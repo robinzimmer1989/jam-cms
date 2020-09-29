@@ -1,0 +1,14 @@
+{
+    "CreateAPIKey": 1,
+    "AppSyncApiName": "cms",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito704b3e59",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "amplify-my-aws-project-gatsbycms-165936-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/af420e1a59c223789a27e555a7a088f8ffb309f5"
+}

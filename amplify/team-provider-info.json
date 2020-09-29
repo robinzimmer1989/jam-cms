@@ -1,0 +1,20 @@
+{
+    "gatsbycms": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-my-aws-project-gatsbycms-165936-authRole",
+            "UnauthRoleArn": "arn:aws:iam::201690694882:role/amplify-my-aws-project-gatsbycms-165936-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::201690694882:role/amplify-my-aws-project-gatsbycms-165936-authRole",
+            "Region": "ca-central-1",
+            "DeploymentBucketName": "amplify-my-aws-project-gatsbycms-165936-deployment",
+            "UnauthRoleName": "amplify-my-aws-project-gatsbycms-165936-unauthRole",
+            "StackName": "amplify-my-aws-project-gatsbycms-165936",
+            "StackId": "arn:aws:cloudformation:ca-central-1:201690694882:stack/amplify-my-aws-project-gatsbycms-165936/ad31be30-fd2f-11ea-bca3-0ede20069124",
+            "AmplifyAppId": "d9ni0suxvukuk"
+        },
+        "categories": {
+            "auth": {
+                "cognito704b3e59": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,398 @@
+type Site @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  ownerID: ID!
+  title: String!
+  netlifyID: String
+  netlifyUrl: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+  postTypes(filter: ModelPostTypeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
+  posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+}
+
+type PostType @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  title: String!
+  slug: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+  posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+}
+
+type Post @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  slug: String!
+  postTypeID: ID!
+  status: String!
+  title: String!
+  content: String
+  seoTitle: String
+  seoDescription: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  postType: PostType @aws_api_key @aws_cognito_user_pools
+  owner: String
+}
+
+type MediaItem @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  title: String!
+  mimeType: String!
+  storageKey: String!
+  altText: String
+  width: Int
+  height: Int
+  fileSize: Float
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelSiteConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Site]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelSiteFilterInput {
+  id: ModelIDInput
+  ownerID: ModelIDInput
+  title: ModelStringInput
+  netlifyID: ModelStringInput
+  netlifyUrl: ModelStringInput
+  and: [ModelSiteFilterInput]
+  or: [ModelSiteFilterInput]
+  not: ModelSiteFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getSite(id: ID!): Site @aws_api_key @aws_cognito_user_pools
+  listSites(filter: ModelSiteFilterInput, limit: Int, nextToken: String): ModelSiteConnection @aws_api_key @aws_cognito_user_pools
+  listPostTypes(filter: ModelPostTypeFilterInput, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
+  getPostType(id: ID!): PostType @aws_api_key @aws_cognito_user_pools
+  getPost(id: ID!): Post @aws_api_key @aws_cognito_user_pools
+  listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+  getMediaItem(id: ID!): MediaItem @aws_api_key @aws_cognito_user_pools
+  listMediaItems(filter: ModelMediaItemFilterInput, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
+}
+
+input CreateSiteInput {
+  id: ID
+  ownerID: ID!
+  title: String!
+  netlifyID: String
+  netlifyUrl: String
+}
+
+input UpdateSiteInput {
+  id: ID!
+  ownerID: ID
+  title: String
+  netlifyID: String
+  netlifyUrl: String
+}
+
+input DeleteSiteInput {
+  id: ID
+}
+
+type Mutation {
+  createSite(input: CreateSiteInput!, condition: ModelSiteConditionInput): Site @aws_api_key @aws_cognito_user_pools
+  updateSite(input: UpdateSiteInput!, condition: ModelSiteConditionInput): Site @aws_api_key @aws_cognito_user_pools
+  deleteSite(input: DeleteSiteInput!, condition: ModelSiteConditionInput): Site @aws_api_key @aws_cognito_user_pools
+  createPostType(input: CreatePostTypeInput!, condition: ModelPostTypeConditionInput): PostType @aws_api_key @aws_cognito_user_pools
+  updatePostType(input: UpdatePostTypeInput!, condition: ModelPostTypeConditionInput): PostType @aws_api_key @aws_cognito_user_pools
+  deletePostType(input: DeletePostTypeInput!, condition: ModelPostTypeConditionInput): PostType @aws_api_key @aws_cognito_user_pools
+  createPost(input: CreatePostInput!, condition: ModelPostConditionInput): Post @aws_api_key @aws_cognito_user_pools
+  updatePost(input: UpdatePostInput!, condition: ModelPostConditionInput): Post @aws_api_key @aws_cognito_user_pools
+  deletePost(input: DeletePostInput!, condition: ModelPostConditionInput): Post @aws_api_key @aws_cognito_user_pools
+  createMediaItem(input: CreateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
+  updateMediaItem(input: UpdateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
+  deleteMediaItem(input: DeleteMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
+}
+
+input ModelSiteConditionInput {
+  ownerID: ModelIDInput
+  title: ModelStringInput
+  netlifyID: ModelStringInput
+  netlifyUrl: ModelStringInput
+  and: [ModelSiteConditionInput]
+  or: [ModelSiteConditionInput]
+  not: ModelSiteConditionInput
+}
+
+type Subscription {
+  onCreateSite(owner: String): Site @aws_subscribe(mutations: ["createSite"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateSite(owner: String): Site @aws_subscribe(mutations: ["updateSite"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteSite(owner: String): Site @aws_subscribe(mutations: ["deleteSite"]) @aws_api_key @aws_cognito_user_pools
+  onCreatePostType(owner: String): PostType @aws_subscribe(mutations: ["createPostType"]) @aws_api_key @aws_cognito_user_pools
+  onUpdatePostType(owner: String): PostType @aws_subscribe(mutations: ["updatePostType"]) @aws_api_key @aws_cognito_user_pools
+  onDeletePostType(owner: String): PostType @aws_subscribe(mutations: ["deletePostType"]) @aws_api_key @aws_cognito_user_pools
+  onCreatePost(owner: String): Post @aws_subscribe(mutations: ["createPost"]) @aws_api_key @aws_cognito_user_pools
+  onUpdatePost(owner: String): Post @aws_subscribe(mutations: ["updatePost"]) @aws_api_key @aws_cognito_user_pools
+  onDeletePost(owner: String): Post @aws_subscribe(mutations: ["deletePost"]) @aws_api_key @aws_cognito_user_pools
+  onCreateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["createMediaItem"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["updateMediaItem"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["deleteMediaItem"]) @aws_api_key @aws_cognito_user_pools
+}
+
+type ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools {
+  items: [PostType]
+  nextToken: String
+}
+
+input ModelPostTypeFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  title: ModelStringInput
+  slug: ModelStringInput
+  and: [ModelPostTypeFilterInput]
+  or: [ModelPostTypeFilterInput]
+  not: ModelPostTypeFilterInput
+}
+
+input CreatePostTypeInput {
+  id: ID
+  siteID: ID!
+  title: String!
+  slug: String!
+}
+
+input UpdatePostTypeInput {
+  id: ID!
+  siteID: ID
+  title: String
+  slug: String
+}
+
+input DeletePostTypeInput {
+  id: ID
+}
+
+input ModelPostTypeConditionInput {
+  siteID: ModelIDInput
+  title: ModelStringInput
+  slug: ModelStringInput
+  and: [ModelPostTypeConditionInput]
+  or: [ModelPostTypeConditionInput]
+  not: ModelPostTypeConditionInput
+}
+
+type ModelPostConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Post]
+  nextToken: String
+}
+
+input ModelPostFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  slug: ModelStringInput
+  postTypeID: ModelIDInput
+  status: ModelStringInput
+  title: ModelStringInput
+  content: ModelStringInput
+  seoTitle: ModelStringInput
+  seoDescription: ModelStringInput
+  and: [ModelPostFilterInput]
+  or: [ModelPostFilterInput]
+  not: ModelPostFilterInput
+}
+
+input CreatePostInput {
+  id: ID
+  siteID: ID!
+  slug: String!
+  postTypeID: ID!
+  status: String!
+  title: String!
+  content: String
+  seoTitle: String
+  seoDescription: String
+}
+
+input UpdatePostInput {
+  id: ID!
+  siteID: ID
+  slug: String
+  postTypeID: ID
+  status: String
+  title: String
+  content: String
+  seoTitle: String
+  seoDescription: String
+}
+
+input DeletePostInput {
+  id: ID
+}
+
+input ModelPostConditionInput {
+  siteID: ModelIDInput
+  slug: ModelStringInput
+  postTypeID: ModelIDInput
+  status: ModelStringInput
+  title: ModelStringInput
+  content: ModelStringInput
+  seoTitle: ModelStringInput
+  seoDescription: ModelStringInput
+  and: [ModelPostConditionInput]
+  or: [ModelPostConditionInput]
+  not: ModelPostConditionInput
+}
+
+type ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools {
+  items: [MediaItem]
+  nextToken: String
+}
+
+input ModelMediaItemFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  title: ModelStringInput
+  mimeType: ModelStringInput
+  storageKey: ModelStringInput
+  altText: ModelStringInput
+  width: ModelIntInput
+  height: ModelIntInput
+  fileSize: ModelFloatInput
+  and: [ModelMediaItemFilterInput]
+  or: [ModelMediaItemFilterInput]
+  not: ModelMediaItemFilterInput
+}
+
+input CreateMediaItemInput {
+  id: ID
+  siteID: ID!
+  title: String!
+  mimeType: String!
+  storageKey: String!
+  altText: String
+  width: Int
+  height: Int
+  fileSize: Float
+}
+
+input UpdateMediaItemInput {
+  id: ID!
+  siteID: ID
+  title: String
+  mimeType: String
+  storageKey: String
+  altText: String
+  width: Int
+  height: Int
+  fileSize: Float
+}
+
+input DeleteMediaItemInput {
+  id: ID
+}
+
+input ModelMediaItemConditionInput {
+  siteID: ModelIDInput
+  title: ModelStringInput
+  mimeType: ModelStringInput
+  storageKey: ModelStringInput
+  altText: ModelStringInput
+  width: ModelIntInput
+  height: ModelIntInput
+  fileSize: ModelFloatInput
+  and: [ModelMediaItemConditionInput]
+  or: [ModelMediaItemConditionInput]
+  not: ModelMediaItemConditionInput
+}

@@ -1,12 +1,7 @@
 {
     "identityPoolName": "cognito704b3e59_identitypool_704b3e59",
-    "allowUnauthenticatedIdentities": false,
-    "thirdPartyAuth": false,
-    "lambdaLogPolicy": "cognito704b3e59_lambda_log_policy",
-    "openIdLambdaRoleName": "cognito704b3e59_openid_lambda_role",
-    "openIdRolePolicy": "cognito704b3e59_openid_pass_role_policy",
-    "openIdLambdaIAMPolicy": "cognito704b3e59_openid_lambda_iam_policy",
-    "openIdLogPolicy": "cognito704b3e59_openid_lambda_log_policy",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "cognit6ef258f0",
     "userPoolName": "cognito704b3e59_userpool_704b3e59",
     "autoVerifiedAttributes": [
         "email"
@@ -15,9 +10,6 @@
     "mfaTypes": [
         "SMS Text Message"
     ],
-    "roleName": "cognito704b3e59_sns-role",
-    "roleExternalId": "cognito704b3e59_role_external_id",
-    "policyName": "cognito704b3e59-sns-policy",
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
@@ -33,29 +25,21 @@
     "requiredAttributes": [
         "email"
     ],
-    "userpoolClientName": "cognito704b3e59_app_client",
     "userpoolClientGenerateSecret": true,
     "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientWriteAttributes": [
+        "email"
+    ],
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "mfaLambdaRole": "cognito704b3e59_totp_lambda_role",
-    "mfaLambdaLogPolicy": "cognito704b3e59_totp_lambda_log_policy",
-    "mfaPassRolePolicy": "cognito704b3e59_totp_pass_role_policy",
-    "mfaLambdaIAMPolicy": "cognito704b3e59_totp_lambda_iam_policy",
     "userpoolClientLambdaRole": "cognito704b3e59_userpoolclient_lambda_role",
-    "userpoolClientLogPolicy": "cognito704b3e59_userpoolclient_lambda_log_policy",
-    "userpoolClientLambdaPolicy": "cognito704b3e59_userpoolclient_lambda_iam_policy",
     "userpoolClientSetAttributes": false,
+    "thirdPartyAuth": false,
+    "roleExternalId": "cognito704b3e59_role_external_id",
     "useDefault": "default",
     "resourceName": "cognito704b3e59",
     "authSelections": "identityPoolAndUserPool",
-    "authRoleName": {
-        "Ref": "AuthRoleName"
-    },
-    "unauthRoleName": {
-        "Ref": "UnauthRoleName"
-    },
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",

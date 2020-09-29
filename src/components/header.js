@@ -1,57 +1,51 @@
 import React from 'react'
-import { Link } from 'gatsby'
-
-import { navigate } from '@reach/router'
-
-import { logout, isLoggedIn } from "../utils/auth"
+import { Link, navigate } from 'gatsby'
+import styled from 'styled-components'
+import { Button } from '@material-ui/core'
 import { Auth } from 'aws-amplify'
 
-const Header = ({ siteTitle }) => (
-  <div
-    style={{
-      background: 'rebeccapurple',
-      marginBottom: '1.45rem',
-    }}
-  >
-    <div
-      style={{
-        margin: '0 auto',
-        maxWidth: 960,
-        padding: '1.45rem 1.0875rem',
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={styles.headerTitle}
-        >
-          {siteTitle}
-        </Link>
-      </h1>
-      {
-        isLoggedIn() && (
-          <p
-            onClick={
-              () => Auth.signOut().then(logout(() => navigate('/app/login'))).catch(err => console.log('eror:', err))
-            }
-            style={styles.link}
-          >Sign Out</p>
-        )
-      }
-    </div>
-  </div>
-)
+// import app components
+import { logout, isLoggedIn } from '../utils/auth'
 
-const styles = {
-  headerTitle: {
-    color: 'white',
-    textDecoration: 'none',
-  },
-  link: {
-    cursor: 'pointer',
-    color: 'white',
-    textDecoration: 'underline'
+const Header = () => {
+  const handleSignOut = async () => {
+    await Auth.signOut()
+
+    logout(() => navigate('/app/login'))
   }
+
+  return (
+    <Container>
+      <Grid>
+        <Link to="/">Gatsby CMS</Link>
+
+        {isLoggedIn() ? (
+          <div>
+            <Link to={`/app/profile`} children={`Profile`} />
+            <Link to={`/app`} children={`My Websites`} />
+            <Button onClick={handleSignOut} children={`Sign Out`} />
+          </div>
+        ) : (
+          <div>
+            <Link to={`/app/signup`}>Sign Up</Link>
+            <Link to={`/app/login`}>Sign In</Link>
+          </div>
+        )}
+      </Grid>
+    </Container>
+  )
 }
+
+const Container = styled.div`
+  padding: 0 20px;
+  background: #f7f7f7;
+`
+
+const Grid = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+`
 
 export default Header

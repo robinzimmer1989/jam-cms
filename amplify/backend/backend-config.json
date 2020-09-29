@@ -4,5 +4,44 @@
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation"
 		}
+	},
+	"api": {
+		"cms": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"authConfig": {
+					"defaultAuthentication": {
+						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
+						"userPoolConfig": {
+							"userPoolId": "authcognito704b3e59"
+						}
+					},
+					"additionalAuthenticationProviders": [
+						{
+							"authenticationType": "API_KEY",
+							"apiKeyConfig": {
+								"apiKeyExpirationDays": 30,
+								"description": "client"
+							}
+						}
+					]
+				}
+			}
+		}
+	},
+	"function": {
+		"auth": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": []
+		}
+	},
+	"storage": {
+		"s3e521e40a": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
+		}
 	}
 }
