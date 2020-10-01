@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createSite, updateSite as dbUpdateSite } from '../graphql/mutations'
+import { createSite, updateSite as dbUpdateSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
 
 export const addSite = async ({ title, ownerID }) => {
   const result = await API.graphql(
@@ -15,6 +15,16 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl }) => {
   const result = await API.graphql(
     graphqlOperation(dbUpdateSite, {
       input: { id, title, netlifyID, netlifyUrl },
+    })
+  )
+
+  return result
+}
+
+export const deleteSite = async ({ id }) => {
+  const result = await API.graphql(
+    graphqlOperation(dbDeleteSite, {
+      input: { id },
     })
   )
 

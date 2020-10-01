@@ -1,14 +1,14 @@
 import React from 'react'
 
 // import app components
-import Sidebar from '../components/cms/Sidebar'
+import Layout from '../components/cms/Layout'
 import MediaLibrary from '../components/MediaLibrary'
 
 const Media = props => {
   return (
-    <Sidebar>
+    <Layout pageTitle={`Media`}>
       <MediaLibrary />
-    </Sidebar>
+    </Layout>
   )
 }
 

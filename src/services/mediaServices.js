@@ -15,26 +15,26 @@ export const addMediaItem = async ({ siteID, title, mimeType, storageKey }) => {
 export const getMediaItems = async ({ siteID }) => {
   const result = await API.graphql(
     graphqlOperation(`
-    query ListMediaItems {
-      listMediaItems(filter: {siteID: {eq: "${siteID}"}}) {
-        items {
-          id
-          siteID
-          title
-          mimeType
-          storageKey
-          altText
-          width
-          height
-          fileSize
-          createdAt
-          updatedAt
-          owner
+      query ListMediaItems {
+        listMediaItems(filter: {siteID: {eq: "${siteID}"}}) {
+          items {
+            id
+            siteID
+            title
+            mimeType
+            storageKey
+            altText
+            width
+            height
+            fileSize
+            createdAt
+            updatedAt
+            owner
+          }
+          nextToken
         }
-        nextToken
       }
-    }
-  `)
+    `)
   )
 
   return result

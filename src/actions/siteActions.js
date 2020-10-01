@@ -46,6 +46,28 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
+export const updateSite = async ({ id, title }, dispatch) => {
+  const result = await siteServices.updateSite({ id, title })
+
+  if (result?.data?.updateSite) {
+    dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
+  }
+}
+
+export const deleteSite = async ({ id, netlifyID }, dispatch) => {
+  netlifyID && (await netlifyServices.deleteSite({ netlifyID }))
+
+  const result = await siteServices.deleteSite({ id })
+
+  if (result?.data?.deleteSite) {
+    dispatch({ type: `DELETE_SITE`, payload: { id } })
+
+    return result
+  }
+
+  return false
+}
+
 export const getSites = async ({}, dispatch) => {
   const result = await siteServices.getSites()
 

@@ -42,6 +42,11 @@ export const postReducer = (state, action) => {
         }
         break
 
+      case `DELETE_SITE`:
+        draft.siteID = null
+        delete draft.sites[payload.id]
+        break
+
       /******************************
        * Collections
        ******************************/

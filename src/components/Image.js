@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Storage } from 'aws-amplify'
 import styled from 'styled-components'
 
+// import app components
+import { colors } from '../theme'
+
 const Image = props => {
-  const { storageKey, ...rest } = props
+  const { storageKey, bg, ...rest } = props
 
   const [src, setSrc] = useState(null)
 
@@ -16,15 +19,20 @@ const Image = props => {
     storageKey && loadImage()
   }, [storageKey])
 
-  return (
-    <Container {...rest}>
-      <Img src={src} />
-    </Container>
-  )
+  return <>{bg ? <Container src={src} {...rest} /> : <Img src={src} />}</>
 }
 
-const Container = styled.div``
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  background-image: url(${({ src }) => src});
+  background-size: cover;
+  background-position: center;
+  background-color: ${colors.background.light};
+`
 
-const Img = styled.img``
+const Img = styled.img`
+  margin: 0;
+`
 
 export default Image

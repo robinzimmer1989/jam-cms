@@ -1,10 +1,12 @@
 import React from 'react'
 import { Link, navigate } from 'gatsby'
 import styled from 'styled-components'
-import { Button } from '@material-ui/core'
+import { Button, IconButton } from '@material-ui/core'
 import { Auth } from 'aws-amplify'
+import AvatarIcon from 'react-ionicons/lib/IosPersonOutline'
 
 // import app components
+import Menu from './Menu'
 import { logout, isLoggedIn } from '../utils/auth'
 
 const Header = () => {
@@ -17,13 +19,26 @@ const Header = () => {
   return (
     <Container>
       <Grid>
-        <Link to="/">Gatsby CMS</Link>
+        <Logo to="/">Gatsby CMS</Logo>
 
         {isLoggedIn() ? (
           <div>
-            <Link to={`/app/profile`} children={`Profile`} />
-            <Link to={`/app`} children={`My Websites`} />
-            <Button onClick={handleSignOut} children={`Sign Out`} />
+            <Menu
+              items={[
+                {
+                  text: `Profile`,
+                  onClick: () => navigate(`/app/profile`),
+                },
+                {
+                  text: `Sign Out`,
+                  onClick: handleSignOut,
+                },
+              ]}
+            >
+              <IconButton>
+                <AvatarIcon />
+              </IconButton>
+            </Menu>
           </div>
         ) : (
           <div>
@@ -36,16 +51,22 @@ const Header = () => {
   )
 }
 
-const Container = styled.div`
-  padding: 0 20px;
-  background: #f7f7f7;
-`
+const Container = styled.div``
 
 const Grid = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 64px;
+`
+
+const Logo = styled(Link)`
+  display: flex;
+  align-items: center;
+  width: 250px;
+  height: 100%;
+  padding: 0 20px;
+  background: #fff;
 `
 
 export default Header

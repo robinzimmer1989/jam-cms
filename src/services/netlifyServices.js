@@ -26,3 +26,8 @@ export const addSite = async ({ siteID }) => {
 
   return site
 }
+
+export const deleteSite = async ({ netlifyID }) => {
+  const site = await client.deleteSite({ site_id: netlifyID })
+  return site
+}

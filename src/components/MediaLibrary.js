@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { Grid } from '@material-ui/core'
+import styled from 'styled-components'
 
 // import app components
-import Image from '../components/Image'
+import Image from './Image'
+import Paper from './Paper'
 import { mediaActions } from '../actions'
 import { useStore } from '../store'
 
@@ -34,18 +35,32 @@ const MediaLibrary = props => {
     <>
       <input type="file" placeholder={'File Upload'} onChange={handleFileUpload} name="file" />
 
-      <Grid container>
-        {site?.mediaItems?.items &&
-          site.mediaItems.items.map(o => {
-            return (
-              <Grid key={o.id} item xs={12} onClick={() => onSelect && onSelect(o)}>
-                <Image storageKey={o.storageKey} />
-              </Grid>
-            )
-          })}
-      </Grid>
+      <Paper>
+        <Grid>
+          {site?.mediaItems?.items &&
+            site.mediaItems.items.map(o => {
+              return (
+                <MediaItem key={o.id} onClick={() => onSelect && onSelect(o)}>
+                  <Image bg={true} storageKey={o.storageKey} />
+                </MediaItem>
+              )
+            })}
+        </Grid>
+      </Paper>
     </>
   )
 }
+
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 200px;
+`
+
+const MediaItem = styled.div`
+  position: relative;
+  height: 200px;
+  width: 200px;
+`
 
 export default MediaLibrary

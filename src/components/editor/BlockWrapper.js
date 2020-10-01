@@ -1,12 +1,13 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { IconButton } from '@material-ui/core'
+import { Fab } from '@material-ui/core'
 import AddIcon from 'react-ionicons/lib/IosAdd'
 import DeleteIcon from 'react-ionicons/lib/IosTrash'
 
 // import app components
 import AddBlock from '../forms/AddBlock'
 import { useStore } from '../../store'
+import { colors } from '../../theme'
 
 const BlockWrapper = props => {
   const { index, children } = props
@@ -29,8 +30,7 @@ const BlockWrapper = props => {
     })
   }
 
-  const handleOpenBlock = () =>
-    dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: index })
+  const handleOpenBlock = () => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: index })
 
   const handleRemoveBlock = () => {
     const blocks = [...post.content]
@@ -53,11 +53,11 @@ const BlockWrapper = props => {
         {children}
       </Content>
 
-      <AddButton className={`icon icon-add`} onClick={handleOpenBlockDialog}>
+      <AddButton size="small" className={`icon icon-add`} onClick={handleOpenBlockDialog}>
         <AddIcon />
       </AddButton>
 
-      <DeleteButton className={`icon icon-remove`} onClick={handleRemoveBlock}>
+      <DeleteButton size="small" className={`icon icon-remove`} onClick={handleRemoveBlock}>
         <DeleteIcon />
       </DeleteButton>
     </Container>
@@ -85,25 +85,39 @@ const Container = styled.div`
 `
 
 const Content = styled.div`
-  border: 1px solid ${({ active }) => (active ? 'blue' : 'transparent')};
+  border: 1px solid transparent;
+
+  ${({ active }) =>
+    active
+      ? css`
+          border-color: ${colors.primary.dark};
+        `
+      : css`
+          &:hover {
+            border-color: ${colors.primary.dark};
+          }
+        `};
 `
 
-const AddButton = styled(IconButton)`
+const AddButton = styled(Fab)`
   && {
     position: absolute;
     z-index: 2;
     left: 50%;
     top: 100%;
     transform: translate(-50%, -50%);
+    background-color: ${colors.primary.dark};
   }
 `
 
-const DeleteButton = styled(IconButton)`
+const DeleteButton = styled(Fab)`
   && {
     position: absolute;
     z-index: 2;
-    right: 10px;
-    top: 10px;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+    background-color: ${colors.primary.dark};
   }
 `
 

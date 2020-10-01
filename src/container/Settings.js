@@ -2,25 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
-import Sidebar from '../components/cms/Sidebar'
-import { useStore } from '../store'
+import Layout from '../components/cms/Layout'
+import GeneralSettings from '../components/cms/GeneralSettings'
 
 const Settings = props => {
-  const { siteID } = props
-
-  const [
-    {
-      postState: { sites },
-    },
-    dispatch,
-  ] = useStore()
-
-  const site = sites[siteID] || null
-
   return (
-    <Sidebar>
-      <Container>Settings</Container>
-    </Sidebar>
+    <Layout pageTitle={`Settings`}>
+      <GeneralSettings />
+    </Layout>
   )
 }
 

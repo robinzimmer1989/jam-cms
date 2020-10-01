@@ -2,16 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
-import Sidebar from '../components/cms/Sidebar'
+import Layout from '../components/cms/Layout'
 
 const Dashboard = props => {
   const { siteID } = props
 
   return (
     <>
-      <Sidebar>
-        <Container>Dashboard</Container>
-      </Sidebar>
+      <Layout pageTitle={`Dashboard`}>
+        <Container></Container>
+      </Layout>
     </>
   )
 }
