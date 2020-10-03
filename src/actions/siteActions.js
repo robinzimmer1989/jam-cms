@@ -8,7 +8,7 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   if (result?.data?.createSite) {
     const siteID = result.data.createSite.id
 
-    dispatch({ type: 'ADD_SITE', payload: result.data.createSite })
+    dispatch({ type: `ADD_SITE`, payload: result.data.createSite })
 
     // Add default collection 'Page'
     const collectionResult = await collectionServices.addCollection({ title: 'Page', slug: '/', siteID }, dispatch)
@@ -34,7 +34,7 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
       const updateSiteResult = await siteServices.updateSite({ id: siteID, title, netlifyID, netlifyUrl })
 
       if (updateSiteResult?.data?.updateSite) {
-        dispatch({ type: 'ADD_SITE', payload: updateSiteResult.data.updateSite })
+        dispatch({ type: `ADD_SITE`, payload: updateSiteResult.data.updateSite })
 
         return updateSiteResult
       }
@@ -46,8 +46,8 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
-export const updateSite = async ({ id, title }, dispatch) => {
-  const result = await siteServices.updateSite({ id, title })
+export const updateSite = async ({ id, title, settings }, dispatch) => {
+  const result = await siteServices.updateSite({ id, title, settings })
 
   if (result?.data?.updateSite) {
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })

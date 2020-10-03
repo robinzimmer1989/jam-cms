@@ -23,27 +23,35 @@ export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
   return result
 }
 
-export const getPost = async ({ postID }, dispatch) => {
+export const getPost = async ({ site, postID }, dispatch) => {
   const result = await postServices.getPost({ postID })
 
   if (result?.data?.getPost) {
-    const post = result.data.getPost
-
-    const payload = {
-      ...post,
-      content: post.content ? JSON.parse(post.content) : [],
-    }
-
     dispatch({
-      type: 'ADD_POST',
-      payload,
+      type: `ADD_POST`,
+      payload: result.data.getPost,
     })
 
     dispatch({
-      type: 'SET_EDITOR_POST',
-      payload,
+      type: `SET_EDITOR_POST`,
+      payload: result.data.getPost,
+    })
+
+    // Every time the user edits a post we need to restore the original site state,
+    // because of the header + footer settings
+    dispatch({
+      type: `SET_EDITOR_SITE`,
+      payload: site,
     })
   }
 
   return result
+}
+
+export const updatePost = ({ id, slug, status, title, content, seoTitle, seoDescription }, dispatch) => {
+  const result = postServices.updatePost({ id, slug, status, title, content, seoTitle, seoDescription })
+
+  if (result?.data?.updatePost) {
+    dispatch({ type: 'ADD_POST', payload: result.data.updatePost })
+  }
 }

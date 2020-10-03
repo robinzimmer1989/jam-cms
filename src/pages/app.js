@@ -2,16 +2,13 @@ import React from 'react'
 import { Router } from '@reach/router'
 import { Dialog } from '@material-ui/core'
 
-// import pages
-import Details from '../container/Details'
-import Home from '../container/Home'
-import Login from '../container/Login'
-import SignUp from '../container/SignUp'
-
 // import components
+import Home from '../components/cms/pages/Home'
+import Profile from '../components/cms/pages/Profile'
 import CmsRouter from '../components/cms/Router'
-import PrivateRoute from '../components/PrivateRoute'
-import { useStore } from '../store'
+import PrivateRoute from '../components/cms/PrivateRoute'
+
+import { useStore } from 'store'
 
 const App = () => {
   const [
@@ -25,11 +22,8 @@ const App = () => {
     <>
       <Router>
         <PrivateRoute path="/app" component={Home} />
-        <PrivateRoute path="/app/profile" component={Details} />
+        <PrivateRoute path="/app/profile" component={Profile} />
         <PrivateRoute path="/app/site/:siteID/*" component={CmsRouter} />
-
-        <Login path="/app/login" />
-        <SignUp path="/app/signup" />
       </Router>
 
       <Dialog
@@ -37,9 +31,8 @@ const App = () => {
         fullWidth
         maxWidth={dialog.width || 'md'}
         onClose={() => dispatch({ type: 'CLOSE_DIALOG' })}
-      >
-        {dialog.component}
-      </Dialog>
+        children={dialog.component}
+      />
     </>
   )
 }

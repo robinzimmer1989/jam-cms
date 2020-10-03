@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled, { css } from 'styled-components'
+
 import CollectionsIcon from 'react-ionicons/lib/IosAlbumsOutline'
 import SettingsIcon from 'react-ionicons/lib/IosOptionsOutline'
 import DashboardIcon from 'react-ionicons/lib/IosPodiumOutline'
@@ -9,10 +10,11 @@ import AddIcon from 'react-ionicons/lib/IosAdd'
 import BackIcon from 'react-ionicons/lib/IosArrowBack'
 
 // import app components
-import AddCollection from '../forms/AddCollection'
+import AddCollection from './forms/AddCollection'
 import Header from './Header'
-import { useStore } from '../../store'
-import { colors } from '../../theme'
+
+import { useStore } from 'store'
+import { colors } from 'theme'
 
 const Layout = props => {
   const { pageTitle, children } = props

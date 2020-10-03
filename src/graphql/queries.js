@@ -7,6 +7,7 @@ export const getSite = /* GraphQL */ `
       id
       ownerID
       title
+      settings
       netlifyID
       netlifyUrl
       createdAt
@@ -55,6 +56,7 @@ export const listSites = /* GraphQL */ `
         id
         ownerID
         title
+        settings
         netlifyID
         netlifyUrl
         createdAt

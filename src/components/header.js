@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, navigate } from 'gatsby'
 import styled from 'styled-components'
-import { Button, IconButton } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { Auth } from 'aws-amplify'
 import AvatarIcon from 'react-ionicons/lib/IosPersonOutline'
 
@@ -51,7 +51,11 @@ const Header = () => {
   )
 }
 
-const Container = styled.div``
+const Container = styled.div`
+  padding: 0 20px;
+  background: #fff;
+  box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
+`
 
 const Grid = styled.div`
   display: flex;

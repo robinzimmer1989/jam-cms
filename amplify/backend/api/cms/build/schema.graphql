@@ -2,6 +2,8 @@ type Site @aws_api_key @aws_cognito_user_pools {
   id: ID!
   ownerID: ID!
   title: String!
+  postStatus: String!
+  settings: String
   netlifyID: String
   netlifyUrl: String
   createdAt: AWSDateTime!
@@ -140,6 +142,8 @@ input ModelSiteFilterInput {
   id: ModelIDInput
   ownerID: ModelIDInput
   title: ModelStringInput
+  postStatus: ModelStringInput
+  settings: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
   and: [ModelSiteFilterInput]
@@ -175,6 +179,8 @@ input CreateSiteInput {
   id: ID
   ownerID: ID!
   title: String!
+  postStatus: String!
+  settings: String
   netlifyID: String
   netlifyUrl: String
 }
@@ -183,6 +189,8 @@ input UpdateSiteInput {
   id: ID!
   ownerID: ID
   title: String
+  postStatus: String
+  settings: String
   netlifyID: String
   netlifyUrl: String
 }
@@ -209,6 +217,8 @@ type Mutation {
 input ModelSiteConditionInput {
   ownerID: ModelIDInput
   title: ModelStringInput
+  postStatus: ModelStringInput
+  settings: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
   and: [ModelSiteConditionInput]

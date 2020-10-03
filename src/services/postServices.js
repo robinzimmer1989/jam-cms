@@ -19,21 +19,15 @@ export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
     listPosts(filter: {postTypeID: {eq: "${postTypeID}"}}) {
       items {
         id
-        siteID
         slug
         status
         title
-        content
-        createdAt
-        updatedAt
         postType {
           id
           title
           slug
         }
-        owner
       }
-      nextToken
     }
   }`)
   )
@@ -43,18 +37,33 @@ export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
 
 export const getPost = async ({ postID }) => {
   const result = await API.graphql(graphqlOperation(dbGetPost, { id: postID }))
+
+  if (result?.data?.getPost) {
+    const post = result.data.getPost
+
+    result.data.getPost = {
+      ...post,
+      content: post.content ? JSON.parse(post.content) : [],
+    }
+  }
+
   return result
 }
 
-export const updatePost = async ({ id, slug, status, title, content }, dispatch) => {
+export const updatePost = async ({ id, slug, status, title, content, seoTitle, seoDescription }, dispatch) => {
   const result = await API.graphql(
     graphqlOperation(dbUpdatePost, {
-      input: { id, slug, status, title, content: JSON.stringify(content) },
+      input: { id, slug, status, title, content: JSON.stringify(content), seoTitle, seoDescription },
     })
   )
 
   if (result?.data?.updatePost) {
-    dispatch({ type: 'ADD_POST', payload: result.data.updatePost })
+    const post = result.data.updatePost
+
+    result.data.updatePost = {
+      ...post,
+      content: post.content ? JSON.parse(post.content) : [],
+    }
   }
 
   return result

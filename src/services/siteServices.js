@@ -1,6 +1,7 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
 import { createSite, updateSite as dbUpdateSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
+import defaultSiteSettings from '../components/cms/editor/defaultSiteSettings'
 
 export const addSite = async ({ title, ownerID }) => {
   const result = await API.graphql(
@@ -11,12 +12,21 @@ export const addSite = async ({ title, ownerID }) => {
   return result
 }
 
-export const updateSite = async ({ id, title, netlifyID, netlifyUrl }) => {
+export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings }) => {
   const result = await API.graphql(
     graphqlOperation(dbUpdateSite, {
-      input: { id, title, netlifyID, netlifyUrl },
+      input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings) },
     })
   )
+
+  if (result?.data?.updateSite) {
+    const site = result.data.updateSite
+
+    result.data.updateSite = {
+      ...site,
+      settings: site.settings ? JSON.parse(site.settings) : defaultSiteSettings,
+    }
+  }
 
   return result
 }
@@ -41,9 +51,6 @@ export const getSites = async () => {
             title
             netlifyID
             netlifyUrl
-            createdAt
-            updatedAt
-            owner
           }
           nextToken
         }
@@ -63,9 +70,7 @@ export const getSite = async ({ siteID }) => {
           title
           netlifyID
           netlifyUrl
-          createdAt
-          updatedAt
-          owner
+          settings
           postTypes {
             items {
               id
@@ -86,5 +91,15 @@ export const getSite = async ({ siteID }) => {
       { id: siteID }
     )
   )
+
+  if (result?.data?.getSite) {
+    const site = result.data.getSite
+
+    result.data.getSite = {
+      ...site,
+      settings: site.settings ? JSON.parse(site.settings) : defaultSiteSettings,
+    }
+  }
+
   return result
 }

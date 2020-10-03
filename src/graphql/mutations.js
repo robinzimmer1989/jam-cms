@@ -10,6 +10,7 @@ export const createSite = /* GraphQL */ `
       id
       ownerID
       title
+      settings
       netlifyID
       netlifyUrl
       createdAt
@@ -56,6 +57,7 @@ export const updateSite = /* GraphQL */ `
       id
       ownerID
       title
+      settings
       netlifyID
       netlifyUrl
       createdAt
@@ -102,6 +104,7 @@ export const deleteSite = /* GraphQL */ `
       id
       ownerID
       title
+      settings
       netlifyID
       netlifyUrl
       createdAt

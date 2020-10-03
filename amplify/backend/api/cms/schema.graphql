@@ -4,6 +4,7 @@ type Site @model @auth(rules: [{ allow: public, provider: apiKey }, { allow: own
   title: String!
   postTypes: [PostType] @connection(keyName: "bySite", fields: ["id"])
   posts: [Post] @connection(keyName: "bySite", fields: ["id"])
+  settings: String
   netlifyID: String
   netlifyUrl: String
 }

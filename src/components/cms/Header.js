@@ -4,8 +4,8 @@ import { IconButton } from '@material-ui/core'
 import ViewIcon from 'react-ionicons/lib/IosEye'
 
 // import app components
-import { useStore } from '../../store'
-import { colors } from '../../theme'
+import { useStore } from 'store'
+import { colors } from 'theme'
 
 const Header = props => {
   const { pageTitle } = props

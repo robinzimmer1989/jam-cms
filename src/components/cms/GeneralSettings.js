@@ -4,8 +4,8 @@ import { navigate } from 'gatsby'
 import { TextField, Button } from '@material-ui/core'
 
 // import app components
-import { useStore } from '../../store'
-import { siteActions } from '../../actions'
+import { useStore } from 'store'
+import { siteActions } from 'actions'
 
 const GeneralSettings = props => {
   const [

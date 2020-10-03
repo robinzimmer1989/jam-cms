@@ -6,6 +6,10 @@ export default createGlobalStyle`
     background: #f8f9ff;
   }
 
+  html {
+    overflow-y: auto;
+  }
+
   a {
     text-decoration: none;
   }
@@ -14,5 +18,9 @@ export default createGlobalStyle`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
+  }
+
+  img {
+    margin: 0;
   }
 `
