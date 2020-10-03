@@ -42,6 +42,17 @@ export const getSite = /* GraphQL */ `
         }
         nextToken
       }
+      menus {
+        items {
+          id
+          siteID
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -66,6 +77,9 @@ export const listSites = /* GraphQL */ `
           nextToken
         }
         posts {
+          nextToken
+        }
+        menus {
           nextToken
         }
       }
@@ -126,36 +140,6 @@ export const getPostType = /* GraphQL */ `
     }
   }
 `;
-export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
-      id
-      siteID
-      slug
-      postTypeID
-      status
-      title
-      content
-      seoTitle
-      seoDescription
-      createdAt
-      updatedAt
-      postType {
-        id
-        siteID
-        title
-        slug
-        createdAt
-        updatedAt
-        owner
-        posts {
-          nextToken
-        }
-      }
-      owner
-    }
-  }
-`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -187,6 +171,36 @@ export const listPosts = /* GraphQL */ `
         owner
       }
       nextToken
+    }
+  }
+`;
+export const getPost = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      siteID
+      slug
+      postTypeID
+      status
+      title
+      content
+      seoTitle
+      seoDescription
+      createdAt
+      updatedAt
+      postType {
+        id
+        siteID
+        title
+        slug
+        createdAt
+        updatedAt
+        owner
+        posts {
+          nextToken
+        }
+      }
+      owner
     }
   }
 `;
@@ -227,6 +241,131 @@ export const listMediaItems = /* GraphQL */ `
         fileSize
         createdAt
         updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getMenu = /* GraphQL */ `
+  query GetMenu($id: ID!) {
+    getMenu(id: $id) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const listMenus = /* GraphQL */ `
+  query ListMenus(
+    $filter: ModelMenuFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMenus(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        siteID
+        slug
+        createdAt
+        updatedAt
+        owner
+        menuItems {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getMenuItem = /* GraphQL */ `
+  query GetMenuItem($id: ID!) {
+    getMenuItem(id: $id) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const listMenuItems = /* GraphQL */ `
+  query ListMenuItems(
+    $filter: ModelMenuItemFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMenuItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        siteID
+        menuID
+        orderPostID
+        title
+        url
+        target
+        createdAt
+        updatedAt
+        post {
+          id
+          siteID
+          slug
+          postTypeID
+          status
+          title
+          content
+          seoTitle
+          seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
         owner
       }
       nextToken

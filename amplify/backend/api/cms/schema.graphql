@@ -1,9 +1,12 @@
-type Site @model @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+type Site
+  @model
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
   id: ID!
   ownerID: ID!
   title: String!
   postTypes: [PostType] @connection(keyName: "bySite", fields: ["id"])
   posts: [Post] @connection(keyName: "bySite", fields: ["id"])
+  menus: [Menu] @connection(keyName: "bySite", fields: ["id"])
   settings: String
   netlifyID: String
   netlifyUrl: String
@@ -37,7 +40,9 @@ type Post
   seoDescription: String
 }
 
-type MediaItem @model @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+type MediaItem
+  @model
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
   id: ID!
   siteID: ID!
   title: String!
@@ -47,4 +52,28 @@ type MediaItem @model @auth(rules: [{ allow: public, provider: apiKey }, { allow
   width: Int
   height: Int
   fileSize: Float
+}
+
+type Menu
+  @model
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }])
+  @key(name: "bySite", fields: ["siteID"]) {
+  id: ID!
+  siteID: ID!
+  slug: String!
+  menuItems: [MenuItem] @connection(keyName: "byMenu", fields: ["id"])
+}
+
+type MenuItem
+  @model
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }])
+  @key(name: "byMenu", fields: ["menuID"]) {
+  id: ID!
+  siteID: ID!
+  menuID: ID!
+  orderPostID: ID
+  post: Post @connection
+  title: String
+  url: String
+  target: String
 }

@@ -36,9 +36,11 @@ const AddBlock = props => {
 
   return (
     <Container>
-      {Object.keys(blocks).map(key => (
-        <Button key={key} children={key} onClick={() => handleBlockSelect(key)} />
-      ))}
+      {Object.keys(blocks)
+        .filter(key => key !== 'Header' && key !== 'Footer')
+        .map(key => (
+          <Button key={key} children={key} onClick={() => handleBlockSelect(key)} />
+        ))}
     </Container>
   )
 }

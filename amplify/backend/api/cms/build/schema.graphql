@@ -2,7 +2,6 @@ type Site @aws_api_key @aws_cognito_user_pools {
   id: ID!
   ownerID: ID!
   title: String!
-  postStatus: String!
   settings: String
   netlifyID: String
   netlifyUrl: String
@@ -11,6 +10,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   owner: String
   postTypes(filter: ModelPostTypeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
   posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+  menus(filter: ModelMenuFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
 }
 
 type PostType @aws_api_key @aws_cognito_user_pools {
@@ -52,6 +52,30 @@ type MediaItem @aws_api_key @aws_cognito_user_pools {
   fileSize: Float
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
+  owner: String
+}
+
+type Menu @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  slug: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+  menuItems(filter: ModelMenuItemFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools
+}
+
+type MenuItem @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  menuID: ID!
+  orderPostID: ID
+  title: String
+  url: String
+  target: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  post: Post @aws_api_key @aws_cognito_user_pools
   owner: String
 }
 
@@ -142,7 +166,6 @@ input ModelSiteFilterInput {
   id: ModelIDInput
   ownerID: ModelIDInput
   title: ModelStringInput
-  postStatus: ModelStringInput
   settings: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
@@ -169,17 +192,20 @@ type Query {
   listSites(filter: ModelSiteFilterInput, limit: Int, nextToken: String): ModelSiteConnection @aws_api_key @aws_cognito_user_pools
   listPostTypes(filter: ModelPostTypeFilterInput, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
   getPostType(id: ID!): PostType @aws_api_key @aws_cognito_user_pools
-  getPost(id: ID!): Post @aws_api_key @aws_cognito_user_pools
   listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+  getPost(id: ID!): Post @aws_api_key @aws_cognito_user_pools
   getMediaItem(id: ID!): MediaItem @aws_api_key @aws_cognito_user_pools
   listMediaItems(filter: ModelMediaItemFilterInput, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
+  getMenu(id: ID!): Menu @aws_api_key @aws_cognito_user_pools
+  listMenus(filter: ModelMenuFilterInput, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
+  getMenuItem(id: ID!): MenuItem @aws_api_key @aws_cognito_user_pools
+  listMenuItems(filter: ModelMenuItemFilterInput, limit: Int, nextToken: String): ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools
 }
 
 input CreateSiteInput {
   id: ID
   ownerID: ID!
   title: String!
-  postStatus: String!
   settings: String
   netlifyID: String
   netlifyUrl: String
@@ -189,7 +215,6 @@ input UpdateSiteInput {
   id: ID!
   ownerID: ID
   title: String
-  postStatus: String
   settings: String
   netlifyID: String
   netlifyUrl: String
@@ -212,12 +237,17 @@ type Mutation {
   createMediaItem(input: CreateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
   updateMediaItem(input: UpdateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
   deleteMediaItem(input: DeleteMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
+  createMenu(input: CreateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
+  updateMenu(input: UpdateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
+  deleteMenu(input: DeleteMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
+  createMenuItem(input: CreateMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
+  updateMenuItem(input: UpdateMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
+  deleteMenuItem(input: DeleteMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
 }
 
 input ModelSiteConditionInput {
   ownerID: ModelIDInput
   title: ModelStringInput
-  postStatus: ModelStringInput
   settings: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
@@ -239,6 +269,12 @@ type Subscription {
   onCreateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["createMediaItem"]) @aws_api_key @aws_cognito_user_pools
   onUpdateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["updateMediaItem"]) @aws_api_key @aws_cognito_user_pools
   onDeleteMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["deleteMediaItem"]) @aws_api_key @aws_cognito_user_pools
+  onCreateMenu(owner: String): Menu @aws_subscribe(mutations: ["createMenu"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateMenu(owner: String): Menu @aws_subscribe(mutations: ["updateMenu"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteMenu(owner: String): Menu @aws_subscribe(mutations: ["deleteMenu"]) @aws_api_key @aws_cognito_user_pools
+  onCreateMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["createMenuItem"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["updateMenuItem"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["deleteMenuItem"]) @aws_api_key @aws_cognito_user_pools
 }
 
 type ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools {
@@ -405,4 +441,98 @@ input ModelMediaItemConditionInput {
   and: [ModelMediaItemConditionInput]
   or: [ModelMediaItemConditionInput]
   not: ModelMediaItemConditionInput
+}
+
+type ModelMenuConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Menu]
+  nextToken: String
+}
+
+input ModelMenuFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  slug: ModelStringInput
+  and: [ModelMenuFilterInput]
+  or: [ModelMenuFilterInput]
+  not: ModelMenuFilterInput
+}
+
+input CreateMenuInput {
+  id: ID
+  siteID: ID!
+  slug: String!
+}
+
+input UpdateMenuInput {
+  id: ID!
+  siteID: ID
+  slug: String
+}
+
+input DeleteMenuInput {
+  id: ID
+}
+
+input ModelMenuConditionInput {
+  siteID: ModelIDInput
+  slug: ModelStringInput
+  and: [ModelMenuConditionInput]
+  or: [ModelMenuConditionInput]
+  not: ModelMenuConditionInput
+}
+
+type ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools {
+  items: [MenuItem]
+  nextToken: String
+}
+
+input ModelMenuItemFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  menuID: ModelIDInput
+  orderPostID: ModelIDInput
+  title: ModelStringInput
+  url: ModelStringInput
+  target: ModelStringInput
+  and: [ModelMenuItemFilterInput]
+  or: [ModelMenuItemFilterInput]
+  not: ModelMenuItemFilterInput
+}
+
+input CreateMenuItemInput {
+  id: ID
+  siteID: ID!
+  menuID: ID!
+  orderPostID: ID
+  title: String
+  url: String
+  target: String
+  menuItemPostId: ID
+}
+
+input UpdateMenuItemInput {
+  id: ID!
+  siteID: ID
+  menuID: ID
+  orderPostID: ID
+  title: String
+  url: String
+  target: String
+  menuItemPostId: ID
+}
+
+input DeleteMenuItemInput {
+  id: ID
+}
+
+input ModelMenuItemConditionInput {
+  siteID: ModelIDInput
+  menuID: ModelIDInput
+  orderPostID: ModelIDInput
+  title: ModelStringInput
+  url: ModelStringInput
+  target: ModelStringInput
+  and: [ModelMenuItemConditionInput]
+  or: [ModelMenuItemConditionInput]
+  not: ModelMenuItemConditionInput
 }

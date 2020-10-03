@@ -11,6 +11,7 @@ const colors = {
     dark: '#232323',
     light: '#9aa1b7',
   },
+  warning: '#e24141',
 }
 
 export default colors

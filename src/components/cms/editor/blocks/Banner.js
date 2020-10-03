@@ -14,6 +14,15 @@ export const fields = {
       label: 'Add Image',
       value: '',
     },
+    {
+      id: 'text',
+      type: 'textarea',
+      placeholder: '',
+      label: 'Headline',
+      value: '',
+      rows: 2,
+      mutliline: true,
+    },
   ],
   style: {},
 }
@@ -21,17 +30,30 @@ export const fields = {
 const Banner = props => {
   const {
     image: { storageKey },
+    text,
   } = props
 
   return (
     <Container>
-      <Image storageKey={storageKey} />
+      <Image storageKey={storageKey} bg={true} />
+      {text && <Headline children={text} />}
     </Container>
   )
 }
 
 const Container = styled.div`
-  padding: 30px;
+  position: relative;
+  height: 300px;
+`
+
+const Headline = styled.h1`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  z-index: 1;
+  text-align: center;
 `
 
 export default Banner

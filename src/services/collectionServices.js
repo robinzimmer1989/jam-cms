@@ -10,12 +10,38 @@ export const addCollection = async ({ siteID, slug, title }, dispatch) => {
   )
 
   if (result?.data?.createPostType) {
-    const {
-      data: { createPostType },
-    } = result
-
-    dispatch({ type: 'ADD_COLLECTION', payload: createPostType })
+    dispatch({ type: `ADD_COLLECTION`, payload: result.data.createPostType })
   }
+
+  return result
+}
+
+export const getCollection = async ({ postTypeID }) => {
+  const result = await API.graphql(
+    graphqlOperation(
+      `
+      query GetPostType($id: ID!) {
+        getPostType(id: $id) {
+          id
+          siteID
+          title
+          slug
+          posts {
+            items {
+              id
+              siteID
+              slug
+              postTypeID
+              status
+              title
+            }
+          }
+        }
+      }
+    `,
+      { id: postTypeID }
+    )
+  )
 
   return result
 }

@@ -45,6 +45,17 @@ export const createSite = /* GraphQL */ `
         }
         nextToken
       }
+      menus {
+        items {
+          id
+          siteID
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -92,6 +103,17 @@ export const updateSite = /* GraphQL */ `
         }
         nextToken
       }
+      menus {
+        items {
+          id
+          siteID
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -133,6 +155,17 @@ export const deleteSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      menus {
+        items {
+          id
+          siteID
+          slug
           createdAt
           updatedAt
           owner
@@ -399,6 +432,222 @@ export const deleteMediaItem = /* GraphQL */ `
       fileSize
       createdAt
       updatedAt
+      owner
+    }
+  }
+`;
+export const createMenu = /* GraphQL */ `
+  mutation CreateMenu(
+    $input: CreateMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    createMenu(input: $input, condition: $condition) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const updateMenu = /* GraphQL */ `
+  mutation UpdateMenu(
+    $input: UpdateMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    updateMenu(input: $input, condition: $condition) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const deleteMenu = /* GraphQL */ `
+  mutation DeleteMenu(
+    $input: DeleteMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    deleteMenu(input: $input, condition: $condition) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const createMenuItem = /* GraphQL */ `
+  mutation CreateMenuItem(
+    $input: CreateMenuItemInput!
+    $condition: ModelMenuItemConditionInput
+  ) {
+    createMenuItem(input: $input, condition: $condition) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const updateMenuItem = /* GraphQL */ `
+  mutation UpdateMenuItem(
+    $input: UpdateMenuItemInput!
+    $condition: ModelMenuItemConditionInput
+  ) {
+    updateMenuItem(input: $input, condition: $condition) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const deleteMenuItem = /* GraphQL */ `
+  mutation DeleteMenuItem(
+    $input: DeleteMenuItemInput!
+    $condition: ModelMenuItemConditionInput
+  ) {
+    deleteMenuItem(input: $input, condition: $condition) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
       owner
     }
   }

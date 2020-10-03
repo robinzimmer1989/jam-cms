@@ -9,6 +9,7 @@ import EditIcon from 'react-ionicons/lib/IosBrushOutline'
 import AddBlock from '../forms/AddBlock'
 import AddPost from '../forms/AddPost'
 import FlexibleContent from './FlexibleContent'
+import BlockWrapper from './BlockWrapper'
 import Layout from './Layout'
 import Header from './blocks/Header'
 import Skeleton from 'components/Skeleton'
@@ -83,7 +84,7 @@ const Editor = props => {
             <HeadlineContainer>
               <Headline children={post?.title} />
               <EditButton size="small" className={`icon icon-add`} onClick={handleOpenUpdatePostForm}>
-                <EditIcon />
+                <EditIcon fontSize={`18px`} />
               </EditButton>
             </HeadlineContainer>
           </Skeleton>
@@ -97,10 +98,13 @@ const Editor = props => {
         {post && (
           <>
             {site?.settings?.header && (
-              <Header
-                {...convertBlockSchemaToProps([site.settings.header])[0].data}
+              <BlockWrapper
+                index={'header'}
                 onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'header' })}
-              />
+                hideAddButtonTop
+              >
+                <Header {...convertBlockSchemaToProps([site.settings.header])[0].data} />
+              </BlockWrapper>
             )}
 
             {post.content.length > 0 ? (
@@ -142,6 +146,7 @@ const Page = styled.div`
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   margin: 0 auto;
   width: 100%;
+  min-height: 400px;
   margin-bottom: 40px;
 `
 

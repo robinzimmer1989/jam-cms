@@ -16,6 +16,13 @@ export const fields = {
       label: 'Add Logo',
       value: '',
     },
+    {
+      id: 'menu',
+      type: 'menu',
+      placeholder: '',
+      label: 'Edit Menu',
+      value: [],
+    },
   ],
   style: {},
 }

@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createSite, updateSite as dbUpdateSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
+import { createSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
 import defaultSiteSettings from '../components/cms/editor/defaultSiteSettings'
 
 export const addSite = async ({ title, ownerID }) => {
@@ -14,9 +14,38 @@ export const addSite = async ({ title, ownerID }) => {
 
 export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings }) => {
   const result = await API.graphql(
-    graphqlOperation(dbUpdateSite, {
-      input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings) },
-    })
+    graphqlOperation(
+      `mutation UpdateSite(
+        $input: UpdateSiteInput!
+        $condition: ModelSiteConditionInput
+      ) {
+        updateSite(input: $input, condition: $condition) {
+          id
+          title
+          netlifyID
+          netlifyUrl
+          settings
+          postTypes {
+            items {
+              id
+              title
+              slug
+              posts {
+                items {
+                  id
+                  title
+                  slug
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+      {
+        input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings) },
+      }
+    )
   )
 
   if (result?.data?.updateSite) {
@@ -76,13 +105,6 @@ export const getSite = async ({ siteID }) => {
               id
               title
               slug
-              posts {
-                items {
-                  id
-                  title
-                  slug
-                }
-              }
             }
           }
         }

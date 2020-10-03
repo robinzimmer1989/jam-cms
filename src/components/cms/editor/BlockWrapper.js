@@ -2,7 +2,6 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { Fab } from '@material-ui/core'
 import AddIcon from 'react-ionicons/lib/IosAdd'
-import DeleteIcon from 'react-ionicons/lib/IosTrash'
 
 // import app components
 import AddBlock from '../forms/AddBlock'
@@ -10,82 +9,74 @@ import { useStore } from 'store'
 import { colors } from 'theme'
 
 const BlockWrapper = props => {
-  const { index, children } = props
+  const { index, hideAddButtonTop, hideAddButtonBottom, onClick, children } = props
 
   const [
     {
-      editorState: { post, activeBlockIndex },
+      editorState: { activeBlockIndex },
     },
     dispatch,
   ] = useStore()
 
-  const handleOpenBlockDialog = () => {
+  const handleOpenBlockDialog = newIndex => {
     dispatch({
-      type: 'SET_DIALOG',
+      type: `SET_DIALOG`,
       payload: {
         open: true,
-        component: <AddBlock index={index + 1} />,
+        component: <AddBlock index={newIndex} />,
         width: 'xs',
       },
     })
   }
 
-  const handleOpenBlock = () => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: index })
-
-  const handleRemoveBlock = () => {
-    const blocks = [...post.content]
-    blocks.splice(index, 1)
-
-    dispatch({
-      type: 'SET_EDITOR_POST',
-      payload: {
-        ...post,
-        content: blocks,
-      },
-    })
-  }
+  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_ACTIVE_BLOCK_INDEX`, payload: index })
 
   const isActive = activeBlockIndex === index
 
   return (
     <Container active={isActive}>
-      <Content onClick={handleOpenBlock} active={isActive}>
-        {children}
+      <Content onClick={onClick || handleOpenBlock} active={isActive}>
+        <div>{children}</div>
       </Content>
 
-      <AddButton size="small" className={`icon icon-add`} onClick={handleOpenBlockDialog}>
-        <AddIcon />
-      </AddButton>
+      {!hideAddButtonTop && (
+        <AddButtonTop size="small" className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index)}>
+          <AddIcon />
+        </AddButtonTop>
+      )}
 
-      <DeleteButton size="small" className={`icon icon-remove`} onClick={handleRemoveBlock}>
-        <DeleteIcon />
-      </DeleteButton>
+      {!hideAddButtonBottom && (
+        <AddButtonBottom size="small" className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index + 1)}>
+          <AddIcon />
+        </AddButtonBottom>
+      )}
     </Container>
   )
 }
 
 const Container = styled.div`
   position: relative;
+  cursor: pointer;
 
   .icon {
     opacity: 0;
     pointer-events: none;
   }
 
-  ${({ active }) =>
-    !active &&
-    css`
-      &:hover {
-        .icon {
-          opacity: 1;
-          pointer-events: all;
-        }
-      }
-    `}
+  &:hover {
+    .icon {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
 `
 
 const Content = styled.div`
   border: 1px solid transparent;
+
+  > div {
+    pointer-events: none;
+  }
 
   ${({ active }) =>
     active
@@ -99,23 +90,23 @@ const Content = styled.div`
         `};
 `
 
-const AddButton = styled(Fab)`
+const AddButtonTop = styled(Fab)`
+  && {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 100%;
+    transform: translate(-50%, 50%);
+  }
+`
+
+const AddButtonBottom = styled(Fab)`
   && {
     position: absolute;
     z-index: 2;
     left: 50%;
     top: 100%;
     transform: translate(-50%, -50%);
-  }
-`
-
-const DeleteButton = styled(Fab)`
-  && {
-    position: absolute;
-    z-index: 2;
-    right: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
   }
 `
 

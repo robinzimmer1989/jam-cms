@@ -17,6 +17,8 @@ const Sidebar = () => {
     dispatch,
   ] = useStore()
 
+  const siteComponent = activeBlockIndex === 'header' || activeBlockIndex === 'footer'
+
   let settings = {
     title: '',
     icon: {
@@ -26,12 +28,11 @@ const Sidebar = () => {
     children: null,
   }
 
-  if (post?.content[activeBlockIndex] || activeBlockIndex === 'header' || activeBlockIndex === 'footer') {
+  if (post?.content[activeBlockIndex] || siteComponent) {
     settings = {
-      title:
-        activeBlockIndex === 'header' || activeBlockIndex === 'footer'
-          ? activeBlockIndex.charAt(0).toUpperCase() + activeBlockIndex.slice(1)
-          : post.content[activeBlockIndex].name,
+      title: siteComponent
+        ? activeBlockIndex.charAt(0).toUpperCase() + activeBlockIndex.slice(1)
+        : post.content[activeBlockIndex].name,
       icon: {
         onClick: () =>
           dispatch({
@@ -72,7 +73,7 @@ const Container = styled.div`
   right: 0;
   top: 0;
   height: 100%;
-  width: 250px;
+  width: 320px;
   background: #fff;
   overflow: auto;
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);

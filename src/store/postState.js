@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { unionBy } from 'lodash'
+import { unionBy, set } from 'lodash'
 
 const DEFAULT_STATE = {
   siteID: null,
@@ -52,15 +52,8 @@ export const postReducer = (state, action) => {
        ******************************/
 
       case `ADD_COLLECTION`:
-        draft.sites = {
-          ...draft.sites,
-          [payload.siteID]: {
-            ...draft.sites[payload.siteID],
-            postTypes: {
-              items: [...draft.sites[payload.siteID].postTypes.items, payload],
-            },
-          },
-        }
+        const collectionIndex = draft.sites[payload.siteID].postTypes.items.findIndex(o => o.id === payload.id)
+        set(draft, `sites.${payload.siteID}.postTypes.items.${collectionIndex}`, payload)
         break
 
       /******************************

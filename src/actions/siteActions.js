@@ -83,3 +83,12 @@ export const getSite = async ({ siteID }, dispatch) => {
     dispatch({ type: `ADD_SITE`, payload: result.data.getSite })
   }
 }
+
+export const deploySite = async ({ netlifyID }, dispatch) => {
+  const result = await netlifyServices.deploySite({ netlifyID })
+
+  console.log(result)
+
+  if (result?.id) {
+  }
+}

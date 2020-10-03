@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { IconButton } from '@material-ui/core'
+import { IconButton, Button } from '@material-ui/core'
 import ViewIcon from 'react-ionicons/lib/IosEye'
 
 // import app components
+import { siteActions } from 'actions'
 import { useStore } from 'store'
 import { colors } from 'theme'
 
@@ -14,16 +15,24 @@ const Header = props => {
     {
       postState: { siteID, sites },
     },
+    dispatch,
   ] = useStore()
 
   const site = sites[siteID] || null
+
+  const handleDeploy = async () => {
+    await siteActions.deploySite(site, dispatch)
+  }
 
   return (
     <Container>
       <Grid>
         {pageTitle && <Title children={pageTitle} />}
         <Grid>
-          {site?.netlifyID && <NetlifyStatus src={`https://api.netlify.com/api/v1/badges/${site.netlifyID}/deploy-status`} />}
+          {site?.netlifyID && (
+            <NetlifyStatus src={`https://api.netlify.com/api/v1/badges/${site.netlifyID}/deploy-status`} />
+          )}
+          {site?.netlifyID && <Button children={`Deploy`} onClick={handleDeploy} />}
           {site?.netlifyUrl && (
             <a href={site?.netlifyUrl} target="_blank" rel="noopener">
               <IconButton>

@@ -2,8 +2,11 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { ToastContainer } from 'react-toastify'
+
+// import external css files
 import 'react-toastify/dist/ReactToastify.css'
 import 'minireset.css'
+import 'react-sortable-tree/style.css'
 
 // import app components
 import { StoreProvider } from 'store'

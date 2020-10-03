@@ -12,9 +12,9 @@ const Layout = props => {
   return (
     <Container>
       <Sidebar />
+
       <Content>
         <TopBar />
-
         <Edges size="md">{children}</Edges>
       </Content>
     </Container>
@@ -22,7 +22,7 @@ const Layout = props => {
 }
 
 const Container = styled.div`
-  padding-right: 250px;
+  padding-right: 320px;
 `
 
 const Content = styled.div`

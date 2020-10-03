@@ -12,6 +12,7 @@ export const fields = {
       placeholder: 'Content',
       label: 'Text',
       value: '',
+      rows: 4,
     },
   ],
   style: {},

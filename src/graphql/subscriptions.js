@@ -42,6 +42,17 @@ export const onCreateSite = /* GraphQL */ `
         }
         nextToken
       }
+      menus {
+        items {
+          id
+          siteID
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -86,6 +97,17 @@ export const onUpdateSite = /* GraphQL */ `
         }
         nextToken
       }
+      menus {
+        items {
+          id
+          siteID
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -124,6 +146,17 @@ export const onDeleteSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      menus {
+        items {
+          id
+          siteID
+          slug
           createdAt
           updatedAt
           owner
@@ -363,6 +396,204 @@ export const onDeleteMediaItem = /* GraphQL */ `
       fileSize
       createdAt
       updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateMenu = /* GraphQL */ `
+  subscription OnCreateMenu($owner: String) {
+    onCreateMenu(owner: $owner) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onUpdateMenu = /* GraphQL */ `
+  subscription OnUpdateMenu($owner: String) {
+    onUpdateMenu(owner: $owner) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onDeleteMenu = /* GraphQL */ `
+  subscription OnDeleteMenu($owner: String) {
+    onDeleteMenu(owner: $owner) {
+      id
+      siteID
+      slug
+      createdAt
+      updatedAt
+      owner
+      menuItems {
+        items {
+          id
+          siteID
+          menuID
+          orderPostID
+          title
+          url
+          target
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onCreateMenuItem = /* GraphQL */ `
+  subscription OnCreateMenuItem($owner: String) {
+    onCreateMenuItem(owner: $owner) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const onUpdateMenuItem = /* GraphQL */ `
+  subscription OnUpdateMenuItem($owner: String) {
+    onUpdateMenuItem(owner: $owner) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
+      owner
+    }
+  }
+`;
+export const onDeleteMenuItem = /* GraphQL */ `
+  subscription OnDeleteMenuItem($owner: String) {
+    onDeleteMenuItem(owner: $owner) {
+      id
+      siteID
+      menuID
+      orderPostID
+      title
+      url
+      target
+      createdAt
+      updatedAt
+      post {
+        id
+        siteID
+        slug
+        postTypeID
+        status
+        title
+        content
+        seoTitle
+        seoDescription
+        createdAt
+        updatedAt
+        postType {
+          id
+          siteID
+          title
+          slug
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+      }
       owner
     }
   }
