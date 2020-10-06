@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import { Router as ReachRouter } from '@reach/router'
-import { navigate } from 'gatsby'
 
 // import app components
-import Collections from './pages/Collections'
 import Dashboard from './pages/Dashboard'
 import Media from './pages/Media'
-import Settings from './pages/Settings'
+import Collections from './pages/Collections'
+import Collection from './pages/Collection'
 import Editor from './editor'
+import Settings from './pages/Settings'
 
+import { ROUTE_MEDIA, ROUTE_COLLECTIONS, ROUTE_EDITOR, ROUTE_SETTINGS } from 'routes'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
 
@@ -37,10 +38,11 @@ const Router = props => {
   return (
     <ReachRouter>
       <Dashboard path="/" />
-      <Media path="/media" />
-      <Collections path="/collections/:postTypeID" />
-      <Editor path="/collections/:postTypeID/:postID" />
-      <Settings path="/settings" />
+      <Media path={`${ROUTE_MEDIA}`} />
+      <Collections path={ROUTE_COLLECTIONS} />
+      <Collection path={`${ROUTE_COLLECTIONS}/:postTypeID`} />
+      <Editor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} />
+      <Settings path={ROUTE_SETTINGS} />
     </ReachRouter>
   )
 }

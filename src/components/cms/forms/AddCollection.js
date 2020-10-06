@@ -5,32 +5,37 @@ import { Button, TextField } from '@material-ui/core'
 import FormWrapper from './FormWrapper'
 import Spacer from 'components/Spacer'
 
-import { collectionServices } from 'services'
+import { formatSlug } from 'utils'
 import { useStore } from 'store'
 
 const AddCollection = props => {
-  const { siteID } = props
+  const { title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props
 
   const [, dispatch] = useStore()
 
-  const [title, setTitle] = useState('')
-  const [slug, setSlug] = useState('')
+  const [title, setTitle] = useState(defaultTitle)
+  const [slug, setSlug] = useState(defaultSlug)
 
   const handleSubmit = async () => {
-    if (!title || !slug) {
+    if (!title) {
       return
     }
 
-    await collectionServices.addCollection({ siteID, title, slug }, dispatch)
+    let formattedSlug
+
+    if (slug) {
+      formattedSlug = formatSlug(slug)
+    } else {
+      formattedSlug = formatSlug(title)
+    }
+
+    await onSubmit({ title, slug: formattedSlug })
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }
 
   return (
-    <FormWrapper
-      title={`Add Collection`}
-      button={<Button children={`Add`} onClick={handleSubmit} variant="contained" />}
-    >
+    <>
       <Spacer mb={20}>
         <TextField
           value={title}
@@ -40,14 +45,20 @@ const AddCollection = props => {
           fullWidth
         />
       </Spacer>
-      <TextField
-        value={slug}
-        onChange={e => setSlug(e.target.value)}
-        variant="outlined"
-        placeholder={`Slug`}
-        fullWidth
-      />
-    </FormWrapper>
+
+      <Spacer mb={20}>
+        <TextField
+          value={slug}
+          onChange={e => setSlug(e.target.value)}
+          variant="outlined"
+          placeholder={`Slug`}
+          helperText={`Optional`}
+          fullWidth
+        />
+      </Spacer>
+
+      <Button children={`Add`} onClick={handleSubmit} variant="contained" />
+    </>
   )
 }
 

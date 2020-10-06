@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core'
 // import app components
 import Spacer from 'components/Spacer'
 import AddImage from '../../forms/AddImage'
-import AddMenu from '../../forms/AddMenu'
+import MenuBuilder from '../../menus/MenuBuilder'
 
 import Textarea from '../fields/Textarea'
 import ImagePicker from '../fields/ImagePicker'
@@ -146,7 +146,7 @@ const BlockEditFields = () => {
                 type: `SET_DIALOG`,
                 payload: {
                   open: true,
-                  component: <AddMenu {...field} onChange={value => handleChange(value, field.id)} />,
+                  component: <MenuBuilder {...field} />,
                   width: `md`,
                 },
               })

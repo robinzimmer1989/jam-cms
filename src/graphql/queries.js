@@ -30,12 +30,30 @@ export const getSite = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      mediaItems {
+        items {
+          id
+          siteID
+          title
+          mimeType
+          storageKey
+          altText
+          width
+          height
+          fileSize
           createdAt
           updatedAt
           owner
@@ -77,6 +95,9 @@ export const listSites = /* GraphQL */ `
           nextToken
         }
         posts {
+          nextToken
+        }
+        mediaItems {
           nextToken
         }
         menus {
@@ -125,6 +146,7 @@ export const getPostType = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
@@ -151,6 +173,7 @@ export const listPosts = /* GraphQL */ `
         id
         siteID
         slug
+        parentID
         postTypeID
         status
         title
@@ -180,6 +203,7 @@ export const getPost = /* GraphQL */ `
       id
       siteID
       slug
+      parentID
       postTypeID
       status
       title
@@ -261,10 +285,8 @@ export const getMenu = /* GraphQL */ `
           id
           siteID
           menuID
-          orderPostID
-          title
-          url
-          target
+          position
+          postID
           createdAt
           updatedAt
           owner
@@ -302,16 +324,15 @@ export const getMenuItem = /* GraphQL */ `
       id
       siteID
       menuID
-      orderPostID
-      title
-      url
-      target
+      position
+      postID
       createdAt
       updatedAt
       post {
         id
         siteID
         slug
+        parentID
         postTypeID
         status
         title
@@ -346,16 +367,15 @@ export const listMenuItems = /* GraphQL */ `
         id
         siteID
         menuID
-        orderPostID
-        title
-        url
-        target
+        position
+        postID
         createdAt
         updatedAt
         post {
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title

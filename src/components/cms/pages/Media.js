@@ -1,14 +1,14 @@
 import React from 'react'
 
 // import app components
-import Layout from '../Layout'
+import CmsLayout from '../CmsLayout'
 import MediaLibrary from '../MediaLibrary'
 
 const Media = props => {
   return (
-    <Layout pageTitle={`Media`}>
+    <CmsLayout pageTitle={`Media`}>
       <MediaLibrary />
-    </Layout>
+    </CmsLayout>
   )
 }
 

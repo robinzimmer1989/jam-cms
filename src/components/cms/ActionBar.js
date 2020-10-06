@@ -10,7 +10,7 @@ const ActionBar = props => {
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 20px 0;
+  margin: 30px 0;
 `
 
 export default ActionBar

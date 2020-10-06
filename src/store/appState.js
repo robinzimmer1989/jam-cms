@@ -4,8 +4,8 @@ export const appState = {
   menu: false,
   dialog: {
     open: false,
+    title: '',
     component: null,
-    width: '',
   },
 }
 

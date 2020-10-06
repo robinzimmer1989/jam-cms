@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { unionBy, set } from 'lodash'
+import { unionBy, set, get } from 'lodash'
 
 const DEFAULT_STATE = {
   siteID: null,
@@ -32,13 +32,7 @@ export const postReducer = (state, action) => {
 
         draft.sites = {
           ...draft.sites,
-          [payload.id]: {
-            ...payload,
-            mediaItems: {
-              items: [],
-              nextToken: null,
-            },
-          },
+          [payload.id]: payload,
         }
         break
 
@@ -59,6 +53,28 @@ export const postReducer = (state, action) => {
       /******************************
        * Posts
        ******************************/
+      case `ADD_POST`:
+        const postTypeIndex = draft.sites[payload.siteID].postTypes.items.findIndex(o => o.id === payload.postTypeID)
+        console.log(postTypeIndex)
+        const path = `sites${payload.siteID}.postTypes.items.${postTypeIndex}.posts.items`
+
+        if (get(draft, path)) {
+          set(draft, path, [payload, ...path])
+        } else {
+          set(draft, path, [payload])
+        }
+
+        break
+
+      /******************************
+       * Menus
+       ******************************/
+      case `ADD_MENU`:
+        draft.sites[payload.siteID].menus = {
+          items: unionBy(draft.sites[payload.siteID].menus, [payload], 'id'),
+          nextToken: payload.nextToken || draft.sites[payload.siteID].mediaItems.nextToken,
+        }
+        break
 
       /******************************
        * Media Items

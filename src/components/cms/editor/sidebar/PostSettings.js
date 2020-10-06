@@ -1,13 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 import produce from 'immer'
-import { Button, Select, MenuItem, TextField, InputLabel, FormControl } from '@material-ui/core'
+import { Input, Button, Space, Select } from 'antd'
 import { toast } from 'react-toastify'
 import { set } from 'lodash'
 
 // import app components
 import Skeleton from 'components/Skeleton'
-import Spacer from 'components/Spacer'
+import updateMenus from '../../menus/updateMenus'
 
 import { useStore } from 'store'
 import { postActions, siteActions } from 'actions'
@@ -15,12 +14,21 @@ import { postActions, siteActions } from 'actions'
 const PostSettings = () => {
   const [
     {
+      postState: { sites, siteID },
       editorState: { site, post },
     },
     dispatch,
   ] = useStore()
 
+  const posts = sites[siteID]?.postTypes?.items
+    .find(o => o.id === post?.postTypeID)
+    ?.posts?.items.filter(o => o.id !== post.id)
+
+  console.log(posts)
+
   const handleSavePost = async () => {
+    await updateMenus({ site }, dispatch)
+
     await postActions.updatePost(post, dispatch)
     await siteActions.updateSite(site, dispatch)
 
@@ -37,61 +45,52 @@ const PostSettings = () => {
   }
 
   return (
-    <Container>
-      <Spacer mb={30}>
-        <Skeleton done={!!post} height={56}>
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel htmlFor="post-status">Status</InputLabel>
-            <Select
-              value={post?.status || ''}
-              name={`status`}
-              onChange={handleChangeSettings}
-              label={`Status`}
-              inputProps={{
-                id: 'post-status',
-              }}
-            >
-              <MenuItem value={`publish`} children={`Publish`} />
-              <MenuItem value={`draft`} children={`Draft`} />
-              <MenuItem value={`trash`} children={`Trash`} />
-            </Select>
-          </FormControl>
+    <>
+      <Space direction="vertical" size={20}>
+        <Skeleton done={!!post} height={32}>
+          <Select
+            value={post?.status || ''}
+            onChange={value => handleChangeSettings({ target: { name: `status`, value } })}
+          >
+            <Select.Option value={`publish`} children={`Publish`} />
+            <Select.Option value={`draft`} children={`Draft`} />
+            <Select.Option value={`trash`} children={`Trash`} />
+          </Select>
         </Skeleton>
-      </Spacer>
 
-      <Spacer mb={30}>
-        <Skeleton done={!!post} height={56}>
-          <TextField
+        <Skeleton done={!!post} height={32}>
+          <Select
+            value={post?.parentID}
+            onChange={value => handleChangeSettings({ target: { name: `parentID`, value } })}
+          >
+            <Select.Option value={``} children={`None`} />
+            {posts && posts.map(o => <Select.Option value={o.id} children={o.title} />)}
+          </Select>
+        </Skeleton>
+
+        <Skeleton done={!!post} height={32}>
+          <Input
             value={post?.seoTitle || ''}
             name={`seoTitle`}
             onChange={handleChangeSettings}
-            label={`SEO Title`}
-            variant={`outlined`}
-            fullWidth
+            placeholder={`SEO Title`}
           />
         </Skeleton>
-      </Spacer>
 
-      <Spacer mb={30}>
-        <Skeleton done={!!post} height={113}>
-          <TextField
+        <Skeleton done={!!post} height={98}>
+          <Input.TextArea
             value={post?.seoDescription || ''}
             name={`seoDescription`}
             onChange={handleChangeSettings}
-            label={`SEO Description`}
-            variant={`outlined`}
-            multiline
+            placeholder={`SEO Description`}
             rows={4}
-            fullWidth
           />
         </Skeleton>
-      </Spacer>
 
-      <Button children={`Save`} variant="contained" onClick={handleSavePost} />
-    </Container>
+        <Button children={`Update`} type="primary" onClick={handleSavePost} />
+      </Space>
+    </>
   )
 }
-
-const Container = styled.div``
 
 export default PostSettings

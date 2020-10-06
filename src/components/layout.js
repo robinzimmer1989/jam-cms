@@ -7,10 +7,11 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'minireset.css'
 import 'react-sortable-tree/style.css'
+import 'antd/dist/antd.css'
 
 // import app components
 import { StoreProvider } from 'store'
-import { mui, typography, GlobalStyles } from 'theme'
+import { GlobalStyles } from 'theme'
 
 const Layout = props => {
   const { children } = props
@@ -19,26 +20,23 @@ const Layout = props => {
     <>
       <Helmet>
         <html lang="en" />
-        {typography.injectStyles()}
       </Helmet>
 
       <GlobalStyles />
 
       <StoreProvider>
-        <MuiThemeProvider theme={mui}>
-          {children}
+        {children}
 
-          <ToastContainer
-            position="bottom-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={true}
-            closeOnClick
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          />
-        </MuiThemeProvider>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </StoreProvider>
     </>
   )

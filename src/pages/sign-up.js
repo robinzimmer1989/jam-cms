@@ -1,140 +1,121 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { navigate } from '@reach/router'
-import { Link } from 'gatsby'
 import { Auth } from 'aws-amplify'
+import { Button, Input, Card } from 'antd'
 
 // import app components
-import Edges from '../components/Edges'
-import Error from '../components/Error'
+import BaseLayout from 'components/BaseLayout'
+import Spacer from 'components/Spacer'
+import Edges from 'components/Edges'
+import Paper from 'components/Paper'
 
-const initialState = {
-  username: ``,
-  password: ``,
-  email: '',
-  phone_number: '',
-  authCode: '',
-  stage: 0,
-  error: '',
-}
+import { setUser, isLoggedIn } from 'utils/auth'
+import getRoute from 'routes'
 
-class SignUp extends React.Component {
-  state = initialState
+const SignUp = () => {
+  const [data, setData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    phone: '',
+    authCode: '',
+    stage: 0,
+    error: '',
+  })
 
-  handleUpdate = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
-  }
+  const isAuthed = isLoggedIn()
 
-  signUp = async () => {
-    const { username, password, email, phone_number } = this.state
+  useEffect(() => {
+    isAuthed && navigate(getRoute(`app`))
+  }, [isAuthed])
+
+  const handleSignUp = async () => {
+    const { username, password, email, phone } = data
+
     try {
       await Auth.signUp({
         username,
         password,
-        attributes: { email, phone_number },
+        attributes: { email, phone_number: phone },
       })
-      this.setState({ stage: 1 })
+      setData({ ...data, stage: 1 })
     } catch (err) {
-      this.setState({ error: err })
+      setData({ ...data, error: err })
       console.log('error signing up...', err)
     }
   }
 
-  confirmSignUp = async () => {
-    const { username, authCode } = this.state
+  const handleConfirmSignUp = async () => {
+    const { username, authCode } = data
+
     try {
       await Auth.confirmSignUp(username, authCode)
-      alert('Successfully signed up!')
-      navigate('/app/login')
+      navigate(getRoute(`app`))
     } catch (err) {
-      this.setState({ error: err })
+      setData({ ...data, error: err })
       console.log('error confirming signing up...', err)
     }
   }
 
-  render() {
-    return (
+  const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
+
+  return (
+    <BaseLayout>
       <Edges size="xs">
-        <h1>Sign Up</h1>
-        {this.state.stage === 0 && (
-          <div style={styles.formContainer}>
-            {this.state.error && <Error errorMessage={this.state.error} />}
-            <input
-              onChange={this.handleUpdate}
-              placeholder="Username"
-              name="username"
-              value={this.state.username}
-              style={styles.input}
-            />
-            <input
-              onChange={this.handleUpdate}
-              placeholder="Password"
-              name="password"
-              value={this.state.password}
-              type="password"
-              style={styles.input}
-            />
-            <input
-              onChange={this.handleUpdate}
-              placeholder="Email"
-              name="email"
-              value={this.state.email}
-              style={styles.input}
-            />
-            <input
-              onChange={this.handleUpdate}
-              placeholder="Phone Number"
-              name="phone_number"
-              value={this.state.phone_number}
-              style={styles.input}
-            />
-            <div style={styles.button} onClick={this.signUp}>
-              <span style={styles.buttonText}>Sign Up</span>
-            </div>
-          </div>
-        )}
-        {this.state.stage === 1 && (
-          <div style={styles.formContainer}>
-            {this.state.error && <Error errorMessage={this.state.error} />}
-            <input
-              onChange={this.handleUpdate}
-              placeholder="Authorization Code"
-              name="authCode"
-              value={this.state.authCode}
-              style={styles.input}
-            />
-            <div style={styles.button} onClick={this.confirmSignUp}>
-              <span style={styles.buttonText}>Confirm Sign Up</span>
-            </div>
-          </div>
-        )}
-        <Link to="/app/login">Sign In</Link>
+        <Spacer mt={30} mb={30}>
+          <Card title={`Sign Up`}>
+            {data.stage === 0 && (
+              <>
+                <Spacer mb={20}>
+                  <Input placeholder={`Username`} value={data.username} onChange={handleChange} name="username" />
+                </Spacer>
+
+                <Spacer mb={20}>
+                  <Input
+                    placeholder={`Password`}
+                    value={data.password}
+                    type="password"
+                    onChange={handleChange}
+                    name="password"
+                  />
+                </Spacer>
+
+                <Spacer mb={20}>
+                  <Input placeholder={`Email`} value={data.email} type="email" onChange={handleChange} name="email" />
+                </Spacer>
+
+                <Spacer mb={20}>
+                  <Input placeholder={`Phone`} value={data.phone} onChange={handleChange} name="phone" />
+                </Spacer>
+
+                <Button children={`Submit`} onClick={handleSignUp} type="primary" />
+              </>
+            )}
+
+            {data.stage === 1 && (
+              <>
+                <Spacer mb={20}>
+                  <Input
+                    placeholder={`Authorization Code`}
+                    value={data.authCode}
+                    onChange={handleChange}
+                    name="authCode"
+                  />
+                </Spacer>
+
+                <Button children={`Confirm Sign Up`} onClick={handleConfirmSignUp} type="primary" />
+              </>
+            )}
+
+            {data?.error?.message && <Error errorMessage={data.error} />}
+          </Card>
+        </Spacer>
       </Edges>
-    )
-  }
+    </BaseLayout>
+  )
 }
 
-const styles = {
-  input: {
-    height: 40,
-    margin: '10px 0px',
-    padding: 7,
-  },
-  formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  button: {
-    backgroundColor: 'rebeccapurple',
-    padding: '15px 7px',
-    cursor: 'pointer',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: 'white',
-  },
-}
+const Error = styled.div``
 
 export default SignUp

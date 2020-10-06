@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { navigate } from 'gatsby'
-import { TextField, Button } from '@material-ui/core'
+import { Button, Input, Card } from 'antd'
 
 // import app components
+import Spacer from 'components/Spacer'
+
 import { useStore } from 'store'
 import { siteActions } from 'actions'
 
@@ -33,11 +35,18 @@ const GeneralSettings = props => {
 
   return (
     <Container>
-      <TextField value={data.title} name="title" variant="outlined" onChange={handleChange} />
+      <Spacer mb={30}>
+        <Card title={`General`}>
+          <Spacer mb={20}>
+            <Input placeholder={`Title`} value={data.title} name="title" onChange={handleChange} />
+          </Spacer>
+          <Button onClick={handleUpdate} children={`Update`} type="primary" />
+        </Card>
+      </Spacer>
 
-      <Button onClick={handleUpdate} children={`Update`} />
-
-      <Button onClick={handleDelete} children={`Delete Site`} />
+      <Card title={`Danger Zone`}>
+        <Button onClick={handleDelete} children={`Delete Site`} type="primary" danger />
+      </Card>
     </Container>
   )
 }

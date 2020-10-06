@@ -33,8 +33,12 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings })
               posts {
                 items {
                   id
-                  title
+                  siteID
                   slug
+                  postTypeID
+                  parentID
+                  status
+                  title
                 }
               }
             }
@@ -81,7 +85,6 @@ export const getSites = async () => {
             netlifyID
             netlifyUrl
           }
-          nextToken
         }
       }
     `)
@@ -105,6 +108,39 @@ export const getSite = async ({ siteID }) => {
               id
               title
               slug
+              posts {
+                items {
+                  id
+                  siteID
+                  slug
+                  postTypeID
+                  parentID
+                  status
+                  title
+                }
+              }
+            }
+          }
+          mediaItems {
+            items {
+              id
+            }
+          }
+          menus {
+            items {
+              id
+              slug
+              menuItems {
+                items {
+                  id
+                  position
+                  post {
+                    id
+                    title
+                    slug
+                  }
+                }
+              }
             }
           }
         }

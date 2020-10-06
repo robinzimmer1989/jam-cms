@@ -87,8 +87,7 @@ export const getSite = async ({ siteID }, dispatch) => {
 export const deploySite = async ({ netlifyID }, dispatch) => {
   const result = await netlifyServices.deploySite({ netlifyID })
 
-  console.log(result)
-
-  if (result?.id) {
+  if (result?.deploy_id) {
+    dispatch({ type: `UPDATE_NETLIFY_DEPLOY_ID`, payload: result.deploy_id })
   }
 }

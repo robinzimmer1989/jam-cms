@@ -1,4 +1,5 @@
 const path = require('path')
+const lessToJson = require('less-to-json')
 
 module.exports = {
   siteMetadata: {
@@ -8,6 +9,21 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-less`,
+      options: {
+        lessOptions: {
+          javascriptEnabled: true,
+          modifyVars: lessToJson('src/theme/ant.less'),
+        },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-antd`,
+      options: {
+        style: true,
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -46,6 +62,18 @@ module.exports = {
         theme: path.join(__dirname, `src/theme`),
         actions: path.join(__dirname, `src/actions`),
         utils: path.join(__dirname, `src/utils`),
+        routes: path.join(__dirname, `src/routes`),
+      },
+    },
+    {
+      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      options: {
+        fonts: [
+          {
+            family: 'Nunito',
+            variants: ['300', '400', '700'],
+          },
+        ],
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

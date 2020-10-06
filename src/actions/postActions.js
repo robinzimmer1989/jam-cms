@@ -1,7 +1,7 @@
 import { postServices } from '../services'
 
-export const addPost = async ({ siteID, slug, postTypeID, status, title, content }, dispatch) => {
-  const result = await postServices.addPost({ siteID, slug, postTypeID, status, title, content })
+export const addPost = async ({ siteID, slug, postTypeID, status, title, content, parentID }, dispatch) => {
+  const result = await postServices.addPost({ siteID, slug, postTypeID, status, title, content, parentID })
 
   if (result?.data?.createPost) {
     dispatch({ type: 'ADD_POST', payload: result.data.createPost })
@@ -48,8 +48,8 @@ export const getPost = async ({ site, postID }, dispatch) => {
   return result
 }
 
-export const updatePost = ({ id, slug, status, title, content, seoTitle, seoDescription }, dispatch) => {
-  const result = postServices.updatePost({ id, slug, status, title, content, seoTitle, seoDescription })
+export const updatePost = ({ id, slug, status, title, content, seoTitle, seoDescription, parentID }, dispatch) => {
+  const result = postServices.updatePost({ id, slug, status, title, content, seoTitle, seoDescription, parentID })
 
   if (result?.data?.updatePost) {
     dispatch({ type: 'ADD_POST', payload: result.data.updatePost })

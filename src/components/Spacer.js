@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import app components
-import { mui } from 'theme'
+const breakpoints = { xs: 0, sm: 600, md: 1024, lg: 1280, xl: 1440, xxl: 1920 }
 
 export default function Spacer(props) {
   return <StyledSpacer {...props}>{props.children}</StyledSpacer>
@@ -57,7 +56,7 @@ const StyledSpacer = styled.div`
 
 export function createBreakpointStyles(value, cssAttr) {
   return Object.keys(value).map(key => {
-    return `@media screen and (min-width: ${mui.breakpoints.values[key]}px){
+    return `@media screen and (min-width: ${breakpoints[key]}px){
       ${cssAttr}: ${value[key]}px;
     }`
   })

@@ -30,12 +30,30 @@ export const onCreateSite = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      mediaItems {
+        items {
+          id
+          siteID
+          title
+          mimeType
+          storageKey
+          altText
+          width
+          height
+          fileSize
           createdAt
           updatedAt
           owner
@@ -85,12 +103,30 @@ export const onUpdateSite = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      mediaItems {
+        items {
+          id
+          siteID
+          title
+          mimeType
+          storageKey
+          altText
+          width
+          height
+          fileSize
           createdAt
           updatedAt
           owner
@@ -140,12 +176,30 @@ export const onDeleteSite = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
           content
           seoTitle
           seoDescription
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      mediaItems {
+        items {
+          id
+          siteID
+          title
+          mimeType
+          storageKey
+          altText
+          width
+          height
+          fileSize
           createdAt
           updatedAt
           owner
@@ -181,6 +235,7 @@ export const onCreatePostType = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
@@ -211,6 +266,7 @@ export const onUpdatePostType = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
@@ -241,6 +297,7 @@ export const onDeletePostType = /* GraphQL */ `
           id
           siteID
           slug
+          parentID
           postTypeID
           status
           title
@@ -262,6 +319,7 @@ export const onCreatePost = /* GraphQL */ `
       id
       siteID
       slug
+      parentID
       postTypeID
       status
       title
@@ -292,6 +350,7 @@ export const onUpdatePost = /* GraphQL */ `
       id
       siteID
       slug
+      parentID
       postTypeID
       status
       title
@@ -322,6 +381,7 @@ export const onDeletePost = /* GraphQL */ `
       id
       siteID
       slug
+      parentID
       postTypeID
       status
       title
@@ -414,10 +474,8 @@ export const onCreateMenu = /* GraphQL */ `
           id
           siteID
           menuID
-          orderPostID
-          title
-          url
-          target
+          position
+          postID
           createdAt
           updatedAt
           owner
@@ -441,10 +499,8 @@ export const onUpdateMenu = /* GraphQL */ `
           id
           siteID
           menuID
-          orderPostID
-          title
-          url
-          target
+          position
+          postID
           createdAt
           updatedAt
           owner
@@ -468,10 +524,8 @@ export const onDeleteMenu = /* GraphQL */ `
           id
           siteID
           menuID
-          orderPostID
-          title
-          url
-          target
+          position
+          postID
           createdAt
           updatedAt
           owner
@@ -487,16 +541,15 @@ export const onCreateMenuItem = /* GraphQL */ `
       id
       siteID
       menuID
-      orderPostID
-      title
-      url
-      target
+      position
+      postID
       createdAt
       updatedAt
       post {
         id
         siteID
         slug
+        parentID
         postTypeID
         status
         title
@@ -526,16 +579,15 @@ export const onUpdateMenuItem = /* GraphQL */ `
       id
       siteID
       menuID
-      orderPostID
-      title
-      url
-      target
+      position
+      postID
       createdAt
       updatedAt
       post {
         id
         siteID
         slug
+        parentID
         postTypeID
         status
         title
@@ -565,16 +617,15 @@ export const onDeleteMenuItem = /* GraphQL */ `
       id
       siteID
       menuID
-      orderPostID
-      title
-      url
-      target
+      position
+      postID
       createdAt
       updatedAt
       post {
         id
         siteID
         slug
+        parentID
         postTypeID
         status
         title

@@ -135,7 +135,7 @@
                         {
                             "Ref": "APIKeyExpirationEpoch"
                         },
-                        1604357326
+                        1604553394
                     ]
                 }
             },
@@ -704,6 +704,7 @@
                 "PostType",
                 "Post",
                 "Menu",
+                "MediaItem",
                 "MenuItem"
             ]
         },

@@ -1,18 +1,31 @@
 import React from 'react'
-import { Link } from 'gatsby'
-import { getCurrentUser } from '../../../utils/auth'
+
+// import app components
+import BaseLayout from 'components/BaseLayout'
+import Spacer from 'components/Spacer'
+import Edges from 'components/Edges'
+import Paper from 'components/Paper'
+
+import { getCurrentUser } from 'utils/auth'
 
 const Home = () => {
   const user = getCurrentUser()
 
   return (
-    <div>
-      <h1>Profile Details</h1>
-      <p>Email: {user.email}</p>
-      <p>Phone: {user.phone_number}</p>
-      <p>Username: {user.username}</p>
-      <Link to="/app">Home</Link>
-    </div>
+    <BaseLayout>
+      <Edges size="sm">
+        <Spacer mt={30} mb={30}>
+          <Paper>
+            <Spacer mb={10}>
+              <h1>Profile Details</h1>
+            </Spacer>
+            <p>Email: {user.email}</p>
+            <p>Phone: {user.phone_number}</p>
+            <p>Username: {user.username}</p>
+          </Paper>
+        </Spacer>
+      </Edges>
+    </BaseLayout>
   )
 }
 

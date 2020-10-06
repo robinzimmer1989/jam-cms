@@ -3,10 +3,10 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { createPost, updatePost as dbUpdatePost } from '../graphql/mutations'
 import { getPost as dbGetPost } from '../graphql/queries'
 
-export const addPost = async ({ siteID, slug, postTypeID, status, title, content }) => {
+export const addPost = async ({ siteID, slug, postTypeID, status, title, content, parentID }) => {
   const result = await API.graphql(
     graphqlOperation(createPost, {
-      input: { siteID, slug, postTypeID, status, title, content },
+      input: { siteID, slug, postTypeID, status, title, content, parentID },
     })
   )
 
@@ -50,10 +50,13 @@ export const getPost = async ({ postID }) => {
   return result
 }
 
-export const updatePost = async ({ id, slug, status, title, content, seoTitle, seoDescription }, dispatch) => {
+export const updatePost = async (
+  { id, slug, status, title, content, seoTitle, seoDescription, parentID },
+  dispatch
+) => {
   const result = await API.graphql(
     graphqlOperation(dbUpdatePost, {
-      input: { id, slug, status, title, content: JSON.stringify(content), seoTitle, seoDescription },
+      input: { id, slug, status, title, content: JSON.stringify(content), seoTitle, seoDescription, parentID },
     })
   )
 

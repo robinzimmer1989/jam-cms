@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@material-ui/core'
+import { Space, Button, Input } from 'antd'
 
 // import app components
-import FormWrapper from './FormWrapper'
-
 import { getCurrentUser } from 'utils/auth'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
 
-const AddSite = () => {
+const SiteForm = () => {
   const [, dispatch] = useStore()
 
   const [title, setTitle] = useState('')
@@ -24,10 +22,11 @@ const AddSite = () => {
   }
 
   return (
-    <FormWrapper title={`Add Site`} button={<Button children={`Add`} onClick={handleSubmit} variant="contained" />}>
-      <TextField value={title} onChange={e => setTitle(e.target.value)} variant="outlined" placeholder={`Enter title...`} fullWidth />
-    </FormWrapper>
+    <Space direction="vertical">
+      <Input value={title} onChange={e => setTitle(e.target.value)} placeholder={`Enter title`} />
+      <Button children={`Add`} onClick={handleSubmit} type="primary" />
+    </Space>
   )
 }
 
-export default AddSite
+export default SiteForm

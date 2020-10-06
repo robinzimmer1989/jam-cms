@@ -1,11 +1,21 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createMediaItem } from '../graphql/mutations'
+import { createMediaItem, updateMediaItem as dbUpdateMediaItem } from '../graphql/mutations'
 
 export const addMediaItem = async ({ siteID, title, mimeType, storageKey }) => {
   const result = await API.graphql(
     graphqlOperation(createMediaItem, {
       input: { siteID, title, mimeType, storageKey },
+    })
+  )
+
+  return result
+}
+
+export const updateMediaItem = async ({ id, altText }) => {
+  const result = await API.graphql(
+    graphqlOperation(dbUpdateMediaItem, {
+      input: { id, altText },
     })
   )
 

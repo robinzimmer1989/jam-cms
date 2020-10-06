@@ -23,3 +23,13 @@ export const getMediaItems = async ({ siteID }, dispatch) => {
 
   return result
 }
+
+export const updateMediaItem = async ({ siteID, id, altText }, dispatch) => {
+  const result = await mediaServices.updateMediaItem({ id, altText })
+
+  if (result?.data?.updateMediaItem) {
+    dispatch({ type: `ADD_MEDIA_ITEMS`, payload: { items: [result.data.updateMediaItem], siteID } })
+  }
+
+  return result
+}

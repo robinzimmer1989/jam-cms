@@ -1,6 +1,6 @@
 import { Storage } from 'aws-amplify'
 
-import { getCleanedFileName } from '../utils/helpers'
+import { getCleanedFileName } from 'utils'
 import config from '../aws-exports.js'
 
 const { aws_user_files_s3_bucket_region: region, aws_user_files_s3_bucket: bucket } = config

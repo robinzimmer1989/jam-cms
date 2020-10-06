@@ -1,28 +1,34 @@
-import React from 'react'
-import { Link } from 'gatsby'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { navigate } from '@reach/router'
 import { Auth } from 'aws-amplify'
+import { Button, Input, Card } from 'antd'
 
 // import app components
-import Edges from '../components/Edges'
-import Error from '../components/Error'
-import { setUser, isLoggedIn } from '../utils/auth'
+import BaseLayout from 'components/BaseLayout'
+import Spacer from 'components/Spacer'
+import Edges from 'components/Edges'
+import Paper from 'components/Paper'
 
-class Login extends React.Component {
-  state = {
+import { setUser, isLoggedIn } from 'utils/auth'
+import getRoute from 'routes'
+
+const SignIn = () => {
+  const [data, setData] = useState({
     username: ``,
     password: ``,
     error: ``,
-  }
+  })
 
-  handleUpdate = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
-  }
+  const isAuthed = isLoggedIn()
 
-  login = async () => {
-    const { username, password } = this.state
+  useEffect(() => {
+    isAuthed && navigate(getRoute(`app`))
+  }, [isAuthed])
+
+  const handleLogin = async () => {
+    const { username, password } = data
+
     try {
       await Auth.signIn(username, password)
       const user = await Auth.currentAuthenticatedUser()
@@ -31,66 +37,44 @@ class Login extends React.Component {
         username: user.username,
       }
       setUser(userInfo)
-      navigate('/app')
+      navigate(getRoute(`app`))
     } catch (err) {
-      this.setState({ error: err })
+      setData({ ...data, error: err })
       console.log('error...: ', err)
     }
   }
 
-  render() {
-    if (isLoggedIn()) navigate('/app/profile')
-    return (
+  const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
+
+  return (
+    <BaseLayout>
       <Edges size="xs">
-        <h1>Sign In</h1>
-        {this.state.error && <Error errorMessage={this.state.error} />}
-        <div style={styles.formContainer}>
-          <input
-            onChange={this.handleUpdate}
-            placeholder="Username"
-            name="username"
-            value={this.state.username}
-            style={styles.input}
-          />
-          <input
-            onChange={this.handleUpdate}
-            placeholder="Password"
-            name="password"
-            value={this.state.password}
-            type="password"
-            style={styles.input}
-          />
-          <div style={styles.button} onClick={this.login}>
-            <span style={styles.buttonText}>Sign In</span>
-          </div>
-        </div>
-        <Link to="/app/signup">Sign Up</Link>
-        <br />
+        <Spacer mt={30} mb={30}>
+          <Card title={`Sign In`}>
+            <Spacer mb={20}>
+              <Input placeholder={`Username`} value={data.username} onChange={handleChange} name="username" />
+            </Spacer>
+
+            <Spacer mb={20}>
+              <Input
+                placeholder={`Password`}
+                value={data.password}
+                type="password"
+                onChange={handleChange}
+                name="password"
+              />
+            </Spacer>
+
+            <Button children={`Submit`} onClick={handleLogin} type="primary" />
+
+            {data?.error?.message && <Error errorMessage={data.error} />}
+          </Card>
+        </Spacer>
       </Edges>
-    )
-  }
+    </BaseLayout>
+  )
 }
 
-const styles = {
-  input: {
-    height: 40,
-    margin: '10px 0px',
-    padding: 7,
-  },
-  formContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  button: {
-    backgroundColor: 'rebeccapurple',
-    padding: '15px 7px',
-    cursor: 'pointer',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: 'white',
-  },
-}
+const Error = styled.div``
 
-export default Login
+export default SignIn

@@ -1,17 +1,23 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createPostType } from '../graphql/mutations'
+import { createPostType, updatePostType } from '../graphql/mutations'
 
-export const addCollection = async ({ siteID, slug, title }, dispatch) => {
+export const addCollection = async ({ siteID, slug, title }) => {
   const result = await API.graphql(
     graphqlOperation(createPostType, {
       input: { siteID, title, slug },
     })
   )
 
-  if (result?.data?.createPostType) {
-    dispatch({ type: `ADD_COLLECTION`, payload: result.data.createPostType })
-  }
+  return result
+}
+
+export const updateCollection = async ({ id, siteID, slug, title }) => {
+  const result = await API.graphql(
+    graphqlOperation(updatePostType, {
+      input: { id, siteID, title, slug },
+    })
+  )
 
   return result
 }

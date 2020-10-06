@@ -1,6 +1,6 @@
 import React from 'react'
 import { Router } from '@reach/router'
-import { Dialog } from '@material-ui/core'
+import { Modal } from 'antd'
 
 // import components
 import Home from '../components/cms/pages/Home'
@@ -8,6 +8,7 @@ import Profile from '../components/cms/pages/Profile'
 import CmsRouter from '../components/cms/Router'
 import PrivateRoute from '../components/cms/PrivateRoute'
 
+import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE } from 'routes'
 import { useStore } from 'store'
 
 const App = () => {
@@ -21,17 +22,17 @@ const App = () => {
   return (
     <>
       <Router>
-        <PrivateRoute path="/app" component={Home} />
-        <PrivateRoute path="/app/profile" component={Profile} />
-        <PrivateRoute path="/app/site/:siteID/*" component={CmsRouter} />
+        <PrivateRoute path={ROUTE_APP} component={Home} />
+        <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
+        <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID/*`} component={CmsRouter} />
       </Router>
 
-      <Dialog
-        open={dialog.open}
-        fullWidth
-        maxWidth={dialog.width || 'md'}
-        onClose={() => dispatch({ type: 'CLOSE_DIALOG' })}
+      <Modal
+        title={dialog.title}
+        visible={dialog.open}
+        onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
         children={dialog.component}
+        footer={null}
       />
     </>
   )

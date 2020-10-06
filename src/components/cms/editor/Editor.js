@@ -7,21 +7,23 @@ import EditIcon from 'react-ionicons/lib/IosBrushOutline'
 
 // import app components
 import AddBlock from '../forms/AddBlock'
-import AddPost from '../forms/AddPost'
+import PostForm from '../forms/PostForm'
 import FlexibleContent from './FlexibleContent'
 import BlockWrapper from './BlockWrapper'
-import Layout from './Layout'
+import EditorLayout from './EditorLayout'
+import EditorPostTitle from './EditorPostTitle'
 import Header from './blocks/Header'
 import Skeleton from 'components/Skeleton'
 import Spacer from 'components/Spacer'
 import convertBlockSchemaToProps from './convertBlockSchemaToProps'
 
+import { formatSlug } from 'utils'
 import { colors } from 'theme'
 import { useStore } from 'store'
 import { postActions } from 'actions'
 
 const Editor = props => {
-  const { postID } = props
+  const { postTypeID, postID } = props
 
   const [
     {
@@ -30,6 +32,8 @@ const Editor = props => {
     },
     dispatch,
   ] = useStore()
+
+  const postType = sites[siteID]?.postTypes?.items.find(o => o.id === postTypeID)
 
   useEffect(() => {
     const loadPost = async () => {
@@ -43,7 +47,7 @@ const Editor = props => {
     }
   }, [postID])
 
-  const handleChangeTitleSlug = (title, slug) => {
+  const handleChangeTitleSlug = ({ title, slug }) => {
     const nextPost = produce(post, draft => {
       set(draft, `title`, title)
       set(draft, `slug`, slug)
@@ -52,17 +56,6 @@ const Editor = props => {
     dispatch({
       type: `SET_EDITOR_POST`,
       payload: nextPost,
-    })
-  }
-
-  const handleOpenUpdatePostForm = () => {
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
-        open: true,
-        component: <AddPost title={post.title} slug={post.slug} onSubmit={handleChangeTitleSlug} />,
-        width: 'xs',
-      },
     })
   }
 
@@ -77,22 +70,8 @@ const Editor = props => {
     })
 
   return (
-    <Layout>
-      <PageHeader>
-        <Spacer mb={10}>
-          <Skeleton done={!!post} width={240} height={35}>
-            <HeadlineContainer>
-              <Headline children={post?.title} />
-              <EditButton size="small" className={`icon icon-add`} onClick={handleOpenUpdatePostForm}>
-                <EditIcon fontSize={`18px`} />
-              </EditButton>
-            </HeadlineContainer>
-          </Skeleton>
-        </Spacer>
-        <Skeleton done={!!site && !!post} width={`80%`} height={19}>
-          <Slug href={site?.netlifyUrl} target="_blank" rel="noopener" children={`${site?.netlifyUrl}${post?.slug}`} />
-        </Skeleton>
-      </PageHeader>
+    <EditorLayout>
+      <EditorPostTitle postType={postType} />
 
       <Page>
         {post && (
@@ -115,12 +94,12 @@ const Editor = props => {
           </>
         )}
       </Page>
-    </Layout>
+    </EditorLayout>
   )
 }
 
 const PageHeader = styled.div`
-  padding: 30px 0;
+  margin-bottom: 30px;
 `
 
 const HeadlineContainer = styled.div`
@@ -146,7 +125,7 @@ const Page = styled.div`
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   margin: 0 auto;
   width: 100%;
-  min-height: 400px;
+  min-height: 360px;
   margin-bottom: 40px;
 `
 

@@ -7,6 +7,7 @@ type Site
   postTypes: [PostType] @connection(keyName: "bySite", fields: ["id"])
   posts: [Post] @connection(keyName: "bySite", fields: ["id"])
   menus: [Menu] @connection(keyName: "bySite", fields: ["id"])
+  mediaItems: [MediaItem] @connection(keyName: "bySite", fields: ["id"])
   settings: String
   netlifyID: String
   netlifyUrl: String
@@ -31,6 +32,7 @@ type Post
   id: ID!
   siteID: ID!
   slug: String!
+  parentID: ID
   postTypeID: ID!
   postType: PostType @connection(fields: ["postTypeID"])
   status: String!
@@ -42,6 +44,7 @@ type Post
 
 type MediaItem
   @model
+  @key(name: "bySite", fields: ["siteID"])
   @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
   id: ID!
   siteID: ID!
@@ -71,9 +74,7 @@ type MenuItem
   id: ID!
   siteID: ID!
   menuID: ID!
-  orderPostID: ID
-  post: Post @connection
-  title: String
-  url: String
-  target: String
+  position: String!
+  postID: ID!
+  post: Post @connection(fields: ["postID"])
 }

@@ -17,11 +17,11 @@ export const fields = {
       value: '',
     },
     {
-      id: 'menu',
+      id: 'header-menu',
       type: 'menu',
       placeholder: '',
       label: 'Edit Menu',
-      value: [],
+      value: '',
     },
   ],
   style: {},

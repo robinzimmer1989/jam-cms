@@ -33,6 +33,6 @@ export const deleteSite = async ({ netlifyID }) => {
 }
 
 export const deploySite = async ({ netlifyID }) => {
-  const site = await client.createSiteDeploy({ site_id: netlifyID })
+  const site = await client.createSiteBuild({ site_id: netlifyID })
   return site
 }

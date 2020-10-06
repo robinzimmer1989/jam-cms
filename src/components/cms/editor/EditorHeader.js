@@ -1,29 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
+import { PageHeader, Button } from 'antd'
 
 // import app components
 import Edges from 'components/Edges'
 
 import { useStore } from 'store'
 import { colors } from 'theme'
+import getRoute from 'routes'
 
-const TopBar = () => {
+const EditorHeader = () => {
   const [
     {
       editorState: { post },
     },
-    dispatch,
   ] = useStore()
 
   return (
-    <Container>
-      <Edges size="md">
-        <Grid>
-          <Link to={`/app/site/${post?.siteID}/collections/${post?.postTypeID}`} children={`All Posts`} />
-        </Grid>
-      </Edges>
-    </Container>
+    <PageHeader
+      title={''}
+      extra={[
+        <Button key={`all-posts`}>
+          <Link
+            to={getRoute(`collection`, { siteID: post?.siteID, postTypeID: post?.postTypeID })}
+            children={`All Posts`}
+          />
+        </Button>,
+      ]}
+    />
   )
 }
 
@@ -39,4 +44,4 @@ const Grid = styled.div`
   height: 49px;
 `
 
-export default TopBar
+export default EditorHeader

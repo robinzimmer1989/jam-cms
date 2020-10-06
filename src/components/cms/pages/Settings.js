@@ -2,14 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
-import Layout from '../Layout'
+import CmsLayout from '../CmsLayout'
 import GeneralSettings from '../GeneralSettings'
 
 const Settings = props => {
   return (
-    <Layout pageTitle={`Settings`}>
+    <CmsLayout pageTitle={`Settings`}>
       <GeneralSettings />
-    </Layout>
+    </CmsLayout>
   )
 }
 

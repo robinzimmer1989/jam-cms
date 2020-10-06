@@ -10,6 +10,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   owner: String
   postTypes(filter: ModelPostTypeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
   posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
+  mediaItems(filter: ModelMediaItemFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
   menus(filter: ModelMenuFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
 }
 
@@ -28,6 +29,7 @@ type Post @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
   slug: String!
+  parentID: ID
   postTypeID: ID!
   status: String!
   title: String!
@@ -69,10 +71,8 @@ type MenuItem @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
   menuID: ID!
-  orderPostID: ID
-  title: String
-  url: String
-  target: String
+  position: String!
+  postID: ID!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   post: Post @aws_api_key @aws_cognito_user_pools
@@ -328,6 +328,7 @@ input ModelPostFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
   slug: ModelStringInput
+  parentID: ModelIDInput
   postTypeID: ModelIDInput
   status: ModelStringInput
   title: ModelStringInput
@@ -343,6 +344,7 @@ input CreatePostInput {
   id: ID
   siteID: ID!
   slug: String!
+  parentID: ID
   postTypeID: ID!
   status: String!
   title: String!
@@ -355,6 +357,7 @@ input UpdatePostInput {
   id: ID!
   siteID: ID
   slug: String
+  parentID: ID
   postTypeID: ID
   status: String
   title: String
@@ -370,6 +373,7 @@ input DeletePostInput {
 input ModelPostConditionInput {
   siteID: ModelIDInput
   slug: ModelStringInput
+  parentID: ModelIDInput
   postTypeID: ModelIDInput
   status: ModelStringInput
   title: ModelStringInput
@@ -490,10 +494,8 @@ input ModelMenuItemFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
   menuID: ModelIDInput
-  orderPostID: ModelIDInput
-  title: ModelStringInput
-  url: ModelStringInput
-  target: ModelStringInput
+  position: ModelStringInput
+  postID: ModelIDInput
   and: [ModelMenuItemFilterInput]
   or: [ModelMenuItemFilterInput]
   not: ModelMenuItemFilterInput
@@ -503,22 +505,16 @@ input CreateMenuItemInput {
   id: ID
   siteID: ID!
   menuID: ID!
-  orderPostID: ID
-  title: String
-  url: String
-  target: String
-  menuItemPostId: ID
+  position: String!
+  postID: ID!
 }
 
 input UpdateMenuItemInput {
   id: ID!
   siteID: ID
   menuID: ID
-  orderPostID: ID
-  title: String
-  url: String
-  target: String
-  menuItemPostId: ID
+  position: String
+  postID: ID
 }
 
 input DeleteMenuItemInput {
@@ -528,10 +524,8 @@ input DeleteMenuItemInput {
 input ModelMenuItemConditionInput {
   siteID: ModelIDInput
   menuID: ModelIDInput
-  orderPostID: ModelIDInput
-  title: ModelStringInput
-  url: ModelStringInput
-  target: ModelStringInput
+  position: ModelStringInput
+  postID: ModelIDInput
   and: [ModelMenuItemConditionInput]
   or: [ModelMenuItemConditionInput]
   not: ModelMenuItemConditionInput
