@@ -2,7 +2,7 @@ import React from 'react'
 
 // import app components
 import CmsLayout from '../CmsLayout'
-import MediaLibrary from '../MediaLibrary'
+import MediaLibrary from '../media/MediaLibrary'
 
 const Media = props => {
   return (

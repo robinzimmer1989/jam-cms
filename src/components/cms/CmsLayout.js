@@ -25,7 +25,7 @@ const CmsLayout = props => {
   return (
     <Layout>
       <Layout.Sider
-        theme="light"
+        theme="dark"
         width={250}
         style={{
           overflow: 'auto',
@@ -37,7 +37,7 @@ const CmsLayout = props => {
         <div>
           <Title>{site?.title}</Title>
 
-          <Menu theme="light" mode="inline" defaultSelectedKeys={[pageTitle]}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[pageTitle]}>
             <Menu.Item key="Dashboard" icon={<LaptopOutlined />}>
               <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
             </Menu.Item>
@@ -47,8 +47,8 @@ const CmsLayout = props => {
             </Menu.Item>
 
             <Menu.SubMenu key="Collections" icon={<UserOutlined />} title="Collections">
-              {site?.postTypes?.items &&
-                site.postTypes.items.map(o => {
+              {site?.postTypes &&
+                Object.values(site.postTypes).map(o => {
                   return (
                     <Menu.Item key={o.id}>
                       <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}> {o.title}</Link>
@@ -57,9 +57,21 @@ const CmsLayout = props => {
                 })}
             </Menu.SubMenu>
 
-            <Menu.Item key="Settings" icon={<LaptopOutlined />}>
-              <Link to={getRoute(`settings`, { siteID })}>Settings</Link>
+            <Menu.Item key="Forms" icon={<LaptopOutlined />}>
+              <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
             </Menu.Item>
+
+            <Menu.SubMenu key="Settings" icon={<LaptopOutlined />} title="Settings">
+              <Menu.Item key="General Settings">
+                <Link to={getRoute(`general-settings`, { siteID })}>General Settings</Link>
+              </Menu.Item>
+              <Menu.Item key="Collections Settings">
+                <Link to={getRoute(`collections-settings`, { siteID })}>Collections</Link>
+              </Menu.Item>
+              <Menu.Item key="SEO">
+                <Link to={getRoute(`seo-settings`, { siteID })}>SEO</Link>
+              </Menu.Item>
+            </Menu.SubMenu>
           </Menu>
         </div>
       </Layout.Sider>
@@ -85,6 +97,7 @@ const Title = styled.h1`
   justify-content: center;
   padding: 40px 10px;
   font-size: 24px;
+  color: #fff;
 `
 
 const StyledDivider = styled(Divider)`

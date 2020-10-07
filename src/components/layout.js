@@ -1,6 +1,5 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import { MuiThemeProvider } from '@material-ui/core/styles'
 import { ToastContainer } from 'react-toastify'
 
 // import external css files

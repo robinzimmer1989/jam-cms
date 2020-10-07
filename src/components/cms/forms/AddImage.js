@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import produce from 'immer'
-import { set } from 'lodash'
 
 // import app components
-import MediaLibrary from '../MediaLibrary'
+import MediaLibrary from '../media/MediaLibrary'
 
 const AddImage = props => {
   const { onSelect } = props

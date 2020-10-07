@@ -6,7 +6,7 @@ import { set } from 'lodash'
 
 // import app components
 import Skeleton from 'components/Skeleton'
-import updateMenus from '../../menus/updateMenus'
+import PostTreeSelect from '../../PostTreeSelect'
 
 import { useStore } from 'store'
 import { postActions, siteActions } from 'actions'
@@ -20,15 +20,13 @@ const PostSettings = () => {
     dispatch,
   ] = useStore()
 
-  const posts = sites[siteID]?.postTypes?.items
-    .find(o => o.id === post?.postTypeID)
-    ?.posts?.items.filter(o => o.id !== post.id)
+  const posts = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts
 
-  console.log(posts)
+  // Remove own post for display in the page parent drop down
+  const otherPosts = { ...posts }
+  post && delete otherPosts[post.id]
 
   const handleSavePost = async () => {
-    await updateMenus({ site }, dispatch)
-
     await postActions.updatePost(post, dispatch)
     await siteActions.updateSite(site, dispatch)
 
@@ -59,13 +57,11 @@ const PostSettings = () => {
         </Skeleton>
 
         <Skeleton done={!!post} height={32}>
-          <Select
+          <PostTreeSelect
+            items={otherPosts}
             value={post?.parentID}
             onChange={value => handleChangeSettings({ target: { name: `parentID`, value } })}
-          >
-            <Select.Option value={``} children={`None`} />
-            {posts && posts.map(o => <Select.Option value={o.id} children={o.title} />)}
-          </Select>
+          />
         </Skeleton>
 
         <Skeleton done={!!post} height={32}>

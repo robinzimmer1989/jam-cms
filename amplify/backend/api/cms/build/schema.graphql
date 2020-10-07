@@ -61,21 +61,9 @@ type Menu @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
   slug: String!
+  content: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
-  owner: String
-  menuItems(filter: ModelMenuItemFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools
-}
-
-type MenuItem @aws_api_key @aws_cognito_user_pools {
-  id: ID!
-  siteID: ID!
-  menuID: ID!
-  position: String!
-  postID: ID!
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-  post: Post @aws_api_key @aws_cognito_user_pools
   owner: String
 }
 
@@ -192,14 +180,12 @@ type Query {
   listSites(filter: ModelSiteFilterInput, limit: Int, nextToken: String): ModelSiteConnection @aws_api_key @aws_cognito_user_pools
   listPostTypes(filter: ModelPostTypeFilterInput, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
   getPostType(id: ID!): PostType @aws_api_key @aws_cognito_user_pools
-  listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
   getPost(id: ID!): Post @aws_api_key @aws_cognito_user_pools
+  listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
   getMediaItem(id: ID!): MediaItem @aws_api_key @aws_cognito_user_pools
   listMediaItems(filter: ModelMediaItemFilterInput, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
   getMenu(id: ID!): Menu @aws_api_key @aws_cognito_user_pools
   listMenus(filter: ModelMenuFilterInput, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
-  getMenuItem(id: ID!): MenuItem @aws_api_key @aws_cognito_user_pools
-  listMenuItems(filter: ModelMenuItemFilterInput, limit: Int, nextToken: String): ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools
 }
 
 input CreateSiteInput {
@@ -240,9 +226,6 @@ type Mutation {
   createMenu(input: CreateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
   updateMenu(input: UpdateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
   deleteMenu(input: DeleteMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
-  createMenuItem(input: CreateMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
-  updateMenuItem(input: UpdateMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
-  deleteMenuItem(input: DeleteMenuItemInput!, condition: ModelMenuItemConditionInput): MenuItem @aws_api_key @aws_cognito_user_pools
 }
 
 input ModelSiteConditionInput {
@@ -272,9 +255,6 @@ type Subscription {
   onCreateMenu(owner: String): Menu @aws_subscribe(mutations: ["createMenu"]) @aws_api_key @aws_cognito_user_pools
   onUpdateMenu(owner: String): Menu @aws_subscribe(mutations: ["updateMenu"]) @aws_api_key @aws_cognito_user_pools
   onDeleteMenu(owner: String): Menu @aws_subscribe(mutations: ["deleteMenu"]) @aws_api_key @aws_cognito_user_pools
-  onCreateMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["createMenuItem"]) @aws_api_key @aws_cognito_user_pools
-  onUpdateMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["updateMenuItem"]) @aws_api_key @aws_cognito_user_pools
-  onDeleteMenuItem(owner: String): MenuItem @aws_subscribe(mutations: ["deleteMenuItem"]) @aws_api_key @aws_cognito_user_pools
 }
 
 type ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools {
@@ -456,6 +436,7 @@ input ModelMenuFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
   slug: ModelStringInput
+  content: ModelStringInput
   and: [ModelMenuFilterInput]
   or: [ModelMenuFilterInput]
   not: ModelMenuFilterInput
@@ -465,12 +446,14 @@ input CreateMenuInput {
   id: ID
   siteID: ID!
   slug: String!
+  content: String
 }
 
 input UpdateMenuInput {
   id: ID!
   siteID: ID
   slug: String
+  content: String
 }
 
 input DeleteMenuInput {
@@ -480,53 +463,8 @@ input DeleteMenuInput {
 input ModelMenuConditionInput {
   siteID: ModelIDInput
   slug: ModelStringInput
+  content: ModelStringInput
   and: [ModelMenuConditionInput]
   or: [ModelMenuConditionInput]
   not: ModelMenuConditionInput
-}
-
-type ModelMenuItemConnection @aws_api_key @aws_cognito_user_pools {
-  items: [MenuItem]
-  nextToken: String
-}
-
-input ModelMenuItemFilterInput {
-  id: ModelIDInput
-  siteID: ModelIDInput
-  menuID: ModelIDInput
-  position: ModelStringInput
-  postID: ModelIDInput
-  and: [ModelMenuItemFilterInput]
-  or: [ModelMenuItemFilterInput]
-  not: ModelMenuItemFilterInput
-}
-
-input CreateMenuItemInput {
-  id: ID
-  siteID: ID!
-  menuID: ID!
-  position: String!
-  postID: ID!
-}
-
-input UpdateMenuItemInput {
-  id: ID!
-  siteID: ID
-  menuID: ID
-  position: String
-  postID: ID
-}
-
-input DeleteMenuItemInput {
-  id: ID
-}
-
-input ModelMenuItemConditionInput {
-  siteID: ModelIDInput
-  menuID: ModelIDInput
-  position: ModelStringInput
-  postID: ModelIDInput
-  and: [ModelMenuItemConditionInput]
-  or: [ModelMenuItemConditionInput]
-  not: ModelMenuItemConditionInput
 }

@@ -1,12 +1,11 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
+import styled from 'styled-components'
+import { List, Button } from 'antd'
 
 // import app components
 import CmsLayout from '../CmsLayout'
 import ActionBar from '../ActionBar'
 import AddCollection from '../forms/AddCollection'
-
-import ListItem from 'components/ListItem'
 
 import { collectionActions } from 'actions'
 import { useStore } from 'store'
@@ -54,10 +53,38 @@ const Collections = () => {
 
       {postTypes &&
         postTypes.map(o => {
-          return <ListItem key={o.id} onClick={() => handleOpenDialog(o)} title={o.title} slug={o.slug} />
+          const actions = [
+            <Button size="small">
+              <Link to={`/`}>Edit</Link>
+            </Button>,
+          ]
+
+          return (
+            <CardWrapper key={o.id}>
+              <Card onClick={() => handleOpenDialog(o)}>
+                <List.Item actions={actions}>
+                  <Link to={editLink}>
+                    <Typography.Text strong>
+                      {o.title}
+                      {o.slug}
+                    </Typography.Text>
+                  </Link>
+                </List.Item>
+              </Card>
+            </CardWrapper>
+          )
         })}
     </CmsLayout>
   )
 }
+
+const CardWrapper = styled.div`
+  margin-left: ${({ level }) => `${level * 30}px`};
+  margin-bottom: 20px;
+
+  .ant-card-body {
+    padding: 0 20px;
+  }
+`
 
 export default Collections

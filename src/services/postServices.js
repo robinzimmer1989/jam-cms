@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createPost, updatePost as dbUpdatePost } from '../graphql/mutations'
+import { createPost, updatePost as dbUpdatePost, deletePost as dbDeletePost } from '../graphql/mutations'
 import { getPost as dbGetPost } from '../graphql/queries'
 
 export const addPost = async ({ siteID, slug, postTypeID, status, title, content, parentID }) => {
@@ -13,7 +13,7 @@ export const addPost = async ({ siteID, slug, postTypeID, status, title, content
   return result
 }
 
-export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
+export const getPosts = async ({ postTypeID }) => {
   const result = await API.graphql(
     graphqlOperation(`query ListPosts{
     listPosts(filter: {postTypeID: {eq: "${postTypeID}"}}) {
@@ -50,13 +50,12 @@ export const getPost = async ({ postID }) => {
   return result
 }
 
-export const updatePost = async (
-  { id, slug, status, title, content, seoTitle, seoDescription, parentID },
-  dispatch
-) => {
+export const updatePost = async ({ id, slug, status, title, content, seoTitle, seoDescription, parentID }) => {
+  const jsonContent = content ? JSON.stringify(content) : null
+
   const result = await API.graphql(
     graphqlOperation(dbUpdatePost, {
-      input: { id, slug, status, title, content: JSON.stringify(content), seoTitle, seoDescription, parentID },
+      input: { id, slug, status, title, content: jsonContent, seoTitle, seoDescription, parentID },
     })
   )
 
@@ -68,6 +67,16 @@ export const updatePost = async (
       content: post.content ? JSON.parse(post.content) : [],
     }
   }
+
+  return result
+}
+
+export const deletePost = async ({ id }) => {
+  const result = await API.graphql(
+    graphqlOperation(dbDeletePost, {
+      input: { id },
+    })
+  )
 
   return result
 }

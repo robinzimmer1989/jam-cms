@@ -16,24 +16,13 @@ export const postReducer = (state, action) => {
       /******************************
        * Sites
        ******************************/
-
       case `ADD_SITES`:
-        draft.sites = {
-          ...draft.sites,
-          ...payload.reduce((obj, item) => {
-            obj[item.id] = item
-            return obj
-          }, {}),
-        }
+        draft.sites = payload
         break
 
       case `ADD_SITE`:
         draft.siteID = payload.id
-
-        draft.sites = {
-          ...draft.sites,
-          [payload.id]: payload,
-        }
+        set(draft, `sites.${payload.id}`, payload)
         break
 
       case `DELETE_SITE`:
@@ -44,42 +33,35 @@ export const postReducer = (state, action) => {
       /******************************
        * Collections
        ******************************/
-
       case `ADD_COLLECTION`:
-        const collectionIndex = draft.sites[payload.siteID].postTypes.items.findIndex(o => o.id === payload.id)
-        set(draft, `sites.${payload.siteID}.postTypes.items.${collectionIndex}`, payload)
+        set(draft, `sites.${payload.siteID}.postTypes.${payload.id}`, payload)
+        break
+
+      case `DELETE_COLLECTION`:
+        delete draft.sites[payload.siteID].postTypes[payload.postTypeID]
         break
 
       /******************************
        * Posts
        ******************************/
       case `ADD_POST`:
-        const postTypeIndex = draft.sites[payload.siteID].postTypes.items.findIndex(o => o.id === payload.postTypeID)
-        console.log(postTypeIndex)
-        const path = `sites${payload.siteID}.postTypes.items.${postTypeIndex}.posts.items`
+        set(draft, `sites.${payload.siteID}.postTypes.${payload.postTypeID}.posts.${payload.id}`, payload)
+        break
 
-        if (get(draft, path)) {
-          set(draft, path, [payload, ...path])
-        } else {
-          set(draft, path, [payload])
-        }
-
+      case `DELETE_POST`:
+        delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id]
         break
 
       /******************************
        * Menus
        ******************************/
       case `ADD_MENU`:
-        draft.sites[payload.siteID].menus = {
-          items: unionBy(draft.sites[payload.siteID].menus, [payload], 'id'),
-          nextToken: payload.nextToken || draft.sites[payload.siteID].mediaItems.nextToken,
-        }
+        set(draft, `sites.${payload.siteID}.menus.${payload.slug}`, payload)
         break
 
       /******************************
        * Media Items
        ******************************/
-
       case `ADD_MEDIA_ITEMS`:
         draft.sites[payload.siteID].mediaItems = {
           items: unionBy(draft.sites[payload.siteID].mediaItems, payload.items, 'id'),

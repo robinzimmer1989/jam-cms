@@ -64,17 +64,5 @@ type Menu
   id: ID!
   siteID: ID!
   slug: String!
-  menuItems: [MenuItem] @connection(keyName: "byMenu", fields: ["id"])
-}
-
-type MenuItem
-  @model
-  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }])
-  @key(name: "byMenu", fields: ["menuID"]) {
-  id: ID!
-  siteID: ID!
-  menuID: ID!
-  position: String!
-  postID: ID!
-  post: Post @connection(fields: ["postID"])
+  content: String
 }

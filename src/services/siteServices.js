@@ -1,7 +1,50 @@
 import { API, graphqlOperation } from 'aws-amplify'
+import produce from 'immer'
+import { set, get } from 'lodash'
 
 import { createSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
 import defaultSiteSettings from '../components/cms/editor/defaultSiteSettings'
+
+const transformSite = site => {
+  const nextSite = produce(site, draft => {
+    // Parse settings or add default settings if empty
+    if (draft.settings) {
+      set(draft, `settings`, JSON.parse(draft.settings))
+    } else {
+      set(draft, `settings`, defaultSiteSettings)
+    }
+
+    // Convert posts and then post types to object structure
+    if (get(draft, `postTypes.items`)) {
+      draft.postTypes.items.map((o, i) => {
+        if (get(o, `posts.items`)) {
+          return (draft.postTypes.items[i].posts = draft.postTypes.items[i].posts.items.reduce(
+            (ac, a) => ({ ...ac, [a.id]: a }),
+            {}
+          ))
+        }
+      })
+
+      draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
+    }
+
+    // Convert menus to object structure (by slug) and parse content
+    if (get(draft, `menus.items`)) {
+      draft.menus = draft.menus.items.reduce(
+        (ac, a) => ({
+          ...ac,
+          [a.slug]: {
+            ...a,
+            content: a.content ? JSON.parse(a.content) : [],
+          },
+        }),
+        {}
+      )
+    }
+  })
+  console.log(nextSite)
+  return nextSite
+}
 
 export const addSite = async ({ title, ownerID }) => {
   const result = await API.graphql(
@@ -9,8 +52,51 @@ export const addSite = async ({ title, ownerID }) => {
       input: { title, ownerID },
     })
   )
+
+  if (result?.data?.createSite) {
+    result.data.createSite = transformSite(result.data.createSite)
+  }
+
   return result
 }
+
+const siteFragment = `
+  id
+  title
+  netlifyID
+  netlifyUrl
+  settings
+  postTypes {
+    items {
+      id
+      title
+      slug
+      posts {
+        items {
+          id
+          siteID
+          slug
+          postTypeID
+          parentID
+          status
+          title
+        }
+      }
+    }
+  }
+  mediaItems {
+    items {
+      id
+    }
+  }
+  menus {
+    items {
+      id
+      slug
+      content
+    }
+  }
+`
 
 export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings }) => {
   const result = await API.graphql(
@@ -20,29 +106,7 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings })
         $condition: ModelSiteConditionInput
       ) {
         updateSite(input: $input, condition: $condition) {
-          id
-          title
-          netlifyID
-          netlifyUrl
-          settings
-          postTypes {
-            items {
-              id
-              title
-              slug
-              posts {
-                items {
-                  id
-                  siteID
-                  slug
-                  postTypeID
-                  parentID
-                  status
-                  title
-                }
-              }
-            }
-          }
+          ${siteFragment}
         }
       }
     `,
@@ -53,12 +117,7 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings })
   )
 
   if (result?.data?.updateSite) {
-    const site = result.data.updateSite
-
-    result.data.updateSite = {
-      ...site,
-      settings: site.settings ? JSON.parse(site.settings) : defaultSiteSettings,
-    }
+    result.data.updateSite = transformSite(result.data.updateSite)
   }
 
   return result
@@ -89,6 +148,14 @@ export const getSites = async () => {
       }
     `)
   )
+
+  if (result?.data?.listSites) {
+    result.data.listSites = result.data.listSites.items.reduce((obj, item) => {
+      obj[item.id] = item
+      return obj
+    }, {})
+  }
+
   return result
 }
 
@@ -98,51 +165,7 @@ export const getSite = async ({ siteID }) => {
       `
       query GetSite($id: ID!) {
         getSite(id: $id) {
-          id
-          title
-          netlifyID
-          netlifyUrl
-          settings
-          postTypes {
-            items {
-              id
-              title
-              slug
-              posts {
-                items {
-                  id
-                  siteID
-                  slug
-                  postTypeID
-                  parentID
-                  status
-                  title
-                }
-              }
-            }
-          }
-          mediaItems {
-            items {
-              id
-            }
-          }
-          menus {
-            items {
-              id
-              slug
-              menuItems {
-                items {
-                  id
-                  position
-                  post {
-                    id
-                    title
-                    slug
-                  }
-                }
-              }
-            }
-          }
+          ${siteFragment}
         }
       }
     `,
@@ -151,12 +174,7 @@ export const getSite = async ({ siteID }) => {
   )
 
   if (result?.data?.getSite) {
-    const site = result.data.getSite
-
-    result.data.getSite = {
-      ...site,
-      settings: site.settings ? JSON.parse(site.settings) : defaultSiteSettings,
-    }
+    result.data.getSite = transformSite(result.data.getSite)
   }
 
   return result

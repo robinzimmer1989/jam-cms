@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 // import app components
 import CmsLayout from '../CmsLayout'
-import GeneralSettings from '../GeneralSettings'
+import General from '../settings/General'
 
 const Settings = props => {
   return (
     <CmsLayout pageTitle={`Settings`}>
-      <GeneralSettings />
+      <General />
     </CmsLayout>
   )
 }

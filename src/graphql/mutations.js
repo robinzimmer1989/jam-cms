@@ -68,6 +68,7 @@ export const createSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -144,6 +145,7 @@ export const updateSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -220,6 +222,7 @@ export const deleteSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -505,22 +508,10 @@ export const createMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
       owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -533,22 +524,10 @@ export const updateMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
       owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -561,144 +540,9 @@ export const deleteMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
-      owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const createMenuItem = /* GraphQL */ `
-  mutation CreateMenuItem(
-    $input: CreateMenuItemInput!
-    $condition: ModelMenuItemConditionInput
-  ) {
-    createMenuItem(input: $input, condition: $condition) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
-      owner
-    }
-  }
-`;
-export const updateMenuItem = /* GraphQL */ `
-  mutation UpdateMenuItem(
-    $input: UpdateMenuItemInput!
-    $condition: ModelMenuItemConditionInput
-  ) {
-    updateMenuItem(input: $input, condition: $condition) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
-      owner
-    }
-  }
-`;
-export const deleteMenuItem = /* GraphQL */ `
-  mutation DeleteMenuItem(
-    $input: DeleteMenuItemInput!
-    $condition: ModelMenuItemConditionInput
-  ) {
-    deleteMenuItem(input: $input, condition: $condition) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
       owner
     }
   }

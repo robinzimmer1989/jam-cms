@@ -1,24 +1,15 @@
 import React, { useEffect } from 'react'
-import produce from 'immer'
 import styled from 'styled-components'
-import { set } from 'lodash'
-import { Fab } from '@material-ui/core'
-import EditIcon from 'react-ionicons/lib/IosBrushOutline'
 
 // import app components
 import AddBlock from '../forms/AddBlock'
-import PostForm from '../forms/PostForm'
-import FlexibleContent from './FlexibleContent'
-import BlockWrapper from './BlockWrapper'
-import EditorLayout from './EditorLayout'
-import EditorPostTitle from './EditorPostTitle'
-import Header from './blocks/Header'
-import Skeleton from 'components/Skeleton'
-import Spacer from 'components/Spacer'
-import convertBlockSchemaToProps from './convertBlockSchemaToProps'
+import FlexibleContent from '../editor/FlexibleContent'
+import BlockWrapper from '../editor/BlockWrapper'
+import EditorLayout from '../editor/EditorLayout'
+import EditorPostTitle from '../editor/EditorPostTitle'
+import Header from '../editor/blocks/Header'
+import convertBlockSchemaToProps from '../editor/convertBlockSchemaToProps'
 
-import { formatSlug } from 'utils'
-import { colors } from 'theme'
 import { useStore } from 'store'
 import { postActions } from 'actions'
 
@@ -33,7 +24,7 @@ const Editor = props => {
     dispatch,
   ] = useStore()
 
-  const postType = sites[siteID]?.postTypes?.items.find(o => o.id === postTypeID)
+  const postType = sites[siteID]?.postTypes?.[postTypeID]
 
   useEffect(() => {
     const loadPost = async () => {
@@ -46,18 +37,6 @@ const Editor = props => {
       dispatch({ type: `CLEAR_EDITOR` })
     }
   }, [postID])
-
-  const handleChangeTitleSlug = ({ title, slug }) => {
-    const nextPost = produce(post, draft => {
-      set(draft, `title`, title)
-      set(draft, `slug`, slug)
-    })
-
-    dispatch({
-      type: `SET_EDITOR_POST`,
-      payload: nextPost,
-    })
-  }
 
   const handleOpenBlockDialog = () =>
     dispatch({
@@ -97,28 +76,6 @@ const Editor = props => {
     </EditorLayout>
   )
 }
-
-const PageHeader = styled.div`
-  margin-bottom: 30px;
-`
-
-const HeadlineContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-`
-
-const Headline = styled.h1`
-  display: inline-block;
-  font-size: 32px;
-  margin-right: 20px;
-`
-
-const EditButton = styled(Fab)``
-
-const Slug = styled.a`
-  color: ${colors.text.light};
-`
 
 const Page = styled.div`
   background: #fff;

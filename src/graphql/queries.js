@@ -65,6 +65,7 @@ export const getSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -162,6 +163,37 @@ export const getPostType = /* GraphQL */ `
     }
   }
 `;
+export const getPost = /* GraphQL */ `
+  query GetPost($id: ID!) {
+    getPost(id: $id) {
+      id
+      siteID
+      slug
+      parentID
+      postTypeID
+      status
+      title
+      content
+      seoTitle
+      seoDescription
+      createdAt
+      updatedAt
+      postType {
+        id
+        siteID
+        title
+        slug
+        createdAt
+        updatedAt
+        owner
+        posts {
+          nextToken
+        }
+      }
+      owner
+    }
+  }
+`;
 export const listPosts = /* GraphQL */ `
   query ListPosts(
     $filter: ModelPostFilterInput
@@ -194,37 +226,6 @@ export const listPosts = /* GraphQL */ `
         owner
       }
       nextToken
-    }
-  }
-`;
-export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
-      id
-      siteID
-      slug
-      parentID
-      postTypeID
-      status
-      title
-      content
-      seoTitle
-      seoDescription
-      createdAt
-      updatedAt
-      postType {
-        id
-        siteID
-        title
-        slug
-        createdAt
-        updatedAt
-        owner
-        posts {
-          nextToken
-        }
-      }
-      owner
     }
   }
 `;
@@ -277,22 +278,10 @@ export const getMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
       owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -307,85 +296,9 @@ export const listMenus = /* GraphQL */ `
         id
         siteID
         slug
-        createdAt
-        updatedAt
-        owner
-        menuItems {
-          nextToken
-        }
-      }
-      nextToken
-    }
-  }
-`;
-export const getMenuItem = /* GraphQL */ `
-  query GetMenuItem($id: ID!) {
-    getMenuItem(id: $id) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
         content
-        seoTitle
-        seoDescription
         createdAt
         updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
-      owner
-    }
-  }
-`;
-export const listMenuItems = /* GraphQL */ `
-  query ListMenuItems(
-    $filter: ModelMenuItemFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listMenuItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        siteID
-        menuID
-        position
-        postID
-        createdAt
-        updatedAt
-        post {
-          id
-          siteID
-          slug
-          parentID
-          postTypeID
-          status
-          title
-          content
-          seoTitle
-          seoDescription
-          createdAt
-          updatedAt
-          owner
-        }
         owner
       }
       nextToken

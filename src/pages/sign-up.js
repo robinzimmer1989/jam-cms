@@ -8,9 +8,8 @@ import { Button, Input, Card } from 'antd'
 import BaseLayout from 'components/BaseLayout'
 import Spacer from 'components/Spacer'
 import Edges from 'components/Edges'
-import Paper from 'components/Paper'
 
-import { setUser, isLoggedIn } from 'utils/auth'
+import { isLoggedIn } from 'utils/auth'
 import getRoute from 'routes'
 
 const SignUp = () => {

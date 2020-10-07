@@ -1,11 +1,9 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
+import { Button } from 'antd'
 import styled from 'styled-components'
 
-// import app components
-
 const Menu = props => {
-  const { label, onClick, value } = props
+  const { label, onClick } = props
 
   return (
     <Container>

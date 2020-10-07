@@ -1,6 +1,7 @@
 import { navigate } from 'gatsby'
 
-import { siteServices, collectionServices, netlifyServices, postServices } from '../services'
+import { siteServices, collectionServices, netlifyServices, postServices } from 'services'
+import { menuActions } from 'actions'
 
 export const addSite = async ({ title, ownerID }, dispatch) => {
   const result = await siteServices.addSite({ title, ownerID })
@@ -46,12 +47,22 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
-export const updateSite = async ({ id, title, settings }, dispatch) => {
+export const updateSite = async ({ id, title, settings, menus }, dispatch) => {
   const result = await siteServices.updateSite({ id, title, settings })
 
   if (result?.data?.updateSite) {
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
   }
+
+  await Promise.all(
+    Object.values(menus).map(async menu => {
+      if (menu.id) {
+        await menuActions.updateMenu(menu, dispatch)
+      } else {
+        await menuActions.createMenu(menu, dispatch)
+      }
+    })
+  )
 }
 
 export const deleteSite = async ({ id, netlifyID }, dispatch) => {
@@ -60,7 +71,7 @@ export const deleteSite = async ({ id, netlifyID }, dispatch) => {
   const result = await siteServices.deleteSite({ id })
 
   if (result?.data?.deleteSite) {
-    dispatch({ type: `DELETE_SITE`, payload: { id } })
+    dispatch({ type: `DELETE_SITE`, payload: result.data.deleteSite })
 
     return result
   }
@@ -68,11 +79,11 @@ export const deleteSite = async ({ id, netlifyID }, dispatch) => {
   return false
 }
 
-export const getSites = async ({}, dispatch) => {
+export const getSites = async (args, dispatch) => {
   const result = await siteServices.getSites()
 
-  if (result?.data?.listSites?.items) {
-    dispatch({ type: `ADD_SITES`, payload: result.data.listSites.items })
+  if (result?.data?.listSites) {
+    dispatch({ type: `ADD_SITES`, payload: result.data.listSites })
   }
 }
 

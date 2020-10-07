@@ -32,6 +32,7 @@ const App = () => {
         visible={dialog.open}
         onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
         children={dialog.component}
+        width={1000}
         footer={null}
       />
     </>

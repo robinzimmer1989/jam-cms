@@ -27,16 +27,19 @@ const CmsHeader = props => {
   if (site?.netlifyID) {
     buttons.push(
       <NetlifyStatus
+        key="netlify-status"
         src={`https://api.netlify.com/api/v1/badges/${site.netlifyID}/deploy-status?key=${Math.floor(
           Math.random() * Math.floor(100)
         )}`}
       />,
-      <Button size="small" children={`Deploy`} onClick={handleDeploy} />
+      <Button key="netlify-deploy-button" size="small" children={`Deploy`} onClick={handleDeploy} />
     )
   }
 
   if (site?.netlifyUrl) {
-    buttons.push(<Button size="small" children={`Visit Site`} href={site?.netlifyUrl} target="_blank" />)
+    buttons.push(
+      <Button key="visit-site-button" size="small" children={`Visit Site`} href={site?.netlifyUrl} target="_blank" />
+    )
   }
 
   return <PageHeader title={title} extra={buttons} />

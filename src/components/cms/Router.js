@@ -4,9 +4,8 @@ import { Router as ReachRouter } from '@reach/router'
 // import app components
 import Dashboard from './pages/Dashboard'
 import Media from './pages/Media'
-import Collections from './pages/Collections'
 import Collection from './pages/Collection'
-import Editor from './editor'
+import Editor from './pages/Editor'
 import Settings from './pages/Settings'
 
 import { ROUTE_MEDIA, ROUTE_COLLECTIONS, ROUTE_EDITOR, ROUTE_SETTINGS } from 'routes'
@@ -39,7 +38,6 @@ const Router = props => {
     <ReachRouter>
       <Dashboard path="/" />
       <Media path={`${ROUTE_MEDIA}`} />
-      <Collections path={ROUTE_COLLECTIONS} />
       <Collection path={`${ROUTE_COLLECTIONS}/:postTypeID`} />
       <Editor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} />
       <Settings path={ROUTE_SETTINGS} />

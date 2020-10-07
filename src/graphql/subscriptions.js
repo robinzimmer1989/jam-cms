@@ -65,6 +65,7 @@ export const onCreateSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -138,6 +139,7 @@ export const onUpdateSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -211,6 +213,7 @@ export const onDeleteSite = /* GraphQL */ `
           id
           siteID
           slug
+          content
           createdAt
           updatedAt
           owner
@@ -466,22 +469,10 @@ export const onCreateMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
       owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -491,22 +482,10 @@ export const onUpdateMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
       owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
     }
   }
 `;
@@ -516,135 +495,9 @@ export const onDeleteMenu = /* GraphQL */ `
       id
       siteID
       slug
+      content
       createdAt
       updatedAt
-      owner
-      menuItems {
-        items {
-          id
-          siteID
-          menuID
-          position
-          postID
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-    }
-  }
-`;
-export const onCreateMenuItem = /* GraphQL */ `
-  subscription OnCreateMenuItem($owner: String) {
-    onCreateMenuItem(owner: $owner) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
-      owner
-    }
-  }
-`;
-export const onUpdateMenuItem = /* GraphQL */ `
-  subscription OnUpdateMenuItem($owner: String) {
-    onUpdateMenuItem(owner: $owner) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
-      owner
-    }
-  }
-`;
-export const onDeleteMenuItem = /* GraphQL */ `
-  subscription OnDeleteMenuItem($owner: String) {
-    onDeleteMenuItem(owner: $owner) {
-      id
-      siteID
-      menuID
-      position
-      postID
-      createdAt
-      updatedAt
-      post {
-        id
-        siteID
-        slug
-        parentID
-        postTypeID
-        status
-        title
-        content
-        seoTitle
-        seoDescription
-        createdAt
-        updatedAt
-        postType {
-          id
-          siteID
-          title
-          slug
-          createdAt
-          updatedAt
-          owner
-        }
-        owner
-      }
       owner
     }
   }

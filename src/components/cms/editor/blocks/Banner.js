@@ -17,7 +17,7 @@ export const fields = {
     {
       id: 'text',
       type: 'textarea',
-      placeholder: '',
+      placeholder: 'Headline',
       label: 'Headline',
       value: '',
       rows: 2,
