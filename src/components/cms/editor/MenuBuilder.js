@@ -3,10 +3,11 @@ import produce from 'immer'
 import { set } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
-import { Button, Row, Col, List, Tree, Collapse } from 'antd'
-import DeleteIcon from 'react-ionicons/lib/IosTrashOutline'
+import { Button, Row, Col, List, Tree, Collapse, Input, Space, Card } from 'antd'
+import AddIcon from 'react-ionicons/lib/IosAdd'
 
 // import app components
+import { recursivelyUpdateTree, removeFromTree } from 'utils'
 import { useStore } from 'store'
 
 const MenuBuilder = props => {
@@ -20,9 +21,7 @@ const MenuBuilder = props => {
     dispatch,
   ] = useStore()
 
-  const menuItems = sites?.[siteID]?.menus?.[menuSlug]?.content
-
-  console.log(sites)
+  const menuItems = sites?.[siteID]?.menus?.[menuSlug]?.content || []
 
   // TODO: Add tabs for different post types
   const [category, setCategory] = useState('Page')
@@ -87,6 +86,31 @@ const MenuBuilder = props => {
     setItems(newItems)
   }
 
+  const handleUpdate = (e, key) => {
+    const updateItem = (parentNode, child, params) => {
+      if (child.key === params.key) {
+        return {
+          ...child,
+          title: params.value,
+        }
+      }
+
+      return child
+    }
+
+    const newItems = recursivelyUpdateTree({ children: items }, updateItem, {
+      key,
+      value: e.target.value,
+    })
+
+    setItems(newItems)
+  }
+
+  const handleRemove = key => {
+    const newItems = removeFromTree({ children: [...items] }, key)
+    setItems(newItems.children)
+  }
+
   const handleSubmit = async () => {
     const nextSite = produce(site, draft => {
       set(draft, `menus.${menuSlug}.content`, items)
@@ -103,28 +127,34 @@ const MenuBuilder = props => {
   return (
     <Container>
       <Row justify="space-between">
-        <Col span="12">
-          {posts &&
-            Object.values(posts).map(({ id, title, postTypeID }) => {
-              return (
-                <List.Item
-                  key={id}
-                  extra={[
-                    <Button
-                      size="small"
-                      onClick={() => setItems([...items, { key: uuidv4(), title, postTypeID, postID: id }])}
-                    >
-                      <DeleteIcon />
-                    </Button>,
-                  ]}
-                >
-                  {title}
-                </List.Item>
-              )
-            })}
+        <Col span="8">
+          <Card>
+            {posts &&
+              Object.values(posts).map(({ id, title, postTypeID }) => {
+                return (
+                  <List.Item
+                    key={id}
+                    extra={[
+                      <Button
+                        key="add"
+                        size="small"
+                        onClick={() =>
+                          setItems([...items, { key: uuidv4(), title, postTypeID, postID: id, children: [] }])
+                        }
+                        shape="circle"
+                      >
+                        <AddIcon />
+                      </Button>,
+                    ]}
+                  >
+                    {title}
+                  </List.Item>
+                )
+              })}
+          </Card>
         </Col>
 
-        <Col span="12">
+        <Col span="14">
           <Tree
             className="draggable-tree"
             draggable
@@ -133,9 +163,12 @@ const MenuBuilder = props => {
             treeData={items}
             titleRender={node => {
               return (
-                <Collapse defaultActiveKey={['1']}>
-                  <Collapse.Panel header={node.title} key="1">
-                    <p>test</p>
+                <Collapse>
+                  <Collapse.Panel header={node.title}>
+                    <Space direction="vertical">
+                      <Input value={node.title} onChange={e => handleUpdate(e, node.key)} />
+                      <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} />
+                    </Space>
                   </Collapse.Panel>
                 </Collapse>
               )

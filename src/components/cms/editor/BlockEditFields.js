@@ -1,18 +1,15 @@
 import React from 'react'
 import { set, unionBy } from 'lodash'
 import produce from 'immer'
-import { Button } from '@material-ui/core'
+import { Button, Space, Collapse } from 'antd'
 
 // import app components
-import Spacer from 'components/Spacer'
-import AddImage from '../../forms/AddImage'
-import MenuBuilder from '../../menus/MenuBuilder'
-
-import Textarea from '../fields/Textarea'
-import ImagePicker from '../fields/ImagePicker'
-import Menu from '../fields/Menu'
-
-import blocks from '../blocks'
+import MenuBuilder from './MenuBuilder'
+import MediaLibrary from '../media/MediaLibrary'
+import Textarea from './fields/Textarea'
+import ImagePicker from './fields/ImagePicker'
+import Menu from './fields/Menu'
+import blocks from './blocks'
 
 import { useStore } from 'store'
 
@@ -128,8 +125,10 @@ const BlockEditFields = () => {
                 type: `SET_DIALOG`,
                 payload: {
                   open: true,
-                  component: <AddImage onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id)} />,
-                  width: `xs`,
+                  component: (
+                    <MediaLibrary onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id)} />
+                  ),
+                  width: 1000,
                 },
               })
             }
@@ -146,8 +145,9 @@ const BlockEditFields = () => {
                 type: `SET_DIALOG`,
                 payload: {
                   open: true,
+                  title: 'Menu',
                   component: <MenuBuilder {...field} />,
-                  width: `md`,
+                  width: 1000,
                 },
               })
             }
@@ -159,20 +159,22 @@ const BlockEditFields = () => {
     }
 
     return (
-      <Spacer key={fieldIndex} mb={30}>
+      <Collapse.Panel header={field.type.toUpperCase()} direction="vertical" key={fieldIndex}>
         {component}
-      </Spacer>
+      </Collapse.Panel>
     )
   }
 
   const fields = getFields()
 
   return (
-    <>
-      <Spacer mb={30}>{fields && fields.map((field, fieldIndex) => getField(field, fieldIndex))}</Spacer>
+    <Space direction="vertical" size={30}>
+      <Collapse defaultActiveKey={[0]}>
+        {fields && fields.map((field, fieldIndex) => getField(field, fieldIndex))}
+      </Collapse>
 
-      {!siteComponent && <Button onClick={handleDeleteBlock} children={`Delete Block`} variant="contained" />}
-    </>
+      {!siteComponent && <Button onClick={handleDeleteBlock} children={`Delete Block`} danger />}
+    </Space>
   )
 }
 

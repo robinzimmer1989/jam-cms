@@ -38,3 +38,16 @@ export const updateCollection = async ({ siteID, id, title, slug }, dispatch) =>
 
   return result
 }
+
+export const deleteCollection = async ({ id }, dispatch) => {
+  const result = await collectionServices.deleteCollection({ id })
+
+  if (result?.data?.deletePostType) {
+    dispatch({
+      type: `DELETE_COLLECTION`,
+      payload: result?.data.deletePostType,
+    })
+  }
+
+  return result
+}

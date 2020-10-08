@@ -38,7 +38,7 @@ export const postReducer = (state, action) => {
         break
 
       case `DELETE_COLLECTION`:
-        delete draft.sites[payload.siteID].postTypes[payload.postTypeID]
+        delete draft.sites[payload.siteID].postTypes[payload.id]
         break
 
       /******************************

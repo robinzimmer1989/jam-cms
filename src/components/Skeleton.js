@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import MuiSkeleton from '@material-ui/lab/Skeleton'
 
 const Skeleton = props => {

@@ -4,7 +4,7 @@ export const editorState = {
   site: null,
   post: null,
   activeBlockIndex: null,
-  view: 'desktop',
+  viewport: 'desktop',
 }
 
 export const editorReducer = (state, action) => {
@@ -22,6 +22,10 @@ export const editorReducer = (state, action) => {
 
       case `SET_EDITOR_ACTIVE_BLOCK_INDEX`:
         draft.activeBlockIndex = payload
+        break
+
+      case `SET_EDITOR_VIEWPORT`:
+        draft.viewport = payload
         break
 
       case `CLEAR_EDITOR`:

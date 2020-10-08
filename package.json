@@ -9,6 +9,7 @@
     "antd": "^4.6.6",
     "aws-amplify": "^3.3.1",
     "aws-amplify-react": "^4.2.5",
+    "font-picker-react": "^3.5.2",
     "formik": "^2.1.6",
     "gatsby": "^2.24.67",
     "gatsby-image": "^2.4.19",
@@ -40,6 +41,7 @@
     "react-toastify": "^6.0.8",
     "slugify": "^1.4.5",
     "styled-components": "^5.2.0",
+    "tree-flatten": "^1.0.0",
     "typography": "^0.16.19",
     "typography-theme-funston": "^0.16.19",
     "uuid": "^8.3.0"

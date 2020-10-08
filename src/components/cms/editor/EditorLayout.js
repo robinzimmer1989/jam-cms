@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Layout, Divider } from 'antd'
 
 // import app components
-import Sidebar from './sidebar/Sidebar'
+import EditorSidebar from './EditorSidebar'
 import EditorHeader from './EditorHeader'
 import Edges from 'components/Edges'
 
@@ -22,7 +22,7 @@ const EditorLayout = props => {
           right: 0,
         }}
       >
-        <Sidebar />
+        <EditorSidebar />
       </Layout.Sider>
 
       <Layout style={{ paddingRight: 300 }}>

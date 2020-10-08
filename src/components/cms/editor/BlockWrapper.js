@@ -1,10 +1,10 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { Fab } from '@material-ui/core'
-import AddIcon from 'react-ionicons/lib/IosAdd'
+import { Button } from 'antd'
+import { PlusCircleTwoTone } from '@ant-design/icons'
 
 // import app components
-import AddBlock from '../forms/AddBlock'
+import BlockForm from '../forms/BlockForm'
 import { useStore } from 'store'
 import { colors } from 'theme'
 
@@ -23,8 +23,9 @@ const BlockWrapper = props => {
       type: `SET_DIALOG`,
       payload: {
         open: true,
-        component: <AddBlock index={newIndex} />,
-        width: 'xs',
+        title: 'Choose a Block',
+        component: <BlockForm index={newIndex} />,
+        width: 800,
       },
     })
   }
@@ -40,14 +41,14 @@ const BlockWrapper = props => {
       </Content>
 
       {!hideAddButtonTop && (
-        <AddButtonTop size="small" className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index)}>
-          <AddIcon />
+        <AddButtonTop className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index)}>
+          <Button type="primary" shape="circle" icon={<PlusCircleTwoTone />} size={'large'} />
         </AddButtonTop>
       )}
 
       {!hideAddButtonBottom && (
-        <AddButtonBottom size="small" className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index + 1)}>
-          <AddIcon />
+        <AddButtonBottom className={`icon icon-add`} onClick={() => handleOpenBlockDialog(index + 1)}>
+          <Button type="primary" shape="circle" icon={<PlusCircleTwoTone />} size={'large'} />
         </AddButtonBottom>
       )}
     </Container>
@@ -90,24 +91,20 @@ const Content = styled.div`
         `};
 `
 
-const AddButtonTop = styled(Fab)`
-  && {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    bottom: 100%;
-    transform: translate(-50%, 50%);
-  }
+const AddButtonTop = styled.div`
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, 50%);
 `
 
-const AddButtonBottom = styled(Fab)`
-  && {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    top: 100%;
-    transform: translate(-50%, -50%);
-  }
+const AddButtonBottom = styled.div`
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -50%);
 `
 
 export default BlockWrapper

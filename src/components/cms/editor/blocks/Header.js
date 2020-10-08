@@ -17,7 +17,7 @@ export const fields = {
       value: '',
     },
     {
-      id: 'header-menu',
+      id: 'headerMenu',
       type: 'menu',
       placeholder: '',
       label: 'Edit Menu',
@@ -28,7 +28,9 @@ export const fields = {
 }
 
 const Header = props => {
-  const { image, ...rest } = props
+  const { image, headerMenu, ...rest } = props
+
+  console.log(props)
 
   return (
     <Container {...rest}>

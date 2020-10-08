@@ -61,15 +61,18 @@ const CmsLayout = props => {
               <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
             </Menu.Item>
 
-            <Menu.SubMenu key="Settings" icon={<LaptopOutlined />} title="Settings">
-              <Menu.Item key="General Settings">
-                <Link to={getRoute(`general-settings`, { siteID })}>General Settings</Link>
+            <Menu.SubMenu icon={<LaptopOutlined />} title="Settings">
+              <Menu.Item key="General">
+                <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
               </Menu.Item>
-              <Menu.Item key="Collections Settings">
-                <Link to={getRoute(`collections-settings`, { siteID })}>Collections</Link>
+              <Menu.Item key="Collections">
+                <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+              </Menu.Item>
+              <Menu.Item key="Theme">
+                <Link to={getRoute(`settings-theme`, { siteID })}>Theme</Link>
               </Menu.Item>
               <Menu.Item key="SEO">
-                <Link to={getRoute(`seo-settings`, { siteID })}>SEO</Link>
+                <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
               </Menu.Item>
             </Menu.SubMenu>
           </Menu>

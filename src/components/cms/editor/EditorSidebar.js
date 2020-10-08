@@ -1,13 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
-import { PageHeader, Divider } from 'antd'
+
+import { PageHeader } from 'antd'
 
 // import app components
 import BlockEditFields from './BlockEditFields'
 import PostSettings from './PostSettings'
 import { useStore } from 'store'
 
-const Sidebar = () => {
+const EditorSidebar = () => {
   const [
     {
       editorState: { post, activeBlockIndex },
@@ -50,18 +50,9 @@ const Sidebar = () => {
   return (
     <>
       <PageHeader {...settings.header} style={{ paddingLeft: 20 }} />
-      <StyledDivider />
-      <Content>{settings.children}</Content>
+      {settings.children}
     </>
   )
 }
 
-const Content = styled.div`
-  padding: 20px;
-`
-
-const StyledDivider = styled(Divider)`
-  margin: 0 0 32px;
-`
-
-export default Sidebar
+export default EditorSidebar

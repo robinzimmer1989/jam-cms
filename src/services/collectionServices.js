@@ -1,6 +1,6 @@
 import { API, graphqlOperation } from 'aws-amplify'
 
-import { createPostType, updatePostType } from '../graphql/mutations'
+import { createPostType, updatePostType, deletePostType } from '../graphql/mutations'
 
 export const addCollection = async ({ siteID, slug, title }) => {
   const result = await API.graphql(
@@ -47,6 +47,16 @@ export const getCollection = async ({ postTypeID }) => {
     `,
       { id: postTypeID }
     )
+  )
+
+  return result
+}
+
+export const deleteCollection = async ({ id }) => {
+  const result = await API.graphql(
+    graphqlOperation(deletePostType, {
+      input: { id },
+    })
   )
 
   return result

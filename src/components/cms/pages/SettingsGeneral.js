@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import { navigate } from 'gatsby'
-import { Button, Input, Card } from 'antd'
+import { Button, Input, Card, Popconfirm } from 'antd'
 
 // import app components
+import CmsLayout from '../CmsLayout'
 import Spacer from 'components/Spacer'
 
 import { useStore } from 'store'
@@ -34,7 +34,7 @@ const GeneralSettings = props => {
   }
 
   return (
-    <Container>
+    <CmsLayout pageTitle={`Collections`}>
       <Spacer mb={30}>
         <Card title={`General`}>
           <Spacer mb={20}>
@@ -45,12 +45,13 @@ const GeneralSettings = props => {
       </Spacer>
 
       <Card title={`Danger Zone`}>
-        <Button onClick={handleDelete} children={`Delete Site`} type="primary" danger />
+        <Popconfirm title="Are you sure?" onConfirm={handleDelete} okText="Yes" cancelText="No">
+          <Button children={`Delete Site`} type="primary" danger />
+        </Popconfirm>
+        ,
       </Card>
-    </Container>
+    </CmsLayout>
   )
 }
-
-const Container = styled.div``
 
 export default GeneralSettings

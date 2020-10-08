@@ -26,6 +26,8 @@ export const appReducer = (state, action) => {
         draft.dialog = {
           ...draft.dialog,
           open: false,
+          title: '',
+          component: null,
         }
         break
 

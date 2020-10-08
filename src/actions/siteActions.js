@@ -55,11 +55,13 @@ export const updateSite = async ({ id, title, settings, menus }, dispatch) => {
   }
 
   await Promise.all(
-    Object.values(menus).map(async menu => {
+    Object.keys(menus).map(async key => {
+      const menu = menus[key]
+
       if (menu.id) {
         await menuActions.updateMenu(menu, dispatch)
       } else {
-        await menuActions.createMenu(menu, dispatch)
+        await menuActions.addMenu({ siteID: id, slug: key, content: menu.content }, dispatch)
       }
     })
   )

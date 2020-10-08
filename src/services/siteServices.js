@@ -9,7 +9,10 @@ const transformSite = site => {
   const nextSite = produce(site, draft => {
     // Parse settings or add default settings if empty
     if (draft.settings) {
-      set(draft, `settings`, JSON.parse(draft.settings))
+      set(draft, `settings`, {
+        ...defaultSiteSettings,
+        ...JSON.parse(draft.settings),
+      })
     } else {
       set(draft, `settings`, defaultSiteSettings)
     }
@@ -42,7 +45,7 @@ const transformSite = site => {
       )
     }
   })
-  console.log(nextSite)
+
   return nextSite
 }
 
