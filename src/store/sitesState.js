@@ -1,14 +1,14 @@
 import produce from 'immer'
-import { unionBy, set, get } from 'lodash'
+import { unionBy, set } from 'lodash'
 
 const DEFAULT_STATE = {
   siteID: null,
   sites: {},
 }
 
-export const postState = { ...DEFAULT_STATE }
+export const sitesState = { ...DEFAULT_STATE }
 
-export const postReducer = (state, action) => {
+export const sitesReducer = (state, action) => {
   const { payload } = action
 
   return produce(state, draft => {

@@ -18,7 +18,7 @@ const Collection = props => {
 
   const [
     {
-      postState: { sites },
+      sitesState: { sites },
     },
     dispatch,
   ] = useStore()
@@ -112,7 +112,6 @@ const Collection = props => {
                   open: true,
                   title: `Add`,
                   component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
-                  width: 'xs',
                 },
               })
             }

@@ -54,17 +54,22 @@ export const updateSite = async ({ id, title, settings, menus }, dispatch) => {
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
   }
 
-  await Promise.all(
-    Object.keys(menus).map(async key => {
-      const menu = menus[key]
+  //TODO: Check if menus have changed or alternatively remove single menu items (see other TODO)
+  if (menus) {
+    await Promise.all(
+      Object.keys(menus).map(async key => {
+        const menu = menus[key]
 
-      if (menu.id) {
-        await menuActions.updateMenu(menu, dispatch)
-      } else {
-        await menuActions.addMenu({ siteID: id, slug: key, content: menu.content }, dispatch)
-      }
-    })
-  )
+        if (menu.id) {
+          await menuActions.updateMenu(menu, dispatch)
+        } else {
+          await menuActions.addMenu({ siteID: id, slug: key, content: menu.content }, dispatch)
+        }
+      })
+    )
+  }
+
+  return result
 }
 
 export const deleteSite = async ({ id, netlifyID }, dispatch) => {
@@ -103,4 +108,11 @@ export const deploySite = async ({ netlifyID }, dispatch) => {
   if (result?.deploy_id) {
     dispatch({ type: `UPDATE_NETLIFY_DEPLOY_ID`, payload: result.deploy_id })
   }
+}
+
+export const addSiteToEditor = ({ site }, dispatch) => {
+  dispatch({
+    type: `SET_EDITOR_SITE`,
+    payload: site,
+  })
 }

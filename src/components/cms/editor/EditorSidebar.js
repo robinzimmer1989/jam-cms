@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PageHeader } from 'antd'
+import { PageHeader, Divider } from 'antd'
 
 // import app components
 import BlockEditFields from './BlockEditFields'
@@ -50,6 +50,7 @@ const EditorSidebar = () => {
   return (
     <>
       <PageHeader {...settings.header} style={{ paddingLeft: 20 }} />
+      <Divider style={{ margin: 0 }} />
       {settings.children}
     </>
   )

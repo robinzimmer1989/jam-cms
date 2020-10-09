@@ -3,12 +3,11 @@ import styled from 'styled-components'
 import { Layout, Divider } from 'antd'
 
 // import app components
-import EditorSidebar from './EditorSidebar'
 import EditorHeader from './EditorHeader'
 import Edges from 'components/Edges'
 
 const EditorLayout = props => {
-  const { children } = props
+  const { sidebar, backLink, children } = props
 
   return (
     <Layout>
@@ -22,27 +21,23 @@ const EditorLayout = props => {
           right: 0,
         }}
       >
-        <EditorSidebar />
+        {sidebar}
       </Layout.Sider>
 
       <Layout style={{ paddingRight: 300 }}>
         <Layout.Header style={{ padding: 0 }}>
           <Edges size="md">
-            <EditorHeader />
+            <EditorHeader backLink={backLink} />
           </Edges>
         </Layout.Header>
 
         <Layout.Content>
-          <StyledDivider />
+          <Divider style={{ margin: '8px 0 32px' }} />
           <Edges size="md">{children}</Edges>
         </Layout.Content>
       </Layout>
     </Layout>
   )
 }
-
-const StyledDivider = styled(Divider)`
-  margin: 8px 0 32px;
-`
 
 export default EditorLayout

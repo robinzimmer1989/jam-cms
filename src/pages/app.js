@@ -14,7 +14,7 @@ import { useStore } from 'store'
 const App = () => {
   const [
     {
-      appState: { dialog },
+      globalState: { dialog },
     },
     dispatch,
   ] = useStore()
@@ -32,7 +32,7 @@ const App = () => {
         visible={dialog.open}
         onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
         children={dialog.component}
-        width={dialog.width || 500}
+        width={dialog.width}
         footer={null}
       />
     </>

@@ -3,10 +3,11 @@ import produce from 'immer'
 import { set } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
-import { Button, Row, Col, List, Tree, Collapse, Input, Space, Card } from 'antd'
+import { Button, Row, Col, List, Tree, Collapse, Space, Card } from 'antd'
 import AddIcon from 'react-ionicons/lib/IosAdd'
 
 // import app components
+import Input from 'components/Input'
 import { recursivelyUpdateTree, removeFromTree } from 'utils'
 import { useStore } from 'store'
 
@@ -15,7 +16,7 @@ const MenuBuilder = props => {
 
   const [
     {
-      postState: { sites, siteID },
+      sitesState: { sites, siteID },
       editorState: { site },
     },
     dispatch,
@@ -166,7 +167,7 @@ const MenuBuilder = props => {
                 <Collapse>
                   <Collapse.Panel header={node.title}>
                     <Space direction="vertical">
-                      <Input value={node.title} onChange={e => handleUpdate(e, node.key)} />
+                      <Input label="title" value={node.title} onChange={e => handleUpdate(e, node.key)} />
                       <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} />
                     </Space>
                   </Collapse.Panel>

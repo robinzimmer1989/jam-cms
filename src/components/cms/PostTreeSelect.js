@@ -1,7 +1,8 @@
 import React from 'react'
-import { TreeSelect } from 'antd'
+import { TreeSelect, Space } from 'antd'
 
 // import app components
+import Caption from 'components/Caption'
 import { createDataTree } from 'utils'
 
 const PostTreeSelect = props => {
@@ -18,18 +19,21 @@ const PostTreeSelect = props => {
   }
 
   return (
-    <TreeSelect
-      showSearch
-      value={value}
-      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-      placeholder="Please select"
-      allowClear
-      treeDefaultExpandAll
-      onChange={onChange}
-    >
-      <TreeSelect.TreeNode value={``} title={`None`} />
-      {treePosts.map(o => renderTreeNode(o))}
-    </TreeSelect>
+    <Space direction="vertical" size={2}>
+      <Caption children={`Parent`} />
+      <TreeSelect
+        showSearch
+        value={value}
+        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+        placeholder="Please select"
+        allowClear
+        treeDefaultExpandAll
+        onChange={onChange}
+      >
+        <TreeSelect.TreeNode value={``} title={`None`} />
+        {treePosts.map(o => renderTreeNode(o))}
+      </TreeSelect>
+    </Space>
   )
 }
 

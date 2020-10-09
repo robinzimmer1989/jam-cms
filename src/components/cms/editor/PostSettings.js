@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import produce from 'immer'
-import { Input, Button, Space, Select, Divider } from 'antd'
+import { Button, Space, Select as AntSelect } from 'antd'
 import { toast } from 'react-toastify'
 import { set } from 'lodash'
 
 // import app components
+import Input from 'components/Input'
+import Select from 'components/Select'
 import Skeleton from 'components/Skeleton'
 import PostTreeSelect from '../PostTreeSelect'
 
@@ -15,7 +17,7 @@ import { postActions, siteActions } from 'actions'
 const PostSettings = () => {
   const [
     {
-      postState: { sites, siteID },
+      sitesState: { sites, siteID },
       editorState: { site, post },
     },
     dispatch,
@@ -45,17 +47,17 @@ const PostSettings = () => {
 
   return (
     <>
-      <StyledDivider />
       <Content>
         <Space direction="vertical" size={20}>
           <Skeleton done={!!post} height={32}>
             <Select
               value={post?.status || ''}
               onChange={value => handleChangeSettings({ target: { name: `status`, value } })}
+              label={`Status`}
             >
-              <Select.Option value={`publish`} children={`Publish`} />
-              <Select.Option value={`draft`} children={`Draft`} />
-              <Select.Option value={`trash`} children={`Trash`} />
+              <AntSelect.Option value={`publish`} children={`Publish`} />
+              <AntSelect.Option value={`draft`} children={`Draft`} />
+              <AntSelect.Option value={`trash`} children={`Trash`} />
             </Select>
           </Skeleton>
 
@@ -68,20 +70,15 @@ const PostSettings = () => {
           </Skeleton>
 
           <Skeleton done={!!post} height={32}>
-            <Input
-              value={post?.seoTitle || ''}
-              name={`seoTitle`}
-              onChange={handleChangeSettings}
-              placeholder={`SEO Title`}
-            />
+            <Input value={post?.seoTitle || ''} name={`seoTitle`} onChange={handleChangeSettings} label={`SEO Title`} />
           </Skeleton>
 
           <Skeleton done={!!post} height={98}>
-            <Input.TextArea
+            <Input
               value={post?.seoDescription || ''}
               name={`seoDescription`}
               onChange={handleChangeSettings}
-              placeholder={`SEO Description`}
+              label={`SEO Description`}
               rows={4}
             />
           </Skeleton>
@@ -95,10 +92,6 @@ const PostSettings = () => {
 
 const Content = styled.div`
   padding: 20px;
-`
-
-const StyledDivider = styled(Divider)`
-  margin: 0;
 `
 
 export default PostSettings

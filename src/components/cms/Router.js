@@ -10,6 +10,7 @@ import SettingsGeneral from './pages/SettingsGeneral'
 import SettingsCollections from './pages/SettingsCollections'
 import SettingsSeo from './pages/SettingsSeo'
 import SettingsTheme from './pages/SettingsTheme'
+import ThemeEditor from './pages/ThemeEditor'
 
 import {
   ROUTE_MEDIA,
@@ -19,6 +20,7 @@ import {
   ROUTE_SETTINGS_COLLECTIONS,
   ROUTE_SETTINGS_SEO,
   ROUTE_SETTINGS_THEME,
+  ROUTE_THEME_EDITOR,
 } from 'routes'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
@@ -28,7 +30,7 @@ const Router = props => {
 
   const [
     {
-      postState: { sites },
+      sitesState: { sites },
     },
     dispatch,
   ] = useStore()
@@ -55,6 +57,7 @@ const Router = props => {
       <SettingsCollections path={ROUTE_SETTINGS_COLLECTIONS} />
       <SettingsSeo path={ROUTE_SETTINGS_SEO} />
       <SettingsTheme path={ROUTE_SETTINGS_THEME} />
+      <ThemeEditor path={ROUTE_THEME_EDITOR} />
     </ReachRouter>
   )
 }

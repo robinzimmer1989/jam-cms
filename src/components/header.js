@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, navigate } from 'gatsby'
 import { Auth } from 'aws-amplify'
 import styled from 'styled-components'
-import { Menu, Row, Avatar, Dropdown, Space } from 'antd'
+import { Menu, Row, Button, Dropdown, Space } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 
 // import app components
@@ -47,11 +47,13 @@ const Header = () => {
             )}
           </Menu>
 
-          <Dropdown overlay={dropDownMenu}>
-            <div>
-              <Avatar size={32} icon={<UserOutlined />} />
-            </div>
-          </Dropdown>
+          {isLoggedIn() && (
+            <Dropdown overlay={dropDownMenu}>
+              <div>
+                <Button size={32} icon={<UserOutlined />} shape="circle" ghost />
+              </div>
+            </Dropdown>
+          )}
         </Space>
       </Row>
     </Row>

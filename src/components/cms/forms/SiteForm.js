@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Space, Button, Input } from 'antd'
+import { Space, Button } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import { getCurrentUser } from 'utils/auth'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
@@ -23,7 +24,7 @@ const SiteForm = () => {
 
   return (
     <Space direction="vertical">
-      <Input value={title} onChange={e => setTitle(e.target.value)} placeholder={`Enter title`} />
+      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import { Button } from 'antd'
 
 // import app components
@@ -35,16 +34,14 @@ const AddBlock = props => {
   }
 
   return (
-    <Container>
+    <>
       {Object.keys(blocks)
         .filter(key => key !== 'Header' && key !== 'Footer')
         .map(key => (
           <Button key={key} children={key} onClick={() => handleBlockSelect(key)} />
         ))}
-    </Container>
+    </>
   )
 }
-
-const Container = styled.div``
 
 export default AddBlock

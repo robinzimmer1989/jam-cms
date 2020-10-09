@@ -12,7 +12,7 @@ import { useStore } from 'store'
 const SettingsCollections = () => {
   const [
     {
-      postState: { siteID, sites },
+      sitesState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -27,7 +27,7 @@ const SettingsCollections = () => {
     }
   }
 
-  const handleDeletePostType = async postTypeID => {
+  const handleDeletePostType = async ({ postTypeID }) => {
     await collectionActions.deleteCollection({ id: postTypeID }, dispatch)
   }
 

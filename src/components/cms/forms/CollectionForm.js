@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Button, Input, Space } from 'antd'
+import { Button, Space } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import { formatSlug } from 'utils'
 import { useStore } from 'store'
 
@@ -33,8 +34,8 @@ const CollectionForm = props => {
 
   return (
     <Space direction="vertical">
-      <Input value={title} onChange={e => setTitle(e.target.value)} placeholder={`Title`} />
-      <Input value={slug} onChange={e => setSlug(e.target.value)} placeholder={`Slug`} />
+      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
+      <Input label="slug" value={slug} onChange={e => setSlug(e.target.value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

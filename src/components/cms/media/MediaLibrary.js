@@ -15,7 +15,7 @@ const MediaLibrary = props => {
 
   const [
     {
-      postState: { siteID, sites },
+      sitesState: { siteID, sites },
     },
     dispatch,
   ] = useStore()

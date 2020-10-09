@@ -3,7 +3,7 @@ import produce from 'immer'
 import { set, get } from 'lodash'
 
 import { createSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
-import defaultSiteSettings from '../components/cms/editor/defaultSiteSettings'
+import defaultSiteSettings from '../components/cms/settings/defaultSiteSettings'
 
 const transformSite = site => {
   const nextSite = produce(site, draft => {

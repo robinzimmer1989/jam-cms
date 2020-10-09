@@ -7,10 +7,10 @@ import CmsLayout from '../CmsLayout'
 
 import { useStore } from 'store'
 
-const SettingsTheme = () => {
+const SettingsSeo = () => {
   const [
     {
-      postState: { siteID, sites },
+      sitesState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -24,4 +24,4 @@ const SettingsTheme = () => {
   )
 }
 
-export default SettingsTheme
+export default SettingsSeo

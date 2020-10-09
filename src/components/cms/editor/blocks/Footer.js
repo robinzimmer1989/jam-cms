@@ -1,24 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'gatsby'
 import { Typography } from 'antd'
 
 // import app components
 import Edges from 'components/Edges'
-import Image from 'components/Image'
 
 export const fields = {
-  name: 'Header',
+  name: 'Footer',
   fields: [
     {
-      id: 'image',
-      type: 'image',
-      placeholder: '',
-      label: 'Add Logo',
-      value: '',
-    },
-    {
-      id: 'headerMenu',
+      id: 'footerMenu',
       type: 'menu',
       placeholder: '',
       label: 'Edit Menu',
@@ -28,8 +19,8 @@ export const fields = {
   style: {},
 }
 
-const Header = props => {
-  const { image, headerMenu, ...rest } = props
+const Footer = props => {
+  const { footerMenu, ...rest } = props
 
   console.log(props)
 
@@ -37,11 +28,9 @@ const Header = props => {
     <Container {...rest}>
       <Edges sixe="lg">
         <Grid>
-          <Logo to={`/`}>{image?.storageKey && <Image storageKey={image.storageKey} />}</Logo>
-
-          {headerMenu && (
+          {footerMenu && (
             <Navigation>
-              {headerMenu.map(o => {
+              {footerMenu.map(o => {
                 return (
                   <MenuItem key={o.key}>
                     <Typography children={o.title} />
@@ -56,38 +45,24 @@ const Header = props => {
   )
 }
 
-const Container = styled.div`
-  background: #fff;
-`
+const Container = styled.div``
 
 const Grid = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 64px;
-  padding: 5px 0;
-`
-
-const Logo = styled(Link)`
-  display: block;
-  height: 100%;
-
-  img {
-    max-width: 100%;
-    max-height: 100%;
-  }
+  padding: 20px 0;
 `
 
 const Navigation = styled.ul`
   flex: 1;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   margin: 0;
 `
 
 const MenuItem = styled.li`
   margin: 0 10px;
-  transform: translateX(10px);
 `
 
-export default Header
+export default Footer

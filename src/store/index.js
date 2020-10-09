@@ -1,22 +1,22 @@
 import React, { createContext, useContext, useReducer } from 'react'
 
-import { appState, appReducer } from './appState'
+import { globalState, globalReducer } from './globalState'
 import { editorState, editorReducer } from './editorState'
-import { postState, postReducer } from './postState'
+import { sitesState, sitesReducer } from './sitesState'
 
 export const StateContext = createContext({})
 
 export const StoreProvider = props => {
   const initialState = {
-    appState,
+    globalState,
     editorState,
-    postState,
+    sitesState,
   }
 
-  const reducer = ({ appState, editorState, postState }, action) => ({
-    appState: appReducer(appState, action),
+  const reducer = ({ globalState, editorState, sitesState }, action) => ({
+    globalState: globalReducer(globalState, action),
     editorState: editorReducer(editorState, action),
-    postState: postReducer(postState, action),
+    sitesState: sitesReducer(sitesState, action),
   })
 
   return <StateContext.Provider value={useReducer(reducer, initialState)}>{props.children}</StateContext.Provider>

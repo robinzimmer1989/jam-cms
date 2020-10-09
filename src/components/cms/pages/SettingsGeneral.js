@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { navigate } from 'gatsby'
-import { Button, Input, Card, Popconfirm } from 'antd'
+import { Button, Card, Popconfirm } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import CmsLayout from '../CmsLayout'
 import Spacer from 'components/Spacer'
 
@@ -12,7 +13,7 @@ import { siteActions } from 'actions'
 const GeneralSettings = props => {
   const [
     {
-      postState: { sites, siteID },
+      sitesState: { sites, siteID },
     },
     dispatch,
   ] = useStore()
@@ -34,11 +35,11 @@ const GeneralSettings = props => {
   }
 
   return (
-    <CmsLayout pageTitle={`Collections`}>
+    <CmsLayout pageTitle={`General`}>
       <Spacer mb={30}>
         <Card title={`General`}>
           <Spacer mb={20}>
-            <Input placeholder={`Title`} value={data.title} name="title" onChange={handleChange} />
+            <Input label="Title" value={data.title} name="title" onChange={handleChange} />
           </Spacer>
           <Button onClick={handleUpdate} children={`Update`} type="primary" />
         </Card>

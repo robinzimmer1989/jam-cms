@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navigate } from '@reach/router'
 import { Auth } from 'aws-amplify'
-import { Button, Input, Card } from 'antd'
+import { Button, Card } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import BaseLayout from 'components/BaseLayout'
 import Spacer from 'components/Spacer'
 import Edges from 'components/Edges'
@@ -17,6 +18,7 @@ const SignIn = () => {
     username: ``,
     password: ``,
     error: ``,
+    loading: false,
   })
 
   const isAuthed = isLoggedIn()
@@ -28,6 +30,12 @@ const SignIn = () => {
   const handleLogin = async () => {
     const { username, password } = data
 
+    if (!username || !password) {
+      return
+    }
+
+    handleChange({ target: { name: 'loading', value: true } })
+
     try {
       await Auth.signIn(username, password)
       const user = await Auth.currentAuthenticatedUser()
@@ -38,9 +46,11 @@ const SignIn = () => {
       setUser(userInfo)
       navigate(getRoute(`app`))
     } catch (err) {
-      setData({ ...data, error: err })
+      handleChange({ target: { name: 'error', value: err } })
       console.log('error...: ', err)
     }
+
+    handleChange({ target: { name: 'loading', value: true } })
   }
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
@@ -51,20 +61,14 @@ const SignIn = () => {
         <Spacer mt={30} mb={30}>
           <Card title={`Sign In`}>
             <Spacer mb={20}>
-              <Input placeholder={`Username`} value={data.username} onChange={handleChange} name="username" />
+              <Input label={`Username`} value={data.username} onChange={handleChange} name="username" />
             </Spacer>
 
             <Spacer mb={20}>
-              <Input
-                placeholder={`Password`}
-                value={data.password}
-                type="password"
-                onChange={handleChange}
-                name="password"
-              />
+              <Input label={`Password`} value={data.password} type="password" onChange={handleChange} name="password" />
             </Spacer>
 
-            <Button children={`Submit`} onClick={handleLogin} type="primary" />
+            <Button loading={data.loading} children={`Submit`} onClick={handleLogin} type="primary" />
 
             {data?.error?.message && <Error errorMessage={data.error} />}
           </Card>

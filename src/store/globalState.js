@@ -1,15 +1,16 @@
 import produce from 'immer'
 
-export const appState = {
+export const globalState = {
   menu: false,
   dialog: {
     open: false,
+    width: 500,
     title: '',
     component: null,
   },
 }
 
-export const appReducer = (state, action) => {
+export const globalReducer = (state, action) => {
   const { payload } = action
 
   return produce(state, draft => {
@@ -19,7 +20,10 @@ export const appReducer = (state, action) => {
         break
 
       case 'SET_DIALOG':
-        draft.dialog = payload
+        draft.dialog = {
+          width: 500,
+          ...payload,
+        }
         break
 
       case 'CLOSE_DIALOG':
@@ -27,6 +31,7 @@ export const appReducer = (state, action) => {
           ...draft.dialog,
           open: false,
           title: '',
+          width: 500,
           component: null,
         }
         break

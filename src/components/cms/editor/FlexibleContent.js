@@ -4,10 +4,6 @@ import React from 'react'
 import allBlocks from './blocks'
 import BlockWrapper from './BlockWrapper'
 
-// import blocks
-import Text from './blocks/Text'
-import Banner from './blocks/Banner'
-
 const FlexibleContent = props => {
   const { blocks } = props
 

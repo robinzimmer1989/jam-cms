@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Input, Button, Space, Row, Col } from 'antd'
+import { Button, Space, Row, Col } from 'antd'
 
 // import app components
 import Image from 'components/Image'
+import Input from 'components/Input'
 
-import { colors } from 'theme'
 import { mediaActions } from 'actions'
 import { useStore } from 'store'
 
@@ -32,7 +32,7 @@ const MediaImage = props => {
         <Col span={12}>
           <Content span={12}>
             <Space direction="vertical">
-              <Input placeholder={`Alternative Text`} value={data.altText} onChange={handleChange} name={`altText`} />
+              <Input label="Alternative Text" value={data.altText} onChange={handleChange} name={`altText`} />
 
               <Button onClick={handleUpdateMediaItem} children={`Update Image`} type="primary" />
             </Space>

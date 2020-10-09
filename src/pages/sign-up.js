@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navigate } from '@reach/router'
 import { Auth } from 'aws-amplify'
-import { Button, Input, Card } from 'antd'
+import { Button, Card } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import BaseLayout from 'components/BaseLayout'
 import Spacer from 'components/Spacer'
 import Edges from 'components/Edges'
@@ -21,6 +22,7 @@ const SignUp = () => {
     authCode: '',
     stage: 0,
     error: '',
+    loading: false,
   })
 
   const isAuthed = isLoggedIn()
@@ -32,6 +34,12 @@ const SignUp = () => {
   const handleSignUp = async () => {
     const { username, password, email, phone } = data
 
+    if (!username || !password || !email || !phone) {
+      return
+    }
+
+    handleChange({ target: { name: 'loading', value: true } })
+
     try {
       await Auth.signUp({
         username,
@@ -40,21 +48,31 @@ const SignUp = () => {
       })
       setData({ ...data, stage: 1 })
     } catch (err) {
-      setData({ ...data, error: err })
+      handleChange({ target: { name: 'error', value: err } })
       console.log('error signing up...', err)
     }
+
+    handleChange({ target: { name: 'loading', value: false } })
   }
 
   const handleConfirmSignUp = async () => {
     const { username, authCode } = data
 
+    if (!username || !authCode) {
+      return
+    }
+
+    handleChange({ target: { name: 'loading', value: true } })
+
     try {
       await Auth.confirmSignUp(username, authCode)
       navigate(getRoute(`app`))
     } catch (err) {
-      setData({ ...data, error: err })
+      handleChange({ target: { name: 'error', value: err } })
       console.log('error confirming signing up...', err)
     }
+
+    handleChange({ target: { name: 'loading', value: false } })
   }
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
@@ -67,12 +85,12 @@ const SignUp = () => {
             {data.stage === 0 && (
               <>
                 <Spacer mb={20}>
-                  <Input placeholder={`Username`} value={data.username} onChange={handleChange} name="username" />
+                  <Input label={`Username`} value={data.username} onChange={handleChange} name="username" />
                 </Spacer>
 
                 <Spacer mb={20}>
                   <Input
-                    placeholder={`Password`}
+                    label={`Password`}
                     value={data.password}
                     type="password"
                     onChange={handleChange}
@@ -81,11 +99,11 @@ const SignUp = () => {
                 </Spacer>
 
                 <Spacer mb={20}>
-                  <Input placeholder={`Email`} value={data.email} type="email" onChange={handleChange} name="email" />
+                  <Input label={`Email`} value={data.email} type="email" onChange={handleChange} name="email" />
                 </Spacer>
 
                 <Spacer mb={20}>
-                  <Input placeholder={`Phone`} value={data.phone} onChange={handleChange} name="phone" />
+                  <Input label={`Phone`} value={data.phone} onChange={handleChange} name="phone" />
                 </Spacer>
 
                 <Button children={`Submit`} onClick={handleSignUp} type="primary" />
@@ -95,12 +113,7 @@ const SignUp = () => {
             {data.stage === 1 && (
               <>
                 <Spacer mb={20}>
-                  <Input
-                    placeholder={`Authorization Code`}
-                    value={data.authCode}
-                    onChange={handleChange}
-                    name="authCode"
-                  />
+                  <Input label={`Authorization Code`} value={data.authCode} onChange={handleChange} name="authCode" />
                 </Spacer>
 
                 <Button children={`Confirm Sign Up`} onClick={handleConfirmSignUp} type="primary" />

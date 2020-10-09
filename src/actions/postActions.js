@@ -1,4 +1,5 @@
-import { postServices } from '../services'
+import { postServices } from 'services'
+import { siteActions } from 'actions'
 
 export const addPost = async ({ siteID, slug, postTypeID, status, title, content, parentID }, dispatch) => {
   const result = await postServices.addPost({ siteID, slug, postTypeID, status, title, content, parentID })
@@ -39,10 +40,7 @@ export const getPost = async ({ site, postID }, dispatch) => {
 
     // Every time the user edits a post we need to restore the original site state,
     // because of the header + footer settings
-    dispatch({
-      type: `SET_EDITOR_SITE`,
-      payload: site,
-    })
+    siteActions.addSiteToEditor({ site }, dispatch)
   }
 
   return result

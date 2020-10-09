@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Space, Button, Input } from 'antd'
+import { Space, Button } from 'antd'
 
 // import app components
+import Input from 'components/Input'
 import PostTreeSelect from '../PostTreeSelect'
 import { formatSlug } from 'utils'
 import { useStore } from 'store'
@@ -11,7 +12,7 @@ const PostForm = props => {
 
   const [
     {
-      postState: { sites, siteID },
+      sitesState: { sites, siteID },
     },
     dispatch,
   ] = useStore()
@@ -46,8 +47,8 @@ const PostForm = props => {
 
   return (
     <Space direction="vertical">
-      <Input value={title} onChange={e => setTitle(e.target.value)} placeholder={`Title`} />
-      <Input value={slug} onChange={e => setSlug(e.target.value)} placeholder={`Slug`} />
+      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} placeholder={`Title`} />
+      <Input label="Slug" value={slug} onChange={e => setSlug(e.target.value)} placeholder={`Slug`} />
       <PostTreeSelect items={posts} value={parentID} onChange={value => setParentID(value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>

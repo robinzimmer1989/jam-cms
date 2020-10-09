@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { Layout, Menu, Divider } from 'antd'
-import { UserOutlined, LaptopOutlined } from '@ant-design/icons'
+import { PieChartOutlined, BlockOutlined, SettingOutlined, FormOutlined, FolderOpenOutlined } from '@ant-design/icons'
 
 // import app components
 import Edges from 'components/Edges'
@@ -16,11 +16,15 @@ const CmsLayout = props => {
 
   const [
     {
-      postState: { siteID, sites },
+      sitesState: { siteID, sites },
     },
   ] = useStore()
 
   const site = sites[siteID] || null
+
+  const defaultOpenKeys = ['General', 'Collections', 'Theme', 'SEO'].includes(pageTitle)
+    ? 'settings-sub'
+    : 'collections-sub'
 
   return (
     <Layout>
@@ -37,31 +41,31 @@ const CmsLayout = props => {
         <div>
           <Title>{site?.title}</Title>
 
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={[pageTitle]}>
-            <Menu.Item key="Dashboard" icon={<LaptopOutlined />}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[pageTitle]} defaultOpenKeys={[defaultOpenKeys]}>
+            <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
               <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
             </Menu.Item>
 
-            <Menu.Item key="Media" icon={<LaptopOutlined />}>
+            <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
               <Link to={getRoute(`media`, { siteID })}>Media</Link>
             </Menu.Item>
 
-            <Menu.SubMenu key="Collections" icon={<UserOutlined />} title="Collections">
+            <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
               {site?.postTypes &&
                 Object.values(site.postTypes).map(o => {
                   return (
-                    <Menu.Item key={o.id}>
+                    <Menu.Item key={o.title}>
                       <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}> {o.title}</Link>
                     </Menu.Item>
                   )
                 })}
             </Menu.SubMenu>
 
-            <Menu.Item key="Forms" icon={<LaptopOutlined />}>
+            <Menu.Item key="Forms" icon={<FormOutlined />}>
               <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
             </Menu.Item>
 
-            <Menu.SubMenu icon={<LaptopOutlined />} title="Settings">
+            <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
               <Menu.Item key="General">
                 <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
               </Menu.Item>
@@ -86,7 +90,7 @@ const CmsLayout = props => {
           </Edges>
         </Layout.Header>
 
-        <Layout.Content>
+        <Layout.Content style={{ paddingBottom: 100 }}>
           <StyledDivider />
           <Edges size="md">{children}</Edges>
         </Layout.Content>

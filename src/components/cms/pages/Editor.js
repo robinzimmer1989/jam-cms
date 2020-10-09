@@ -10,9 +10,12 @@ import FlexibleContent from '../editor/FlexibleContent'
 import BlockWrapper from '../editor/BlockWrapper'
 import EditorLayout from '../editor/EditorLayout'
 import EditorPostTitle from '../editor/EditorPostTitle'
+import EditorSidebar from '../editor/EditorSidebar'
 import Header from '../editor/blocks/Header'
+import Footer from '../editor/blocks/Footer'
 import convertBlockSchemaToProps from '../editor/convertBlockSchemaToProps'
 
+import getRoute from 'routes'
 import { useStore } from 'store'
 import { postActions } from 'actions'
 
@@ -21,7 +24,7 @@ const Editor = props => {
 
   const [
     {
-      postState: { sites, siteID },
+      sitesState: { sites, siteID },
       editorState: { site, post, viewport },
     },
     dispatch,
@@ -40,6 +43,17 @@ const Editor = props => {
     })
   }
 
+  // TODO: Evaluate if menus as separate post types are still necessary
+  // Add menu data to all header menus
+  const footerData = site && { ...convertBlockSchemaToProps([site.settings.footer])[0].data }
+
+  if (site) {
+    const footerMenus = site.settings.footer.fields.filter(o => o.type === 'menu')
+    footerMenus.map(menu => {
+      set(footerData, menu.id, site.menus[menu.id]?.content)
+    })
+  }
+
   useEffect(() => {
     const loadPost = async () => {
       await postActions.getPost({ site: sites[siteID], postID }, dispatch)
@@ -51,8 +65,6 @@ const Editor = props => {
       dispatch({ type: `CLEAR_EDITOR` })
     }
   }, [postID])
-
-  console.log(site)
 
   const handleOpenBlockDialog = () =>
     dispatch({
@@ -66,7 +78,7 @@ const Editor = props => {
     })
 
   return (
-    <EditorLayout>
+    <EditorLayout sidebar={<EditorSidebar />} backLink={getRoute(`collection`, { siteID, postTypeID })}>
       <EditorPostTitle postType={postType} />
 
       {viewport === `fullscreen` && (
@@ -100,6 +112,16 @@ const Editor = props => {
               <FlexibleContent blocks={convertBlockSchemaToProps(post.content)} />
             ) : (
               <AddFirstBlock onClick={handleOpenBlockDialog} children={`Add Block`} />
+            )}
+
+            {site?.settings?.footer && (
+              <BlockWrapper
+                index={'footer'}
+                onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'footer' })}
+                hideAddButtonTop
+              >
+                <Footer {...footerData} />
+              </BlockWrapper>
             )}
           </>
         )}
