@@ -7,7 +7,6 @@ export const ROUTE_COLLECTIONS = `/collections`
 export const ROUTE_EDITOR = `/editor`
 export const ROUTE_SETTINGS_GENERAL = `/settings`
 export const ROUTE_SETTINGS_THEME = `/settings/theme`
-export const ROUTE_THEME_EDITOR = `/settings/theme/editor`
 export const ROUTE_SETTINGS_SEO = `/settings/seo`
 export const ROUTE_SETTINGS_COLLECTIONS = `/settings/collections`
 export const ROUTE_PROFILE = `/profile`
@@ -43,9 +42,6 @@ const getRoute = (route, args) => {
 
     case `settings-theme`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_THEME}`
-
-    case `theme-editor`:
-      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_THEME_EDITOR}`
 
     case `settings-seo`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_SEO}`

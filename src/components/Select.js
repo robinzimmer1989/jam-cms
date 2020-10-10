@@ -5,8 +5,6 @@ import { Select as AntSelect, Space } from 'antd'
 const Select = props => {
   const { value, name, onChange, children, label } = props
 
-  console.log(children)
-
   return (
     <Space direction="vertical" size={2}>
       {label && <Caption children={label} />}

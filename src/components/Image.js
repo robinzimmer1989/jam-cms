@@ -3,7 +3,7 @@ import { Storage } from 'aws-amplify'
 import styled from 'styled-components'
 
 // import app components
-import { colors } from '../theme'
+import { colors } from 'theme'
 
 const Image = props => {
   const { storageKey, bg, ...rest } = props
