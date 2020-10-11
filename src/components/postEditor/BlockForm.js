@@ -2,8 +2,7 @@ import React from 'react'
 import { Button } from 'antd'
 
 // import app components
-import blocks from './blocks'
-
+import blocks from 'components/postBlocks'
 import { useStore } from 'store'
 
 const AddBlock = props => {
@@ -16,19 +15,19 @@ const AddBlock = props => {
     dispatch,
   ] = useStore()
 
-  const handleBlockSelect = blockName => {
+  const handleSelect = name => {
     const content = [...post.content]
-    content.splice(index, 0, blocks[blockName].fields)
+    content.splice(index, 0, blocks[name].fields)
 
     dispatch({
-      type: 'SET_EDITOR_POST',
+      type: 'UPDATE_EDITOR_POST',
       payload: {
         ...post,
-        content: content,
+        content,
       },
     })
 
-    dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: index })
+    dispatch({ type: 'SET_EDITOR_INDEX', payload: index })
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }
@@ -38,7 +37,7 @@ const AddBlock = props => {
       {Object.keys(blocks)
         .filter(key => key !== 'Header' && key !== 'Footer')
         .map(key => (
-          <Button key={key} children={key} onClick={() => handleBlockSelect(key)} />
+          <Button key={key} children={key} onClick={() => handleSelect(key)} />
         ))}
     </>
   )

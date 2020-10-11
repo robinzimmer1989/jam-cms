@@ -1,8 +1,8 @@
 import React from 'react'
 
 // import app components
-import allBlocks from 'components/blocks'
-import BlockWrapper from './BlockWrapper'
+import allBlocks from 'components/postBlocks'
+import BlockWrapper from 'components/postEditor/BlockWrapper'
 
 const FlexibleContent = props => {
   const { blocks } = props

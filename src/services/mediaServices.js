@@ -36,11 +36,16 @@ export const deleteMediaItem = async ({ id }) => {
   return result
 }
 
-export const getMediaItems = async ({ siteID }) => {
+export const getMediaItems = async ({ siteID, nextToken = null, limit = 5 }) => {
   const result = await API.graphql(
-    graphqlOperation(`
-      query ListMediaItems {
-        listMediaItems(filter: {siteID: {eq: "${siteID}"}}) {
+    graphqlOperation(
+      `
+      query ListMediaItems(
+        $filter: ModelMediaItemFilterInput
+        $limit: Int
+        $nextToken: String
+      ) {
+        listMediaItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
           items {
             id
             siteID
@@ -58,7 +63,13 @@ export const getMediaItems = async ({ siteID }) => {
           nextToken
         }
       }
-    `)
+    `,
+      {
+        filter: { siteID: { eq: siteID } },
+        limit,
+        nextToken,
+      }
+    )
   )
 
   return result

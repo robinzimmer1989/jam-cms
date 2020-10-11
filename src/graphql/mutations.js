@@ -69,7 +69,7 @@ export const createSite = /* GraphQL */ `
           id
           siteID
           title
-          fields
+          content
           settings
           createdAt
           updatedAt
@@ -148,7 +148,7 @@ export const updateSite = /* GraphQL */ `
           id
           siteID
           title
-          fields
+          content
           settings
           createdAt
           updatedAt
@@ -227,7 +227,7 @@ export const deleteSite = /* GraphQL */ `
           id
           siteID
           title
-          fields
+          content
           settings
           createdAt
           updatedAt
@@ -514,7 +514,7 @@ export const createForm = /* GraphQL */ `
       id
       siteID
       title
-      fields
+      content
       settings
       createdAt
       updatedAt
@@ -524,8 +524,7 @@ export const createForm = /* GraphQL */ `
           id
           siteID
           formID
-          email
-          fields
+          content
           createdAt
           updatedAt
           owner
@@ -544,7 +543,7 @@ export const updateForm = /* GraphQL */ `
       id
       siteID
       title
-      fields
+      content
       settings
       createdAt
       updatedAt
@@ -554,8 +553,7 @@ export const updateForm = /* GraphQL */ `
           id
           siteID
           formID
-          email
-          fields
+          content
           createdAt
           updatedAt
           owner
@@ -574,7 +572,7 @@ export const deleteForm = /* GraphQL */ `
       id
       siteID
       title
-      fields
+      content
       settings
       createdAt
       updatedAt
@@ -584,8 +582,7 @@ export const deleteForm = /* GraphQL */ `
           id
           siteID
           formID
-          email
-          fields
+          content
           createdAt
           updatedAt
           owner
@@ -604,8 +601,7 @@ export const createEntry = /* GraphQL */ `
       id
       siteID
       formID
-      email
-      fields
+      content
       createdAt
       updatedAt
       owner
@@ -621,8 +617,7 @@ export const updateEntry = /* GraphQL */ `
       id
       siteID
       formID
-      email
-      fields
+      content
       createdAt
       updatedAt
       owner
@@ -638,8 +633,7 @@ export const deleteEntry = /* GraphQL */ `
       id
       siteID
       formID
-      email
-      fields
+      content
       createdAt
       updatedAt
       owner

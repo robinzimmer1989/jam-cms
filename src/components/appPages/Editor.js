@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react'
 import { Button, Empty } from 'antd'
-import { set } from 'lodash'
 
 // import app components
-import BlockForm from 'components/BlockForm'
+import BlockForm from 'components/postEditor/BlockForm'
 import CmsLayout from 'components/CmsLayout'
 import PageWrapper from 'components/PageWrapper'
-import EditorPostTitle from 'components/editor/EditorPostTitle'
-import EditorSidebar from 'components/editor/EditorSidebar'
-import convertBlockSchemaToProps from 'components/editor/convertBlockSchemaToProps'
-import FlexibleContent from 'components/editor/FlexibleContent'
-import BlockWrapper from 'components/editor/BlockWrapper'
+import EditorPostTitle from 'components/postEditor/EditorPostTitle'
+import EditorSidebar from 'components/postEditor/EditorSidebar'
+import FlexibleContent from 'components/postEditor/FlexibleContent'
+import BlockWrapper from 'components/postEditor/BlockWrapper'
 
-import Header from 'components/blocks/Header'
-import Footer from 'components/blocks/Footer'
+import Header from 'components/postBlocks/Header'
+import Footer from 'components/postBlocks/Footer'
 
+import { convertToPropsSchema } from 'utils'
 import { useStore } from 'store'
 import { postActions } from 'actions'
 
@@ -43,7 +42,7 @@ const Editor = props => {
     }
   }, [postID])
 
-  const handleOpenBlockDialog = () =>
+  const handleOpenDialog = () =>
     dispatch({
       type: 'SET_DIALOG',
       payload: {
@@ -62,16 +61,13 @@ const Editor = props => {
         {post && (
           <>
             {site?.settings?.header && (
-              <BlockWrapper
-                index={'header'}
-                onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'header' })}
-              >
-                <Header {...convertBlockSchemaToProps([site.settings.header])[0].data} />
+              <BlockWrapper index={'header'} onClick={() => dispatch({ type: 'SET_EDITOR_INDEX', payload: 'header' })}>
+                <Header {...convertToPropsSchema([site.settings.header])[0].data} />
               </BlockWrapper>
             )}
 
             {post.content.length > 0 ? (
-              <FlexibleContent blocks={convertBlockSchemaToProps(post.content)} />
+              <FlexibleContent blocks={convertToPropsSchema(post.content)} />
             ) : (
               <Empty
                 style={{ padding: 60 }}
@@ -82,18 +78,15 @@ const Editor = props => {
                 description=""
                 className="reset-font"
               >
-                <Button type="primary" onClick={handleOpenBlockDialog}>
-                  Let's do this
+                <Button type="primary" onClick={handleOpenDialog}>
+                  Add Block
                 </Button>
               </Empty>
             )}
 
             {site?.settings?.footer && (
-              <BlockWrapper
-                index={'footer'}
-                onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'footer' })}
-              >
-                <Footer {...convertBlockSchemaToProps([site.settings.footer])[0].data} />
+              <BlockWrapper index={'footer'} onClick={() => dispatch({ type: 'SET_EDITOR_INDEX', payload: 'footer' })}>
+                <Footer {...convertToPropsSchema([site.settings.footer])[0].data} />
               </BlockWrapper>
             )}
           </>

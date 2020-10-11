@@ -1,21 +1,20 @@
 import React from 'react'
-
 import { PageHeader, Divider } from 'antd'
 
 // import app components
-import BlockEditFields from './BlockEditFields'
-import PostSettings from './PostSettings'
+import BlockEditFields from 'components/postEditor/BlockEditFields'
+import PostSettings from 'components/postEditor/PostSettings'
 import { useStore } from 'store'
 
 const EditorSidebar = () => {
   const [
     {
-      editorState: { post, activeBlockIndex },
+      editorState: { post, editorIndex },
     },
     dispatch,
   ] = useStore()
 
-  const siteComponent = activeBlockIndex === 'header' || activeBlockIndex === 'footer'
+  const siteComponent = editorIndex === 'header' || editorIndex === 'footer'
 
   let settings = {
     title: '',
@@ -26,15 +25,15 @@ const EditorSidebar = () => {
     children: null,
   }
 
-  if (post?.content[activeBlockIndex] || siteComponent) {
+  if (post?.content[editorIndex] || siteComponent) {
     settings = {
       title: {
         title: siteComponent
-          ? activeBlockIndex.charAt(0).toUpperCase() + activeBlockIndex.slice(1)
-          : post.content[activeBlockIndex].name,
+          ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
+          : post.content[editorIndex].name,
         onBack: () =>
           dispatch({
-            type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX',
+            type: 'SET_EDITOR_INDEX',
             payload: null,
           }),
       },

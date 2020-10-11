@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal, Row, Col, Upload, Button, Space, message } from 'antd'
+import { Modal, Row, Upload, Button, Space, message } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 // import app components
@@ -20,18 +20,22 @@ const MediaLibrary = props => {
     dispatch,
   ] = useStore()
 
-  const site = sites[siteID]
+  const {
+    mediaItems: { items, nextToken },
+  } = sites[siteID]
 
   const [activeFile, setActiveFile] = useState(null)
   const [uploader, setUploader] = useState(false)
 
   useEffect(() => {
-    const loadMediaItems = async () => {
-      await mediaActions.getMediaItems({ siteID }, dispatch)
-    }
-
-    loadMediaItems()
+    loadMediaItems(null)
   }, [siteID])
+
+  const loadMediaItems = async nextToken => {
+    await mediaActions.getMediaItems({ siteID, nextToken }, dispatch)
+  }
+
+  const handleLoadMore = () => nextToken && loadMediaItems(nextToken)
 
   const handleFileUpload = async info => {
     const {
@@ -65,8 +69,8 @@ const MediaLibrary = props => {
         )}
 
         <Row>
-          {site?.mediaItems?.items &&
-            site.mediaItems.items.map(o => {
+          {items &&
+            items.map(o => {
               return (
                 <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
                   <Image storageKey={o.storageKey} preview={false} />
@@ -74,6 +78,8 @@ const MediaLibrary = props => {
               )
             })}
         </Row>
+
+        <Button children={'Load More'} onClick={handleLoadMore} />
       </Space>
 
       <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>

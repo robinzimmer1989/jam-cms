@@ -4,10 +4,7 @@ export default createGlobalStyle`
 
   body {
     background: #f8f9ff;
-  }
-
-  html {
-    overflow-y: auto;
+    overflow-y: scroll !important;
   }
 
   a {

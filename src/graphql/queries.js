@@ -66,7 +66,7 @@ export const getSite = /* GraphQL */ `
           id
           siteID
           title
-          fields
+          content
           settings
           createdAt
           updatedAt
@@ -281,7 +281,7 @@ export const getForm = /* GraphQL */ `
       id
       siteID
       title
-      fields
+      content
       settings
       createdAt
       updatedAt
@@ -291,8 +291,7 @@ export const getForm = /* GraphQL */ `
           id
           siteID
           formID
-          email
-          fields
+          content
           createdAt
           updatedAt
           owner
@@ -313,7 +312,7 @@ export const listForms = /* GraphQL */ `
         id
         siteID
         title
-        fields
+        content
         settings
         createdAt
         updatedAt
@@ -332,8 +331,7 @@ export const getEntry = /* GraphQL */ `
       id
       siteID
       formID
-      email
-      fields
+      content
       createdAt
       updatedAt
       owner
@@ -351,8 +349,7 @@ export const listEntrys = /* GraphQL */ `
         id
         siteID
         formID
-        email
-        fields
+        content
         createdAt
         updatedAt
         owner

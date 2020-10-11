@@ -43,7 +43,7 @@ const PostSettings = () => {
     const nextPost = produce(post, draft => set(draft, `${e.target.name}`, e.target.value))
 
     dispatch({
-      type: `SET_EDITOR_POST`,
+      type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
     })
   }

@@ -3,16 +3,16 @@ import { Router as ReachRouter } from '@reach/router'
 import Helmet from 'react-helmet'
 
 // import app components
-import Dashboard from './pages/Dashboard'
-import Media from './pages/Media'
-import Collection from './pages/Collection'
-import Editor from './pages/Editor'
-import Forms from './pages/Forms'
-import Form from './pages/Form'
-import SettingsGeneral from './pages/SettingsGeneral'
-import SettingsCollections from './pages/SettingsCollections'
-import SettingsSeo from './pages/SettingsSeo'
-import SettingsTheme from './pages/SettingsTheme'
+import Dashboard from 'components/appPages/Dashboard'
+import Media from 'components/appPages/Media'
+import Collection from 'components/appPages/Collection'
+import Editor from 'components/appPages/Editor'
+import Forms from 'components/appPages/Forms'
+import Form from 'components/appPages/Form'
+import SettingsGeneral from 'components/appPages/SettingsGeneral'
+import SettingsCollections from 'components/appPages/SettingsCollections'
+import SettingsSeo from 'components/appPages/SettingsSeo'
+import SettingsTheme from 'components/appPages/SettingsTheme'
 
 import {
   ROUTE_MEDIA,

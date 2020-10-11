@@ -1,6 +1,6 @@
-export default function(array, param, direction = 'desc') {
+export default function(array, param, direction = 'DESC') {
   let x, y
-  if (direction === 'desc') {
+  if (direction.toUpperCase() === 'DESC') {
     x = 1
     y = -1
   } else {

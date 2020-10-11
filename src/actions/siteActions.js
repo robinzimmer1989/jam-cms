@@ -102,7 +102,7 @@ export const deploySite = async ({ netlifyID }, dispatch) => {
 
 export const addSiteToEditor = ({ site }, dispatch) => {
   dispatch({
-    type: `SET_EDITOR_SITE`,
+    type: `ADD_EDITOR_SITE`,
     payload: site,
   })
 }

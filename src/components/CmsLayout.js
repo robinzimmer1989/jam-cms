@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { PageHeader, Layout, Menu, Divider } from 'antd'
@@ -18,6 +18,7 @@ const CmsLayout = props => {
     {
       globalState: { leftSidebar },
       cmsState: { siteID, sites },
+      editorState: { hasChanged },
     },
     dispatch,
   ] = useStore()

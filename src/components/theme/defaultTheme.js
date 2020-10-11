@@ -1,4 +1,4 @@
-import blocks from '../blocks'
+import blocks from 'components/postBlocks'
 
 export default {
   header: blocks['Header'].fields,

@@ -1,21 +1,18 @@
 import React from 'react'
-
 import { PageHeader, Divider } from 'antd'
 
 // import app components
-import BlockEditFields from './BlockEditFields'
-import PostSettings from './PostSettings'
+import FormSettings from 'components/formEditor/FormSettings'
+import FormEditFields from 'components/formEditor/FormEditFields'
 import { useStore } from 'store'
 
 const FormEditorSidebar = () => {
   const [
     {
-      editorState: { site, activeBlockIndex },
+      editorState: { form, editorIndex },
     },
     dispatch,
   ] = useStore()
-
-  const siteComponent = activeBlockIndex === 'header' || activeBlockIndex === 'footer'
 
   let settings = {
     title: '',
@@ -26,24 +23,22 @@ const FormEditorSidebar = () => {
     children: null,
   }
 
-  if (post?.content[activeBlockIndex] || siteComponent) {
+  if (form?.content?.[editorIndex]) {
     settings = {
       title: {
-        title: siteComponent
-          ? activeBlockIndex.charAt(0).toUpperCase() + activeBlockIndex.slice(1)
-          : post.content[activeBlockIndex].name,
+        title: form.content[editorIndex].name,
         onBack: () =>
           dispatch({
-            type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX',
+            type: 'SET_EDITOR_INDEX',
             payload: null,
           }),
       },
-      children: <BlockEditFields />,
+      children: <FormEditFields />,
     }
   } else {
     settings = {
       title: { title: 'Settings', onBack: null },
-      children: <PostSettings />,
+      children: <FormSettings />,
     }
   }
 

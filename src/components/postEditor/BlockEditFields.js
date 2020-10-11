@@ -7,29 +7,30 @@ import { Button, Space, Collapse } from 'antd'
 // import app components
 import MenuBuilder from 'components/MenuBuilder'
 import MediaLibrary from 'components/MediaLibrary'
-import Textarea from 'components/editorFields/Textarea'
-import ImagePicker from 'components/editorFields/ImagePicker'
-import Menu from 'components/editorFields/Menu'
-import blocks from 'components/blocks'
+import postBlocks from 'components/postBlocks'
+
+import Textarea from 'components/postEditorAdminFields/Textarea'
+import ImagePicker from 'components/postEditorAdminFields/ImagePicker'
+import Menu from 'components/postEditorAdminFields/Menu'
 
 import { useStore } from 'store'
 
 const BlockEditFields = () => {
   const [
     {
-      editorState: { site, post, activeBlockIndex },
+      editorState: { site, post, editorIndex },
     },
     dispatch,
   ] = useStore()
 
-  const siteComponent = activeBlockIndex === 'header' || activeBlockIndex === 'footer'
+  const siteComponent = editorIndex === 'header' || editorIndex === 'footer'
 
   // merges default settings and db values
   const getFields = () => {
     if (siteComponent) {
-      // loop through default blocks and replace value if found
-      return blocks[site.settings[activeBlockIndex].name].fields.fields.map(o => {
-        const setting = site.settings[activeBlockIndex].fields.find(p => p.id === o.id)
+      // loop through default postBlocks and replace value if found
+      return postBlocks[site.settings[editorIndex].name].fields.fields.map(o => {
+        const setting = site.settings[editorIndex].fields.find(p => p.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -37,10 +38,10 @@ const BlockEditFields = () => {
           return o
         }
       })
-    } else if (post && post.content[activeBlockIndex]) {
-      // loop through default blocks and replace value if found
-      return blocks[post.content[activeBlockIndex].name].fields.fields.map(o => {
-        const setting = post.content[activeBlockIndex].fields.find(p => p.id === o.id)
+    } else if (post && post.content[editorIndex]) {
+      // loop through default postBlocks and replace value if found
+      return postBlocks[post.content[editorIndex].name].fields.fields.map(o => {
+        const setting = post.content[editorIndex].fields.find(p => p.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -56,20 +57,20 @@ const BlockEditFields = () => {
 
     if (siteComponent) {
       const nextSite = produce(site, draft => {
-        return set(draft, `settings.${activeBlockIndex}.fields.${index}`, { id, value })
+        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, value })
       })
 
       dispatch({
-        type: `SET_EDITOR_SITE`,
+        type: `UPDATE_EDITOR_SITE`,
         payload: nextSite,
       })
     } else {
       const nextPost = produce(post, draft => {
-        return set(draft, `content.${activeBlockIndex}.fields.${index}`, { id, value })
+        return set(draft, `content.${editorIndex}.fields.${index}`, { id, value })
       })
 
       dispatch({
-        type: `SET_EDITOR_POST`,
+        type: `UPDATE_EDITOR_POST`,
         payload: nextPost,
       })
     }
@@ -77,28 +78,28 @@ const BlockEditFields = () => {
 
   const handleDeleteBlock = () => {
     const content = [...post.content]
-    content.splice(activeBlockIndex, 1)
+    content.splice(editorIndex, 1)
 
     dispatch({
-      type: `SET_EDITOR_POST`,
+      type: `UPDATE_EDITOR_POST`,
       payload: {
         ...post,
         content,
       },
     })
 
-    dispatch({ type: `SET_EDITOR_ACTIVE_BLOCK_INDEX`, payload: null })
+    dispatch({ type: `SET_EDITOR_INDEX`, payload: null })
   }
 
   const getField = (field, fieldIndex) => {
     let component
 
     switch (field.type) {
-      case `textarea`:
+      case 'textarea':
         component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, fieldIndex)} />
         break
 
-      case `image`:
+      case 'image':
         component = (
           <ImagePicker
             {...field}
@@ -120,7 +121,7 @@ const BlockEditFields = () => {
         )
         break
 
-      case `menu`:
+      case 'menu':
         component = (
           <Menu
             {...field}

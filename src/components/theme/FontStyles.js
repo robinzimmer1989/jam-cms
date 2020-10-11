@@ -21,7 +21,7 @@ const FontStyles = () => {
     })
 
     dispatch({
-      type: `SET_EDITOR_SITE`,
+      type: `UPDATE_EDITOR_SITE`,
       payload: nextSite,
     })
   }

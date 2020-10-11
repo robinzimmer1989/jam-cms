@@ -13,27 +13,28 @@ export const addPost = async ({ siteID, slug, postTypeID, status, title, content
   return result
 }
 
-export const getPosts = async ({ postTypeID }) => {
-  const result = await API.graphql(
-    graphqlOperation(`query ListPosts{
-    listPosts(filter: {postTypeID: {eq: "${postTypeID}"}}) {
-      items {
-        id
-        slug
-        status
-        title
-        postType {
-          id
-          title
-          slug
-        }
-      }
-    }
-  }`)
-  )
+// export const getPosts = async ({ postTypeID }) => {
+//   const result = await API.graphql(
+//     graphqlOperation(`query ListPosts{
+//     listPosts(filter: {postTypeID: {eq: "${postTypeID}"}}) {
+//       items {
+//         id
+//         slug
+//         status
+//         title
+//         postType {
+//           id
+//           title
+//           slug
+//           createdAt
+//         }
+//       }
+//     }
+//   }`)
+//   )
 
-  return result
-}
+//   return result
+// }
 
 export const getPost = async ({ postID }) => {
   const result = await API.graphql(graphqlOperation(dbGetPost, { id: postID }))

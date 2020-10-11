@@ -62,7 +62,7 @@ type Form @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
   title: String!
-  fields: String
+  content: String
   settings: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -74,8 +74,7 @@ type Entry @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
   formID: ID!
-  email: String!
-  fields: String!
+  content: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   owner: String
@@ -462,7 +461,7 @@ input ModelFormFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
   title: ModelStringInput
-  fields: ModelStringInput
+  content: ModelStringInput
   settings: ModelStringInput
   and: [ModelFormFilterInput]
   or: [ModelFormFilterInput]
@@ -473,7 +472,7 @@ input CreateFormInput {
   id: ID
   siteID: ID!
   title: String!
-  fields: String
+  content: String
   settings: String
 }
 
@@ -481,7 +480,7 @@ input UpdateFormInput {
   id: ID!
   siteID: ID
   title: String
-  fields: String
+  content: String
   settings: String
 }
 
@@ -492,7 +491,7 @@ input DeleteFormInput {
 input ModelFormConditionInput {
   siteID: ModelIDInput
   title: ModelStringInput
-  fields: ModelStringInput
+  content: ModelStringInput
   settings: ModelStringInput
   and: [ModelFormConditionInput]
   or: [ModelFormConditionInput]
@@ -508,8 +507,7 @@ input ModelEntryFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
   formID: ModelIDInput
-  email: ModelStringInput
-  fields: ModelStringInput
+  content: ModelStringInput
   and: [ModelEntryFilterInput]
   or: [ModelEntryFilterInput]
   not: ModelEntryFilterInput
@@ -519,16 +517,14 @@ input CreateEntryInput {
   id: ID
   siteID: ID!
   formID: ID!
-  email: String!
-  fields: String!
+  content: String!
 }
 
 input UpdateEntryInput {
   id: ID!
   siteID: ID
   formID: ID
-  email: String
-  fields: String
+  content: String
 }
 
 input DeleteEntryInput {
@@ -538,8 +534,7 @@ input DeleteEntryInput {
 input ModelEntryConditionInput {
   siteID: ModelIDInput
   formID: ModelIDInput
-  email: ModelStringInput
-  fields: ModelStringInput
+  content: ModelStringInput
   and: [ModelEntryConditionInput]
   or: [ModelEntryConditionInput]
   not: ModelEntryConditionInput

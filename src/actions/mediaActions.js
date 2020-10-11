@@ -8,14 +8,14 @@ export const uploadMediaItem = async ({ siteID, file }, dispatch) => {
   const result = await mediaServices.addMediaItem({ siteID, title, mimeType, storageKey })
 
   if (result?.data?.createMediaItem) {
-    dispatch({ type: `ADD_MEDIA_ITEMS`, payload: { items: [result.data.createMediaItem], siteID } })
+    dispatch({ type: `ADD_MEDIA_ITEM`, payload: { item: result.data.createMediaItem, siteID } })
   }
 
   return result
 }
 
-export const getMediaItems = async ({ siteID }, dispatch) => {
-  const result = await mediaServices.getMediaItems({ siteID })
+export const getMediaItems = async ({ siteID, nextToken }, dispatch) => {
+  const result = await mediaServices.getMediaItems({ siteID, nextToken })
 
   if (result?.data?.listMediaItems) {
     dispatch({ type: `ADD_MEDIA_ITEMS`, payload: { ...result.data.listMediaItems, siteID } })
@@ -28,7 +28,7 @@ export const updateMediaItem = async ({ siteID, id, altText }, dispatch) => {
   const result = await mediaServices.updateMediaItem({ id, altText })
 
   if (result?.data?.updateMediaItem) {
-    dispatch({ type: `ADD_MEDIA_ITEMS`, payload: { items: [result.data.updateMediaItem], siteID } })
+    dispatch({ type: `ADD_MEDIA_ITEM`, payload: { item: result.data.updateMediaItem, siteID } })
   }
 
   return result

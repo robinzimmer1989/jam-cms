@@ -65,7 +65,7 @@ type Form
   id: ID!
   siteID: ID!
   title: String!
-  fields: String
+  content: String
   settings: String
   entries: [Entry] @connection(keyName: "byForm", fields: ["id"])
 }
@@ -77,6 +77,5 @@ type Entry
   id: ID!
   siteID: ID!
   formID: ID!
-  email: String!
-  fields: String!
+  content: String!
 }

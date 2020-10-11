@@ -4,7 +4,7 @@ import produce from 'immer'
 import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons'
 
 // import app components
-import BlockForm from 'components/BlockForm'
+import BlockForm from 'components/postEditor/BlockForm'
 import { useStore } from 'store'
 import { colors } from 'theme'
 
@@ -13,7 +13,7 @@ const BlockWrapper = props => {
 
   const [
     {
-      editorState: { post, activeBlockIndex },
+      editorState: { post, editorIndex },
     },
     dispatch,
   ] = useStore()
@@ -42,14 +42,14 @@ const BlockWrapper = props => {
     })
 
     dispatch({
-      type: `SET_EDITOR_POST`,
+      type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
     })
   }
 
-  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_ACTIVE_BLOCK_INDEX`, payload: index })
+  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
 
-  const isActive = activeBlockIndex === index
+  const isActive = editorIndex === index
 
   return (
     <Container active={isActive}>

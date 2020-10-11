@@ -6,7 +6,7 @@ import AddIcon from 'react-ionicons/lib/IosAdd'
 
 // import app components
 import Input from 'components/Input'
-import { recursivelyUpdateTree, removeFromTree } from 'utils'
+import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from 'utils'
 import { useStore } from 'store'
 
 const MenuBuilder = props => {
@@ -21,7 +21,7 @@ const MenuBuilder = props => {
 
   // TODO: Add tabs for different post types
   const [filter, setFilter] = useState('Page')
-  const [items, setItems] = useState([...value])
+  const [items, setItems] = useState(deepCopyTree(value))
   const [customLink, setCustomLink] = useState({
     title: '',
     url: '',
@@ -140,48 +140,50 @@ const MenuBuilder = props => {
                 return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />
               })}
 
-              <Tabs.TabPane key={'custom-link'} tab={'Custom Link'} />
+              <Tabs.TabPane key={'custom-link'} tab={'CUSTOM LINK'} />
             </Tabs>
 
-            {posts &&
-              Object.values(posts).map(({ id, title, postTypeID }) => {
-                return (
-                  <List.Item
-                    key={id}
-                    extra={[
-                      <Button
-                        key="add"
-                        size="small"
-                        onClick={() =>
-                          setItems([...items, { key: uuidv4(), title, postTypeID, postID: id, children: [] }])
-                        }
-                        shape="circle"
-                      >
-                        <AddIcon />
-                      </Button>,
-                    ]}
-                  >
-                    {title}
-                  </List.Item>
-                )
-              })}
+            <ItemsContainer>
+              {posts &&
+                Object.values(posts).map(({ id, title, postTypeID }) => {
+                  return (
+                    <List.Item
+                      key={id}
+                      extra={[
+                        <Button
+                          key="add"
+                          size="small"
+                          onClick={() =>
+                            setItems([...items, { key: uuidv4(), title, postTypeID, postID: id, children: [] }])
+                          }
+                          shape="circle"
+                        >
+                          <AddIcon />
+                        </Button>,
+                      ]}
+                    >
+                      {title}
+                    </List.Item>
+                  )
+                })}
 
-            {filter === 'custom-link' && (
-              <Space direction="vertical" size={20}>
-                <Input
-                  label="Title"
-                  value={customLink.title}
-                  onChange={e => setCustomLink({ ...customLink, title: e.target.value })}
-                />
-                <Input
-                  label="Url"
-                  value={customLink.url}
-                  onChange={e => setCustomLink({ ...customLink, url: e.target.value })}
-                  placeholder="https://"
-                />
-                <Button children={`Add`} type="primary" onClick={handleAddCustomLink} />
-              </Space>
-            )}
+              {filter === 'custom-link' && (
+                <Space direction="vertical" size={20}>
+                  <Input
+                    label="Title"
+                    value={customLink.title}
+                    onChange={e => setCustomLink({ ...customLink, title: e.target.value })}
+                  />
+                  <Input
+                    label="Url"
+                    value={customLink.url}
+                    onChange={e => setCustomLink({ ...customLink, url: e.target.value })}
+                    placeholder="https://"
+                  />
+                  <Button children={`Add`} type="primary" onClick={handleAddCustomLink} />
+                </Space>
+              )}
+            </ItemsContainer>
           </Card>
         </Col>
 
@@ -222,9 +224,19 @@ const Container = styled.div`
     height: 400px;
   }
 
+  .ant-card-body {
+    padding: 24px 0 0 24px;
+  }
+
   .rst__rowContents {
     min-width: 150px;
   }
+`
+
+const ItemsContainer = styled.div`
+  max-height: 290px;
+  overflow-y: auto;
+  padding-right: 24px;
 `
 
 export default MenuBuilder

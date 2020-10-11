@@ -35,6 +35,8 @@ const transformSite = site => {
     if (get(draft, `forms.items`)) {
       draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
+
+    set(draft, `mediaItems`, { items: [], nextToken: null })
   })
 
   return nextSite
@@ -74,21 +76,16 @@ const siteFragment = `
           parentID
           status
           title
+          createdAt
         }
       }
-    }
-  }
-  mediaItems {
-    items {
-      id
     }
   }
   forms {
     items {
       id
       title
-      fields
-      settings
+      createdAt
     }
   }
 `

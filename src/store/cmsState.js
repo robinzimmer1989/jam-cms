@@ -66,10 +66,17 @@ export const sitesReducer = (state, action) => {
       /******************************
        * Media Items
        ******************************/
+       case `ADD_MEDIA_ITEM`:
+        draft.sites[payload.siteID].mediaItems = {
+          items: unionBy([payload.item], draft.sites[payload.siteID].mediaItems.items, 'id'),
+          nextToken: draft.sites[payload.siteID].mediaItems.nextToken,
+        }
+        break
+        
       case `ADD_MEDIA_ITEMS`:
         draft.sites[payload.siteID].mediaItems = {
-          items: unionBy(payload.items, draft.sites[payload.siteID].mediaItems.items, 'id'),
-          nextToken: payload.nextToken || draft.sites[payload.siteID].mediaItems.nextToken,
+          items: unionBy(draft.sites[payload.siteID].mediaItems.items, payload.items, 'id'),
+          nextToken: payload.nextToken
         }
         break
 

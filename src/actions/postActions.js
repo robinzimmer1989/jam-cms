@@ -11,18 +11,18 @@ export const addPost = async ({ siteID, slug, postTypeID, status, title, content
   return result
 }
 
-export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
-  const result = await postServices.getPosts({ siteID, postTypeID })
+// export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
+//   const result = await postServices.getPosts({ siteID, postTypeID })
 
-  if (result?.data?.listPosts) {
-    dispatch({
-      type: `ADD_POSTS`,
-      payload: { ...result.data.listPosts, siteID, postTypeID },
-    })
-  }
+//   if (result?.data?.listPosts) {
+//     dispatch({
+//       type: `ADD_POSTS`,
+//       payload: { ...result.data.listPosts, siteID, postTypeID },
+//     })
+//   }
 
-  return result
-}
+//   return result
+// }
 
 export const getPost = async ({ site, postID }, dispatch) => {
   const result = await postServices.getPost({ postID })
@@ -34,12 +34,11 @@ export const getPost = async ({ site, postID }, dispatch) => {
     })
 
     dispatch({
-      type: `SET_EDITOR_POST`,
+      type: `ADD_EDITOR_POST`,
       payload: result.data.getPost,
     })
 
-    // Every time the user edits a post we need to restore the original site state,
-    // because of the header + footer settings
+    // Every time the user edits a post we need to restore the original site state
     siteActions.addSiteToEditor({ site }, dispatch)
   }
 

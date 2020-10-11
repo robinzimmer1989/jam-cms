@@ -3,8 +3,8 @@ import { Router } from '@reach/router'
 import { Modal } from 'antd'
 
 // import components
-import Home from 'components/pages/Home'
-import Profile from 'components/pages/Profile'
+import Home from 'components/appPages/Home'
+import Profile from 'components/appPages/Profile'
 import CmsRouter from 'components/Router'
 import PrivateRoute from 'components/PrivateRoute'
 

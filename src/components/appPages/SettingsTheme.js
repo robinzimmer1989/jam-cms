@@ -8,7 +8,7 @@ import FontFamily from 'components/theme/FontFamily'
 import FontStyles from 'components/theme/FontStyles'
 import FontFamilyPreview from 'components/theme/FontFamilyPreview'
 import Colors from 'components/theme/Colors'
-import TextImage from 'components/blocks/TextImage'
+import TextImage from 'components/postBlocks/TextImage'
 import PageWrapper from 'components/PageWrapper'
 
 import { siteActions } from 'actions'
@@ -90,6 +90,7 @@ const SettingsTheme = () => {
             <Radio.Button value="colors">Colors</Radio.Button>
             <Radio.Button value="fontFamily">Font Family</Radio.Button>
             <Radio.Button value="fontStyles">Font Styles</Radio.Button>
+            <Radio.Button value="forms">Forms</Radio.Button>
             <Radio.Button value="blocks">Blocks</Radio.Button>
           </Radio.Group>
 

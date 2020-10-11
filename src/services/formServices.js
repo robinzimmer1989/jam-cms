@@ -12,12 +12,23 @@ export const addForm = async ({ siteID, title }) => {
   return result
 }
 
-export const updateForm = async ({ id, siteID, title }) => {
+export const updateForm = async ({ id, title, content }) => {
+  const jsonContent = content ? JSON.stringify(content) : null
+
   const result = await API.graphql(
     graphqlOperation(dbUpdateForm, {
-      input: { id, siteID, title },
+      input: { id, title, content: jsonContent },
     })
   )
+
+  if (result?.data?.updateForm) {
+    const form = result.data.updateForm
+
+    result.data.updateForm = {
+      ...form,
+      content: form.content ? JSON.parse(form.content) : [],
+    }
+  }
 
   return result
 }
@@ -31,7 +42,7 @@ export const getForm = async ({ id }) => {
           id
           siteID
           title
-          fields
+          content
           settings
         }
       }
@@ -39,6 +50,15 @@ export const getForm = async ({ id }) => {
       { id }
     )
   )
+
+  if (result?.data?.getForm) {
+    const form = result.data.getForm
+
+    result.data.getForm = {
+      ...form,
+      content: form.content ? JSON.parse(form.content) : [],
+    }
+  }
 
   return result
 }

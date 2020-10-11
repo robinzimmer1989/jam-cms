@@ -12,7 +12,7 @@ import { postActions } from 'actions'
 import { useStore } from 'store'
 import { colors } from 'theme'
 import getRoute from 'routes'
-import { createDataTree } from 'utils'
+import { createDataTree, sortBy } from 'utils'
 
 const Collection = props => {
   const { siteID, postTypeID } = props
@@ -32,6 +32,7 @@ const Collection = props => {
   const treePosts = createDataTree(posts)
 
   const filteredPosts = filter !== `all` ? treePosts.filter(o => o.status === filter) : treePosts
+  sortBy(filteredPosts, 'createdAt')
 
   const handleAddPost = async ({ title, slug, parentID }) => {
     await postActions.addPost({ siteID, postTypeID, status: `draft`, title, slug, parentID }, dispatch)
