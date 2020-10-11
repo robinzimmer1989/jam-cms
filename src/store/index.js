@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react'
 
 import { globalState, globalReducer } from './globalState'
 import { editorState, editorReducer } from './editorState'
-import { sitesState, sitesReducer } from './sitesState'
+import { cmsState, sitesReducer } from './cmsState'
 
 export const StateContext = createContext({})
 
@@ -10,13 +10,13 @@ export const StoreProvider = props => {
   const initialState = {
     globalState,
     editorState,
-    sitesState,
+    cmsState,
   }
 
-  const reducer = ({ globalState, editorState, sitesState }, action) => ({
+  const reducer = ({ globalState, editorState, cmsState }, action) => ({
     globalState: globalReducer(globalState, action),
     editorState: editorReducer(editorState, action),
-    sitesState: sitesReducer(sitesState, action),
+    cmsState: sitesReducer(cmsState, action),
   })
 
   return <StateContext.Provider value={useReducer(reducer, initialState)}>{props.children}</StateContext.Provider>

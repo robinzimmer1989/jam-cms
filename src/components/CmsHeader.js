@@ -4,6 +4,7 @@ import { PageHeader, Button, Tooltip } from 'antd'
 import { FullscreenOutlined } from '@ant-design/icons'
 
 // import app components
+import AvatarMenu from 'components/AvatarMenu'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
 
@@ -12,7 +13,7 @@ const CmsHeader = props => {
 
   const [
     {
-      sitesState: { siteID, sites },
+      cmsState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -53,6 +54,8 @@ const CmsHeader = props => {
         <Button key="visit-site-button" size="small" children={`Visit Site`} href={site?.netlifyUrl} target="_blank" />
       )
     }
+
+    buttons.push(<AvatarMenu key="avatar-menu" />)
   }
 
   return <PageHeader title={title} extra={buttons} />

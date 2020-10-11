@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import produce from 'immer'
 import { Button, Space, Select as AntSelect } from 'antd'
@@ -17,11 +17,13 @@ import { postActions, siteActions } from 'actions'
 const PostSettings = () => {
   const [
     {
-      sitesState: { sites, siteID },
+      cmsState: { sites, siteID },
       editorState: { site, post },
     },
     dispatch,
   ] = useStore()
+
+  const [loading, setLoading] = useState(false)
 
   const posts = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts
 
@@ -30,9 +32,10 @@ const PostSettings = () => {
   post && delete otherPosts[post.id]
 
   const handleSavePost = async () => {
+    setLoading(true)
     await postActions.updatePost(post, dispatch)
     await siteActions.updateSite(site, dispatch)
-
+    setLoading(false)
     toast.success('Updated successfully')
   }
 
@@ -82,7 +85,7 @@ const PostSettings = () => {
           />
         </Skeleton>
 
-        <Button children={`Update`} type="primary" onClick={handleSavePost} />
+        <Button children={`Update`} type="primary" onClick={handleSavePost} loading={loading} />
       </Space>
     </Container>
   )

@@ -86,7 +86,7 @@
         }
     },
     "Resources": {
-        "MenuTable": {
+        "EntryTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
                 "TableName": {
@@ -96,7 +96,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Menu",
+                                    "Entry",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     },
@@ -110,7 +110,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Menu",
+                                    "Entry",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     }
@@ -131,7 +131,7 @@
                         "AttributeType": "S"
                     },
                     {
-                        "AttributeName": "siteID",
+                        "AttributeName": "formID",
                         "AttributeType": "S"
                     }
                 ],
@@ -185,10 +185,10 @@
                 },
                 "GlobalSecondaryIndexes": [
                     {
-                        "IndexName": "bySite",
+                        "IndexName": "byForm",
                         "KeySchema": [
                             {
-                                "AttributeName": "siteID",
+                                "AttributeName": "formID",
                                 "KeyType": "HASH"
                             }
                         ],
@@ -216,7 +216,7 @@
             },
             "DeletionPolicy": "Delete"
         },
-        "MenuIAMRole": {
+        "EntryIAMRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "RoleName": {
@@ -226,7 +226,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Menudba42c",
+                                    "Entry9f098c",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -241,7 +241,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Menu440591",
+                                    "Entrydf9892",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -293,7 +293,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Menu",
+                                                                        "Entry",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -307,7 +307,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Menu",
+                                                                        "Entry",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -330,7 +330,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Menu",
+                                                                        "Entry",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -344,7 +344,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "Menu",
+                                                                        "Entry",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -364,17 +364,17 @@
                 ]
             }
         },
-        "MenuDataSource": {
+        "EntryDataSource": {
             "Type": "AWS::AppSync::DataSource",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
-                "Name": "MenuTable",
+                "Name": "EntryTable",
                 "Type": "AMAZON_DYNAMODB",
                 "ServiceRoleArn": {
                     "Fn::GetAtt": [
-                        "MenuIAMRole",
+                        "EntryIAMRole",
                         "Arn"
                     ]
                 },
@@ -389,7 +389,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "Menu",
+                                        "Entry",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         },
@@ -403,7 +403,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "Menu",
+                                        "Entry",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         }
@@ -415,10 +415,10 @@
                 }
             },
             "DependsOn": [
-                "MenuIAMRole"
+                "EntryIAMRole"
             ]
         },
-        "GetMenuResolver": {
+        "GetEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -426,11 +426,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "MenuDataSource",
+                        "EntryDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "getMenu",
+                "FieldName": "getEntry",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -447,7 +447,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getMenu",
+                                        "getEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -471,7 +471,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getMenu",
+                                        "getEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -482,7 +482,7 @@
                 }
             }
         },
-        "ListMenuResolver": {
+        "ListEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -490,11 +490,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "MenuDataSource",
+                        "EntryDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "listMenus",
+                "FieldName": "listEntrys",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -511,7 +511,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listMenus",
+                                        "listEntrys",
                                         "req",
                                         "vtl"
                                     ]
@@ -535,7 +535,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listMenus",
+                                        "listEntrys",
                                         "res",
                                         "vtl"
                                     ]
@@ -546,7 +546,7 @@
                 }
             }
         },
-        "CreateMenuResolver": {
+        "CreateEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -554,11 +554,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "MenuDataSource",
+                        "EntryDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "createMenu",
+                "FieldName": "createEntry",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -575,7 +575,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createMenu",
+                                        "createEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -599,7 +599,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createMenu",
+                                        "createEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -610,7 +610,7 @@
                 }
             }
         },
-        "UpdateMenuResolver": {
+        "UpdateEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -618,11 +618,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "MenuDataSource",
+                        "EntryDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "updateMenu",
+                "FieldName": "updateEntry",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -639,7 +639,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateMenu",
+                                        "updateEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -663,7 +663,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateMenu",
+                                        "updateEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -674,7 +674,7 @@
                 }
             }
         },
-        "DeleteMenuResolver": {
+        "DeleteEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -682,11 +682,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "MenuDataSource",
+                        "EntryDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "deleteMenu",
+                "FieldName": "deleteEntry",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -703,7 +703,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteMenu",
+                                        "deleteEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -727,7 +727,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteMenu",
+                                        "deleteEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -738,14 +738,14 @@
                 }
             }
         },
-        "SubscriptiononCreateMenuResolver": {
+        "SubscriptiononCreateEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
                 "DataSourceName": "NONE",
-                "FieldName": "onCreateMenu",
+                "FieldName": "onCreateEntry",
                 "TypeName": "Subscription",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -762,7 +762,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onCreateMenu",
+                                        "onCreateEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -786,7 +786,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onCreateMenu",
+                                        "onCreateEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -797,14 +797,14 @@
                 }
             }
         },
-        "SubscriptiononUpdateMenuResolver": {
+        "SubscriptiononUpdateEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
                 "DataSourceName": "NONE",
-                "FieldName": "onUpdateMenu",
+                "FieldName": "onUpdateEntry",
                 "TypeName": "Subscription",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -821,7 +821,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onUpdateMenu",
+                                        "onUpdateEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -845,7 +845,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onUpdateMenu",
+                                        "onUpdateEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -856,14 +856,14 @@
                 }
             }
         },
-        "SubscriptiononDeleteMenuResolver": {
+        "SubscriptiononDeleteEntryResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
                 "DataSourceName": "NONE",
-                "FieldName": "onDeleteMenu",
+                "FieldName": "onDeleteEntry",
                 "TypeName": "Subscription",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -880,7 +880,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onDeleteMenu",
+                                        "onDeleteEntry",
                                         "req",
                                         "vtl"
                                     ]
@@ -904,7 +904,7 @@
                                     ".",
                                     [
                                         "Subscription",
-                                        "onDeleteMenu",
+                                        "onDeleteEntry",
                                         "res",
                                         "vtl"
                                     ]
@@ -917,11 +917,11 @@
         }
     },
     "Outputs": {
-        "GetAttMenuTableStreamArn": {
+        "GetAttEntryTableStreamArn": {
             "Description": "Your DynamoDB table StreamArn.",
             "Value": {
                 "Fn::GetAtt": [
-                    "MenuTable",
+                    "EntryTable",
                     "StreamArn"
                 ]
             },
@@ -934,18 +934,18 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "MenuTable",
+                            "EntryTable",
                             "StreamArn"
                         ]
                     ]
                 }
             }
         },
-        "GetAttMenuDataSourceName": {
+        "GetAttEntryDataSourceName": {
             "Description": "Your model DataSource name.",
             "Value": {
                 "Fn::GetAtt": [
-                    "MenuDataSource",
+                    "EntryDataSource",
                     "Name"
                 ]
             },
@@ -958,17 +958,17 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "MenuDataSource",
+                            "EntryDataSource",
                             "Name"
                         ]
                     ]
                 }
             }
         },
-        "GetAttMenuTableName": {
+        "GetAttEntryTableName": {
             "Description": "Your DynamoDB table name.",
             "Value": {
-                "Ref": "MenuTable"
+                "Ref": "EntryTable"
             },
             "Export": {
                 "Name": {
@@ -979,7 +979,7 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "MenuTable",
+                            "EntryTable",
                             "Name"
                         ]
                     ]

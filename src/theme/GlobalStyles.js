@@ -61,4 +61,13 @@ export default createGlobalStyle`
   .ant-select {
     width: 100%;
   }
+
+  .ant-page-header-heading-extra {
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-tabs-tab-btn {
+    font-size: 11px;
+  }
 `

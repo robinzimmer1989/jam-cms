@@ -10,16 +10,14 @@ import { useStore } from 'store'
 const SettingsSeo = () => {
   const [
     {
-      sitesState: { siteID, sites },
+      cmsState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
 
   return (
     <CmsLayout pageTitle={`SEO`}>
-      <PageHeader>
-        <Button children={`Add`} type="primary" />
-      </PageHeader>
+      <PageHeader></PageHeader>
     </CmsLayout>
   )
 }

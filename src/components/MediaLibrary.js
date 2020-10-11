@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Modal, Row, Col, Upload, Button, Space } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Modal, Row, Col, Upload, Button, Space, message } from 'antd'
+import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 // import app components
 import MediaImage from 'components/MediaImage'
@@ -15,7 +15,7 @@ const MediaLibrary = props => {
 
   const [
     {
-      sitesState: { siteID, sites },
+      cmsState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -23,6 +23,7 @@ const MediaLibrary = props => {
   const site = sites[siteID]
 
   const [activeFile, setActiveFile] = useState(null)
+  const [uploader, setUploader] = useState(false)
 
   useEffect(() => {
     const loadMediaItems = async () => {
@@ -32,8 +33,19 @@ const MediaLibrary = props => {
     loadMediaItems()
   }, [siteID])
 
-  const handleFileUpload = async event => {
-    await mediaActions.uploadMediaItem({ siteID, file: event.target.files[0] }, dispatch)
+  const handleFileUpload = async info => {
+    const {
+      file: { status, name, originFileObj },
+    } = info
+
+    if (status !== 'uploading') {
+      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch)
+    }
+    if (status === 'done') {
+      message.success(`${name} file uploaded successfully.`)
+    } else if (status === 'error') {
+      message.error(`${name} file upload failed.`)
+    }
   }
 
   const handleCloseDialog = () => setActiveFile(null)
@@ -41,16 +53,23 @@ const MediaLibrary = props => {
   return (
     <>
       <Space direction="vertical" size={20}>
-        <Upload type="file" placeholder={'File Upload'} onChange={handleFileUpload} name="file">
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
+        <Button icon={<UploadOutlined />} children="Upload" type="primary" onClick={() => setUploader(!uploader)} />
 
-        <Row gutter={[16, 16]}>
+        {uploader && (
+          <Upload.Dragger name="file" multiple onChange={handleFileUpload}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          </Upload.Dragger>
+        )}
+
+        <Row>
           {site?.mediaItems?.items &&
             site.mediaItems.items.map(o => {
               return (
                 <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                  <Image bg={true} storageKey={o.storageKey} />
+                  <Image storageKey={o.storageKey} preview={false} />
                 </MediaItem>
               )
             })}
@@ -64,15 +83,18 @@ const MediaLibrary = props => {
   )
 }
 
-const MediaItem = styled(Col)`
+const MediaItem = styled.div`
   position: relative;
-  height: 200px;
+  height: 150px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  margin-bottom: 20px;
   cursor: pointer;
-
-  > div {
-    background-color: #fff;
-    box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
-  }
+  background-color: #fff;
+  box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
 `
 
 export default MediaLibrary

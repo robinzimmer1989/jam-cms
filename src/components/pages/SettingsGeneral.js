@@ -13,14 +13,12 @@ import { siteActions } from 'actions'
 const GeneralSettings = props => {
   const [
     {
-      sitesState: { sites, siteID },
+      cmsState: { sites, siteID },
     },
     dispatch,
   ] = useStore()
 
-  const site = sites[siteID]
-
-  const [data, setData] = useState({ ...site })
+  const [data, setData] = useState({ ...sites[siteID] })
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
 

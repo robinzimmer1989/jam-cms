@@ -135,7 +135,7 @@
                         {
                             "Ref": "APIKeyExpirationEpoch"
                         },
-                        1604672916
+                        1604971028
                     ]
                 }
             },
@@ -478,7 +478,7 @@
                 "NoneDataSource"
             ]
         },
-        "Menu": {
+        "Form": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "Parameters": {
@@ -543,7 +543,82 @@
                                 "Ref": "S3DeploymentRootKey"
                             },
                             "stacks",
-                            "Menu.json"
+                            "Form.json"
+                        ]
+                    ]
+                }
+            },
+            "DependsOn": [
+                "GraphQLSchema",
+                "NoneDataSource"
+            ]
+        },
+        "Entry": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "Parameters": {
+                    "AppSyncApiId": {
+                        "Fn::GetAtt": [
+                            "GraphQLAPI",
+                            "ApiId"
+                        ]
+                    },
+                    "DynamoDBModelTableReadIOPS": {
+                        "Ref": "DynamoDBModelTableReadIOPS"
+                    },
+                    "DynamoDBModelTableWriteIOPS": {
+                        "Ref": "DynamoDBModelTableWriteIOPS"
+                    },
+                    "DynamoDBBillingMode": {
+                        "Ref": "DynamoDBBillingMode"
+                    },
+                    "DynamoDBEnablePointInTimeRecovery": {
+                        "Ref": "DynamoDBEnablePointInTimeRecovery"
+                    },
+                    "DynamoDBEnableServerSideEncryption": {
+                        "Ref": "DynamoDBEnableServerSideEncryption"
+                    },
+                    "AppSyncApiName": {
+                        "Ref": "AppSyncApiName"
+                    },
+                    "APIKeyExpirationEpoch": {
+                        "Ref": "APIKeyExpirationEpoch"
+                    },
+                    "CreateAPIKey": {
+                        "Ref": "CreateAPIKey"
+                    },
+                    "AuthCognitoUserPoolId": {
+                        "Ref": "AuthCognitoUserPoolId"
+                    },
+                    "env": {
+                        "Ref": "env"
+                    },
+                    "S3DeploymentBucket": {
+                        "Ref": "S3DeploymentBucket"
+                    },
+                    "S3DeploymentRootKey": {
+                        "Ref": "S3DeploymentRootKey"
+                    },
+                    "GetAttGraphQLAPIApiId": {
+                        "Fn::GetAtt": [
+                            "GraphQLAPI",
+                            "ApiId"
+                        ]
+                    }
+                },
+                "TemplateURL": {
+                    "Fn::Join": [
+                        "/",
+                        [
+                            "https://s3.amazonaws.com",
+                            {
+                                "Ref": "S3DeploymentBucket"
+                            },
+                            {
+                                "Ref": "S3DeploymentRootKey"
+                            },
+                            "stacks",
+                            "Entry.json"
                         ]
                     ]
                 }
@@ -628,8 +703,9 @@
                 "NoneDataSource",
                 "PostType",
                 "Post",
-                "Menu",
-                "MediaItem"
+                "MediaItem",
+                "Form",
+                "Entry"
             ]
         },
         "CustomResourcesjson": {
@@ -679,7 +755,8 @@
                 "PostType",
                 "Post",
                 "MediaItem",
-                "Menu",
+                "Form",
+                "Entry",
                 "ConnectionStack"
             ]
         }

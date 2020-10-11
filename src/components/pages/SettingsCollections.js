@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components'
-import { List, Button, PageHeader, Typography, Card, Popconfirm } from 'antd'
+import { Button, PageHeader, Popconfirm } from 'antd'
 
 // import app components
 import CmsLayout from 'components/CmsLayout'
 import CollectionForm from 'components/CollectionForm'
+import ListItem from 'components/ListItem'
 
 import { collectionActions } from 'actions'
 import { useStore } from 'store'
@@ -12,7 +12,7 @@ import { useStore } from 'store'
 const SettingsCollections = () => {
   const [
     {
-      sitesState: { siteID, sites },
+      cmsState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -70,29 +70,10 @@ const SettingsCollections = () => {
             </Button>,
           ]
 
-          return (
-            <CardWrapper key={o.id}>
-              <Card>
-                <List.Item actions={actions}>
-                  <Typography.Text onClick={() => handleOpenDialog(o)} strong>
-                    {o.title}
-                  </Typography.Text>
-                </List.Item>
-              </Card>
-            </CardWrapper>
-          )
+          return <ListItem key={o.id} actions={actions} title={o.title} />
         })}
     </CmsLayout>
   )
 }
-
-const CardWrapper = styled.div`
-  margin-left: ${({ level }) => `${level * 30}px`};
-  margin-bottom: 20px;
-
-  .ant-card-body {
-    padding: 0 20px;
-  }
-`
 
 export default SettingsCollections

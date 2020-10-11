@@ -1,27 +1,14 @@
 import React from 'react'
-import { Link, navigate } from 'gatsby'
-import { Auth } from 'aws-amplify'
+import { Link } from 'gatsby'
 import styled from 'styled-components'
-import { Menu, Row, Button, Dropdown, Space } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { Menu, Row, Space } from 'antd'
 
 // import app components
-import { logout, isLoggedIn } from 'utils/auth'
+import AvatarMenu from 'components/AvatarMenu'
+import { isLoggedIn } from 'utils/auth'
 import getRoute from 'routes'
 
 const Header = () => {
-  const handleSignOut = async () => {
-    await Auth.signOut()
-    logout(() => navigate(getRoute(`/`)))
-  }
-
-  const dropDownMenu = (
-    <Menu>
-      <Menu.Item children={`Profile`} onClick={() => navigate(`/app/profile`)} />
-      <Menu.Item children={`Sign Out`} onClick={handleSignOut} />
-    </Menu>
-  )
-
   return (
     <Row justify="space-between" align="center">
       <Logo to="/">Gatsby CMS</Logo>
@@ -47,13 +34,7 @@ const Header = () => {
             )}
           </Menu>
 
-          {isLoggedIn() && (
-            <Dropdown overlay={dropDownMenu}>
-              <div>
-                <Button size={32} icon={<UserOutlined />} shape="circle" ghost />
-              </div>
-            </Dropdown>
-          )}
+          {isLoggedIn() && <AvatarMenu ghost={true} />}
         </Space>
       </Row>
     </Row>

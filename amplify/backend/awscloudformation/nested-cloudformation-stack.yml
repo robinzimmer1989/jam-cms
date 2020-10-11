@@ -131,7 +131,7 @@
 						]
 					},
 					"S3DeploymentBucket": "amplify-my-aws-project-gatsbycms-165936-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/45aad5f4ef6611e6c6e37d713ec0a6b143b4b744",
+					"S3DeploymentRootKey": "amplify-appsync-files/5132baf2fcf826bdd898442956ca9a6a92ab6b33",
 					"env": "gatsbycms"
 				}
 			}

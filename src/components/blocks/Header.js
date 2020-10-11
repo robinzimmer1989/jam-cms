@@ -22,7 +22,7 @@ export const fields = {
       type: 'menu',
       placeholder: '',
       label: 'Menu',
-      value: '',
+      value: [],
     },
   ],
   style: {},
@@ -67,12 +67,13 @@ const Grid = styled.div`
 `
 
 const Logo = styled(Link)`
-  display: block;
+  display: flex;
+  align-items: center;
   height: 100%;
 
   img {
-    max-width: 100%;
-    max-height: 100%;
+    height: 40px;
+    width: auto;
   }
 `
 

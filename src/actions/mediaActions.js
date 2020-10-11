@@ -33,3 +33,15 @@ export const updateMediaItem = async ({ siteID, id, altText }, dispatch) => {
 
   return result
 }
+
+export const deleteMediaItem = async ({ id, storageKey, siteID }, dispatch) => {
+  await storageServices.deleteFile({ storageKey })
+
+  const result = await mediaServices.deleteMediaItem({ id })
+
+  if (result?.data?.deleteMediaItem) {
+    dispatch({ type: `DELETE_MEDIA_ITEM`, payload: { id, siteID } })
+  }
+
+  return result
+}

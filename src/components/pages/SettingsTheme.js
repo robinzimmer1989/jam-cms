@@ -18,7 +18,7 @@ import getRoute from 'routes'
 const SettingsTheme = () => {
   const [
     {
-      sitesState: { sites, siteID },
+      cmsState: { sites, siteID },
       editorState: { site },
     },
     dispatch,
@@ -44,16 +44,19 @@ const SettingsTheme = () => {
     if (tab === 'colors') {
       return {
         page: <TextImage image={{ storageKey: null }} title="Lorem" text="Lorem ipsum Dolor" button={null} />,
+        title: 'Colors',
         sidebar: <Colors />,
       }
     } else if (tab === 'fontFamily') {
       return {
         page: <FontFamilyPreview />,
+        title: 'Font Family',
         sidebar: <FontFamily />,
       }
     } else if (tab === 'fontStyles') {
       return {
         page: <FontFamilyPreview />,
+        title: 'Font Styles',
         sidebar: <FontStyles />,
       }
     } else if (tab === 'blocks') {
@@ -68,10 +71,8 @@ const SettingsTheme = () => {
 
   const sidebar = (
     <>
-      <PageHeader title="Theme" style={{ paddingLeft: 20 }} />
-
+      <PageHeader title={elements.title} style={{ paddingLeft: 20 }} />
       <Divider style={{ margin: 0 }} />
-
       {elements.sidebar}
     </>
   )

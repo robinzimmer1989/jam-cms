@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
   sites: {},
 }
 
-export const sitesState = { ...DEFAULT_STATE }
+export const cmsState = { ...DEFAULT_STATE }
 
 export const sitesReducer = (state, action) => {
   const { payload } = action
@@ -42,6 +42,17 @@ export const sitesReducer = (state, action) => {
         break
 
       /******************************
+       * Collections
+       ******************************/
+      case `ADD_FORM`:
+        set(draft, `sites.${payload.siteID}.forms.${payload.id}`, payload)
+        break
+
+      case `DELETE_FORM`:
+        delete draft.sites[payload.siteID].forms[payload.id]
+        break
+
+      /******************************
        * Posts
        ******************************/
       case `ADD_POST`:
@@ -53,20 +64,19 @@ export const sitesReducer = (state, action) => {
         break
 
       /******************************
-       * Menus
-       ******************************/
-      case `ADD_MENU`:
-        set(draft, `sites.${payload.siteID}.menus.${payload.slug}`, payload)
-        break
-
-      /******************************
        * Media Items
        ******************************/
       case `ADD_MEDIA_ITEMS`:
         draft.sites[payload.siteID].mediaItems = {
-          items: unionBy(draft.sites[payload.siteID].mediaItems, payload.items, 'id'),
+          items: unionBy(payload.items, draft.sites[payload.siteID].mediaItems.items, 'id'),
           nextToken: payload.nextToken || draft.sites[payload.siteID].mediaItems.nextToken,
         }
+        break
+
+      case `DELETE_MEDIA_ITEM`:
+        draft.sites[payload.siteID].mediaItems.items = draft.sites[payload.siteID].mediaItems.items.filter(
+          o => o.id !== payload.id
+        )
         break
 
       /******************************

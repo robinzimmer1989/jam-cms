@@ -10,6 +10,8 @@ export const ROUTE_SETTINGS_THEME = `/settings/theme`
 export const ROUTE_SETTINGS_SEO = `/settings/seo`
 export const ROUTE_SETTINGS_COLLECTIONS = `/settings/collections`
 export const ROUTE_PROFILE = `/profile`
+export const ROUTE_FORMS = `/forms`
+export const ROUTE_FORM = `/form`
 
 const getRoute = (route, args) => {
   switch (route) {
@@ -21,6 +23,9 @@ const getRoute = (route, args) => {
 
     case `app`:
       return ROUTE_APP
+
+    case `profile`:
+      return `${ROUTE_APP}${ROUTE_PROFILE}`
 
     case `dashboard`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}`
@@ -36,6 +41,12 @@ const getRoute = (route, args) => {
 
     case `editor`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_COLLECTIONS}/${args?.postTypeID}${ROUTE_EDITOR}/${args?.postID}`
+
+    case `forms`:
+      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_FORMS}`
+
+    case `form`:
+      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_FORMS}/${args?.formID}`
 
     case `settings-general`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_GENERAL}`

@@ -31,18 +31,9 @@ const transformSite = site => {
       draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
 
-    // Convert menus to object structure (by slug) and parse content
-    if (get(draft, `menus.items`)) {
-      draft.menus = draft.menus.items.reduce(
-        (ac, a) => ({
-          ...ac,
-          [a.slug]: {
-            ...a,
-            content: a.content ? JSON.parse(a.content) : [],
-          },
-        }),
-        {}
-      )
+    // Convert forms to object structure
+    if (get(draft, `forms.items`)) {
+      draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
   })
 
@@ -92,11 +83,12 @@ const siteFragment = `
       id
     }
   }
-  menus {
+  forms {
     items {
       id
-      slug
-      content
+      title
+      fields
+      settings
     }
   }
 `

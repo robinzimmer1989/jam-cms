@@ -12,7 +12,7 @@ const PostForm = props => {
 
   const [
     {
-      sitesState: { sites, siteID },
+      cmsState: { sites, siteID },
     },
     dispatch,
   ] = useStore()

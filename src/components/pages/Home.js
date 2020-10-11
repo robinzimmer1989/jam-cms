@@ -12,7 +12,7 @@ import { useStore } from 'store'
 const Home = () => {
   const [
     {
-      sitesState: { sites },
+      cmsState: { sites },
     },
     dispatch,
   ] = useStore()

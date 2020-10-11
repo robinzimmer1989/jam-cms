@@ -1,7 +1,6 @@
 import { navigate } from 'gatsby'
 
 import { siteServices, collectionServices, netlifyServices, postServices } from 'services'
-import { menuActions } from 'actions'
 
 export const addSite = async ({ title, ownerID }, dispatch) => {
   const result = await siteServices.addSite({ title, ownerID })
@@ -47,26 +46,11 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
-export const updateSite = async ({ id, title, settings, menus }, dispatch) => {
+export const updateSite = async ({ id, title, settings }, dispatch) => {
   const result = await siteServices.updateSite({ id, title, settings })
 
   if (result?.data?.updateSite) {
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
-  }
-
-  //TODO: Check if menus have changed or alternatively remove single menu items (see other TODO)
-  if (menus) {
-    await Promise.all(
-      Object.keys(menus).map(async key => {
-        const menu = menus[key]
-
-        if (menu.id) {
-          await menuActions.updateMenu(menu, dispatch)
-        } else {
-          await menuActions.addMenu({ siteID: id, slug: key, content: menu.content }, dispatch)
-        }
-      })
-    )
   }
 
   return result
@@ -92,6 +76,8 @@ export const getSites = async (args, dispatch) => {
   if (result?.data?.listSites) {
     dispatch({ type: `ADD_SITES`, payload: result.data.listSites })
   }
+
+  return result
 }
 
 export const getSite = async ({ siteID }, dispatch) => {
@@ -100,6 +86,8 @@ export const getSite = async ({ siteID }, dispatch) => {
   if (result?.data?.getSite) {
     dispatch({ type: `ADD_SITE`, payload: result.data.getSite })
   }
+
+  return result
 }
 
 export const deploySite = async ({ netlifyID }, dispatch) => {
@@ -108,6 +96,8 @@ export const deploySite = async ({ netlifyID }, dispatch) => {
   if (result?.deploy_id) {
     dispatch({ type: `UPDATE_NETLIFY_DEPLOY_ID`, payload: result.deploy_id })
   }
+
+  return result
 }
 
 export const addSiteToEditor = ({ site }, dispatch) => {

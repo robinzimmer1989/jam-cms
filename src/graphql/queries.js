@@ -8,6 +8,7 @@ export const getSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -60,12 +61,13 @@ export const getSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -87,6 +89,7 @@ export const listSites = /* GraphQL */ `
         ownerID
         title
         settings
+        redirects
         netlifyID
         netlifyUrl
         createdAt
@@ -101,7 +104,7 @@ export const listSites = /* GraphQL */ `
         mediaItems {
           nextToken
         }
-        menus {
+        forms {
           nextToken
         }
       }
@@ -272,31 +275,84 @@ export const listMediaItems = /* GraphQL */ `
     }
   }
 `;
-export const getMenu = /* GraphQL */ `
-  query GetMenu($id: ID!) {
-    getMenu(id: $id) {
+export const getForm = /* GraphQL */ `
+  query GetForm($id: ID!) {
+    getForm(id: $id) {
       id
       siteID
-      slug
-      content
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const listForms = /* GraphQL */ `
+  query ListForms(
+    $filter: ModelFormFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listForms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        siteID
+        title
+        fields
+        settings
+        createdAt
+        updatedAt
+        owner
+        entries {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const getEntry = /* GraphQL */ `
+  query GetEntry($id: ID!) {
+    getEntry(id: $id) {
+      id
+      siteID
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const listMenus = /* GraphQL */ `
-  query ListMenus(
-    $filter: ModelMenuFilterInput
+export const listEntrys = /* GraphQL */ `
+  query ListEntrys(
+    $filter: ModelEntryFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listMenus(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listEntrys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         siteID
-        slug
-        content
+        formID
+        email
+        fields
         createdAt
         updatedAt
         owner

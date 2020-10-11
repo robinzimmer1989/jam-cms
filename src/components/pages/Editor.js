@@ -23,35 +23,13 @@ const Editor = props => {
 
   const [
     {
-      sitesState: { sites, siteID },
+      cmsState: { sites, siteID },
       editorState: { site, post },
     },
     dispatch,
   ] = useStore()
 
   const postType = sites[siteID]?.postTypes?.[postTypeID]
-
-  // TODO: Evaluate if menus as separate post types are still necessary
-  // Add menu data to all header menus
-  const headerData = site && { ...convertBlockSchemaToProps([site.settings.header])[0].data }
-
-  if (site) {
-    const headerMenus = site.settings.header.fields.filter(o => o.type === 'menu')
-    headerMenus.map(menu => {
-      set(headerData, menu.id, site.menus[menu.id]?.content)
-    })
-  }
-
-  // TODO: Evaluate if menus as separate post types are still necessary
-  // Add menu data to all header menus
-  const footerData = site && { ...convertBlockSchemaToProps([site.settings.footer])[0].data }
-
-  if (site) {
-    const footerMenus = site.settings.footer.fields.filter(o => o.type === 'menu')
-    footerMenus.map(menu => {
-      set(footerData, menu.id, site.menus[menu.id]?.content)
-    })
-  }
 
   useEffect(() => {
     const loadPost = async () => {
@@ -88,7 +66,7 @@ const Editor = props => {
                 index={'header'}
                 onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'header' })}
               >
-                <Header {...headerData} />
+                <Header {...convertBlockSchemaToProps([site.settings.header])[0].data} />
               </BlockWrapper>
             )}
 
@@ -115,7 +93,7 @@ const Editor = props => {
                 index={'footer'}
                 onClick={() => dispatch({ type: 'SET_EDITOR_ACTIVE_BLOCK_INDEX', payload: 'footer' })}
               >
-                <Footer {...footerData} />
+                <Footer {...convertBlockSchemaToProps([site.settings.footer])[0].data} />
               </BlockWrapper>
             )}
           </>

@@ -6,9 +6,10 @@ type Site
   title: String!
   postTypes: [PostType] @connection(keyName: "bySite", fields: ["id"])
   posts: [Post] @connection(keyName: "bySite", fields: ["id"])
-  menus: [Menu] @connection(keyName: "bySite", fields: ["id"])
   mediaItems: [MediaItem] @connection(keyName: "bySite", fields: ["id"])
+  forms: [Form] @connection(keyName: "bySite", fields: ["id"])
   settings: String
+  redirects: String
   netlifyID: String
   netlifyUrl: String
 }
@@ -57,12 +58,25 @@ type MediaItem
   fileSize: Float
 }
 
-type Menu
+type Form
   @model
-  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }])
-  @key(name: "bySite", fields: ["siteID"]) {
+  @key(name: "bySite", fields: ["siteID"])
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
   id: ID!
   siteID: ID!
-  slug: String!
-  content: String
+  title: String!
+  fields: String
+  settings: String
+  entries: [Entry] @connection(keyName: "byForm", fields: ["id"])
+}
+
+type Entry
+  @model
+  @key(name: "byForm", fields: ["formID"])
+  @auth(rules: [{ allow: public, provider: apiKey }, { allow: owner }, { allow: groups, groups: ["Admin"] }]) {
+  id: ID!
+  siteID: ID!
+  formID: ID!
+  email: String!
+  fields: String!
 }

@@ -232,79 +232,6 @@
                 }
             }
         },
-        "SitemenusResolver": {
-            "Type": "AWS::AppSync::Resolver",
-            "Properties": {
-                "ApiId": {
-                    "Ref": "GetAttGraphQLAPIApiId"
-                },
-                "DataSourceName": {
-                    "Fn::ImportValue": {
-                        "Fn::Join": [
-                            ":",
-                            [
-                                {
-                                    "Ref": "AppSyncApiId"
-                                },
-                                "GetAtt",
-                                "MenuDataSource",
-                                "Name"
-                            ]
-                        ]
-                    }
-                },
-                "FieldName": "menus",
-                "TypeName": "Site",
-                "RequestMappingTemplateS3Location": {
-                    "Fn::Sub": [
-                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-                        {
-                            "S3DeploymentBucket": {
-                                "Ref": "S3DeploymentBucket"
-                            },
-                            "S3DeploymentRootKey": {
-                                "Ref": "S3DeploymentRootKey"
-                            },
-                            "ResolverFileName": {
-                                "Fn::Join": [
-                                    ".",
-                                    [
-                                        "Site",
-                                        "menus",
-                                        "req",
-                                        "vtl"
-                                    ]
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "ResponseMappingTemplateS3Location": {
-                    "Fn::Sub": [
-                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
-                        {
-                            "S3DeploymentBucket": {
-                                "Ref": "S3DeploymentBucket"
-                            },
-                            "S3DeploymentRootKey": {
-                                "Ref": "S3DeploymentRootKey"
-                            },
-                            "ResolverFileName": {
-                                "Fn::Join": [
-                                    ".",
-                                    [
-                                        "Site",
-                                        "menus",
-                                        "res",
-                                        "vtl"
-                                    ]
-                                ]
-                            }
-                        }
-                    ]
-                }
-            }
-        },
         "SitemediaItemsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
@@ -368,6 +295,79 @@
                                     [
                                         "Site",
                                         "mediaItems",
+                                        "res",
+                                        "vtl"
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "SiteformsResolver": {
+            "Type": "AWS::AppSync::Resolver",
+            "Properties": {
+                "ApiId": {
+                    "Ref": "GetAttGraphQLAPIApiId"
+                },
+                "DataSourceName": {
+                    "Fn::ImportValue": {
+                        "Fn::Join": [
+                            ":",
+                            [
+                                {
+                                    "Ref": "AppSyncApiId"
+                                },
+                                "GetAtt",
+                                "FormDataSource",
+                                "Name"
+                            ]
+                        ]
+                    }
+                },
+                "FieldName": "forms",
+                "TypeName": "Site",
+                "RequestMappingTemplateS3Location": {
+                    "Fn::Sub": [
+                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+                        {
+                            "S3DeploymentBucket": {
+                                "Ref": "S3DeploymentBucket"
+                            },
+                            "S3DeploymentRootKey": {
+                                "Ref": "S3DeploymentRootKey"
+                            },
+                            "ResolverFileName": {
+                                "Fn::Join": [
+                                    ".",
+                                    [
+                                        "Site",
+                                        "forms",
+                                        "req",
+                                        "vtl"
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "ResponseMappingTemplateS3Location": {
+                    "Fn::Sub": [
+                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+                        {
+                            "S3DeploymentBucket": {
+                                "Ref": "S3DeploymentBucket"
+                            },
+                            "S3DeploymentRootKey": {
+                                "Ref": "S3DeploymentRootKey"
+                            },
+                            "ResolverFileName": {
+                                "Fn::Join": [
+                                    ".",
+                                    [
+                                        "Site",
+                                        "forms",
                                         "res",
                                         "vtl"
                                     ]
@@ -514,6 +514,79 @@
                                     [
                                         "Post",
                                         "postType",
+                                        "res",
+                                        "vtl"
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "FormentriesResolver": {
+            "Type": "AWS::AppSync::Resolver",
+            "Properties": {
+                "ApiId": {
+                    "Ref": "GetAttGraphQLAPIApiId"
+                },
+                "DataSourceName": {
+                    "Fn::ImportValue": {
+                        "Fn::Join": [
+                            ":",
+                            [
+                                {
+                                    "Ref": "AppSyncApiId"
+                                },
+                                "GetAtt",
+                                "EntryDataSource",
+                                "Name"
+                            ]
+                        ]
+                    }
+                },
+                "FieldName": "entries",
+                "TypeName": "Form",
+                "RequestMappingTemplateS3Location": {
+                    "Fn::Sub": [
+                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+                        {
+                            "S3DeploymentBucket": {
+                                "Ref": "S3DeploymentBucket"
+                            },
+                            "S3DeploymentRootKey": {
+                                "Ref": "S3DeploymentRootKey"
+                            },
+                            "ResolverFileName": {
+                                "Fn::Join": [
+                                    ".",
+                                    [
+                                        "Form",
+                                        "entries",
+                                        "req",
+                                        "vtl"
+                                    ]
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "ResponseMappingTemplateS3Location": {
+                    "Fn::Sub": [
+                        "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/${ResolverFileName}",
+                        {
+                            "S3DeploymentBucket": {
+                                "Ref": "S3DeploymentBucket"
+                            },
+                            "S3DeploymentRootKey": {
+                                "Ref": "S3DeploymentRootKey"
+                            },
+                            "ResolverFileName": {
+                                "Fn::Join": [
+                                    ".",
+                                    [
+                                        "Form",
+                                        "entries",
                                         "res",
                                         "vtl"
                                     ]

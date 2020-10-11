@@ -66,7 +66,7 @@ $util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.inpu
 
 
 ## [Start] Prepare DynamoDB PutItem Request. **
-$util.qr($context.args.input.put("__typename", "Menu"))
+$util.qr($context.args.input.put("__typename", "Entry"))
 #set( $condition = {
   "expression": "attribute_not_exists(#id)",
   "expressionNames": {

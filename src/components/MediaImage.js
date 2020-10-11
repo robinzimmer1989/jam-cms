@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button, Space, Row, Col } from 'antd'
+import { Button, Space, Row, Col, Popconfirm } from 'antd'
 
 // import app components
 import Image from 'components/Image'
@@ -15,12 +15,26 @@ const MediaImage = props => {
   const [, dispatch] = useStore()
 
   const [data, setData] = useState({ ...file })
+  const [loading, setLoading] = useState(false)
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
 
   const handleUpdateMediaItem = async () => {
     const { id, altText, siteID } = data
+
+    setLoading('update')
     await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch)
+    setLoading(false)
+  }
+
+  const handlDeleteMediaItem = async () => {
+    setLoading('delete')
+    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch)
+    setLoading(false)
+
+    if (result?.data?.deleteMediaItem) {
+      onClose()
+    }
   }
 
   return (
@@ -34,13 +48,24 @@ const MediaImage = props => {
             <Space direction="vertical">
               <Input label="Alternative Text" value={data.altText} onChange={handleChange} name={`altText`} />
 
-              <Button onClick={handleUpdateMediaItem} children={`Update Image`} type="primary" />
+              <Space>
+                <Popconfirm title="Are you sure?" onConfirm={handlDeleteMediaItem} okText="Yes" cancelText="No">
+                  <Button children={`Delete`} danger loading={loading === 'delete'} />
+                </Popconfirm>
+
+                <Button
+                  onClick={handleUpdateMediaItem}
+                  children={`Update Image`}
+                  type="primary"
+                  loading={loading === 'update'}
+                />
+              </Space>
             </Space>
 
-            <div>
+            <Space>
               <Button onClick={onClose} children={`Close`} />
               {onSelect && <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />}
-            </div>
+            </Space>
           </Content>
         </Col>
       </Row>

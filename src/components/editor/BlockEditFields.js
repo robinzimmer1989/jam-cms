@@ -1,5 +1,6 @@
 import React from 'react'
-import { set, unionBy } from 'lodash'
+import { set } from 'lodash'
+import styled from 'styled-components'
 import produce from 'immer'
 import { Button, Space, Collapse } from 'antd'
 
@@ -23,47 +24,39 @@ const BlockEditFields = () => {
 
   const siteComponent = activeBlockIndex === 'header' || activeBlockIndex === 'footer'
 
+  // merges default settings and db values
   const getFields = () => {
-    // Because fields can change in the future, we have to combine the default settings
-    // of each block with the saved settings from the db to make the fields appear in the sidebar
     if (siteComponent) {
-      return unionBy(
-        site.settings[activeBlockIndex].fields,
-        blocks[site.settings[activeBlockIndex].name].fields.fields,
-        'id'
-      )
+      // loop through default blocks and replace value if found
+      return blocks[site.settings[activeBlockIndex].name].fields.fields.map(o => {
+        const setting = site.settings[activeBlockIndex].fields.find(p => p.id === o.id)
+
+        if (setting) {
+          return { ...o, value: setting.value }
+        } else {
+          return o
+        }
+      })
     } else if (post && post.content[activeBlockIndex]) {
-      return unionBy(
-        post.content[activeBlockIndex].fields,
-        blocks[post.content[activeBlockIndex].name].fields.fields,
-        'id'
-      )
+      // loop through default blocks and replace value if found
+      return blocks[post.content[activeBlockIndex].name].fields.fields.map(o => {
+        const setting = post.content[activeBlockIndex].fields.find(p => p.id === o.id)
+
+        if (setting) {
+          return { ...o, value: setting.value }
+        } else {
+          return o
+        }
+      })
     }
   }
 
-  const handleChange = (value, id) => {
-    // Because fields can change in the future, we have to combine the default settings
-    // of each block with the saved settings from the db to make the fields appear in the post/site content.
-    // We can't just pass in the field index, because the order might have changed after the merge.
-
+  const handleChange = (value, id, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
-
-    let index
 
     if (siteComponent) {
       const nextSite = produce(site, draft => {
-        set(
-          draft,
-          `settings.${activeBlockIndex}.fields`,
-          unionBy(
-            draft.settings[activeBlockIndex].fields,
-            blocks[draft.settings[activeBlockIndex].name].fields.fields,
-            'id'
-          )
-        )
-
-        index = draft.settings[activeBlockIndex].fields.findIndex(o => o.id === id)
-        return set(draft, `settings.${activeBlockIndex}.fields.${index}.value`, value)
+        return set(draft, `settings.${activeBlockIndex}.fields.${index}`, { id, value })
       })
 
       dispatch({
@@ -72,18 +65,7 @@ const BlockEditFields = () => {
       })
     } else {
       const nextPost = produce(post, draft => {
-        set(
-          draft,
-          `content.${activeBlockIndex}.fields`,
-          unionBy(
-            draft.content[activeBlockIndex].fields,
-            blocks[draft.content[activeBlockIndex].name].fields.fields,
-            'id'
-          )
-        )
-
-        index = draft.content[activeBlockIndex].fields.findIndex(o => o.id === id)
-        return set(draft, `content.${activeBlockIndex}.fields.${index}.value`, value)
+        return set(draft, `content.${activeBlockIndex}.fields.${index}`, { id, value })
       })
 
       dispatch({
@@ -113,7 +95,7 @@ const BlockEditFields = () => {
 
     switch (field.type) {
       case `textarea`:
-        component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id)} />
+        component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, fieldIndex)} />
         break
 
       case `image`:
@@ -126,7 +108,9 @@ const BlockEditFields = () => {
                 payload: {
                   open: true,
                   component: (
-                    <MediaLibrary onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id)} />
+                    <MediaLibrary
+                      onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id, fieldIndex)}
+                    />
                   ),
                   width: 1000,
                 },
@@ -146,7 +130,9 @@ const BlockEditFields = () => {
                 payload: {
                   open: true,
                   title: 'Menu',
-                  component: <MenuBuilder {...field} />,
+                  component: (
+                    <MenuBuilder index={fieldIndex} {...field} onChange={v => handleChange(v, field.id, fieldIndex)} />
+                  ),
                   width: 1000,
                 },
               })
@@ -173,9 +159,13 @@ const BlockEditFields = () => {
         {fields && fields.map((field, fieldIndex) => getField(field, fieldIndex))}
       </Collapse>
 
-      {!siteComponent && <Button onClick={handleDeleteBlock} children={`Delete Block`} danger />}
+      <Container>{!siteComponent && <Button onClick={handleDeleteBlock} children={`Delete Block`} danger />}</Container>
     </Space>
   )
 }
+
+const Container = styled.div`
+  padding: 0 20px;
+`
 
 export default BlockEditFields

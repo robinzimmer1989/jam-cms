@@ -17,7 +17,7 @@ const CmsLayout = props => {
   const [
     {
       globalState: { leftSidebar },
-      sitesState: { siteID, sites },
+      cmsState: { siteID, sites },
     },
     dispatch,
   ] = useStore()
@@ -92,7 +92,7 @@ const CmsLayout = props => {
           </Edges>
         </Layout.Header>
 
-        <Layout.Content style={{ paddingBottom: 100, transition: 'all 0.2s' }}>
+        <Layout.Content style={{ paddingBottom: 100 }}>
           <StyledDivider />
           <Edges size="md">{children}</Edges>
         </Layout.Content>
@@ -118,8 +118,9 @@ const CmsLayout = props => {
 }
 
 const Container = styled(Layout)`
+  .sider,
   .sider * {
-    transition: none;
+    transition: none !important;
   }
 `
 

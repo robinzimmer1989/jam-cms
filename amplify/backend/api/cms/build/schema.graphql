@@ -3,6 +3,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   ownerID: ID!
   title: String!
   settings: String
+  redirects: String
   netlifyID: String
   netlifyUrl: String
   createdAt: AWSDateTime!
@@ -11,7 +12,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   postTypes(filter: ModelPostTypeFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools
   posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
   mediaItems(filter: ModelMediaItemFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
-  menus(filter: ModelMenuFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
+  forms(filter: ModelFormFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelFormConnection @aws_api_key @aws_cognito_user_pools
 }
 
 type PostType @aws_api_key @aws_cognito_user_pools {
@@ -57,11 +58,24 @@ type MediaItem @aws_api_key @aws_cognito_user_pools {
   owner: String
 }
 
-type Menu @aws_api_key @aws_cognito_user_pools {
+type Form @aws_api_key @aws_cognito_user_pools {
   id: ID!
   siteID: ID!
-  slug: String!
-  content: String
+  title: String!
+  fields: String
+  settings: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+  entries(filter: ModelEntryFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelEntryConnection @aws_api_key @aws_cognito_user_pools
+}
+
+type Entry @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  siteID: ID!
+  formID: ID!
+  email: String!
+  fields: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   owner: String
@@ -155,6 +169,7 @@ input ModelSiteFilterInput {
   ownerID: ModelIDInput
   title: ModelStringInput
   settings: ModelStringInput
+  redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
   and: [ModelSiteFilterInput]
@@ -184,8 +199,10 @@ type Query {
   listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection @aws_api_key @aws_cognito_user_pools
   getMediaItem(id: ID!): MediaItem @aws_api_key @aws_cognito_user_pools
   listMediaItems(filter: ModelMediaItemFilterInput, limit: Int, nextToken: String): ModelMediaItemConnection @aws_api_key @aws_cognito_user_pools
-  getMenu(id: ID!): Menu @aws_api_key @aws_cognito_user_pools
-  listMenus(filter: ModelMenuFilterInput, limit: Int, nextToken: String): ModelMenuConnection @aws_api_key @aws_cognito_user_pools
+  getForm(id: ID!): Form @aws_api_key @aws_cognito_user_pools
+  listForms(filter: ModelFormFilterInput, limit: Int, nextToken: String): ModelFormConnection @aws_api_key @aws_cognito_user_pools
+  getEntry(id: ID!): Entry @aws_api_key @aws_cognito_user_pools
+  listEntrys(filter: ModelEntryFilterInput, limit: Int, nextToken: String): ModelEntryConnection @aws_api_key @aws_cognito_user_pools
 }
 
 input CreateSiteInput {
@@ -193,6 +210,7 @@ input CreateSiteInput {
   ownerID: ID!
   title: String!
   settings: String
+  redirects: String
   netlifyID: String
   netlifyUrl: String
 }
@@ -202,6 +220,7 @@ input UpdateSiteInput {
   ownerID: ID
   title: String
   settings: String
+  redirects: String
   netlifyID: String
   netlifyUrl: String
 }
@@ -223,15 +242,19 @@ type Mutation {
   createMediaItem(input: CreateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
   updateMediaItem(input: UpdateMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
   deleteMediaItem(input: DeleteMediaItemInput!, condition: ModelMediaItemConditionInput): MediaItem @aws_api_key @aws_cognito_user_pools
-  createMenu(input: CreateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
-  updateMenu(input: UpdateMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
-  deleteMenu(input: DeleteMenuInput!, condition: ModelMenuConditionInput): Menu @aws_api_key @aws_cognito_user_pools
+  createForm(input: CreateFormInput!, condition: ModelFormConditionInput): Form @aws_api_key @aws_cognito_user_pools
+  updateForm(input: UpdateFormInput!, condition: ModelFormConditionInput): Form @aws_api_key @aws_cognito_user_pools
+  deleteForm(input: DeleteFormInput!, condition: ModelFormConditionInput): Form @aws_api_key @aws_cognito_user_pools
+  createEntry(input: CreateEntryInput!, condition: ModelEntryConditionInput): Entry @aws_api_key @aws_cognito_user_pools
+  updateEntry(input: UpdateEntryInput!, condition: ModelEntryConditionInput): Entry @aws_api_key @aws_cognito_user_pools
+  deleteEntry(input: DeleteEntryInput!, condition: ModelEntryConditionInput): Entry @aws_api_key @aws_cognito_user_pools
 }
 
 input ModelSiteConditionInput {
   ownerID: ModelIDInput
   title: ModelStringInput
   settings: ModelStringInput
+  redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
   and: [ModelSiteConditionInput]
@@ -252,9 +275,12 @@ type Subscription {
   onCreateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["createMediaItem"]) @aws_api_key @aws_cognito_user_pools
   onUpdateMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["updateMediaItem"]) @aws_api_key @aws_cognito_user_pools
   onDeleteMediaItem(owner: String): MediaItem @aws_subscribe(mutations: ["deleteMediaItem"]) @aws_api_key @aws_cognito_user_pools
-  onCreateMenu(owner: String): Menu @aws_subscribe(mutations: ["createMenu"]) @aws_api_key @aws_cognito_user_pools
-  onUpdateMenu(owner: String): Menu @aws_subscribe(mutations: ["updateMenu"]) @aws_api_key @aws_cognito_user_pools
-  onDeleteMenu(owner: String): Menu @aws_subscribe(mutations: ["deleteMenu"]) @aws_api_key @aws_cognito_user_pools
+  onCreateForm(owner: String): Form @aws_subscribe(mutations: ["createForm"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateForm(owner: String): Form @aws_subscribe(mutations: ["updateForm"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteForm(owner: String): Form @aws_subscribe(mutations: ["deleteForm"]) @aws_api_key @aws_cognito_user_pools
+  onCreateEntry(owner: String): Entry @aws_subscribe(mutations: ["createEntry"]) @aws_api_key @aws_cognito_user_pools
+  onUpdateEntry(owner: String): Entry @aws_subscribe(mutations: ["updateEntry"]) @aws_api_key @aws_cognito_user_pools
+  onDeleteEntry(owner: String): Entry @aws_subscribe(mutations: ["deleteEntry"]) @aws_api_key @aws_cognito_user_pools
 }
 
 type ModelPostTypeConnection @aws_api_key @aws_cognito_user_pools {
@@ -427,44 +453,94 @@ input ModelMediaItemConditionInput {
   not: ModelMediaItemConditionInput
 }
 
-type ModelMenuConnection @aws_api_key @aws_cognito_user_pools {
-  items: [Menu]
+type ModelFormConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Form]
   nextToken: String
 }
 
-input ModelMenuFilterInput {
+input ModelFormFilterInput {
   id: ModelIDInput
   siteID: ModelIDInput
-  slug: ModelStringInput
-  content: ModelStringInput
-  and: [ModelMenuFilterInput]
-  or: [ModelMenuFilterInput]
-  not: ModelMenuFilterInput
+  title: ModelStringInput
+  fields: ModelStringInput
+  settings: ModelStringInput
+  and: [ModelFormFilterInput]
+  or: [ModelFormFilterInput]
+  not: ModelFormFilterInput
 }
 
-input CreateMenuInput {
+input CreateFormInput {
   id: ID
   siteID: ID!
-  slug: String!
-  content: String
+  title: String!
+  fields: String
+  settings: String
 }
 
-input UpdateMenuInput {
+input UpdateFormInput {
   id: ID!
   siteID: ID
-  slug: String
-  content: String
+  title: String
+  fields: String
+  settings: String
 }
 
-input DeleteMenuInput {
+input DeleteFormInput {
   id: ID
 }
 
-input ModelMenuConditionInput {
+input ModelFormConditionInput {
   siteID: ModelIDInput
-  slug: ModelStringInput
-  content: ModelStringInput
-  and: [ModelMenuConditionInput]
-  or: [ModelMenuConditionInput]
-  not: ModelMenuConditionInput
+  title: ModelStringInput
+  fields: ModelStringInput
+  settings: ModelStringInput
+  and: [ModelFormConditionInput]
+  or: [ModelFormConditionInput]
+  not: ModelFormConditionInput
+}
+
+type ModelEntryConnection @aws_api_key @aws_cognito_user_pools {
+  items: [Entry]
+  nextToken: String
+}
+
+input ModelEntryFilterInput {
+  id: ModelIDInput
+  siteID: ModelIDInput
+  formID: ModelIDInput
+  email: ModelStringInput
+  fields: ModelStringInput
+  and: [ModelEntryFilterInput]
+  or: [ModelEntryFilterInput]
+  not: ModelEntryFilterInput
+}
+
+input CreateEntryInput {
+  id: ID
+  siteID: ID!
+  formID: ID!
+  email: String!
+  fields: String!
+}
+
+input UpdateEntryInput {
+  id: ID!
+  siteID: ID
+  formID: ID
+  email: String
+  fields: String
+}
+
+input DeleteEntryInput {
+  id: ID
+}
+
+input ModelEntryConditionInput {
+  siteID: ModelIDInput
+  formID: ModelIDInput
+  email: ModelStringInput
+  fields: ModelStringInput
+  and: [ModelEntryConditionInput]
+  or: [ModelEntryConditionInput]
+  not: ModelEntryConditionInput
 }

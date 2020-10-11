@@ -22,3 +22,12 @@ export const uploadFile = async ({ siteID, file }) => {
     console.log('error: ', err)
   }
 }
+
+export const deleteFile = async ({ storageKey }) => {
+  try {
+    const result = await Storage.remove(storageKey)
+    return result
+  } catch (err) {
+    console.log('error: ', err)
+  }
+}

@@ -11,6 +11,7 @@ export const createSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -63,12 +64,13 @@ export const createSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -88,6 +90,7 @@ export const updateSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -140,12 +143,13 @@ export const updateSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -165,6 +169,7 @@ export const deleteSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -217,12 +222,13 @@ export const deleteSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -499,48 +505,141 @@ export const deleteMediaItem = /* GraphQL */ `
     }
   }
 `;
-export const createMenu = /* GraphQL */ `
-  mutation CreateMenu(
-    $input: CreateMenuInput!
-    $condition: ModelMenuConditionInput
+export const createForm = /* GraphQL */ `
+  mutation CreateForm(
+    $input: CreateFormInput!
+    $condition: ModelFormConditionInput
   ) {
-    createMenu(input: $input, condition: $condition) {
+    createForm(input: $input, condition: $condition) {
       id
       siteID
-      slug
-      content
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const updateForm = /* GraphQL */ `
+  mutation UpdateForm(
+    $input: UpdateFormInput!
+    $condition: ModelFormConditionInput
+  ) {
+    updateForm(input: $input, condition: $condition) {
+      id
+      siteID
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const deleteForm = /* GraphQL */ `
+  mutation DeleteForm(
+    $input: DeleteFormInput!
+    $condition: ModelFormConditionInput
+  ) {
+    deleteForm(input: $input, condition: $condition) {
+      id
+      siteID
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const createEntry = /* GraphQL */ `
+  mutation CreateEntry(
+    $input: CreateEntryInput!
+    $condition: ModelEntryConditionInput
+  ) {
+    createEntry(input: $input, condition: $condition) {
+      id
+      siteID
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const updateMenu = /* GraphQL */ `
-  mutation UpdateMenu(
-    $input: UpdateMenuInput!
-    $condition: ModelMenuConditionInput
+export const updateEntry = /* GraphQL */ `
+  mutation UpdateEntry(
+    $input: UpdateEntryInput!
+    $condition: ModelEntryConditionInput
   ) {
-    updateMenu(input: $input, condition: $condition) {
+    updateEntry(input: $input, condition: $condition) {
       id
       siteID
-      slug
-      content
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const deleteMenu = /* GraphQL */ `
-  mutation DeleteMenu(
-    $input: DeleteMenuInput!
-    $condition: ModelMenuConditionInput
+export const deleteEntry = /* GraphQL */ `
+  mutation DeleteEntry(
+    $input: DeleteEntryInput!
+    $condition: ModelEntryConditionInput
   ) {
-    deleteMenu(input: $input, condition: $condition) {
+    deleteEntry(input: $input, condition: $condition) {
       id
       siteID
-      slug
-      content
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner

@@ -8,6 +8,7 @@ export const onCreateSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -60,12 +61,13 @@ export const onCreateSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -82,6 +84,7 @@ export const onUpdateSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -134,12 +137,13 @@ export const onUpdateSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -156,6 +160,7 @@ export const onDeleteSite = /* GraphQL */ `
       ownerID
       title
       settings
+      redirects
       netlifyID
       netlifyUrl
       createdAt
@@ -208,12 +213,13 @@ export const onDeleteSite = /* GraphQL */ `
         }
         nextToken
       }
-      menus {
+      forms {
         items {
           id
           siteID
-          slug
-          content
+          title
+          fields
+          settings
           createdAt
           updatedAt
           owner
@@ -463,39 +469,123 @@ export const onDeleteMediaItem = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMenu = /* GraphQL */ `
-  subscription OnCreateMenu($owner: String) {
-    onCreateMenu(owner: $owner) {
+export const onCreateForm = /* GraphQL */ `
+  subscription OnCreateForm($owner: String) {
+    onCreateForm(owner: $owner) {
       id
       siteID
-      slug
-      content
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onUpdateForm = /* GraphQL */ `
+  subscription OnUpdateForm($owner: String) {
+    onUpdateForm(owner: $owner) {
+      id
+      siteID
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onDeleteForm = /* GraphQL */ `
+  subscription OnDeleteForm($owner: String) {
+    onDeleteForm(owner: $owner) {
+      id
+      siteID
+      title
+      fields
+      settings
+      createdAt
+      updatedAt
+      owner
+      entries {
+        items {
+          id
+          siteID
+          formID
+          email
+          fields
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+    }
+  }
+`;
+export const onCreateEntry = /* GraphQL */ `
+  subscription OnCreateEntry($owner: String) {
+    onCreateEntry(owner: $owner) {
+      id
+      siteID
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const onUpdateMenu = /* GraphQL */ `
-  subscription OnUpdateMenu($owner: String) {
-    onUpdateMenu(owner: $owner) {
+export const onUpdateEntry = /* GraphQL */ `
+  subscription OnUpdateEntry($owner: String) {
+    onUpdateEntry(owner: $owner) {
       id
       siteID
-      slug
-      content
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner
     }
   }
 `;
-export const onDeleteMenu = /* GraphQL */ `
-  subscription OnDeleteMenu($owner: String) {
-    onDeleteMenu(owner: $owner) {
+export const onDeleteEntry = /* GraphQL */ `
+  subscription OnDeleteEntry($owner: String) {
+    onDeleteEntry(owner: $owner) {
       id
       siteID
-      slug
-      content
+      formID
+      email
+      fields
       createdAt
       updatedAt
       owner

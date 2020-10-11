@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import produce from 'immer'
-import { set } from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
-import { Button, Row, Col, List, Tree, Collapse, Space, Card } from 'antd'
+import { Button, Row, Col, List, Tree, Collapse, Space, Card, Tabs } from 'antd'
 import AddIcon from 'react-ionicons/lib/IosAdd'
 
 // import app components
@@ -12,24 +10,25 @@ import { recursivelyUpdateTree, removeFromTree } from 'utils'
 import { useStore } from 'store'
 
 const MenuBuilder = props => {
-  const { id: menuSlug } = props
+  const { value, onChange } = props
 
   const [
     {
-      sitesState: { sites, siteID },
-      editorState: { site },
+      cmsState: { sites, siteID },
     },
     dispatch,
   ] = useStore()
 
-  const menuItems = sites?.[siteID]?.menus?.[menuSlug]?.content || []
-
   // TODO: Add tabs for different post types
-  const [category, setCategory] = useState('Page')
-  const [items, setItems] = useState([...menuItems])
+  const [filter, setFilter] = useState('Page')
+  const [items, setItems] = useState([...value])
+  const [customLink, setCustomLink] = useState({
+    title: '',
+    url: '',
+  })
 
-  // Get posts by category
-  const postType = Object.values(sites[siteID]?.postTypes).find(o => o.title === category)
+  // Get posts by filter
+  const postType = Object.values(sites[siteID]?.postTypes).find(o => o.title === filter)
   const posts = postType?.posts
 
   // Function provided by Ant Design
@@ -49,32 +48,36 @@ const MenuBuilder = props => {
         }
       }
     }
-    const newItems = [...items]
+    const data = [...items]
 
+    // Find dragObject
     let dragObj
-    loop(newItems, dragKey, (item, index, arr) => {
+    loop(data, dragKey, (item, index, arr) => {
       arr.splice(index, 1)
       dragObj = item
     })
 
     if (!info.dropToGap) {
-      loop(newItems, dropKey, item => {
+      // Drop on the content
+      loop(data, dropKey, item => {
         item.children = item.children || []
+        // where to insert
         item.children.push(dragObj)
       })
     } else if (
-      (info.node.props.children || []).length > 0 &&
-      info.node.props.expanded &&
+      (info.node.props.children || []).length > 0 && // Has children
+      info.node.props.expanded && // Is expanded
       dropPosition === 1 // On the bottom gap
     ) {
-      loop(newItems, dropKey, item => {
+      loop(data, dropKey, item => {
         item.children = item.children || []
+        // where to insert
         item.children.unshift(dragObj)
       })
     } else {
       let ar
       let i
-      loop(newItems, dropKey, (item, index, arr) => {
+      loop(data, dropKey, (item, index, arr) => {
         ar = arr
         i = index
       })
@@ -84,15 +87,16 @@ const MenuBuilder = props => {
         ar.splice(i + 1, 0, dragObj)
       }
     }
-    setItems(newItems)
+
+    setItems(data)
   }
 
-  const handleUpdate = (e, key) => {
+  const handleUpdate = (e, name, key) => {
     const updateItem = (parentNode, child, params) => {
       if (child.key === params.key) {
         return {
           ...child,
-          title: params.value,
+          [name]: params.value,
         }
       }
 
@@ -113,23 +117,32 @@ const MenuBuilder = props => {
   }
 
   const handleSubmit = async () => {
-    const nextSite = produce(site, draft => {
-      set(draft, `menus.${menuSlug}.content`, items)
-    })
-
-    dispatch({
-      type: `SET_EDITOR_SITE`,
-      payload: nextSite,
-    })
-
+    onChange(items)
     dispatch({ type: `CLOSE_DIALOG` })
+  }
+
+  const handleAddCustomLink = () => {
+    if (!customLink.title || !customLink.url) {
+      return
+    }
+
+    setItems([...items, { key: uuidv4(), ...customLink, postTypeID: null, postID: null, children: [] }])
+    setCustomLink({ title: '', url: '' })
   }
 
   return (
     <Container>
       <Row justify="space-between">
-        <Col span="8">
+        <Col span="11">
           <Card>
+            <Tabs defaultActiveKey="all" onChange={v => setFilter(v)}>
+              {Object.values(sites[siteID]?.postTypes).map(o => {
+                return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />
+              })}
+
+              <Tabs.TabPane key={'custom-link'} tab={'Custom Link'} />
+            </Tabs>
+
             {posts &&
               Object.values(posts).map(({ id, title, postTypeID }) => {
                 return (
@@ -152,10 +165,27 @@ const MenuBuilder = props => {
                   </List.Item>
                 )
               })}
+
+            {filter === 'custom-link' && (
+              <Space direction="vertical" size={20}>
+                <Input
+                  label="Title"
+                  value={customLink.title}
+                  onChange={e => setCustomLink({ ...customLink, title: e.target.value })}
+                />
+                <Input
+                  label="Url"
+                  value={customLink.url}
+                  onChange={e => setCustomLink({ ...customLink, url: e.target.value })}
+                  placeholder="https://"
+                />
+                <Button children={`Add`} type="primary" onClick={handleAddCustomLink} />
+              </Space>
+            )}
           </Card>
         </Col>
 
-        <Col span="14">
+        <Col span="12">
           <Tree
             className="draggable-tree"
             draggable
@@ -163,11 +193,16 @@ const MenuBuilder = props => {
             onDrop={onDrop}
             treeData={items}
             titleRender={node => {
+              const header = node.url ? `${node.title} - Custom` : node.title
+
               return (
                 <Collapse>
-                  <Collapse.Panel header={node.title}>
+                  <Collapse.Panel header={header}>
                     <Space direction="vertical">
-                      <Input label="title" value={node.title} onChange={e => handleUpdate(e, node.key)} />
+                      <Input label="title" value={node.title} onChange={e => handleUpdate(e, 'title', node.key)} />
+                      {node.url && (
+                        <Input label="Url" value={node.url} onChange={e => handleUpdate(e, 'url', node.key)} />
+                      )}
                       <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} />
                     </Space>
                   </Collapse.Panel>
@@ -177,7 +212,7 @@ const MenuBuilder = props => {
           />
         </Col>
       </Row>
-      <Button children={`Accept`} onClick={handleSubmit} type="primary" />
+      <Button children={`Update`} onClick={handleSubmit} type="primary" />
     </Container>
   )
 }
