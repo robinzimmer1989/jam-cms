@@ -6,7 +6,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "aws-sdk": "^2.763.0",
+    "immer": "^7.0.9",
     "isomorphic-fetch": "^3.0.0",
-    "node-fetch": "^2.6.1"
+    "lodash": "^4.17.20",
+    "minireset.css": "^0.0.6",
+    "node-fetch": "^2.6.1",
+    "slugify": "^1.4.5"
   }
 }

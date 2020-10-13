@@ -42,10 +42,10 @@ const transformSite = site => {
   return nextSite
 }
 
-export const addSite = async ({ title, ownerID }) => {
+export const addSite = async ({ title, ownerID, apiKey }) => {
   const result = await API.graphql(
     graphqlOperation(createSite, {
-      input: { title, ownerID },
+      input: { title, ownerID, apiKey },
     })
   )
 
@@ -61,6 +61,7 @@ const siteFragment = `
   title
   netlifyID
   netlifyUrl
+  apiKey
   settings
   postTypes {
     items {
@@ -90,7 +91,7 @@ const siteFragment = `
   }
 `
 
-export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings }) => {
+export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings, apiKey }) => {
   const result = await API.graphql(
     graphqlOperation(
       `mutation UpdateSite(
@@ -103,7 +104,7 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings })
       }
     `,
       {
-        input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings) },
+        input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings), apiKey },
       }
     )
   )

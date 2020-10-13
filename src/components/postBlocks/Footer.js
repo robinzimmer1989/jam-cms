@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Typography } from 'antd'
 
 // import app components
 import Edges from 'components/Edges'
@@ -28,12 +27,8 @@ const Footer = props => {
         <Grid>
           {footerMenu && (
             <Navigation>
-              {footerMenu.map(o => {
-                return (
-                  <MenuItem key={o.key}>
-                    <Typography children={o.title} />
-                  </MenuItem>
-                )
+              {footerMenu.map((o, i) => {
+                return <MenuItem key={i}>{o.title}</MenuItem>
               })}
             </Navigation>
           )}

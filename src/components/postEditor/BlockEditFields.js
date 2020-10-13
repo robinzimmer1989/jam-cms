@@ -52,12 +52,12 @@ const BlockEditFields = () => {
     }
   }
 
-  const handleChange = (value, id, index) => {
+  const handleChange = (value, id, type, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
     if (siteComponent) {
       const nextSite = produce(site, draft => {
-        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, value })
+        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, value, type })
       })
 
       dispatch({
@@ -66,7 +66,7 @@ const BlockEditFields = () => {
       })
     } else {
       const nextPost = produce(post, draft => {
-        return set(draft, `content.${editorIndex}.fields.${index}`, { id, value })
+        return set(draft, `content.${editorIndex}.fields.${index}`, { id, value, type })
       })
 
       dispatch({
@@ -96,7 +96,7 @@ const BlockEditFields = () => {
 
     switch (field.type) {
       case 'textarea':
-        component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, fieldIndex)} />
+        component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, field.type, fieldIndex)} />
         break
 
       case 'image':
@@ -110,7 +110,7 @@ const BlockEditFields = () => {
                   open: true,
                   component: (
                     <MediaLibrary
-                      onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id, fieldIndex)}
+                      onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id, field.type, fieldIndex)}
                     />
                   ),
                   width: 1000,
@@ -132,7 +132,7 @@ const BlockEditFields = () => {
                   open: true,
                   title: 'Menu',
                   component: (
-                    <MenuBuilder index={fieldIndex} {...field} onChange={v => handleChange(v, field.id, fieldIndex)} />
+                    <MenuBuilder index={fieldIndex} {...field} onChange={v => handleChange(v, field.id, field.type, fieldIndex)} />
                   ),
                   width: 1000,
                 },

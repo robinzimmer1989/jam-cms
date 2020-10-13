@@ -12,7 +12,7 @@ import { postActions } from 'actions'
 import { useStore } from 'store'
 import { colors } from 'theme'
 import getRoute from 'routes'
-import { createDataTree, sortBy } from 'utils'
+import { createDataTree, sortBy, generateSlug } from 'utils'
 
 const Collection = props => {
   const { siteID, postTypeID } = props
@@ -87,7 +87,8 @@ const Collection = props => {
           actions={actions}
           link={editLink}
           title={o.title}
-          status={o.status === 'draft' || (o.status === 'trash' && <Status children={o.status} />)}
+          subtitle={generateSlug(postType, o.id)}
+          status={(o.status === 'draft' || o.status === 'trash') && <Status children={o.status} />}
         />
 
         {o.childNodes.map(p => renderPost(p, level + 1))}
@@ -123,9 +124,11 @@ const Collection = props => {
 }
 
 const Status = styled.span`
-  padding: 4px 6px;
+  display: inline-block;
+  padding: 2px 4px;
   margin-left: 10px;
-  font-size: 10px;
+  transform: translateY(-2px);
+  font-size: 9px;
   text-transform: uppercase;
   border-radius: 4px;
 

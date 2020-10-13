@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
-import { Typography } from 'antd'
 
 // import app components
 import Edges from 'components/Edges'
@@ -18,7 +17,7 @@ export const fields = {
       value: '',
     },
     {
-      id: 'headerMenu',
+      id: 'mainMenu',
       type: 'menu',
       placeholder: '',
       label: 'Menu',
@@ -29,7 +28,7 @@ export const fields = {
 }
 
 const Header = props => {
-  const { image, headerMenu, ...rest } = props
+  const { image, mainMenu, ...rest } = props
 
   return (
     <Container {...rest}>
@@ -37,14 +36,10 @@ const Header = props => {
         <Grid>
           <Logo to={`/`}>{image?.storageKey && <Image storageKey={image.storageKey} />}</Logo>
 
-          {headerMenu && (
+          {mainMenu && (
             <Navigation>
-              {headerMenu.map(o => {
-                return (
-                  <MenuItem key={o.key}>
-                    <Typography children={o.title} />
-                  </MenuItem>
-                )
+              {mainMenu.map((o, i) => {
+                return <MenuItem key={i}>{o.title}</MenuItem>
               })}
             </Navigation>
           )}

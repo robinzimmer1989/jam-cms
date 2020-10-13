@@ -180,7 +180,7 @@ const MenuBuilder = props => {
                     onChange={e => setCustomLink({ ...customLink, url: e.target.value })}
                     placeholder="https://"
                   />
-                  <Button children={`Add`} type="primary" onClick={handleAddCustomLink} />
+                  <Button style={{ marginBottom: 20 }} children={`Add`} type="primary" onClick={handleAddCustomLink} />
                 </Space>
               )}
             </ItemsContainer>

@@ -1,9 +1,12 @@
 import { navigate } from 'gatsby'
+import { v4 as uuidv4 } from 'uuid'
 
 import { siteServices, collectionServices, netlifyServices, postServices } from 'services'
 
 export const addSite = async ({ title, ownerID }, dispatch) => {
-  const result = await siteServices.addSite({ title, ownerID })
+  const apiKey = uuidv4()
+
+  const result = await siteServices.addSite({ title, ownerID, apiKey })
 
   if (result?.data?.createSite) {
     const siteID = result.data.createSite.id
@@ -25,7 +28,7 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
     }
 
     // Create site on Netlify
-    const netlifyResult = await netlifyServices.addSite({ siteID })
+    const netlifyResult = await netlifyServices.addSite({ siteID, apiKey })
 
     if (netlifyResult?.id) {
       const { id: netlifyID, ssl_url: netlifyUrl } = netlifyResult
@@ -46,10 +49,18 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
-export const updateSite = async ({ id, title, settings }, dispatch) => {
-  const result = await siteServices.updateSite({ id, title, settings })
+export const updateSite = async ({ id, netlifyID, title, settings, apiKey }, dispatch) => {
+  const result = await siteServices.updateSite({ id, title, settings, apiKey })
 
   if (result?.data?.updateSite) {
+
+    // Update API in Netloify if provided. We have to update the editor state afterwards,
+    // because the change isn't happening via user input
+    if (apiKey && netlifyID) {
+      await netlifyServices.updateSite({ netlifyID, siteID: id, apiKey })
+      addSiteToEditor({ site: result.data.updateSite }, dispatch)
+    }
+
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
   }
 

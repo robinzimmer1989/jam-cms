@@ -6,7 +6,7 @@ import { Typography, Row } from 'antd'
 // import app components
 import Skeleton from 'components/Skeleton'
 
-import { formatSlug } from 'utils'
+import { formatSlug, generateSlug } from 'utils'
 import { useStore } from 'store'
 
 const EditorPostTitle = props => {
@@ -18,6 +18,10 @@ const EditorPostTitle = props => {
     },
     dispatch,
   ] = useStore()
+
+  // Generate slug, but trim actually post slug (after last slash), because this becomes an edit field
+  let slug = generateSlug(postType, post?.id)
+  slug = slug.substr(0, slug.lastIndexOf('/'))
 
   const handleChange = (name, value) => {
     const nextPost = produce(post, draft => set(draft, name, value))
@@ -39,9 +43,8 @@ const EditorPostTitle = props => {
       </Skeleton>
 
       <Skeleton done={!!site && !!post} width={`80%`} height={19}>
-        {/* <a href={site?.netlifyUrl} target="_blank" rel="noopener"></a> */}
         <Row>
-          <Typography children={`${site?.netlifyUrl}${formatSlug(postType?.slug)}`} />
+          <Typography children={slug} />
           <Typography.Paragraph
             children={post?.slug}
             editable={{ onChange: value => handleChange('slug', formatSlug(value)) }}

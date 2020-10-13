@@ -24,11 +24,11 @@ const Form = props => {
   ] = useStore()
 
   useEffect(() => {
-    const loadPost = async () => {
+    const loadForm = async () => {
       await formActions.getForm({ site: sites[siteID], id: formID }, dispatch)
     }
 
-    loadPost()
+    loadForm()
 
     return function cleanup() {
       dispatch({ type: `CLEAR_EDITOR` })

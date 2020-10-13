@@ -33,7 +33,7 @@ export const editorReducer = (state, action) => {
         break
 
       case `ADD_EDITOR_FORM`:
-        draft.post = payload
+        draft.form = payload
         break
 
       case `UPDATE_EDITOR_FORM`:

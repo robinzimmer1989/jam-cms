@@ -6,6 +6,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  apiKey: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   owner: String
@@ -171,6 +172,7 @@ input ModelSiteFilterInput {
   redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
+  apiKey: ModelStringInput
   and: [ModelSiteFilterInput]
   or: [ModelSiteFilterInput]
   not: ModelSiteFilterInput
@@ -212,6 +214,7 @@ input CreateSiteInput {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  apiKey: String!
 }
 
 input UpdateSiteInput {
@@ -222,6 +225,7 @@ input UpdateSiteInput {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  apiKey: String
 }
 
 input DeleteSiteInput {
@@ -256,6 +260,7 @@ input ModelSiteConditionInput {
   redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
+  apiKey: ModelStringInput
   and: [ModelSiteConditionInput]
   or: [ModelSiteConditionInput]
   not: ModelSiteConditionInput

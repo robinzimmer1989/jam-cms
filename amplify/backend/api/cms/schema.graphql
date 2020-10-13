@@ -12,6 +12,7 @@ type Site
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  apiKey: String!
 }
 
 type PostType

@@ -1,32 +1,41 @@
 const fetch = require('node-fetch')
-const AWS = require('aws-sdk')
 
-const s3 = new AWS.S3()
+const transformSite = require('./utils/transformSite')
 
 const graphqlEndpoint = `https://57nzp46d5jfaln3gizr6sjpeoy.appsync-api.ca-central-1.amazonaws.com/graphql`
-const apiKey = `da2-ax4b7yn3v5arjgxqovk3yzo6mm`
-const bucket = `my-aws-project7deb432f10d54bd29e13786dda5e7f97project-gatsbycms`
+const graphqlApiKey = `da2-ax4b7yn3v5arjgxqovk3yzo6mm`
 
 exports.handler = async (event, context) => {
   const body = event.body
   const params = new URLSearchParams(body)
+
   const siteID = params.get('siteID')
+  const apiKey = params.get('apiKey')
 
   if (!siteID) {
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Please provide a siteID` }),
+      body: JSON.stringify({ message: `Please provide a site ID` }),
+    }
+  }
+
+  if (!apiKey) {
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: `Please provide an API Key` }),
     }
   }
 
   const result = await fetch(graphqlEndpoint, {
     method: 'POST',
-    headers: { 'x-api-key': apiKey },
+    headers: { 'x-api-key': graphqlApiKey },
     body: JSON.stringify({
       query: `{
           getSite(id: "${siteID}") {
             id
             title
+            apiKey
+            settings
             postTypes {
               items {
                 id
@@ -35,19 +44,33 @@ exports.handler = async (event, context) => {
                 posts {
                   items {
                     id
-                    title
                     slug
+                    postTypeID
+                    parentID
+                    status
+                    title
                     content
+                    seoTitle
+                    seoDescription
                   }
                 }
               }
             }
-          }
-          listMediaItems(filter: {siteID: {eq: "${siteID}"}}) {
-            items {
-              id
-              title
-              storageKey
+            forms {
+              items {
+                id
+                title
+                content
+                settings
+              }
+            }
+            mediaItems {
+              items {
+                id
+                title
+                storageKey
+                altText
+              }
             }
           }
         }`,
@@ -55,19 +78,20 @@ exports.handler = async (event, context) => {
   })
 
   const {
-    data: {
-      getSite: site,
-      listMediaItems: { items: mediaItems },
-    },
+    data: { getSite: site },
   } = await result.json()
 
-  const mediaItemsWithUrls = mediaItems.map(o => {
-    const url = s3.getSignedUrl('getObject', { Bucket: bucket, Key: `public/${o.storageKey}` })
-    return { ...o, url }
-  })
+  if (site.apiKey !== apiKey) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({ message: `Not Authorized` }),
+    }
+  }
+
+  const transformedSite = transformSite(site)
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ site, mediaItems: mediaItemsWithUrls }),
+    body: JSON.stringify(transformedSite),
   }
 }

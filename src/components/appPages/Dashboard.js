@@ -3,9 +3,12 @@ import styled from 'styled-components'
 
 // import app components
 import CmsLayout from 'components/CmsLayout'
+import { useStore } from 'store'
 
-const Dashboard = props => {
-  const { siteID } = props
+
+
+const Dashboard = () => {
+  const [{ cmsState: { sites, siteID } }] = useStore()
 
   return (
     <>

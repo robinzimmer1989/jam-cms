@@ -32,9 +32,11 @@ const PostSettings = () => {
   post && delete otherPosts[post.id]
 
   const handleSavePost = async () => {
+    const { id, settings } = site
+
     setLoading(true)
     await postActions.updatePost(post, dispatch)
-    await siteActions.updateSite(site, dispatch)
+    await siteActions.updateSite({ id, settings }, dispatch)
     setLoading(false)
     toast.success('Updated successfully')
   }

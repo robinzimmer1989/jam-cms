@@ -2,7 +2,7 @@ import NetlifyAPI from 'netlify'
 
 const client = new NetlifyAPI(process.env.GATSBY_NETLIFY_API_KEY)
 
-export const addSite = async ({ siteID }) => {
+export const addSite = async ({ siteID, apiKey }) => {
   // https://open-api.netlify.com/#/default/createSite
   const site = await client.createSite({
     body: {
@@ -19,11 +19,27 @@ export const addSite = async ({ siteID }) => {
       build_settings: {
         env: {
           GATSBY_SITE_ID: siteID,
+          GATSBY_API_KEY: apiKey
         },
       },
     },
   })
 
+  return site
+}
+
+export const updateSite = async ({ netlifyID, siteID, apiKey }) => {
+  const site = await client.updateSite({ 
+    site_id: netlifyID,
+    body: {
+      build_settings: {
+        env: {
+          GATSBY_SITE_ID: siteID,
+          GATSBY_API_KEY: apiKey
+        },
+      },
+    }
+  })
   return site
 }
 
