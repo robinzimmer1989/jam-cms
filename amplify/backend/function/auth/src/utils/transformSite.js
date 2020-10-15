@@ -33,6 +33,17 @@ const transformSite = site => {
       draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
 
+    const settings = JSON.parse(draft.settings)
+
+    settings.header = transformField(draft, settings.header)
+    settings.footer = transformField(draft, settings.footer)
+
+    set(draft, `settings`, {
+      ...settings,
+      header: convertToPropsSchema([settings.header])[0].data,
+      footer: convertToPropsSchema([settings.footer])[0].data,
+    })
+
     const transformField = (draft, item) => {
       return {
         ...item,
@@ -54,7 +65,7 @@ const transformSite = site => {
 
               return {
                 title,
-                slug: generateSlug(draft.postTypes[postTypeID], postID),
+                slug: generateSlug(draft.postTypes[postTypeID], postID, settings.frontPage),
                 url,
                 target,
               }
@@ -87,7 +98,7 @@ const transformSite = site => {
         if (status === 'publish') {
           return pages.push({
             title,
-            slug: generateSlug(postType, id),
+            slug: generateSlug(postType, id, settings.frontPage),
             content: convertToPropsSchema(transformedContent),
             seoTitle,
             seoDescription,
@@ -97,19 +108,6 @@ const transformSite = site => {
     })
 
     set(draft, `pages`, pages)
-
-    if (draft.settings) {
-      const settings = JSON.parse(draft.settings)
-
-      settings.header = transformField(draft, settings.header)
-      settings.footer = transformField(draft, settings.footer)
-
-      set(draft, `settings`, {
-        ...settings,
-        header: convertToPropsSchema([settings.header])[0].data,
-        footer: convertToPropsSchema([settings.footer])[0].data,
-      })
-    }
 
     delete draft.id
     delete draft.forms

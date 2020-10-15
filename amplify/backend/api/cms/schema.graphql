@@ -12,6 +12,7 @@ type Site
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  customDomain: String
   apiKey: String!
 }
 
@@ -24,6 +25,7 @@ type PostType
   title: String!
   slug: String!
   posts: [Post] @connection(keyName: "byPostType", fields: ["id"])
+  template: String
 }
 
 type Post

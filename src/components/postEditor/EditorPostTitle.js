@@ -20,7 +20,7 @@ const EditorPostTitle = props => {
   ] = useStore()
 
   // Generate slug, but trim actually post slug (after last slash), because this becomes an edit field
-  let slug = generateSlug(postType, post?.id)
+  let slug = generateSlug(postType, post?.id, site?.settings?.frontPage)
   slug = slug.substr(0, slug.lastIndexOf('/'))
 
   const handleChange = (name, value) => {
@@ -43,12 +43,15 @@ const EditorPostTitle = props => {
       </Skeleton>
 
       <Skeleton done={!!site && !!post} width={`80%`} height={19}>
-        <Row>
-          <Typography children={slug} />
-          <Typography.Paragraph
-            children={post?.slug}
-            editable={{ onChange: value => handleChange('slug', formatSlug(value)) }}
-          />
+        <Row style={{ height: 36 }}>
+          <Typography children={post?.id === site?.settings?.frontPage ? '/' : slug} />
+
+          {post?.id !== site?.settings?.frontPage && (
+            <Typography.Paragraph
+              children={post?.slug}
+              editable={{ onChange: value => handleChange('slug', formatSlug(value)) }}
+            />
+          )}
         </Row>
       </Skeleton>
     </>

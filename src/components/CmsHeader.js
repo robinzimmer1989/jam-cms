@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { PageHeader, Button, Tooltip } from 'antd'
+import { PageHeader, Button, Tooltip, notification } from 'antd'
 import { FullscreenOutlined } from '@ant-design/icons'
 
 // import app components
@@ -21,6 +21,14 @@ const CmsHeader = props => {
   const site = sites[siteID] || null
 
   const handleDeploy = async () => {
+    if (!site?.settings?.frontPage) {
+      return notification.error({
+        message: 'Error',
+        description: 'Please add a front page',
+        placement: 'bottomRight',
+      })
+    }
+
     await siteActions.deploySite(site, dispatch)
   }
 

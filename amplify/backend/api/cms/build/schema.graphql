@@ -6,6 +6,7 @@ type Site @aws_api_key @aws_cognito_user_pools {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  customDomain: String
   apiKey: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -21,6 +22,7 @@ type PostType @aws_api_key @aws_cognito_user_pools {
   siteID: ID!
   title: String!
   slug: String!
+  template: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   owner: String
@@ -172,6 +174,7 @@ input ModelSiteFilterInput {
   redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
+  customDomain: ModelStringInput
   apiKey: ModelStringInput
   and: [ModelSiteFilterInput]
   or: [ModelSiteFilterInput]
@@ -214,6 +217,7 @@ input CreateSiteInput {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  customDomain: String
   apiKey: String!
 }
 
@@ -225,6 +229,7 @@ input UpdateSiteInput {
   redirects: String
   netlifyID: String
   netlifyUrl: String
+  customDomain: String
   apiKey: String
 }
 
@@ -260,6 +265,7 @@ input ModelSiteConditionInput {
   redirects: ModelStringInput
   netlifyID: ModelStringInput
   netlifyUrl: ModelStringInput
+  customDomain: ModelStringInput
   apiKey: ModelStringInput
   and: [ModelSiteConditionInput]
   or: [ModelSiteConditionInput]
@@ -297,6 +303,7 @@ input ModelPostTypeFilterInput {
   siteID: ModelIDInput
   title: ModelStringInput
   slug: ModelStringInput
+  template: ModelStringInput
   and: [ModelPostTypeFilterInput]
   or: [ModelPostTypeFilterInput]
   not: ModelPostTypeFilterInput
@@ -307,6 +314,7 @@ input CreatePostTypeInput {
   siteID: ID!
   title: String!
   slug: String!
+  template: String
 }
 
 input UpdatePostTypeInput {
@@ -314,6 +322,7 @@ input UpdatePostTypeInput {
   siteID: ID
   title: String
   slug: String
+  template: String
 }
 
 input DeletePostTypeInput {
@@ -324,6 +333,7 @@ input ModelPostTypeConditionInput {
   siteID: ModelIDInput
   title: ModelStringInput
   slug: ModelStringInput
+  template: ModelStringInput
   and: [ModelPostTypeConditionInput]
   or: [ModelPostTypeConditionInput]
   not: ModelPostTypeConditionInput

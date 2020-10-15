@@ -11,6 +11,8 @@ export const onCreateSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -20,6 +22,7 @@ export const onCreateSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -87,6 +90,8 @@ export const onUpdateSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -96,6 +101,7 @@ export const onUpdateSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -163,6 +169,8 @@ export const onDeleteSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -172,6 +180,7 @@ export const onDeleteSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -236,6 +245,7 @@ export const onCreatePostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -267,6 +277,7 @@ export const onUpdatePostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -298,6 +309,7 @@ export const onDeletePostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -342,6 +354,7 @@ export const onCreatePost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -373,6 +386,7 @@ export const onUpdatePost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -404,6 +418,7 @@ export const onDeletePost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner

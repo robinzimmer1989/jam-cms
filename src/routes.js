@@ -60,6 +60,9 @@ const getRoute = (route, args) => {
     case `settings-collections`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_COLLECTIONS}`
 
+    case `settings-collection`:
+      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_COLLECTIONS}/${args?.postTypeID}`
+
     default:
       return `/`
   }

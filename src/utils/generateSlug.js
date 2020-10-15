@@ -11,13 +11,22 @@ function getParentSlug(posts, parentID, slug = '') {
   return newSlug
 }
 
-export default function generateSlug(postType, postID) {
+export default function generateSlug(postType, postID, frontPage) {
+  if (postID === frontPage) {
+    return '/'
+  }
 
   if (!postType?.posts?.[postID]) {
     return ''
   }
 
-  const { slug: postTypeSlug, posts, posts: { [postID]: { slug: postSlug, parentID } } } = postType
+  const {
+    slug: postTypeSlug,
+    posts,
+    posts: {
+      [postID]: { slug: postSlug, parentID },
+    },
+  } = postType
 
   const parentSlug = getParentSlug(posts, parentID)
 

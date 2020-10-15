@@ -11,6 +11,8 @@ export const getSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -20,6 +22,7 @@ export const getSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -92,6 +95,8 @@ export const listSites = /* GraphQL */ `
         redirects
         netlifyID
         netlifyUrl
+        customDomain
+        apiKey
         createdAt
         updatedAt
         owner
@@ -124,6 +129,7 @@ export const listPostTypes = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -142,6 +148,7 @@ export const getPostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -186,6 +193,7 @@ export const getPost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -222,6 +230,7 @@ export const listPosts = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner

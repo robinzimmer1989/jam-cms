@@ -80,6 +80,16 @@ const Collection = props => {
       )
     }
 
+    let badges = []
+
+    if (sites?.[siteID]?.settings?.frontPage === o.id) {
+      badges.push(<Status children={'front'} />)
+    }
+
+    if (o.status === 'draft' || o.status === 'trash') {
+      badges.push(<Status children={o.status} />)
+    }
+
     return (
       <React.Fragment key={o.id}>
         <ListItem
@@ -87,8 +97,8 @@ const Collection = props => {
           actions={actions}
           link={editLink}
           title={o.title}
-          subtitle={generateSlug(postType, o.id)}
-          status={(o.status === 'draft' || o.status === 'trash') && <Status children={o.status} />}
+          subtitle={generateSlug(postType, o.id, sites?.[siteID]?.settings?.frontPage)}
+          status={badges}
         />
 
         {o.childNodes.map(p => renderPost(p, level + 1))}
@@ -131,6 +141,13 @@ const Status = styled.span`
   font-size: 9px;
   text-transform: uppercase;
   border-radius: 4px;
+
+  ${({ children }) =>
+    children === 'front' &&
+    css`
+      background: ${colors.success};
+      color: #fff;
+    `}
 
   ${({ children }) =>
     children === 'draft' &&

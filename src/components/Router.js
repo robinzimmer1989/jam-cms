@@ -5,14 +5,16 @@ import Helmet from 'react-helmet'
 // import app components
 import Dashboard from 'components/appPages/Dashboard'
 import Media from 'components/appPages/Media'
+import Collections from 'components/appPages/Collections'
 import Collection from 'components/appPages/Collection'
+import CollectionEditor from 'components/appPages/CollectionEditor'
 import Editor from 'components/appPages/Editor'
 import Forms from 'components/appPages/Forms'
 import Form from 'components/appPages/Form'
-import SettingsGeneral from 'components/appPages/SettingsGeneral'
-import SettingsCollections from 'components/appPages/SettingsCollections'
-import SettingsSeo from 'components/appPages/SettingsSeo'
-import SettingsTheme from 'components/appPages/SettingsTheme'
+import GeneralSettings from 'components/appPages/GeneralSettings'
+
+import Seo from 'components/appPages/Seo'
+import Theme from 'components/appPages/Theme'
 
 import {
   ROUTE_MEDIA,
@@ -72,10 +74,11 @@ const Router = props => {
         <Editor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} />
         <Forms path={ROUTE_FORMS} />
         <Form path={`${ROUTE_FORMS}/:formID`} />
-        <SettingsGeneral path={ROUTE_SETTINGS_GENERAL} />
-        <SettingsCollections path={ROUTE_SETTINGS_COLLECTIONS} />
-        <SettingsSeo path={ROUTE_SETTINGS_SEO} />
-        <SettingsTheme path={ROUTE_SETTINGS_THEME} />
+        <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
+        <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
+        <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} />
+        <Seo path={ROUTE_SETTINGS_SEO} />
+        <Theme path={ROUTE_SETTINGS_THEME} />
       </ReachRouter>
     </>
   )

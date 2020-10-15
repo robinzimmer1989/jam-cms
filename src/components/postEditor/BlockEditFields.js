@@ -9,6 +9,7 @@ import MenuBuilder from 'components/MenuBuilder'
 import MediaLibrary from 'components/MediaLibrary'
 import postBlocks from 'components/postBlocks'
 
+import PostSelector from 'components/postEditorAdminFields/PostSelector'
 import Textarea from 'components/postEditorAdminFields/Textarea'
 import ImagePicker from 'components/postEditorAdminFields/ImagePicker'
 import Menu from 'components/postEditorAdminFields/Menu'
@@ -25,7 +26,7 @@ const BlockEditFields = () => {
 
   const siteComponent = editorIndex === 'header' || editorIndex === 'footer'
 
-  // merges default settings and db values
+  // merges default settings and db values (settings could have changed)
   const getFields = () => {
     if (siteComponent) {
       // loop through default postBlocks and replace value if found
@@ -96,7 +97,19 @@ const BlockEditFields = () => {
 
     switch (field.type) {
       case 'textarea':
-        component = <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, field.type, fieldIndex)} />
+        component = (
+          <Textarea {...field} onChange={e => handleChange(e.target.value, field.id, field.type, fieldIndex)} />
+        )
+        break
+
+      case 'postSelector':
+        component = (
+          <PostSelector
+            site={site}
+            {...field}
+            onSelect={postTypeID => handleChange(postTypeID, field.id, field.type, fieldIndex)}
+          />
+        )
         break
 
       case 'image':
@@ -110,7 +123,9 @@ const BlockEditFields = () => {
                   open: true,
                   component: (
                     <MediaLibrary
-                      onSelect={({ id, storageKey }) => handleChange({ id, storageKey }, field.id, field.type, fieldIndex)}
+                      onSelect={({ id, storageKey }) =>
+                        handleChange({ id, storageKey }, field.id, field.type, fieldIndex)
+                      }
                     />
                   ),
                   width: 1000,
@@ -132,7 +147,11 @@ const BlockEditFields = () => {
                   open: true,
                   title: 'Menu',
                   component: (
-                    <MenuBuilder index={fieldIndex} {...field} onChange={v => handleChange(v, field.id, field.type, fieldIndex)} />
+                    <MenuBuilder
+                      index={fieldIndex}
+                      {...field}
+                      onChange={v => handleChange(v, field.id, field.type, fieldIndex)}
+                    />
                   ),
                   width: 1000,
                 },

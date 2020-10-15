@@ -3,7 +3,11 @@ const get = require('lodash/get')
 const getParentSlug = require('./getParentSlug')
 const formatSlug = require('./formatSlug')
 
-const generateSlug = (postType, postID) => {
+const generateSlug = (postType, postID, frontPage) => {
+  if (postID === frontPage) {
+    return '/'
+  }
+
   if (!get(postType, `posts.${postID}`)) {
     return ''
   }

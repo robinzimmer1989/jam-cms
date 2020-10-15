@@ -30,6 +30,36 @@ const Editor = props => {
 
   const postType = sites[siteID]?.postTypes?.[postTypeID]
 
+  let blocks = []
+
+  // This is a special block to make post references work (such as archive page)
+  // The admin field is simply returning an ID and we're replacing it with the actual content
+  if (site && post) {
+    blocks = post.content.map(block => {
+      return {
+        ...block,
+        fields: block.fields.map(field => {
+          if (field.type === 'postSelector' && field?.value) {
+            // Filter out draft and trashed posts
+            // Possibly change object structure in the future to match with front end props
+            const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
+              post => post.status === 'publish'
+            )
+
+            return {
+              ...field,
+              value: posts,
+            }
+          }
+
+          return field
+        }),
+      }
+    })
+  }
+
+  blocks = convertToPropsSchema(blocks)
+
   useEffect(() => {
     const loadPost = async () => {
       await postActions.getPost({ site: sites[siteID], postID }, dispatch)
@@ -67,14 +97,12 @@ const Editor = props => {
             )}
 
             {post.content.length > 0 ? (
-              <FlexibleContent blocks={convertToPropsSchema(post.content)} />
+              <FlexibleContent blocks={blocks} />
             ) : (
               <Empty
                 style={{ padding: 60 }}
                 image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                imageStyle={{
-                  height: 60,
-                }}
+                imageStyle={{ height: 60 }}
                 description=""
                 className="reset-font"
               >

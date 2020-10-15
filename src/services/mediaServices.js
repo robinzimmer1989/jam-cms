@@ -36,7 +36,7 @@ export const deleteMediaItem = async ({ id }) => {
   return result
 }
 
-export const getMediaItems = async ({ siteID, nextToken = null, limit = 5 }) => {
+export const getMediaItems = async ({ siteID, nextToken = null, limit = 20 }) => {
   const result = await API.graphql(
     graphqlOperation(
       `

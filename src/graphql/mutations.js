@@ -14,6 +14,8 @@ export const createSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -23,6 +25,7 @@ export const createSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -93,6 +96,8 @@ export const updateSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -102,6 +107,7 @@ export const updateSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -172,6 +178,8 @@ export const deleteSite = /* GraphQL */ `
       redirects
       netlifyID
       netlifyUrl
+      customDomain
+      apiKey
       createdAt
       updatedAt
       owner
@@ -181,6 +189,7 @@ export const deleteSite = /* GraphQL */ `
           siteID
           title
           slug
+          template
           createdAt
           updatedAt
           owner
@@ -248,6 +257,7 @@ export const createPostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -282,6 +292,7 @@ export const updatePostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -316,6 +327,7 @@ export const deletePostType = /* GraphQL */ `
       siteID
       title
       slug
+      template
       createdAt
       updatedAt
       owner
@@ -363,6 +375,7 @@ export const createPost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -397,6 +410,7 @@ export const updatePost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner
@@ -431,6 +445,7 @@ export const deletePost = /* GraphQL */ `
         siteID
         title
         slug
+        template
         createdAt
         updatedAt
         owner

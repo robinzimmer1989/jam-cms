@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import produce from 'immer'
-import { Button, Space } from 'antd'
-import { toast } from 'react-toastify'
+import { Button, Space, notification } from 'antd'
 import { set } from 'lodash'
 
 // import app components
@@ -26,7 +25,12 @@ const FormSettings = () => {
     setLoading(true)
     await formActions.updateForm(form, dispatch)
     setLoading(false)
-    toast.success('Updated successfully')
+
+    notification.success({
+      message: 'Success',
+      description: 'Updated successfully',
+      placement: 'bottomRight',
+    })
   }
 
   const handleChangeSettings = e => {

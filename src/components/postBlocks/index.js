@@ -3,6 +3,7 @@ import Footer, { fields as footerFields } from './Footer'
 import Header, { fields as headerFields } from './Header'
 import Text, { fields as textFields } from './Text'
 import TextImage, { fields as textImageFields } from './TextImage'
+import Posts, { fields as postsFields } from './Posts'
 
 const blocks = {
   Banner: {
@@ -24,6 +25,10 @@ const blocks = {
   TextImage: {
     component: TextImage,
     fields: textImageFields,
+  },
+  Posts: {
+    component: Posts,
+    fields: postsFields,
   },
 }
 

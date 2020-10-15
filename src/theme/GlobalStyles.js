@@ -24,6 +24,10 @@ export default createGlobalStyle`
   .reset-font, .reset-font * {
       font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
       font-size: 14px !important;
+
+      .ant-btn span {
+        color: #fff !important;
+      }
   }
 
   .ant-layout {

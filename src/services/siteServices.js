@@ -20,6 +20,11 @@ const transformSite = site => {
     // Convert posts and then post types to object structure
     if (get(draft, `postTypes.items`)) {
       draft.postTypes.items.map((o, i) => {
+        // Parse template property on post type
+        draft.postTypes.items[i].template = draft.postTypes.items[i].template
+          ? JSON.parse(draft.postTypes.items[i].template)
+          : []
+
         if (get(o, `posts.items`)) {
           return (draft.postTypes.items[i].posts = draft.postTypes.items[i].posts.items.reduce(
             (ac, a) => ({ ...ac, [a.id]: a }),
@@ -61,6 +66,7 @@ const siteFragment = `
   title
   netlifyID
   netlifyUrl
+  customDomain
   apiKey
   settings
   postTypes {
@@ -68,6 +74,7 @@ const siteFragment = `
       id
       title
       slug
+      template
       posts {
         items {
           id
@@ -91,7 +98,7 @@ const siteFragment = `
   }
 `
 
-export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings, apiKey }) => {
+export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings, apiKey, customDomain }) => {
   const result = await API.graphql(
     graphqlOperation(
       `mutation UpdateSite(
@@ -104,7 +111,7 @@ export const updateSite = async ({ id, title, netlifyID, netlifyUrl, settings, a
       }
     `,
       {
-        input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings), apiKey },
+        input: { id, title, netlifyID, netlifyUrl, settings: JSON.stringify(settings), apiKey, customDomain },
       }
     )
   )

@@ -49,18 +49,10 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
   return result
 }
 
-export const updateSite = async ({ id, netlifyID, title, settings, apiKey }, dispatch) => {
-  const result = await siteServices.updateSite({ id, title, settings, apiKey })
+export const updateSite = async ({ id, title, settings, apiKey, customDomain }, dispatch) => {
+  const result = await siteServices.updateSite({ id, title, settings, apiKey, customDomain })
 
   if (result?.data?.updateSite) {
-
-    // Update API in Netloify if provided. We have to update the editor state afterwards,
-    // because the change isn't happening via user input
-    if (apiKey && netlifyID) {
-      await netlifyServices.updateSite({ netlifyID, siteID: id, apiKey })
-      addSiteToEditor({ site: result.data.updateSite }, dispatch)
-    }
-
     dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
   }
 

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import produce from 'immer'
-import { Button, Space, Select as AntSelect } from 'antd'
-import { toast } from 'react-toastify'
+import { Button, Space, Select as AntSelect, Checkbox, notification } from 'antd'
 import { set } from 'lodash'
 
 // import app components
@@ -38,15 +37,29 @@ const PostSettings = () => {
     await postActions.updatePost(post, dispatch)
     await siteActions.updateSite({ id, settings }, dispatch)
     setLoading(false)
-    toast.success('Updated successfully')
+
+    notification.success({
+      message: 'Success',
+      description: 'Updated successfully',
+      placement: 'bottomRight',
+    })
   }
 
-  const handleChangeSettings = e => {
+  const handleChangePageSettings = e => {
     const nextPost = produce(post, draft => set(draft, `${e.target.name}`, e.target.value))
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
+    })
+  }
+
+  const handleChangeSiteSettings = (name, value) => {
+    const nextSite = produce(site, draft => set(draft, `settings.${name}`, value))
+
+    dispatch({
+      type: `UPDATE_EDITOR_SITE`,
+      payload: nextSite,
     })
   }
 
@@ -56,7 +69,7 @@ const PostSettings = () => {
         <Skeleton done={!!post} height={32}>
           <Select
             value={post?.status || ''}
-            onChange={value => handleChangeSettings({ target: { name: `status`, value } })}
+            onChange={value => handleChangePageSettings({ target: { name: `status`, value } })}
             label={`Status`}
           >
             <AntSelect.Option value={`publish`} children={`Publish`} />
@@ -69,21 +82,36 @@ const PostSettings = () => {
           <PostTreeSelect
             items={otherPosts}
             value={post?.parentID}
-            onChange={value => handleChangeSettings({ target: { name: `parentID`, value } })}
+            onChange={value => handleChangePageSettings({ target: { name: `parentID`, value } })}
           />
         </Skeleton>
 
         <Skeleton done={!!post} height={32}>
-          <Input value={post?.seoTitle || ''} name={`seoTitle`} onChange={handleChangeSettings} label={`SEO Title`} />
+          <Input
+            value={post?.seoTitle || ''}
+            name={`seoTitle`}
+            onChange={handleChangePageSettings}
+            label={`SEO Title`}
+          />
         </Skeleton>
 
         <Skeleton done={!!post} height={98}>
           <Input
             value={post?.seoDescription || ''}
             name={`seoDescription`}
-            onChange={handleChangeSettings}
+            onChange={handleChangePageSettings}
             label={`SEO Description`}
             rows={4}
+          />
+        </Skeleton>
+
+        <Skeleton done={!!post} height={98}>
+          <Checkbox
+            value={post?.id}
+            checked={post?.id === site?.settings?.frontPage}
+            onChange={e => handleChangeSiteSettings(e.target.name, e.target.checked ? e.target.value : '')}
+            name={`frontPage`}
+            children={`Front Page`}
           />
         </Skeleton>
 

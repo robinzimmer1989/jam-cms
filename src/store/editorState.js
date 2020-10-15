@@ -23,6 +23,11 @@ export const editorReducer = (state, action) => {
         draft.hasChanged = true
         break
 
+      case `UPDATE_EDITOR_COLLECTION`:
+        draft.site.postTypes[payload.id] = payload
+        draft.hasChanged = true
+        break
+
       case `ADD_EDITOR_POST`:
         draft.post = payload
         break

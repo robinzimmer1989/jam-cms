@@ -60,7 +60,7 @@ const MediaLibrary = props => {
         <Button icon={<UploadOutlined />} children="Upload" type="primary" onClick={() => setUploader(!uploader)} />
 
         {uploader && (
-          <Upload.Dragger name="file" multiple onChange={handleFileUpload}>
+          <Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
@@ -79,7 +79,7 @@ const MediaLibrary = props => {
             })}
         </Row>
 
-        <Button children={'Load More'} onClick={handleLoadMore} />
+        {nextToken && <Button children={'Load More'} onClick={handleLoadMore} />}
       </Space>
 
       <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>
