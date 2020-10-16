@@ -42,7 +42,7 @@ export const sitesReducer = (state, action) => {
         break
 
       /******************************
-       * Collections
+       * Forms
        ******************************/
       case `ADD_FORM`:
         set(draft, `sites.${payload.siteID}.forms.${payload.id}`, payload)

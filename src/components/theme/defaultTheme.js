@@ -67,5 +67,13 @@ export default {
       color: 'backgroundText',
       textTransform: 'none',
     },
+    menuItem: {
+      fontSize: 12,
+      fontWeight: 400,
+      letterSpacing: 1,
+      lineHeight: 1,
+      color: 'backgroundText',
+      textTransform: 'uppercase',
+    },
   },
 }

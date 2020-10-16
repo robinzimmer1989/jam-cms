@@ -7,7 +7,7 @@ export default function generateCss(site) {
 
   const {
     settings: {
-      typography: { h1, h2, h3, h4, h5, p, headlineFontFamily, paragraphFontFamily },
+      typography: { h1, h2, h3, h4, h5, p, menuItem, headlineFontFamily, paragraphFontFamily },
       colors,
     },
   } = site
@@ -40,6 +40,11 @@ export default function generateCss(site) {
   const pStyles = {
     ...p,
     color: colors[p.color],
+  }
+
+  const menuItemStyles = {
+    ...menuItem,
+    color: colors[menuItem.color],
   }
 
   return css`
@@ -77,6 +82,11 @@ export default function generateCss(site) {
     div {
       font-family: ${paragraphFontFamily};
       ${pStyles};
+    }
+
+    a.menu__item {
+      font-family: ${paragraphFontFamily};
+      ${menuItemStyles}
     }
   `
 }

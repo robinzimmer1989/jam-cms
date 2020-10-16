@@ -76,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-my-aws-project-gatsbycms-165936-deployment",
-					"S3Key": "amplify-builds/auth-7671367555516e557551-build.zip"
+					"S3Key": "amplify-builds/auth-75364c467a5332467476-build.zip"
 				}
 			}
 		},

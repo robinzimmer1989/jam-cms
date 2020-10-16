@@ -7,7 +7,7 @@ import { useStore } from 'store'
 import { colors } from 'theme'
 
 const BlockWrapper = props => {
-  const { index, renderedElements, onClick, children, onOpenDialog, onMoveElement } = props
+  const { index, renderedElements, isTemplate, onClick, children, onOpenDialog, onMoveElement } = props
 
   const [
     {
@@ -26,19 +26,19 @@ const BlockWrapper = props => {
         <div>{children}</div>
       </Content>
 
-      {index !== 'header' && (
+      {!isTemplate && index !== 'header' && (
         <AddButtonTop className={`icon`} onClick={() => onOpenDialog(index)}>
           <PlusCircleTwoTone />
         </AddButtonTop>
       )}
 
-      {index !== 'footer' && (
+      {!isTemplate && index !== 'footer' && (
         <AddButtonBottom className={`icon`} onClick={() => onOpenDialog(index + 1)}>
           <PlusCircleTwoTone />
         </AddButtonBottom>
       )}
 
-      {index !== 'header' && index !== 'footer' && (
+      {!isTemplate && index !== 'header' && index !== 'footer' && (
         <MoveIcons className={`icon`}>
           <MoveIcon onClick={() => onMoveElement(index, index - 1)} disabled={index === 0}>
             <UpCircleTwoTone />

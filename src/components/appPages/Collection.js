@@ -29,6 +29,7 @@ const Collection = props => {
   const postType = sites[siteID]?.postTypes?.[postTypeID]
   const title = postType?.title
   const posts = postType?.posts ? Object.values(postType.posts) : []
+
   const treePosts = createDataTree(posts)
 
   const filteredPosts = filter !== `all` ? treePosts.filter(o => o.status === filter) : treePosts
@@ -83,11 +84,11 @@ const Collection = props => {
     let badges = []
 
     if (sites?.[siteID]?.settings?.frontPage === o.id) {
-      badges.push(<Status children={'front'} />)
+      badges.push(<Tag key="front" children={'front'} />)
     }
 
     if (o.status === 'draft' || o.status === 'trash') {
-      badges.push(<Status children={o.status} />)
+      badges.push(<Tag key="status" children={o.status} />)
     }
 
     return (
@@ -133,7 +134,7 @@ const Collection = props => {
   )
 }
 
-const Status = styled.span`
+const Tag = styled.span`
   display: inline-block;
   padding: 2px 4px;
   margin-left: 10px;

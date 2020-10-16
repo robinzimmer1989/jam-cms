@@ -1,23 +1,34 @@
 import React, { useState } from 'react'
 import { Space, Button } from 'antd'
+import { navigate } from 'gatsby'
 
 // import app components
 import Input from 'components/Input'
 import { getCurrentUser } from 'utils/auth'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
+import getRoute from 'routes'
 
 const SiteForm = () => {
   const [, dispatch] = useStore()
 
   const [title, setTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
     if (!title) {
       return
     }
 
-    await siteActions.addSite({ ownerID: getCurrentUser().sub, title }, dispatch)
+    setLoading(true)
+
+    const result = await siteActions.addSite({ ownerID: getCurrentUser().sub, title }, dispatch)
+
+    if (result?.data?.updateSite) {
+      navigate(getRoute(`dashboard`, { siteID: result.data.updateSite.id }))
+    }
+
+    setLoading(false)
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }
@@ -25,7 +36,7 @@ const SiteForm = () => {
   return (
     <Space direction="vertical">
       <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
-      <Button children={`Add`} onClick={handleSubmit} type="primary" />
+      <Button loading={loading} children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )
 }

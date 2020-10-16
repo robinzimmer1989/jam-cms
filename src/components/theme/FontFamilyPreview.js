@@ -11,7 +11,7 @@ const FontFamilyPreview = () => {
 
   return (
     <Container>
-      <Edges size="md">
+      <Edges size="sm">
         <Space direction="vertical" size={40}>
           <Input className="reset-font" label="Preview Text" value={text} onChange={e => setText(e.target.value)} />
           <div>
@@ -31,7 +31,7 @@ const FontFamilyPreview = () => {
 }
 
 const Container = styled.div`
-  padding: 30px 0;
+  padding: 60px 0;
 `
 
 export default FontFamilyPreview

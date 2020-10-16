@@ -16,7 +16,7 @@ import { siteActions } from 'actions'
 import { useStore } from 'store'
 import getRoute from 'routes'
 
-const SettingsCollection = ({ postTypeID }) => {
+const CollectionEditor = ({ postTypeID }) => {
   const [
     {
       cmsState: { sites, siteID },
@@ -179,4 +179,4 @@ const SettingsCollection = ({ postTypeID }) => {
   )
 }
 
-export default SettingsCollection
+export default CollectionEditor

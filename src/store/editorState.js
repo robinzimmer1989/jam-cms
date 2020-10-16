@@ -14,6 +14,9 @@ export const editorReducer = (state, action) => {
 
   return produce(state, draft => {
     switch (action.type) {
+      /******************************
+       * Sites
+       ******************************/
       case `ADD_EDITOR_SITE`:
         draft.site = payload
         break
@@ -23,11 +26,17 @@ export const editorReducer = (state, action) => {
         draft.hasChanged = true
         break
 
+      /******************************
+       * Collections
+       ******************************/
       case `UPDATE_EDITOR_COLLECTION`:
         draft.site.postTypes[payload.id] = payload
         draft.hasChanged = true
         break
 
+      /******************************
+       * Posts
+       ******************************/
       case `ADD_EDITOR_POST`:
         draft.post = payload
         break
@@ -37,6 +46,9 @@ export const editorReducer = (state, action) => {
         draft.hasChanged = true
         break
 
+      /******************************
+       * Forms
+       ******************************/
       case `ADD_EDITOR_FORM`:
         draft.form = payload
         break
@@ -46,6 +58,9 @@ export const editorReducer = (state, action) => {
         draft.hasChanged = true
         break
 
+      /******************************
+       * General Settings
+       ******************************/
       case `SET_EDITOR_INDEX`:
         draft.editorIndex = payload
         break
@@ -61,6 +76,8 @@ export const editorReducer = (state, action) => {
       case `CLEAR_EDITOR`:
         draft.site = null
         draft.post = null
+        draft.form = null
+        draft.hasChanged = false
         draft.editorIndex = null
         break
 

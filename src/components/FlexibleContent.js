@@ -10,7 +10,16 @@ import { convertToPropsSchema } from 'utils'
 import { useStore } from 'store'
 
 const FlexibleContent = props => {
-  const { allElements, renderedElements, editableHeader, editableFooter, onOpenDialog, onMoveElement } = props
+  const {
+    allElements,
+    renderedElements,
+    children,
+    editableHeader,
+    editableFooter,
+    isTemplate,
+    onOpenDialog,
+    onMoveElement,
+  } = props
 
   const [
     {
@@ -60,6 +69,7 @@ const FlexibleContent = props => {
         index={index}
         onClick={() => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })}
         renderedElements={renderedElements}
+        isTemplate={isTemplate}
         onOpenDialog={onOpenDialog}
         onMoveElement={onMoveElement}
         children={component}
@@ -72,12 +82,14 @@ const FlexibleContent = props => {
       <>
         {editableHeader ? generateWrapper(header, 'header') : header}
 
-        {modifiedElements.length > 0 ? (
+        {modifiedElements.length > 0 || children ? (
           <>
             {modifiedElements.map(({ name, data }, index) => {
               const Component = allElements[name].component
               return generateWrapper(<Component {...data} />, index)
             })}
+
+            {children}
           </>
         ) : (
           <Empty

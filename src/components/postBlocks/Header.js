@@ -39,7 +39,11 @@ const Header = props => {
           {mainMenu && (
             <Navigation>
               {mainMenu.map((o, i) => {
-                return <MenuItem key={i}>{o.title}</MenuItem>
+                return (
+                  <MenuItem key={i} className="menu__item">
+                    {o.title}
+                  </MenuItem>
+                )
               })}
             </Navigation>
           )}
@@ -79,8 +83,9 @@ const Navigation = styled.ul`
   margin: 0;
 `
 
-const MenuItem = styled.li`
+const MenuItem = styled(Link)`
   margin: 0 10px;
+  text-decoration: none;
   transform: translateX(10px);
 `
 

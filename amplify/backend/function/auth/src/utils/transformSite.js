@@ -33,6 +33,47 @@ const transformSite = site => {
       draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
 
+    const transformField = (draft, item) => {
+      return {
+        ...item,
+        fields: item.fields.map(field => {
+          const { value, type } = field
+
+          if (value) {
+            // Add image information
+            if (type === 'image') {
+              field.value = {
+                url: `${bucketName}/${value.storageKey}`,
+                altText: draft.mediaItems[value.id].altText,
+              }
+            }
+
+            // Add current slugs
+            if (type === 'menu') {
+              field.value = value.map(menuItem => {
+                const { postID, title, postTypeID, url, target } = menuItem
+
+                return {
+                  title,
+                  slug: generateSlug(draft.postTypes[postTypeID], postID, settings.frontPage),
+                  url,
+                  target,
+                }
+              })
+            }
+
+            if (type === 'form') {
+            }
+
+            if (type === 'posts') {
+            }
+          }
+
+          return field
+        }),
+      }
+    }
+
     const settings = JSON.parse(draft.settings)
 
     settings.header = transformField(draft, settings.header)
@@ -43,45 +84,6 @@ const transformSite = site => {
       header: convertToPropsSchema([settings.header])[0].data,
       footer: convertToPropsSchema([settings.footer])[0].data,
     })
-
-    const transformField = (draft, item) => {
-      return {
-        ...item,
-        fields: item.fields.map(field => {
-          const { value, type } = field
-
-          // Add image information
-          if (type === 'image') {
-            field.value = {
-              url: `${bucketName}/${value.storageKey}`,
-              altText: draft.mediaItems[value.id].altText,
-            }
-          }
-
-          // Add current slugs
-          if (type === 'menu') {
-            field.value = field.value.map(menuItem => {
-              const { postID, title, postTypeID, url, target } = menuItem
-
-              return {
-                title,
-                slug: generateSlug(draft.postTypes[postTypeID], postID, settings.frontPage),
-                url,
-                target,
-              }
-            })
-          }
-
-          if (type === 'form') {
-          }
-
-          if (type === 'posts') {
-          }
-
-          return field
-        }),
-      }
-    }
 
     const pages = []
 

@@ -25,7 +25,7 @@ const SettingsCollections = () => {
     const result = await collectionActions.addCollection({ siteID, title, slug }, dispatch)
 
     if (result?.data?.createPostType) {
-      navigate(getRoute(`settings-collection`, { siteID, postTypeID: result.id }))
+      navigate(getRoute(`settings-collection`, { siteID, postTypeID: result.data.createPostType.id }))
     }
   }
 

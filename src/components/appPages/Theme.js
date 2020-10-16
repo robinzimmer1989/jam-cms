@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Radio, PageHeader, Divider, Space, Button, Row, notification } from 'antd'
+import { Tabs, PageHeader, Divider, Space, Button, Row, notification } from 'antd'
 
 // import app components
 import CmsLayout from 'components/CmsLayout'
@@ -7,8 +7,11 @@ import FontFamily from 'components/theme/FontFamily'
 import FontStyles from 'components/theme/FontStyles'
 import FontFamilyPreview from 'components/theme/FontFamilyPreview'
 import Colors from 'components/theme/Colors'
-import TextImage from 'components/postBlocks/TextImage'
 import PageWrapper from 'components/PageWrapper'
+
+import Header from 'components/postBlocks/Header'
+import Banner from 'components/postBlocks/Banner'
+import TextImage from 'components/postBlocks/TextImage'
 
 import { siteActions } from 'actions'
 import { useStore } from 'store'
@@ -23,7 +26,7 @@ const SettingsTheme = () => {
     dispatch,
   ] = useStore()
 
-  const [tab, setTab] = useState('colors')
+  const [tab, setTab] = useState('Design')
 
   useEffect(() => {
     siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch)
@@ -44,44 +47,42 @@ const SettingsTheme = () => {
   }
 
   const renderContent = () => {
-    if (tab === 'colors') {
+    if (tab === 'Design') {
       return {
-        page: <TextImage image={{ storageKey: null }} title="Lorem" text="Lorem ipsum Dolor" button={null} />,
-        title: 'Colors',
-        sidebar: <Colors />,
-      }
-    } else if (tab === 'fontFamily') {
-      return {
-        page: <FontFamilyPreview />,
-        title: 'Font Family',
-        sidebar: <FontFamily />,
-      }
-    } else if (tab === 'fontStyles') {
-      return {
-        page: <FontFamilyPreview />,
-        title: 'Font Styles',
-        sidebar: <FontStyles />,
-      }
-    } else if (tab === 'blocks') {
-      return {
-        page: null,
+        title: tab,
         sidebar: null,
       }
-    } else if (tab === 'forms') {
+    } else if (tab === 'Colors') {
       return {
-        page: null,
+        title: tab,
+        sidebar: <Colors />,
+      }
+    } else if (tab === 'Typography') {
+      return {
+        title: tab,
+        sidebar: (
+          <>
+            <FontFamily />
+            <FontStyles />
+          </>
+        ),
+      }
+    } else if (tab === 'Components') {
+      return {
+        elements: null,
+        title: tab,
         sidebar: null,
       }
     }
   }
 
-  const elements = renderContent()
+  const content = renderContent()
 
   const sidebar = (
     <>
-      <PageHeader title={elements.title} style={{ paddingLeft: 20 }} />
+      <PageHeader title={content.title} style={{ paddingLeft: 20 }} />
       <Divider style={{ margin: 0 }} />
-      {elements.sidebar}
+      {content.sidebar}
     </>
   )
 
@@ -94,18 +95,28 @@ const SettingsTheme = () => {
     >
       <Space direction="vertical" size={30}>
         <Row justify="space-between">
-          <Radio.Group value={tab} onChange={e => setTab(e.target.value)}>
-            <Radio.Button value="colors">Colors</Radio.Button>
-            <Radio.Button value="fontFamily">Font Family</Radio.Button>
-            <Radio.Button value="fontStyles">Font Styles</Radio.Button>
-            <Radio.Button value="forms">Forms</Radio.Button>
-            <Radio.Button value="blocks">Blocks</Radio.Button>
-          </Radio.Group>
+          <Tabs defaultActiveKey="all" onChange={v => setTab(v)}>
+            {['Design', 'Colors', 'Typography', 'Components'].map(name => {
+              return <Tabs.TabPane key={name} tab={name} />
+            })}
+          </Tabs>
 
           <Button onClick={handleSave} children="Update" type="primary" />
         </Row>
 
-        <PageWrapper>{elements.page}</PageWrapper>
+        <PageWrapper>
+          <Header
+            image={{ storageKey: 'dummylogo.jpg' }}
+            mainMenu={[{ title: 'About us' }, { title: 'Products' }, { title: 'Contact Us' }]}
+          />
+          <Banner image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }} />
+          <FontFamilyPreview />
+          <TextImage
+            image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }}
+            title={'Hello World'}
+            text={'Lorem ipsum dolor...'}
+          />
+        </PageWrapper>
       </Space>
     </CmsLayout>
   )

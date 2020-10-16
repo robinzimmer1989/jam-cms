@@ -29,8 +29,8 @@ const FontStyles = () => {
 
   return (
     <Space direction="vertical" size={30}>
-      <Collapse defaultActiveKey={['h1']}>
-        {['h1', 'h2', 'h3', 'h4', 'h5', 'p'].map(tag => {
+      <Collapse>
+        {['menuItem', 'h1', 'h2', 'h3', 'h4', 'h5', 'p'].map(tag => {
           const setting = site.settings.typography[tag]
 
           return (
