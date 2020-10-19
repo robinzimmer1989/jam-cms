@@ -41,7 +41,7 @@ const MediaImage = props => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Image storageKey={file?.storageKey} />
+          <Image image={file} />
         </Col>
         <Col span={12}>
           <Content span={12}>

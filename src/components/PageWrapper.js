@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { Button, Tooltip } from 'antd'
 import { FullscreenExitOutlined } from '@ant-design/icons'
+import { ThemeProvider } from 'styled-components'
 
 // import app components
 import { generateCss } from 'utils'
@@ -33,9 +34,13 @@ const PageWrapper = ({ children }) => {
         </Tooltip>
       )}
 
-      <Page viewport={viewport} themeCss={themeCss}>
-        {children}
-      </Page>
+      {site && (
+        <ThemeProvider theme={site.settings}>
+          <Page viewport={viewport} themeCss={themeCss}>
+            {children}
+          </Page>
+        </ThemeProvider>
+      )}
     </>
   )
 }

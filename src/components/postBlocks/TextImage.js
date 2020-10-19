@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 // import app components
 import Image from 'components/Image'
+import Edges from 'components/Edges'
+import Button from './Button'
 
 export const fields = {
   name: 'TextImage',
@@ -11,76 +13,160 @@ export const fields = {
     {
       id: 'image',
       type: 'image',
-      placeholder: '',
       label: 'Add Image',
-      value: '',
+    },
+    {
+      id: 'imageAlignment',
+      type: 'select',
+      label: 'Image Alignment',
+      defaultValue: 'left',
+      options: [
+        {
+          name: 'Left',
+          value: 'left',
+        },
+        {
+          name: 'Right',
+          value: 'right',
+        },
+      ],
+    },
+    {
+      id: 'label',
+      type: 'text',
+      placeholder: '',
+      label: 'Label',
     },
     {
       id: 'title',
-      type: 'textarea',
-      placeholder: 'Write something...',
+      type: 'text',
+      placeholder: '',
       label: 'Title',
-      value: '',
-      rows: 1,
     },
     {
       id: 'text',
-      type: 'textarea',
+      type: 'wysiwyg',
       placeholder: 'Write something...',
       label: 'Text',
-      value: '',
-      rows: 8,
+      rows: 4,
     },
     {
-      id: 'button',
-      type: 'button',
-      placeholder: '',
-      label: 'Button',
-      value: '',
+      id: 'buttons',
+      type: 'repeater',
+      label: 'Buttons',
+      items: [
+        {
+          id: 'button',
+          type: 'link',
+          label: 'Button',
+        },
+        {
+          id: 'color',
+          type: 'select',
+          label: 'Color',
+          defaultValue: 'primary',
+          options: [
+            {
+              name: 'Primary',
+              value: 'primary',
+            },
+            {
+              name: 'Secondary',
+              value: 'secondary',
+            },
+          ],
+        },
+        {
+          id: 'variant',
+          type: 'select',
+          label: 'Variant',
+          defaultValue: 'filled',
+          options: [
+            {
+              name: 'Filled',
+              value: 'filled',
+            },
+            {
+              name: 'Outlined',
+              value: 'outlined',
+            },
+          ],
+        },
+      ],
     },
   ],
   style: {},
 }
 
 const TextImage = props => {
-  const {
-    image: { storageKey },
-    title,
-    text,
-    button,
-  } = props
+  const { image, imageAlignment, label, title, text, buttons } = props
 
   return (
-    <Container>
-      <ImageContainer>
-        <Image storageKey={storageKey} bg={true} />
-      </ImageContainer>
-      <ContentContainer>
-        <div>
-          {title && <h2 children={title} />}
-          {text && <p children={text} />}
-          {button && <button children={button} />}
-        </div>
-      </ContentContainer>
+    <Container className={`gcmsTextImage`}>
+      <Edges className={`gcmsTextImage__edges`} size="md">
+        <Inner className={`gcmsTextImage__inner`}>
+          <ImageContainer className={`gcmsTextImage__imageContainer`} imageAlignment={imageAlignment}>
+            <Image className={`gcmsTextImage__image`} image={image} bg={true} />
+          </ImageContainer>
+          <ContentContainer className={`gcmsTextImage__contentContainer`} imageAlignment={imageAlignment}>
+            <div className={`gcmsTextImage__contentInner`}>
+              {label && <p className={`gcmsTextImage__label`} children={label} />}
+              {title && <h2 className={`gcmsTextImage__headline`} children={title} />}
+              {text && <p className={`gcmsTextImage__paragraph`} children={text} />}
+              {buttons && (
+                <Buttons className={`gcmsTextImage__buttonsContainer`}>
+                  {buttons.map(
+                    (o, i) =>
+                      o.button &&
+                      o.button.url &&
+                      o.button.title && (
+                        <Button
+                          key={i}
+                          className={`gcmsTextImage__button`}
+                          {...o.button}
+                          color={o.color || 'primary'}
+                          variant={o.variant || 'filled'}
+                        />
+                      )
+                  )}
+                </Buttons>
+              )}
+            </div>
+          </ContentContainer>
+        </Inner>
+      </Edges>
     </Container>
   )
 }
 
 const Container = styled.div`
+  min-height: 300px;
+`
+
+const Inner = styled.div`
   position: relative;
   display: flex;
-  min-height: 300px;
 `
 
 const ImageContainer = styled.div`
   width: 50%;
+  order: ${({ imageAlignment }) => (imageAlignment === 'left' ? 1 : 3)};
 `
 
 const ContentContainer = styled.div`
   width: 50%;
-  padding: 30px;
+  padding: ${({ imageAlignment }) => (imageAlignment === 'left' ? '30px 0 30px 30px' : '30px 30px 30px 0')};
   display: flex;
   align-items: center;
+  order: 2;
+`
+
+const Buttons = styled.div`
+  margin-top: 2em;
+
+  > a {
+    margin-right: 20px;
+  }
 `
 
 export default TextImage

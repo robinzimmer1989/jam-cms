@@ -73,7 +73,7 @@ const MediaLibrary = props => {
             items.map(o => {
               return (
                 <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                  <Image storageKey={o.storageKey} preview={false} />
+                  <Image image={o} preview={false} />
                 </MediaItem>
               )
             })}

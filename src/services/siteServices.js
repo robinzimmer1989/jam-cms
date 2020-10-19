@@ -3,18 +3,18 @@ import produce from 'immer'
 import { set, get } from 'lodash'
 
 import { createSite, deleteSite as dbDeleteSite } from '../graphql/mutations'
-import defaultSiteSettings from 'components/theme/defaultTheme'
+import defaultTheme from 'components/themes/defaultTheme'
 
 const transformSite = site => {
   const nextSite = produce(site, draft => {
     // Parse settings or add default settings if empty
     if (draft.settings) {
       set(draft, `settings`, {
-        ...defaultSiteSettings,
+        ...defaultTheme,
         ...JSON.parse(draft.settings),
       })
     } else {
-      set(draft, `settings`, defaultSiteSettings)
+      set(draft, `settings`, defaultTheme)
     }
 
     // Convert posts and then post types to object structure

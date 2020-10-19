@@ -76,4 +76,8 @@ export default {
       textTransform: 'uppercase',
     },
   },
+  css: `
+      
+
+  `,
 }

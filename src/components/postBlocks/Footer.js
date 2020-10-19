@@ -12,7 +12,6 @@ export const fields = {
       type: 'menu',
       placeholder: '',
       label: 'Edit Menu',
-      value: '',
     },
   ],
   style: {},

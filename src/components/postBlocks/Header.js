@@ -14,14 +14,12 @@ export const fields = {
       type: 'image',
       placeholder: '',
       label: 'Logo',
-      value: '',
     },
     {
       id: 'mainMenu',
       type: 'menu',
       placeholder: '',
       label: 'Menu',
-      value: [],
     },
   ],
   style: {},
@@ -34,13 +32,15 @@ const Header = props => {
     <Container {...rest}>
       <Edges sixe="lg">
         <Grid>
-          <Logo to={`/`}>{image?.storageKey && <Image storageKey={image.storageKey} />}</Logo>
+          <Logo to={`/`}>
+            <Image image={image} />
+          </Logo>
 
           {mainMenu && (
             <Navigation>
               {mainMenu.map((o, i) => {
                 return (
-                  <MenuItem key={i} className="menu__item">
+                  <MenuItem key={i} to={o.slug} className="menu__item">
                     {o.title}
                   </MenuItem>
                 )
@@ -83,7 +83,7 @@ const Navigation = styled.ul`
   margin: 0;
 `
 
-const MenuItem = styled(Link)`
+const MenuItem = styled.li`
   margin: 0 10px;
   text-decoration: none;
   transform: translateX(10px);

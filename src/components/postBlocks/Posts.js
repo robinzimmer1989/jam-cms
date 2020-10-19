@@ -12,7 +12,6 @@ export const fields = {
       type: 'postSelector',
       placeholder: '',
       label: 'Collection',
-      value: '',
     },
   ],
   style: {},

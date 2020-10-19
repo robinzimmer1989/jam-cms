@@ -1,4 +1,5 @@
 import Banner, { fields as bannerFields } from './Banner'
+import Boxes, { fields as boxesFields } from './Boxes'
 import Footer, { fields as footerFields } from './Footer'
 import Header, { fields as headerFields } from './Header'
 import Text, { fields as textFields } from './Text'
@@ -9,6 +10,10 @@ const blocks = {
   Banner: {
     component: Banner,
     fields: bannerFields,
+  },
+  Boxes: {
+    component: Boxes,
+    fields: boxesFields,
   },
   Footer: {
     component: Footer,

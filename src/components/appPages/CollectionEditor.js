@@ -89,7 +89,7 @@ const CollectionEditor = ({ postTypeID }) => {
     )
   }
 
-  const handleChangeElement = (value, id, type, index) => {
+  const handleChangeElement = ({ id, type, value }, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
     const nextPostType = produce(postType, draft => {

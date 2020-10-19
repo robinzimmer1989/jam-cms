@@ -8,10 +8,9 @@ export const fields = {
   fields: [
     {
       id: 'text',
-      type: 'textarea',
+      type: 'wysiwyg',
       placeholder: 'Content',
       label: 'Text',
-      value: '',
       rows: 4,
     },
   ],

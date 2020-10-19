@@ -27,8 +27,6 @@ const PostEditor = props => {
     dispatch,
   ] = useStore()
 
-  console.log(post, postBlocks)
-
   const postType = sites[siteID]?.postTypes?.[postTypeID]
 
   const siteComponent = editorIndex === 'header' || editorIndex === 'footer'
@@ -149,12 +147,12 @@ const PostEditor = props => {
     )
   }
 
-  const handleChangeElement = (value, id, type, index) => {
+  const handleChangeElement = ({ id, type, value }, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
     if (siteComponent) {
       const nextSite = produce(site, draft => {
-        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, value, type })
+        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, type, value })
       })
 
       dispatch({
@@ -163,7 +161,7 @@ const PostEditor = props => {
       })
     } else {
       const nextPost = produce(post, draft => {
-        return set(draft, `content.${editorIndex}.fields.${index}`, { id, value, type })
+        return set(draft, `content.${editorIndex}.fields.${index}`, { id, type, value })
       })
 
       dispatch({

@@ -7,12 +7,12 @@ import Image from 'components/Image'
 import { colors } from 'theme'
 
 const ImagePicker = props => {
-  const { buttonText = 'Edit', onClick, value } = props
+  const { buttonText = 'Edit', onClick, value = '' } = props
 
   return (
     <Container>
       <ImageContainer>
-        <Image bg={true} {...value} />
+        <Image bg={true} image={value} />
       </ImageContainer>
 
       <Button children={buttonText} onClick={onClick} />
