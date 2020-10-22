@@ -6,6 +6,7 @@ import BlockWrapper from 'components/BlockWrapper'
 import Header from 'components/postBlocks/Header'
 import Footer from 'components/postBlocks/Footer'
 
+import { generateSlug } from 'utils'
 import { convertToPropsSchema } from 'utils'
 import { useStore } from 'store'
 
@@ -36,14 +37,16 @@ const FlexibleContent = props => {
       return {
         ...block,
         fields: block.fields.map(field => {
-          if (field.type === 'postSelector' && field?.value) {
+          if (field.type === 'collectionSelector' && field?.value) {
             const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
               post => post.status === 'publish'
             )
 
             return {
               ...field,
-              value: posts,
+              value: posts.map(o => {
+                return { ...o, slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage) }
+              }),
             }
           }
 
@@ -99,7 +102,7 @@ const FlexibleContent = props => {
             description=""
             className="reset-font"
           >
-            <Button type="primary" onClick={onOpenDialog} children="Add" />
+            <Button type="primary" onClick={() => onOpenDialog(0)} children="Add" />
           </Empty>
         )}
 

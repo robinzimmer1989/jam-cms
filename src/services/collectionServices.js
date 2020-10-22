@@ -19,6 +19,7 @@ const collectionFragment = `
       parentID
       status
       title
+      featuredImage
       createdAt
     }
   }
@@ -82,6 +83,7 @@ export const updateCollection = async ({ id, siteID, title, slug, template }) =>
       if (get(draft, `posts.items`)) {
         draft.posts = draft.posts.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
         draft.template = draft.template ? JSON.parse(draft.template) : []
+        draft.featuredImage = draft.featuredImage ? JSON.parse(draft.featuredImage) : null
       }
 
       return draft

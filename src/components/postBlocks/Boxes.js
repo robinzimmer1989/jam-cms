@@ -16,9 +16,19 @@ export const fields = {
       label: 'Title',
     },
     {
+      id: 'columns',
+      type: 'number',
+      label: 'Columns',
+      defaultValue: 3,
+      min: 1,
+      max: 4,
+      step: 1,
+    },
+    {
       id: 'boxes',
       type: 'repeater',
       label: 'Boxes',
+      defaultValue: [],
       items: [
         {
           id: 'image',
@@ -59,31 +69,44 @@ export const fields = {
         },
       ],
     },
+    {
+      id: 'settings',
+      type: 'settings',
+      defaultValue: {
+        marginTop: 'md',
+        marginBottom: 'md',
+        paddingTop: 'md',
+        paddingBottom: 'md',
+        backgroundColor: 'transarent',
+      },
+    },
   ],
 }
 
 const Boxes = props => {
-  const { title, boxes } = props
+  const { title, columns, boxes, settings } = props
 
   return (
-    <Container className={`gcmsBoxes`}>
+    <Container settings={settings} className={`gcmsBoxes`}>
       <Edges className={`gcmsBoxes__edges`} size="md">
-        <Inner className={`gcmsBoxes__inner`}>
+        {title && <h3 className={`gcmsBoxes__title`} children={title} />}
+
+        <BoxesContainer className={`gcmsBoxes__inner`}>
           {boxes &&
             boxes.map((box, index) => {
               return (
-                <Box key={index}>
+                <Box key={index} className={`gcmsBoxes__box`} columns={columns}>
                   {box.image && (
-                    <ImageContainer className={`gcmsBoxes__imageContainer`}>
-                      <Image className={`gcmsBoxes__image`} image={box.image} bg={true} />
+                    <ImageContainer className={`gcmsBoxes__boxImageContainer`}>
+                      <Image className={`gcmsBoxes__boxImage`} image={box.image} bg={true} />
                     </ImageContainer>
                   )}
 
-                  {box.title && <h3 children={box.title} />}
-                  {box.text && <p children={box.text} />}
+                  {box.title && <h4 className={`gcmsBoxes__boxTitle`} children={box.title} />}
+                  {box.text && <p className={`gcmsBoxes__boxParagraph`} children={box.text} />}
                   {box.button && box.button.url && box.button.title && (
                     <Button
-                      className={`gcmsBoxes__button`}
+                      className={`gcmsBoxes__boxButton`}
                       {...box.button}
                       color={box.color || 'primary'}
                       variant={box.variant || 'filled'}
@@ -92,7 +115,11 @@ const Boxes = props => {
                 </Box>
               )
             })}
-        </Inner>
+
+          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
+          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
+          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
+        </BoxesContainer>
       </Edges>
     </Container>
   )
@@ -100,18 +127,53 @@ const Boxes = props => {
 
 const Container = styled.div`
   min-height: 300px;
+  margin-top: ${({ theme, settings }) => theme.spacing.marginTop[settings.marginTop]}px;
+  margin-bottom: ${({ theme, settings }) => theme.spacing.marginBottom[settings.marginBottom]}px;
+  padding-top: ${({ theme, settings }) => theme.spacing.paddingTop[settings.paddingTop]}px;
+  padding-bottom: ${({ theme, settings }) => theme.spacing.paddingBottom[settings.paddingBottom]}px;
+  background: ${({ settings }) => settings.backgroundColor};
 `
 
-const Inner = styled.div`
+const BoxesContainer = styled.div`
   position: relative;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `
 
 const ImageContainer = styled.div`
-  width: 50%;
-  order: ${({ imageAlignment }) => (imageAlignment === 'left' ? 1 : 3)};
+  position: relative;
+  width: 100%;
+  height: 120px;
+  margin-bottom: 12px;
 `
 
-const Box = styled.div``
+const Box = styled.div`
+  width: 100%;
+
+  @media (min-width: 600px) {
+    ${({ columns }) =>
+      columns > 1 &&
+      `
+      width: calc(50% - 10px);
+    `}
+  }
+
+  @media (min-width: 900px) {
+    ${({ columns }) =>
+      columns > 2 &&
+      `
+      width: calc(100% / 3 - 10px);
+    `}
+  }
+
+  @media (min-width: 1200px) {
+    ${({ columns }) =>
+      columns > 3 &&
+      `
+      width: calc(100% / 4 - 10px);
+    `}
+  }
+`
 
 export default Boxes

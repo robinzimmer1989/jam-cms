@@ -51,10 +51,8 @@ const PostEditor = props => {
     // if post type has a template assigned, then overwrite content in editor store
     // Because we don't wanna loose information in case the user changes the template along the way,
     // We'll loop through the existing fields and populate the template accordingly
-    if (postType?.template && postType.template > 0) {
-      const content = [...postType.template]
-
-      const nextContent = produce(content, draft => {
+    if (postType?.template && postType.template.length > 0) {
+      const nextContent = produce(postType.template, draft => {
         post.content.map((o, i) => {
           if (postType?.template?.[i]?.name === o.name) {
             o.fields.map((p, j) => {
@@ -128,6 +126,8 @@ const PostEditor = props => {
             fields={getFields()}
             onChangeElement={handleChangeElement}
             onDeleteElement={handleDeleteElement}
+            isTemplate={postType?.template && postType.template.length}
+            isSiteComponent={!!siteComponent}
           />
         ),
       }
@@ -203,8 +203,19 @@ const PostEditor = props => {
   }
 
   const handleSelectElement = (name, index) => {
+    // We only want to write id, type and value to the database, so we have to extract them from all fields
+    // We'll add them back on the fly in the getFields function.
+    // Furthermore, we use this function to assign the default value
+    const block = produce(postBlocks[name], draft => {
+      draft.fields.fields = draft.fields.fields.map(o => {
+        return { id: o.id, type: o.type, value: o.defaultValue || null }
+      })
+
+      return draft
+    })
+
     const nextPost = produce(post, draft => {
-      draft.content.splice(index, 0, postBlocks[name].fields)
+      draft.content.splice(index, 0, block.fields)
       return draft
     })
 
@@ -212,9 +223,11 @@ const PostEditor = props => {
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
     })
+
+    dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
   }
 
-  const handleOpenDialog = (index = 0) =>
+  const handleOpenDialog = (index = 0) => {
     dispatch({
       type: 'SET_DIALOG',
       payload: {
@@ -224,6 +237,7 @@ const PostEditor = props => {
         width: 500,
       },
     })
+  }
 
   return (
     <CmsLayout pageTitle="Editor" actionBar="editor" rightSidebar={getSidebar()}>

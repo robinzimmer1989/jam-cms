@@ -40,6 +40,7 @@ type Post @aws_api_key @aws_cognito_user_pools {
   content: String
   seoTitle: String
   seoDescription: String
+  featuredImage: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
   postType: PostType @aws_api_key @aws_cognito_user_pools
@@ -355,6 +356,7 @@ input ModelPostFilterInput {
   content: ModelStringInput
   seoTitle: ModelStringInput
   seoDescription: ModelStringInput
+  featuredImage: ModelStringInput
   and: [ModelPostFilterInput]
   or: [ModelPostFilterInput]
   not: ModelPostFilterInput
@@ -371,6 +373,7 @@ input CreatePostInput {
   content: String
   seoTitle: String
   seoDescription: String
+  featuredImage: String
 }
 
 input UpdatePostInput {
@@ -384,6 +387,7 @@ input UpdatePostInput {
   content: String
   seoTitle: String
   seoDescription: String
+  featuredImage: String
 }
 
 input DeletePostInput {
@@ -400,6 +404,7 @@ input ModelPostConditionInput {
   content: ModelStringInput
   seoTitle: ModelStringInput
   seoDescription: ModelStringInput
+  featuredImage: ModelStringInput
   and: [ModelPostConditionInput]
   or: [ModelPostConditionInput]
   not: ModelPostConditionInput

@@ -41,6 +41,7 @@ export const getSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -164,6 +165,7 @@ export const getPostType = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -186,6 +188,7 @@ export const getPost = /* GraphQL */ `
       content
       seoTitle
       seoDescription
+      featuredImage
       createdAt
       updatedAt
       postType {
@@ -223,6 +226,7 @@ export const listPosts = /* GraphQL */ `
         content
         seoTitle
         seoDescription
+        featuredImage
         createdAt
         updatedAt
         postType {

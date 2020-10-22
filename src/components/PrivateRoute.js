@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { navigate } from '@reach/router'
 
 // import app components
 import { isLoggedIn } from 'utils/auth'
-import getRoute from 'routes'
 
-class PrivateRoute extends React.Component {
-  render() {
-    const { component: Component, location, ...rest } = this.props
-    if (!isLoggedIn()) {
-      navigate(getRoute(`sign-in`))
-      return null
+const PrivateRoute = props => {
+  const { component: Component, location, ...rest } = props
+
+  useEffect(() => {
+    const { location } = props
+
+    if (!isLoggedIn() && location.pathname !== `/`) {
+      navigate(`/`)
     }
-    return <Component {...rest} />
-  }
+  })
+
+  return isLoggedIn() ? <Component {...rest} /> : null
 }
 
 export default PrivateRoute

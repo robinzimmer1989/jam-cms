@@ -36,7 +36,7 @@ const PageWrapper = ({ children }) => {
 
       {site && (
         <ThemeProvider theme={site.settings}>
-          <Page viewport={viewport} themeCss={themeCss}>
+          <Page className={`gcmsPageWrapper`} viewport={viewport} themeCss={themeCss}>
             {children}
           </Page>
         </ThemeProvider>

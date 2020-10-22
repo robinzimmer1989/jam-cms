@@ -32,23 +32,23 @@ const buttonStyles = css`
 `
 
 const InternalLink = styled(Link)`
-&& {
-  ${buttonStyles}
-  background: ${({ theme, variant, color }) => (variant === 'filled' ? theme.colors[color] : 'transparent')};
-  color: ${({ theme, variant, color }) =>
-    variant === 'filled' ? theme.colors[`${color}Text`] : theme.colors[`backgroundText`]};
-  border: 2px solid ${({ theme, color }) => theme.colors[color]};
-}
+  && {
+    ${buttonStyles}
+    background: ${({ theme, variant, color }) => (variant === 'filled' ? theme.colors[color] : 'transparent')};
+    color: ${({ theme, variant, color }) =>
+      variant === 'filled' ? theme.colors[`${color}Text`] : theme.colors[`backgroundText`]};
+    border: 2px solid ${({ theme, color }) => theme.colors[color]};
+  }
 `
 
 const ExternalLink = styled.a`
-&& {
-  ${buttonStyles}
-  background: ${({ theme, variant, color }) => (variant === 'filled' ? theme.colors[color] : 'transparent')};
-  color: ${({ theme, variant, color }) =>
-    variant === 'filled' ? theme.colors[`${color}Text`] : theme.colors[`backgroundText`]};
-  border: 2px solid ${({ theme, color }) => theme.colors[color]};
-}
+  && {
+    ${buttonStyles}
+    background: ${({ theme, variant, color }) => (variant === 'filled' ? theme.colors[color] : 'transparent')};
+    color: ${({ theme, variant, color }) =>
+      variant === 'filled' ? theme.colors[`${color}Text`] : theme.colors[`backgroundText`]};
+    border: 2px solid ${({ theme, color }) => theme.colors[color]};
+  }
 `
 
 export default Button

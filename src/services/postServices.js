@@ -45,18 +45,40 @@ export const getPost = async ({ postID }) => {
     result.data.getPost = {
       ...post,
       content: post.content ? JSON.parse(post.content) : [],
+      featuredImage: post.featuredImage ? JSON.parse(post.featuredImage) : null,
     }
   }
 
   return result
 }
 
-export const updatePost = async ({ id, slug, status, title, content, seoTitle, seoDescription, parentID }) => {
+export const updatePost = async ({
+  id,
+  slug,
+  status,
+  title,
+  content,
+  seoTitle,
+  seoDescription,
+  parentID,
+  featuredImage,
+}) => {
   const jsonContent = content ? JSON.stringify(content) : null
+  const jsonFeaturedImage = featuredImage ? JSON.stringify(featuredImage) : null
 
   const result = await API.graphql(
     graphqlOperation(dbUpdatePost, {
-      input: { id, slug, status, title, content: jsonContent, seoTitle, seoDescription, parentID },
+      input: {
+        id,
+        slug,
+        status,
+        title,
+        content: jsonContent,
+        seoTitle,
+        seoDescription,
+        parentID,
+        featuredImage: jsonFeaturedImage,
+      },
     })
   )
 
@@ -66,6 +88,7 @@ export const updatePost = async ({ id, slug, status, title, content, seoTitle, s
     result.data.updatePost = {
       ...post,
       content: post.content ? JSON.parse(post.content) : [],
+      featuredImage: post.featuredImage ? JSON.parse(post.featuredImage) : null,
     }
   }
 

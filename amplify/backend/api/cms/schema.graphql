@@ -44,6 +44,7 @@ type Post
   content: String
   seoTitle: String
   seoDescription: String
+  featuredImage: String
 }
 
 type MediaItem

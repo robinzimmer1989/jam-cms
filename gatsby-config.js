@@ -77,6 +77,10 @@ module.exports = {
       },
     },
     `gatsby-plugin-remove-trailing-slashes`,
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/app/*`] },
+    },
     // `gatsby-plugin-offline`,
   ],
 }

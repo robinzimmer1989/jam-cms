@@ -3,16 +3,20 @@ import styled from 'styled-components'
 import { Image as AntImage } from 'antd'
 
 const Image = props => {
-  const { image, bg, preview = false, ...rest } = props
+  const { image, bg, width, height, preview = false, ...rest } = props
 
   if (!image?.storageKey) {
+    if (bg) {
+      return <Container width={width} height={height} />
+    }
+
     return null
   }
 
   const src = `https://my-aws-project7deb432f10d54bd29e13786dda5e7f97project-gatsbycms.s3.ca-central-1.amazonaws.com/public/${image.storageKey}`
 
   return bg ? (
-    <Container>
+    <Container width={width} height={height}>
       <AntImage
         preview={preview}
         src={src}
@@ -31,8 +35,9 @@ const Image = props => {
 }
 
 const Container = styled.div`
-  height: 100%;
-  width: 100%;
+  height: ${({ height }) => (height ? `${height}px` : '100%')};
+  width: ${({ width }) => (width ? `${width}px` : '100%')};
+  background: #f7f7f7;
 
   .ant-image {
     width: 100%;

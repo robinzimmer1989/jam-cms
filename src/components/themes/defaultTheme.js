@@ -15,6 +15,10 @@ export default {
     backgroundText: '#000000',
     surface: '#ffffff',
     surfaceText: '#000000',
+    header: '#ffffff',
+    headerText: '#000000',
+    footer: '#ffffff',
+    footerText: '#000000',
   },
   typography: {
     headlineFontFamily: 'Roboto',
@@ -74,6 +78,28 @@ export default {
       lineHeight: 1,
       color: 'backgroundText',
       textTransform: 'uppercase',
+    },
+  },
+  spacing: {
+    marginTop: {
+      sm: 30,
+      md: 60,
+      lg: 90,
+    },
+    marginBottom: {
+      sm: 30,
+      md: 60,
+      lg: 90,
+    },
+    paddingTop: {
+      sm: 30,
+      md: 60,
+      lg: 90,
+    },
+    paddingBottom: {
+      sm: 30,
+      md: 60,
+      lg: 90,
     },
   },
   css: `

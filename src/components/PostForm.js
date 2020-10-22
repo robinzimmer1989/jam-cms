@@ -24,7 +24,7 @@ const PostForm = props => {
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts
 
   const handleSubmit = async () => {
-    if (!title) {
+    if (!title || slug === '/') {
       return
     }
 

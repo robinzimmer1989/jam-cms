@@ -44,6 +44,7 @@ export const createSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -126,6 +127,7 @@ export const updateSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -208,6 +210,7 @@ export const deleteSite = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -273,6 +276,7 @@ export const createPostType = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -308,6 +312,7 @@ export const updatePostType = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -343,6 +348,7 @@ export const deletePostType = /* GraphQL */ `
           content
           seoTitle
           seoDescription
+          featuredImage
           createdAt
           updatedAt
           owner
@@ -368,6 +374,7 @@ export const createPost = /* GraphQL */ `
       content
       seoTitle
       seoDescription
+      featuredImage
       createdAt
       updatedAt
       postType {
@@ -403,6 +410,7 @@ export const updatePost = /* GraphQL */ `
       content
       seoTitle
       seoDescription
+      featuredImage
       createdAt
       updatedAt
       postType {
@@ -438,6 +446,7 @@ export const deletePost = /* GraphQL */ `
       content
       seoTitle
       seoDescription
+      featuredImage
       createdAt
       updatedAt
       postType {

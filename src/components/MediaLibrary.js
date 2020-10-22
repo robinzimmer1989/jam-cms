@@ -101,6 +101,12 @@ const MediaItem = styled.div`
   cursor: pointer;
   background-color: #fff;
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
+
+  img {
+    max-height: 150px;
+    max-width: 150px;
+    width: auto;
+  }
 `
 
 export default MediaLibrary

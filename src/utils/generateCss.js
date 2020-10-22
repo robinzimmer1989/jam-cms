@@ -48,6 +48,9 @@ export default function generateCss(site) {
   }
 
   return css`
+    background-color: ${colors.background};
+    color: ${colors.backgroundText};
+
     h1 {
       font-family: ${headlineFontFamily};
       ${h1Styles};
@@ -84,8 +87,9 @@ export default function generateCss(site) {
       ${pStyles};
     }
 
-    a.menu__item {
+    .menu__item {
       font-family: ${paragraphFontFamily};
+      color: ${colors.headerText};
       ${menuItemStyles}
     }
   `

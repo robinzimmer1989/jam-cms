@@ -27,7 +27,13 @@ const transformSite = site => {
 
         if (get(o, `posts.items`)) {
           return (draft.postTypes.items[i].posts = draft.postTypes.items[i].posts.items.reduce(
-            (ac, a) => ({ ...ac, [a.id]: a }),
+            (ac, a) => ({
+              ...ac,
+              [a.id]: {
+                ...a,
+                featuredImage: a.featuredImage ? JSON.parse(a.featuredImage) : null,
+              },
+            }),
             {}
           ))
         }
@@ -84,6 +90,7 @@ const siteFragment = `
           parentID
           status
           title
+          featuredImage
           createdAt
         }
       }

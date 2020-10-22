@@ -37,6 +37,10 @@ const Colors = () => {
     backgroundText,
     surface,
     surfaceText,
+    header,
+    headerText,
+    footer,
+    footerText,
   } = colors
 
   const handleChange = async (key, value) => {
@@ -156,6 +160,42 @@ const Colors = () => {
             <Caption children="Text" />
             <Popover content={getPicker('surfaceText')} title="Surface Text" trigger="click">
               <Swatch value={surfaceText} />
+            </Popover>
+          </Space>
+        </Space>
+      </Collapse.Panel>
+
+      <Collapse.Panel key="Header" header="Header" direction="vertical">
+        <Space direction="vertical" size={20}>
+          <Space direction="vertical" size={2}>
+            <Caption children="Header" />
+            <Popover content={getPicker('header')} title="Header" trigger="click">
+              <Swatch value={header} />
+            </Popover>
+          </Space>
+
+          <Space direction="vertical" size={2}>
+            <Caption children="Text" />
+            <Popover content={getPicker('headerText')} title="Header Text" trigger="click">
+              <Swatch value={headerText} />
+            </Popover>
+          </Space>
+        </Space>
+      </Collapse.Panel>
+
+      <Collapse.Panel key="Footer" header="Footer" direction="vertical">
+        <Space direction="vertical" size={20}>
+          <Space direction="vertical" size={2}>
+            <Caption children="Footer" />
+            <Popover content={getPicker('footer')} title="Footer" trigger="click">
+              <Swatch value={footer} />
+            </Popover>
+          </Space>
+
+          <Space direction="vertical" size={2}>
+            <Caption children="Text" />
+            <Popover content={getPicker('footerText')} title="Footer Text" trigger="click">
+              <Swatch value={footerText} />
             </Popover>
           </Space>
         </Space>

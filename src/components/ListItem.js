@@ -3,28 +3,35 @@ import styled from 'styled-components'
 import { Card, List, Typography } from 'antd'
 import { Link } from 'gatsby'
 
+// import app components
+import Image from 'components/Image'
+
 const ListItem = props => {
-  const { level = 0, link, actions, title, subtitle, status } = props
+  const { level = 0, link, actions, title, subtitle, status, image, hideImage } = props
+
+  const metaTitle = link ? (
+    <Link to={link} style={{ flex: 1 }}>
+      <Typography.Text strong>
+        {title}
+        {status}
+      </Typography.Text>
+    </Link>
+  ) : (
+    <Typography.Text strong>
+      {title}
+      {status}
+    </Typography.Text>
+  )
+
   return (
     <Container level={level}>
       <Card>
         <List.Item actions={actions}>
-          {link ? (
-            <Link to={link} style={{ flex: 1 }}>
-              <Typography.Text strong>
-                {title}
-                {status}
-              </Typography.Text>
-              {subtitle &&
-                <List.Item.Meta description={subtitle} />
-              }
-            </Link>
-          ) : (
-              <Typography.Text strong>
-                {title}
-                {status}
-              </Typography.Text>
-            )}
+          <List.Item.Meta
+            avatar={!hideImage && <Image width={50} height={50} image={image} bg />}
+            title={metaTitle}
+            description={subtitle}
+          />
         </List.Item>
       </Card>
     </Container>

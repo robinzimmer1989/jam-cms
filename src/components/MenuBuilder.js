@@ -10,7 +10,7 @@ import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from 'utils'
 import { useStore } from 'store'
 
 const MenuBuilder = props => {
-  const { value, onChange } = props
+  const { value = [], onChange } = props
 
   const [
     {
@@ -19,7 +19,6 @@ const MenuBuilder = props => {
     dispatch,
   ] = useStore()
 
-  // TODO: Add tabs for different post types
   const [filter, setFilter] = useState('Page')
   const [items, setItems] = useState(deepCopyTree(value))
   const [customLink, setCustomLink] = useState({

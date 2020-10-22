@@ -8,7 +8,7 @@ import MediaLibrary from 'components/MediaLibrary'
 import Caption from 'components/Caption'
 
 // Admin fields
-import PostSelector from 'components/postEditorAdminFields/PostSelector'
+import CollectionSelector from 'components/postEditorAdminFields/CollectionSelector'
 import FormSelector from 'components/postEditorAdminFields/FormSelector'
 import Text from 'components/postEditorAdminFields/Text'
 import Wysiwyg from 'components/postEditorAdminFields/Wysiwyg'
@@ -17,6 +17,8 @@ import Menu from 'components/postEditorAdminFields/Menu'
 import Repeater from 'components/postEditorAdminFields/Repeater'
 import LinkSelector from 'components/postEditorAdminFields/LinkSelector'
 import Select from 'components/postEditorAdminFields/Select'
+import Number from 'components/postEditorAdminFields/Number'
+import Settings from 'components/postEditorAdminFields/Settings'
 
 import { useStore } from 'store'
 
@@ -37,7 +39,16 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <Wysiwyg
           {...field}
-          onChange={e => onChangeElement({ id: field.id, type: field.type, value: e.target.value }, index)}
+          onChange={editorState => onChangeElement({ id: field.id, type: field.type, value: editorState }, index)}
+        />
+      )
+      break
+
+    case 'number':
+      component = (
+        <Number
+          {...field}
+          onChange={number => onChangeElement({ id: field.id, type: field.type, value: number }, index)}
         />
       )
       break
@@ -62,11 +73,20 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       )
       break
 
-    case 'postSelector':
+    case 'settings':
       component = (
-        <PostSelector
-          site={site}
+        <Settings
           {...field}
+          onChange={newValue => onChangeElement({ id: field.id, type: field.type, value: newValue }, index)}
+        />
+      )
+      break
+
+    case 'collectionSelector':
+      component = (
+        <CollectionSelector
+          {...field}
+          site={site}
           onSelect={postTypeID => onChangeElement({ id: field.id, type: field.type, value: postTypeID }, index)}
         />
       )
@@ -75,8 +95,8 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
     case 'formSelector':
       component = (
         <FormSelector
-          site={site}
           {...field}
+          site={site}
           onSelect={formID => onChangeElement({ id: field.id, type: field.type, value: formID }, index)}
         />
       )
@@ -154,7 +174,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
 }
 
 const BlockEditFields = props => {
-  const { fields, onDeleteElement, onChangeElement } = props
+  const { fields, isTemplate, isSiteComponent, onDeleteElement, onChangeElement } = props
 
   const [
     {
@@ -167,7 +187,7 @@ const BlockEditFields = props => {
     <Container>
       <Space direction="vertical" size={30}>
         {fields && fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
-        <Button onClick={onDeleteElement} children={`Delete Block`} danger />
+        {!isTemplate && !isSiteComponent && <Button onClick={onDeleteElement} children={`Delete Block`} danger />}
       </Space>
     </Container>
   )

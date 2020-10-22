@@ -10,30 +10,45 @@ export const fields = {
   name: 'Header',
   fields: [
     {
-      id: 'image',
+      id: 'height',
+      type: 'number',
+      label: 'Height',
+      defaultValue: 80,
+      min: 60,
+      max: 200,
+      step: 2,
+    },
+    {
+      id: 'logo',
       type: 'image',
-      placeholder: '',
       label: 'Logo',
+    },
+    {
+      id: 'logoHeight',
+      type: 'number',
+      label: 'Logo Height',
+      defaultValue: 40,
+      min: 20,
+      max: 100,
+      step: 2,
     },
     {
       id: 'mainMenu',
       type: 'menu',
-      placeholder: '',
       label: 'Menu',
     },
   ],
-  style: {},
 }
 
 const Header = props => {
-  const { image, mainMenu, ...rest } = props
+  const { height = 80, logo, logoHeight = 40, mainMenu, ...rest } = props
 
   return (
-    <Container {...rest}>
-      <Edges sixe="lg">
+    <Container {...rest} height={height}>
+      <Edges size="lg" style={{ height: '100%' }}>
         <Grid>
-          <Logo to={`/`}>
-            <Image image={image} />
+          <Logo to={`/`} height={logoHeight}>
+            <Image image={logo} />
           </Logo>
 
           {mainMenu && (
@@ -54,24 +69,26 @@ const Header = props => {
 }
 
 const Container = styled.div`
-  background: #fff;
+  height: ${({ height }) => height}px;
+  background: ${({ theme }) => theme.colors.header};
+  color: ${({ theme }) => theme.colors.headerText};
 `
 
 const Grid = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 64px;
+  height: 100%;
   padding: 5px 0;
 `
 
-const Logo = styled(Link)`
+const Logo = styled(({ height, ...rest }) => <Link {...rest} />)`
   display: flex;
   align-items: center;
   height: 100%;
 
   img {
-    height: 40px;
+    height: ${({ height }) => height}px;
     width: auto;
   }
 `

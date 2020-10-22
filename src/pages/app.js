@@ -22,7 +22,7 @@ const App = () => {
   return (
     <>
       <Router>
-        <PrivateRoute path={ROUTE_APP} component={Home} />
+        <PrivateRoute path={`${ROUTE_APP}`} component={Home} />
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID/*`} component={CmsRouter} />
       </Router>

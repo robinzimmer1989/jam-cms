@@ -7,8 +7,11 @@ import { set } from 'lodash'
 // import app components
 import Input from 'components/Input'
 import Select from 'components/Select'
+import Caption from 'components/Caption'
 import Skeleton from 'components/Skeleton'
 import PostTreeSelect from 'components/PostTreeSelect'
+import MediaLibrary from 'components/MediaLibrary'
+import ImagePicker from 'components/postEditorAdminFields/ImagePicker'
 
 import { useStore } from 'store'
 import { postActions, siteActions } from 'actions'
@@ -45,8 +48,8 @@ const PostSettings = () => {
     })
   }
 
-  const handleChangePageSettings = e => {
-    const nextPost = produce(post, draft => set(draft, `${e.target.name}`, e.target.value))
+  const handleChangePageSettings = (name, value) => {
+    const nextPost = produce(post, draft => set(draft, `${name}`, value))
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
@@ -63,18 +66,24 @@ const PostSettings = () => {
     })
   }
 
+  const handleSelectImage = ({ id, storageKey }) => {
+    handleChangePageSettings('featuredImage', { id, storageKey })
+
+    dispatch({ type: 'CLOSE_DIALOG' })
+  }
+
   return (
     <Container>
       <Space direction="vertical" size={20}>
         <Skeleton done={!!post} height={32}>
           <Select
             value={post?.status || ''}
-            onChange={value => handleChangePageSettings({ target: { name: `status`, value } })}
-            label={`Status`}
+            onChange={value => handleChangePageSettings('status', value)}
+            label={'Status'}
           >
-            <AntSelect.Option value={`publish`} children={`Publish`} />
-            <AntSelect.Option value={`draft`} children={`Draft`} />
-            <AntSelect.Option value={`trash`} children={`Trash`} />
+            <AntSelect.Option value={'publish'} children={'Publish'} />
+            <AntSelect.Option value={'draft'} children={'Draft'} />
+            <AntSelect.Option value={'trash'} children={'Trash'} />
           </Select>
         </Skeleton>
 
@@ -82,40 +91,60 @@ const PostSettings = () => {
           <PostTreeSelect
             items={otherPosts}
             value={post?.parentID}
-            onChange={value => handleChangePageSettings({ target: { name: `parentID`, value } })}
+            onChange={value => handleChangePageSettings('parentID', value)}
           />
         </Skeleton>
 
         <Skeleton done={!!post} height={32}>
           <Input
             value={post?.seoTitle || ''}
-            name={`seoTitle`}
-            onChange={handleChangePageSettings}
-            label={`SEO Title`}
+            onChange={e => handleChangePageSettings('seoTitle', e.target.value)}
+            label={'SEO Title'}
           />
         </Skeleton>
 
         <Skeleton done={!!post} height={98}>
           <Input
             value={post?.seoDescription || ''}
-            name={`seoDescription`}
-            onChange={handleChangePageSettings}
-            label={`SEO Description`}
+            onChange={e => handleChangePageSettings('seoDescription', e.target.value)}
+            label={'SEO Description'}
             rows={4}
           />
         </Skeleton>
 
-        <Skeleton done={!!post} height={98}>
-          <Checkbox
-            value={post?.id}
-            checked={post?.id === site?.settings?.frontPage}
-            onChange={e => handleChangeSiteSettings(e.target.name, e.target.checked ? e.target.value : '')}
-            name={`frontPage`}
-            children={`Front Page`}
-          />
+        <Skeleton done={!!post} height={100}>
+          <Space direction="vertical" size={2}>
+            <Caption children="Featured Image" />
+            <ImagePicker
+              value={post?.featuredImage}
+              onClick={() =>
+                dispatch({
+                  type: `SET_DIALOG`,
+                  payload: {
+                    open: true,
+                    component: <MediaLibrary onSelect={handleSelectImage} />,
+                    width: 1000,
+                  },
+                })
+              }
+            />
+          </Space>
         </Skeleton>
 
-        <Button children={`Update`} type="primary" onClick={handleSavePost} loading={loading} />
+        {post?.postType?.title === 'Page' && (
+          <Skeleton done={!!post} height={98}>
+            <Checkbox
+              value={post?.id}
+              checked={post?.id === site?.settings?.frontPage}
+              onChange={e => handleChangeSiteSettings('frontPage', e.target.checked ? e.target.value : '')}
+              children="Front Page"
+            />
+          </Skeleton>
+        )}
+
+        <Skeleton done={!!post} height={32} width={78}>
+          <Button children="Update" type="primary" onClick={handleSavePost} loading={loading} />
+        </Skeleton>
       </Space>
     </Container>
   )

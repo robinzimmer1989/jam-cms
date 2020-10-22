@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
+import Wysiwyg from 'components/Wysiwyg'
 
 export const fields = {
   name: 'Text',
@@ -9,18 +10,19 @@ export const fields = {
     {
       id: 'text',
       type: 'wysiwyg',
-      placeholder: 'Content',
       label: 'Text',
-      rows: 4,
     },
   ],
-  style: {},
 }
 
 const Text = props => {
   const { text } = props
 
-  return <Container>{text}</Container>
+  return (
+    <Container>
+      <Wysiwyg children={text} />
+    </Container>
+  )
 }
 
 const Container = styled.div`

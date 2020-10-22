@@ -26,8 +26,8 @@ const Container = styled.div`
 `
 
 const ImageContainer = styled.div`
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
   margin-right: 10px;
   background: ${colors.background.light};
 `

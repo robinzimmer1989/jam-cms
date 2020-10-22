@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
+import Wysiwyg from 'components/Wysiwyg'
 import Image from 'components/Image'
 import Edges from 'components/Edges'
 
@@ -15,29 +16,27 @@ export const fields = {
       label: 'Add Image',
     },
     {
-      id: 'title',
+      id: 'text',
       type: 'wysiwyg',
-      placeholder: 'Write something...',
-      label: 'Headline',
-      rows: 2,
+      label: 'Text',
     },
     {
       id: 'height',
       type: 'select',
       label: 'Heigth',
-      defaultValue: 'medium',
+      defaultValue: 'md',
       options: [
         {
           name: 'Small',
-          value: 'small',
+          value: 'sm',
         },
         {
           name: 'Medium',
-          value: 'medium',
+          value: 'md',
         },
         {
           name: 'Large',
-          value: 'large',
+          value: 'lg',
         },
       ],
     },
@@ -45,7 +44,7 @@ export const fields = {
       id: 'width',
       type: 'select',
       label: 'Width',
-      defaultValue: 'medium',
+      defaultValue: 'md',
       options: [
         {
           name: 'Small',
@@ -70,19 +69,21 @@ export const fields = {
 }
 
 const Banner = props => {
-  const { image, title, height, width } = props
+  const { image, text, height, width } = props
 
   return (
     <Container className={`gcmsBanner gcmsBanner--height-${height}`} height={height}>
       <Edges className={`gcmsBanner__edges gcmsBanner__edges--width-${width}`} size={width}>
         <Inner className={`gcmsBanner__inner`}>
           {image && (
-            <ImageContainer className={`gcmsBanner__imageContainer`}>
+            <ImageContainer className={`gcmsBanner__imageContainer`} height={height}>
               <Image className={`gcmsBanner__image`} image={image} bg={true} />
             </ImageContainer>
           )}
           <ContentContainer className={`gcmsBanner__contentContainer`}>
-            {title && <Headline className={`gcmsBanner__headline`} children={title} />}
+            <Edges className={`gcmsBanner__edges gcmsBanner__edges--width-${width}`} size={'lg'}>
+              <Wysiwyg children={text} />
+            </Edges>
           </ContentContainer>
         </Inner>
       </Edges>
@@ -91,7 +92,7 @@ const Banner = props => {
 }
 
 const Container = styled.div`
-  min-height: ${({ height }) =>
+  height: ${({ height }) =>
     height === 'sm' ? `300px` : height === 'md' ? `500px` : height === 'lg' ? `100vh` : `300px`};
 `
 
@@ -99,18 +100,18 @@ const Inner = styled.div`
   position: relative;
 `
 
-const Headline = styled.h1`
+const ImageContainer = styled.div`
+  height: ${({ height }) =>
+    height === 'sm' ? `300px` : height === 'md' ? `500px` : height === 'lg' ? `100vh` : `300px`};
+`
+
+const ContentContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 0;
   width: 100%;
   transform: translateY(-50%);
   z-index: 1;
-  text-align: center;
 `
-
-const ImageContainer = styled.div``
-
-const ContentContainer = styled.div``
 
 export default Banner

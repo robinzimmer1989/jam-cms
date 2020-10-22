@@ -143,9 +143,11 @@ const CollectionEditor = ({ postTypeID }) => {
       type: `UPDATE_EDITOR_COLLECTION`,
       payload: nextPostType,
     })
+
+    dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
   }
 
-  const handleOpenDialog = (index = 0) =>
+  const handleOpenDialog = (index = 0) => {
     dispatch({
       type: 'SET_DIALOG',
       payload: {
@@ -155,6 +157,7 @@ const CollectionEditor = ({ postTypeID }) => {
         width: 500,
       },
     })
+  }
 
   return (
     <CmsLayout

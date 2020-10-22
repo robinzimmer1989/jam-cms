@@ -11,29 +11,36 @@ const BlockWrapper = props => {
 
   const [
     {
-      editorState: { editorIndex },
+      editorState: { editorIndex, viewport },
     },
     dispatch,
   ] = useStore()
 
-  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
-
   const isActive = editorIndex === index
 
+  const blockName = index === 'header' || index === 'footer' ? index : renderedElements[index].name
+
+  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
+
   return (
-    <Container active={isActive}>
-      <Content onClick={onClick || handleOpenBlock} active={isActive}>
+    <Container active={isActive} viewport={viewport}>
+      <Content onClick={onClick || handleOpenBlock} active={isActive} viewport={viewport}>
         <div>{children}</div>
       </Content>
 
+      <BlockName className="blockName" children={blockName} />
+
       {!isTemplate && index !== 'header' && (
-        <AddButtonTop className={`icon`} onClick={() => onOpenDialog(index)}>
+        <AddButtonTop
+          className={`icon`}
+          onClick={() => onOpenDialog(index === 'footer' ? renderedElements.length : index)}
+        >
           <PlusCircleTwoTone />
         </AddButtonTop>
       )}
 
       {!isTemplate && index !== 'footer' && (
-        <AddButtonBottom className={`icon`} onClick={() => onOpenDialog(index + 1)}>
+        <AddButtonBottom className={`icon`} onClick={() => onOpenDialog(index === 'header' ? 0 : index + 1)}>
           <PlusCircleTwoTone />
         </AddButtonBottom>
       )}
@@ -57,17 +64,30 @@ const Container = styled.div`
   position: relative;
   cursor: pointer;
 
-  .icon {
+  .icon,
+  .blockName {
     opacity: 0;
     pointer-events: none;
   }
 
   &:hover {
+    .blockName,
     .icon {
       opacity: 1;
       pointer-events: all;
     }
   }
+
+  ${({ active, viewport }) =>
+    active &&
+    viewport !== 'fullscreen' &&
+    css`
+      .blockName {
+        opacity: 1;
+        pointer-events: all;
+      }
+    `};
+
   /* Dummy element to make hovering over move icons possible */
   &:before {
     content: '';
@@ -94,8 +114,8 @@ const Content = styled.div`
     pointer-events: none;
   }
 
-  ${({ active }) =>
-    active
+  ${({ active, viewport }) =>
+    active && viewport !== 'fullscreen'
       ? css`
           &:after {
             border-color: ${colors.primary.dark};
@@ -106,6 +126,20 @@ const Content = styled.div`
             border-color: ${colors.primary.dark};
           }
         `};
+`
+
+const BlockName = styled.div`
+  && {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    bottom: 100%;
+    padding: 2px 6px;
+    background: ${colors.primary.dark};
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 9px;
+  }
 `
 
 const AddButtonTop = styled.div`

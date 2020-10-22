@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Tabs, PageHeader, Divider, Space, Button, Row, notification } from 'antd'
+import { PageHeader, Divider, Space, Button, notification } from 'antd'
+import styled from 'styled-components'
 
 // import app components
 import CmsLayout from 'components/CmsLayout'
@@ -26,7 +27,7 @@ const SettingsTheme = () => {
     dispatch,
   ] = useStore()
 
-  const [tab, setTab] = useState('Design')
+  const [tab, setTab] = useState(null)
 
   useEffect(() => {
     siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch)
@@ -47,79 +48,85 @@ const SettingsTheme = () => {
   }
 
   const renderContent = () => {
-    if (tab === 'Design') {
-      return {
-        title: tab,
-        sidebar: null,
-      }
+    if (tab === 'Theme') {
+      return null
     } else if (tab === 'Colors') {
-      return {
-        title: tab,
-        sidebar: <Colors />,
-      }
+      return <Colors />
     } else if (tab === 'Typography') {
-      return {
-        title: tab,
-        sidebar: (
-          <>
-            <FontFamily />
-            <FontStyles />
-          </>
-        ),
-      }
-    } else if (tab === 'Components') {
-      return {
-        elements: null,
-        title: tab,
-        sidebar: null,
-      }
+      return (
+        <>
+          <FontFamily />
+          <FontStyles />
+        </>
+      )
     }
   }
 
-  const content = renderContent()
+  const getSidebar = () => {
+    let sidebar = {
+      title: '',
+      icon: {
+        onClick: null,
+        component: null,
+      },
+      children: null,
+    }
 
-  const sidebar = (
-    <>
-      <PageHeader title={content.title} style={{ paddingLeft: 20 }} />
-      <Divider style={{ margin: 0 }} />
-      {content.sidebar}
-    </>
-  )
+    if (tab === null) {
+      sidebar = {
+        title: { title: 'Settings', onBack: null },
+        children: (
+          <Container>
+            <Space direction="vertical" size={20}>
+              {['Theme', 'Colors', 'Typography'].map(name => {
+                return <Button key={name} children={name} onClick={() => setTab(name)} />
+              })}
+
+              <Button onClick={handleSave} children="Update" type="primary" />
+            </Space>
+          </Container>
+        ),
+      }
+    } else {
+      sidebar = {
+        title: {
+          title: tab,
+          onBack: () => setTab(null),
+        },
+        children: renderContent(),
+      }
+    }
+
+    return (
+      <>
+        <PageHeader {...sidebar.title} style={{ paddingLeft: 20 }} />
+        <Divider style={{ margin: 0 }} />
+        {sidebar.children}
+      </>
+    )
+  }
 
   return (
-    <CmsLayout
-      pageTitle="Theme"
-      actionBar={'editor'}
-      rightSidebar={sidebar}
-      backLink={getRoute(`settings-theme`, { siteID })}
-    >
-      <Space direction="vertical" size={30}>
-        <Row justify="space-between">
-          <Tabs defaultActiveKey="all" onChange={v => setTab(v)}>
-            {['Design', 'Colors', 'Typography', 'Components'].map(name => {
-              return <Tabs.TabPane key={name} tab={name} />
-            })}
-          </Tabs>
-
-          <Button onClick={handleSave} children="Update" type="primary" />
-        </Row>
-
-        <PageWrapper>
-          <Header
-            image={{ storageKey: 'dummylogo.jpg' }}
-            mainMenu={[{ title: 'About us' }, { title: 'Products' }, { title: 'Contact Us' }]}
-          />
-          <Banner image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }} />
-          <FontFamilyPreview />
-          <TextImage
-            image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }}
-            title={'Hello World'}
-            text={'Lorem ipsum dolor...'}
-          />
-        </PageWrapper>
-      </Space>
+    <CmsLayout pageTitle="Theme" actionBar={'editor'} rightSidebar={getSidebar()}>
+      <PageWrapper>
+        <Header
+          image={{ storageKey: 'dummylogo.jpg' }}
+          mainMenu={[{ title: 'About us' }, { title: 'Products' }, { title: 'Contact Us' }]}
+        />
+        <Banner image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }} />
+        <FontFamilyPreview />
+        <TextImage
+          image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }}
+          title={'Hello World'}
+          text={'Lorem ipsum dolor...'}
+        />
+      </PageWrapper>
     </CmsLayout>
   )
 }
+
+const Container = styled.div`
+  padding: 20px;
+`
 
 export default SettingsTheme

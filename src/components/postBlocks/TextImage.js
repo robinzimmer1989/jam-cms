@@ -4,6 +4,7 @@ import styled from 'styled-components'
 // import app components
 import Image from 'components/Image'
 import Edges from 'components/Edges'
+import Wysiwyg from 'components/Wysiwyg'
 import Button from './Button'
 
 export const fields = {
@@ -32,23 +33,9 @@ export const fields = {
       ],
     },
     {
-      id: 'label',
-      type: 'text',
-      placeholder: '',
-      label: 'Label',
-    },
-    {
-      id: 'title',
-      type: 'text',
-      placeholder: '',
-      label: 'Title',
-    },
-    {
       id: 'text',
       type: 'wysiwyg',
-      placeholder: 'Write something...',
       label: 'Text',
-      rows: 4,
     },
     {
       id: 'buttons',
@@ -99,7 +86,7 @@ export const fields = {
 }
 
 const TextImage = props => {
-  const { image, imageAlignment, label, title, text, buttons } = props
+  const { image, imageAlignment, text, buttons } = props
 
   return (
     <Container className={`gcmsTextImage`}>
@@ -110,9 +97,8 @@ const TextImage = props => {
           </ImageContainer>
           <ContentContainer className={`gcmsTextImage__contentContainer`} imageAlignment={imageAlignment}>
             <div className={`gcmsTextImage__contentInner`}>
-              {label && <p className={`gcmsTextImage__label`} children={label} />}
-              {title && <h2 className={`gcmsTextImage__headline`} children={title} />}
-              {text && <p className={`gcmsTextImage__paragraph`} children={text} />}
+              {text && <Wysiwyg children={text} />}
+
               {buttons && (
                 <Buttons className={`gcmsTextImage__buttonsContainer`}>
                   {buttons.map(

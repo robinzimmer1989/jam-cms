@@ -46,10 +46,20 @@ export const getPost = async ({ site, postID }, dispatch) => {
 }
 
 export const updatePost = async (
-  { id, slug, status, title, content, seoTitle, seoDescription, parentID },
+  { id, slug, status, title, content, seoTitle, seoDescription, parentID, featuredImage },
   dispatch
 ) => {
-  const result = await postServices.updatePost({ id, slug, status, title, content, seoTitle, seoDescription, parentID })
+  const result = await postServices.updatePost({
+    id,
+    slug,
+    status,
+    title,
+    content,
+    seoTitle,
+    seoDescription,
+    parentID,
+    featuredImage,
+  })
 
   if (result?.data?.updatePost) {
     dispatch({ type: `ADD_POST`, payload: result.data.updatePost })

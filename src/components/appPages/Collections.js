@@ -52,6 +52,8 @@ const SettingsCollections = () => {
 
       {postTypes &&
         Object.values(postTypes).map(o => {
+          const link = getRoute(`settings-collection`, { siteID, postTypeID: o.id })
+
           const actions = [
             <Popconfirm
               title="Are you sure?"
@@ -62,11 +64,11 @@ const SettingsCollections = () => {
               <Button size="small" children={`Delete`} danger />
             </Popconfirm>,
             <Button size="small">
-              <Link to={getRoute(`settings-collection`, { siteID, postTypeID: o.id })} children={`Edit`} />
+              <Link to={link} children={`Edit`} />
             </Button>,
           ]
 
-          return <ListItem key={o.id} actions={actions} title={o.title} />
+          return <ListItem key={o.id} link={link} actions={actions} title={o.title} subtitle={o.slug} hideImage />
         })}
     </CmsLayout>
   )

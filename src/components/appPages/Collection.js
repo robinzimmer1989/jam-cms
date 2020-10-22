@@ -100,6 +100,7 @@ const Collection = props => {
           title={o.title}
           subtitle={generateSlug(postType, o.id, sites?.[siteID]?.settings?.frontPage)}
           status={badges}
+          image={o.featuredImage}
         />
 
         {o.childNodes.map(p => renderPost(p, level + 1))}

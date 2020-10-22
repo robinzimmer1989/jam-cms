@@ -44,13 +44,12 @@ const SignIn = () => {
         username: user.username,
       }
       setUser(userInfo)
-      navigate(getRoute(`app`))
     } catch (err) {
       handleChange({ target: { name: 'error', value: err } })
       console.log('error...: ', err)
     }
 
-    handleChange({ target: { name: 'loading', value: true } })
+    handleChange({ target: { name: 'loading', value: false } })
   }
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
