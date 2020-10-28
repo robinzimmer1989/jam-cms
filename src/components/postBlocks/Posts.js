@@ -39,6 +39,10 @@ export const fields = {
       max: 4,
       step: 1,
     },
+    {
+      id: 'settings',
+      type: 'settings',
+    },
   ],
 }
 

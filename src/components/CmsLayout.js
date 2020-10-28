@@ -81,6 +81,9 @@ const CmsLayout = props => {
               <Menu.Item key="SEO">
                 <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
               </Menu.Item>
+              <Menu.Item key="Editors">
+                <Link to={getRoute(`admin`, { siteID })}>Editors</Link>
+              </Menu.Item>
             </Menu.SubMenu>
           </Menu>
         </div>

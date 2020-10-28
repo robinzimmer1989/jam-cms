@@ -12,6 +12,7 @@ export const ROUTE_SETTINGS_COLLECTIONS = `/settings/collections`
 export const ROUTE_PROFILE = `/profile`
 export const ROUTE_FORMS = `/forms`
 export const ROUTE_FORM = `/form`
+export const ROUTE_SITE_ADMIN = `/admin`
 
 const getRoute = (route, args) => {
   switch (route) {
@@ -26,6 +27,9 @@ const getRoute = (route, args) => {
 
     case `profile`:
       return `${ROUTE_APP}${ROUTE_PROFILE}`
+
+    case `admin`:
+      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SITE_ADMIN}`
 
     case `dashboard`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}`

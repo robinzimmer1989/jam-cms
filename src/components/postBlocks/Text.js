@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 // import app components
 import Wysiwyg from 'components/Wysiwyg'
+import Edges from 'components/Edges'
 
 export const fields = {
   name: 'Text',
@@ -11,6 +12,10 @@ export const fields = {
       id: 'text',
       type: 'wysiwyg',
       label: 'Text',
+    },
+    {
+      id: 'settings',
+      type: 'settings',
     },
   ],
 }
@@ -26,7 +31,7 @@ const Text = props => {
 }
 
 const Container = styled.div`
-  padding: 30px;
+  min-height: 40px;
 `
 
 export default Text

@@ -65,7 +65,7 @@ const FlexibleContent = props => {
 
   const footer = site?.settings?.footer && <Footer {...convertToPropsSchema([site.settings.footer])[0].data} />
 
-  const generateWrapper = (component, index) => {
+  const generateWrapper = (component, index, settings = null) => {
     return (
       <BlockWrapper
         key={index}
@@ -76,6 +76,7 @@ const FlexibleContent = props => {
         onOpenDialog={onOpenDialog}
         onMoveElement={onMoveElement}
         children={component}
+        settings={settings}
       />
     )
   }
@@ -89,7 +90,11 @@ const FlexibleContent = props => {
           <>
             {modifiedElements.map(({ name, data }, index) => {
               const Component = allElements[name].component
-              return generateWrapper(<Component {...data} />, index)
+
+              // Extract global settings from data, so we can apply it to the block wrapper in the next step.
+              // This way the settings don't have to be applied for each block separately.
+              const { settings, ...rest } = data
+              return generateWrapper(<Component {...rest} />, index, settings)
             })}
 
             {children}

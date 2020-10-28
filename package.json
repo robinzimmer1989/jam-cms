@@ -12,6 +12,8 @@
     "aws-amplify-react": "^4.2.5",
     "color-scheme": "^1.0.1",
     "draft-js": "^0.11.7",
+    "draft-js-image-plugin": "^2.0.7",
+    "draft-js-plugins-editor": "^3.0.0",
     "draftjs-to-html": "^0.9.1",
     "font-picker-react": "^3.5.2",
     "formik": "^2.1.6",

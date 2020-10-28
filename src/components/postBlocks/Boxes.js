@@ -72,22 +72,15 @@ export const fields = {
     {
       id: 'settings',
       type: 'settings',
-      defaultValue: {
-        marginTop: 'md',
-        marginBottom: 'md',
-        paddingTop: 'md',
-        paddingBottom: 'md',
-        backgroundColor: 'transarent',
-      },
     },
   ],
 }
 
 const Boxes = props => {
-  const { title, columns, boxes, settings } = props
+  const { title, columns, boxes } = props
 
   return (
-    <Container settings={settings} className={`gcmsBoxes`}>
+    <Container className={`gcmsBoxes`}>
       <Edges className={`gcmsBoxes__edges`} size="md">
         {title && <h3 className={`gcmsBoxes__title`} children={title} />}
 
@@ -127,11 +120,6 @@ const Boxes = props => {
 
 const Container = styled.div`
   min-height: 300px;
-  margin-top: ${({ theme, settings }) => theme.spacing.marginTop[settings.marginTop]}px;
-  margin-bottom: ${({ theme, settings }) => theme.spacing.marginBottom[settings.marginBottom]}px;
-  padding-top: ${({ theme, settings }) => theme.spacing.paddingTop[settings.paddingTop]}px;
-  padding-bottom: ${({ theme, settings }) => theme.spacing.paddingBottom[settings.paddingBottom]}px;
-  background: ${({ settings }) => settings.backgroundColor};
 `
 
 const BoxesContainer = styled.div`

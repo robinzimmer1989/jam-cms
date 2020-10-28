@@ -23,7 +23,7 @@ export const fields = {
     {
       id: 'height',
       type: 'select',
-      label: 'Heigth',
+      label: 'Height',
       defaultValue: 'md',
       options: [
         {
@@ -43,9 +43,13 @@ export const fields = {
     {
       id: 'width',
       type: 'select',
-      label: 'Width',
+      label: 'Inner Width',
       defaultValue: 'md',
       options: [
+        {
+          name: 'None',
+          value: 'none',
+        },
         {
           name: 'Small',
           value: 'xs',
@@ -58,14 +62,13 @@ export const fields = {
           name: 'Large',
           value: 'lg',
         },
-        {
-          name: 'Full',
-          value: 'fl',
-        },
       ],
     },
+    {
+      id: 'settings',
+      type: 'settings',
+    },
   ],
-  style: {},
 }
 
 const Banner = props => {
@@ -73,31 +76,25 @@ const Banner = props => {
 
   return (
     <Container className={`gcmsBanner gcmsBanner--height-${height}`} height={height}>
-      <Edges className={`gcmsBanner__edges gcmsBanner__edges--width-${width}`} size={width}>
-        <Inner className={`gcmsBanner__inner`}>
-          {image && (
-            <ImageContainer className={`gcmsBanner__imageContainer`} height={height}>
-              <Image className={`gcmsBanner__image`} image={image} bg={true} />
-            </ImageContainer>
-          )}
-          <ContentContainer className={`gcmsBanner__contentContainer`}>
-            <Edges className={`gcmsBanner__edges gcmsBanner__edges--width-${width}`} size={'lg'}>
-              <Wysiwyg children={text} />
-            </Edges>
-          </ContentContainer>
-        </Inner>
-      </Edges>
+      {image && (
+        <ImageContainer className={`gcmsBanner__imageContainer`} height={height}>
+          <Image className={`gcmsBanner__image`} image={image} bg={true} />
+        </ImageContainer>
+      )}
+
+      <ContentContainer className={`gcmsBanner__contentContainer`}>
+        <Edges className={`gcmsBanner__edges gcmsBanner__edges--width-${width}`} size={width}>
+          <Wysiwyg children={text} />
+        </Edges>
+      </ContentContainer>
     </Container>
   )
 }
 
 const Container = styled.div`
+  position: relative;
   height: ${({ height }) =>
     height === 'sm' ? `300px` : height === 'md' ? `500px` : height === 'lg' ? `100vh` : `300px`};
-`
-
-const Inner = styled.div`
-  position: relative;
 `
 
 const ImageContainer = styled.div`

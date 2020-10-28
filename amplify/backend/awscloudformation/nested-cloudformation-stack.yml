@@ -115,6 +115,51 @@
 				}
 			}
 		},
+		"authuserPoolGroups": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplify-my-aws-project-gatsbycms-165936-deployment/amplify-cfn-templates/auth/template.json",
+				"Parameters": {
+					"AuthRoleArn": {
+						"Fn::GetAtt": [
+							"AuthRole",
+							"Arn"
+						]
+					},
+					"UnauthRoleArn": {
+						"Fn::GetAtt": [
+							"UnauthRole",
+							"Arn"
+						]
+					},
+					"authcognito704b3e59UserPoolId": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.UserPoolId"
+						]
+					},
+					"authcognito704b3e59AppClientIDWeb": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.AppClientIDWeb"
+						]
+					},
+					"authcognito704b3e59AppClientID": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.AppClientID"
+						]
+					},
+					"authcognito704b3e59IdentityPoolId": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.IdentityPoolId"
+						]
+					},
+					"env": "gatsbycms"
+				}
+			}
+		},
 		"apicms": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
@@ -136,11 +181,59 @@
 				}
 			}
 		},
+		"apiAdminQueries": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplify-my-aws-project-gatsbycms-165936-deployment/amplify-cfn-templates/api/admin-queries-cloudformation-template.json",
+				"Parameters": {
+					"authRoleName": {
+						"Ref": "AuthRoleName"
+					},
+					"unauthRoleName": {
+						"Ref": "UnauthRoleName"
+					},
+					"authcognito704b3e59UserPoolId": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.UserPoolId"
+						]
+					},
+					"functionAdminQueries9f539e69Arn": {
+						"Fn::GetAtt": [
+							"functionAdminQueries9f539e69",
+							"Outputs.Arn"
+						]
+					},
+					"functionAdminQueries9f539e69Name": {
+						"Fn::GetAtt": [
+							"functionAdminQueries9f539e69",
+							"Outputs.Name"
+						]
+					},
+					"env": "gatsbycms"
+				}
+			}
+		},
 		"functionauth": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
 				"TemplateURL": "https://s3.amazonaws.com/amplify-my-aws-project-gatsbycms-165936-deployment/amplify-cfn-templates/function/auth-cloudformation-template.json",
 				"Parameters": {
+					"env": "gatsbycms"
+				}
+			}
+		},
+		"functionAdminQueries9f539e69": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplify-my-aws-project-gatsbycms-165936-deployment/amplify-cfn-templates/function/AdminQueries9f539e69-cloudformation-template.json",
+				"Parameters": {
+					"authcognito704b3e59UserPoolId": {
+						"Fn::GetAtt": [
+							"authcognito704b3e59",
+							"Outputs.UserPoolId"
+						]
+					},
 					"env": "gatsbycms"
 				}
 			}

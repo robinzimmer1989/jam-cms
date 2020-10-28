@@ -28,6 +28,8 @@ const CollectionEditor = ({ postTypeID }) => {
   const postType = site?.postTypes?.[postTypeID]
 
   useEffect(() => {
+    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false })
+
     siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch)
   }, [])
 
@@ -160,12 +162,7 @@ const CollectionEditor = ({ postTypeID }) => {
   }
 
   return (
-    <CmsLayout
-      pageTitle={`${postType?.title} Template`}
-      actionBar={'editor'}
-      rightSidebar={getSidebar()}
-      backLink={getRoute(`settings-collections`, { siteID })}
-    >
+    <CmsLayout pageTitle={`${postType?.title} Template`} actionBar={'editor'} rightSidebar={getSidebar()}>
       <Space direction="vertical" size={30}>
         <PageWrapper>
           <FlexibleContent

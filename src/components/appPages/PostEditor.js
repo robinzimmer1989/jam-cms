@@ -47,6 +47,10 @@ const PostEditor = props => {
     }
   }, [postID])
 
+  useEffect(() => {
+    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false })
+  }, [])
+
   const renderTemplateContent = post => {
     // if post type has a template assigned, then overwrite content in editor store
     // Because we don't wanna loose information in case the user changes the template along the way,

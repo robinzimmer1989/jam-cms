@@ -1,10 +1,70 @@
 import React, { useEffect, useState } from 'react'
+import { Modal } from 'antd'
+// import Editor from 'draft-js-plugins-editor'
+import createImagePlugin from 'draft-js-image-plugin'
 import { Editor } from 'react-draft-wysiwyg'
-import { EditorState, convertFromRaw, convertToRaw } from 'draft-js'
+import { EditorState, Modifier, convertFromRaw, convertToRaw, AtomicBlockUtils } from 'draft-js'
+
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import 'draft-js-image-plugin/lib/plugin.css'
+
+// import app components
+import MediaLibrary from 'components/MediaLibrary'
+
+const imagePlugin = createImagePlugin()
+
+const bucketName = `https://my-aws-project7deb432f10d54bd29e13786dda5e7f97project-gatsbycms.s3.ca-central-1.amazonaws.com/public`
+
+const ImageUploadIcon = props => {
+  const [open, setOpen] = useState(false)
+
+  const handleSelect = ({ id, storageKey }) => {
+    const { editorState, onChange } = props
+    const contentState = Modifier.replaceText(
+      editorState.getCurrentContent(),
+      editorState.getSelection(),
+      '<img src="test" />',
+      editorState.getCurrentInlineStyle()
+    )
+    onChange(EditorState.push(editorState, contentState, 'insert-characters'))
+
+    // const { editorState, onChange } = props
+
+    // const contentState = editorState.getCurrentContent()
+    // const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', {
+    //   src: `${bucketName}/${storageKey}`,
+    // })
+    // const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
+    // const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity })
+    // setOpen(false)
+    // return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' ')
+
+    // const contentState = Modifier.replaceText(
+    //   editorState.getCurrentContent(),
+    //   editorState.getSelection(),
+    //   <img src={`${bucketName}/${storageKey}`} alt="" />,
+    //   editorState.getCurrentInlineStyle()
+    // )
+    // onChange(EditorState.push(editorState, contentState, 'insert-characters'))
+  }
+
+  const handleClick = () => setOpen(true)
+
+  return (
+    <>
+      <div onClick={handleClick}>Img</div>
+
+      <Modal title={'Media Library'} visible={open} onCancel={() => setOpen(false)} width={1000}>
+        <MediaLibrary onSelect={handleSelect} />
+      </Modal>
+    </>
+  )
+}
 
 const Wysiwyg = props => {
   const { value, onChange } = props
+
+  console.log(value)
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
@@ -25,8 +85,10 @@ const Wysiwyg = props => {
   return (
     <Editor
       // toolbarOnFocus
+      toolbarCustomButtons={[<ImageUploadIcon />]}
+      plugins={[imagePlugin]}
       toolbar={{
-        options: ['inline', 'blockType', 'list', 'textAlign'],
+        options: ['inline', 'blockType', 'list', 'textAlign', 'colorPicker', 'embedded'],
         inline: {
           inDropdown: true,
         },

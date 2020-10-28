@@ -9,6 +9,15 @@ import Caption from 'components/Caption'
 const Settings = props => {
   const { value, onChange } = props
 
+  const defaultValue = {
+    marginTop: 'none',
+    marginBottom: 'none',
+    paddingTop: 'none',
+    paddingBottom: 'none',
+    backgroundColor: 'transparent',
+    edges: 'none',
+  }
+
   const options = [
     { name: 'None', value: 'none' },
     { name: 'Small', value: 'sm' },
@@ -22,7 +31,7 @@ const Settings = props => {
 
   const getPicker = () => (
     <StyledChromePicker
-      color={value.backgroundColor}
+      color={value?.backgroundColor || defaultValue.backgroundColor}
       onChange={newValue => handleChange('backgroundColor', newValue.hex)}
     />
   )
@@ -32,40 +41,68 @@ const Settings = props => {
       <Space direction="vertical" size={20}>
         <div>
           <Caption children="Margin Top" />
-          <Select defaultValue={value.marginTop} onChange={newValue => handleChange('marginTop', newValue)}>
+          <Select
+            defaultValue={value?.marginTop || defaultValue.marginTop}
+            onChange={newValue => handleChange('marginTop', newValue)}
+          >
             {options.map(o => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
         </div>
+
         <div>
           <Caption children="Margin Bottom" />
-          <Select defaultValue={value.marginBottom} onChange={newValue => handleChange('marginBottom', newValue)}>
+          <Select
+            defaultValue={value?.marginBottom || defaultValue.marginBottom}
+            onChange={newValue => handleChange('marginBottom', newValue)}
+          >
             {options.map(o => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
         </div>
+
         <div>
           <Caption children="Padding Top" />
-          <Select defaultValue={value.paddingTop} onChange={newValue => handleChange('paddingTop', newValue)}>
+          <Select
+            defaultValue={value?.paddingTop || defaultValue.paddingTop}
+            onChange={newValue => handleChange('paddingTop', newValue)}
+          >
             {options.map(o => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
         </div>
+
         <div>
           <Caption children="Padding Bottom" />
-          <Select defaultValue={value.paddingBottom} onChange={newValue => handleChange('paddingBottom', newValue)}>
+          <Select
+            defaultValue={value?.paddingBottom || defaultValue.paddingBottom}
+            onChange={newValue => handleChange('paddingBottom', newValue)}
+          >
             {options.map(o => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
         </div>
+
+        <div>
+          <Caption children="Edges" />
+          <Select
+            defaultValue={value?.edges || defaultValue.edges}
+            onChange={newValue => handleChange('edges', newValue)}
+          >
+            {options.map(o => (
+              <Select.Option key={o.value} value={o.value} children={o.name} />
+            ))}
+          </Select>
+        </div>
+
         <div>
           <Caption children="Background Color" />
           <Popover content={getPicker()} title="Background Color" trigger="click">
-            <Swatch value={value.backgroundColor} />
+            <Swatch value={value?.backgroundColor || defaultValue.backgroundColor} />
           </Popover>
         </div>
       </Space>

@@ -54,6 +54,11 @@ const MediaLibrary = props => {
 
   const handleCloseDialog = () => setActiveFile(null)
 
+  const handleSelect = ({ id, storageKey }) => {
+    handleCloseDialog()
+    onSelect({ id, storageKey })
+  }
+
   return (
     <>
       <Space direction="vertical" size={20}>
@@ -83,7 +88,7 @@ const MediaLibrary = props => {
       </Space>
 
       <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>
-        {activeFile && <MediaImage file={activeFile} onSelect={onSelect} onClose={handleCloseDialog} />}
+        {activeFile && <MediaImage file={activeFile} onSelect={handleSelect} onClose={handleCloseDialog} />}
       </Modal>
     </>
   )

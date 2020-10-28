@@ -81,8 +81,11 @@ export const fields = {
         },
       ],
     },
+    {
+      id: 'settings',
+      type: 'settings',
+    },
   ],
-  style: {},
 }
 
 const TextImage = props => {

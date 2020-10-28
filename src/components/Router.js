@@ -12,6 +12,7 @@ import PostEditor from 'components/appPages/PostEditor'
 import Forms from 'components/appPages/Forms'
 import Form from 'components/appPages/Form'
 import GeneralSettings from 'components/appPages/GeneralSettings'
+import Admin from 'components/appPages/Admin'
 
 import Seo from 'components/appPages/Seo'
 import Theme from 'components/appPages/Theme'
@@ -25,6 +26,7 @@ import {
   ROUTE_SETTINGS_COLLECTIONS,
   ROUTE_SETTINGS_SEO,
   ROUTE_SETTINGS_THEME,
+  ROUTE_SITE_ADMIN,
 } from 'routes'
 import { siteActions } from 'actions'
 import { useStore } from 'store'
@@ -79,6 +81,7 @@ const Router = props => {
         <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} />
         <Seo path={ROUTE_SETTINGS_SEO} />
         <Theme path={ROUTE_SETTINGS_THEME} />
+        <Admin path={ROUTE_SITE_ADMIN} />
       </ReachRouter>
     </>
   )

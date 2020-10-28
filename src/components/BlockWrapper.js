@@ -3,11 +3,12 @@ import styled, { css } from 'styled-components'
 import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons'
 
 // import app components
+import Edges from 'components/Edges'
 import { useStore } from 'store'
 import { colors } from 'theme'
 
 const BlockWrapper = props => {
-  const { index, renderedElements, isTemplate, onClick, children, onOpenDialog, onMoveElement } = props
+  const { index, renderedElements, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props
 
   const [
     {
@@ -25,7 +26,9 @@ const BlockWrapper = props => {
   return (
     <Container active={isActive} viewport={viewport}>
       <Content onClick={onClick || handleOpenBlock} active={isActive} viewport={viewport}>
-        <div>{children}</div>
+        <ContentWrapper settings={settings}>
+          <Edges size={settings?.edges || 'none'}>{children}</Edges>
+        </ContentWrapper>
       </Content>
 
       <BlockName className="blockName" children={blockName} />
@@ -126,6 +129,16 @@ const Content = styled.div`
             border-color: ${colors.primary.dark};
           }
         `};
+`
+
+const ContentWrapper = styled.div`
+  margin-top: ${({ theme, settings }) => settings?.marginTop && theme.spacing.marginTop[settings.marginTop]}px;
+  margin-bottom: ${({ theme, settings }) =>
+    settings?.marginBottom && theme.spacing.marginBottom[settings.marginBottom]}px;
+  padding-top: ${({ theme, settings }) => settings?.paddingTop && theme.spacing.paddingTop[settings.paddingTop]}px;
+  padding-bottom: ${({ theme, settings }) =>
+    settings?.paddingBottom && theme.spacing.paddingBottom[settings.paddingBottom]}px;
+  background: ${({ settings }) => settings?.backgroundColor && settings.backgroundColor};
 `
 
 const BlockName = styled.div`
