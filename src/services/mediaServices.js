@@ -1,76 +1,48 @@
-import { API, graphqlOperation } from 'aws-amplify'
+import axios from 'axios'
+import { navigate } from 'gatsby'
 
-import {
-  createMediaItem,
-  updateMediaItem as dbUpdateMediaItem,
-  deleteMediaItem as dbDeleteMediaItem,
-} from '../graphql/mutations'
+import { db } from '.'
+import { auth } from '../utils'
 
-export const addMediaItem = async ({ siteID, title, mimeType, storageKey }) => {
-  const result = await API.graphql(
-    graphqlOperation(createMediaItem, {
-      input: { siteID, title, mimeType, storageKey },
-    })
+export const addMediaItem = async ({ siteID, file }) => {
+  const user = auth.getUser()
+
+  if (!user?.token) {
+    auth.logout(() => navigate(`/`))
+  }
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  let result = await axios.post(
+    `${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/createMediaItem?siteID=${siteID}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${user.token}`,
+      },
+    }
   )
 
+  const { data, status } = result
+
+  if (status === 200) {
+    return data
+  }
+}
+
+export const updateMediaItem = async ({ siteID, id, altText }) => {
+  let result = await db('updateMediaItem', { siteID, id, altText })
   return result
 }
 
-export const updateMediaItem = async ({ id, altText }) => {
-  const result = await API.graphql(
-    graphqlOperation(dbUpdateMediaItem, {
-      input: { id, altText },
-    })
-  )
-
+export const deleteMediaItem = async ({ siteID, id }) => {
+  let result = await db('deleteMediaItem', { siteID, id })
   return result
 }
 
-export const deleteMediaItem = async ({ id }) => {
-  const result = await API.graphql(
-    graphqlOperation(dbDeleteMediaItem, {
-      input: { id },
-    })
-  )
-
-  return result
-}
-
-export const getMediaItems = async ({ siteID, nextToken = null, limit = 20 }) => {
-  const result = await API.graphql(
-    graphqlOperation(
-      `
-      query ListMediaItems(
-        $filter: ModelMediaItemFilterInput
-        $limit: Int
-        $nextToken: String
-      ) {
-        listMediaItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
-          items {
-            id
-            siteID
-            title
-            mimeType
-            storageKey
-            altText
-            width
-            height
-            fileSize
-            createdAt
-            updatedAt
-            owner
-          }
-          nextToken
-        }
-      }
-    `,
-      {
-        filter: { siteID: { eq: siteID } },
-        limit,
-        nextToken,
-      }
-    )
-  )
-
+export const getMediaItems = async ({ siteID, page = null, limit = 20 }) => {
+  let result = await db('getMediaItems', { siteID, page, limit })
   return result
 }

@@ -2,13 +2,16 @@ import React from 'react'
 import styled from 'styled-components'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import { useStore } from 'store'
+import CmsLayout from '../CmsLayout'
 
-
+import { useStore } from '../../store'
 
 const Dashboard = () => {
-  const [{ cmsState: { sites, siteID } }] = useStore()
+  const [
+    {
+      cmsState: { sites, siteID },
+    },
+  ] = useStore()
 
   return (
     <>

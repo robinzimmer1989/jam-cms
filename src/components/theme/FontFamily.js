@@ -6,8 +6,8 @@ import FontPicker from 'font-picker-react'
 import { set } from 'lodash'
 
 // import app components
-import Caption from 'components/Caption'
-import { useStore } from 'store'
+import Caption from '../Caption'
+import { useStore } from '../../store'
 
 const FontFamily = () => {
   const [
@@ -20,7 +20,7 @@ const FontFamily = () => {
   const { headlineFontFamily, paragraphFontFamily } = site?.settings?.typography
 
   const handleChange = async (key, value) => {
-    const nextSite = produce(site, draft => {
+    const nextSite = produce(site, (draft) => {
       set(draft, `settings.typography.${key}`, value)
     })
 
@@ -39,7 +39,7 @@ const FontFamily = () => {
             pickerId="headline"
             apiKey={process.env.GATSBY_GOOGLE_FONTS_KEY}
             activeFontFamily={headlineFontFamily}
-            onChange={nextFont => handleChange('headlineFontFamily', nextFont.family)}
+            onChange={(nextFont) => handleChange('headlineFontFamily', nextFont.family)}
             sort={`popularity`}
             categories={['sans-serif', 'serif', 'display', 'handwriting']}
           />
@@ -50,7 +50,7 @@ const FontFamily = () => {
             pickerId="paragraph"
             apiKey={process.env.GATSBY_GOOGLE_FONTS_KEY}
             activeFontFamily={paragraphFontFamily}
-            onChange={nextFont => handleChange('paragraphFontFamily', nextFont.family)}
+            onChange={(nextFont) => handleChange('paragraphFontFamily', nextFont.family)}
             sort={`popularity`}
             categories={['sans-serif', 'serif']}
           />

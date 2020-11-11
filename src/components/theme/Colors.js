@@ -7,8 +7,8 @@ import { set } from 'lodash'
 import ColorScheme from 'color-scheme'
 
 // import app components
-import Caption from 'components/Caption'
-import { useStore } from 'store'
+import Caption from '../Caption'
+import { useStore } from '../../store'
 
 const scheme = new ColorScheme()
 
@@ -44,7 +44,7 @@ const Colors = () => {
   } = colors
 
   const handleChange = async (key, value) => {
-    const nextSite = produce(site, draft => {
+    const nextSite = produce(site, (draft) => {
       set(draft, `settings.colors.${key}`, value.hex)
     })
 
@@ -54,23 +54,25 @@ const Colors = () => {
     })
   }
 
-  const getSwatchColors = color =>
+  const getSwatchColors = (color) =>
     scheme
       .from_hex(color.replace('#', ''))
       .scheme('monochromatic')
       .variation('default')
       .web_safe(true)
       .colors()
-      .map(s => `#${s}`)
+      .map((s) => `#${s}`)
 
-  const getPicker = key => <StyledChromePicker color={colors[key]} onChange={v => handleChange(key, v)} disableAlpha />
+  const getPicker = (key) => (
+    <StyledChromePicker color={colors[key]} onChange={(v) => handleChange(key, v)} disableAlpha />
+  )
 
   const getSwatch = (keyParent, key) => {
     const swatch = getSwatchColors(colors[keyParent])
 
     return (
       <SwatchesPicker>
-        {swatch.map(s => (
+        {swatch.map((s) => (
           <Swatch key={s} value={s} onClick={() => handleChange(key, { hex: s })} />
         ))}
       </SwatchesPicker>
@@ -208,7 +210,7 @@ const Swatch = styled.div`
   width: 100%;
   height: 30px;
   margin-bottom: 10px;
-  background-color: ${props => props.value};
+  background-color: ${(props) => props.value};
   border-radius: 4px;
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   cursor: pointer;

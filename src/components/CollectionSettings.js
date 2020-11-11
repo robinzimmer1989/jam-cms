@@ -5,15 +5,16 @@ import { Button, Space, notification } from 'antd'
 import { set } from 'lodash'
 
 // import app components
-import Input from 'components/Input'
-import Skeleton from 'components/Skeleton'
+import Input from './Input'
+import Skeleton from './Skeleton'
 
-import { useStore } from 'store'
-import { collectionActions } from 'actions'
+import { useStore } from '../store'
+import { collectionActions } from '../actions'
 
 const CollectionSettings = ({ postTypeID }) => {
   const [
     {
+      cmsState: { siteID },
       editorState: { site },
     },
     dispatch,
@@ -27,7 +28,7 @@ const CollectionSettings = ({ postTypeID }) => {
     const { id, title, slug, template } = postType
 
     setLoading(true)
-    await collectionActions.updateCollection({ id, title, slug, template }, dispatch)
+    await collectionActions.updateCollection({ siteID, id, title, slug, template }, dispatch)
     setLoading(false)
 
     notification.success({
@@ -37,8 +38,8 @@ const CollectionSettings = ({ postTypeID }) => {
     })
   }
 
-  const handleChange = e => {
-    const nextPostType = produce(postType, draft => {
+  const handleChange = (e) => {
+    const nextPostType = produce(postType, (draft) => {
       return set(draft, `${e.target.name}`, e.target.value)
     })
 
@@ -52,14 +53,28 @@ const CollectionSettings = ({ postTypeID }) => {
     <Container>
       <Space direction="vertical" size={20}>
         <Skeleton done={!!postType} height={32}>
-          <Input value={postType?.title} name={`title`} onChange={handleChange} label={`Title`} />
+          <Input
+            value={postType?.title}
+            name={`title`}
+            onChange={handleChange}
+            label={`Title`}
+            disabled={postTypeID === 'page'}
+          />
         </Skeleton>
 
         <Skeleton done={!!postType} height={32}>
-          <Input value={postType?.slug} name={`slug`} onChange={handleChange} label={`Slug`} />
+          <Input
+            value={postType?.slug}
+            name={`slug`}
+            onChange={handleChange}
+            label={`Slug`}
+            disabled={postTypeID === 'page'}
+          />
         </Skeleton>
 
-        <Button children={`Update`} type="primary" onClick={handleUpdate} loading={loading} />
+        {postTypeID !== 'page' && (
+          <Button children={`Update`} type="primary" onClick={handleUpdate} loading={loading} />
+        )}
       </Space>
     </Container>
   )

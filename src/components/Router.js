@@ -3,19 +3,17 @@ import { Router as ReachRouter } from '@reach/router'
 import Helmet from 'react-helmet'
 
 // import app components
-import Dashboard from 'components/appPages/Dashboard'
-import Media from 'components/appPages/Media'
-import Collections from 'components/appPages/Collections'
-import Collection from 'components/appPages/Collection'
-import CollectionEditor from 'components/appPages/CollectionEditor'
-import PostEditor from 'components/appPages/PostEditor'
-import Forms from 'components/appPages/Forms'
-import Form from 'components/appPages/Form'
-import GeneralSettings from 'components/appPages/GeneralSettings'
-import Admin from 'components/appPages/Admin'
-
-import Seo from 'components/appPages/Seo'
-import Theme from 'components/appPages/Theme'
+import Dashboard from './appPages/Dashboard'
+import Media from './appPages/Media'
+import Collections from './appPages/Collections'
+import Collection from './appPages/Collection'
+import CollectionEditor from './appPages/CollectionEditor'
+import PostEditor from './appPages/PostEditor'
+import Forms from './appPages/Forms'
+import Form from './appPages/Form'
+import GeneralSettings from './appPages/GeneralSettings'
+import Admin from './appPages/Admin'
+import Seo from './appPages/Seo'
 
 import {
   ROUTE_MEDIA,
@@ -25,14 +23,13 @@ import {
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_COLLECTIONS,
   ROUTE_SETTINGS_SEO,
-  ROUTE_SETTINGS_THEME,
   ROUTE_SITE_ADMIN,
-} from 'routes'
-import { siteActions } from 'actions'
-import { useStore } from 'store'
+} from '../routes'
+import { siteActions } from '../actions'
+import { useStore } from '../store'
 
-const Router = props => {
-  const { siteID } = props
+const Router = (props) => {
+  const { siteID, theme, blocks } = props
 
   const [
     {
@@ -45,17 +42,21 @@ const Router = props => {
 
   useEffect(() => {
     const loadSite = async () => {
-      const result = await siteActions.getSite({ siteID }, dispatch)
-
-      if (result?.data?.getSite?.settings?.typography) {
-        const { headlineFontFamily, paragraphFontFamily } = result?.data?.getSite?.settings?.typography
-
-        setFonts([...new Set([headlineFontFamily, paragraphFontFamily])])
-      }
+      await siteActions.getSite({ siteID }, dispatch)
     }
 
-    loadSite()
+    // React was loading the site on every page change, even though the siteID never changed
+    // Fixed it with adding conditional logic here
+    !sites[siteID] && loadSite()
   }, [siteID])
+
+  useEffect(() => {
+    if (theme?.typography) {
+      const { headlineFontFamily, paragraphFontFamily } = theme.typography
+
+      setFonts([...new Set([headlineFontFamily, paragraphFontFamily])])
+    }
+  }, [theme])
 
   if (!sites[siteID]) {
     return null
@@ -64,7 +65,7 @@ const Router = props => {
   return (
     <>
       <Helmet>
-        {fonts.map(s => (
+        {fonts.map((s) => (
           <link key={s} rel="stylesheet" href={`https://fonts.googleapis.com/css?family=${s}`} />
         ))}
       </Helmet>
@@ -73,14 +74,13 @@ const Router = props => {
         <Dashboard path="/" />
         <Media path={`${ROUTE_MEDIA}`} />
         <Collection path={`${ROUTE_COLLECTIONS}/:postTypeID`} />
-        <PostEditor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} />
+        <PostEditor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} theme={theme} blocks={blocks} />
         <Forms path={ROUTE_FORMS} />
         <Form path={`${ROUTE_FORMS}/:formID`} />
         <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
         <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
-        <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} />
+        <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} theme={theme} blocks={blocks} />
         <Seo path={ROUTE_SETTINGS_SEO} />
-        <Theme path={ROUTE_SETTINGS_THEME} />
         <Admin path={ROUTE_SITE_ADMIN} />
       </ReachRouter>
     </>

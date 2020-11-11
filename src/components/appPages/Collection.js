@@ -4,17 +4,17 @@ import styled, { css } from 'styled-components'
 import { Button, Popconfirm, PageHeader, Tabs } from 'antd'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import PostForm from 'components/PostForm'
-import ListItem from 'components/ListItem'
+import CmsLayout from '../CmsLayout'
+import PostForm from '../PostForm'
+import ListItem from '../ListItem'
 
-import { postActions } from 'actions'
-import { useStore } from 'store'
-import { colors } from 'theme'
-import getRoute from 'routes'
-import { createDataTree, sortBy, generateSlug } from 'utils'
+import { postActions } from '../../actions'
+import { useStore } from '../../store'
+import { colors } from '../../theme'
+import getRoute from '../../routes'
+import { createDataTree, sortBy, generateSlug } from '../../utils'
 
-const Collection = props => {
+const Collection = (props) => {
   const { siteID, postTypeID } = props
 
   const [
@@ -32,24 +32,24 @@ const Collection = props => {
 
   const treePosts = createDataTree(posts)
 
-  const filteredPosts = filter !== `all` ? treePosts.filter(o => o.status === filter) : treePosts
+  const filteredPosts = filter !== `all` ? treePosts.filter((o) => o.status === filter) : treePosts
   sortBy(filteredPosts, 'createdAt')
 
   const handleAddPost = async ({ title, slug, parentID }) => {
-    await postActions.addPost({ siteID, postTypeID, status: `draft`, title, slug, parentID }, dispatch)
+    await postActions.addPost({ siteID, postTypeID, status: 'draft', title, slug, parentID }, dispatch)
   }
 
   const handleDeletePost = async ({ postID }) => {
-    await postActions.deletePost({ id: postID }, dispatch)
+    await postActions.deletePost({ siteID, id: postID }, dispatch)
   }
 
   const handleTrashPost = async ({ postID }) => {
-    await postActions.updatePost({ id: postID, status: 'trash' }, dispatch)
+    await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch)
   }
 
   const filterItems = (
-    <Tabs defaultActiveKey="all" onChange={v => setFilter(v)}>
-      {['all', 'publish', 'draft', 'trash'].map(name => {
+    <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
+      {['all', 'publish', 'draft', 'trash'].map((name) => {
         return <Tabs.TabPane key={name} tab={name.toUpperCase()} />
       })}
     </Tabs>
@@ -83,7 +83,7 @@ const Collection = props => {
 
     let badges = []
 
-    if (sites?.[siteID]?.settings?.frontPage === o.id) {
+    if (sites?.[siteID]?.frontPage === o.id) {
       badges.push(<Tag key="front" children={'front'} />)
     }
 
@@ -98,12 +98,13 @@ const Collection = props => {
           actions={actions}
           link={editLink}
           title={o.title}
-          subtitle={generateSlug(postType, o.id, sites?.[siteID]?.settings?.frontPage)}
+          subtitle={generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}
           status={badges}
           image={o.featuredImage}
+          hideImage={postTypeID === 'page'}
         />
 
-        {o.childNodes.map(p => renderPost(p, level + 1))}
+        {o.childNodes.map((p) => renderPost(p, level + 1))}
       </React.Fragment>
     )
   }
@@ -130,7 +131,7 @@ const Collection = props => {
         }
       />
 
-      {filteredPosts && filteredPosts.map(item => renderPost(item, 0))}
+      {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
     </CmsLayout>
   )
 }

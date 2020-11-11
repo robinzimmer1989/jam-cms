@@ -3,13 +3,13 @@ import { Collapse, Button, Space } from 'antd'
 import produce from 'immer'
 
 // import app components
-import { getField } from 'components/BlockEditFields'
+import { getField } from '../BlockEditFields'
 
-const Repeater = props => {
+const Repeater = (props) => {
   const { site, items, value: values = [], onChange, dispatch } = props
 
-  const handleAdd = index => {
-    const newValues = produce(values, draft => {
+  const handleAdd = (index) => {
+    const newValues = produce(values, (draft) => {
       draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}))
       return draft
     })
@@ -17,8 +17,8 @@ const Repeater = props => {
     onChange(newValues)
   }
 
-  const handleRemove = index => {
-    const newValues = produce(values, draft => {
+  const handleRemove = (index) => {
+    const newValues = produce(values, (draft) => {
       draft.splice(index, 1)
       return draft
     })
@@ -27,7 +27,7 @@ const Repeater = props => {
   }
 
   const handleChange = (item, index) => {
-    const newValues = produce(values, draft => {
+    const newValues = produce(values, (draft) => {
       draft[index][item.id] = item.value
       return draft
     })
@@ -51,7 +51,7 @@ const Repeater = props => {
                             field: { ...field, value: value[field.id] },
                             index,
                             site,
-                            onChangeElement: value => handleChange(value, index),
+                            onChangeElement: (value) => handleChange(value, index),
                             dispatch,
                           })}
                         </div>

@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { navigate } from 'gatsby'
-import { PageHeader, Space, Button, Card, Row, Col, Typography } from 'antd'
+import { PageHeader, Space, Button } from 'antd'
 
 // import app components
-import BaseLayout from 'components/BaseLayout'
-import Edges from 'components/Edges'
-import SiteForm from 'components/SiteForm'
-import { siteActions } from 'actions'
-import { useStore } from 'store'
+import BaseLayout from '../BaseLayout'
+import Edges from '../Edges'
+import SiteForm from '../SiteForm'
+import ListItem from '../ListItem'
+import Loader from '../Loader'
+
+import { siteActions } from '../../actions'
+import { useStore } from '../../store'
+import getRoute from '../../routes'
 
 const Home = () => {
   const [
@@ -17,71 +21,77 @@ const Home = () => {
     dispatch,
   ] = useStore()
 
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
     const loadSites = async () => {
-      await siteActions.getSites({}, dispatch)
+      // Directly redirect to site if env variable GATSBY_CMS_SITE_ID is enabled. We don't need to load it here, because it will be loaded in the next step.
+      // Otherwise get all sites, but redirect if first site isn't multisite
+      if (process.env.GATSBY_CMS_SITE_ID) {
+        navigate(getRoute(`dashboard`, { siteID: process.env.GATSBY_CMS_SITE_ID }))
+      } else {
+        const result = await siteActions.getSites({}, dispatch)
+
+        if (result.length > 0 && !result[0].multisite) {
+          navigate(getRoute(`dashboard`, { siteID: sites[0].id }))
+        }
+      }
+
+      setLoaded(true)
     }
     loadSites()
   }, [])
 
   return (
     <BaseLayout>
-      <Edges size="md">
-        <PageHeader
-          title="My Websites"
-          extra={[
-            <Button
-              key="1"
-              onClick={() =>
-                dispatch({
-                  type: 'SET_DIALOG',
-                  payload: {
-                    open: true,
-                    title: 'Add Website',
-                    component: <SiteForm />,
-                  },
-                })
-              }
-              type="primary"
-              children={`Add Site`}
-            />,
-          ]}
-        />
+      {loaded ? (
+        <Edges size="md">
+          <PageHeader
+            title="My Websites"
+            extra={[
+              <Button
+                key="1"
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_DIALOG',
+                    payload: {
+                      open: true,
+                      title: 'Add Website',
+                      component: <SiteForm />,
+                    },
+                  })
+                }
+                type="primary"
+                children={`Add Site`}
+              />,
+            ]}
+          />
 
-        <Space direction="vertical">
-          {Object.keys(sites).map(key => {
-            const { id, title, netlifyID, netlifyUrl } = sites[key]
+          <Space direction="vertical">
+            {Object.keys(sites).map((key) => {
+              const { id, title } = sites[key]
 
-            return (
-              <Card
-                key={id}
-                title={title}
-                extra={[<Button key="1" onClick={() => navigate(`/app/site/${id}`)} children={`Dashboard`} />]}
-              >
-                <Row>
-                  <Col span={12}>
-                    <Typography.Title level={5} children="Website" />
-                    {netlifyUrl && <a href={netlifyUrl} target="_blank" rel="noopener" children={netlifyUrl} />}
-                  </Col>
-                  <Col span={6}>
-                    <Typography.Title level={5} children="Status" />
-                    {netlifyID && (
-                      <img
-                        src={`https://api.netlify.com/api/v1/badges/${netlifyID}/deploy-status`}
-                        alt="Netlify Status"
-                      />
-                    )}
-                  </Col>
-                  <Col span={6}>
-                    <Typography.Title level={5} children="Billing Information" />
-                    <Typography children="..." />
-                  </Col>
-                </Row>
-              </Card>
-            )
-          })}
-        </Space>
-      </Edges>
+              return (
+                <ListItem
+                  key={id}
+                  title={title}
+                  actions={[
+                    <Button
+                      key="1"
+                      onClick={() => navigate(getRoute(`dashboard`, { siteID: id }))}
+                      children={`Dashboard`}
+                    />,
+                  ]}
+                  link={getRoute(`dashboard`, { siteID: id })}
+                  hideImage={true}
+                />
+              )
+            })}
+          </Space>
+        </Edges>
+      ) : (
+        <Loader />
+      )}
     </BaseLayout>
   )
 }

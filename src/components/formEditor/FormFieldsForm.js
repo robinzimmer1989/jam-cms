@@ -2,10 +2,10 @@ import React from 'react'
 import { Button } from 'antd'
 
 // import app components
-import formBlocks from 'components/formBlocks'
-import { useStore } from 'store'
+import formBlocks from '../formBlocks'
+import { useStore } from '../../store'
 
-const FormFieldsForm = props => {
+const FormFieldsForm = (props) => {
   const { index } = props
 
   const [
@@ -15,7 +15,7 @@ const FormFieldsForm = props => {
     dispatch,
   ] = useStore()
 
-  const handleSelect = name => {
+  const handleSelect = (name) => {
     const content = [...form.content]
     content.splice(index, 0, formBlocks[name].fields)
 
@@ -34,7 +34,7 @@ const FormFieldsForm = props => {
 
   return (
     <>
-      {Object.keys(formBlocks).map(key => (
+      {Object.keys(formBlocks).map((key) => (
         <Button key={key} children={key} onClick={() => handleSelect(key)} />
       ))}
     </>

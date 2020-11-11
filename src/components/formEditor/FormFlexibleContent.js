@@ -1,10 +1,10 @@
 import React from 'react'
 
 // import app components
-import allBlocks from 'components/formBlocks'
-import FormBlockWrapper from 'components/formEditor/FormBlockWrapper'
+import allBlocks from '../formBlocks'
+import FormBlockWrapper from '../formEditor/FormBlockWrapper'
 
-const FlexibleContent = props => {
+const FlexibleContent = (props) => {
   const { blocks } = props
 
   return (

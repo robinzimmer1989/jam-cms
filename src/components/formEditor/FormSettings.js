@@ -5,11 +5,11 @@ import { Button, Space, notification } from 'antd'
 import { set } from 'lodash'
 
 // import app components
-import Input from 'components/Input'
-import Skeleton from 'components/Skeleton'
+import Input from '../Input'
+import Skeleton from '../Skeleton'
 
-import { useStore } from 'store'
-import { formActions } from 'actions'
+import { useStore } from '../../store'
+import { formActions } from '../../actions'
 
 const FormSettings = () => {
   const [
@@ -33,8 +33,8 @@ const FormSettings = () => {
     })
   }
 
-  const handleChangeSettings = e => {
-    const nextForm = produce(form, draft => set(draft, `${e.target.name}`, e.target.value))
+  const handleChangeSettings = (e) => {
+    const nextForm = produce(form, (draft) => set(draft, `${e.target.name}`, e.target.value))
 
     dispatch({
       type: `UPDATE_EDITOR_FORM`,

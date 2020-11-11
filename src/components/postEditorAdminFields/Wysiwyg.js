@@ -9,13 +9,11 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import 'draft-js-image-plugin/lib/plugin.css'
 
 // import app components
-import MediaLibrary from 'components/MediaLibrary'
+import MediaLibrary from '../MediaLibrary'
 
 const imagePlugin = createImagePlugin()
 
-const bucketName = `https://my-aws-project7deb432f10d54bd29e13786dda5e7f97project-gatsbycms.s3.ca-central-1.amazonaws.com/public`
-
-const ImageUploadIcon = props => {
+const ImageUploadIcon = (props) => {
   const [open, setOpen] = useState(false)
 
   const handleSelect = ({ id, storageKey }) => {
@@ -61,10 +59,8 @@ const ImageUploadIcon = props => {
   )
 }
 
-const Wysiwyg = props => {
+const Wysiwyg = (props) => {
   const { value, onChange } = props
-
-  console.log(value)
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
@@ -74,7 +70,7 @@ const Wysiwyg = props => {
     }
   }, [])
 
-  const handleChange = editorState => {
+  const handleChange = (editorState) => {
     setEditorState(editorState)
 
     const contentState = editorState.getCurrentContent()

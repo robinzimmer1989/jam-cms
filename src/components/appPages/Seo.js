@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import { Button, PageHeader } from 'antd'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
+import CmsLayout from '../CmsLayout'
 
-import { useStore } from 'store'
+import { useStore } from '../../store'
 
 const SettingsSeo = () => {
   const [

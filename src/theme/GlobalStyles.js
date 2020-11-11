@@ -2,10 +2,11 @@ import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
 
-  body {
+  body, iframe {
     background: #f8f9ff;
     overflow-y: scroll !important;
   }
+  
 
   a {
     text-decoration: none;

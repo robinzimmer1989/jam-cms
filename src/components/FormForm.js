@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Space, Button } from 'antd'
 
 // import app components
-import Input from 'components/Input'
-import { formActions } from 'actions'
-import { useStore } from 'store'
+import Input from './Input'
+import { formActions } from '../actions'
+import { useStore } from '../store'
 
-const FormForm = props => {
+const FormForm = (props) => {
   const { siteID } = props
 
   const [, dispatch] = useStore()
@@ -25,7 +25,7 @@ const FormForm = props => {
 
   return (
     <Space direction="vertical">
-      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
+      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

@@ -2,10 +2,10 @@ import React from 'react'
 import { Card, PageHeader } from 'antd'
 
 // import app components
-import BaseLayout from 'components/BaseLayout'
-import Edges from 'components/Edges'
+import BaseLayout from '../BaseLayout'
+import Edges from '../Edges'
 
-import { getCurrentUser } from 'utils/auth'
+import { getCurrentUser } from '../../utils/auth'
 
 const Home = () => {
   const user = getCurrentUser()
@@ -15,10 +15,8 @@ const Home = () => {
       <Edges size="md">
         <PageHeader title="Profile" />
 
-        <Card title="Contact Details">
+        <Card>
           <p>Email: {user.email}</p>
-          <p>Phone: {user.phone_number}</p>
-          <p>Username: {user.username}</p>
         </Card>
       </Edges>
     </BaseLayout>

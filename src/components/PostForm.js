@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Space, Button } from 'antd'
 
 // import app components
-import Input from 'components/Input'
-import PostTreeSelect from 'components/PostTreeSelect'
-import { formatSlug } from 'utils'
-import { useStore } from 'store'
+import Input from './Input'
+import PostTreeSelect from './PostTreeSelect'
+import { formatSlug } from '../utils'
+import { useStore } from '../store'
 
-const PostForm = props => {
+const PostForm = (props) => {
   const { postTypeID, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props
 
   const [
@@ -46,10 +46,14 @@ const PostForm = props => {
   }
 
   return (
-    <Space direction="vertical">
-      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} placeholder={`Title`} />
-      <Input label="Slug" value={slug} onChange={e => setSlug(e.target.value)} placeholder={`Slug`} />
-      <PostTreeSelect items={posts} value={parentID} onChange={value => setParentID(value)} />
+    <Space direction="vertical" size={20}>
+      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={``} />
+      <Input label="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder={`(Optional)`} />
+
+      {postTypeID === 'page' && (
+        <PostTreeSelect items={posts} value={parentID} onChange={(value) => setParentID(value)} />
+      )}
+
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

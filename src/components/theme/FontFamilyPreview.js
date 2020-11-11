@@ -3,8 +3,8 @@ import { Typography, Space } from 'antd'
 import styled from 'styled-components'
 
 // import app components
-import Input from 'components/Input'
-import Edges from 'components/Edges'
+import Input from '../Input'
+import Edges from '../Edges'
 
 const FontFamilyPreview = () => {
   const [text, setText] = useState(`A red flair silhouetted the jagged edge of a wing.`)
@@ -13,7 +13,7 @@ const FontFamilyPreview = () => {
     <Container>
       <Edges size="sm">
         <Space direction="vertical" size={40}>
-          <Input className="reset-font" label="Preview Text" value={text} onChange={e => setText(e.target.value)} />
+          <Input className="reset-font" label="Preview Text" value={text} onChange={(e) => setText(e.target.value)} />
           <div>
             <Space direction="vertical" size={20}>
               <Typography.Title level={1} children={`h1. ${text}`} />

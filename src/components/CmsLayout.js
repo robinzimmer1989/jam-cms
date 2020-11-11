@@ -5,13 +5,13 @@ import { PageHeader, Layout, Menu, Divider } from 'antd'
 import { PieChartOutlined, BlockOutlined, SettingOutlined, FormOutlined, FolderOpenOutlined } from '@ant-design/icons'
 
 // import app components
-import Edges from 'components/Edges'
-import CmsHeader from 'components/CmsHeader'
+import Edges from './Edges'
+import CmsHeader from './CmsHeader'
 
-import { useStore } from 'store'
-import getRoute from 'routes'
+import { useStore } from '../store'
+import getRoute from '../routes'
 
-const CmsLayout = props => {
+const CmsLayout = (props) => {
   const { pageTitle, actionBar, rightSidebar, children } = props
 
   const [
@@ -55,7 +55,7 @@ const CmsLayout = props => {
 
             <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
               {site?.postTypes &&
-                Object.values(site.postTypes).map(o => {
+                Object.values(site.postTypes).map((o) => {
                   return (
                     <Menu.Item key={o.title}>
                       <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}> {o.title}</Link>
@@ -74,9 +74,6 @@ const CmsLayout = props => {
               </Menu.Item>
               <Menu.Item key="Collections">
                 <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
-              </Menu.Item>
-              <Menu.Item key="Theme">
-                <Link to={getRoute(`settings-theme`, { siteID })}>Theme</Link>
               </Menu.Item>
               <Menu.Item key="SEO">
                 <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>

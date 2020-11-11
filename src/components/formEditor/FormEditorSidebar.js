@@ -2,9 +2,10 @@ import React from 'react'
 import { PageHeader, Divider } from 'antd'
 
 // import app components
-import FormSettings from 'components/formEditor/FormSettings'
-import FormEditFields from 'components/formEditor/FormEditFields'
-import { useStore } from 'store'
+import FormSettings from '../formEditor/FormSettings'
+import FormEditFields from '../formEditor/FormEditFields'
+
+import { useStore } from '../../store'
 
 const FormEditorSidebar = () => {
   const [

@@ -4,9 +4,9 @@ import { Popover, Space, Select } from 'antd'
 import { ChromePicker } from 'react-color'
 
 // import app components
-import Caption from 'components/Caption'
+import Caption from '../Caption'
 
-const Settings = props => {
+const Settings = (props) => {
   const { value, onChange } = props
 
   const defaultValue = {
@@ -32,7 +32,7 @@ const Settings = props => {
   const getPicker = () => (
     <StyledChromePicker
       color={value?.backgroundColor || defaultValue.backgroundColor}
-      onChange={newValue => handleChange('backgroundColor', newValue.hex)}
+      onChange={(newValue) => handleChange('backgroundColor', newValue.hex)}
     />
   )
 
@@ -43,9 +43,9 @@ const Settings = props => {
           <Caption children="Margin Top" />
           <Select
             defaultValue={value?.marginTop || defaultValue.marginTop}
-            onChange={newValue => handleChange('marginTop', newValue)}
+            onChange={(newValue) => handleChange('marginTop', newValue)}
           >
-            {options.map(o => (
+            {options.map((o) => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
@@ -55,9 +55,9 @@ const Settings = props => {
           <Caption children="Margin Bottom" />
           <Select
             defaultValue={value?.marginBottom || defaultValue.marginBottom}
-            onChange={newValue => handleChange('marginBottom', newValue)}
+            onChange={(newValue) => handleChange('marginBottom', newValue)}
           >
-            {options.map(o => (
+            {options.map((o) => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
@@ -67,9 +67,9 @@ const Settings = props => {
           <Caption children="Padding Top" />
           <Select
             defaultValue={value?.paddingTop || defaultValue.paddingTop}
-            onChange={newValue => handleChange('paddingTop', newValue)}
+            onChange={(newValue) => handleChange('paddingTop', newValue)}
           >
-            {options.map(o => (
+            {options.map((o) => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
@@ -79,9 +79,9 @@ const Settings = props => {
           <Caption children="Padding Bottom" />
           <Select
             defaultValue={value?.paddingBottom || defaultValue.paddingBottom}
-            onChange={newValue => handleChange('paddingBottom', newValue)}
+            onChange={(newValue) => handleChange('paddingBottom', newValue)}
           >
-            {options.map(o => (
+            {options.map((o) => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
@@ -91,9 +91,9 @@ const Settings = props => {
           <Caption children="Edges" />
           <Select
             defaultValue={value?.edges || defaultValue.edges}
-            onChange={newValue => handleChange('edges', newValue)}
+            onChange={(newValue) => handleChange('edges', newValue)}
           >
-            {options.map(o => (
+            {options.map((o) => (
               <Select.Option key={o.value} value={o.value} children={o.name} />
             ))}
           </Select>
@@ -118,7 +118,7 @@ const Swatch = styled.div`
   width: 100%;
   height: 30px;
   margin-bottom: 10px;
-  background-color: ${props => props.value};
+  background-color: ${(props) => props.value};
   border-radius: 4px;
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   cursor: pointer;

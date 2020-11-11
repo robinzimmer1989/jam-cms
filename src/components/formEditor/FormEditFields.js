@@ -5,11 +5,10 @@ import produce from 'immer'
 import { Button, Space, Collapse } from 'antd'
 
 // import app components
-import formBlocks from 'components/formBlocks'
+import formBlocks from '../formBlocks'
+import Text from '../formEditorAdminFields/Text'
 
-import Text from 'components/formEditorAdminFields/Text'
-
-import { useStore } from 'store'
+import { useStore } from '../../store'
 
 const FormEditFields = () => {
   const [
@@ -23,8 +22,8 @@ const FormEditFields = () => {
   const getFields = () => {
     if (form && form.content[editorIndex]) {
       // loop through default formBlocks and replace value if found
-      return formBlocks[form.content[editorIndex].name].fields.fields.map(o => {
-        const setting = form.content[editorIndex].fields.find(p => p.id === o.id)
+      return formBlocks[form.content[editorIndex].name].fields.fields.map((o) => {
+        const setting = form.content[editorIndex].fields.find((p) => p.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -38,7 +37,7 @@ const FormEditFields = () => {
   const handleChange = (value, id, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
-    const nextForm = produce(form, draft => {
+    const nextForm = produce(form, (draft) => {
       return set(draft, `content.${editorIndex}.fields.${index}`, { id, value })
     })
 
@@ -68,7 +67,7 @@ const FormEditFields = () => {
 
     switch (field.type) {
       case 'text':
-        component = <Text {...field} onChange={e => handleChange(e.target.value, field.id, fieldIndex)} />
+        component = <Text {...field} onChange={(e) => handleChange(e.target.value, field.id, fieldIndex)} />
         break
 
       default:

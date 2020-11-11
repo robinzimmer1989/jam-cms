@@ -3,20 +3,15 @@ import { PageHeader, Divider, Space, Button, notification } from 'antd'
 import styled from 'styled-components'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import FontFamily from 'components/theme/FontFamily'
-import FontStyles from 'components/theme/FontStyles'
-import FontFamilyPreview from 'components/theme/FontFamilyPreview'
-import Colors from 'components/theme/Colors'
-import PageWrapper from 'components/PageWrapper'
+import CmsLayout from '../CmsLayout'
+import FontFamily from '../theme/FontFamily'
+import FontStyles from '../theme/FontStyles'
+import FontFamilyPreview from '../theme/FontFamilyPreview'
+import Colors from '../theme/Colors'
+import PageWrapper from '../PageWrapper'
 
-import Header from 'components/postBlocks/Header'
-import Banner from 'components/postBlocks/Banner'
-import TextImage from 'components/postBlocks/TextImage'
-
-import { siteActions } from 'actions'
-import { useStore } from 'store'
-import getRoute from 'routes'
+import { siteActions } from '../../actions'
+import { useStore } from '../../store'
 
 const SettingsTheme = () => {
   const [
@@ -48,9 +43,7 @@ const SettingsTheme = () => {
   }
 
   const renderContent = () => {
-    if (tab === 'Theme') {
-      return null
-    } else if (tab === 'Colors') {
+    if (tab === 'Colors') {
       return <Colors />
     } else if (tab === 'Typography') {
       return (
@@ -78,7 +71,7 @@ const SettingsTheme = () => {
         children: (
           <Container>
             <Space direction="vertical" size={20}>
-              {['Theme', 'Colors', 'Typography'].map(name => {
+              {['Colors', 'Typography'].map((name) => {
                 return <Button key={name} children={name} onClick={() => setTab(name)} />
               })}
 
@@ -109,17 +102,7 @@ const SettingsTheme = () => {
   return (
     <CmsLayout pageTitle="Theme" actionBar={'editor'} rightSidebar={getSidebar()}>
       <PageWrapper>
-        <Header
-          image={{ storageKey: 'dummylogo.jpg' }}
-          mainMenu={[{ title: 'About us' }, { title: 'Products' }, { title: 'Contact Us' }]}
-        />
-        <Banner image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }} />
         <FontFamilyPreview />
-        <TextImage
-          image={{ storageKey: 'justin-hu-RIzdVSGa60w-unsplash (1).jpg' }}
-          title={'Hello World'}
-          text={'Lorem ipsum dolor...'}
-        />
       </PageWrapper>
     </CmsLayout>
   )

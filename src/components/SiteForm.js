@@ -3,11 +3,11 @@ import { Space, Button } from 'antd'
 import { navigate } from 'gatsby'
 
 // import app components
-import Input from 'components/Input'
-import { getCurrentUser } from 'utils/auth'
-import { siteActions } from 'actions'
-import { useStore } from 'store'
-import getRoute from 'routes'
+import Input from './Input'
+import { getCurrentUser } from '../utils/auth'
+import { siteActions } from '../actions'
+import { useStore } from '../store'
+import getRoute from '../routes'
 
 const SiteForm = () => {
   const [, dispatch] = useStore()
@@ -24,8 +24,8 @@ const SiteForm = () => {
 
     const result = await siteActions.addSite({ ownerID: getCurrentUser().sub, title }, dispatch)
 
-    if (result?.data?.updateSite) {
-      navigate(getRoute(`dashboard`, { siteID: result.data.updateSite.id }))
+    if (result) {
+      navigate(getRoute(`dashboard`, { siteID: result.id }))
     }
 
     setLoading(false)
@@ -35,7 +35,7 @@ const SiteForm = () => {
 
   return (
     <Space direction="vertical">
-      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
+      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
       <Button loading={loading} children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

@@ -1,16 +1,14 @@
 import { css } from 'styled-components'
 
-export default function generateCss(site) {
-  if (!site) {
+export default function generateCss(theme) {
+  if (!theme) {
     return
   }
 
   const {
-    settings: {
-      typography: { h1, h2, h3, h4, h5, p, menuItem, headlineFontFamily, paragraphFontFamily },
-      colors,
-    },
-  } = site
+    typography: { h1, h2, h3, h4, h5, p, menuItem, headlineFontFamily, paragraphFontFamily },
+    colors,
+  } = theme
 
   const h1Styles = {
     ...h1,

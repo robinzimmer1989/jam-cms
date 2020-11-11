@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Button, Space, Row, Col, Popconfirm } from 'antd'
+import Img from 'gatsby-image'
 
 // import app components
-import Image from 'components/Image'
-import Input from 'components/Input'
+import Input from './Input'
 
-import { mediaActions } from 'actions'
-import { useStore } from 'store'
+import { mediaActions } from '../actions'
+import { useStore } from '../store'
+import { colors } from '../theme'
 
-const MediaImage = props => {
+const MediaImage = (props) => {
   const { file, onSelect, onClose } = props
 
   const [, dispatch] = useStore()
@@ -17,7 +18,7 @@ const MediaImage = props => {
   const [data, setData] = useState({ ...file })
   const [loading, setLoading] = useState(false)
 
-  const handleChange = e => setData({ ...data, [e.target.name]: e.target.value })
+  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value })
 
   const handleUpdateMediaItem = async () => {
     const { id, altText, siteID } = data
@@ -32,7 +33,7 @@ const MediaImage = props => {
     const result = await mediaActions.deleteMediaItem({ ...file }, dispatch)
     setLoading(false)
 
-    if (result?.data?.deleteMediaItem) {
+    if (result) {
       onClose()
     }
   }
@@ -41,7 +42,21 @@ const MediaImage = props => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Image image={file} />
+          {file?.childImageSharp?.fluid && (
+            <Img
+              fluid={file.childImageSharp.fluid}
+              imgStyle={{
+                objectFit: 'contain',
+                maxWidth: file.width,
+                maxHeight: file.height,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+              alt={file.alt}
+              style={{ width: '100%', height: '50vh', background: colors.primary.light }}
+            />
+          )}
         </Col>
         <Col span={12}>
           <Content span={12}>

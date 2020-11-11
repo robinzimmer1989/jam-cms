@@ -4,19 +4,17 @@ import produce from 'immer'
 import { set } from 'lodash'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import PageWrapper from 'components/PageWrapper'
-import FlexibleContent from 'components/FlexibleContent'
-import BlockForm from 'components/BlockForm'
-import BlockEditFields from 'components/BlockEditFields'
-import postBlocks from 'components/postBlocks'
-import CollectionSettings from 'components/CollectionSettings'
+import CmsLayout from '../CmsLayout'
+import PageWrapper from '../PageWrapper'
+import FlexibleContent from '../FlexibleContent'
+import BlockForm from '../BlockForm'
+import BlockEditFields from '../BlockEditFields'
+import CollectionSettings from '../CollectionSettings'
 
-import { siteActions } from 'actions'
-import { useStore } from 'store'
-import getRoute from 'routes'
+import { siteActions } from '../../actions'
+import { useStore } from '../../store'
 
-const CollectionEditor = ({ postTypeID }) => {
+const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const [
     {
       cmsState: { sites, siteID },
@@ -35,8 +33,8 @@ const CollectionEditor = ({ postTypeID }) => {
 
   const getFields = () => {
     if (postType?.template?.[editorIndex]) {
-      return postBlocks[postType.template[editorIndex].name].fields.fields.map(o => {
-        const setting = postType.template[editorIndex].fields.find(p => p.id === o.id)
+      return blocks[postType.template[editorIndex].name].fields.fields.map((o) => {
+        const setting = postType.template[editorIndex].fields.find((p) => p.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -91,11 +89,11 @@ const CollectionEditor = ({ postTypeID }) => {
     )
   }
 
-  const handleChangeElement = ({ id, type, value }, index) => {
+  const handleChangeElement = (field, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
-    const nextPostType = produce(postType, draft => {
-      return set(draft, `template.${editorIndex}.fields.${index}`, { id, value, type })
+    const nextPostType = produce(postType, (draft) => {
+      return set(draft, `template.${editorIndex}.fields.${index}`, field)
     })
 
     dispatch({
@@ -105,7 +103,7 @@ const CollectionEditor = ({ postTypeID }) => {
   }
 
   const handleDeleteElement = () => {
-    const nextPostType = produce(postType, draft => {
+    const nextPostType = produce(postType, (draft) => {
       draft.template.splice(editorIndex, 1)
       return draft
     })
@@ -119,7 +117,7 @@ const CollectionEditor = ({ postTypeID }) => {
   }
 
   const handleMoveElement = (index, newIndex) => {
-    const nextPostType = produce(postType, draft => {
+    const nextPostType = produce(postType, (draft) => {
       if (newIndex > -1 && newIndex < draft.template.length) {
         const temp = draft.template[index]
         draft.template[index] = draft.template[newIndex]
@@ -136,8 +134,8 @@ const CollectionEditor = ({ postTypeID }) => {
   }
 
   const handleSelectElement = (name, index) => {
-    const nextPostType = produce(postType, draft => {
-      draft.template.splice(index, 0, postBlocks[name].fields)
+    const nextPostType = produce(postType, (draft) => {
+      draft.template.splice(index, 0, blocks[name].fields)
       return draft
     })
 
@@ -155,7 +153,7 @@ const CollectionEditor = ({ postTypeID }) => {
       payload: {
         open: true,
         title: 'Choose a Block',
-        component: <BlockForm index={index} onSelect={handleSelectElement} />,
+        component: <BlockForm index={index} onSelect={handleSelectElement} blocks={blocks} />,
         width: 500,
       },
     })
@@ -164,10 +162,10 @@ const CollectionEditor = ({ postTypeID }) => {
   return (
     <CmsLayout pageTitle={`${postType?.title} Template`} actionBar={'editor'} rightSidebar={getSidebar()}>
       <Space direction="vertical" size={30}>
-        <PageWrapper>
+        <PageWrapper theme={theme}>
           <FlexibleContent
-            allElements={postBlocks}
-            renderedElements={postType?.template}
+            blocks={blocks}
+            renderedBlocks={postType?.template}
             editableHeader={false}
             editableFooter={false}
             onOpenDialog={handleOpenDialog}

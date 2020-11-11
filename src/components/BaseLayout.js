@@ -2,9 +2,9 @@ import React from 'react'
 import { Layout } from 'antd'
 
 // import app components
-import Header from 'components/Header'
+import Header from './Header'
 
-const BaseLayout = props => {
+const BaseLayout = (props) => {
   const { children } = props
 
   return (

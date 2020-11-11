@@ -8,7 +8,7 @@ import removeFromTree from './removeFromTree'
 import generateCss from './generateCss'
 import convertToPropsSchema from './convertToPropsSchema'
 import deepCopyTree from './deepCopyTree'
-
+import * as auth from './auth'
 
 export {
   createDataTree,
@@ -21,5 +21,5 @@ export {
   generateCss,
   convertToPropsSchema,
   deepCopyTree,
-
+  auth,
 }

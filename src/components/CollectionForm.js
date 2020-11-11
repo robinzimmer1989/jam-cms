@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Button, Space } from 'antd'
 
 // import app components
-import Input from 'components/Input'
-import { formatSlug } from 'utils'
-import { useStore } from 'store'
+import Input from './Input'
+import { formatSlug } from '../utils'
+import { useStore } from '../store'
 
-const CollectionForm = props => {
+const CollectionForm = (props) => {
   const { title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props
 
   const [, dispatch] = useStore()
@@ -22,9 +22,13 @@ const CollectionForm = props => {
     let formattedSlug
 
     if (slug) {
-      formattedSlug = formatSlug(slug)
+      formattedSlug = formatSlug(slug).replace('/', '')
+      // Remove first slash
+      formattedSlug = formattedSlug.substring(1)
     } else {
       formattedSlug = formatSlug(title)
+      // Remove first slash
+      formattedSlug = formattedSlug.substring(1)
     }
 
     await onSubmit({ title, slug: formattedSlug })
@@ -34,8 +38,8 @@ const CollectionForm = props => {
 
   return (
     <Space direction="vertical">
-      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} />
-      <Input label="slug" value={slug} onChange={e => setSlug(e.target.value)} />
+      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

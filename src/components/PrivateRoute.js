@@ -2,16 +2,17 @@ import React, { useEffect } from 'react'
 import { navigate } from '@reach/router'
 
 // import app components
-import { isLoggedIn } from 'utils/auth'
+import { isLoggedIn } from '../utils/auth'
+import getRoute from '../routes'
 
-const PrivateRoute = props => {
+const PrivateRoute = (props) => {
   const { component: Component, location, ...rest } = props
 
   useEffect(() => {
     const { location } = props
 
     if (!isLoggedIn() && location.pathname !== `/`) {
-      navigate(`/`)
+      navigate(getRoute(`sign-in`))
     }
   })
 

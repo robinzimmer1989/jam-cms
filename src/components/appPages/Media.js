@@ -1,10 +1,10 @@
 import React from 'react'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import MediaLibrary from 'components/MediaLibrary'
+import CmsLayout from '../CmsLayout'
+import MediaLibrary from '../MediaLibrary'
 
-const Media = props => {
+const Media = (props) => {
   return (
     <CmsLayout pageTitle={`Media`}>
       <MediaLibrary />

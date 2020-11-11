@@ -5,16 +5,16 @@ import { Button, Space, Select as AntSelect, Checkbox, notification } from 'antd
 import { set } from 'lodash'
 
 // import app components
-import Input from 'components/Input'
-import Select from 'components/Select'
-import Caption from 'components/Caption'
-import Skeleton from 'components/Skeleton'
-import PostTreeSelect from 'components/PostTreeSelect'
-import MediaLibrary from 'components/MediaLibrary'
-import ImagePicker from 'components/postEditorAdminFields/ImagePicker'
+import Input from './Input'
+import Select from './Select'
+import Caption from './Caption'
+import Skeleton from './Skeleton'
+import PostTreeSelect from './PostTreeSelect'
+import MediaLibrary from './MediaLibrary'
+import ImagePicker from './postEditorAdminFields/ImagePicker'
 
-import { useStore } from 'store'
-import { postActions, siteActions } from 'actions'
+import { useStore } from '../store'
+import { postActions, siteActions } from '../actions'
 
 const PostSettings = () => {
   const [
@@ -34,11 +34,11 @@ const PostSettings = () => {
   post && delete otherPosts[post.id]
 
   const handleSavePost = async () => {
-    const { id, settings } = site
+    const { id, settings, frontPage } = site
 
     setLoading(true)
-    await postActions.updatePost(post, dispatch)
-    await siteActions.updateSite({ id, settings }, dispatch)
+    await postActions.updatePost({ siteID: id, ...post }, dispatch)
+    await siteActions.updateSite({ id, settings, frontPage }, dispatch)
     setLoading(false)
 
     notification.success({
@@ -48,8 +48,8 @@ const PostSettings = () => {
     })
   }
 
-  const handleChangePageSettings = (name, value) => {
-    const nextPost = produce(post, draft => set(draft, `${name}`, value))
+  const handleChangePost = (name, value) => {
+    const nextPost = produce(post, (draft) => set(draft, `${name}`, value))
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
@@ -57,8 +57,8 @@ const PostSettings = () => {
     })
   }
 
-  const handleChangeSiteSettings = (name, value) => {
-    const nextSite = produce(site, draft => set(draft, `settings.${name}`, value))
+  const handleChangeSite = (name, value) => {
+    const nextSite = produce(site, (draft) => set(draft, `${name}`, value))
 
     dispatch({
       type: `UPDATE_EDITOR_SITE`,
@@ -66,8 +66,8 @@ const PostSettings = () => {
     })
   }
 
-  const handleSelectImage = ({ id, storageKey }) => {
-    handleChangePageSettings('featuredImage', { id, storageKey })
+  const handleSelectImage = (image) => {
+    handleChangePost('featuredImage', image)
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }
@@ -76,29 +76,27 @@ const PostSettings = () => {
     <Container>
       <Space direction="vertical" size={20}>
         <Skeleton done={!!post} height={32}>
-          <Select
-            value={post?.status || ''}
-            onChange={value => handleChangePageSettings('status', value)}
-            label={'Status'}
-          >
+          <Select value={post?.status || ''} onChange={(value) => handleChangePost('status', value)} label={'Status'}>
             <AntSelect.Option value={'publish'} children={'Publish'} />
             <AntSelect.Option value={'draft'} children={'Draft'} />
             <AntSelect.Option value={'trash'} children={'Trash'} />
           </Select>
         </Skeleton>
 
-        <Skeleton done={!!post} height={32}>
-          <PostTreeSelect
-            items={otherPosts}
-            value={post?.parentID}
-            onChange={value => handleChangePageSettings('parentID', value)}
-          />
-        </Skeleton>
+        {post?.postTypeID === 'page' && (
+          <Skeleton done={!!post} height={32}>
+            <PostTreeSelect
+              items={otherPosts}
+              value={post?.parentID}
+              onChange={(value) => handleChangePost('parentID', value)}
+            />
+          </Skeleton>
+        )}
 
         <Skeleton done={!!post} height={32}>
           <Input
             value={post?.seoTitle || ''}
-            onChange={e => handleChangePageSettings('seoTitle', e.target.value)}
+            onChange={(e) => handleChangePost('seoTitle', e.target.value)}
             label={'SEO Title'}
           />
         </Skeleton>
@@ -106,37 +104,39 @@ const PostSettings = () => {
         <Skeleton done={!!post} height={98}>
           <Input
             value={post?.seoDescription || ''}
-            onChange={e => handleChangePageSettings('seoDescription', e.target.value)}
+            onChange={(e) => handleChangePost('seoDescription', e.target.value)}
             label={'SEO Description'}
             rows={4}
           />
         </Skeleton>
 
-        <Skeleton done={!!post} height={100}>
-          <Space direction="vertical" size={2}>
-            <Caption children="Featured Image" />
-            <ImagePicker
-              value={post?.featuredImage}
-              onClick={() =>
-                dispatch({
-                  type: `SET_DIALOG`,
-                  payload: {
-                    open: true,
-                    component: <MediaLibrary onSelect={handleSelectImage} />,
-                    width: 1000,
-                  },
-                })
-              }
-            />
-          </Space>
-        </Skeleton>
+        {post?.postTypeID !== 'page' && (
+          <Skeleton done={!!post} height={100}>
+            <Space direction="vertical" size={2}>
+              <Caption children="Featured Image" />
+              <ImagePicker
+                value={post?.featuredImage}
+                onClick={() =>
+                  dispatch({
+                    type: `SET_DIALOG`,
+                    payload: {
+                      open: true,
+                      component: <MediaLibrary onSelect={handleSelectImage} />,
+                      width: 1000,
+                    },
+                  })
+                }
+              />
+            </Space>
+          </Skeleton>
+        )}
 
-        {post?.postType?.title === 'Page' && (
+        {post?.postTypeID === 'page' && (
           <Skeleton done={!!post} height={98}>
             <Checkbox
               value={post?.id}
-              checked={post?.id === site?.settings?.frontPage}
-              onChange={e => handleChangeSiteSettings('frontPage', e.target.checked ? e.target.value : '')}
+              checked={post?.id === site?.frontPage}
+              onChange={(e) => handleChangeSite('frontPage', e.target.checked ? e.target.value : '')}
               children="Front Page"
             />
           </Skeleton>

@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { unionBy, set } from 'lodash'
+import { unionBy, set, get } from 'lodash'
 
 const DEFAULT_STATE = {
   siteID: null,
@@ -11,7 +11,7 @@ export const cmsState = { ...DEFAULT_STATE }
 export const sitesReducer = (state, action) => {
   const { payload } = action
 
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       /******************************
        * Sites
@@ -35,6 +35,13 @@ export const sitesReducer = (state, action) => {
        ******************************/
       case `ADD_COLLECTION`:
         set(draft, `sites.${payload.siteID}.postTypes.${payload.id}`, payload)
+        break
+
+      case `UPDATE_COLLECTION`:
+        set(draft, `sites.${payload.siteID}.postTypes.${payload.id}`, {
+          ...get(draft, `sites.${payload.siteID}.postTypes.${payload.id}`),
+          ...payload,
+        })
         break
 
       case `DELETE_COLLECTION`:
@@ -68,21 +75,21 @@ export const sitesReducer = (state, action) => {
        ******************************/
       case `ADD_MEDIA_ITEM`:
         draft.sites[payload.siteID].mediaItems = {
-          items: unionBy([payload.item], draft.sites[payload.siteID].mediaItems.items, 'id'),
-          nextToken: draft.sites[payload.siteID].mediaItems.nextToken,
+          items: unionBy([payload], draft.sites[payload.siteID].mediaItems.items, 'id'),
+          page: draft.sites[payload.siteID].mediaItems.page,
         }
         break
 
       case `ADD_MEDIA_ITEMS`:
         draft.sites[payload.siteID].mediaItems = {
           items: unionBy(draft.sites[payload.siteID].mediaItems.items, payload.items, 'id'),
-          nextToken: payload.nextToken,
+          page: payload.page,
         }
         break
 
       case `DELETE_MEDIA_ITEM`:
         draft.sites[payload.siteID].mediaItems.items = draft.sites[payload.siteID].mediaItems.items.filter(
-          o => o.id !== payload.id
+          (o) => o.id !== payload.id
         )
         break
 
@@ -90,6 +97,8 @@ export const sitesReducer = (state, action) => {
        * Clear
        ******************************/
       case `CLEAR_POST_STATE`:
+        draft.siteID = null
+        draft.sites = {}
         break
 
       default:

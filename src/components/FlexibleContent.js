@@ -2,18 +2,15 @@ import React from 'react'
 import { Button, Empty } from 'antd'
 
 // import app components
-import BlockWrapper from 'components/BlockWrapper'
-import Header from 'components/postBlocks/Header'
-import Footer from 'components/postBlocks/Footer'
+import BlockWrapper from './BlockWrapper'
 
-import { generateSlug } from 'utils'
-import { convertToPropsSchema } from 'utils'
-import { useStore } from 'store'
+import { generateSlug, convertToPropsSchema } from '../utils'
+import { useStore } from '../store'
 
-const FlexibleContent = props => {
+const FlexibleContent = (props) => {
   const {
-    allElements,
-    renderedElements,
+    blocks,
+    renderedBlocks,
     children,
     editableHeader,
     editableFooter,
@@ -31,20 +28,20 @@ const FlexibleContent = props => {
 
   let modifiedElements = []
 
-  // Post relationship fields
-  if (site && renderedElements) {
-    modifiedElements = renderedElements.map(block => {
+  if (site && renderedBlocks) {
+    modifiedElements = renderedBlocks.map((block) => {
       return {
         ...block,
-        fields: block.fields.map(field => {
+        fields: block.fields.map((field) => {
+          // Post relationship fields
           if (field.type === 'collectionSelector' && field?.value) {
             const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
-              post => post.status === 'publish'
+              (post) => post.status === 'publish'
             )
 
             return {
               ...field,
-              value: posts.map(o => {
+              value: posts.map((o) => {
                 return { ...o, slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage) }
               }),
             }
@@ -61,9 +58,15 @@ const FlexibleContent = props => {
 
   modifiedElements = convertToPropsSchema(modifiedElements)
 
-  const header = site?.settings?.header && <Header {...convertToPropsSchema([site.settings.header])[0].data} />
+  const Header = blocks?.['header']?.component
+  const header = !!Header && site?.settings?.header && (
+    <Header {...convertToPropsSchema([site.settings.header])[0].data} />
+  )
 
-  const footer = site?.settings?.footer && <Footer {...convertToPropsSchema([site.settings.footer])[0].data} />
+  const Footer = blocks?.['footer']?.component
+  const footer = !!Footer && site?.settings?.footer && (
+    <Footer {...convertToPropsSchema([site.settings.footer])[0].data} />
+  )
 
   const generateWrapper = (component, index, settings = null) => {
     return (
@@ -71,7 +74,7 @@ const FlexibleContent = props => {
         key={index}
         index={index}
         onClick={() => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })}
-        renderedElements={renderedElements}
+        renderedBlocks={renderedBlocks}
         isTemplate={isTemplate}
         onOpenDialog={onOpenDialog}
         onMoveElement={onMoveElement}
@@ -84,17 +87,19 @@ const FlexibleContent = props => {
   return (
     site && (
       <>
-        {editableHeader ? generateWrapper(header, 'header') : header}
+        {header && (editableHeader ? generateWrapper(header, 'header') : header)}
 
         {modifiedElements.length > 0 || children ? (
           <>
             {modifiedElements.map(({ name, data }, index) => {
-              const Component = allElements[name].component
+              const Component = blocks?.[name]?.component
 
-              // Extract global settings from data, so we can apply it to the block wrapper in the next step.
-              // This way the settings don't have to be applied for each block separately.
-              const { settings, ...rest } = data
-              return generateWrapper(<Component {...rest} />, index, settings)
+              if (Component) {
+                // Extract global settings from data, so we can apply it to the block wrapper in the next step.
+                // This way the settings don't have to be applied for each block separately.
+                const { settings, ...rest } = data
+                return generateWrapper(<Component {...rest} />, index, settings)
+              }
             })}
 
             {children}
@@ -111,7 +116,7 @@ const FlexibleContent = props => {
           </Empty>
         )}
 
-        {editableFooter ? generateWrapper(footer, 'footer') : footer}
+        {footer && (editableFooter ? generateWrapper(footer, 'footer') : footer)}
       </>
     )
   )

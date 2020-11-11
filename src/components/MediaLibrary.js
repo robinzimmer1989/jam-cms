@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import Img from 'gatsby-image'
 import { Modal, Row, Upload, Button, Space, message } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 // import app components
-import MediaImage from 'components/MediaImage'
-import Image from 'components/Image'
+import MediaImage from './MediaImage'
 
-import { mediaActions } from 'actions'
-import { useStore } from 'store'
+import { mediaActions } from '../actions'
+import { useStore } from '../store'
 
-const MediaLibrary = props => {
+const MediaLibrary = (props) => {
   const { onSelect } = props
 
   const [
@@ -21,23 +21,25 @@ const MediaLibrary = props => {
   ] = useStore()
 
   const {
-    mediaItems: { items, nextToken },
+    mediaItems: { items, page },
   } = sites[siteID]
 
   const [activeFile, setActiveFile] = useState(null)
   const [uploader, setUploader] = useState(false)
 
   useEffect(() => {
-    loadMediaItems(null)
-  }, [siteID])
+    loadMediaItems(page || 0)
+  }, [])
 
-  const loadMediaItems = async nextToken => {
-    await mediaActions.getMediaItems({ siteID, nextToken }, dispatch)
+  const loadMediaItems = async (page) => {
+    if (page > -1) {
+      await mediaActions.getMediaItems({ siteID, page }, dispatch)
+    }
   }
 
-  const handleLoadMore = () => nextToken && loadMediaItems(nextToken)
+  const handleLoadMore = () => page && loadMediaItems(page)
 
-  const handleFileUpload = async info => {
+  const handleFileUpload = async (info) => {
     const {
       file: { status, name, originFileObj },
     } = info
@@ -54,9 +56,9 @@ const MediaLibrary = props => {
 
   const handleCloseDialog = () => setActiveFile(null)
 
-  const handleSelect = ({ id, storageKey }) => {
+  const handleSelect = (image) => {
     handleCloseDialog()
-    onSelect({ id, storageKey })
+    onSelect(image)
   }
 
   return (
@@ -75,20 +77,26 @@ const MediaLibrary = props => {
 
         <Row>
           {items &&
-            items.map(o => {
+            items.map((o) => {
               return (
                 <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                  <Image image={o} preview={false} />
+                  <Img
+                    fluid={o.childImageSharp.fluid}
+                    objectFit="cover"
+                    objectPosition="50% 50%"
+                    alt={o.alt}
+                    style={{ width: '100%', height: '100%' }}
+                  />
                 </MediaItem>
               )
             })}
         </Row>
 
-        {nextToken && <Button children={'Load More'} onClick={handleLoadMore} />}
+        {page && <Button children={'Load More'} onClick={handleLoadMore} />}
       </Space>
 
       <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>
-        {activeFile && <MediaImage file={activeFile} onSelect={handleSelect} onClose={handleCloseDialog} />}
+        {activeFile && <MediaImage file={activeFile} onSelect={onSelect && handleSelect} onClose={handleCloseDialog} />}
       </Modal>
     </>
   )

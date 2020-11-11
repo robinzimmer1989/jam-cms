@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { Space, Button } from 'antd'
 
 // import app components
-import Input from 'components/Input'
-import { useStore } from 'store'
+import Input from './Input'
+import { useStore } from '../store'
 
-const EditorForm = props => {
+const EditorForm = (props) => {
   const { onSubmit } = props
 
   const [, dispatch] = useStore()
@@ -26,7 +26,7 @@ const EditorForm = props => {
 
   return (
     <Space direction="vertical">
-      <Input label="Username" value={username} onChange={e => setUsername(e.target.value)} placeholder={``} />
+      <Input label="Username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={``} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

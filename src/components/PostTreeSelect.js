@@ -2,18 +2,18 @@ import React from 'react'
 import { TreeSelect, Space } from 'antd'
 
 // import app components
-import Caption from 'components/Caption'
-import { createDataTree } from 'utils'
+import Caption from './Caption'
+import { createDataTree } from '../utils'
 
-const PostTreeSelect = props => {
+const PostTreeSelect = (props) => {
   const { items = {}, value, onChange } = props
 
   const treePosts = createDataTree(Object.values(items))
 
-  const renderTreeNode = item => {
+  const renderTreeNode = (item) => {
     return (
       <TreeSelect.TreeNode key={item.id} value={item.id} title={item.title}>
-        {item.childNodes.map(o => renderTreeNode(o))}
+        {item.childNodes.map((o) => renderTreeNode(o))}
       </TreeSelect.TreeNode>
     )
   }
@@ -31,7 +31,7 @@ const PostTreeSelect = props => {
         onChange={onChange}
       >
         <TreeSelect.TreeNode value={``} title={`None`} />
-        {treePosts.map(o => renderTreeNode(o))}
+        {treePosts.map((o) => renderTreeNode(o))}
       </TreeSelect>
     </Space>
   )

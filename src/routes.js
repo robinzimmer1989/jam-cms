@@ -1,6 +1,6 @@
+export const ROUTE_APP = `/${process.env.GATSBY_CMS_ROUTE}`
 export const ROUTE_SIGN_IN = `/sign-in`
 export const ROUTE_SIGN_UP = `/sign-up`
-export const ROUTE_APP = `/app`
 export const ROUTE_SITE = `/site`
 export const ROUTE_MEDIA = `/media`
 export const ROUTE_COLLECTIONS = `/collections`
@@ -19,11 +19,11 @@ const getRoute = (route, args) => {
     case `sign-up`:
       return ROUTE_SIGN_UP
 
-    case `sign-in`:
-      return ROUTE_SIGN_IN
-
     case `app`:
       return ROUTE_APP
+
+    case `sign-in`:
+      return `${ROUTE_APP}${ROUTE_SIGN_IN}`
 
     case `profile`:
       return `${ROUTE_APP}${ROUTE_PROFILE}`

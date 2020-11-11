@@ -3,12 +3,12 @@ import styled, { css } from 'styled-components'
 import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons'
 
 // import app components
-import Edges from 'components/Edges'
-import { useStore } from 'store'
-import { colors } from 'theme'
+import Edges from './Edges'
+import { useStore } from '../store'
+import { colors } from '../theme'
 
-const BlockWrapper = props => {
-  const { index, renderedElements, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props
+const BlockWrapper = (props) => {
+  const { index, renderedBlocks, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props
 
   const [
     {
@@ -19,7 +19,7 @@ const BlockWrapper = props => {
 
   const isActive = editorIndex === index
 
-  const blockName = index === 'header' || index === 'footer' ? index : renderedElements[index].name
+  const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].name
 
   const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
 
@@ -36,7 +36,7 @@ const BlockWrapper = props => {
       {!isTemplate && index !== 'header' && (
         <AddButtonTop
           className={`icon`}
-          onClick={() => onOpenDialog(index === 'footer' ? renderedElements.length : index)}
+          onClick={() => onOpenDialog(index === 'footer' ? renderedBlocks.length : index)}
         >
           <PlusCircleTwoTone />
         </AddButtonTop>
@@ -54,7 +54,7 @@ const BlockWrapper = props => {
             <UpCircleTwoTone />
           </MoveIcon>
 
-          <MoveIcon onClick={() => onMoveElement(index, index + 1)} disabled={index === renderedElements.length - 1}>
+          <MoveIcon onClick={() => onMoveElement(index, index + 1)} disabled={index === renderedBlocks.length - 1}>
             <DownCircleTwoTone />
           </MoveIcon>
         </MoveIcons>
@@ -90,16 +90,6 @@ const Container = styled.div`
         pointer-events: all;
       }
     `};
-
-  /* Dummy element to make hovering over move icons possible */
-  &:before {
-    content: '';
-    position: absolute;
-    left: 100%;
-    top: 0;
-    width: 30px;
-    height: 100%;
-  }
 `
 
 const Content = styled.div`
@@ -179,9 +169,9 @@ const AddButtonBottom = styled.div`
 const MoveIcons = styled.div`
   position: absolute;
   z-index: 2;
-  right: 0;
+  right: 5px;
   top: 50%;
-  transform: translate(25px, -50%);
+  transform: translateY(-50%);
 `
 
 const MoveIcon = styled.div`
@@ -191,7 +181,7 @@ const MoveIcon = styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px 0;
-  opacity: ${props => (props.disabled ? 0.2 : 1)};
+  opacity: ${(props) => (props.disabled ? 0.4 : 1)};
 `
 
 export default BlockWrapper

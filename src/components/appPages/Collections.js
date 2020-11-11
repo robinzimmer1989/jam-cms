@@ -3,15 +3,15 @@ import { Button, PageHeader, Popconfirm } from 'antd'
 import { Link, navigate } from 'gatsby'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import CollectionForm from 'components/CollectionForm'
-import ListItem from 'components/ListItem'
+import CmsLayout from '../CmsLayout'
+import CollectionForm from '../CollectionForm'
+import ListItem from '../ListItem'
 
-import { collectionActions } from 'actions'
-import { useStore } from 'store'
-import getRoute from 'routes'
+import { collectionActions } from '../../actions'
+import { useStore } from '../../store'
+import getRoute from '../../routes'
 
-const SettingsCollections = () => {
+const CollectionSettings = () => {
   const [
     {
       cmsState: { siteID, sites },
@@ -30,7 +30,7 @@ const SettingsCollections = () => {
   }
 
   const handleDeletePostType = async ({ postTypeID }) => {
-    await collectionActions.deleteCollection({ id: postTypeID }, dispatch)
+    await collectionActions.deleteCollection({ siteID, id: postTypeID }, dispatch)
   }
 
   const handleOpenDialog = () => {
@@ -51,27 +51,34 @@ const SettingsCollections = () => {
       </PageHeader>
 
       {postTypes &&
-        Object.values(postTypes).map(o => {
+        Object.values(postTypes).map((o) => {
           const link = getRoute(`settings-collection`, { siteID, postTypeID: o.id })
 
-          const actions = [
-            <Popconfirm
-              title="Are you sure?"
-              onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button size="small" children={`Delete`} danger />
-            </Popconfirm>,
-            <Button size="small">
-              <Link to={link} children={`Edit`} />
-            </Button>,
-          ]
+          const actions = []
 
-          return <ListItem key={o.id} link={link} actions={actions} title={o.title} subtitle={o.slug} hideImage />
+          if (o.id !== 'page') {
+            actions.push(
+              <Popconfirm
+                title="Are you sure?"
+                onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size="small" children={`Delete`} danger />
+              </Popconfirm>
+            )
+          }
+
+          actions.push(
+            <Button size="small" disabled>
+              <Link to={link} children={`Edit`} />
+            </Button>
+          )
+
+          return <ListItem key={o.id} link={link} actions={actions} title={o.title} subtitle={`/${o.slug}`} hideImage />
         })}
     </CmsLayout>
   )
 }
 
-export default SettingsCollections
+export default CollectionSettings

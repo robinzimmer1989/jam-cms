@@ -1,8 +1,9 @@
 import React from 'react'
-import Caption from 'components/Caption'
 import { Select as AntSelect, Space } from 'antd'
 
-const Select = props => {
+import Caption from './Caption'
+
+const Select = (props) => {
   const { value, name, onChange, children, label } = props
 
   return (

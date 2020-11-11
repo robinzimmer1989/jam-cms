@@ -4,20 +4,19 @@ import produce from 'immer'
 import { set } from 'lodash'
 
 // import app components
-import BlockForm from 'components/BlockForm'
-import BlockEditFields from 'components/BlockEditFields'
-import CmsLayout from 'components/CmsLayout'
-import PageWrapper from 'components/PageWrapper'
-import PostHeader from 'components/PostHeader'
-import FlexibleContent from 'components/FlexibleContent'
-import PostSettings from 'components/PostSettings'
-import postBlocks from 'components/postBlocks'
+import BlockForm from '../BlockForm'
+import BlockEditFields from '../BlockEditFields'
+import CmsLayout from '../CmsLayout'
+import PageWrapper from '../PageWrapper'
+import PostHeader from '../PostHeader'
+import FlexibleContent from '../FlexibleContent'
+import PostSettings from '../PostSettings'
 
-import { useStore } from 'store'
-import { postActions } from 'actions'
+import { useStore } from '../../store'
+import { postActions } from '../../actions'
 
-const PostEditor = props => {
-  const { postTypeID, postID } = props
+const PostEditor = (props) => {
+  const { postTypeID, postID, theme, blocks } = props
 
   const [
     {
@@ -33,10 +32,15 @@ const PostEditor = props => {
 
   useEffect(() => {
     const loadPost = async () => {
-      const result = await postActions.getPost({ site: sites[siteID], postID }, dispatch)
+      const result = await postActions.getPost({ siteID, postID }, dispatch)
 
-      if (result?.data?.getPost) {
-        renderTemplateContent(result.data.getPost)
+      if (result) {
+        dispatch({
+          type: `ADD_EDITOR_SITE`,
+          payload: sites[siteID],
+        })
+
+        renderTemplateContent(result)
       }
     }
 
@@ -51,12 +55,12 @@ const PostEditor = props => {
     dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false })
   }, [])
 
-  const renderTemplateContent = post => {
+  const renderTemplateContent = (post) => {
     // if post type has a template assigned, then overwrite content in editor store
     // Because we don't wanna loose information in case the user changes the template along the way,
     // We'll loop through the existing fields and populate the template accordingly
     if (postType?.template && postType.template.length > 0) {
-      const nextContent = produce(postType.template, draft => {
+      const nextContent = produce(postType.template, (draft) => {
         post.content.map((o, i) => {
           if (postType?.template?.[i]?.name === o.name) {
             o.fields.map((p, j) => {
@@ -79,9 +83,12 @@ const PostEditor = props => {
 
   const getFields = () => {
     if (siteComponent) {
-      // loop through default postBlocks and replace value if found
-      return postBlocks[site.settings[editorIndex].name].fields.fields.map(o => {
-        const setting = site.settings[editorIndex].fields.find(p => p.id === o.id)
+      // loop through default blocks and replace value if found
+      return blocks?.[site.settings[editorIndex].name].fields.fields.map((o) => {
+        // TODO: We might have to move to an object structure for fields instead of array.
+        // There is a problem when fields get removed and we try to add an array element and then skip something in between.
+        // The p?.id should fix it for now.
+        const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -90,9 +97,9 @@ const PostEditor = props => {
         }
       })
     } else if (post && post.content[editorIndex]) {
-      // loop through default postBlocks and replace value if found
-      return postBlocks[post.content[editorIndex].name].fields.fields.map(o => {
-        const setting = post.content[editorIndex].fields.find(p => p.id === o.id)
+      // loop through default blocks and replace value if found
+      return blocks?.[post.content[editorIndex].name].fields.fields.map((o) => {
+        const setting = post.content[editorIndex].fields.find((p) => p.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }
@@ -118,7 +125,7 @@ const PostEditor = props => {
         title: {
           title: siteComponent
             ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
-            : post.content[editorIndex].name,
+            : post.content[editorIndex].label || post.content[editorIndex].name,
           onBack: () =>
             dispatch({
               type: 'SET_EDITOR_INDEX',
@@ -151,12 +158,12 @@ const PostEditor = props => {
     )
   }
 
-  const handleChangeElement = ({ id, type, value }, index) => {
+  const handleChangeElement = (field, index) => {
     dispatch({ type: `CLOSE_DIALOG` })
 
     if (siteComponent) {
-      const nextSite = produce(site, draft => {
-        return set(draft, `settings.${editorIndex}.fields.${index}`, { id, type, value })
+      const nextSite = produce(site, (draft) => {
+        return set(draft, `settings.${editorIndex}.fields.${index}`, field)
       })
 
       dispatch({
@@ -164,8 +171,8 @@ const PostEditor = props => {
         payload: nextSite,
       })
     } else {
-      const nextPost = produce(post, draft => {
-        return set(draft, `content.${editorIndex}.fields.${index}`, { id, type, value })
+      const nextPost = produce(post, (draft) => {
+        return set(draft, `content.${editorIndex}.fields.${index}`, field)
       })
 
       dispatch({
@@ -176,7 +183,7 @@ const PostEditor = props => {
   }
 
   const handleDeleteElement = () => {
-    const nextPost = produce(post, draft => {
+    const nextPost = produce(post, (draft) => {
       draft.content.splice(editorIndex, 1)
       return draft
     })
@@ -190,7 +197,7 @@ const PostEditor = props => {
   }
 
   const handleMoveElement = (index, newIndex) => {
-    const nextPost = produce(post, draft => {
+    const nextPost = produce(post, (draft) => {
       if (newIndex > -1 && newIndex < draft.content.length) {
         const temp = draft.content[index]
         draft.content[index] = draft.content[newIndex]
@@ -207,18 +214,16 @@ const PostEditor = props => {
   }
 
   const handleSelectElement = (name, index) => {
-    // We only want to write id, type and value to the database, so we have to extract them from all fields
-    // We'll add them back on the fly in the getFields function.
-    // Furthermore, we use this function to assign the default value
-    const block = produce(postBlocks[name], draft => {
-      draft.fields.fields = draft.fields.fields.map(o => {
-        return { id: o.id, type: o.type, value: o.defaultValue || null }
+    // Assign the default value
+    const block = produce(blocks[name], (draft) => {
+      draft.fields.fields = draft.fields.fields.map((o) => {
+        return { ...o, value: o.defaultValue || null }
       })
 
       return draft
     })
 
-    const nextPost = produce(post, draft => {
+    const nextPost = produce(post, (draft) => {
       draft.content.splice(index, 0, block.fields)
       return draft
     })
@@ -237,7 +242,7 @@ const PostEditor = props => {
       payload: {
         open: true,
         title: 'Choose a Block',
-        component: <BlockForm index={index} onSelect={handleSelectElement} />,
+        component: <BlockForm index={index} onSelect={handleSelectElement} blocks={blocks} />,
         width: 500,
       },
     })
@@ -247,10 +252,10 @@ const PostEditor = props => {
     <CmsLayout pageTitle="Editor" actionBar="editor" rightSidebar={getSidebar()}>
       <PostHeader postType={postType} />
 
-      <PageWrapper>
+      <PageWrapper theme={theme}>
         <FlexibleContent
-          allElements={postBlocks}
-          renderedElements={post?.content}
+          blocks={blocks}
+          renderedBlocks={post?.content}
           editableHeader={true}
           editableFooter={true}
           isTemplate={postType?.template && postType.template.length}

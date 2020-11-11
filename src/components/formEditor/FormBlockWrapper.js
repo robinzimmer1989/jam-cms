@@ -4,11 +4,11 @@ import produce from 'immer'
 import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons'
 
 // import app components
-import FormFieldsForm from 'components/formEditor/FormFieldsForm'
-import { useStore } from 'store'
-import { colors } from 'theme'
+import FormFieldsForm from '../formEditor/FormFieldsForm'
+import { useStore } from '../../store'
+import { colors } from '../../theme'
 
-const FormBlockWrapper = props => {
+const FormBlockWrapper = (props) => {
   const { index, onClick, children } = props
 
   const [
@@ -18,7 +18,7 @@ const FormBlockWrapper = props => {
     dispatch,
   ] = useStore()
 
-  const handleOpenBlockDialog = newIndex => {
+  const handleOpenBlockDialog = (newIndex) => {
     dispatch({
       type: `SET_DIALOG`,
       payload: {
@@ -30,8 +30,8 @@ const FormBlockWrapper = props => {
     })
   }
 
-  const handleMoveBlock = newIndex => {
-    const nextForm = produce(form, draft => {
+  const handleMoveBlock = (newIndex) => {
+    const nextForm = produce(form, (draft) => {
       if (newIndex > -1 && newIndex < draft.content.length) {
         const temp = draft.content[index]
         draft.content[index] = draft.content[newIndex]
@@ -171,7 +171,7 @@ const MoveIcon = styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px 0;
-  opacity: ${props => (props.disabled ? 0.2 : 1)};
+  opacity: ${(props) => (props.disabled ? 0.2 : 1)};
 `
 
 export default FormBlockWrapper

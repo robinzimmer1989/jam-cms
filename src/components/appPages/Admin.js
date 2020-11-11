@@ -3,12 +3,11 @@ import styled from 'styled-components'
 import { Button, PageHeader } from 'antd'
 
 // import app components
-import CmsLayout from 'components/CmsLayout'
-import ListItem from 'components/ListItem'
-import EditorForm from 'components/EditorForm'
+import CmsLayout from '../CmsLayout'
+import ListItem from '../ListItem'
+import EditorForm from '../EditorForm'
 
-import { adminServices } from 'services'
-import { useStore } from 'store'
+import { useStore } from '../../store'
 
 const Admin = () => {
   const [
@@ -24,11 +23,10 @@ const Admin = () => {
 
   useEffect(() => {
     const loadEditors = async () => {
-      const result = await adminServices.listEditors({ limit: 10, token: null })
-
-      if (result) {
-        setData(result)
-      }
+      // const result = await adminServices.listEditors({ limit: 10, token: null })
+      // if (result) {
+      //   setData(result)
+      // }
     }
 
     loadEditors()
@@ -45,21 +43,17 @@ const Admin = () => {
     })
 
   const handleAdd = async ({ username }) => {
-    const result = await adminServices.addToGroup({ username })
-
-    console.log(result)
+    // const result = await adminServices.addToGroup({ username })
   }
 
   return (
-    <CmsLayout pageTitle={`Admin`}>
-      <PageHeader>
-        <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
-      </PageHeader>
+    <CmsLayout pageTitle={`Editors`}>
+      <PageHeader>{/* <Button children={`Add`} onClick={handleOpenDialog} type="primary" /> */}</PageHeader>
 
-      {data?.users &&
-        data.users.map(o => {
+      {/* {data?.users &&
+        data.users.map((o) => {
           return <ListItem title={'test'} />
-        })}
+        })} */}
     </CmsLayout>
   )
 }

@@ -5,11 +5,11 @@ import { Button, Row, Col, List, Tree, Collapse, Space, Card, Tabs } from 'antd'
 import AddIcon from 'react-ionicons/lib/IosAdd'
 
 // import app components
-import Input from 'components/Input'
-import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from 'utils'
-import { useStore } from 'store'
+import Input from './Input'
+import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../utils'
+import { useStore } from '../store'
 
-const MenuBuilder = props => {
+const MenuBuilder = (props) => {
   const { value = [], onChange } = props
 
   const [
@@ -19,7 +19,7 @@ const MenuBuilder = props => {
     dispatch,
   ] = useStore()
 
-  const [filter, setFilter] = useState('Page')
+  const [filter, setFilter] = useState('Pages')
   const [items, setItems] = useState(deepCopyTree(value))
   const [customLink, setCustomLink] = useState({
     title: '',
@@ -27,11 +27,11 @@ const MenuBuilder = props => {
   })
 
   // Get posts by filter
-  const postType = Object.values(sites[siteID]?.postTypes).find(o => o.title === filter)
+  const postType = Object.values(sites[siteID]?.postTypes).find((o) => o.title === filter)
   const posts = postType?.posts
 
   // Function provided by Ant Design
-  const onDrop = info => {
+  const onDrop = (info) => {
     const dropKey = info.node.props.eventKey
     const dragKey = info.dragNode.props.eventKey
     const dropPos = info.node.props.pos.split('-')
@@ -58,7 +58,7 @@ const MenuBuilder = props => {
 
     if (!info.dropToGap) {
       // Drop on the content
-      loop(data, dropKey, item => {
+      loop(data, dropKey, (item) => {
         item.children = item.children || []
         // where to insert
         item.children.push(dragObj)
@@ -68,7 +68,7 @@ const MenuBuilder = props => {
       info.node.props.expanded && // Is expanded
       dropPosition === 1 // On the bottom gap
     ) {
-      loop(data, dropKey, item => {
+      loop(data, dropKey, (item) => {
         item.children = item.children || []
         // where to insert
         item.children.unshift(dragObj)
@@ -110,7 +110,7 @@ const MenuBuilder = props => {
     setItems(newItems)
   }
 
-  const handleRemove = key => {
+  const handleRemove = (key) => {
     const newItems = removeFromTree({ children: [...items] }, key)
     setItems(newItems.children)
   }
@@ -134,8 +134,8 @@ const MenuBuilder = props => {
       <Row justify="space-between">
         <Col span="11">
           <Card>
-            <Tabs defaultActiveKey="all" onChange={v => setFilter(v)}>
-              {Object.values(sites[siteID]?.postTypes).map(o => {
+            <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
+              {Object.values(sites[siteID]?.postTypes).map((o) => {
                 return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />
               })}
 
@@ -171,12 +171,12 @@ const MenuBuilder = props => {
                   <Input
                     label="Title"
                     value={customLink.title}
-                    onChange={e => setCustomLink({ ...customLink, title: e.target.value })}
+                    onChange={(e) => setCustomLink({ ...customLink, title: e.target.value })}
                   />
                   <Input
                     label="Url"
                     value={customLink.url}
-                    onChange={e => setCustomLink({ ...customLink, url: e.target.value })}
+                    onChange={(e) => setCustomLink({ ...customLink, url: e.target.value })}
                     placeholder="https://"
                   />
                   <Button style={{ marginBottom: 20 }} children={`Add`} type="primary" onClick={handleAddCustomLink} />
@@ -193,16 +193,16 @@ const MenuBuilder = props => {
             blockNode
             onDrop={onDrop}
             treeData={items}
-            titleRender={node => {
+            titleRender={(node) => {
               const header = node.url ? `${node.title} - Custom` : node.title
 
               return (
                 <Collapse>
                   <Collapse.Panel header={header}>
                     <Space direction="vertical">
-                      <Input label="title" value={node.title} onChange={e => handleUpdate(e, 'title', node.key)} />
+                      <Input label="title" value={node.title} onChange={(e) => handleUpdate(e, 'title', node.key)} />
                       {node.url && (
-                        <Input label="Url" value={node.url} onChange={e => handleUpdate(e, 'url', node.key)} />
+                        <Input label="Url" value={node.url} onChange={(e) => handleUpdate(e, 'url', node.key)} />
                       )}
                       <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} />
                     </Space>

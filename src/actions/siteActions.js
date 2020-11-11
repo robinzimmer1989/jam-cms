@@ -1,83 +1,55 @@
 import { navigate } from 'gatsby'
-import { v4 as uuidv4 } from 'uuid'
 
-import { siteServices, collectionServices, netlifyServices, postServices } from 'services'
+import { siteServices } from '../services'
+import getRoute from '../routes'
 
 export const addSite = async ({ title, ownerID }, dispatch) => {
-  const apiKey = uuidv4()
+  const result = await siteServices.addSite({ title, ownerID })
 
-  const result = await siteServices.addSite({ title, ownerID, apiKey })
-
-  if (result?.data?.createSite) {
-    const siteID = result.data.createSite.id
-
-    dispatch({ type: `ADD_SITE`, payload: result.data.createSite })
-
-    // Add default collection 'Page'
-    const collectionResult = await collectionServices.addCollection({ title: 'Page', slug: '/', siteID }, dispatch)
-
-    // Add default page 'Home'
-    if (collectionResult?.data?.createPostType) {
-      await postServices.addPost({
-        siteID,
-        postTypeID: collectionResult.data.createPostType.id,
-        title: 'Home',
-        slug: '/',
-        status: 'publish',
-      })
-    }
-
-    // Create site on Netlify
-    const netlifyResult = await netlifyServices.addSite({ siteID, apiKey })
-
-    if (netlifyResult?.id) {
-      const { id: netlifyID, ssl_url: netlifyUrl } = netlifyResult
-
-      // Update site with Netlify info
-      const updateSiteResult = await siteServices.updateSite({ id: siteID, title, netlifyID, netlifyUrl })
-
-      if (updateSiteResult?.data?.updateSite) {
-        dispatch({ type: `ADD_SITE`, payload: updateSiteResult.data.updateSite })
-
-        return updateSiteResult
-      }
-
-      navigate(`/app/site/${siteID}`)
-    }
+  if (result) {
+    dispatch({ type: `ADD_SITE`, payload: result })
+    navigate(getRoute(`dashboard`, { siteID: result.id }))
   }
 
   return result
 }
 
-export const updateSite = async ({ id, title, settings, apiKey, customDomain }, dispatch) => {
-  const result = await siteServices.updateSite({ id, title, settings, apiKey, customDomain })
+export const updateSite = async (
+  { id, title, settings, frontPage, netlifyBuildHook, netlifyBadgeImage, netlifyBadgeLink },
+  dispatch
+) => {
+  const result = await siteServices.updateSite({
+    id,
+    title,
+    settings,
+    frontPage,
+    netlifyBuildHook,
+    netlifyBadgeImage,
+    netlifyBadgeLink,
+  })
 
-  if (result?.data?.updateSite) {
-    dispatch({ type: `ADD_SITE`, payload: result.data.updateSite })
+  if (result) {
+    dispatch({ type: `ADD_SITE`, payload: result })
   }
 
   return result
 }
 
-export const deleteSite = async ({ id, netlifyID }, dispatch) => {
-  netlifyID && (await netlifyServices.deleteSite({ netlifyID }))
-
+export const deleteSite = async ({ id }, dispatch) => {
   const result = await siteServices.deleteSite({ id })
 
-  if (result?.data?.deleteSite) {
-    dispatch({ type: `DELETE_SITE`, payload: result.data.deleteSite })
-
-    return result
+  if (result) {
+    dispatch({ type: `DELETE_SITE`, payload: result })
   }
 
-  return false
+  return result
 }
 
 export const getSites = async (args, dispatch) => {
   const result = await siteServices.getSites()
 
-  if (result?.data?.listSites) {
-    dispatch({ type: `ADD_SITES`, payload: result.data.listSites })
+  if (result) {
+    dispatch({ type: `ADD_SITES`, payload: result })
   }
 
   return result
@@ -86,18 +58,8 @@ export const getSites = async (args, dispatch) => {
 export const getSite = async ({ siteID }, dispatch) => {
   const result = await siteServices.getSite({ siteID })
 
-  if (result?.data?.getSite) {
-    dispatch({ type: `ADD_SITE`, payload: result.data.getSite })
-  }
-
-  return result
-}
-
-export const deploySite = async ({ netlifyID }, dispatch) => {
-  const result = await netlifyServices.deploySite({ netlifyID })
-
-  if (result?.deploy_id) {
-    dispatch({ type: `UPDATE_NETLIFY_DEPLOY_ID`, payload: result.deploy_id })
+  if (result) {
+    dispatch({ type: `ADD_SITE`, payload: result })
   }
 
   return result

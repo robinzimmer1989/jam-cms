@@ -2,15 +2,14 @@ import React from 'react'
 import { Button } from 'antd'
 
 // import app components
-import blocks from 'components/postBlocks'
-import { useStore } from 'store'
+import { useStore } from '../store'
 
-const BlockForm = props => {
-  const { index, onSelect } = props
+const BlockForm = (props) => {
+  const { index, onSelect, blocks } = props
 
   const [, dispatch] = useStore()
 
-  const handleSelect = name => {
+  const handleSelect = (name) => {
     onSelect(name, index)
 
     dispatch({ type: 'SET_EDITOR_INDEX', payload: index })
@@ -19,11 +18,10 @@ const BlockForm = props => {
 
   return (
     <>
-      {Object.keys(blocks)
-        .filter(key => key !== 'Header' && key !== 'Footer')
-        .map(key => (
-          <Button key={key} children={key} onClick={() => handleSelect(key)} />
-        ))}
+      {blocks &&
+        Object.keys(blocks)
+          .filter((key) => key !== 'header' && key !== 'footer')
+          .map((key) => <Button key={key} children={blocks[key].fields.label} onClick={() => handleSelect(key)} />)}
     </>
   )
 }

@@ -1,55 +1,38 @@
-import { postServices } from 'services'
-import { siteActions } from 'actions'
+import { postServices } from '../services'
 
 export const addPost = async ({ siteID, slug, postTypeID, status, title, content, parentID }, dispatch) => {
   const result = await postServices.addPost({ siteID, slug, postTypeID, status, title, content, parentID })
 
-  if (result?.data?.createPost) {
-    dispatch({ type: `ADD_POST`, payload: result.data.createPost })
+  if (result) {
+    dispatch({ type: `ADD_POST`, payload: result })
   }
 
   return result
 }
 
-// export const getPosts = async ({ siteID, postTypeID }, dispatch) => {
-//   const result = await postServices.getPosts({ siteID, postTypeID })
+export const getPost = async ({ siteID, postID }, dispatch) => {
+  const result = await postServices.getPost({ siteID, postID })
 
-//   if (result?.data?.listPosts) {
-//     dispatch({
-//       type: `ADD_POSTS`,
-//       payload: { ...result.data.listPosts, siteID, postTypeID },
-//     })
-//   }
-
-//   return result
-// }
-
-export const getPost = async ({ site, postID }, dispatch) => {
-  const result = await postServices.getPost({ postID })
-
-  if (result?.data?.getPost) {
+  if (result) {
     dispatch({
       type: `ADD_POST`,
-      payload: result.data.getPost,
+      payload: result,
     })
-
     dispatch({
       type: `ADD_EDITOR_POST`,
-      payload: result.data.getPost,
+      payload: result,
     })
-
-    // Every time the user edits a post we need to restore the original site state
-    siteActions.addSiteToEditor({ site }, dispatch)
   }
 
   return result
 }
 
 export const updatePost = async (
-  { id, slug, status, title, content, seoTitle, seoDescription, parentID, featuredImage },
+  { siteID, id, slug, status, title, content, seoTitle, seoDescription, parentID, featuredImage },
   dispatch
 ) => {
   const result = await postServices.updatePost({
+    siteID,
     id,
     slug,
     status,
@@ -61,15 +44,15 @@ export const updatePost = async (
     featuredImage,
   })
 
-  if (result?.data?.updatePost) {
-    dispatch({ type: `ADD_POST`, payload: result.data.updatePost })
+  if (result) {
+    dispatch({ type: `ADD_POST`, payload: result })
   }
 }
 
-export const deletePost = async ({ id }, dispatch) => {
-  const result = await postServices.deletePost({ id })
+export const deletePost = async ({ siteID, id }, dispatch) => {
+  const result = await postServices.deletePost({ siteID, id })
 
-  if (result?.data?.deletePost) {
-    dispatch({ type: `DELETE_POST`, payload: result.data.deletePost })
+  if (result) {
+    dispatch({ type: `DELETE_POST`, payload: result })
   }
 }

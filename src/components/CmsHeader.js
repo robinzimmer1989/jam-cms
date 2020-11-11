@@ -1,27 +1,26 @@
 import React from 'react'
 import styled from 'styled-components'
-import { PageHeader, Button, Tooltip, notification } from 'antd'
-import { FullscreenOutlined } from '@ant-design/icons'
+import { PageHeader, Button, notification } from 'antd'
+import axios from 'axios'
 
 // import app components
-import AvatarMenu from 'components/AvatarMenu'
-import { siteActions } from 'actions'
-import { useStore } from 'store'
+import ViewToggle from './ViewToggle'
+import AvatarMenu from './AvatarMenu'
+import { useStore } from '../store'
 
-const CmsHeader = props => {
+const CmsHeader = (props) => {
   const { title, actionBar } = props
 
   const [
     {
       cmsState: { siteID, sites },
     },
-    dispatch,
   ] = useStore()
 
   const site = sites[siteID] || null
 
   const handleDeploy = async () => {
-    if (!site?.settings?.frontPage) {
+    if (!site?.frontPage) {
       return notification.error({
         message: 'Error',
         description: 'Please add a front page',
@@ -29,21 +28,13 @@ const CmsHeader = props => {
       })
     }
 
-    await siteActions.deploySite(site, dispatch)
+    axios.post(site.netlifyBuildHook)
   }
 
   const buttons = []
 
   if (actionBar === 'editor') {
-    buttons.push(
-      <Tooltip key={`view-fullscreen`} title={`Fullscreen`}>
-        <Button
-          onClick={() => dispatch({ type: `SET_EDITOR_VIEWPORT`, payload: `fullscreen` })}
-          icon={<FullscreenOutlined style={{ fontSize: '12px' }} />}
-          shape="circle"
-        />
-      </Tooltip>
-    )
+    buttons.push(<ViewToggle key={'view-toggle'} />)
   } else {
     if (site?.netlifyID) {
       buttons.push(

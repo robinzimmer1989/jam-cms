@@ -3,83 +3,60 @@ import styled from 'styled-components'
 import { Button, Space } from 'antd'
 
 // import app components
-import MenuBuilder from 'components/MenuBuilder'
-import MediaLibrary from 'components/MediaLibrary'
-import Caption from 'components/Caption'
+import MenuBuilder from './MenuBuilder'
+import MediaLibrary from './MediaLibrary'
+import Caption from './Caption'
 
 // Admin fields
-import CollectionSelector from 'components/postEditorAdminFields/CollectionSelector'
-import FormSelector from 'components/postEditorAdminFields/FormSelector'
-import Text from 'components/postEditorAdminFields/Text'
-import Wysiwyg from 'components/postEditorAdminFields/Wysiwyg'
-import ImagePicker from 'components/postEditorAdminFields/ImagePicker'
-import Menu from 'components/postEditorAdminFields/Menu'
-import Repeater from 'components/postEditorAdminFields/Repeater'
-import LinkSelector from 'components/postEditorAdminFields/LinkSelector'
-import Select from 'components/postEditorAdminFields/Select'
-import Number from 'components/postEditorAdminFields/Number'
-import Settings from 'components/postEditorAdminFields/Settings'
+import CollectionSelector from './postEditorAdminFields/CollectionSelector'
+import FormSelector from './postEditorAdminFields/FormSelector'
+import Text from './postEditorAdminFields/Text'
+import Wysiwyg from './postEditorAdminFields/Wysiwyg'
+import ImagePicker from './postEditorAdminFields/ImagePicker'
+import Menu from './postEditorAdminFields/Menu'
+import Repeater from './postEditorAdminFields/Repeater'
+import LinkSelector from './postEditorAdminFields/LinkSelector'
+import Select from './postEditorAdminFields/Select'
+import Number from './postEditorAdminFields/Number'
+import Settings from './postEditorAdminFields/Settings'
 
-import { useStore } from 'store'
+import { useStore } from '../store'
 
 export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
   let component
 
   switch (field.type) {
     case 'text':
-      component = (
-        <Text
-          {...field}
-          onChange={e => onChangeElement({ id: field.id, type: field.type, value: e.target.value }, index)}
-        />
-      )
+      component = <Text {...field} onChange={(e) => onChangeElement({ ...field, value: e.target.value }, index)} />
       break
 
     case 'wysiwyg':
       component = (
-        <Wysiwyg
-          {...field}
-          onChange={editorState => onChangeElement({ id: field.id, type: field.type, value: editorState }, index)}
-        />
+        <Wysiwyg {...field} onChange={(editorState) => onChangeElement({ ...field, value: editorState }, index)} />
       )
       break
 
     case 'number':
-      component = (
-        <Number
-          {...field}
-          onChange={number => onChangeElement({ id: field.id, type: field.type, value: number }, index)}
-        />
-      )
+      component = <Number {...field} onChange={(number) => onChangeElement({ ...field, value: number }, index)} />
       break
 
     case 'link':
       component = (
         <LinkSelector
           {...field}
-          onChange={({ title, url, target }) =>
-            onChangeElement({ id: field.id, type: field.type, value: { title, url, target } }, index)
-          }
+          onChange={({ title, url, target }) => onChangeElement({ ...field, value: { title, url, target } }, index)}
         />
       )
       break
 
     case 'select':
       component = (
-        <Select
-          {...field}
-          onChange={optionValue => onChangeElement({ id: field.id, type: field.type, value: optionValue }, index)}
-        />
+        <Select {...field} onChange={(optionValue) => onChangeElement({ ...field, value: optionValue }, index)} />
       )
       break
 
     case 'settings':
-      component = (
-        <Settings
-          {...field}
-          onChange={newValue => onChangeElement({ id: field.id, type: field.type, value: newValue }, index)}
-        />
-      )
+      component = <Settings {...field} onChange={(newValue) => onChangeElement({ ...field, value: newValue }, index)} />
       break
 
     case 'collectionSelector':
@@ -87,7 +64,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
         <CollectionSelector
           {...field}
           site={site}
-          onSelect={postTypeID => onChangeElement({ id: field.id, type: field.type, value: postTypeID }, index)}
+          onSelect={(postTypeID) => onChangeElement({ ...field, value: postTypeID }, index)}
         />
       )
       break
@@ -97,7 +74,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
         <FormSelector
           {...field}
           site={site}
-          onSelect={formID => onChangeElement({ id: field.id, type: field.type, value: formID }, index)}
+          onSelect={(formID) => onChangeElement({ ...field, value: formID }, index)}
         />
       )
       break
@@ -108,7 +85,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
           {...field}
           site={site}
           dispatch={dispatch}
-          onChange={items => onChangeElement({ id: field.id, type: field.type, value: items }, index)}
+          onChange={(items) => onChangeElement({ ...field, value: items }, index)}
         />
       )
       break
@@ -122,13 +99,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
               type: `SET_DIALOG`,
               payload: {
                 open: true,
-                component: (
-                  <MediaLibrary
-                    onSelect={({ id, storageKey }) =>
-                      onChangeElement({ id: field.id, type: field.type, value: { id, storageKey } }, index)
-                    }
-                  />
-                ),
+                component: <MediaLibrary onSelect={(image) => onChangeElement({ ...field, value: image }, index)} />,
                 width: 1000,
               },
             })
@@ -151,7 +122,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                   <MenuBuilder
                     index={index}
                     {...field}
-                    onChange={menu => onChangeElement({ id: field.id, type: field.type, value: menu }, index)}
+                    onChange={(menu) => onChangeElement({ ...field, value: menu }, index)}
                   />
                 ),
                 width: 1000,
@@ -173,7 +144,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
   )
 }
 
-const BlockEditFields = props => {
+const BlockEditFields = (props) => {
   const { fields, isTemplate, isSiteComponent, onDeleteElement, onChangeElement } = props
 
   const [
