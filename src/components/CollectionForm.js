@@ -19,19 +19,7 @@ const CollectionForm = (props) => {
       return
     }
 
-    let formattedSlug
-
-    if (slug) {
-      formattedSlug = formatSlug(slug).replace('/', '')
-      // Remove first slash
-      formattedSlug = formattedSlug.substring(1)
-    } else {
-      formattedSlug = formatSlug(title)
-      // Remove first slash
-      formattedSlug = formattedSlug.substring(1)
-    }
-
-    await onSubmit({ title, slug: formattedSlug })
+    await onSubmit({ title, slug })
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }

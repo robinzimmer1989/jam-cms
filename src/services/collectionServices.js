@@ -2,6 +2,11 @@ import { db } from '.'
 
 export const addCollection = async ({ siteID, title, slug }) => {
   let result = await db('createCollection', { siteID, title, slug })
+
+  if (result) {
+    result.posts = []
+  }
+
   return result
 }
 

@@ -30,7 +30,7 @@ const PostTreeSelect = (props) => {
         treeDefaultExpandAll
         onChange={onChange}
       >
-        <TreeSelect.TreeNode value={``} title={`None`} />
+        <TreeSelect.TreeNode value={0} title={`None`} />
         {treePosts.map((o) => renderTreeNode(o))}
       </TreeSelect>
     </Space>

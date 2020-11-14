@@ -70,7 +70,7 @@ const CollectionSettings = () => {
           }
 
           actions.push(
-            <Button size="small" disabled>
+            <Button size="small">
               <Link to={link} children={`Edit`} />
             </Button>
           )
