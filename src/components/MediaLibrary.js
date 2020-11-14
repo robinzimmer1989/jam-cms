@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import InfiniteScroll from 'react-infinite-scroller'
 import Img from 'gatsby-image'
-import { Modal, Row, Upload, Button, Space, message } from 'antd'
+import { Modal, Upload, Button, Space, message, Spin } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 // import app components
@@ -33,7 +34,7 @@ const MediaLibrary = (props) => {
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
-      await mediaActions.getMediaItems({ siteID, page }, dispatch)
+      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch)
     }
   }
 
@@ -75,7 +76,16 @@ const MediaLibrary = (props) => {
           </Upload.Dragger>
         )}
 
-        <Row>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={handleLoadMore}
+          hasMore={page > -1}
+          loader={
+            <LoadingContainer key={0}>
+              <Spin size="large" />
+            </LoadingContainer>
+          }
+        >
           {items &&
             items.map((o) => {
               return (
@@ -90,9 +100,7 @@ const MediaLibrary = (props) => {
                 </MediaItem>
               )
             })}
-        </Row>
-
-        {page && <Button children={'Load More'} onClick={handleLoadMore} />}
+        </InfiniteScroll>
       </Space>
 
       <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>
@@ -103,9 +111,10 @@ const MediaLibrary = (props) => {
 }
 
 const MediaItem = styled.div`
+  float: left;
   position: relative;
-  height: 150px;
-  width: 150px;
+  height: 140px;
+  width: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,6 +129,13 @@ const MediaItem = styled.div`
     max-width: 150px;
     width: auto;
   }
+`
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 `
 
 export default MediaLibrary
