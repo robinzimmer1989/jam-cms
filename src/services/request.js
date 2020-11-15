@@ -11,10 +11,20 @@ const db = async (endpoint, params) => {
   }
 
   try {
-    const result = await axios.get(`${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/${endpoint}`, {
-      params,
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
+    const formData = new FormData()
+    Object.keys(params).map((key) => formData.append(key, params[key]))
+
+    const result = await axios.post(
+      `${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/${endpoint}`,
+      formData,
+
+      {
+        headers: {
+          'Content-Type': 'x-www-form-urlencoded',
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    )
 
     const { data, status } = result
 
