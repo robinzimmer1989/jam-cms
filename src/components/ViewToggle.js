@@ -5,7 +5,9 @@ import { FullscreenOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } f
 // import app components
 import { useStore } from '../store'
 
-const ViewToggle = () => {
+const ViewToggle = (props) => {
+  const { hideFullscreen } = props
+
   const [
     {
       editorState: { viewport },
@@ -13,14 +15,23 @@ const ViewToggle = () => {
     dispatch,
   ] = useStore()
 
+  const elements = [
+    { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
+    { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
+    { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Laptop' },
+  ]
+
+  if (!hideFullscreen) {
+    elements.push({
+      type: 'fullscreen',
+      icon: <FullscreenOutlined style={{ fontSize: '14px' }} />,
+      title: 'Fullscreen',
+    })
+  }
+
   return (
     <Space>
-      {[
-        { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
-        { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
-        { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Laptop' },
-        { type: 'fullscreen', icon: <FullscreenOutlined style={{ fontSize: '14px' }} />, title: 'Fullscreen' },
-      ].map((o) => {
+      {elements.map((o) => {
         return (
           <Tooltip key={o.type} title={o.title}>
             <Button

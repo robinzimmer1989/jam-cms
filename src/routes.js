@@ -13,6 +13,7 @@ export const ROUTE_PROFILE = `/profile`
 export const ROUTE_FORMS = `/forms`
 export const ROUTE_FORM = `/form`
 export const ROUTE_SITE_ADMIN = `/admin`
+export const ROUTE_DEV = `/dev`
 
 const getRoute = (route, args) => {
   switch (route) {
@@ -66,6 +67,9 @@ const getRoute = (route, args) => {
 
     case `settings-collection`:
       return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_SETTINGS_COLLECTIONS}/${args?.postTypeID}`
+
+    case `dev`:
+      return `${ROUTE_APP}${ROUTE_SITE}/${args?.siteID}${ROUTE_DEV}`
 
     default:
       return `/`

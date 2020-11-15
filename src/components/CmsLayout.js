@@ -2,7 +2,14 @@ import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
 import { PageHeader, Layout, Menu, Divider } from 'antd'
-import { PieChartOutlined, BlockOutlined, SettingOutlined, FormOutlined, FolderOpenOutlined } from '@ant-design/icons'
+import {
+  PieChartOutlined,
+  BlockOutlined,
+  SettingOutlined,
+  FormOutlined,
+  FolderOpenOutlined,
+  CodeOutlined,
+} from '@ant-design/icons'
 
 // import app components
 import Edges from './Edges'
@@ -64,9 +71,9 @@ const CmsLayout = (props) => {
                 })}
             </Menu.SubMenu>
 
-            <Menu.Item key="Forms" icon={<FormOutlined />}>
+            {/* <Menu.Item key="Forms" icon={<FormOutlined />}>
               <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
-            </Menu.Item>
+            </Menu.Item> */}
 
             <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
               <Menu.Item key="General">
@@ -75,13 +82,19 @@ const CmsLayout = (props) => {
               <Menu.Item key="Collections">
                 <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
               </Menu.Item>
-              <Menu.Item key="SEO">
+              {/* <Menu.Item key="SEO">
                 <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
-              </Menu.Item>
-              <Menu.Item key="Editors">
+              </Menu.Item> */}
+              {/* <Menu.Item key="Editors">
                 <Link to={getRoute(`admin`, { siteID })}>Editors</Link>
-              </Menu.Item>
+              </Menu.Item> */}
             </Menu.SubMenu>
+
+            {process.env.NODE_ENV === 'development' && (
+              <Menu.Item key="Development" icon={<CodeOutlined />}>
+                <Link to={getRoute(`dev`, { siteID })}>Development</Link>
+              </Menu.Item>
+            )}
           </Menu>
         </div>
       </Layout.Sider>
