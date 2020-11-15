@@ -34,7 +34,7 @@ const FlexibleContent = (props) => {
         ...block,
         fields: block.fields.map((field) => {
           // Post relationship fields
-          if (field.type === 'collectionSelector' && field?.value) {
+          if (field.type === 'collection' && field?.value) {
             const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
               (post) => post.status === 'publish'
             )

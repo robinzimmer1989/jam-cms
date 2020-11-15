@@ -99,7 +99,10 @@ const PostEditor = (props) => {
     } else if (post && post.content[editorIndex]) {
       // loop through default blocks and replace value if found
       return blocks?.[post.content[editorIndex].name].fields.fields.map((o) => {
-        const setting = post.content[editorIndex].fields.find((p) => p.id === o.id)
+        // TODO: We might have to move to an object structure for fields instead of array.
+        // There is a problem when fields get removed and we try to add an array element and then skip something in between.
+        // The p?.id should fix it for now.
+        const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id)
 
         if (setting) {
           return { ...o, value: setting.value }

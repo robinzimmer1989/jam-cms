@@ -59,7 +59,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = <Settings {...field} onChange={(newValue) => onChangeElement({ ...field, value: newValue }, index)} />
       break
 
-    case 'collectionSelector':
+    case 'collection':
       component = (
         <CollectionSelector
           {...field}
