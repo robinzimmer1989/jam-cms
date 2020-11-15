@@ -72,4 +72,19 @@ export default createGlobalStyle`
   .ant-tabs-tab-btn {
     font-size: 11px;
   }
+
+  .ant-menu-item, .ant-menu-submenu-title {
+    padding-left: 32px !important;
+  }
+
+  .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .ant-page-header-heading-title {
+    margin: 0;
+  }
 `
