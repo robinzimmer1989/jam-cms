@@ -3,6 +3,8 @@ import React from 'react'
 // import external css files
 import 'minireset.css'
 import 'antd/dist/antd.css'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import 'draft-js-image-plugin/lib/plugin.css'
 
 // import app components
 import Master from './src/components/Master'
