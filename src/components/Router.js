@@ -47,9 +47,7 @@ const Router = (props) => {
       await siteActions.getSite({ siteID }, dispatch)
     }
 
-    // React was loading the site on every page change, even though the siteID never changed
-    // Fixed it with adding conditional logic here
-    !sites[siteID] && loadSite()
+    loadSite()
   }, [siteID])
 
   useEffect(() => {

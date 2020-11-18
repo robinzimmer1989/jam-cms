@@ -2,17 +2,18 @@ import axios from 'axios'
 import { navigate } from 'gatsby'
 
 import { auth } from '../utils'
+import getRoute from '../routes'
 
 const db = async (endpoint, params) => {
   const user = auth.getUser()
 
   if (!user?.token) {
-    auth.logout(() => navigate(`/`))
+    auth.logout(() => navigate(getRoute(`sign-in`)))
   }
 
   try {
     const formData = new FormData()
-    Object.keys(params).map((key) => formData.append(key, params[key]))
+    Object.keys(params).map((key) => typeof params[key] !== 'undefined' && formData.append(key, params[key]))
 
     const result = await axios.post(
       `${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/${endpoint}`,
@@ -30,13 +31,10 @@ const db = async (endpoint, params) => {
 
     if (status === 200) {
       return data
+    } else {
+      auth.logout(() => navigate(getRoute(`sign-in`)))
+      return false
     }
-
-    if (status === 403) {
-      // navigate(`/`)
-    }
-
-    return false
   } catch (err) {
     console.log(err)
   }

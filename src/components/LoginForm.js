@@ -37,15 +37,14 @@ export default () => {
     try {
       const result = await authActions.signIn({ username, password })
 
-      if (result) {
+      if (result?.success) {
         navigate(getRoute(`app`))
+      } else {
+        handleChange({ target: { name: 'error', value: result?.message } })
       }
     } catch (err) {
-      handleChange({ target: { name: 'error', value: err } })
       console.log('error...: ', err)
     }
-
-    handleChange({ target: { name: 'loading', value: false } })
   }
 
   const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value })
@@ -61,9 +60,13 @@ export default () => {
           <Input label={`Password`} value={data.password} type="password" onChange={handleChange} name="password" />
         </Spacer>
 
-        <Button loading={data.loading} children={`Submit`} onClick={handleLogin} type="primary" />
+        {data?.error && (
+          <Spacer mb={20}>
+            <Error children={data.error} />
+          </Spacer>
+        )}
 
-        {data?.error?.message && <Error children={data.error} />}
+        <Button loading={data.loading} children={`Submit`} onClick={handleLogin} type="primary" />
       </Card>
     </Spacer>
   )

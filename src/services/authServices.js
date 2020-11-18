@@ -7,13 +7,9 @@ export const signIn = async ({ username, password }) => {
       password,
     })
 
-    const { data, status } = result
+    const { data } = result
 
-    if (status === 200 && data?.data?.token) {
-      return data.data
-    }
-
-    return false
+    return data
   } catch (err) {
     console.log(err)
   }

@@ -28,7 +28,11 @@ export const getSite = async ({ siteID }) => {
 }
 
 export const addSite = async ({ title }) => {
-  const result = await db('createSite', { title })
+  let result = await db('createSite', { title })
+
+  if (result) {
+    result = transformSite(result)
+  }
 
   return result
 }

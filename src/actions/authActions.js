@@ -4,8 +4,8 @@ import { auth } from '../utils'
 export const signIn = async ({ username, password }, dispatch) => {
   const result = await authServices.signIn({ username, password })
 
-  if (result) {
-    auth.setUser(result)
+  if (result?.data?.token) {
+    auth.setUser(result.data)
   }
 
   return result
