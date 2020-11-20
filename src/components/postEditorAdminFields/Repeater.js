@@ -6,7 +6,9 @@ import produce from 'immer'
 import { getField } from '../BlockEditFields'
 
 const Repeater = (props) => {
-  const { site, items, value: values = [], onChange, dispatch } = props
+  const { site, items, value, onChange, dispatch } = props
+
+  const values = value || []
 
   const handleAdd = (index) => {
     const newValues = produce(values, (draft) => {
