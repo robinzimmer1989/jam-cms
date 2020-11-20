@@ -90,11 +90,11 @@ const CmsLayout = (props) => {
               </Menu.Item> */}
             </Menu.SubMenu>
 
-            {process.env.NODE_ENV === 'development' && (
+            {/* {process.env.NODE_ENV === 'development' && (
               <Menu.Item key="Development" icon={<CodeOutlined />}>
                 <Link to={getRoute(`dev`, { siteID })}>Development</Link>
               </Menu.Item>
-            )}
+            )} */}
           </Menu>
         </div>
       </Layout.Sider>
