@@ -32,7 +32,7 @@ export const updatePost = async ({
     seoTitle,
     seoDescription,
     parentID,
-    featuredImage,
+    featuredImage: JSON.stringify(featuredImage),
   })
 
   return result
