@@ -37,14 +37,18 @@ const Master = (props) => {
         <SignIn path={`${ROUTE_APP}${ROUTE_SIGN_IN}`} />
       </Router>
 
-      <Modal
-        title={dialog.title}
-        visible={dialog.open}
-        onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
-        children={dialog.component}
-        width={dialog.width}
-        footer={null}
-      />
+      {dialog.open && (
+        <Modal
+          transitionName="none"
+          maskTransitionName="none"
+          title={dialog.title}
+          visible={true}
+          onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
+          children={dialog.component}
+          width={dialog.width}
+          footer={null}
+        />
+      )}
     </>
   )
 }

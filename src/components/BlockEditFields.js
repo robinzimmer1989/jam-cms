@@ -99,7 +99,12 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
               type: `SET_DIALOG`,
               payload: {
                 open: true,
-                component: <MediaLibrary onSelect={(image) => onChangeElement({ ...field, value: image }, index)} />,
+                component: (
+                  <MediaLibrary
+                    onSelect={(image) => onChangeElement({ ...field, value: image }, index)}
+                    allow={['image']}
+                  />
+                ),
                 width: 1000,
               },
             })
