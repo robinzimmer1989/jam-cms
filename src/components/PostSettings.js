@@ -121,7 +121,7 @@ const PostSettings = () => {
                     type: `SET_DIALOG`,
                     payload: {
                       open: true,
-                      component: <MediaLibrary onSelect={handleSelectImage} />,
+                      component: <MediaLibrary onSelect={handleSelectImage} allow={['image']} />,
                       width: 1000,
                     },
                   })

@@ -42,7 +42,7 @@ const MediaImage = (props) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          {file?.childImageSharp?.fluid && (
+          {file.type === 'image' && file?.childImageSharp?.fluid && (
             <Img
               fluid={file.childImageSharp.fluid}
               imgStyle={{
@@ -54,8 +54,17 @@ const MediaImage = (props) => {
                 transform: 'translate(-50%, -50%)',
               }}
               alt={file.alt}
-              style={{ width: '100%', height: '50vh', background: colors.primary.light }}
+              style={{ width: '100%', height: '50vh' }}
             />
+          )}
+
+          {file.type === 'application' && (
+            <File>
+              <div>
+                <img src={file.icon} />
+                <span>{file.title}</span>
+              </div>
+            </File>
           )}
         </Col>
         <Col span={12}>
@@ -77,10 +86,7 @@ const MediaImage = (props) => {
               </Space>
             </Space>
 
-            <Space>
-              <Button onClick={onClose} children={`Close`} />
-              {onSelect && <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />}
-            </Space>
+            <Space>{onSelect && <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />}</Space>
           </Content>
         </Col>
       </Row>
@@ -95,6 +101,27 @@ const Content = styled.div`
   align-items: flex-end;
   height: 100%;
   min-height: 300px;
+`
+
+const File = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  div {
+  }
+
+  img {
+    margin-bottom: 10px;
+  }
+
+  span {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
 `
 
 export default MediaImage

@@ -12,7 +12,7 @@ import { mediaActions } from '../actions'
 import { useStore } from '../store'
 
 const MediaLibrary = (props) => {
-  const { onSelect } = props
+  const { onSelect, allow } = props
 
   const [
     {
@@ -87,25 +87,48 @@ const MediaLibrary = (props) => {
           }
         >
           {items &&
-            items.map((o) => {
-              return (
-                <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                  <Img
-                    fluid={o.childImageSharp.fluid}
-                    objectFit="cover"
-                    objectPosition="50% 50%"
-                    alt={o.alt}
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                </MediaItem>
-              )
-            })}
+            items
+              .filter((o) => (allow ? allow.includes(o.type) : o))
+              .map((o) => {
+                return (
+                  <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
+                    {o.type === 'image' && (
+                      <Img
+                        fluid={o.childImageSharp.fluid}
+                        objectFit="cover"
+                        objectPosition="50% 50%"
+                        alt={o.alt}
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    )}
+
+                    {o.type === 'application' && (
+                      <File>
+                        <img src={o.icon} />
+                        <span>{o.title}</span>
+                      </File>
+                    )}
+                  </MediaItem>
+                )
+              })}
         </InfiniteScroll>
       </Space>
 
-      <Modal title={`Media Image`} visible={!!activeFile} onCancel={handleCloseDialog} footer={null} width={1024}>
-        {activeFile && <MediaImage file={activeFile} onSelect={onSelect && handleSelect} onClose={handleCloseDialog} />}
-      </Modal>
+      {!!activeFile && (
+        <Modal
+          transitionName="none"
+          maskTransitionName="none"
+          title={`Media Image`}
+          visible={true}
+          onCancel={handleCloseDialog}
+          footer={null}
+          width={1024}
+        >
+          {activeFile && (
+            <MediaImage file={activeFile} onSelect={onSelect && handleSelect} onClose={handleCloseDialog} />
+          )}
+        </Modal>
+      )}
     </>
   )
 }
@@ -128,6 +151,23 @@ const MediaItem = styled.div`
     max-height: 150px;
     max-width: 150px;
     width: auto;
+  }
+`
+
+const File = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  img {
+    height: 40px;
+    margin-bottom: 10px;
+  }
+
+  span {
+    display: block;
+    width: 100%;
+    text-align: center;
   }
 `
 
