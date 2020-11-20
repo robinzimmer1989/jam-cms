@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { PageHeader, Divider } from 'antd'
 import produce from 'immer'
 import { set } from 'lodash'
+import Parser from 'html-react-parser'
 
 // import app components
 import BlockForm from '../BlockForm'
@@ -128,7 +129,7 @@ const PostEditor = (props) => {
         title: {
           title: siteComponent
             ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
-            : post.content[editorIndex].label || post.content[editorIndex].name,
+            : Parser(post.content[editorIndex].label || post.content[editorIndex].name),
           onBack: () =>
             dispatch({
               type: 'SET_EDITOR_INDEX',
