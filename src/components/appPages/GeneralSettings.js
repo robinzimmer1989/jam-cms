@@ -39,11 +39,11 @@ const GeneralSettings = () => {
     })
   }
 
-  const handleUpdate = async () => {
-    const { id, title, netlifyBuildHook, netlifyBadgeImage, netlifyBadgeLink } = site
+  const handleUpdate = async (args, loader) => {
+    const { id } = site
 
-    setLoading('updateGeneralSettings')
-    await siteActions.updateSite({ id, title, netlifyBuildHook, netlifyBadgeImage, netlifyBadgeLink }, dispatch)
+    setLoading(loader)
+    await siteActions.updateSite({ id, ...args }, dispatch)
     setLoading(null)
 
     notification.success({
@@ -55,26 +55,69 @@ const GeneralSettings = () => {
 
   return (
     <CmsLayout pageTitle={`General`}>
-      <Space direction="vertical" size={20}>
+      <Space direction="vertical" size={40}>
         <Card title={`General`}>
           <Space direction="vertical" size={20}>
             <Input label="Title" value={site?.title} name="title" onChange={handleChange} />
 
-            <Input label="Build Hook" value={site?.netlifyBuildHook} name="netlifyBuildHook" onChange={handleChange} />
+            <Button
+              loading={loading === 'general'}
+              onClick={() => handleUpdate({ title: site.title }, 'general')}
+              children={`Update`}
+              type="primary"
+            />
+          </Space>
+        </Card>
 
+        <Card title={`Deployment`}>
+          <Space direction="vertical" size={20}>
             <Input
-              label="Badge Image"
-              value={site?.netlifyBadgeImage}
-              name="netlifyBadgeImage"
+              label="Build Hook"
+              value={site?.deploymentBuildHook}
+              name="deploymentBuildHook"
               onChange={handleChange}
             />
 
-            <Input label="Badge Link" value={site?.netlifyBadgeLink} name="netlifyBadgeLink" onChange={handleChange} />
+            <Input
+              label="Badge Image"
+              value={site?.deploymentBadgeImage}
+              name="deploymentBadgeImage"
+              onChange={handleChange}
+            />
+
+            <Input
+              label="Badge Link"
+              value={site?.deploymentBadgeLink}
+              name="deploymentBadgeLink"
+              onChange={handleChange}
+            />
 
             <Button
-              loading={loading === 'updateGeneralSettings'}
-              onClick={handleUpdate}
+              loading={loading === 'deployment'}
+              onClick={() =>
+                handleUpdate(
+                  {
+                    deploymentBuildHook: site.deploymentBuildHook,
+                    deploymentBadgeImage: site.deploymentBadgeImage,
+                    deploymentBadgeLink: site.deploymentBadgeLink,
+                  },
+                  'deployment'
+                )
+              }
               children={`Update`}
+              type="primary"
+            />
+          </Space>
+        </Card>
+
+        <Card title={`Build`}>
+          <Space direction="vertical" size={20}>
+            <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
+
+            <Button
+              loading={loading === 'apikey'}
+              onClick={() => handleUpdate({ apiKey: true }, 'apikey')}
+              children={`Regenerate`}
               type="primary"
             />
           </Space>
