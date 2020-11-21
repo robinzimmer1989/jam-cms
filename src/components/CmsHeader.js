@@ -28,7 +28,7 @@ const CmsHeader = (props) => {
       })
     }
 
-    axios.post(site.netlifyBuildHook)
+    axios.post(site.deploymentBuildHook)
   }
 
   const buttons = []
@@ -36,21 +36,22 @@ const CmsHeader = (props) => {
   if (actionBar === 'editor') {
     buttons.push(<ViewToggle key={'view-toggle'} />)
   } else {
-    if (site?.netlifyID) {
+    if (site?.deploymentBadgeImage) {
       buttons.push(
-        <NetlifyStatus
-          key="netlify-status"
-          src={`https://api.netlify.com/api/v1/badges/${site.netlifyID}/deploy-status?key=${Math.floor(
-            Math.random() * Math.floor(100)
-          )}`}
-        />,
-        <Button key="netlify-deploy-button" size="small" children={`Deploy`} onClick={handleDeploy} />
+        <DeploymentStatus
+          key="deployment-status"
+          src={`${site.deploymentBadgeImage}?key=${Math.floor(Math.random() * Math.floor(100))}`}
+        />
       )
     }
 
-    if (site?.netlifyUrl) {
+    if (site?.deploymentBuildHook) {
+      buttons.push(<Button key="deployment-button" size="small" children={`Deploy`} onClick={handleDeploy} />)
+    }
+
+    if (site?.frontendUrl) {
       buttons.push(
-        <Button key="visit-site-button" size="small" children={`Visit Site`} href={site?.netlifyUrl} target="_blank" />
+        <Button key="visit-site-button" size="small" children={`Visit Site`} href={site?.frontendUrl} target="_blank" />
       )
     }
 
@@ -60,7 +61,7 @@ const CmsHeader = (props) => {
   return <PageHeader title={title} extra={buttons} />
 }
 
-const NetlifyStatus = styled.img`
+const DeploymentStatus = styled.img`
   height: 16px;
   margin: 0 10px;
 `

@@ -42,18 +42,20 @@ export const updateSite = async ({
   title,
   settings,
   frontPage,
-  netlifyBuildHook,
-  netlifyBadgeImage,
-  netlifyBadgeLink,
+  deploymentBuildHook,
+  deploymentBadgeImage,
+  deploymentBadgeLink,
+  apiKey,
 }) => {
   let result = await db('updateSite', {
     id,
     title,
     settings: JSON.stringify(settings),
     frontPage,
-    netlifyBuildHook,
-    netlifyBadgeImage,
-    netlifyBadgeLink,
+    deploymentBuildHook,
+    deploymentBadgeImage,
+    deploymentBadgeLink,
+    apiKey,
   })
 
   if (result) {

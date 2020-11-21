@@ -15,7 +15,7 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
 }
 
 export const updateSite = async (
-  { id, title, settings, frontPage, netlifyBuildHook, netlifyBadgeImage, netlifyBadgeLink },
+  { id, title, settings, frontPage, deploymentBuildHook, deploymentBadgeImage, deploymentBadgeLink, apiKey },
   dispatch
 ) => {
   const result = await siteServices.updateSite({
@@ -23,13 +23,15 @@ export const updateSite = async (
     title,
     settings,
     frontPage,
-    netlifyBuildHook,
-    netlifyBadgeImage,
-    netlifyBadgeLink,
+    deploymentBuildHook,
+    deploymentBadgeImage,
+    deploymentBadgeLink,
+    apiKey,
   })
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result })
+    dispatch({ type: `ADD_EDITOR_SITE`, payload: result })
   }
 
   return result
