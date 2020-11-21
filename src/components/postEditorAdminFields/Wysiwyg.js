@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Modal } from 'antd'
 import createImagePlugin from 'draft-js-image-plugin'
-import { Editor } from 'react-draft-wysiwyg'
 import draftToHtml from 'draftjs-to-html'
 import { ContentState, EditorState, convertToRaw, AtomicBlockUtils, convertFromHTML } from 'draft-js'
 
@@ -40,10 +39,18 @@ const ImageUploadIcon = (props) => {
   )
 }
 
+let Editor = () => <></>
+
 const Wysiwyg = (props) => {
   const { value, onChange } = props
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [editor, setEditor] = useState(null)
+
+  useEffect(() => {
+    Editor = require('react-draft-wysiwyg').Editor
+    setEditor(true)
+  }, [])
 
   // Convert html value to editor state on initial load
   // Afterward, we gonna use local state and send the converted html back to the store
@@ -69,28 +76,29 @@ const Wysiwyg = (props) => {
 
   return (
     <EditorContainer>
-      <Editor
-        // toolbarOnFocus
-        toolbarCustomButtons={[<ImageUploadIcon modifier={imagePlugin.addImage} />]}
-        plugins={[imagePlugin]}
-        toolbar={{
-          options: ['inline', 'blockType', 'list', 'textAlign'],
-          inline: {
-            inDropdown: true,
-          },
-          blockType: {
-            inDropdown: true,
-          },
-          list: {
-            inDropdown: true,
-          },
-          textAlign: {
-            inDropdown: true,
-          },
-        }}
-        editorState={editorState}
-        onEditorStateChange={handleChange}
-      />
+      {editor && (
+        <Editor
+          toolbarCustomButtons={[<ImageUploadIcon modifier={imagePlugin.addImage} />]}
+          plugins={[imagePlugin]}
+          toolbar={{
+            options: ['inline', 'blockType', 'list', 'textAlign'],
+            inline: {
+              inDropdown: true,
+            },
+            blockType: {
+              inDropdown: true,
+            },
+            list: {
+              inDropdown: true,
+            },
+            textAlign: {
+              inDropdown: true,
+            },
+          }}
+          editorState={editorState}
+          onEditorStateChange={handleChange}
+        />
+      )}
     </EditorContainer>
   )
 }
