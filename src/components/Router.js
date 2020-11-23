@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Router as ReachRouter } from '@reach/router'
-import Helmet from 'react-helmet'
 
 // import app components
 import Dashboard from './appPages/Dashboard'
@@ -12,7 +11,7 @@ import PostEditor from './appPages/PostEditor'
 import Forms from './appPages/Forms'
 import Form from './appPages/Form'
 import GeneralSettings from './appPages/GeneralSettings'
-import Admin from './appPages/Admin'
+import Editors from './appPages/Editors'
 import Seo from './appPages/Seo'
 import Development from './appPages/Development'
 
@@ -24,7 +23,7 @@ import {
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_COLLECTIONS,
   ROUTE_SETTINGS_SEO,
-  ROUTE_SITE_ADMIN,
+  ROUTE_SITE_EDITORS,
   ROUTE_DEV,
 } from '../routes'
 import { siteActions } from '../actions'
@@ -35,28 +34,19 @@ const Router = (props) => {
 
   const [
     {
+      authState: { authUser },
       cmsState: { sites },
     },
     dispatch,
   ] = useStore()
-
-  const [fonts, setFonts] = useState([])
 
   useEffect(() => {
     const loadSite = async () => {
       await siteActions.getSite({ siteID }, dispatch)
     }
 
-    loadSite()
+    !sites[siteID] && loadSite()
   }, [siteID])
-
-  useEffect(() => {
-    if (theme?.typography) {
-      const { headlineFontFamily, paragraphFontFamily } = theme.typography
-
-      setFonts([...new Set([headlineFontFamily, paragraphFontFamily])])
-    }
-  }, [theme])
 
   if (!sites[siteID]) {
     return null
@@ -64,12 +54,6 @@ const Router = (props) => {
 
   return (
     <>
-      <Helmet>
-        {fonts.map((s) => (
-          <link key={s} rel="stylesheet" href={`https://fonts.googleapis.com/css?family=${s}`} />
-        ))}
-      </Helmet>
-
       <ReachRouter>
         <Dashboard path="/" />
         <Media path={`${ROUTE_MEDIA}`} />
@@ -77,12 +61,15 @@ const Router = (props) => {
         <PostEditor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} theme={theme} blocks={blocks} />
         <Forms path={ROUTE_FORMS} />
         <Form path={`${ROUTE_FORMS}/:formID`} />
-        <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
-        <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
-        <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} theme={theme} blocks={blocks} />
         <Seo path={ROUTE_SETTINGS_SEO} />
-        <Admin path={ROUTE_SITE_ADMIN} />
-        <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />
+        {authUser?.capabilities?.manage_options && <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />}
+        {authUser?.capabilities?.manage_options && <Collections path={ROUTE_SETTINGS_COLLECTIONS} />}
+        {authUser?.capabilities?.manage_options && (
+          <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} theme={theme} blocks={blocks} />
+        )}
+        {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
+
+        {/* {process.env.NODE_ENV === 'development' && <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />} */}
       </ReachRouter>
     </>
   )

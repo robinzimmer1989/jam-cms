@@ -23,6 +23,7 @@ const CmsLayout = (props) => {
 
   const [
     {
+      authState: { authUser },
       globalState: { leftSidebar },
       cmsState: { siteID, sites },
       editorState: { hasChanged },
@@ -75,20 +76,35 @@ const CmsLayout = (props) => {
               <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
             </Menu.Item> */}
 
-            <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
-              <Menu.Item key="General">
-                <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
-              </Menu.Item>
-              <Menu.Item key="Collections">
-                <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
-              </Menu.Item>
-              {/* <Menu.Item key="SEO">
+            {(authUser?.capabilities?.manage_options ||
+              authUser?.capabilities?.list_users ||
+              authUser?.capabilities?.wpseo_manage_options) && (
+              <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
+                {authUser?.capabilities?.manage_options && (
+                  <Menu.Item key="General">
+                    <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
+                  </Menu.Item>
+                )}
+
+                {authUser?.capabilities?.manage_options && (
+                  <Menu.Item key="Collections">
+                    <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+                  </Menu.Item>
+                )}
+
+                {authUser?.capabilities?.list_users && (
+                  <Menu.Item key="Editors">
+                    <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
+                  </Menu.Item>
+                )}
+
+                {/* {authUser?.capabilities?.wpseo_manage_options &&
+                <Menu.Item key="SEO">
                 <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
-              </Menu.Item> */}
-              {/* <Menu.Item key="Editors">
-                <Link to={getRoute(`admin`, { siteID })}>Editors</Link>
-              </Menu.Item> */}
-            </Menu.SubMenu>
+              </Menu.Item>
+              } */}
+              </Menu.SubMenu>
+            )}
 
             {/* {process.env.NODE_ENV === 'development' && (
               <Menu.Item key="Development" icon={<CodeOutlined />}>

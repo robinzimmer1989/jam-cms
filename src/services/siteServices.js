@@ -98,8 +98,6 @@ const transformSite = (site) => {
     if (get(draft, `forms.items`)) {
       draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
     }
-
-    set(draft, `mediaItems`, { items: [], page: null })
   })
 
   return nextSite

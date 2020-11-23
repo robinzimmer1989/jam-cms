@@ -1,32 +1,52 @@
 import React, { useState } from 'react'
-import { Space, Button } from 'antd'
+import { Space, Button, Select } from 'antd'
 
 // import app components
 import Input from './Input'
+import Caption from './Caption'
+
 import { useStore } from '../store'
 
 const EditorForm = (props) => {
-  const { onSubmit } = props
+  const { id, email: defaultEmail = '', role: defaultRole = 'editor', onAdd, onUpdate } = props
 
   const [, dispatch] = useStore()
 
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState(defaultEmail)
+  const [role, setRole] = useState(defaultRole)
 
   const handleSubmit = async () => {
-    if (!username) {
+    if (!email) {
       return
     }
 
-    await onSubmit({ username })
-
-    setUsername('')
+    if (id) {
+      onUpdate({ id, role })
+    } else {
+      onAdd({ email, role })
+    }
 
     dispatch({ type: 'CLOSE_DIALOG' })
   }
 
   return (
     <Space direction="vertical">
-      <Input label="Username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder={``} />
+      <Input
+        label="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={``}
+        disabled={!!defaultEmail}
+      />
+
+      <Space direction="vertical" size={2}>
+        <Caption children="Role" />
+        <Select defaultValue={role || defaultRole} onChange={(v) => setRole(v)}>
+          <Select.Option value={'editor'} children={'Editor'} />
+          <Select.Option value={'administrator'} children={'Admin'} />
+        </Select>
+      </Space>
+
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   )

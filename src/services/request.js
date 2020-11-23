@@ -15,17 +15,14 @@ const db = async (endpoint, params) => {
     const formData = new FormData()
     Object.keys(params).map((key) => typeof params[key] !== 'undefined' && formData.append(key, params[key]))
 
-    const result = await axios.post(
-      `${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/${endpoint}`,
-      formData,
+    const url = process.env.GATSBY_CMS_SOURCE
 
-      {
-        headers: {
-          'Content-Type': 'x-www-form-urlencoded',
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-    )
+    const result = await axios.post(`${url.replace(/\/+$/, '')}/${endpoint}`, formData, {
+      headers: {
+        'Content-Type': 'x-www-form-urlencoded',
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
 
     const { data, status } = result
 

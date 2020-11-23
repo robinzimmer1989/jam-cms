@@ -25,16 +25,10 @@ const Home = () => {
 
   useEffect(() => {
     const loadSites = async () => {
-      // Directly redirect to site if env variable GATSBY_CMS_SITE_ID is enabled. We don't need to load it here, because it will be loaded in the next step.
-      // Otherwise get all sites, but redirect if first site isn't multisite
-      if (process.env.GATSBY_CMS_SITE_ID) {
-        navigate(getRoute(`dashboard`, { siteID: process.env.GATSBY_CMS_SITE_ID }))
+      if (!!process.env.GATSBY_CMS_MULTISITE) {
+        await siteActions.getSites({}, dispatch)
       } else {
-        const result = await siteActions.getSites({}, dispatch)
-
-        if (result.length > 0 && !result[0].multisite) {
-          navigate(getRoute(`dashboard`, { siteID: sites[0].id }))
-        }
+        navigate(getRoute(`dashboard`))
       }
 
       setLoaded(true)
@@ -43,56 +37,58 @@ const Home = () => {
   }, [])
 
   return (
-    <BaseLayout>
+    <>
       {loaded ? (
-        <Edges size="md">
-          <PageHeader
-            title="My Websites"
-            extra={[
-              <Button
-                key="1"
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_DIALOG',
-                    payload: {
-                      open: true,
-                      title: 'Add Website',
-                      component: <SiteForm />,
-                    },
-                  })
-                }
-                type="primary"
-                children={`Add Site`}
-              />,
-            ]}
-          />
+        <BaseLayout>
+          <Edges size="md">
+            <PageHeader
+              title="My Websites"
+              extra={[
+                <Button
+                  key="1"
+                  onClick={() =>
+                    dispatch({
+                      type: 'SET_DIALOG',
+                      payload: {
+                        open: true,
+                        title: 'Add Website',
+                        component: <SiteForm />,
+                      },
+                    })
+                  }
+                  type="primary"
+                  children={`Add Site`}
+                />,
+              ]}
+            />
 
-          <Space direction="vertical">
-            {Object.keys(sites).map((key) => {
-              const { id, title } = sites[key]
+            <Space direction="vertical">
+              {Object.keys(sites).map((key) => {
+                const { id, title } = sites[key]
 
-              return (
-                <ListItem
-                  key={id}
-                  title={title}
-                  actions={[
-                    <Button
-                      key="1"
-                      onClick={() => navigate(getRoute(`dashboard`, { siteID: id }))}
-                      children={`Dashboard`}
-                    />,
-                  ]}
-                  link={getRoute(`dashboard`, { siteID: id })}
-                  hideImage={true}
-                />
-              )
-            })}
-          </Space>
-        </Edges>
+                return (
+                  <ListItem
+                    key={id}
+                    title={title}
+                    actions={[
+                      <Button
+                        key="1"
+                        onClick={() => navigate(getRoute(`dashboard`, { siteID: id }))}
+                        children={`Dashboard`}
+                      />,
+                    ]}
+                    link={getRoute(`dashboard`, { siteID: id })}
+                    hideImage={true}
+                  />
+                )
+              })}
+            </Space>
+          </Edges>
+        </BaseLayout>
       ) : (
         <Loader />
       )}
-    </BaseLayout>
+    </>
   )
 }
 

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import styled, { css, StyleSheetManager } from 'styled-components'
 import { Button, Tooltip } from 'antd'
 import { FullscreenExitOutlined } from '@ant-design/icons'
-import { ThemeProvider } from 'styled-components'
 import Frame, { FrameContextConsumer } from 'react-frame-component'
+import Helmet from 'react-helmet'
 
 // import app components
 import { generateCss } from '../utils'
 import { useStore } from '../store'
+import { GlobalStyles } from '../theme'
 
 const PageWrapper = ({ theme, children, ...rest }) => {
   const [
@@ -18,10 +19,9 @@ const PageWrapper = ({ theme, children, ...rest }) => {
   ] = useStore()
 
   const iframeRef = React.createRef()
-  const [height, setHeight] = useState(0)
 
-  // Generate theme css (typography, colors, etc.)
-  const themeCss = generateCss(theme)
+  const [height, setHeight] = useState(0)
+  const [fonts, setFonts] = useState([])
 
   const handleResize = (iframe) => {
     if (viewport === 'fullscreen') {
@@ -33,11 +33,19 @@ const PageWrapper = ({ theme, children, ...rest }) => {
       iframe.current.node.contentDocument.body.scrollHeight !== 0
     ) {
       // Calculate height automatically based on body height of iframe
-      setHeight(iframe.current.node.contentDocument.body.scrollHeight + 20)
+      setHeight(iframe.current.node.contentDocument.body.scrollHeight + 30)
     }
   }
 
   useEffect(() => handleResize(iframeRef), [children, viewport])
+
+  useEffect(() => {
+    if (theme?.typography) {
+      const { headlineFontFamily, paragraphFontFamily } = theme.typography
+
+      setFonts([...new Set([headlineFontFamily, paragraphFontFamily])])
+    }
+  }, [theme])
 
   return (
     <>
@@ -56,27 +64,36 @@ const PageWrapper = ({ theme, children, ...rest }) => {
       )}
 
       {site && (
-        <ThemeProvider theme={theme || {}}>
-          <Page viewport={viewport}>
-            <Frame
-              style={{ width: '100%', height, overflow: 'auto' }}
-              // We have to add minireset manually, because base styles don't get applied to the iframe
-              head={<style>{minireset}</style>}
-              onLoad={() => handleResize(iframeRef)}
-              ref={iframeRef}
-            >
-              <FrameContextConsumer>
-                {(frameContext) => (
-                  <StyleSheetManager target={frameContext.document.head}>
-                    <ContentWrapper themeCss={themeCss} viewport={viewport}>
-                      {children}
-                    </ContentWrapper>
-                  </StyleSheetManager>
-                )}
-              </FrameContextConsumer>
-            </Frame>
-          </Page>
-        </ThemeProvider>
+        <Page viewport={viewport}>
+          <Frame
+            style={{ width: '100%', height, overflow: 'auto' }}
+            head={
+              <>
+                <style>${minireset}</style>
+
+                {fonts.map((s) => (
+                  <link key={s} rel="stylesheet" href={`https://fonts.googleapis.com/css?family=${s}`} />
+                ))}
+              </>
+            }
+            onLoad={() => handleResize(iframeRef)}
+            ref={iframeRef}
+          >
+            <Helmet></Helmet>
+
+            <FrameContextConsumer>
+              {(frameContext) => (
+                <StyleSheetManager target={frameContext.document.head}>
+                  <ContentWrapper viewport={viewport}>
+                    <GlobalStyles />
+
+                    {children}
+                  </ContentWrapper>
+                </StyleSheetManager>
+              )}
+            </FrameContextConsumer>
+          </Frame>
+        </Page>
       )}
     </>
   )
@@ -116,7 +133,7 @@ const Page = styled.div`
 const ContentWrapper = styled.div`
   margin-top: ${({ viewport }) => (viewport === 'fullscreen' ? 0 : '13px')};
   /* box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07); */
-  ${(props) => props.themeCss}
+  ${({ theme }) => theme && generateCss(theme)}
 `
 
 const FullScreenExitButton = styled.div`

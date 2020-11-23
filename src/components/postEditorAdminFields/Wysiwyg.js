@@ -4,13 +4,15 @@ import { Modal } from 'antd'
 import createImagePlugin from 'draft-js-image-plugin'
 import draftToHtml from 'draftjs-to-html'
 import { ContentState, EditorState, convertToRaw, AtomicBlockUtils, convertFromHTML } from 'draft-js'
+import { FileImageOutlined } from '@ant-design/icons'
 
 // import app components
 import MediaLibrary from '../MediaLibrary'
+import { generateCss } from '../../utils'
 
 const imagePlugin = createImagePlugin()
 
-const ImageUploadIcon = (props) => {
+const WysiwygImageUpload = (props) => {
   const { editorState, onChange } = props
 
   const [open, setOpen] = useState(false)
@@ -30,7 +32,9 @@ const ImageUploadIcon = (props) => {
 
   return (
     <>
-      <div onClick={() => setOpen(true)}>Img</div>
+      <IconContainer className="rdw-dropdown-wrapper" onClick={() => setOpen(true)}>
+        <FileImageOutlined />
+      </IconContainer>
 
       <Modal title={'Media Library'} visible={open} onCancel={() => setOpen(false)} width={1000}>
         <MediaLibrary onSelect={handleSelect} />
@@ -78,7 +82,7 @@ const Wysiwyg = (props) => {
     <EditorContainer>
       {editor && (
         <Editor
-          toolbarCustomButtons={[<ImageUploadIcon modifier={imagePlugin.addImage} />]}
+          toolbarCustomButtons={[<WysiwygImageUpload modifier={imagePlugin.addImage} />]}
           plugins={[imagePlugin]}
           toolbar={{
             options: ['inline', 'blockType', 'list', 'textAlign'],
@@ -97,6 +101,7 @@ const Wysiwyg = (props) => {
           }}
           editorState={editorState}
           onEditorStateChange={handleChange}
+          placeholder={`Write something...`}
         />
       )}
     </EditorContainer>
@@ -104,9 +109,24 @@ const Wysiwyg = (props) => {
 }
 
 const EditorContainer = styled.div`
-  .DraftEditor-editorContainer {
-    border: 1px solid #eee;
-    padding: 0 5px;
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .public-DraftStyleDefault-block {
+    margin: 0;
   }
 
   .rdw-editor-toolbar {
@@ -117,7 +137,10 @@ const EditorContainer = styled.div`
 
   .rdw-dropdown-wrapper {
     width: 30px;
-    border-radius: 50%;
+  }
+
+  .rdw-dropdown-selectedtext {
+    overflow: hidden;
   }
 
   .rdw-dropdown-carettoopen,
@@ -128,6 +151,12 @@ const EditorContainer = styled.div`
   .rdw-dropdown-optionwrapper {
     width: 100px;
   }
+`
+
+const IconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export default Wysiwyg

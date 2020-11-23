@@ -59,7 +59,7 @@ const Form = (props) => {
               height: 60,
             }}
             description=""
-            className="reset-font"
+            className="flexible-content-empty"
           >
             <Button type="primary" onClick={handleOpenDialog}>
               Add Field

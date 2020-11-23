@@ -109,7 +109,7 @@ const SettingsTheme = () => {
 }
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 15px;
 `
 
 export default SettingsTheme

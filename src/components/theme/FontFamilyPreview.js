@@ -13,7 +13,7 @@ const FontFamilyPreview = () => {
     <Container>
       <Edges size="sm">
         <Space direction="vertical" size={40}>
-          <Input className="reset-font" label="Preview Text" value={text} onChange={(e) => setText(e.target.value)} />
+          <Input label="Preview Text" value={text} onChange={(e) => setText(e.target.value)} />
           <div>
             <Space direction="vertical" size={20}>
               <Typography.Title level={1} children={`h1. ${text}`} />

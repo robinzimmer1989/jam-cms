@@ -4,7 +4,7 @@ export default createGlobalStyle`
 
   body, iframe {
     background: #f8f9ff;
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
   }
   
 
@@ -22,14 +22,45 @@ export default createGlobalStyle`
     margin: 0;
   }
 
-  .reset-font, .reset-font * {
-      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+  .blockName {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
+  }
+
+  .flexible-content-empty {
+      
       font-size: 14px !important;
 
-      .ant-btn span {
-        color: #fff !important;
+      .ant-empty-image, .ant-empty-footer {
+        display: flex;
+        justify-content: center;
+      }
+
+      .ant-empty-image {
+        margin-bottom: 20px;
+      }
+
+      .ant-btn-primary {
+        color: #fff;
+        background: #1890ff;
+        border: 1px solid #1890ff;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+        height: 32px;
+        padding: 4px 15px;
+        font-size: 14px;
+        border-radius: 2px;
+        outline: 0;
+        cursor: pointer;
+
+        &:hover {
+          color: #fff;
+          background: #40a9ff;
+          border-color: #40a9ff;
+        }
       }
   }
+
+  
 
   .ant-layout {
     background: transparent;

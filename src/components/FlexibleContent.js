@@ -110,7 +110,7 @@ const FlexibleContent = (props) => {
             image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
             imageStyle={{ height: 60 }}
             description=""
-            className="reset-font"
+            className="flexible-content-empty"
           >
             <Button type="primary" onClick={() => onOpenDialog(0)} children="Add" />
           </Empty>

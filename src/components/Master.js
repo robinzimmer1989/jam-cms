@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Router } from '@reach/router'
 import { Modal } from 'antd'
 
@@ -11,6 +11,7 @@ import PrivateRoute from './PrivateRoute'
 
 import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE, ROUTE_SIGN_IN } from '../routes'
 import { useStore } from '../store'
+import { userActions } from '../actions'
 
 const Master = (props) => {
   const { theme, blocks } = props
@@ -21,6 +22,14 @@ const Master = (props) => {
     },
     dispatch,
   ] = useStore()
+
+  useEffect(() => {
+    const getUser = async () => {
+      await userActions.getAuthUser({}, dispatch)
+    }
+
+    getUser()
+  }, [])
 
   return (
     <>

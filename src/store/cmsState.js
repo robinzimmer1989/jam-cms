@@ -94,6 +94,29 @@ export const sitesReducer = (state, action) => {
         break
 
       /******************************
+       * Users
+       ******************************/
+      case `ADD_USER`:
+        draft.sites[payload.siteID].users = {
+          items: unionBy([payload], draft.sites[payload.siteID].users.items, 'id'),
+          page: draft.sites[payload.siteID].users.page,
+        }
+        break
+
+      case `ADD_USERS`:
+        draft.sites[payload.siteID].users = {
+          items: unionBy(draft.sites[payload.siteID].users.items, payload.items, 'id'),
+          page: payload.page,
+        }
+        break
+
+      case `DELETE_USER`:
+        draft.sites[payload.siteID].users.items = draft.sites[payload.siteID].users.items.filter(
+          (o) => o.id !== payload.id
+        )
+        break
+
+      /******************************
        * Clear
        ******************************/
       case `CLEAR_POST_STATE`:

@@ -6,7 +6,7 @@ export default function generateCss(theme) {
   }
 
   const {
-    typography: { h1, h2, h3, h4, h5, p, menuItem, headlineFontFamily, paragraphFontFamily },
+    typography: { h1, h2, h3, h4, h5, p, headlineFontFamily, paragraphFontFamily },
     colors,
   } = theme
 
@@ -38,11 +38,6 @@ export default function generateCss(theme) {
   const pStyles = {
     ...p,
     color: colors[p.color],
-  }
-
-  const menuItemStyles = {
-    ...menuItem,
-    color: colors[menuItem.color],
   }
 
   return css`
@@ -78,17 +73,9 @@ export default function generateCss(theme) {
     a,
     ul,
     ol,
-    li,
-    span,
-    div {
+    li {
       font-family: ${paragraphFontFamily};
       ${pStyles};
-    }
-
-    .menu__item {
-      font-family: ${paragraphFontFamily};
-      color: ${colors.headerText};
-      ${menuItemStyles}
     }
   `
 }

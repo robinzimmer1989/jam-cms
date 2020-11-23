@@ -30,7 +30,7 @@ const FontStyles = () => {
   return (
     <Space direction="vertical" size={30}>
       <Collapse>
-        {['menuItem', 'h1', 'h2', 'h3', 'h4', 'h5', 'p'].map((tag) => {
+        {['h1', 'h2', 'h3', 'h4', 'h5', 'p'].map((tag) => {
           const setting = site.settings.typography[tag]
 
           return (
