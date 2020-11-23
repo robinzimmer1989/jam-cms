@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Alert, Space } from 'antd'
 
 // import app components
 import CmsLayout from '../CmsLayout'
@@ -13,10 +14,20 @@ const Dashboard = () => {
     },
   ] = useStore()
 
+  const errors = sites?.[siteID]?.errors
+
   return (
     <>
       <CmsLayout pageTitle={`Dashboard`}>
-        <Container></Container>
+        <Container>
+          {errors && (
+            <Space direction="vertical">
+              {errors.map((o, i) => {
+                return <Alert key={i} message={o.title} description={o.description} type="error" showIcon />
+              })}
+            </Space>
+          )}
+        </Container>
       </CmsLayout>
     </>
   )
