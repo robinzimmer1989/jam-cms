@@ -12,7 +12,7 @@ import PrivateRoute from './PrivateRoute'
 import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE, ROUTE_SIGN_IN } from '../routes'
 import { useStore } from '../store'
 import { userActions } from '../actions'
-
+import { isLoggedIn } from '../utils/auth'
 const Master = (props) => {
   const { theme, blocks } = props
 
@@ -23,22 +23,27 @@ const Master = (props) => {
     dispatch,
   ] = useStore()
 
+  const loggedIn = isLoggedIn()
+
   useEffect(() => {
-    const getUser = async () => {
+    const loadUser = async () => {
       await userActions.getAuthUser({}, dispatch)
     }
 
-    getUser()
-  }, [])
-
-  const cmsPath = `${ROUTE_APP}${ROUTE_SITE}/:siteID/*`
+    loggedIn && loadUser()
+  }, [loggedIn])
 
   return (
     <>
       <Router>
         <PrivateRoute path={`${ROUTE_APP}`} component={Home} />
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
-        <PrivateRoute path={cmsPath} component={CmsRouter} theme={theme} blocks={blocks} />
+        <PrivateRoute
+          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID/*`}
+          component={CmsRouter}
+          theme={theme}
+          blocks={blocks}
+        />
 
         <SignIn path={`${ROUTE_APP}${ROUTE_SIGN_IN}`} />
       </Router>

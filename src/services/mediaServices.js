@@ -3,12 +3,13 @@ import { navigate } from 'gatsby'
 
 import { db } from '.'
 import { auth } from '../utils'
+import getRoute from '../routes'
 
 export const addMediaItem = async ({ siteID, file }) => {
   const user = auth.getUser()
 
   if (!user?.token) {
-    auth.logout(() => navigate(`/`))
+    auth.logout(() => navigate(getRoute(`sign-in`)))
   }
 
   const formData = new FormData()

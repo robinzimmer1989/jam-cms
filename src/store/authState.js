@@ -11,6 +11,11 @@ export const authReducer = (state, action) => {
     switch (action.type) {
       case `ADD_AUTH_USER`:
         draft.authUser = payload
+        break
+
+      case `REMOVE_AUTH_USER`:
+        draft.authUser = null
+        break
 
       default:
     }

@@ -8,7 +8,6 @@ import { FileImageOutlined } from '@ant-design/icons'
 
 // import app components
 import MediaLibrary from '../MediaLibrary'
-import { generateCss } from '../../utils'
 
 const imagePlugin = createImagePlugin()
 

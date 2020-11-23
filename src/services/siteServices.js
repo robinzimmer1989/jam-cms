@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { set, get } from 'lodash'
+import { get } from 'lodash'
 
 // import app components
 import { db } from '.'
@@ -89,6 +89,8 @@ const transformSite = (site) => {
             {}
           ))
         }
+
+        return null
       })
 
       draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})

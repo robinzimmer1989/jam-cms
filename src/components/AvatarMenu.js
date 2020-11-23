@@ -11,7 +11,7 @@ const AvatarMenu = (props) => {
   const { ghost } = props
 
   const handleSignOut = async () => {
-    auth.logout(() => navigate(getRoute(`/`)))
+    auth.logout(() => navigate(getRoute(`sign-in`)))
   }
 
   const dropDownMenu = (

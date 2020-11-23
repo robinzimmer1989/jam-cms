@@ -13,6 +13,8 @@ export const signIn = async ({ username, password }, dispatch) => {
 
 export const signOut = async ({ callback }, dispatch) => {
   auth.logout(callback)
+
+  dispatch({ type: `REMOVE_AUTH_USER` })
 }
 
 export const resetPassword = async ({ email }, dispatch) => {

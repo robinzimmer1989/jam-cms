@@ -59,9 +59,9 @@ const Router = (props) => {
         <Media path={`${ROUTE_MEDIA}`} />
         <Collection path={`${ROUTE_COLLECTIONS}/:postTypeID`} />
         <PostEditor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} theme={theme} blocks={blocks} />
-        <Forms path={ROUTE_FORMS} />
-        <Form path={`${ROUTE_FORMS}/:formID`} />
-        <Seo path={ROUTE_SETTINGS_SEO} />
+        {/* <Forms path={ROUTE_FORMS} /> */}
+        {/* <Form path={`${ROUTE_FORMS}/:formID`} /> */}
+        {/* <Seo path={ROUTE_SETTINGS_SEO} /> */}
         {authUser?.capabilities?.manage_options && <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />}
         {authUser?.capabilities?.manage_options && <Collections path={ROUTE_SETTINGS_COLLECTIONS} />}
         {authUser?.capabilities?.manage_options && (
