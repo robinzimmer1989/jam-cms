@@ -30,7 +30,7 @@ import { siteActions } from '../actions'
 import { useStore } from '../store'
 
 const Router = (props) => {
-  const { siteID, theme, blocks } = props
+  const { siteID = 'default', theme, blocks } = props
 
   const [
     {
@@ -45,7 +45,7 @@ const Router = (props) => {
       await siteActions.getSite({ siteID }, dispatch)
     }
 
-    !sites[siteID] && loadSite()
+    loadSite()
   }, [siteID])
 
   if (!sites[siteID]) {

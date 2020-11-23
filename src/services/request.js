@@ -15,9 +15,9 @@ const db = async (endpoint, params) => {
     const formData = new FormData()
     Object.keys(params).map((key) => typeof params[key] !== 'undefined' && formData.append(key, params[key]))
 
-    const url = process.env.GATSBY_CMS_SOURCE
+    const source = process.env.GATSBY_CMS_SOURCE
 
-    const result = await axios.post(`${url.replace(/\/+$/, '')}/${endpoint}`, formData, {
+    const result = await axios.post(`${source.replace(/\/+$/, '')}/${endpoint}`, formData, {
       headers: {
         'Content-Type': 'x-www-form-urlencoded',
         Authorization: `Bearer ${user.token}`,

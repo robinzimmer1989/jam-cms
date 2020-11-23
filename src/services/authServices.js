@@ -2,7 +2,9 @@ import axios from 'axios'
 
 export const signIn = async ({ username, password }) => {
   try {
-    const result = await axios.post(`${process.env.GATSBY_CMS_SOURCE}/wp-json/jwt-auth/v1/token`, {
+    const source = process.env.GATSBY_CMS_AUTH
+
+    const result = await axios.post(source.replace(/\/+$/, ''), {
       username,
       password,
     })
