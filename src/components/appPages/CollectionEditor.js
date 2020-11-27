@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { PageHeader, Divider, Space } from 'antd'
 import produce from 'immer'
 import { set } from 'lodash'
+import Parser from 'html-react-parser'
 
 // import app components
 import CmsLayout from '../CmsLayout'
@@ -58,7 +59,7 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
     if (postType?.template?.[editorIndex]) {
       sidebar = {
         title: {
-          title: postType?.template?.[editorIndex].name,
+          title: Parser(postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].name),
           onBack: () =>
             dispatch({
               type: 'SET_EDITOR_INDEX',
