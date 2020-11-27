@@ -16,7 +16,7 @@ export const addMediaItem = async ({ siteID, file }) => {
   formData.append('file', file)
 
   let result = await axios.post(
-    `${process.env.GATSBY_CMS_SOURCE}/wp-json/gcms/v1/createMediaItem?siteID=${siteID}`,
+    `${process.env.GATSBY_CMS_SOURCE}/wp-json/jamcms/v1/createMediaItem?siteID=${siteID}`,
     formData,
     {
       headers: {

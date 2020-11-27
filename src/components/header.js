@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <Container>
       <Row justify="space-between" align="center">
-        <Logo to={getRoute(`app`)}>Gatsby CMS</Logo>
+        <Logo to={getRoute(`app`)}>jamCMS</Logo>
 
         <Row align="center">{isLoggedIn() && <AvatarMenu ghost={true} />}</Row>
       </Row>

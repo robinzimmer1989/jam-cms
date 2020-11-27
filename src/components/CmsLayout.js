@@ -49,7 +49,7 @@ const CmsLayout = (props) => {
         }}
       >
         <div>
-          <StyledPageHeader title={leftSidebar ? 'Gatsby CMS' : 'G'} />
+          <StyledPageHeader title={leftSidebar ? 'jamCMS' : 'j'} />
 
           <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
             <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>

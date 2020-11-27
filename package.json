@@ -1,5 +1,5 @@
 {
-  "name": "gatsby-cms",
+  "name": "jam-cms",
   "version": "0.0.1",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
