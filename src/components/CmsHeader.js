@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { PageHeader, Button, notification } from 'antd'
+import { PageHeader, Button, notification, Tag } from 'antd'
 import axios from 'axios'
 
 // import app components
@@ -14,6 +14,7 @@ const CmsHeader = (props) => {
   const [
     {
       cmsState: { siteID, sites },
+      editorState: { hasChanged },
     },
   ] = useStore()
 
@@ -29,6 +30,12 @@ const CmsHeader = (props) => {
     }
 
     axios.post(site.deploymentBuildHook)
+  }
+
+  const tags = []
+
+  if (actionBar === 'editor' && hasChanged) {
+    tags.push(<Tag key={'has-changed'} color="blue" children={`Unsaved Changes`} />)
   }
 
   const buttons = []
@@ -58,7 +65,7 @@ const CmsHeader = (props) => {
     buttons.push(<AvatarMenu key="avatar-menu" />)
   }
 
-  return <PageHeader title={title} extra={buttons} />
+  return <PageHeader title={title} extra={buttons} tags={tags} />
 }
 
 const DeploymentStatus = styled.img`
