@@ -1,6 +1,7 @@
 import React from 'react'
 import { navigate } from 'gatsby'
-import { Menu, Button, Dropdown } from 'antd'
+import styled from 'styled-components'
+import { Menu, Button, Dropdown, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 
 // import app components
@@ -15,19 +16,23 @@ const AvatarMenu = (props) => {
   }
 
   const dropDownMenu = (
-    <Menu>
-      <Menu.Item children={`Profile`} onClick={() => navigate(getRoute(`profile`))} />
+    <StyledMenu>
+      {/* <Menu.Item children={`Profile`} onClick={() => navigate(getRoute(`profile`))} /> */}
       <Menu.Item children={`Sign Out`} onClick={handleSignOut} />
-    </Menu>
+    </StyledMenu>
   )
 
   return (
-    <Dropdown overlay={dropDownMenu}>
+    <Dropdown overlay={dropDownMenu} arrow>
       <div>
         <Button size={32} icon={<UserOutlined />} shape="circle" ghost={ghost} />
       </div>
     </Dropdown>
   )
 }
+
+const StyledMenu = styled(Menu)`
+  width: 150px;
+`
 
 export default AvatarMenu
