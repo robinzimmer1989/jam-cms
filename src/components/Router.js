@@ -69,7 +69,7 @@ const Router = (props) => {
         )}
         {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
 
-        {/* {process.env.NODE_ENV === 'development' && <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />} */}
+        {process.env.NODE_ENV === 'development' && <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />}
       </ReachRouter>
     </>
   )

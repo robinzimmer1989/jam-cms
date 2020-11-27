@@ -26,7 +26,6 @@ const CmsLayout = (props) => {
       authState: { authUser },
       globalState: { leftSidebar },
       cmsState: { siteID, sites },
-      editorState: { hasChanged },
     },
     dispatch,
   ] = useStore()
@@ -106,11 +105,11 @@ const CmsLayout = (props) => {
               </Menu.SubMenu>
             )}
 
-            {/* {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === 'development' && (
               <Menu.Item key="Development" icon={<CodeOutlined />}>
                 <Link to={getRoute(`dev`, { siteID })}>Development</Link>
               </Menu.Item>
-            )} */}
+            )}
           </Menu>
         </div>
       </Layout.Sider>
@@ -161,6 +160,7 @@ const StyledPageHeader = styled(PageHeader)`
 
   .ant-page-header-heading-title {
     width: 100%;
+    margin: 0;
     text-align: center;
     color: #fff;
   }

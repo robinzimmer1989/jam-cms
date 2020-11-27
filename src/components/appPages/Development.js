@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { PageHeader } from 'antd'
+import { PageHeader, Select } from 'antd'
 import { navigate } from 'gatsby'
 import styled from 'styled-components'
 
@@ -16,31 +16,83 @@ const Development = (props) => {
 
   const [
     {
-      cmsState: { siteID },
+      cmsState: { sites, siteID },
     },
+    dispatch,
   ] = useStore()
 
-  const [activeComponents, setActiveComponents] = useState([])
+  const [activeBlocks, setActiveBlocks] = useState([])
 
-  console.log(blocks)
+  useEffect(() => {
+    dispatch({
+      type: `ADD_EDITOR_SITE`,
+      payload: sites[siteID],
+    })
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const localBlocks = localStorage.getItem('jam-cms-blocks')
+
+      if (localBlocks) {
+        setActiveBlocks(JSON.parse(localBlocks))
+      } else {
+        setActiveBlocks(Object.keys(blocks).filter((key) => key !== 'header' && key !== 'footer'))
+      }
+    }
+  }, [])
+
+  const handleSelect = (v) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jam-cms-blocks', JSON.stringify(v))
+      setActiveBlocks(v)
+    }
+  }
+
+  const renderedBlocks = activeBlocks.map((key) => blocks[key].fields)
 
   return (
     <>
-      <Navigation>
+      <Container>
         <PageHeader
           onBack={() => navigate(getRoute(`dashboard`, { siteID }))}
           title="Development"
-          extra={[<ViewToggle key={'view-toggle'} hideFullscreen />]}
+          extra={[
+            <SelectContainer>
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="Select Blocks"
+                value={activeBlocks}
+                onChange={handleSelect}
+              >
+                {Object.keys(blocks)
+                  .filter((key) => key !== 'header' && key !== 'footer')
+                  .map((key) => {
+                    return (
+                      <Select.Option
+                        key={key}
+                        value={key}
+                        children={blocks[key].fields.label || blocks[key].fields.name}
+                      />
+                    )
+                  })}
+              </Select>
+            </SelectContainer>,
+            <ViewToggle key={'view-toggle'} hideFullscreen />,
+          ]}
         />
-      </Navigation>
+      </Container>
 
       <PageWrapper theme={theme}>
         <FlexibleContent
           blocks={blocks}
-          renderedBlocks={[]}
+          renderedBlocks={renderedBlocks}
           editableHeader={false}
           editableFooter={false}
-          isTemplate={false}
+          editable={false}
+          isTemplate={true}
           onOpenDialog={null}
           onMoveElement={null}
         />
@@ -49,12 +101,13 @@ const Development = (props) => {
   )
 }
 
-const Navigation = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+const Container = styled.div`
   padding: 0 20px;
+`
+
+const SelectContainer = styled.div`
+  margin-right: 40px;
+  min-width: 400px;
 `
 
 export default Development

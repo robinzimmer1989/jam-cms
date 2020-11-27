@@ -115,7 +115,4 @@ export default createGlobalStyle`
     }
   }
 
-  .ant-page-header-heading-title {
-    margin: 0;
-  }
 `
