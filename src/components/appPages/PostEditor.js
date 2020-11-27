@@ -13,6 +13,7 @@ import PostHeader from '../PostHeader'
 import FlexibleContent from '../FlexibleContent'
 import PostSettings from '../PostSettings'
 
+import { formatBlocks } from '../../utils'
 import { useStore } from '../../store'
 import { postActions } from '../../actions'
 
@@ -259,7 +260,7 @@ const PostEditor = (props) => {
       <PageWrapper theme={theme}>
         <FlexibleContent
           blocks={blocks}
-          renderedBlocks={post?.content}
+          renderedBlocks={formatBlocks(post?.content, site)}
           editableHeader={true}
           editableFooter={true}
           isTemplate={postType?.template && postType.template.length}

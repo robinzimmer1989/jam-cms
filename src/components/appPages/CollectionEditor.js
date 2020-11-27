@@ -12,6 +12,7 @@ import BlockForm from '../BlockForm'
 import BlockEditFields from '../BlockEditFields'
 import CollectionSettings from '../CollectionSettings'
 
+import { formatBlocks } from '../../utils'
 import { siteActions } from '../../actions'
 import { useStore } from '../../store'
 
@@ -166,7 +167,7 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
         <PageWrapper theme={theme}>
           <FlexibleContent
             blocks={blocks}
-            renderedBlocks={postType?.template}
+            renderedBlocks={formatBlocks(postType?.template, site)}
             editableHeader={false}
             editableFooter={false}
             onOpenDialog={handleOpenDialog}

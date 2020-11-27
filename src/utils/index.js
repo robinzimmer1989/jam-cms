@@ -8,6 +8,9 @@ import removeFromTree from './removeFromTree'
 import generateCss from './generateCss'
 import convertToPropsSchema from './convertToPropsSchema'
 import deepCopyTree from './deepCopyTree'
+import formatFieldForEditor from './formatFieldForEditor'
+import formatFieldForDevelopment from './formatFieldForDevelopment'
+import formatBlocks from './formatBlocks'
 import * as auth from './auth'
 
 export {
@@ -21,5 +24,8 @@ export {
   generateCss,
   convertToPropsSchema,
   deepCopyTree,
+  formatFieldForEditor,
+  formatFieldForDevelopment,
+  formatBlocks,
   auth,
 }

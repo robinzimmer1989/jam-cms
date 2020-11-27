@@ -8,6 +8,7 @@ import PageWrapper from '../PageWrapper'
 import FlexibleContent from '../FlexibleContent'
 import ViewToggle from '../ViewToggle'
 
+import { formatBlocks } from '../../utils'
 import getRoute from '../../routes'
 import { useStore } from '../../store'
 
@@ -58,7 +59,7 @@ const Development = (props) => {
           onBack={() => navigate(getRoute(`dashboard`, { siteID }))}
           title="Development"
           extra={[
-            <SelectContainer>
+            <SelectContainer key="block-select">
               <Select
                 mode="multiple"
                 allowClear
@@ -88,7 +89,7 @@ const Development = (props) => {
       <PageWrapper theme={theme}>
         <FlexibleContent
           blocks={blocks}
-          renderedBlocks={renderedBlocks}
+          renderedBlocks={formatBlocks(renderedBlocks, null, true)}
           editableHeader={false}
           editableFooter={false}
           editable={false}
