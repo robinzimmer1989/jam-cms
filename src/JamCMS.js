@@ -9,10 +9,10 @@ import 'draft-js-image-plugin/lib/plugin.css'
 import 'draft-js/dist/Draft.css'
 
 // import app components
-import Master from './src/components/Master'
-import { StoreProvider } from './src/store'
-import { GlobalStyles } from './src/theme'
-import { generateCss } from './src/utils'
+import Master from './components/Master'
+import { StoreProvider } from './store'
+import { GlobalStyles } from './theme'
+import { generateCss } from './utils'
 
 const Index = (props) => {
   const { theme, blocks } = props
