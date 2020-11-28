@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 
 import { db } from '.'
 import { auth } from '../utils'

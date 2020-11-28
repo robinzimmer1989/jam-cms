@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 import { PageHeader, Space, Button } from 'antd'
 
 // import app components

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { PageHeader, Select } from 'antd'
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 import styled from 'styled-components'
 
 // import app components

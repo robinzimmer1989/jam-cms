@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'gatsby'
+import { Link } from '@reach/router'
 import styled, { css } from 'styled-components'
 import { Button, Popconfirm, PageHeader, Tabs } from 'antd'
 

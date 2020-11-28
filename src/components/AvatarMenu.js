@@ -1,5 +1,5 @@
 import React from 'react'
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 import styled from 'styled-components'
 import { Menu, Button, Dropdown, Typography } from 'antd'
 import { UserOutlined } from '@ant-design/icons'

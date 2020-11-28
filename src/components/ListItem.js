@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Card, List, Typography } from 'antd'
-import { Link } from 'gatsby'
+import { Link } from '@reach/router'
 import Img from 'gatsby-image'
 
 const ListItem = (props) => {

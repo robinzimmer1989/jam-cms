@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, PageHeader, Popconfirm } from 'antd'
-import { Link, navigate } from 'gatsby'
+import { Link, navigate } from '@reach/router'
 
 // import app components
 import CmsLayout from '../CmsLayout'

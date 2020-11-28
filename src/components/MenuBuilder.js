@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styled from 'styled-components'
 import { Button, Row, Col, List, Tree, Collapse, Space, Card, Tabs } from 'antd'
-import AddIcon from 'react-ionicons/lib/IosAdd'
+import { PlusOutlined } from '@ant-design/icons'
 
 // import app components
 import Input from './Input'
@@ -157,7 +157,7 @@ const MenuBuilder = (props) => {
                           }
                           shape="circle"
                         >
-                          <AddIcon />
+                          <PlusOutlined />
                         </Button>,
                       ]}
                     >

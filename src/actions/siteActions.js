@@ -1,4 +1,4 @@
-import { navigate } from 'gatsby'
+import { navigate } from '@reach/router'
 
 import { siteServices } from '../services'
 import getRoute from '../routes'
