@@ -8,12 +8,11 @@ import AvatarMenu from './AvatarMenu'
 import { isLoggedIn } from '../utils/auth'
 import getRoute from '../routes'
 
-const Header = () => {
+const HomeHeader = () => {
   return (
     <Container>
       <Row justify="space-between" align="center">
         <Logo to={getRoute(`app`)}>jamCMS</Logo>
-
         <Row align="center">{isLoggedIn() && <AvatarMenu ghost={true} />}</Row>
       </Row>
     </Container>
@@ -29,4 +28,4 @@ const Logo = styled(Link)`
   float: left;
 `
 
-export default Header
+export default HomeHeader
