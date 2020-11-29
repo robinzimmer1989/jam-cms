@@ -1,18 +1,19 @@
 import { useEffect } from 'react'
-import WebFont from 'webfontloader'
 
 const Fonts = ({ fonts }) => {
   useEffect(() => {
     const loadFont = async () => {
+      const WebFont = require('webfontloader')
+
       await WebFont.load({
         classes: false,
         events: false,
-        context: typeof window !== 'undefined' && window.frames[0].frameElement.contentWindow,
+        context: window.frames[0].frameElement.contentWindow,
         ...fonts,
       })
     }
 
-    loadFont()
+    typeof window !== 'undefined' && loadFont()
   }, [])
 
   return null
