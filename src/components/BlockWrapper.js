@@ -121,22 +121,14 @@ const Content = styled.div`
         `};
 `
 
-const ContentWrapper = styled.div`
-  margin-top: ${({ theme, settings }) => settings?.marginTop && theme.spacing.marginTop[settings.marginTop]}px;
-  margin-bottom: ${({ theme, settings }) =>
-    settings?.marginBottom && theme.spacing.marginBottom[settings.marginBottom]}px;
-  padding-top: ${({ theme, settings }) => settings?.paddingTop && theme.spacing.paddingTop[settings.paddingTop]}px;
-  padding-bottom: ${({ theme, settings }) =>
-    settings?.paddingBottom && theme.spacing.paddingBottom[settings.paddingBottom]}px;
-  background: ${({ settings }) => settings?.backgroundColor && settings.backgroundColor};
-`
+const ContentWrapper = styled.div``
 
 const BlockName = styled.div`
   && {
     position: absolute;
     z-index: 2;
-    right: 0;
-    bottom: 100%;
+    left: 0;
+    top: 0;
     padding: 2px 6px;
     background: ${colors.primary.dark};
     color: #fff;

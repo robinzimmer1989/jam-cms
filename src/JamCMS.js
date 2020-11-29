@@ -11,15 +11,14 @@ import 'draft-js/dist/Draft.css'
 // import app components
 import Master from './components/Master'
 import { StoreProvider } from './store'
-import { GlobalStyles } from './theme'
-import { generateCss } from './utils'
+import { CmsStyles } from './theme'
 
 const Index = (props) => {
   const { theme, blocks } = props
 
   return (
     <>
-      <GlobalStyles />
+      <CmsStyles />
 
       <ThemeProvider theme={theme || {}}>
         <StoreProvider>
@@ -31,5 +30,3 @@ const Index = (props) => {
 }
 
 export default Index
-
-export { generateCss }

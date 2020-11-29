@@ -1,4 +1,4 @@
 import colors from './colors'
-import GlobalStyles from './GlobalStyles'
+import CmsStyles from './CmsStyles'
 
-export { colors, GlobalStyles }
+export { colors, CmsStyles }
