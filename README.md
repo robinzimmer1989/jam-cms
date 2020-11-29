@@ -28,7 +28,7 @@ It's optimized for Gatsby, but (theoretically) it could also be used with any ot
 
 ## Get Started
 
-### 1. WordPress
+### 1. Set up WordPress
 
 Install the following the plugins:
 
@@ -40,7 +40,7 @@ Install the following the plugins:
 - Classic Editor
 - jamCMS (download from here: https://github.com/robinzimmer1989/jam-cms-wordpress)
 
-### 2. Gatsby
+### 2. Set up with Gatsby starter theme
 
 Download jam-cms-gatsby-starter from here: https://github.com/robinzimmer1989/jam-cms-gatsby-starter
 
@@ -77,16 +77,234 @@ gatsby develop
 
 Visit https:localhost:8000/cms
 
+## Development
+
+The component takes in the props "blocks" and "theme".
+
+```
+<JamCms blocks={blocks} theme={theme} />
+```
+
+The theme prop is an object with "fonts" and "css" keys.
+
+We're using webfontloader behind the scenes so you have to pass in fonts in the correct format (see: https://github.com/typekit/webfontloader). Those fonts are only loaded within the CMS, so you have to load them separately for the frontend (i.e. with gatsby-plugin-webfonts).
+
+The second prop "css" represents global css. This also includes any kind of CSS reset.
+
+```
+import { css } from 'styled-components'
+
+export default {
+  fonts: {
+    google: {
+      families: ['Nerko+One:400,400i,700', 'Roboto+Condensed:400,700'],
+    },
+  },
+  css: css`
+    body {
+      background-color: #000000;
+    }
+  `
+}
+```
+
+The "blocks" property is an object of all the content blocks. Each block has a fields object and the actual React component.
+
+```
+import Header, { fields as headerFields } from './components/blocks/Header'
+import Footer, { fields as footerFields } from './components/blocks/Footer'
+import Banner, { fields as bannerFields } from './components/blocks/Banner'
+
+const blocks = {
+  header: {
+    component: Header,
+    fields: headerFields,
+  },
+  footer: {
+    component: Footer,
+    fields: footerFields,
+  },
+  banner: {
+    component: Banner,
+    fields: bannerFields,
+  },
+}
+
+export default blocks
+```
+
+The individual component looks something like this. We have a fields object, which defines the editor fields and passed in props, and the React component.
+The "name" key in the fields object must be unique. The id of each field represents the prop which is passed into the react component. Right now, only lowercase strings without special characters are supported. A list of all field types can be found in the next section.
+
+```
+import React from 'react'
+import Img from 'gatsby-image'
+
+export const fields = {
+  name: 'banner',
+  label: 'Banner',
+  fields: [
+    {
+      id: 'image',
+      type: 'image',
+      label: 'Image'
+    },
+  ],
+}
+
+const Banner = ({ image }) => {
+  return (
+    <div style={{position: 'relative', height: '300px'}}>
+      {image?.childImageSharp?.fluid && (
+        <Img
+          fluid={image.childImageSharp.fluid}
+          objectFit="cover"
+          objectPosition="50% 50%"
+          style={{ width: '100%', height: '100%' }}
+        />
+      )}
+    </div>
+  )
+}
+
+export default Banner
+```
+
+## Supported field types
+
+At the moment, not all ACF field types are supported but I'm working on it.
+
+#### Text
+
+```
+{
+  id: 'foo',
+  type: 'text',
+  label: 'Bar',
+}
+```
+
+#### WYSIWYG
+
+```
+{
+  id: 'foo',
+  type: 'wysiwyg',
+  label: 'Bar',
+}
+```
+
+#### Image
+
+```
+{
+  id: 'foo',
+  type: 'image',
+  label: 'Bar',
+}
+```
+
+#### Select
+
+```
+{
+  id: 'foo',
+  type: 'select',
+  label: 'Bar',
+  defaultValue: 'option1',
+  options: [
+    {
+      name: 'Option 1',
+      value: 'option1',
+    },
+    {
+      name: 'Option 2',
+      value: 'option2',
+    },
+  ],
+}
+```
+
+#### Number
+
+```
+{
+  id: 'foo',
+  type: 'number',
+  label: 'Bar',
+  defaultValue: 3,
+  min: 1,
+  max: 4,
+  step: 1,
+}
+```
+
+#### Repeater
+
+```
+{
+  id: 'foo',
+  type: 'repeater',
+  label: 'Bar',
+  defaultValue: [],
+  items: [
+    {
+      id: 'image',
+      type: 'image',
+      label: 'Add Image',
+    },
+  ]
+}
+```
+
+#### Menu
+
+The menu id must be unqiue throughout the entire site.
+
+```
+{
+  id: 'foo',
+  type: 'menu',
+  label: 'Bar'
+}
+```
+
+#### Link
+
+```
+{
+  id: 'foo',
+  type: 'link',
+  label: 'Bar'
+}
+```
+
+#### Collection
+
+```
+{
+  id: 'foo',
+  type: 'collection',
+  label: 'Bar'
+}
+```
+
 ## Known issues
 
 The project is still in an early alpha version with many changes to come. Here are some current issues:
 
 - Limited ACF field support
-  (Text, WYSIWYG, Select, Repeater, Number, Menu, Link, Image, PostType)
 - WYSIWYG editor needs improvement
 - Premature Development screen
+- Design tweaks
 - (...)
 
 ## Roadmap
 
-- Coming soon
+- Dashboard (Analytics integration)
+- Add more ACF fields
+- Add link selector similiar to WordPress
+- Revisions
+- Forms
+- Netlify API integration
+- (...)
