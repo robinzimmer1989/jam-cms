@@ -3,3 +3,4 @@ demo
 .babelrc
 webpack.config.js
 yarn-error.log
+.cache
