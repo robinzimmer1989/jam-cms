@@ -1,8 +1,20 @@
 {
   "presets": [
-    "@babel/react"
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": "3.0.0"
+      }
+    ],
+    "@babel/preset-react"
   ],
   "plugins": [
-    "@babel/plugin-proposal-optional-chaining"
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
   ]
 }
