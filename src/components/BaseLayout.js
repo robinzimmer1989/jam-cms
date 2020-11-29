@@ -1,11 +1,11 @@
-import React from 'react'
-import { Layout } from 'antd'
+import React from 'react';
+import { Layout } from 'antd';
 
 // import app components
-import Header from './HomeHeader'
+import Header from './HomeHeader';
 
 const BaseLayout = (props) => {
-  const { children } = props
+  const { children } = props;
 
   return (
     <Layout>
@@ -15,7 +15,7 @@ const BaseLayout = (props) => {
       <Layout.Content> {children}</Layout.Content>
       <Layout.Footer></Layout.Footer>
     </Layout>
-  )
-}
+  );
+};
 
-export default BaseLayout
+export default BaseLayout;

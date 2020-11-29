@@ -1,34 +1,34 @@
-import React, { useState } from 'react'
-import { Space, Button } from 'antd'
+import React, { useState } from 'react';
+import { Space, Button } from 'antd';
 
 // import app components
-import Input from './Input'
-import { formActions } from '../actions'
-import { useStore } from '../store'
+import Input from './Input';
+import { formActions } from '../actions';
+import { useStore } from '../store';
 
 const FormForm = (props) => {
-  const { siteID } = props
+  const { siteID } = props;
 
-  const [, dispatch] = useStore()
+  const [, dispatch] = useStore();
 
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState('');
 
   const handleSubmit = async () => {
     if (!title) {
-      return
+      return;
     }
 
-    await formActions.addForm({ siteID, title }, dispatch)
+    await formActions.addForm({ siteID, title }, dispatch);
 
-    dispatch({ type: 'CLOSE_DIALOG' })
-  }
+    dispatch({ type: 'CLOSE_DIALOG' });
+  };
 
   return (
     <Space direction="vertical">
       <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
-  )
-}
+  );
+};
 
-export default FormForm
+export default FormForm;

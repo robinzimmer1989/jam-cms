@@ -1,19 +1,19 @@
-import axios from 'axios'
-import { navigate } from '@reach/router'
+import axios from 'axios';
+import { navigate } from '@reach/router';
 
-import { db } from '.'
-import { auth } from '../utils'
-import getRoute from '../routes'
+import { db } from '.';
+import { auth } from '../utils';
+import getRoute from '../routes';
 
 export const addMediaItem = async ({ siteID, file }) => {
-  const user = auth.getUser()
+  const user = auth.getUser();
 
   if (!user?.token) {
-    auth.logout(() => navigate(getRoute(`sign-in`)))
+    auth.logout(() => navigate(getRoute(`sign-in`)));
   }
 
-  const formData = new FormData()
-  formData.append('file', file)
+  const formData = new FormData();
+  formData.append('file', file);
 
   let result = await axios.post(
     `${process.env.GATSBY_CMS_SOURCE}/wp-json/jamcms/v1/createMediaItem?siteID=${siteID}`,
@@ -24,26 +24,26 @@ export const addMediaItem = async ({ siteID, file }) => {
         Authorization: `Bearer ${user.token}`,
       },
     }
-  )
+  );
 
-  const { data, status } = result
+  const { data, status } = result;
 
   if (status === 200) {
-    return data
+    return data;
   }
-}
+};
 
 export const updateMediaItem = async ({ siteID, id, altText }) => {
-  let result = await db('updateMediaItem', { siteID, id, altText })
-  return result
-}
+  let result = await db('updateMediaItem', { siteID, id, altText });
+  return result;
+};
 
 export const deleteMediaItem = async ({ siteID, id }) => {
-  let result = await db('deleteMediaItem', { siteID, id })
-  return result
-}
+  let result = await db('deleteMediaItem', { siteID, id });
+  return result;
+};
 
 export const getMediaItems = async ({ siteID, page = null, limit = 20 }) => {
-  let result = await db('getMediaItems', { siteID, page, limit })
-  return result
-}
+  let result = await db('getMediaItems', { siteID, page, limit });
+  return result;
+};

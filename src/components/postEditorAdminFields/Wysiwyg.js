@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Modal } from 'antd'
-import createImagePlugin from 'draft-js-image-plugin'
-import draftToHtml from 'draftjs-to-html'
-import { ContentState, EditorState, convertToRaw, AtomicBlockUtils, convertFromHTML } from 'draft-js'
-import { FileImageOutlined } from '@ant-design/icons'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Modal } from 'antd';
+import createImagePlugin from 'draft-js-image-plugin';
+import draftToHtml from 'draftjs-to-html';
+import { ContentState, EditorState, convertToRaw, AtomicBlockUtils, convertFromHTML } from 'draft-js';
+import { FileImageOutlined } from '@ant-design/icons';
 
 // import app components
-import MediaLibrary from '../MediaLibrary'
+import MediaLibrary from '../MediaLibrary';
 
-const imagePlugin = createImagePlugin()
+const imagePlugin = createImagePlugin();
 
 const WysiwygImageUpload = (props) => {
-  const { editorState, onChange } = props
+  const { editorState, onChange } = props;
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const handleSelect = (image) => {
-    const { url, width, height, alt } = image
+    const { url, width, height, alt } = image;
 
-    const contentState = editorState.getCurrentContent()
-    const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', { width, height, alt, src: url })
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
-    const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ')
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', { width, height, alt, src: url });
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
 
-    onChange(newEditorState)
+    onChange(newEditorState);
 
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <>
@@ -39,43 +39,43 @@ const WysiwygImageUpload = (props) => {
         <MediaLibrary onSelect={handleSelect} />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-let Editor = () => <></>
+let Editor = () => <></>;
 
 const Wysiwyg = (props) => {
-  const { value, onChange } = props
+  const { value, onChange } = props;
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty())
-  const [editor, setEditor] = useState(null)
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editor, setEditor] = useState(null);
 
   useEffect(() => {
-    Editor = require('react-draft-wysiwyg').Editor
-    setEditor(true)
-  }, [])
+    Editor = require('react-draft-wysiwyg').Editor;
+    setEditor(true);
+  }, []);
 
   // Convert html value to editor state on initial load
   // Afterward, we gonna use local state and send the converted html back to the store
   useEffect(() => {
     if (value) {
-      const blocksFromHTML = convertFromHTML(value)
-      const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap)
-      const editorState = EditorState.createWithContent(contentState)
+      const blocksFromHTML = convertFromHTML(value);
+      const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+      const editorState = EditorState.createWithContent(contentState);
 
-      setEditorState(editorState)
+      setEditorState(editorState);
     }
-  }, [])
+  }, []);
 
   const handleChange = (editorState) => {
-    setEditorState(editorState)
+    setEditorState(editorState);
 
     // Convert editor state to html and send to store
-    const contentState = editorState.getCurrentContent()
-    const rawState = convertToRaw(contentState)
-    const html = draftToHtml(rawState)
-    onChange(html)
-  }
+    const contentState = editorState.getCurrentContent();
+    const rawState = convertToRaw(contentState);
+    const html = draftToHtml(rawState);
+    onChange(html);
+  };
 
   return (
     <EditorContainer>
@@ -104,8 +104,8 @@ const Wysiwyg = (props) => {
         />
       )}
     </EditorContainer>
-  )
-}
+  );
+};
 
 const EditorContainer = styled.div`
   h1 {
@@ -150,12 +150,12 @@ const EditorContainer = styled.div`
   .rdw-dropdown-optionwrapper {
     width: 100px;
   }
-`
+`;
 
 const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
-export default Wysiwyg
+export default Wysiwyg;

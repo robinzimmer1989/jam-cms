@@ -1,35 +1,35 @@
-const isBrowser = typeof window !== `undefined`
+const isBrowser = typeof window !== `undefined`;
 
-export const setUser = user => (window.localStorage.gatsbyUser = JSON.stringify(user))
+export const setUser = (user) => (window.localStorage.gatsbyUser = JSON.stringify(user));
 
 export const getUser = () => {
   if (window.localStorage.gatsbyUser) {
-    let user = JSON.parse(window.localStorage.gatsbyUser)
-    return user ? user : {}
+    let user = JSON.parse(window.localStorage.gatsbyUser);
+    return user ? user : {};
   }
-  return {}
-}
+  return {};
+};
 
 export const isLoggedIn = () => {
   if (!isBrowser) {
-    return false
+    return false;
   }
 
-  const user = getUser()
+  const user = getUser();
 
   if (user) {
-    return !!user.token
+    return !!user.token;
   }
 
-  return false
-}
+  return false;
+};
 
-export const getCurrentUser = () => isBrowser && getUser()
+export const getCurrentUser = () => isBrowser && getUser();
 
-export const logout = callback => {
+export const logout = (callback) => {
   if (!isBrowser) {
-    return
+    return;
   }
-  setUser({})
-  callback()
-}
+  setUser({});
+  callback();
+};

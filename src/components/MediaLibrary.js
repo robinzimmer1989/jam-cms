@@ -1,66 +1,66 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import InfiniteScroll from 'react-infinite-scroller'
-import Img from 'gatsby-image'
-import { Modal, Upload, Button, Space, message, Spin } from 'antd'
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroller';
+import Img from 'gatsby-image';
+import { Modal, Upload, Button, Space, message, Spin } from 'antd';
+import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 
 // import app components
-import MediaImage from './MediaImage'
+import MediaImage from './MediaImage';
 
-import { mediaActions } from '../actions'
-import { useStore } from '../store'
+import { mediaActions } from '../actions';
+import { useStore } from '../store';
 
 const MediaLibrary = (props) => {
-  const { onSelect, allow } = props
+  const { onSelect, allow } = props;
 
   const [
     {
       cmsState: { siteID, sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   const {
     mediaItems: { items, page },
-  } = sites[siteID]
+  } = sites[siteID];
 
-  const [activeFile, setActiveFile] = useState(null)
-  const [uploader, setUploader] = useState(false)
+  const [activeFile, setActiveFile] = useState(null);
+  const [uploader, setUploader] = useState(false);
 
   useEffect(() => {
-    loadMediaItems(page || 0)
-  }, [])
+    loadMediaItems(page || 0);
+  }, []);
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
-      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch)
+      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch);
     }
-  }
+  };
 
-  const handleLoadMore = () => page && loadMediaItems(page)
+  const handleLoadMore = () => page && loadMediaItems(page);
 
   const handleFileUpload = async (info) => {
     const {
       file: { status, name, originFileObj },
-    } = info
+    } = info;
 
     if (status !== 'uploading') {
-      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch)
+      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch);
     }
     if (status === 'done') {
-      message.success(`${name} file uploaded successfully.`)
+      message.success(`${name} file uploaded successfully.`);
     } else if (status === 'error') {
-      message.error(`${name} file upload failed.`)
+      message.error(`${name} file upload failed.`);
     }
-  }
+  };
 
-  const handleCloseDialog = () => setActiveFile(null)
+  const handleCloseDialog = () => setActiveFile(null);
 
   const handleSelect = (image) => {
-    handleCloseDialog()
-    onSelect(image)
-  }
+    handleCloseDialog();
+    onSelect(image);
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ const MediaLibrary = (props) => {
                       </File>
                     )}
                   </MediaItem>
-                )
+                );
               })}
         </InfiniteScroll>
       </Space>
@@ -130,8 +130,8 @@ const MediaLibrary = (props) => {
         </Modal>
       )}
     </>
-  )
-}
+  );
+};
 
 const MediaItem = styled.div`
   float: left;
@@ -152,7 +152,7 @@ const MediaItem = styled.div`
     max-width: 150px;
     width: auto;
   }
-`
+`;
 
 const File = styled.div`
   display: flex;
@@ -169,13 +169,13 @@ const File = styled.div`
     width: 100%;
     text-align: center;
   }
-`
+`;
 
 const LoadingContainer = styled.div`
   width: 100%;
   padding: 20px;
   display: flex;
   justify-content: center;
-`
+`;
 
-export default MediaLibrary
+export default MediaLibrary;

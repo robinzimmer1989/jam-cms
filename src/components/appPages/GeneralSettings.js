@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Card, Space, notification } from 'antd'
-import produce from 'immer'
-import { set } from 'lodash'
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Space, notification } from 'antd';
+import produce from 'immer';
+import { set } from 'lodash';
 
 // import app components
-import Input from '../Input'
-import CmsLayout from '../CmsLayout'
+import Input from '../Input';
+import CmsLayout from '../CmsLayout';
 
-import { useStore } from '../../store'
-import { siteActions } from '../../actions'
+import { useStore } from '../../store';
+import { siteActions } from '../../actions';
 
 const GeneralSettings = () => {
   const [
@@ -17,41 +17,41 @@ const GeneralSettings = () => {
       editorState: { site },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [loading, setLoading] = useState(null)
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     dispatch({
       type: `ADD_EDITOR_SITE`,
       payload: sites[siteID],
-    })
-  }, [])
+    });
+  }, []);
 
   const handleChange = (e) => {
     const nextSite = produce(site, (draft) => {
-      return set(draft, `${e.target.name}`, e.target.value)
-    })
+      return set(draft, `${e.target.name}`, e.target.value);
+    });
 
     dispatch({
       type: `UPDATE_EDITOR_SITE`,
       payload: nextSite,
-    })
-  }
+    });
+  };
 
   const handleUpdate = async (args, loader) => {
-    const { id } = site
+    const { id } = site;
 
-    setLoading(loader)
-    await siteActions.updateSite({ id, ...args }, dispatch)
-    setLoading(null)
+    setLoading(loader);
+    await siteActions.updateSite({ id, ...args }, dispatch);
+    setLoading(null);
 
     notification.success({
       message: 'Success',
       description: 'Updated successfully',
       placement: 'bottomRight',
-    })
-  }
+    });
+  };
 
   return (
     <CmsLayout pageTitle={`General`}>
@@ -124,7 +124,7 @@ const GeneralSettings = () => {
         </Card>
       </Space>
     </CmsLayout>
-  )
-}
+  );
+};
 
-export default GeneralSettings
+export default GeneralSettings;

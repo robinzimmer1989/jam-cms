@@ -13,6 +13,6 @@ const colors = {
   },
   success: '#3BB143',
   warning: '#e24141',
-}
+};
 
-export default colors
+export default colors;

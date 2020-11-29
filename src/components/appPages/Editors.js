@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
-import { Button, PageHeader, Spin, Popconfirm } from 'antd'
-import InfiniteScroll from 'react-infinite-scroller'
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { Button, PageHeader, Spin, Popconfirm } from 'antd';
+import InfiniteScroll from 'react-infinite-scroller';
 
 // import app components
-import CmsLayout from '../CmsLayout'
-import ListItem from '../ListItem'
-import EditorForm from '../EditorForm'
+import CmsLayout from '../CmsLayout';
+import ListItem from '../ListItem';
+import EditorForm from '../EditorForm';
 
-import { userActions } from '../../actions'
-import { useStore } from '../../store'
+import { userActions } from '../../actions';
+import { useStore } from '../../store';
 
 const Editors = () => {
   const [
@@ -17,23 +17,23 @@ const Editors = () => {
       cmsState: { siteID, sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   const {
     users: { items, page },
-  } = sites[siteID]
+  } = sites[siteID];
 
   useEffect(() => {
-    loadUsers(page || 0)
-  }, [])
+    loadUsers(page || 0);
+  }, []);
 
   const loadUsers = async (page) => {
     if (page > -1) {
-      await userActions.getUsers({ siteID, page, limit: 10 }, dispatch)
+      await userActions.getUsers({ siteID, page, limit: 10 }, dispatch);
     }
-  }
+  };
 
-  const handleLoadMore = () => page && loadUsers(page)
+  const handleLoadMore = () => page && loadUsers(page);
 
   const handleOpenDialog = (user = {}) =>
     dispatch({
@@ -43,19 +43,19 @@ const Editors = () => {
         title: `Add`,
         component: <EditorForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
       },
-    })
+    });
 
   const handleAdd = async ({ email, role }) => {
-    await userActions.addUser({ siteID, email, role }, dispatch)
-  }
+    await userActions.addUser({ siteID, email, role }, dispatch);
+  };
 
   const handleUpdate = async ({ id, role }) => {
-    await userActions.updateUser({ siteID, id, role }, dispatch)
-  }
+    await userActions.updateUser({ siteID, id, role }, dispatch);
+  };
 
   const handleDelete = async ({ id }) => {
-    await userActions.deleteUser({ siteID, id }, dispatch)
-  }
+    await userActions.deleteUser({ siteID, id }, dispatch);
+  };
 
   return (
     <CmsLayout pageTitle={`Editors`}>
@@ -88,20 +88,20 @@ const Editors = () => {
               <Button key="edit" size="small" onClick={() => handleOpenDialog(o)}>
                 Edit
               </Button>,
-            ]
+            ];
 
-            return <ListItem key={o.id} title={o.email} subtitle={o.role} actions={actions} />
+            return <ListItem key={o.id} title={o.email} subtitle={o.role} actions={actions} />;
           })}
       </InfiniteScroll>
     </CmsLayout>
-  )
-}
+  );
+};
 
 const LoadingContainer = styled.div`
   width: 100%;
   padding: 20px;
   display: flex;
   justify-content: center;
-`
+`;
 
-export default Editors
+export default Editors;

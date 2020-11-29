@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { navigate } from '@reach/router'
-import { Button, Card } from 'antd'
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { navigate } from '@reach/router';
+import { Button, Card } from 'antd';
 
 // import app components
-import Input from './Input'
-import Spacer from './Spacer'
+import Input from './Input';
+import Spacer from './Spacer';
 
-import { authActions } from '../actions'
-import getRoute from '../routes'
-import { auth } from '../utils'
+import { authActions } from '../actions';
+import getRoute from '../routes';
+import { auth } from '../utils';
 
 export default () => {
   const [data, setData] = useState({
@@ -17,37 +17,37 @@ export default () => {
     password: ``,
     error: ``,
     loading: false,
-  })
+  });
 
-  const isAuthed = auth.isLoggedIn()
+  const isAuthed = auth.isLoggedIn();
 
   useEffect(() => {
-    isAuthed && navigate(getRoute(`app`))
-  }, [isAuthed])
+    isAuthed && navigate(getRoute(`app`));
+  }, [isAuthed]);
 
   const handleLogin = async () => {
-    const { username, password } = data
+    const { username, password } = data;
 
     if (!username || !password) {
-      return
+      return;
     }
 
-    handleChange({ target: { name: 'loading', value: true } })
+    handleChange({ target: { name: 'loading', value: true } });
 
     try {
-      const result = await authActions.signIn({ username, password })
+      const result = await authActions.signIn({ username, password });
 
       if (result?.success) {
-        navigate(getRoute(`app`))
+        navigate(getRoute(`app`));
       } else {
-        handleChange({ target: { name: 'error', value: result?.message } })
+        handleChange({ target: { name: 'error', value: result?.message } });
       }
     } catch (err) {
-      console.log('error...: ', err)
+      console.log('error...: ', err);
     }
-  }
+  };
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value })
+  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   return (
     <Spacer mt={30} mb={30}>
@@ -69,7 +69,7 @@ export default () => {
         <Button loading={data.loading} children={`Submit`} onClick={handleLogin} type="primary" />
       </Card>
     </Spacer>
-  )
-}
+  );
+};
 
-const Error = styled.div``
+const Error = styled.div``;

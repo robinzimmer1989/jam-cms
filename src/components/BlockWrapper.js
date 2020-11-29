@@ -1,27 +1,27 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons'
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons';
 
 // import app components
-import Edges from './Edges'
-import { useStore } from '../store'
-import { colors } from '../theme'
+import Edges from './Edges';
+import { useStore } from '../store';
+import { colors } from '../theme';
 
 const BlockWrapper = (props) => {
-  const { index, renderedBlocks, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props
+  const { index, renderedBlocks, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props;
 
   const [
     {
       editorState: { editorIndex, viewport },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const isActive = editorIndex === index
+  const isActive = editorIndex === index;
 
-  const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].name
+  const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].name;
 
-  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
+  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index });
 
   return (
     <Container active={isActive} viewport={viewport}>
@@ -60,8 +60,8 @@ const BlockWrapper = (props) => {
         </MoveIcons>
       )}
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   position: relative;
@@ -90,7 +90,7 @@ const Container = styled.div`
         pointer-events: all;
       }
     `};
-`
+`;
 
 const Content = styled.div`
   &:after {
@@ -119,9 +119,9 @@ const Content = styled.div`
             border-color: ${colors.primary.dark};
           }
         `};
-`
+`;
 
-const ContentWrapper = styled.div``
+const ContentWrapper = styled.div``;
 
 const BlockName = styled.div`
   && {
@@ -135,7 +135,7 @@ const BlockName = styled.div`
     text-transform: uppercase;
     font-size: 9px;
   }
-`
+`;
 
 const AddButtonTop = styled.div`
   position: absolute;
@@ -143,7 +143,7 @@ const AddButtonTop = styled.div`
   left: 50%;
   top: 0;
   transform: translate(-50%, -50%);
-`
+`;
 
 const AddButtonBottom = styled.div`
   position: absolute;
@@ -156,7 +156,7 @@ const AddButtonBottom = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const MoveIcons = styled.div`
   position: absolute;
@@ -164,7 +164,7 @@ const MoveIcons = styled.div`
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
-`
+`;
 
 const MoveIcon = styled.div`
   width: 20px;
@@ -174,6 +174,6 @@ const MoveIcon = styled.div`
   align-items: center;
   margin: 10px 0;
   opacity: ${(props) => (props.disabled ? 0.4 : 1)};
-`
+`;
 
-export default BlockWrapper
+export default BlockWrapper;

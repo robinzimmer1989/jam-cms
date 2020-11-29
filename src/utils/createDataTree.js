@@ -1,16 +1,16 @@
 export default function createDataTree(dataset) {
-  let hashTable = Object.create(null)
+  let hashTable = Object.create(null);
 
-  dataset.forEach(aData => (hashTable[aData.id] = { ...aData, childNodes: [] }))
+  dataset.forEach((aData) => (hashTable[aData.id] = { ...aData, childNodes: [] }));
 
-  let dataTree = []
+  let dataTree = [];
 
-  dataset.forEach(aData => {
+  dataset.forEach((aData) => {
     if (aData.parentID && hashTable[aData.parentID]) {
-      hashTable[aData.parentID].childNodes.push(hashTable[aData.id])
+      hashTable[aData.parentID].childNodes.push(hashTable[aData.id]);
     } else {
-      dataTree.push(hashTable[aData.id])
+      dataTree.push(hashTable[aData.id]);
     }
-  })
-  return dataTree
+  });
+  return dataTree;
 }

@@ -1,16 +1,16 @@
-import React from 'react'
-import { Select as AntSelect } from 'antd'
+import React from 'react';
+import { Select as AntSelect } from 'antd';
 
-const Select = props => {
-  const { value = '', options, defaultValue, onChange } = props
+const Select = (props) => {
+  const { value = '', options, defaultValue, onChange } = props;
 
   return (
     <AntSelect defaultValue={value || defaultValue || ''} onChange={onChange}>
-      {options.map(o => (
+      {options.map((o) => (
         <AntSelect.Option key={o.value} value={o.value} children={o.name} />
       ))}
     </AntSelect>
-  )
-}
+  );
+};
 
-export default Select
+export default Select;

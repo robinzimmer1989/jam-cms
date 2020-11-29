@@ -1,23 +1,23 @@
-import formatSlug from './formatSlug'
+import formatSlug from './formatSlug';
 
 function getParentSlug(posts, parentID, slug = '') {
-  let newSlug = slug
+  let newSlug = slug;
 
   if (parentID && posts[parentID]) {
-    const parentSlug = posts[parentID].slug + newSlug
-    newSlug = getParentSlug(posts, posts[parentID].parentID, parentSlug)
+    const parentSlug = posts[parentID].slug + newSlug;
+    newSlug = getParentSlug(posts, posts[parentID].parentID, parentSlug);
   }
 
-  return newSlug
+  return newSlug;
 }
 
 export default function generateSlug(postType, postID, frontPage) {
   if (postID === frontPage) {
-    return '/'
+    return '/';
   }
 
   if (!postType?.posts?.[postID]) {
-    return ''
+    return '';
   }
 
   const {
@@ -26,11 +26,11 @@ export default function generateSlug(postType, postID, frontPage) {
     posts: {
       [postID]: { slug: postSlug, parentID },
     },
-  } = postType
+  } = postType;
 
-  const parentSlug = getParentSlug(posts, parentID)
+  const parentSlug = getParentSlug(posts, parentID);
 
-  const slug = formatSlug(`${postTypeSlug}${parentSlug}${postSlug}`)
+  const slug = formatSlug(`${postTypeSlug}${parentSlug}${postSlug}`);
 
-  return slug
+  return slug;
 }

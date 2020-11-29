@@ -1,5 +1,5 @@
-import { formServices } from '../services'
-import { siteActions } from '../actions'
+import { formServices } from '../services';
+import { siteActions } from '../actions';
 
 export const getForm = async ({ site, id }, dispatch) => {
   // const result = await formServices.getForm({ id })
@@ -16,7 +16,7 @@ export const getForm = async ({ site, id }, dispatch) => {
   //   siteActions.addSiteToEditor({ site }, dispatch)
   // }
   // return result
-}
+};
 
 export const addForm = async ({ siteID, title }, dispatch) => {
   // const result = await formServices.addForm({ siteID, title })
@@ -27,7 +27,7 @@ export const addForm = async ({ siteID, title }, dispatch) => {
   //   })
   // }
   // return result
-}
+};
 
 export const updateForm = async ({ id, title, content }, dispatch) => {
   // const result = await formServices.updateForm({ id, title, content })
@@ -38,7 +38,7 @@ export const updateForm = async ({ id, title, content }, dispatch) => {
   //   })
   // }
   // return result
-}
+};
 
 export const deleteForm = async ({ id }, dispatch) => {
   // const result = await formServices.deleteForm({ id })
@@ -49,4 +49,4 @@ export const deleteForm = async ({ id }, dispatch) => {
   //   })
   // }
   // return result
-}
+};

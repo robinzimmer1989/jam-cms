@@ -1,13 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Popover, Space, Select } from 'antd'
-import { ChromePicker } from 'react-color'
+import React from 'react';
+import styled from 'styled-components';
+import { Popover, Space, Select } from 'antd';
+import { ChromePicker } from 'react-color';
 
 // import app components
-import Caption from '../Caption'
+import Caption from '../Caption';
 
 const Settings = (props) => {
-  const { value, onChange } = props
+  const { value, onChange } = props;
 
   const defaultValue = {
     marginTop: 'none',
@@ -16,25 +16,25 @@ const Settings = (props) => {
     paddingBottom: 'none',
     backgroundColor: 'transparent',
     edges: 'none',
-  }
+  };
 
   const options = [
     { name: 'None', value: 'none' },
     { name: 'Small', value: 'sm' },
     { name: 'Medium', value: 'md' },
     { name: 'Large', value: 'lg' },
-  ]
+  ];
 
   const handleChange = (name, newValue) => {
-    onChange({ ...value, [name]: newValue })
-  }
+    onChange({ ...value, [name]: newValue });
+  };
 
   const getPicker = () => (
     <StyledChromePicker
       color={value?.backgroundColor || defaultValue.backgroundColor}
       onChange={(newValue) => handleChange('backgroundColor', newValue.hex)}
     />
-  )
+  );
 
   return (
     <>
@@ -107,12 +107,12 @@ const Settings = (props) => {
         </div>
       </Space>
     </>
-  )
-}
+  );
+};
 
 const StyledChromePicker = styled(ChromePicker)`
   box-shadow: none !important;
-`
+`;
 
 const Swatch = styled.div`
   width: 100%;
@@ -122,6 +122,6 @@ const Swatch = styled.div`
   border-radius: 4px;
   box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   cursor: pointer;
-`
+`;
 
-export default Settings
+export default Settings;

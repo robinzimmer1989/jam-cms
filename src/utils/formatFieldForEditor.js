@@ -1,35 +1,37 @@
-import Parser from 'html-react-parser'
+import Parser from 'html-react-parser';
 
-import generateSlug from './generateSlug'
+import generateSlug from './generateSlug';
 
 export default function formatFieldForEditor(field, site) {
   // Post relationship fields
   if (field.type === 'collection' && field?.value) {
-    const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter((post) => post.status === 'publish')
+    const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
+      (post) => post.status === 'publish'
+    );
 
     return {
       ...field,
       value: posts.map((o) => {
-        return { ...o, slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage) }
+        return { ...o, slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage) };
       }),
-    }
+    };
   }
 
-  if (field.type === 'form' && field?.value) {
-  }
-
-  if (field.type === 'wysiwyg' && (!field?.value || field?.value.replace(/(\r\n|\n|\r)/gm, '') === '<p></p>')) {
+  if (
+    field.type === 'wysiwyg' &&
+    (!field?.value || field?.value.replace(/(\r\n|\n|\r)/gm, '') === '<p></p>')
+  ) {
     return {
       ...field,
       value: '<i>Write something...</i>',
-    }
+    };
   }
 
   if (field.type === 'text' && !field?.value) {
     return {
       ...field,
       value: Parser('<i>Write something...</i>'),
-    }
+    };
   }
 
   if (field.type === 'image' && !field?.value) {
@@ -53,8 +55,8 @@ export default function formatFieldForEditor(field, site) {
         type: 'image',
         url: 'https://www.fpcanada.org/wp-content/uploads/woocommerce-placeholder.png',
       },
-    }
+    };
   }
 
-  return field
+  return field;
 }

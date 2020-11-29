@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import produce from 'immer'
-import { Button, Space, Select as AntSelect, Checkbox, notification } from 'antd'
-import { set } from 'lodash'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import produce from 'immer';
+import { Button, Space, Select as AntSelect, Checkbox, notification } from 'antd';
+import { set } from 'lodash';
 
 // import app components
-import Input from './Input'
-import Select from './Select'
-import Caption from './Caption'
-import Skeleton from './Skeleton'
-import PostTreeSelect from './PostTreeSelect'
-import MediaLibrary from './MediaLibrary'
-import ImagePicker from './postEditorAdminFields/ImagePicker'
+import Input from './Input';
+import Select from './Select';
+import Caption from './Caption';
+import Skeleton from './Skeleton';
+import PostTreeSelect from './PostTreeSelect';
+import MediaLibrary from './MediaLibrary';
+import ImagePicker from './postEditorAdminFields/ImagePicker';
 
-import { useStore } from '../store'
-import { postActions, siteActions } from '../actions'
+import { useStore } from '../store';
+import { postActions, siteActions } from '../actions';
 
 const PostSettings = () => {
   const [
@@ -23,54 +23,54 @@ const PostSettings = () => {
       editorState: { site, post },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const posts = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts
+  const posts = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts;
 
   // Remove own post for display in the page parent drop down
-  const otherPosts = { ...posts }
-  post && delete otherPosts[post.id]
+  const otherPosts = { ...posts };
+  post && delete otherPosts[post.id];
 
   const handleSavePost = async () => {
-    const { id, settings, frontPage } = site
+    const { id, settings, frontPage } = site;
 
-    setLoading(true)
-    await postActions.updatePost({ siteID: id, ...post }, dispatch)
-    await siteActions.updateSite({ id, settings, frontPage }, dispatch)
-    setLoading(false)
+    setLoading(true);
+    await postActions.updatePost({ siteID: id, ...post }, dispatch);
+    await siteActions.updateSite({ id, settings, frontPage }, dispatch);
+    setLoading(false);
 
     notification.success({
       message: 'Success',
       description: 'Updated successfully',
       placement: 'bottomRight',
-    })
-  }
+    });
+  };
 
   const handleChangePost = (name, value) => {
-    const nextPost = produce(post, (draft) => set(draft, `${name}`, value))
+    const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
-    })
-  }
+    });
+  };
 
   const handleChangeSite = (name, value) => {
-    const nextSite = produce(site, (draft) => set(draft, `${name}`, value))
+    const nextSite = produce(site, (draft) => set(draft, `${name}`, value));
 
     dispatch({
       type: `UPDATE_EDITOR_SITE`,
       payload: nextSite,
-    })
-  }
+    });
+  };
 
   const handleSelectImage = (image) => {
-    handleChangePost('featuredImage', image)
+    handleChangePost('featuredImage', image);
 
-    dispatch({ type: 'CLOSE_DIALOG' })
-  }
+    dispatch({ type: 'CLOSE_DIALOG' });
+  };
 
   return (
     <Container>
@@ -147,11 +147,11 @@ const PostSettings = () => {
         </Skeleton>
       </Space>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   padding: 15px;
-`
+`;
 
-export default PostSettings
+export default PostSettings;

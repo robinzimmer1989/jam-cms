@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react'
-import { Router as ReachRouter } from '@reach/router'
+import React, { useEffect } from 'react';
+import { Router as ReachRouter } from '@reach/router';
 
 // import app components
-import Dashboard from './appPages/Dashboard'
-import Media from './appPages/Media'
-import Collections from './appPages/Collections'
-import Collection from './appPages/Collection'
-import CollectionEditor from './appPages/CollectionEditor'
-import PostEditor from './appPages/PostEditor'
-import Forms from './appPages/Forms'
-import Form from './appPages/Form'
-import GeneralSettings from './appPages/GeneralSettings'
-import Editors from './appPages/Editors'
-import Seo from './appPages/Seo'
-import Development from './appPages/Development'
+import Dashboard from './appPages/Dashboard';
+import Media from './appPages/Media';
+import Collections from './appPages/Collections';
+import Collection from './appPages/Collection';
+import CollectionEditor from './appPages/CollectionEditor';
+import PostEditor from './appPages/PostEditor';
+import Forms from './appPages/Forms';
+import Form from './appPages/Form';
+import GeneralSettings from './appPages/GeneralSettings';
+import Editors from './appPages/Editors';
+import Seo from './appPages/Seo';
+import Development from './appPages/Development';
 
 import {
   ROUTE_MEDIA,
@@ -25,12 +25,12 @@ import {
   ROUTE_SETTINGS_SEO,
   ROUTE_SITE_EDITORS,
   ROUTE_DEV,
-} from '../routes'
-import { siteActions } from '../actions'
-import { useStore } from '../store'
+} from '../routes';
+import { siteActions } from '../actions';
+import { useStore } from '../store';
 
 const Router = (props) => {
-  const { siteID = 'default', theme, blocks } = props
+  const { siteID = 'default', theme, blocks } = props;
 
   const [
     {
@@ -38,18 +38,18 @@ const Router = (props) => {
       cmsState: { sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   useEffect(() => {
     const loadSite = async () => {
-      await siteActions.getSite({ siteID }, dispatch)
-    }
+      await siteActions.getSite({ siteID }, dispatch);
+    };
 
-    loadSite()
-  }, [siteID])
+    loadSite();
+  }, [siteID]);
 
   if (!sites[siteID]) {
-    return null
+    return null;
   }
 
   return (
@@ -72,7 +72,7 @@ const Router = (props) => {
         {process.env.NODE_ENV === 'development' && <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />}
       </ReachRouter>
     </>
-  )
-}
+  );
+};
 
-export default Router
+export default Router;

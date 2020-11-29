@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react'
-import { Button, Empty } from 'antd'
+import React, { useEffect } from 'react';
+import { Button, Empty } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout'
-import PageWrapper from '../PageWrapper'
+import CmsLayout from '../CmsLayout';
+import PageWrapper from '../PageWrapper';
 
-import { convertToPropsSchema } from '../../utils'
-import { useStore } from '../../store'
-import { formActions } from '../../actions'
+import { convertToPropsSchema } from '../../utils';
+import { useStore } from '../../store';
+import { formActions } from '../../actions';
 
 const Form = (props) => {
-  const { formID, theme } = props
+  const { formID, theme } = props;
 
   const [
     {
@@ -18,21 +18,21 @@ const Form = (props) => {
       editorState: { form },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   useEffect(() => {
     const loadForm = async () => {
-      await formActions.getForm({ site: sites[siteID], id: formID }, dispatch)
-    }
+      await formActions.getForm({ site: sites[siteID], id: formID }, dispatch);
+    };
 
-    loadForm()
+    loadForm();
 
     return function cleanup() {
-      dispatch({ type: `CLEAR_EDITOR` })
-    }
-  }, [formID])
+      dispatch({ type: `CLEAR_EDITOR` });
+    };
+  }, [formID]);
 
-  return <CmsLayout pageTitle="Form" actionBar="editor"></CmsLayout>
-}
+  return <CmsLayout pageTitle="Form" actionBar="editor"></CmsLayout>;
+};
 
-export default Form
+export default Form;

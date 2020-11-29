@@ -1,42 +1,42 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import { Button, Space, Row, Col, Popconfirm } from 'antd'
-import Img from 'gatsby-image'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Button, Space, Row, Col, Popconfirm } from 'antd';
+import Img from 'gatsby-image';
 
 // import app components
-import Input from './Input'
+import Input from './Input';
 
-import { mediaActions } from '../actions'
-import { useStore } from '../store'
-import { colors } from '../theme'
+import { mediaActions } from '../actions';
+import { useStore } from '../store';
+import { colors } from '../theme';
 
 const MediaImage = (props) => {
-  const { file, onSelect, onClose } = props
+  const { file, onSelect, onClose } = props;
 
-  const [, dispatch] = useStore()
+  const [, dispatch] = useStore();
 
-  const [data, setData] = useState({ ...file })
-  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState({ ...file });
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value })
+  const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   const handleUpdateMediaItem = async () => {
-    const { id, altText, siteID } = data
+    const { id, altText, siteID } = data;
 
-    setLoading('update')
-    await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch)
-    setLoading(false)
-  }
+    setLoading('update');
+    await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch);
+    setLoading(false);
+  };
 
   const handlDeleteMediaItem = async () => {
-    setLoading('delete')
-    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch)
-    setLoading(false)
+    setLoading('delete');
+    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch);
+    setLoading(false);
 
     if (result) {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   return (
     <>
@@ -91,8 +91,8 @@ const MediaImage = (props) => {
         </Col>
       </Row>
     </>
-  )
-}
+  );
+};
 
 const Content = styled.div`
   display: flex;
@@ -101,7 +101,7 @@ const Content = styled.div`
   align-items: flex-end;
   height: 100%;
   min-height: 300px;
-`
+`;
 
 const File = styled.div`
   display: flex;
@@ -122,6 +122,6 @@ const File = styled.div`
     width: 100%;
     text-align: center;
   }
-`
+`;
 
-export default MediaImage
+export default MediaImage;

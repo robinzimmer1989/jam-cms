@@ -1,49 +1,49 @@
-import React, { useState } from 'react'
-import { Space, Button } from 'antd'
+import React, { useState } from 'react';
+import { Space, Button } from 'antd';
 
 // import app components
-import Input from './Input'
-import PostTreeSelect from './PostTreeSelect'
-import { formatSlug } from '../utils'
-import { useStore } from '../store'
+import Input from './Input';
+import PostTreeSelect from './PostTreeSelect';
+import { formatSlug } from '../utils';
+import { useStore } from '../store';
 
 const PostForm = (props) => {
-  const { postTypeID, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props
+  const { postTypeID, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
 
   const [
     {
       cmsState: { sites, siteID },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [title, setTitle] = useState(defaultTitle)
-  const [slug, setSlug] = useState(defaultSlug)
-  const [parentID, setParentID] = useState('')
+  const [title, setTitle] = useState(defaultTitle);
+  const [slug, setSlug] = useState(defaultSlug);
+  const [parentID, setParentID] = useState('');
 
-  const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts
+  const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
   const handleSubmit = async () => {
     if (!title || slug === '/') {
-      return
+      return;
     }
 
-    let formattedSlug
+    let formattedSlug;
 
     if (slug) {
-      formattedSlug = formatSlug(slug)
+      formattedSlug = formatSlug(slug);
     } else {
-      formattedSlug = formatSlug(title)
+      formattedSlug = formatSlug(title);
     }
 
-    await onSubmit({ title, slug: formattedSlug, parentID })
+    await onSubmit({ title, slug: formattedSlug, parentID });
 
-    setTitle('')
-    setSlug('')
-    setParentID('')
+    setTitle('');
+    setSlug('');
+    setParentID('');
 
-    dispatch({ type: 'CLOSE_DIALOG' })
-  }
+    dispatch({ type: 'CLOSE_DIALOG' });
+  };
 
   return (
     <Space direction="vertical" size={20}>
@@ -56,7 +56,7 @@ const PostForm = (props) => {
 
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
-  )
-}
+  );
+};
 
-export default PostForm
+export default PostForm;

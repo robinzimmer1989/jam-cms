@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { navigate } from '@reach/router'
-import { PageHeader, Space, Button } from 'antd'
+import React, { useEffect, useState } from 'react';
+import { navigate } from '@reach/router';
+import { PageHeader, Space, Button } from 'antd';
 
 // import app components
-import BaseLayout from '../BaseLayout'
-import Edges from '../Edges'
-import SiteForm from '../SiteForm'
-import ListItem from '../ListItem'
-import Loader from '../Loader'
+import BaseLayout from '../BaseLayout';
+import Edges from '../Edges';
+import SiteForm from '../SiteForm';
+import ListItem from '../ListItem';
+import Loader from '../Loader';
 
-import { siteActions } from '../../actions'
-import { useStore } from '../../store'
-import getRoute from '../../routes'
+import { siteActions } from '../../actions';
+import { useStore } from '../../store';
+import getRoute from '../../routes';
 
 const Home = () => {
   const [
@@ -19,22 +19,22 @@ const Home = () => {
       cmsState: { sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const loadSites = async () => {
       if (!!process.env.GATSBY_CMS_MULTISITE) {
-        await siteActions.getSites({}, dispatch)
+        await siteActions.getSites({}, dispatch);
       } else {
-        navigate(getRoute(`dashboard`))
+        navigate(getRoute(`dashboard`));
       }
 
-      setLoaded(true)
-    }
-    loadSites()
-  }, [])
+      setLoaded(true);
+    };
+    loadSites();
+  }, []);
 
   return (
     <>
@@ -64,7 +64,7 @@ const Home = () => {
 
             <Space direction="vertical">
               {Object.keys(sites).map((key) => {
-                const { id, title } = sites[key]
+                const { id, title } = sites[key];
 
                 return (
                   <ListItem
@@ -80,7 +80,7 @@ const Home = () => {
                     link={getRoute(`dashboard`, { siteID: id })}
                     hideImage={true}
                   />
-                )
+                );
               })}
             </Space>
           </Edges>
@@ -89,7 +89,7 @@ const Home = () => {
         <Loader />
       )}
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

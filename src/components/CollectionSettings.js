@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import produce from 'immer'
-import { Button, Space, notification } from 'antd'
-import { set } from 'lodash'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import produce from 'immer';
+import { Button, Space, notification } from 'antd';
+import { set } from 'lodash';
 
 // import app components
-import Input from './Input'
-import Skeleton from './Skeleton'
+import Input from './Input';
+import Skeleton from './Skeleton';
 
-import { useStore } from '../store'
-import { collectionActions } from '../actions'
+import { useStore } from '../store';
+import { collectionActions } from '../actions';
 
 const CollectionSettings = ({ postTypeID }) => {
   const [
@@ -18,36 +18,36 @@ const CollectionSettings = ({ postTypeID }) => {
       editorState: { site },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const postType = site?.postTypes?.[postTypeID]
+  const postType = site?.postTypes?.[postTypeID];
 
   const handleUpdate = async () => {
-    const { id, title, slug, template } = postType
+    const { id, title, slug, template } = postType;
 
-    setLoading(true)
-    await collectionActions.updateCollection({ siteID, id, title, slug, template }, dispatch)
-    setLoading(false)
+    setLoading(true);
+    await collectionActions.updateCollection({ siteID, id, title, slug, template }, dispatch);
+    setLoading(false);
 
     notification.success({
       message: 'Success',
       description: 'Updated successfully',
       placement: 'bottomRight',
-    })
-  }
+    });
+  };
 
   const handleChange = (e) => {
     const nextPostType = produce(postType, (draft) => {
-      return set(draft, `${e.target.name}`, e.target.value)
-    })
+      return set(draft, `${e.target.name}`, e.target.value);
+    });
 
     dispatch({
       type: `UPDATE_EDITOR_COLLECTION`,
       payload: nextPostType,
-    })
-  }
+    });
+  };
 
   return (
     <Container>
@@ -77,11 +77,11 @@ const CollectionSettings = ({ postTypeID }) => {
         )}
       </Space>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   padding: 15px;
-`
+`;
 
-export default CollectionSettings
+export default CollectionSettings;

@@ -1,11 +1,11 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Button, PageHeader } from 'antd'
+import React from 'react';
+import styled from 'styled-components';
+import { Button, PageHeader } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout'
+import CmsLayout from '../CmsLayout';
 
-import { useStore } from '../../store'
+import { useStore } from '../../store';
 
 const SettingsSeo = () => {
   const [
@@ -13,13 +13,13 @@ const SettingsSeo = () => {
       cmsState: { siteID, sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   return (
     <CmsLayout pageTitle={`SEO`}>
       <PageHeader></PageHeader>
     </CmsLayout>
-  )
-}
+  );
+};
 
-export default SettingsSeo
+export default SettingsSeo;

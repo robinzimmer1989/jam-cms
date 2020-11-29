@@ -1,14 +1,14 @@
-import React from 'react'
-import { Button, PageHeader, Popconfirm } from 'antd'
-import { Link } from '@reach/router'
+import React from 'react';
+import { Button, PageHeader, Popconfirm } from 'antd';
+import { Link } from '@reach/router';
 // import app components
-import CmsLayout from '../CmsLayout'
-import FormForm from '../FormForm'
-import ListItem from '../ListItem'
+import CmsLayout from '../CmsLayout';
+import FormForm from '../FormForm';
+import ListItem from '../ListItem';
 
-import { formActions } from '../../actions'
-import { useStore } from '../../store'
-import getRoute from '../../routes'
+import { formActions } from '../../actions';
+import { useStore } from '../../store';
+import getRoute from '../../routes';
 
 const Forms = () => {
   const [
@@ -16,17 +16,17 @@ const Forms = () => {
       cmsState: { siteID, sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const forms = sites[siteID]?.forms
+  const forms = sites[siteID]?.forms;
 
   const handleAddForm = async ({ title }) => {
-    await formActions.addForm({ siteID, title }, dispatch)
-  }
+    await formActions.addForm({ siteID, title }, dispatch);
+  };
 
   const handleDeleteForm = async ({ id }) => {
-    await formActions.deleteForm({ id }, dispatch)
-  }
+    await formActions.deleteForm({ id }, dispatch);
+  };
 
   const handleOpenDialog = () => {
     dispatch({
@@ -36,8 +36,8 @@ const Forms = () => {
         title: `Form`,
         component: <FormForm onSubmit={handleAddForm} siteID={siteID} />,
       },
-    })
-  }
+    });
+  };
 
   return (
     <CmsLayout pageTitle={`Forms`}>
@@ -45,7 +45,7 @@ const Forms = () => {
 
       {forms &&
         Object.values(forms).map((o) => {
-          const editLink = getRoute(`form`, { siteID, formID: o.id })
+          const editLink = getRoute(`form`, { siteID, formID: o.id });
 
           const actions = [
             <Popconfirm
@@ -59,12 +59,12 @@ const Forms = () => {
             <Button size="small">
               <Link to={editLink}>Edit</Link>
             </Button>,
-          ]
+          ];
 
-          return <ListItem key={o.id} link={editLink} actions={actions} title={o.title} hideImage />
+          return <ListItem key={o.id} link={editLink} actions={actions} title={o.title} hideImage />;
         })}
     </CmsLayout>
-  )
-}
+  );
+};
 
-export default Forms
+export default Forms;

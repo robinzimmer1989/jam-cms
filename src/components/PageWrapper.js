@@ -1,11 +1,11 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { Button, Tooltip } from 'antd'
-import { FullscreenExitOutlined } from '@ant-design/icons'
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { Button, Tooltip } from 'antd';
+import { FullscreenExitOutlined } from '@ant-design/icons';
 
 // import app components
-import Iframe from './Iframe'
-import { useStore } from '../store'
+import Iframe from './Iframe';
+import { useStore } from '../store';
 
 const PageWrapper = ({ theme, children }) => {
   const [
@@ -13,7 +13,7 @@ const PageWrapper = ({ theme, children }) => {
       editorState: { site, viewport },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   return (
     <>
@@ -37,8 +37,8 @@ const PageWrapper = ({ theme, children }) => {
         </Page>
       )}
     </>
-  )
-}
+  );
+};
 
 const Page = styled.div`
   margin: 0 auto;
@@ -69,13 +69,13 @@ const Page = styled.div`
         css`
           max-width: 360px;
         `}
-`
+`;
 
 const FullScreenExitButton = styled.div`
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 25;
-`
+`;
 
-export default PageWrapper
+export default PageWrapper;

@@ -1,41 +1,41 @@
-import React from 'react'
-import { Collapse, Button, Space } from 'antd'
-import produce from 'immer'
+import React from 'react';
+import { Collapse, Button, Space } from 'antd';
+import produce from 'immer';
 
 // import app components
-import { getField } from '../BlockEditFields'
+import { getField } from '../BlockEditFields';
 
 const Repeater = (props) => {
-  const { site, items, value, onChange, dispatch } = props
+  const { site, items, value, onChange, dispatch } = props;
 
-  const values = value || []
+  const values = value || [];
 
   const handleAdd = (index) => {
     const newValues = produce(values, (draft) => {
-      draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}))
-      return draft
-    })
+      draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}));
+      return draft;
+    });
 
-    onChange(newValues)
-  }
+    onChange(newValues);
+  };
 
   const handleRemove = (index) => {
     const newValues = produce(values, (draft) => {
-      draft.splice(index, 1)
-      return draft
-    })
+      draft.splice(index, 1);
+      return draft;
+    });
 
-    onChange(newValues)
-  }
+    onChange(newValues);
+  };
 
   const handleChange = (item, index) => {
     const newValues = produce(values, (draft) => {
-      draft[index][item.id] = item.value
-      return draft
-    })
+      draft[index][item.id] = item.value;
+      return draft;
+    });
 
-    onChange(newValues)
-  }
+    onChange(newValues);
+  };
 
   return (
     <>
@@ -57,19 +57,19 @@ const Repeater = (props) => {
                             dispatch,
                           })}
                         </div>
-                      )
+                      );
                     })}
 
                   <Button size="small" danger children={`Remove`} onClick={() => handleRemove(index)} />
                 </Space>
               </Collapse.Panel>
             </Collapse>
-          )
+          );
         })}
 
       <Button onClick={() => handleAdd(items.length)}>Add</Button>
     </>
-  )
-}
+  );
+};
 
-export default Repeater
+export default Repeater;

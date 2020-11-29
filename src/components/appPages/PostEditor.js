@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react'
-import { PageHeader, Divider } from 'antd'
-import produce from 'immer'
-import { set } from 'lodash'
-import Parser from 'html-react-parser'
+import React, { useEffect } from 'react';
+import { PageHeader, Divider } from 'antd';
+import produce from 'immer';
+import { set } from 'lodash';
+import Parser from 'html-react-parser';
 
 // import app components
-import BlockForm from '../BlockForm'
-import BlockEditFields from '../BlockEditFields'
-import CmsLayout from '../CmsLayout'
-import PageWrapper from '../PageWrapper'
-import PostHeader from '../PostHeader'
-import FlexibleContent from '../FlexibleContent'
-import PostSettings from '../PostSettings'
+import BlockForm from '../BlockForm';
+import BlockEditFields from '../BlockEditFields';
+import CmsLayout from '../CmsLayout';
+import PageWrapper from '../PageWrapper';
+import PostHeader from '../PostHeader';
+import FlexibleContent from '../FlexibleContent';
+import PostSettings from '../PostSettings';
 
-import { formatBlocks } from '../../utils'
-import { useStore } from '../../store'
-import { postActions } from '../../actions'
+import { formatBlocks } from '../../utils';
+import { useStore } from '../../store';
+import { postActions } from '../../actions';
 
 const PostEditor = (props) => {
-  const { postTypeID, postID, theme, blocks } = props
+  const { postTypeID, postID, theme, blocks } = props;
 
   const [
     {
@@ -26,36 +26,36 @@ const PostEditor = (props) => {
       editorState: { site, post, editorIndex },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const postType = sites[siteID]?.postTypes?.[postTypeID]
+  const postType = sites[siteID]?.postTypes?.[postTypeID];
 
-  const siteComponent = editorIndex === 'header' || editorIndex === 'footer'
+  const siteComponent = editorIndex === 'header' || editorIndex === 'footer';
 
   useEffect(() => {
     const loadPost = async () => {
-      const result = await postActions.getPost({ siteID, postID }, dispatch)
+      const result = await postActions.getPost({ siteID, postID }, dispatch);
 
       if (result) {
         dispatch({
           type: `ADD_EDITOR_SITE`,
           payload: sites[siteID],
-        })
+        });
 
-        renderTemplateContent(result)
+        renderTemplateContent(result);
       }
-    }
+    };
 
-    loadPost()
+    loadPost();
 
     return function cleanup() {
-      dispatch({ type: `CLEAR_EDITOR` })
-    }
-  }, [postID])
+      dispatch({ type: `CLEAR_EDITOR` });
+    };
+  }, [postID]);
 
   useEffect(() => {
-    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false })
-  }, [])
+    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false });
+  }, []);
 
   const renderTemplateContent = (post) => {
     // if post type has a template assigned, then overwrite content in editor store
@@ -66,12 +66,12 @@ const PostEditor = (props) => {
         post.content.map((o, i) => {
           if (postType?.template?.[i]?.name === o.name) {
             o.fields.map((p, j) => {
-              set(draft, `${i}.fields.${j}.value`, p.value)
-            })
+              set(draft, `${i}.fields.${j}.value`, p.value);
+            });
           }
-        })
-        return draft
-      })
+        });
+        return draft;
+      });
 
       dispatch({
         type: `UPDATE_EDITOR_POST`,
@@ -79,9 +79,9 @@ const PostEditor = (props) => {
           ...post,
           content: nextContent,
         },
-      })
+      });
     }
-  }
+  };
 
   const getFields = () => {
     if (siteComponent) {
@@ -90,30 +90,30 @@ const PostEditor = (props) => {
         // TODO: We might have to move to an object structure for fields instead of array.
         // There is a problem when fields get removed and we try to add an array element and then skip something in between.
         // The p?.id should fix it for now.
-        const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id)
+        const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id);
 
         if (setting) {
-          return { ...o, value: setting.value }
+          return { ...o, value: setting.value };
         } else {
-          return o
+          return o;
         }
-      })
+      });
     } else if (post && post.content[editorIndex]) {
       // loop through default blocks and replace value if found
       return blocks?.[post.content[editorIndex].name].fields.fields.map((o) => {
         // TODO: We might have to move to an object structure for fields instead of array.
         // There is a problem when fields get removed and we try to add an array element and then skip something in between.
         // The p?.id should fix it for now.
-        const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id)
+        const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id);
 
         if (setting) {
-          return { ...o, value: setting.value }
+          return { ...o, value: setting.value };
         } else {
-          return o
+          return o;
         }
-      })
+      });
     }
-  }
+  };
 
   const getSidebar = () => {
     let sidebar = {
@@ -123,7 +123,7 @@ const PostEditor = (props) => {
         component: null,
       },
       children: null,
-    }
+    };
 
     if (post?.content[editorIndex] || siteComponent) {
       sidebar = {
@@ -146,12 +146,12 @@ const PostEditor = (props) => {
             isSiteComponent={!!siteComponent}
           />
         ),
-      }
+      };
     } else {
       sidebar = {
         title: { title: 'Settings', onBack: null },
         children: <PostSettings />,
-      }
+      };
     }
 
     return (
@@ -160,86 +160,86 @@ const PostEditor = (props) => {
         <Divider style={{ margin: 0 }} />
         {sidebar.children}
       </>
-    )
-  }
+    );
+  };
 
   const handleChangeElement = (field, index) => {
-    dispatch({ type: `CLOSE_DIALOG` })
+    dispatch({ type: `CLOSE_DIALOG` });
 
     if (siteComponent) {
       const nextSite = produce(site, (draft) => {
-        return set(draft, `settings.${editorIndex}.fields.${index}`, field)
-      })
+        return set(draft, `settings.${editorIndex}.fields.${index}`, field);
+      });
 
       dispatch({
         type: `UPDATE_EDITOR_SITE`,
         payload: nextSite,
-      })
+      });
     } else {
       const nextPost = produce(post, (draft) => {
-        return set(draft, `content.${editorIndex}.fields.${index}`, field)
-      })
+        return set(draft, `content.${editorIndex}.fields.${index}`, field);
+      });
 
       dispatch({
         type: `UPDATE_EDITOR_POST`,
         payload: nextPost,
-      })
+      });
     }
-  }
+  };
 
   const handleDeleteElement = () => {
     const nextPost = produce(post, (draft) => {
-      draft.content.splice(editorIndex, 1)
-      return draft
-    })
+      draft.content.splice(editorIndex, 1);
+      return draft;
+    });
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
-    })
+    });
 
-    dispatch({ type: `SET_EDITOR_INDEX`, payload: null })
-  }
+    dispatch({ type: `SET_EDITOR_INDEX`, payload: null });
+  };
 
   const handleMoveElement = (index, newIndex) => {
     const nextPost = produce(post, (draft) => {
       if (newIndex > -1 && newIndex < draft.content.length) {
-        const temp = draft.content[index]
-        draft.content[index] = draft.content[newIndex]
-        draft.content[newIndex] = temp
+        const temp = draft.content[index];
+        draft.content[index] = draft.content[newIndex];
+        draft.content[newIndex] = temp;
       }
 
-      return draft
-    })
+      return draft;
+    });
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
-    })
-  }
+    });
+  };
 
   const handleSelectElement = (name, index) => {
     // Assign the default value
     const block = produce(blocks[name], (draft) => {
       draft.fields.fields = draft.fields.fields.map((o) => {
-        return { ...o, value: o.defaultValue || null }
-      })
+        return { ...o, value: o.defaultValue || null };
+      });
 
-      return draft
-    })
+      return draft;
+    });
 
     const nextPost = produce(post, (draft) => {
-      draft.content.splice(index, 0, block.fields)
-      return draft
-    })
+      draft.content.splice(index, 0, block.fields);
+      return draft;
+    });
 
     dispatch({
       type: `UPDATE_EDITOR_POST`,
       payload: nextPost,
-    })
+    });
 
-    dispatch({ type: `SET_EDITOR_INDEX`, payload: index })
-  }
+    dispatch({ type: `SET_EDITOR_INDEX`, payload: index });
+  };
 
   const handleOpenDialog = (index = 0) => {
     dispatch({
@@ -250,8 +250,8 @@ const PostEditor = (props) => {
         component: <BlockForm index={index} onSelect={handleSelectElement} blocks={blocks} />,
         width: 500,
       },
-    })
-  }
+    });
+  };
 
   return (
     <CmsLayout pageTitle="Editor" actionBar="editor" rightSidebar={getSidebar()}>
@@ -269,7 +269,7 @@ const PostEditor = (props) => {
         />
       </PageWrapper>
     </CmsLayout>
-  )
-}
+  );
+};
 
-export default PostEditor
+export default PostEditor;

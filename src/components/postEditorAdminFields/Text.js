@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
 // import app components
-import Input from '../Input'
+import Input from '../Input';
 
 const Text = (props) => {
-  const { value = '', placeholder, rows = 1, onChange } = props
+  const { value = '', placeholder, rows = 1, onChange } = props;
 
-  return <Input value={value} placeholder={placeholder} onChange={onChange} rows={rows} />
-}
+  return <Input value={value} placeholder={placeholder} onChange={onChange} rows={rows} />;
+};
 
-export default Text
+export default Text;

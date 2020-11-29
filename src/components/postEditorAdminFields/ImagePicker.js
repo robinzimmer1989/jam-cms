@@ -1,13 +1,13 @@
-import React from 'react'
-import { Button } from 'antd'
-import styled from 'styled-components'
-import Img from 'gatsby-image'
+import React from 'react';
+import { Button } from 'antd';
+import styled from 'styled-components';
+import Img from 'gatsby-image';
 
 // import app components
-import { colors } from '../../theme'
+import { colors } from '../../theme';
 
 const ImagePicker = (props) => {
-  const { buttonText = 'Edit', onClick, value = '' } = props
+  const { buttonText = 'Edit', onClick, value = '' } = props;
 
   return (
     <Container>
@@ -25,19 +25,19 @@ const ImagePicker = (props) => {
 
       <Button children={buttonText} onClick={onClick} />
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const ImageContainer = styled.div`
   height: 80px;
   width: 80px;
   margin-right: 10px;
   background: ${colors.background.light};
-`
+`;
 
-export default ImagePicker
+export default ImagePicker;

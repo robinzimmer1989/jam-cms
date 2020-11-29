@@ -1,32 +1,32 @@
-import React from 'react'
-import { Button, Tooltip, Space } from 'antd'
-import { FullscreenOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } from '@ant-design/icons'
+import React from 'react';
+import { Button, Tooltip, Space } from 'antd';
+import { FullscreenOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } from '@ant-design/icons';
 
 // import app components
-import { useStore } from '../store'
+import { useStore } from '../store';
 
 const ViewToggle = (props) => {
-  const { hideFullscreen } = props
+  const { hideFullscreen } = props;
 
   const [
     {
       editorState: { viewport },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
   const elements = [
     { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
     { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
     { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Laptop' },
-  ]
+  ];
 
   if (!hideFullscreen) {
     elements.push({
       type: 'fullscreen',
       icon: <FullscreenOutlined style={{ fontSize: '14px' }} />,
       title: 'Fullscreen',
-    })
+    });
   }
 
   return (
@@ -42,10 +42,10 @@ const ViewToggle = (props) => {
               type={viewport === o.type ? 'primary' : 'default'}
             />
           </Tooltip>
-        )
+        );
       })}
     </Space>
-  )
-}
+  );
+};
 
-export default ViewToggle
+export default ViewToggle;

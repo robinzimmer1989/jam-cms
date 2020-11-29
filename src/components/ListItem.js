@@ -1,11 +1,11 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Card, List, Typography } from 'antd'
-import { Link } from '@reach/router'
-import Img from 'gatsby-image'
+import React from 'react';
+import styled from 'styled-components';
+import { Card, List, Typography } from 'antd';
+import { Link } from '@reach/router';
+import Img from 'gatsby-image';
 
 const ListItem = (props) => {
-  const { level = 0, link, actions, title, subtitle, status, image, hideImage } = props
+  const { level = 0, link, actions, title, subtitle, status, image, hideImage } = props;
 
   const metaTitle = link ? (
     <Link to={link} style={{ flex: 1 }}>
@@ -19,7 +19,7 @@ const ListItem = (props) => {
       {title}
       {status}
     </Typography.Text>
-  )
+  );
 
   return (
     <Container level={level}>
@@ -44,8 +44,8 @@ const ListItem = (props) => {
         </List.Item>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   margin-left: ${({ level }) => `${level * 30}px`};
@@ -54,6 +54,6 @@ const Container = styled.div`
   .ant-card-body {
     padding: 0 20px;
   }
-`
+`;
 
-export default ListItem
+export default ListItem;

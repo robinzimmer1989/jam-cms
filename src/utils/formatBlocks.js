@@ -1,12 +1,12 @@
-import formatFieldForEditor from './formatFieldForEditor'
-import formatFieldForDevelopment from './formatFieldForDevelopment'
-import convertToPropsSchema from './convertToPropsSchema'
+import formatFieldForEditor from './formatFieldForEditor';
+import formatFieldForDevelopment from './formatFieldForDevelopment';
+import convertToPropsSchema from './convertToPropsSchema';
 
 export default function formatBlocks(blocks, site, development = false) {
-  let modifiedBlocks = []
+  let modifiedBlocks = [];
 
   if (!development && (!blocks || !site)) {
-    return modifiedBlocks
+    return modifiedBlocks;
   }
 
   modifiedBlocks = blocks.map((block) => {
@@ -15,10 +15,10 @@ export default function formatBlocks(blocks, site, development = false) {
       fields: block.fields.map((field) =>
         development ? formatFieldForDevelopment(field) : formatFieldForEditor(field, site)
       ),
-    }
-  })
+    };
+  });
 
-  modifiedBlocks = convertToPropsSchema(modifiedBlocks)
+  modifiedBlocks = convertToPropsSchema(modifiedBlocks);
 
-  return modifiedBlocks
+  return modifiedBlocks;
 }

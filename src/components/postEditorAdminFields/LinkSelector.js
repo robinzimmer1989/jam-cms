@@ -1,15 +1,15 @@
-import React from 'react'
-import { Space, Checkbox } from 'antd'
+import React from 'react';
+import { Space, Checkbox } from 'antd';
 
 // import app components
-import Input from '../Input'
+import Input from '../Input';
 
 const LinkSelector = (props) => {
-  const { value = {}, placeholder, onChange } = props
+  const { value = {}, placeholder, onChange } = props;
 
   const handleChange = (name, newValue) => {
-    onChange({ ...value, [name]: newValue })
-  }
+    onChange({ ...value, [name]: newValue });
+  };
 
   return (
     <Space direction="vertical" size={20}>
@@ -26,7 +26,7 @@ const LinkSelector = (props) => {
         children="Open in new tab"
       />
     </Space>
-  )
-}
+  );
+};
 
-export default LinkSelector
+export default LinkSelector;

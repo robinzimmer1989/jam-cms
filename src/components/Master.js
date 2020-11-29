@@ -1,37 +1,38 @@
-import React, { useEffect } from 'react'
-import { Router } from '@reach/router'
-import { Modal } from 'antd'
+import React, { useEffect } from 'react';
+import { Router } from '@reach/router';
+import { Modal } from 'antd';
 
 // import components
-import Home from './appPages/Home'
-import Profile from './appPages/Profile'
-import SignIn from './appPages/SignIn'
-import CmsRouter from './Router'
-import PrivateRoute from './PrivateRoute'
+import Home from './appPages/Home';
+import Profile from './appPages/Profile';
+import SignIn from './appPages/SignIn';
+import CmsRouter from './Router';
+import PrivateRoute from './PrivateRoute';
 
-import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE, ROUTE_SIGN_IN } from '../routes'
-import { useStore } from '../store'
-import { userActions } from '../actions'
-import { isLoggedIn } from '../utils/auth'
+import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE, ROUTE_SIGN_IN } from '../routes';
+import { useStore } from '../store';
+import { userActions } from '../actions';
+import { isLoggedIn } from '../utils/auth';
+
 const Master = (props) => {
-  const { theme, blocks } = props
+  const { theme, blocks } = props;
 
   const [
     {
       globalState: { dialog },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const loggedIn = isLoggedIn()
+  const loggedIn = isLoggedIn();
 
   useEffect(() => {
     const loadUser = async () => {
-      await userActions.getAuthUser({}, dispatch)
-    }
+      await userActions.getAuthUser({}, dispatch);
+    };
 
-    loggedIn && loadUser()
-  }, [loggedIn])
+    loggedIn && loadUser();
+  }, [loggedIn]);
 
   return (
     <>
@@ -61,7 +62,7 @@ const Master = (props) => {
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default Master
+export default Master;

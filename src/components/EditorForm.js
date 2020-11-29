@@ -1,33 +1,33 @@
-import React, { useState } from 'react'
-import { Space, Button, Select } from 'antd'
+import React, { useState } from 'react';
+import { Space, Button, Select } from 'antd';
 
 // import app components
-import Input from './Input'
-import Caption from './Caption'
+import Input from './Input';
+import Caption from './Caption';
 
-import { useStore } from '../store'
+import { useStore } from '../store';
 
 const EditorForm = (props) => {
-  const { id, email: defaultEmail = '', role: defaultRole = 'editor', onAdd, onUpdate } = props
+  const { id, email: defaultEmail = '', role: defaultRole = 'editor', onAdd, onUpdate } = props;
 
-  const [, dispatch] = useStore()
+  const [, dispatch] = useStore();
 
-  const [email, setEmail] = useState(defaultEmail)
-  const [role, setRole] = useState(defaultRole)
+  const [email, setEmail] = useState(defaultEmail);
+  const [role, setRole] = useState(defaultRole);
 
   const handleSubmit = async () => {
     if (!email) {
-      return
+      return;
     }
 
     if (id) {
-      onUpdate({ id, role })
+      onUpdate({ id, role });
     } else {
-      onAdd({ email, role })
+      onAdd({ email, role });
     }
 
-    dispatch({ type: 'CLOSE_DIALOG' })
-  }
+    dispatch({ type: 'CLOSE_DIALOG' });
+  };
 
   return (
     <Space direction="vertical">
@@ -49,7 +49,7 @@ const EditorForm = (props) => {
 
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
-  )
-}
+  );
+};
 
-export default EditorForm
+export default EditorForm;

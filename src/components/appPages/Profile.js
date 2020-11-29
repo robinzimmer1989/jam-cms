@@ -1,14 +1,14 @@
-import React from 'react'
-import { Card, PageHeader } from 'antd'
+import React from 'react';
+import { Card, PageHeader } from 'antd';
 
 // import app components
-import BaseLayout from '../BaseLayout'
-import Edges from '../Edges'
+import BaseLayout from '../BaseLayout';
+import Edges from '../Edges';
 
-import { getCurrentUser } from '../../utils/auth'
+import { getCurrentUser } from '../../utils/auth';
 
 const Home = () => {
-  const user = getCurrentUser()
+  const user = getCurrentUser();
 
   return (
     <BaseLayout>
@@ -20,7 +20,7 @@ const Home = () => {
         </Card>
       </Edges>
     </BaseLayout>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

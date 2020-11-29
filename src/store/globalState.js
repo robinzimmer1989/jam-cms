@@ -1,4 +1,4 @@
-import produce from 'immer'
+import produce from 'immer';
 
 export const globalState = {
   menu: false,
@@ -9,23 +9,23 @@ export const globalState = {
     title: '',
     component: null,
   },
-}
+};
 
 export const globalReducer = (state, action) => {
-  const { payload } = action
+  const { payload } = action;
 
-  return produce(state, draft => {
+  return produce(state, (draft) => {
     switch (action.type) {
       case `SET_MENU`:
-        draft.menu = payload
-        break
+        draft.menu = payload;
+        break;
 
       case `SET_DIALOG`:
         draft.dialog = {
           width: 500,
           ...payload,
-        }
-        break
+        };
+        break;
 
       case `CLOSE_DIALOG`:
         draft.dialog = {
@@ -34,14 +34,14 @@ export const globalReducer = (state, action) => {
           title: '',
           width: 500,
           component: null,
-        }
-        break
+        };
+        break;
 
       case `SET_LEFT_SIDEBAR`:
-        draft.leftSidebar = payload
-        break
+        draft.leftSidebar = payload;
+        break;
 
       default:
     }
-  })
-}
+  });
+};

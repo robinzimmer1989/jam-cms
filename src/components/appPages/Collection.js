@@ -1,68 +1,68 @@
-import React, { useState } from 'react'
-import { Link } from '@reach/router'
-import styled, { css } from 'styled-components'
-import { Button, Popconfirm, PageHeader, Tabs } from 'antd'
+import React, { useState } from 'react';
+import { Link } from '@reach/router';
+import styled, { css } from 'styled-components';
+import { Button, Popconfirm, PageHeader, Tabs } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout'
-import PostForm from '../PostForm'
-import ListItem from '../ListItem'
+import CmsLayout from '../CmsLayout';
+import PostForm from '../PostForm';
+import ListItem from '../ListItem';
 
-import { postActions } from '../../actions'
-import { useStore } from '../../store'
-import { colors } from '../../theme'
-import getRoute from '../../routes'
-import { createDataTree, sortBy, generateSlug } from '../../utils'
+import { postActions } from '../../actions';
+import { useStore } from '../../store';
+import { colors } from '../../theme';
+import getRoute from '../../routes';
+import { createDataTree, sortBy, generateSlug } from '../../utils';
 
 const Collection = (props) => {
-  const { siteID, postTypeID } = props
+  const { siteID, postTypeID } = props;
 
   const [
     {
       cmsState: { sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [filter, setFilter] = useState(`all`)
+  const [filter, setFilter] = useState(`all`);
 
-  const postType = sites[siteID]?.postTypes?.[postTypeID]
-  const title = postType?.title
-  const posts = postType?.posts ? Object.values(postType.posts) : []
+  const postType = sites[siteID]?.postTypes?.[postTypeID];
+  const title = postType?.title;
+  const posts = postType?.posts ? Object.values(postType.posts) : [];
 
-  const treePosts = createDataTree(posts)
+  const treePosts = createDataTree(posts);
 
-  const filteredPosts = filter !== `all` ? treePosts.filter((o) => o.status === filter) : treePosts
-  sortBy(filteredPosts, 'createdAt')
+  const filteredPosts = filter !== `all` ? treePosts.filter((o) => o.status === filter) : treePosts;
+  sortBy(filteredPosts, 'createdAt');
 
   const handleAddPost = async ({ title, slug, parentID }) => {
-    await postActions.addPost({ siteID, postTypeID, status: 'draft', title, slug, parentID }, dispatch)
-  }
+    await postActions.addPost({ siteID, postTypeID, status: 'draft', title, slug, parentID }, dispatch);
+  };
 
   const handleDeletePost = async ({ postID }) => {
-    await postActions.deletePost({ siteID, id: postID }, dispatch)
-  }
+    await postActions.deletePost({ siteID, id: postID }, dispatch);
+  };
 
   const handleTrashPost = async ({ postID }) => {
-    await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch)
-  }
+    await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch);
+  };
 
   const filterItems = (
     <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
       {['all', 'publish', 'draft', 'trash'].map((name) => {
-        return <Tabs.TabPane key={name} tab={name.toUpperCase()} />
+        return <Tabs.TabPane key={name} tab={name.toUpperCase()} />;
       })}
     </Tabs>
-  )
+  );
 
   const renderPost = (o, level) => {
-    const editLink = getRoute(`editor`, { siteID, postTypeID, postID: o.id })
+    const editLink = getRoute(`editor`, { siteID, postTypeID, postID: o.id });
 
     const actions = [
       <Button size="small">
         <Link to={editLink}>Edit</Link>
       </Button>,
-    ]
+    ];
 
     if (o.status === 'trash') {
       actions.unshift(
@@ -74,21 +74,21 @@ const Collection = (props) => {
         >
           <Button size="small" children={`Delete`} danger />
         </Popconfirm>
-      )
+      );
     } else {
       actions.unshift(
         <Button size="small" onClick={() => handleTrashPost({ postID: o.id })} children={`Trash`} danger />
-      )
+      );
     }
 
-    let badges = []
+    let badges = [];
 
     if (sites?.[siteID]?.frontPage === o.id) {
-      badges.push(<Tag key="front" children={'front'} />)
+      badges.push(<Tag key="front" children={'front'} />);
     }
 
     if (o.status === 'draft' || o.status === 'trash') {
-      badges.push(<Tag key="status" children={o.status} />)
+      badges.push(<Tag key="status" children={o.status} />);
     }
 
     return (
@@ -106,8 +106,8 @@ const Collection = (props) => {
 
         {o.childNodes.map((p) => renderPost(p, level + 1))}
       </React.Fragment>
-    )
-  }
+    );
+  };
 
   return (
     <CmsLayout pageTitle={title}>
@@ -133,8 +133,8 @@ const Collection = (props) => {
 
       {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
     </CmsLayout>
-  )
-}
+  );
+};
 
 const Tag = styled.span`
   display: inline-block;
@@ -165,6 +165,6 @@ const Tag = styled.span`
       background: ${colors.warning};
       color: #fff;
     `}
-`
+`;
 
-export default Collection
+export default Collection;

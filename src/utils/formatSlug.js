@@ -1,14 +1,14 @@
-import slugify from 'slugify'
+import slugify from 'slugify';
 
-export default function(slug) {
-  let formattedSlug = slugify(slug, { lower: true, remove: /[*+~.()'"!:@]/g })
+export default function (slug) {
+  let formattedSlug = slugify(slug, { lower: true, remove: /[*+~.()'"!:@]/g });
 
   formattedSlug = formattedSlug
     .split('/')
-    .filter(s => !!s)
-    .join('/')
+    .filter((s) => !!s)
+    .join('/');
 
-  formattedSlug = `/${formattedSlug}`
+  formattedSlug = `/${formattedSlug}`;
 
-  return formattedSlug
+  return formattedSlug;
 }

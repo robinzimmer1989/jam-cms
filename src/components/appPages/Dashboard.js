@@ -1,20 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Alert, Space } from 'antd'
+import React from 'react';
+import styled from 'styled-components';
+import { Alert, Space } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout'
+import CmsLayout from '../CmsLayout';
 
-import { useStore } from '../../store'
+import { useStore } from '../../store';
 
 const Dashboard = () => {
   const [
     {
       cmsState: { sites, siteID },
     },
-  ] = useStore()
+  ] = useStore();
 
-  const errors = sites?.[siteID]?.errors
+  const errors = sites?.[siteID]?.errors;
 
   return (
     <>
@@ -23,16 +23,16 @@ const Dashboard = () => {
           {errors && (
             <Space direction="vertical">
               {errors.map((o, i) => {
-                return <Alert key={i} message={o.title} description={o.description} type="error" showIcon />
+                return <Alert key={i} message={o.title} description={o.description} type="error" showIcon />;
               })}
             </Space>
           )}
         </Container>
       </CmsLayout>
     </>
-  )
-}
+  );
+};
 
-const Container = styled.div``
+const Container = styled.div``;
 
-export default Dashboard
+export default Dashboard;

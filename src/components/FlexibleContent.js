@@ -1,11 +1,11 @@
-import React from 'react'
-import { Button, Empty } from 'antd'
+import React from 'react';
+import { Button, Empty } from 'antd';
 
 // import app components
-import BlockWrapper from './BlockWrapper'
+import BlockWrapper from './BlockWrapper';
 
-import { convertToPropsSchema } from '../utils'
-import { useStore } from '../store'
+import { convertToPropsSchema } from '../utils';
+import { useStore } from '../store';
 
 const FlexibleContent = (props) => {
   const {
@@ -18,24 +18,24 @@ const FlexibleContent = (props) => {
     isTemplate,
     onOpenDialog,
     onMoveElement,
-  } = props
+  } = props;
 
   const [
     {
       editorState: { site },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const Header = blocks?.['header']?.component
+  const Header = blocks?.['header']?.component;
   const header = !!Header && site?.settings?.header && (
     <Header {...convertToPropsSchema([site.settings.header])[0].data} />
-  )
+  );
 
-  const Footer = blocks?.['footer']?.component
+  const Footer = blocks?.['footer']?.component;
   const footer = !!Footer && site?.settings?.footer && (
     <Footer {...convertToPropsSchema([site.settings.footer])[0].data} />
-  )
+  );
 
   const generateWrapper = (component, index, settings = null) => {
     return (
@@ -50,8 +50,8 @@ const FlexibleContent = (props) => {
         children={component}
         settings={settings}
       />
-    )
-  }
+    );
+  };
 
   return (
     site && (
@@ -61,17 +61,17 @@ const FlexibleContent = (props) => {
         {renderedBlocks.length > 0 || children ? (
           <>
             {renderedBlocks.map(({ name, data }, index) => {
-              const Component = blocks?.[name]?.component
+              const Component = blocks?.[name]?.component;
 
               if (Component) {
                 // Extract global settings from data, so we can apply it to the block wrapper in the next step.
                 // This way the settings don't have to be applied for each block separately.
-                const { settings, ...rest } = data
+                const { settings, ...rest } = data;
                 return editable ? (
                   generateWrapper(<Component {...rest} />, index, settings)
                 ) : (
                   <Component key={index} {...rest} />
-                )
+                );
               }
             })}
 
@@ -96,7 +96,7 @@ const FlexibleContent = (props) => {
         {footer && (editableFooter && editable ? generateWrapper(footer, 'footer') : footer)}
       </>
     )
-  )
-}
+  );
+};
 
-export default FlexibleContent
+export default FlexibleContent;

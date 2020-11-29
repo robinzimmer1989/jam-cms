@@ -1,56 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { PageHeader, Select } from 'antd'
-import { navigate } from '@reach/router'
-import styled from 'styled-components'
+import React, { useState, useEffect } from 'react';
+import { PageHeader, Select } from 'antd';
+import { navigate } from '@reach/router';
+import styled from 'styled-components';
 
 // import app components
-import PageWrapper from '../PageWrapper'
-import FlexibleContent from '../FlexibleContent'
-import ViewToggle from '../ViewToggle'
+import PageWrapper from '../PageWrapper';
+import FlexibleContent from '../FlexibleContent';
+import ViewToggle from '../ViewToggle';
 
-import { formatBlocks } from '../../utils'
-import getRoute from '../../routes'
-import { useStore } from '../../store'
+import { formatBlocks } from '../../utils';
+import getRoute from '../../routes';
+import { useStore } from '../../store';
 
 const Development = (props) => {
-  const { blocks, theme } = props
+  const { blocks, theme } = props;
 
   const [
     {
       cmsState: { sites, siteID },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const [activeBlocks, setActiveBlocks] = useState([])
+  const [activeBlocks, setActiveBlocks] = useState([]);
 
   useEffect(() => {
     dispatch({
       type: `ADD_EDITOR_SITE`,
       payload: sites[siteID],
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const localBlocks = localStorage.getItem('jam-cms-blocks')
+      const localBlocks = localStorage.getItem('jam-cms-blocks');
 
       if (localBlocks) {
-        setActiveBlocks(JSON.parse(localBlocks))
+        setActiveBlocks(JSON.parse(localBlocks));
       } else {
-        setActiveBlocks(Object.keys(blocks).filter((key) => key !== 'header' && key !== 'footer'))
+        setActiveBlocks(Object.keys(blocks).filter((key) => key !== 'header' && key !== 'footer'));
       }
     }
-  }, [])
+  }, []);
 
   const handleSelect = (v) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('jam-cms-blocks', JSON.stringify(v))
-      setActiveBlocks(v)
+      localStorage.setItem('jam-cms-blocks', JSON.stringify(v));
+      setActiveBlocks(v);
     }
-  }
+  };
 
-  const renderedBlocks = activeBlocks.map((key) => blocks[key].fields)
+  const renderedBlocks = activeBlocks.map((key) => blocks[key].fields);
 
   return (
     <>
@@ -77,7 +77,7 @@ const Development = (props) => {
                         value={key}
                         children={blocks[key].fields.label || blocks[key].fields.name}
                       />
-                    )
+                    );
                   })}
               </Select>
             </SelectContainer>,
@@ -99,16 +99,16 @@ const Development = (props) => {
         />
       </PageWrapper>
     </>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   padding: 0 20px;
-`
+`;
 
 const SelectContainer = styled.div`
   margin-right: 40px;
   min-width: 400px;
-`
+`;
 
-export default Development
+export default Development;

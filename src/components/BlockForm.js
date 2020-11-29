@@ -1,20 +1,20 @@
-import React from 'react'
-import { Button } from 'antd'
+import React from 'react';
+import { Button } from 'antd';
 
 // import app components
-import { useStore } from '../store'
+import { useStore } from '../store';
 
 const BlockForm = (props) => {
-  const { index, onSelect, blocks } = props
+  const { index, onSelect, blocks } = props;
 
-  const [, dispatch] = useStore()
+  const [, dispatch] = useStore();
 
   const handleSelect = (name) => {
-    onSelect(name, index)
+    onSelect(name, index);
 
-    dispatch({ type: 'SET_EDITOR_INDEX', payload: index })
-    dispatch({ type: 'CLOSE_DIALOG' })
-  }
+    dispatch({ type: 'SET_EDITOR_INDEX', payload: index });
+    dispatch({ type: 'CLOSE_DIALOG' });
+  };
 
   return (
     <>
@@ -23,7 +23,7 @@ const BlockForm = (props) => {
           .filter((key) => key !== 'header' && key !== 'footer')
           .map((key) => <Button key={key} children={blocks[key].fields.label} onClick={() => handleSelect(key)} />)}
     </>
-  )
-}
+  );
+};
 
-export default BlockForm
+export default BlockForm;

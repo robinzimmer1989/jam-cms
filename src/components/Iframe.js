@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheetManager, createGlobalStyle } from 'styled-components'
-import Frame, { FrameContextConsumer } from 'react-frame-component'
+import React, { useEffect, useState } from 'react';
+import { StyleSheetManager, createGlobalStyle } from 'styled-components';
+import Frame, { FrameContextConsumer } from 'react-frame-component';
 
-import { useStore } from '../store'
-import Fonts from './Fonts'
+import { useStore } from '../store';
+import Fonts from './Fonts';
 
 const Iframe = ({ theme, children }) => {
   const [
     {
       editorState: { viewport },
     },
-  ] = useStore()
+  ] = useStore();
 
-  const iframeRef = React.createRef()
+  const iframeRef = React.createRef();
 
-  const [height, setHeight] = useState(0)
+  const [height, setHeight] = useState(0);
 
   const handleResize = (iframe) => {
     if (viewport === 'fullscreen') {
-      typeof window !== `undefined` && setHeight(window.innerHeight)
+      typeof window !== `undefined` && setHeight(window.innerHeight);
     } else if (
       iframe.current &&
       iframe.current.node &&
@@ -26,11 +26,11 @@ const Iframe = ({ theme, children }) => {
       iframe.current.node.contentDocument.body.scrollHeight !== 0
     ) {
       // Calculate height automatically based on body height of iframe
-      setHeight(iframe.current.node.contentDocument.body.scrollHeight + 30)
+      setHeight(iframe.current.node.contentDocument.body.scrollHeight + 30);
     }
-  }
+  };
 
-  useEffect(() => handleResize(iframeRef), [children, viewport])
+  useEffect(() => handleResize(iframeRef), [children, viewport]);
 
   return (
     <div>
@@ -48,8 +48,8 @@ const Iframe = ({ theme, children }) => {
         </FrameContextConsumer>
       </Frame>
     </div>
-  )
-}
+  );
+};
 
 const ThemeCSS = createGlobalStyle`
   ${({ theme }) => theme.css}
@@ -94,6 +94,6 @@ const ThemeCSS = createGlobalStyle`
       }
     }
   }
-`
+`;
 
-export default Iframe
+export default Iframe;

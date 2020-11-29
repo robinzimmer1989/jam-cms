@@ -1,7 +1,7 @@
-import React from 'react'
-import { Link } from '@reach/router'
-import styled from 'styled-components'
-import { PageHeader, Layout, Menu, Divider } from 'antd'
+import React from 'react';
+import { Link } from '@reach/router';
+import styled from 'styled-components';
+import { PageHeader, Layout, Menu, Divider } from 'antd';
 import {
   PieChartOutlined,
   BlockOutlined,
@@ -9,17 +9,17 @@ import {
   FormOutlined,
   FolderOpenOutlined,
   CodeOutlined,
-} from '@ant-design/icons'
+} from '@ant-design/icons';
 
 // import app components
-import Edges from './Edges'
-import CmsHeader from './CmsHeader'
+import Edges from './Edges';
+import CmsHeader from './CmsHeader';
 
-import { useStore } from '../store'
-import getRoute from '../routes'
+import { useStore } from '../store';
+import getRoute from '../routes';
 
 const CmsLayout = (props) => {
-  const { pageTitle, actionBar, rightSidebar, children } = props
+  const { pageTitle, actionBar, rightSidebar, children } = props;
 
   const [
     {
@@ -28,9 +28,9 @@ const CmsLayout = (props) => {
       cmsState: { siteID, sites },
     },
     dispatch,
-  ] = useStore()
+  ] = useStore();
 
-  const site = sites[siteID] || null
+  const site = sites[siteID] || null;
 
   return (
     <Container>
@@ -67,7 +67,7 @@ const CmsLayout = (props) => {
                     <Menu.Item key={o.title}>
                       <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}> {o.title}</Link>
                     </Menu.Item>
-                  )
+                  );
                 })}
             </Menu.SubMenu>
 
@@ -143,15 +143,15 @@ const CmsLayout = (props) => {
         </Layout.Sider>
       )}
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled(Layout)`
   .sider,
   .sider * {
     transition: none !important;
   }
-`
+`;
 
 const StyledPageHeader = styled(PageHeader)`
   .ant-page-header-heading-left {
@@ -164,10 +164,10 @@ const StyledPageHeader = styled(PageHeader)`
     text-align: center;
     color: #fff;
   }
-`
+`;
 
 const StyledDivider = styled(Divider)`
   margin: 8px 0 32px;
-`
+`;
 
-export default CmsLayout
+export default CmsLayout;

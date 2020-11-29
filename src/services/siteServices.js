@@ -1,41 +1,41 @@
-import produce from 'immer'
-import { get } from 'lodash'
+import produce from 'immer';
+import { get } from 'lodash';
 
 // import app components
-import { db } from '.'
+import { db } from '.';
 
 export const getSites = async () => {
-  let result = await db('getSites', {})
+  let result = await db('getSites', {});
 
   if (result) {
     result = result.reduce((obj, item) => {
-      obj[item.id] = item
-      return obj
-    }, {})
+      obj[item.id] = item;
+      return obj;
+    }, {});
   }
 
-  return result
-}
+  return result;
+};
 
 export const getSite = async ({ siteID }) => {
-  let result = await db('getSite', { siteID })
+  let result = await db('getSite', { siteID });
 
   if (result) {
-    result = transformSite(result)
+    result = transformSite(result);
   }
 
-  return result
-}
+  return result;
+};
 
 export const addSite = async ({ title }) => {
-  let result = await db('createSite', { title })
+  let result = await db('createSite', { title });
 
   if (result) {
-    result = transformSite(result)
+    result = transformSite(result);
   }
 
-  return result
-}
+  return result;
+};
 
 export const updateSite = async ({
   id,
@@ -56,24 +56,24 @@ export const updateSite = async ({
     deploymentBadgeImage,
     deploymentBadgeLink,
     apiKey,
-  })
+  });
 
   if (result) {
-    result = transformSite(result)
+    result = transformSite(result);
   }
 
-  return result
-}
+  return result;
+};
 
 export const deleteSite = async ({ id }) => {
-  let result = await db('deleteSite', { id })
+  let result = await db('deleteSite', { id });
 
   if (result) {
-    result = transformSite(result)
+    result = transformSite(result);
   }
 
-  return result
-}
+  return result;
+};
 
 const transformSite = (site) => {
   const nextSite = produce(site, (draft) => {
@@ -87,20 +87,20 @@ const transformSite = (site) => {
               [a.id]: a,
             }),
             {}
-          ))
+          ));
         }
 
-        return null
-      })
+        return null;
+      });
 
-      draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
+      draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});
     }
 
     // Convert forms to object structure
     if (get(draft, `forms.items`)) {
-      draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {})
+      draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});
     }
-  })
+  });
 
-  return nextSite
-}
+  return nextSite;
+};

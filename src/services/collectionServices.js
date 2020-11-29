@@ -1,14 +1,14 @@
-import { db } from '.'
+import { db } from '.';
 
 export const addCollection = async ({ siteID, title, slug }) => {
-  let result = await db('createCollection', { siteID, title, slug })
+  let result = await db('createCollection', { siteID, title, slug });
 
   if (result) {
-    result.posts = []
+    result.posts = [];
   }
 
-  return result
-}
+  return result;
+};
 
 export const updateCollection = async ({ siteID, id, title, slug, template }) => {
   let result = await db('updateCollection', {
@@ -17,11 +17,11 @@ export const updateCollection = async ({ siteID, id, title, slug, template }) =>
     title,
     slug,
     template: template ? JSON.stringify(template) : null,
-  })
-  return result
-}
+  });
+  return result;
+};
 
 export const deleteCollection = async ({ siteID, id }) => {
-  let result = await db('deleteCollection', { siteID, id })
-  return result
-}
+  let result = await db('deleteCollection', { siteID, id });
+  return result;
+};
