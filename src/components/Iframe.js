@@ -71,14 +71,12 @@ const ThemeCSS = createGlobalStyle`
     }
 
     .ant-btn-primary {
-      color: #fff;
       background: #1890ff;
       border: 1px solid #1890ff;
       text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
       box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
       height: 32px;
       padding: 4px 15px;
-      font-size: 14px;
       border-radius: 2px;
       outline: 0;
       cursor: pointer;
@@ -87,6 +85,12 @@ const ThemeCSS = createGlobalStyle`
         color: #fff;
         background: #40a9ff;
         border-color: #40a9ff;
+      }
+
+      span {
+        color: #fff;
+        font-size: 14px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !important;
       }
     }
   }
