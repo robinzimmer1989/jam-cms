@@ -1,6 +1,6 @@
 {
   "name": "jam-cms",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
