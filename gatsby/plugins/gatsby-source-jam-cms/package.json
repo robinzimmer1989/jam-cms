@@ -1,0 +1,31 @@
+{
+  "name": "gatsby-source-jam-cms",
+  "version": "0.0.1",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "cross-env": "5.0.5",
+    "gatsby": "^2.24.67",
+    "gatsby-plugin-sharp": "^2.6.36",
+    "gatsby-transformer-sharp": "^2.5.15"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinzimmer1989/gatsby-source-jam-cms.git"
+  },
+  "keywords": [
+    "gatsby",
+    "jam-cms"
+  ],
+  "author": "Robin Zimmer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robinzimmer1989/gatsby-source-jam-cms/issues"
+  },
+  "homepage": "https://github.com/robinzimmer1989/gatsby-source-jam-cms#readme",
+  "description": ""
+}
