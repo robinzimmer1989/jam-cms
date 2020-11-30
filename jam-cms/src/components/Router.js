@@ -58,18 +58,32 @@ const Router = (props) => {
         <Dashboard path="/" />
         <Media path={`${ROUTE_MEDIA}`} />
         <Collection path={`${ROUTE_COLLECTIONS}/:postTypeID`} />
-        <PostEditor path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`} theme={theme} blocks={blocks} />
+        <PostEditor
+          path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`}
+          theme={theme}
+          blocks={blocks}
+        />
         {/* <Forms path={ROUTE_FORMS} /> */}
         {/* <Form path={`${ROUTE_FORMS}/:formID`} /> */}
         {/* <Seo path={ROUTE_SETTINGS_SEO} /> */}
-        {authUser?.capabilities?.manage_options && <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />}
-        {authUser?.capabilities?.manage_options && <Collections path={ROUTE_SETTINGS_COLLECTIONS} />}
         {authUser?.capabilities?.manage_options && (
-          <CollectionEditor path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`} theme={theme} blocks={blocks} />
+          <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
+        )}
+        {authUser?.capabilities?.manage_options && (
+          <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
+        )}
+        {authUser?.capabilities?.manage_options && (
+          <CollectionEditor
+            path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`}
+            theme={theme}
+            blocks={blocks}
+          />
         )}
         {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
 
-        {process.env.NODE_ENV === 'development' && <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />}
+        {process.env.NODE_ENV === 'development' && (
+          <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />
+        )}
       </ReachRouter>
     </>
   );
