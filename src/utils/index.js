@@ -12,6 +12,7 @@ import formatFieldForDevelopment from './formatFieldForDevelopment';
 import formatBlocks from './formatBlocks';
 import * as auth from './auth';
 import generateRandomString from './generateRandomString';
+import convertFileSize from './convertFileSize';
 
 export {
   createDataTree,
@@ -28,4 +29,5 @@ export {
   formatBlocks,
   auth,
   generateRandomString,
+  convertFileSize,
 };
