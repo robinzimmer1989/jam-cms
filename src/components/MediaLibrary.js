@@ -27,6 +27,7 @@ const MediaLibrary = (props) => {
 
   const [activeFile, setActiveFile] = useState(null);
   const [uploader, setUploader] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     loadMediaItems(page || 0);
@@ -46,12 +47,15 @@ const MediaLibrary = (props) => {
     } = info;
 
     if (status !== 'uploading') {
+      setLoading(true);
       await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch);
     }
     if (status === 'done') {
       message.success(`${name} file uploaded successfully.`);
+      setLoading(false);
     } else if (status === 'error') {
       message.error(`${name} file upload failed.`);
+      setLoading(false);
     }
   };
 
@@ -65,7 +69,13 @@ const MediaLibrary = (props) => {
   return (
     <>
       <Space direction="vertical" size={20}>
-        <Button icon={<UploadOutlined />} children="Upload" type="primary" onClick={() => setUploader(!uploader)} />
+        <Button
+          icon={<UploadOutlined />}
+          children="Upload"
+          type="primary"
+          onClick={() => setUploader(!uploader)}
+          loading={loading}
+        />
 
         {uploader && (
           <Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
@@ -125,7 +135,11 @@ const MediaLibrary = (props) => {
           width={1024}
         >
           {activeFile && (
-            <MediaImage file={activeFile} onSelect={onSelect && handleSelect} onClose={handleCloseDialog} />
+            <MediaImage
+              file={activeFile}
+              onSelect={onSelect && handleSelect}
+              onClose={handleCloseDialog}
+            />
           )}
         </Modal>
       )}
