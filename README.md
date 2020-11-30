@@ -30,7 +30,7 @@ It's optimized for Gatsby, but (theoretically) it could also be used with any ot
 
 ### 1. Set up WordPress
 
-Install the following the plugins:
+Install the following plugins:
 
 - Advanced Custom Fields PRO
 - Custom Post Type UI
@@ -75,7 +75,7 @@ Run
 gatsby develop
 ```
 
-Visit https:localhost:8000/cms
+Visit https:localhost:8000/cms and login with your WordPress credentials.
 
 ## Development
 
@@ -111,9 +111,9 @@ export default {
 The "blocks" property is an object of all the content blocks. Each block has a fields object and the actual React component.
 
 ```
-import Header, { fields as headerFields } from './components/blocks/Header'
-import Footer, { fields as footerFields } from './components/blocks/Footer'
-import Banner, { fields as bannerFields } from './components/blocks/Banner'
+import Header, { fields as headerFields } from './Header'
+import Footer, { fields as footerFields } from './Footer'
+import Banner, { fields as bannerFields } from './Banner'
 
 const blocks = {
   header: {
@@ -172,7 +172,7 @@ export default Banner
 
 ## Supported field types
 
-At the moment, not all ACF field types are supported but I'm working on it.
+The following field types are supported. More to come.
 
 #### Text
 
