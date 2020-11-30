@@ -38,10 +38,7 @@ export const sitesReducer = (state, action) => {
         break;
 
       case `UPDATE_COLLECTION`:
-        set(draft, `sites.${payload.siteID}.postTypes.${payload.id}`, {
-          ...get(draft, `sites.${payload.siteID}.postTypes.${payload.id}`),
-          ...payload,
-        });
+        set(draft, `sites.${payload.siteID}.postTypes.${payload.id}`, payload);
         break;
 
       case `DELETE_COLLECTION`:
@@ -63,7 +60,11 @@ export const sitesReducer = (state, action) => {
        * Posts
        ******************************/
       case `ADD_POST`:
-        set(draft, `sites.${payload.siteID}.postTypes.${payload.postTypeID}.posts.${payload.id}`, payload);
+        set(
+          draft,
+          `sites.${payload.siteID}.postTypes.${payload.postTypeID}.posts.${payload.id}`,
+          payload
+        );
         break;
 
       case `DELETE_POST`:
@@ -88,9 +89,9 @@ export const sitesReducer = (state, action) => {
         break;
 
       case `DELETE_MEDIA_ITEM`:
-        draft.sites[payload.siteID].mediaItems.items = draft.sites[payload.siteID].mediaItems.items.filter(
-          (o) => o.id !== payload.id
-        );
+        draft.sites[payload.siteID].mediaItems.items = draft.sites[
+          payload.siteID
+        ].mediaItems.items.filter((o) => o.id !== payload.id);
         break;
 
       /******************************
