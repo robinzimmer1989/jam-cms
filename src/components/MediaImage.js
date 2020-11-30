@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Space, Row, Col, Popconfirm, message } from 'antd';
+import { Button, Space, Row, Col, Popconfirm, message, Typography } from 'antd';
 import Img from 'gatsby-image';
 
 // import app components
+import Caption from './Caption';
 import Input from './Input';
 
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
+import { convertFileSize } from '../utils';
 
 const MediaImage = (props) => {
   const { file, onSelect, onClose } = props;
@@ -44,7 +46,7 @@ const MediaImage = (props) => {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={12}>
+        <Col span={12} style={{ border: '1px solid #f0f0f0' }}>
           {file.type === 'image' && file?.childImageSharp?.fluid && (
             <Img
               fluid={file.childImageSharp.fluid}
@@ -71,40 +73,93 @@ const MediaImage = (props) => {
           )}
         </Col>
         <Col span={12}>
-          <Content span={12}>
-            <Space direction="vertical">
-              <Input
-                label="Alternative Text"
-                value={data.altText}
-                onChange={handleChange}
-                name={`altText`}
-              />
+          <Space direction="vertical" size={20}>
+            <Content span={12}>
+              <Space direction="vertical">
+                <Row gutter={[8, 8]} align="middle">
+                  {data?.filename && (
+                    <>
+                      <Col span={6}>
+                        <Caption children="File name" />
+                      </Col>
+                      <Col span={18}>
+                        <Typography children={data.filename} />
+                      </Col>
+                    </>
+                  )}
 
-              <Space>
-                <Popconfirm
-                  title="Are you sure?"
-                  onConfirm={handlDeleteMediaItem}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button children={`Delete`} danger loading={loading === 'delete'} />
-                </Popconfirm>
+                  {data?.type && data?.subtype && (
+                    <>
+                      <Col span={6}>
+                        <Caption children="Type" />
+                      </Col>
+                      <Col span={18}>
+                        <Typography children={`${data.type}/${data.subtype}`} />
+                      </Col>
+                    </>
+                  )}
 
-                <Button
-                  onClick={handleUpdateMediaItem}
-                  children={`Update Image`}
-                  type="primary"
-                  loading={loading === 'update'}
+                  {data?.filesize && (
+                    <>
+                      <Col span={6}>
+                        <Caption children="File size" />
+                      </Col>
+                      <Col span={18}>
+                        <Typography children={convertFileSize(data.filesize)} />
+                      </Col>
+                    </>
+                  )}
+
+                  {data?.width && data?.height && (
+                    <>
+                      <Col span={6}>
+                        <Caption children="Dimensions" />
+                      </Col>
+                      <Col span={18}>
+                        <Typography children={`${data.width} by ${data.height} pixels`} />
+                      </Col>
+                    </>
+                  )}
+                </Row>
+
+                <Input
+                  label="Alternative Text"
+                  value={data.altText}
+                  onChange={handleChange}
+                  name={`altText`}
                 />
-              </Space>
-            </Space>
 
-            <Space>
+                <Input label="Url" value={data.url} onChange={() => {}} name={`url`} disabled />
+                <Typography.Paragraph copyable={{ text: data.url }} children={'Copy Link'} />
+              </Space>
+            </Content>
+
+            <Row justify="space-between">
+              <Col>
+                <Space>
+                  <Popconfirm
+                    title="Are you sure?"
+                    onConfirm={handlDeleteMediaItem}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button children={`Delete`} danger loading={loading === 'delete'} />
+                  </Popconfirm>
+
+                  <Button
+                    onClick={handleUpdateMediaItem}
+                    children={`Update Image`}
+                    loading={loading === 'update'}
+                  />
+                </Space>
+              </Col>
               {onSelect && (
-                <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />
+                <Col>
+                  <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />
+                </Col>
               )}
-            </Space>
-          </Content>
+            </Row>
+          </Space>
         </Col>
       </Row>
     </>
@@ -116,7 +171,6 @@ const Content = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  height: 100%;
   min-height: 300px;
 `;
 
