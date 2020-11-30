@@ -8,6 +8,8 @@ dist
 .rpt2_cache
 
 # misc
+jam-cms/README.md
+gatsby/public
 .DS_Store
 .env
 .env.local
