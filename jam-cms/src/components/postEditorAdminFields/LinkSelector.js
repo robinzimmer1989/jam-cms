@@ -14,14 +14,18 @@ const LinkSelector = (props) => {
   return (
     <Space direction="vertical" size={20}>
       <Input
-        value={value.title || ''}
+        value={value?.title || ''}
         placeholder={placeholder || ''}
         onChange={(e) => handleChange('title', e.target.value)}
       />
-      <Input value={value.url || ''} placeholder={'https://'} onChange={(e) => handleChange('url', e.target.value)} />
+      <Input
+        value={value?.url || ''}
+        placeholder={'https://'}
+        onChange={(e) => handleChange('url', e.target.value)}
+      />
       <Checkbox
         value={'_blank'}
-        checked={value.target || false}
+        checked={value?.target || false}
         onChange={(e) => handleChange('target', e.target.checked ? e.target.value : '')}
         children="Open in new tab"
       />
