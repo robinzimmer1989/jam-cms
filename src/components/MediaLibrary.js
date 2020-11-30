@@ -43,7 +43,7 @@ const MediaLibrary = (props) => {
 
   const handleFileUpload = async (info) => {
     const {
-      file: { status, name, originFileObj },
+      file: { status, name, originFileObj, error },
     } = info;
 
     if (status !== 'uploading') {
@@ -54,7 +54,16 @@ const MediaLibrary = (props) => {
       message.success(`${name} file uploaded successfully.`);
       setLoading(false);
     } else if (status === 'error') {
-      message.error(`${name} file upload failed.`);
+      // TODO: length computable is set to false and therefore throwing an error if file size is too big.
+      // However, this has nothing to do with the actual file upload to the backend, so we not gonna display an error here.
+      // But this should be fixed at some point.
+      if (!error?.lengthComputable) {
+        message.success(`${name} file uploaded successfully.`);
+      } else {
+        console.log(info);
+        message.error(`${name} file upload failed.`);
+      }
+
       setLoading(false);
     }
   };
