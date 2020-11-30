@@ -58,18 +58,22 @@ or
 npm i
 ```
 
-Create .env.development in root directory with the following content (replace {{WordPress URL}} with the correct backend url)
+Create .env.development in root directory with the following content (replace {{WordPress URL}} with the correct backend url). The variable GATSBY_CMS_API_KEY is relevant for building the site. You can retrieve an API key once you're logged-in under Settings -> General.
 
 ```
 GATSBY_CMS_SOURCE={{WordPress URL}}/wp-json/jamcms/v1
 GATSBY_CMS_AUTH={{WordPress URL}}/wp-json/jwt-auth/v1/token
-GATSBY_CMS_ROUTE=cms
 GATSBY_CMS_API_KEY=
 ```
 
-If you wanna change the backend route to something else, you also have to replace the path for gatsby-plugin-create-client-paths in gatsby-config.js and rename the page in /src/pages/cms.js.
+Optional variables:
 
-The variable GATSBY_CMS_API_KEY is relevant for building the site. You can retrieve an API key once you're logged-in under Settings -> General.
+```
+GATSBY_CMS_LOCAL_STORAGE_KEY=jam-cms-user
+GATSBY_CMS_ROUTE=cms
+```
+
+If you wanna change the backend route from 'cms' to something else, you also have to replace the path for gatsby-plugin-create-client-paths in gatsby-config.js and rename the page in /src/pages/cms.js.
 
 Run
 
