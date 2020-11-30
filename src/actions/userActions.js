@@ -1,4 +1,8 @@
+import { navigate } from '@reach/router';
+
 import { userServices } from '../services';
+import { auth } from '../utils';
+import getRoute from '../routes';
 
 export const addUser = async ({ siteID, email, role }, dispatch) => {
   const result = await userServices.addUser({ siteID, email, role });
@@ -14,7 +18,11 @@ export const getAuthUser = async ({}, dispatch) => {
   const result = await userServices.getAuthUser();
 
   if (result) {
-    dispatch({ type: `ADD_AUTH_USER`, payload: result });
+    if (result.hasOwnProperty('success') && !result.success) {
+      auth.logout(() => navigate(getRoute(`sign-in`)));
+    } else {
+      dispatch({ type: `ADD_AUTH_USER`, payload: result });
+    }
   }
 
   return result;
