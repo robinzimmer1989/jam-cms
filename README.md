@@ -303,6 +303,7 @@ The project is still in an early alpha version with many changes to come. Here a
 
 ## Roadmap
 
+- Tests (!!!)
 - Dashboard (Analytics integration)
 - Add more ACF fields
 - Add link selector similiar to WordPress
