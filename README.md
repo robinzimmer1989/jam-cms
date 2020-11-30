@@ -30,7 +30,7 @@ It's optimized for Gatsby, but (theoretically) it can also be used with any othe
 
 ## Get Started
 
-### 1. Set up WordPress
+### 1. WordPress
 
 Install the following plugins:
 
@@ -42,9 +42,9 @@ Install the following plugins:
 - Classic Editor
 - jamCMS (download from here: https://github.com/robinzimmer1989/jam-cms-wordpress)
 
-### 2. Set up with Gatsby starter theme
+### 2. Gatsby
 
-Download jam-cms-gatsby-starter from here: https://github.com/robinzimmer1989/jam-cms-gatsby-starter
+Download / Fork repository
 
 Run
 
@@ -52,13 +52,7 @@ Run
 yarn
 ```
 
-or
-
-```
-npm i
-```
-
-Create .env.development in root directory with the following content (replace {{WordPress URL}} with the correct backend url). The variable GATSBY_CMS_API_KEY is relevant for building the site. You can retrieve an API key once you're logged-in under Settings -> General.
+Create .env.development in 'gatsby' subdirectory with the following content (replace {{WordPress URL}} with the correct backend url). The variable GATSBY_CMS_API_KEY is relevant for building the site. You can retrieve an API key once you're logged-in under Settings -> General.
 
 ```
 GATSBY_CMS_SOURCE={{WordPress URL}}/wp-json/jamcms/v1

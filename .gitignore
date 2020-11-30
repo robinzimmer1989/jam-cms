@@ -1,11 +1,9 @@
-
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
 node_modules
 
 # builds
-build
 dist
 .rpt2_cache
 
@@ -13,8 +11,10 @@ dist
 .DS_Store
 .env
 .env.local
+.env.development
 .env.development.local
 .env.test.local
+.env.production
 .env.production.local
 .cache
 
