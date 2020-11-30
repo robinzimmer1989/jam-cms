@@ -7,7 +7,7 @@
 jamCMS is a layer on top of other CMS's like WordPress.
 Technically it can connect to any CMS or data source, but it works best with WordPress at the moment.
 
-It's optimized for Gatsby, but (theoretically) it could also be used with any other React framework.
+It's optimized for Gatsby, but (theoretically) it can also be used with any other React framework.
 
 ## Reasons to use jamCMS
 
@@ -36,7 +36,7 @@ Install the following plugins:
 
 - Advanced Custom Fields PRO
 - Custom Post Type UI
-- JWT Auth by Useful Team (follow the plugin instructions)
+- JWT Auth by Useful Team (follow the plugin instructions and enable pretty permalinks)
 - Yoast SEO
 - JAMstack Deployments
 - Classic Editor
