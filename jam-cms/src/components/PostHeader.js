@@ -48,7 +48,7 @@ const EditorPostTitle = (props) => {
 
           {post?.id !== site?.frontPage && (
             <Typography.Paragraph
-              children={post?.slug}
+              children={formatSlug(post?.slug || '')}
               editable={{ onChange: (value) => handleChange('slug', formatSlug(value)) }}
             />
           )}

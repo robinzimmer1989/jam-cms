@@ -4,7 +4,7 @@ function getParentSlug(posts, parentID, slug = '') {
   let newSlug = slug;
 
   if (parentID && posts[parentID]) {
-    const parentSlug = posts[parentID].slug + newSlug;
+    const parentSlug = `${posts[parentID].slug}${newSlug}`;
     newSlug = getParentSlug(posts, posts[parentID].parentID, parentSlug);
   }
 
@@ -30,7 +30,7 @@ export default function generateSlug(postType, postID, frontPage) {
 
   const parentSlug = getParentSlug(posts, parentID);
 
-  const slug = formatSlug(`${postTypeSlug}${parentSlug}${postSlug}`);
+  const slug = formatSlug(`${postTypeSlug}/${parentSlug}/${postSlug}`);
 
   return slug;
 }
