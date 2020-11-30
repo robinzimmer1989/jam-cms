@@ -71,7 +71,7 @@ function App() {
 
 ## How to contribute
 
-Download / Fork repository
+Download / Fork https://github.com/robinzimmer1989/jam-cms
 
 Run
 
