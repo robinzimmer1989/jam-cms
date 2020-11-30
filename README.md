@@ -44,7 +44,7 @@ Install the following plugins:
 
 ### 2. Gatsby
 
-Download / Fork repository
+Download / Fork https://github.com/robinzimmer1989/jam-cms
 
 Run
 
