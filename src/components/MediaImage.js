@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Space, Row, Col, Popconfirm } from 'antd';
+import { Button, Space, Row, Col, Popconfirm, message } from 'antd';
 import Img from 'gatsby-image';
 
 // import app components
@@ -8,7 +8,6 @@ import Input from './Input';
 
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
-import { colors } from '../theme';
 
 const MediaImage = (props) => {
   const { file, onSelect, onClose } = props;
@@ -24,8 +23,12 @@ const MediaImage = (props) => {
     const { id, altText, siteID } = data;
 
     setLoading('update');
-    await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch);
+    const result = await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch);
     setLoading(false);
+
+    if (result) {
+      message.success(`Saved successfully.`);
+    }
   };
 
   const handlDeleteMediaItem = async () => {
@@ -70,10 +73,20 @@ const MediaImage = (props) => {
         <Col span={12}>
           <Content span={12}>
             <Space direction="vertical">
-              <Input label="Alternative Text" value={data.altText} onChange={handleChange} name={`altText`} />
+              <Input
+                label="Alternative Text"
+                value={data.altText}
+                onChange={handleChange}
+                name={`altText`}
+              />
 
               <Space>
-                <Popconfirm title="Are you sure?" onConfirm={handlDeleteMediaItem} okText="Yes" cancelText="No">
+                <Popconfirm
+                  title="Are you sure?"
+                  onConfirm={handlDeleteMediaItem}
+                  okText="Yes"
+                  cancelText="No"
+                >
                   <Button children={`Delete`} danger loading={loading === 'delete'} />
                 </Popconfirm>
 
@@ -86,7 +99,11 @@ const MediaImage = (props) => {
               </Space>
             </Space>
 
-            <Space>{onSelect && <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />}</Space>
+            <Space>
+              {onSelect && (
+                <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />
+              )}
+            </Space>
           </Content>
         </Col>
       </Row>
