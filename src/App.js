@@ -9,6 +9,7 @@ import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js/dist/Draft.css';
 
 // import app components
+import Loader from './components/Loader';
 import { StoreProvider } from './store';
 import { CmsStyles } from './theme';
 
@@ -21,12 +22,12 @@ const App = (props) => {
     <>
       <CmsStyles />
       <ThemeProvider theme={theme || {}}>
-        <div />
         <StoreProvider>
-          <div />
-          <React.Suspense fallback={<div />}>
-            <Master theme={theme} blocks={blocks} />
-          </React.Suspense>
+          {typeof window !== 'undefined' && (
+            <React.Suspense fallback={<Loader />}>
+              <Master theme={theme} blocks={blocks} />
+            </React.Suspense>
+          )}
         </StoreProvider>
       </ThemeProvider>
     </>
