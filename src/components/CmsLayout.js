@@ -14,6 +14,8 @@ import {
 // import app components
 import Edges from './Edges';
 import CmsHeader from './CmsHeader';
+import JamCmsLogo from '../icons/jamCMS.svg';
+import JamCmsLogoJar from '../icons/jamCMS_jar.svg';
 
 import { useStore } from '../store';
 import getRoute from '../routes';
@@ -49,7 +51,14 @@ const CmsLayout = (props) => {
         }}
       >
         <div>
-          <StyledPageHeader title={leftSidebar ? 'jamCMS' : 'j'} />
+          <StyledPageHeader
+            title={
+              <>
+                <JamCmsLogo className={`jam-cms-logo ${leftSidebar && `active`}`} />
+                <JamCmsLogoJar className={`jam-cms-logo-jar ${!leftSidebar && `active`}`} />
+              </>
+            }
+          />
 
           <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
             <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
@@ -65,7 +74,10 @@ const CmsLayout = (props) => {
                 Object.values(site.postTypes).map((o) => {
                   return (
                     <Menu.Item key={o.title}>
-                      <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}> {o.title}</Link>
+                      <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
+                        {' '}
+                        {o.title}
+                      </Link>
                     </Menu.Item>
                   );
                 })}
@@ -154,6 +166,28 @@ const Container = styled(Layout)`
 `;
 
 const StyledPageHeader = styled(PageHeader)`
+  .jam-cms-logo,
+  .jam-cms-logo-jar {
+    margin: 0 auto;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+
+    path {
+      fill: #f8f9ff;
+    }
+  }
+
+  .jam-cms-logo {
+    width: 100px;
+  }
+
+  .jam-cms-logo-jar {
+    width: 30px;
+  }
+
   .ant-page-header-heading-left {
     width: 100%;
   }
