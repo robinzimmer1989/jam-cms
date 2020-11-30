@@ -36,7 +36,10 @@ const Collection = (props) => {
   sortBy(filteredPosts, 'createdAt');
 
   const handleAddPost = async ({ title, slug, parentID }) => {
-    await postActions.addPost({ siteID, postTypeID, status: 'draft', title, slug, parentID }, dispatch);
+    await postActions.addPost(
+      { siteID, postTypeID, status: 'draft', title, slug, parentID },
+      dispatch
+    );
   };
 
   const handleDeletePost = async ({ postID }) => {
@@ -77,7 +80,12 @@ const Collection = (props) => {
       );
     } else {
       actions.unshift(
-        <Button size="small" onClick={() => handleTrashPost({ postID: o.id })} children={`Trash`} danger />
+        <Button
+          size="small"
+          onClick={() => handleTrashPost({ postID: o.id })}
+          children={`Trash`}
+          danger
+        />
       );
     }
 
