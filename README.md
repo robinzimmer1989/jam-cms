@@ -1,4 +1,6 @@
-# jamCMS - Alpha version
+<img src="https://github.com/robinzimmer1989/jam-cms/blob/master/src/icons/jamCMS.svg" alt="jamCMS Logo" />
+
+#### Alpha version
 
 ## Introduction
 
