@@ -1,10 +1,11 @@
 const isBrowser = typeof window !== `undefined`;
+const storageKey = process.env.GATSBY_CMS_LOCAL_STORAGE_KEY || 'jam-cms-user';
 
-export const setUser = (user) => (window.localStorage.gatsbyUser = JSON.stringify(user));
+export const setUser = (user) => (window.localStorage[storageKey] = JSON.stringify(user));
 
 export const getUser = () => {
-  if (window.localStorage.gatsbyUser) {
-    let user = JSON.parse(window.localStorage.gatsbyUser);
+  if (window.localStorage[storageKey]) {
+    let user = JSON.parse(window.localStorage[storageKey]);
     return user ? user : {};
   }
   return {};
