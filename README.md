@@ -42,7 +42,34 @@ Install the following plugins:
 - Classic Editor
 - jamCMS (download from here: https://github.com/robinzimmer1989/jam-cms-wordpress)
 
-### 2. Gatsby
+### 2. React
+
+##### Installation
+
+```
+// with yarn
+yarn add jam-cms
+
+// with npm
+npm i jam-cms
+```
+
+##### Usage
+
+Check out the 'How to contribute' and 'Development' section for more info.
+
+```
+import React from 'react';
+import JamCms from 'jam-cms'
+
+function App() {
+  return (
+    <JamCms blocks={blocks} theme={theme} />
+  );
+}
+```
+
+## How to contribute
 
 Download / Fork repository
 
