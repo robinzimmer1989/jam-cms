@@ -5,6 +5,7 @@ import { Button, Space } from 'antd';
 // import app components
 import MenuBuilder from './MenuBuilder';
 import MediaLibrary from './MediaLibrary';
+import LinkSelector from './LinkSelector';
 import Caption from './Caption';
 
 // Admin fields
@@ -15,7 +16,7 @@ import Wysiwyg from './postEditorAdminFields/Wysiwyg';
 import ImagePicker from './postEditorAdminFields/ImagePicker';
 import Menu from './postEditorAdminFields/Menu';
 import Repeater from './postEditorAdminFields/Repeater';
-import LinkSelector from './postEditorAdminFields/LinkSelector';
+import Link from './postEditorAdminFields/Link';
 import Select from './postEditorAdminFields/Select';
 import Number from './postEditorAdminFields/Number';
 import Settings from './postEditorAdminFields/Settings';
@@ -55,10 +56,25 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
 
     case 'link':
       component = (
-        <LinkSelector
+        <Link
           {...field}
-          onChange={({ title, url, target }) =>
-            onChangeElement({ ...field, value: { title, url, target } }, index)
+          onRemove={() => onChangeElement({ ...field, value: null }, index)}
+          onClick={() =>
+            dispatch({
+              type: `SET_DIALOG`,
+              payload: {
+                open: true,
+                title: 'Link',
+                component: (
+                  <LinkSelector
+                    index={index}
+                    {...field}
+                    onChange={(value) => onChangeElement({ ...field, value }, index)}
+                  />
+                ),
+                width: 500,
+              },
+            })
           }
         />
       );
@@ -154,7 +170,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                     onChange={(menu) => onChangeElement({ ...field, value: menu }, index)}
                   />
                 ),
-                width: 1000,
+                width: 1600,
               },
             })
           }
