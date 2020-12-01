@@ -27,6 +27,7 @@ It's optimized for Gatsby, but (theoretically) it can also be used with any othe
 - ACF fields are created automatically
 - Post Types are generated with one click
 - No risk. The CMS can be decoupled at any time
+- You can still use all backend plugins as usual (i.e. WP All Import)
 
 ## Get Started
 
