@@ -24,7 +24,7 @@ const ImagePicker = (props) => {
       </ImageContainer>
       <Buttons>
         <Space direction="vertical">
-          <Button children="Remove" onClick={onRemove} danger size="small" />
+          {value && <Button children="Remove" onClick={onRemove} danger size="small" />}
           <Button children={buttonText} onClick={onClick} size="small" />
         </Space>
       </Buttons>
