@@ -1,6 +1,6 @@
 {
   "name": "jam-cms",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@babel/polyfill": "^7.12.1",
@@ -40,7 +40,7 @@
     "styled-components": "^5.2.0"
   },
   "description": "",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "devDependencies": {
     "@babel/cli": "^7.12.8",
     "@babel/core": "^7.12.9",
@@ -64,6 +64,7 @@
   },
   "scripts": {
     "build": "rimraf dist && babel src --out-dir dist --ignore **/__tests__ --extensions \".ts,.js\"",
+    "watch": "babel -w src --out-dir dist --ignore **/__tests__ --verbose --extensions \".ts,.js\" --source-maps",
     "test": "echo \"Error: no test specified\"",
     "lint": "eslint --debug src/index.js"
   },
