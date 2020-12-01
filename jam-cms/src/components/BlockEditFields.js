@@ -27,37 +27,58 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
 
   switch (field.type) {
     case 'text':
-      component = <Text {...field} onChange={(e) => onChangeElement({ ...field, value: e.target.value }, index)} />;
+      component = (
+        <Text
+          {...field}
+          onChange={(e) => onChangeElement({ ...field, value: e.target.value }, index)}
+        />
+      );
       break;
 
     case 'wysiwyg':
       component = (
-        <Wysiwyg {...field} onChange={(editorState) => onChangeElement({ ...field, value: editorState }, index)} />
+        <Wysiwyg
+          {...field}
+          onChange={(editorState) => onChangeElement({ ...field, value: editorState }, index)}
+        />
       );
       break;
 
     case 'number':
-      component = <Number {...field} onChange={(number) => onChangeElement({ ...field, value: number }, index)} />;
+      component = (
+        <Number
+          {...field}
+          onChange={(number) => onChangeElement({ ...field, value: number }, index)}
+        />
+      );
       break;
 
     case 'link':
       component = (
         <LinkSelector
           {...field}
-          onChange={({ title, url, target }) => onChangeElement({ ...field, value: { title, url, target } }, index)}
+          onChange={({ title, url, target }) =>
+            onChangeElement({ ...field, value: { title, url, target } }, index)
+          }
         />
       );
       break;
 
     case 'select':
       component = (
-        <Select {...field} onChange={(optionValue) => onChangeElement({ ...field, value: optionValue }, index)} />
+        <Select
+          {...field}
+          onChange={(optionValue) => onChangeElement({ ...field, value: optionValue }, index)}
+        />
       );
       break;
 
     case 'settings':
       component = (
-        <Settings {...field} onChange={(newValue) => onChangeElement({ ...field, value: newValue }, index)} />
+        <Settings
+          {...field}
+          onChange={(newValue) => onChangeElement({ ...field, value: newValue }, index)}
+        />
       );
       break;
 
@@ -96,6 +117,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <ImagePicker
           {...field}
+          onRemove={() => onChangeElement({ ...field, value: null }, index)}
           onClick={() =>
             dispatch({
               type: `SET_DIALOG`,
@@ -164,8 +186,11 @@ const BlockEditFields = (props) => {
   return (
     <Container>
       <Space direction="vertical" size={30}>
-        {fields && fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
-        {!isTemplate && !isSiteComponent && <Button onClick={onDeleteElement} children={`Delete Block`} danger />}
+        {fields &&
+          fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
+        {!isTemplate && !isSiteComponent && (
+          <Button onClick={onDeleteElement} children={`Delete Block`} danger />
+        )}
       </Space>
     </Container>
   );

@@ -76,7 +76,11 @@ const PostSettings = () => {
     <Container>
       <Space direction="vertical" size={20}>
         <Skeleton done={!!post} height={32}>
-          <Select value={post?.status || ''} onChange={(value) => handleChangePost('status', value)} label={'Status'}>
+          <Select
+            value={post?.status || ''}
+            onChange={(value) => handleChangePost('status', value)}
+            label={'Status'}
+          >
             <AntSelect.Option value={'publish'} children={'Publish'} />
             <AntSelect.Option value={'draft'} children={'Draft'} />
             <AntSelect.Option value={'trash'} children={'Trash'} />
@@ -116,6 +120,7 @@ const PostSettings = () => {
               <Caption children="Featured Image" />
               <ImagePicker
                 value={post?.featuredImage}
+                onRemove={() => handleSelectImage(null)}
                 onClick={() =>
                   dispatch({
                     type: `SET_DIALOG`,
@@ -136,7 +141,9 @@ const PostSettings = () => {
             <Checkbox
               value={post?.id}
               checked={post?.id === site?.frontPage}
-              onChange={(e) => handleChangeSite('frontPage', e.target.checked ? e.target.value : '')}
+              onChange={(e) =>
+                handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
+              }
               children="Front Page"
             />
           </Skeleton>

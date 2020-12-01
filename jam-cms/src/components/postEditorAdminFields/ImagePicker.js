@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import styled from 'styled-components';
 import Img from 'gatsby-image';
 
@@ -7,7 +7,7 @@ import Img from 'gatsby-image';
 import { colors } from '../../theme';
 
 const ImagePicker = (props) => {
-  const { buttonText = 'Edit', onClick, value = '' } = props;
+  const { buttonText = 'Edit', onClick, onRemove, value = '' } = props;
 
   return (
     <Container>
@@ -22,8 +22,12 @@ const ImagePicker = (props) => {
           />
         )}
       </ImageContainer>
-
-      <Button children={buttonText} onClick={onClick} />
+      <Buttons>
+        <Space direction="vertical">
+          <Button children="Remove" onClick={onRemove} danger size="small" />
+          <Button children={buttonText} onClick={onClick} size="small" />
+        </Space>
+      </Buttons>
     </Container>
   );
 };
@@ -38,6 +42,10 @@ const ImageContainer = styled.div`
   width: 80px;
   margin-right: 10px;
   background: ${colors.background.light};
+`;
+
+const Buttons = styled.div`
+  flex: 1;
 `;
 
 export default ImagePicker;
