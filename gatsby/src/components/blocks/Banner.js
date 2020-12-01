@@ -1,9 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
-import Img from 'gatsby-image'
+import React from 'react';
+import styled from 'styled-components';
+import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges'
+import Edges from '../Edges';
 
 export const fields = {
   name: 'banner',
@@ -21,10 +21,10 @@ export const fields = {
       label: 'Headline',
     },
   ],
-}
+};
 
 const Banner = (props) => {
-  const { image, headline } = props
+  const { image, headline } = props;
 
   return (
     <Container>
@@ -46,17 +46,17 @@ const Banner = (props) => {
         </Edges>
       </ContentContainer>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   position: relative;
   height: 300px;
-`
+`;
 
 const ImageContainer = styled.div`
   height: 100%;
-`
+`;
 
 const ContentContainer = styled.div`
   position: absolute;
@@ -65,6 +65,7 @@ const ContentContainer = styled.div`
   width: 100%;
   transform: translateY(-50%);
   z-index: 1;
-`
+  color: #fff;
+`;
 
-export default Banner
+export default Banner;
