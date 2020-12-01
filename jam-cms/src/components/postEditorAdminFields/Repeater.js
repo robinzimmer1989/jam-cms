@@ -44,7 +44,7 @@ const Repeater = (props) => {
           return (
             <Collapse key={index}>
               <Collapse.Panel header={`Item ${index + 1}`}>
-                <Space direction="vertical">
+                <Space direction="vertical" size={30}>
                   {items &&
                     items.map((field, subIndex) => {
                       return (
@@ -60,7 +60,12 @@ const Repeater = (props) => {
                       );
                     })}
 
-                  <Button size="small" danger children={`Remove`} onClick={() => handleRemove(index)} />
+                  <Button
+                    size="small"
+                    danger
+                    children={`Remove`}
+                    onClick={() => handleRemove(index)}
+                  />
                 </Space>
               </Collapse.Panel>
             </Collapse>
