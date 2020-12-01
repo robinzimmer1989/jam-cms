@@ -9,6 +9,10 @@ Technically it can connect to any CMS or data source, but it works best with Wor
 
 It's optimized for Gatsby, but (theoretically) it can also be used with any other React framework.
 
+<img src="https://raw.githubusercontent.com/robinzimmer1989/jam-cms/master/screenshot-1.png" alt="Pages" />
+
+<img src="https://raw.githubusercontent.com/robinzimmer1989/jam-cms/master/screenshot-2.png" alt="Pages" />
+
 ## Reasons to use jamCMS
 
 **For clients:**
