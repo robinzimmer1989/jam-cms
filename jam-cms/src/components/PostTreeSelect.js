@@ -6,9 +6,9 @@ import Caption from './Caption';
 import { createDataTree } from '../utils';
 
 const PostTreeSelect = (props) => {
-  const { items = {}, value, onChange } = props;
+  const { items = [], value, label, onChange } = props;
 
-  const treePosts = createDataTree(Object.values(items));
+  const treePosts = createDataTree(items);
 
   const renderTreeNode = (item) => {
     return (
@@ -20,9 +20,10 @@ const PostTreeSelect = (props) => {
 
   return (
     <Space direction="vertical" size={2}>
-      <Caption children={`Parent`} />
+      <Caption children={label} />
       <TreeSelect
         showSearch
+        treeNodeFilterProp="title"
         value={value}
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         placeholder="Please select"

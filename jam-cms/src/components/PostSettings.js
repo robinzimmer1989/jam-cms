@@ -90,7 +90,8 @@ const PostSettings = () => {
         {post?.postTypeID === 'page' && (
           <Skeleton done={!!post} height={32}>
             <PostTreeSelect
-              items={otherPosts}
+              label="Parent"
+              items={Object.values(otherPosts)}
               value={post?.parentID}
               onChange={(value) => handleChangePost('parentID', value)}
             />

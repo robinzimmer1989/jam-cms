@@ -47,11 +47,26 @@ const PostForm = (props) => {
 
   return (
     <Space direction="vertical" size={20}>
-      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={``} />
-      <Input label="Slug" value={slug} onChange={(e) => setSlug(e.target.value)} placeholder={`(Optional)`} />
+      <Input
+        label="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder={``}
+      />
+      <Input
+        label="Slug"
+        value={slug}
+        onChange={(e) => setSlug(e.target.value)}
+        placeholder={`(Optional)`}
+      />
 
       {postTypeID === 'page' && (
-        <PostTreeSelect items={posts} value={parentID} onChange={(value) => setParentID(value)} />
+        <PostTreeSelect
+          label="Parent"
+          items={Object.values(posts)}
+          value={parentID}
+          onChange={(value) => setParentID(value)}
+        />
       )}
 
       <Button children={`Add`} onClick={handleSubmit} type="primary" />
