@@ -46,7 +46,7 @@ const MediaImage = (props) => {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={12} style={{ border: '1px solid #f0f0f0' }}>
+        <Col span={12} style={{ border: '1px solid #f0f0f0', background: '#fff', padding: 0 }}>
           {file.type === 'image' && file?.childImageSharp?.fluid && (
             <Img
               fluid={file.childImageSharp.fluid}
@@ -72,7 +72,7 @@ const MediaImage = (props) => {
             </File>
           )}
         </Col>
-        <Col span={12}>
+        <Col span={12} style={{ padding: '0 0 0 20px' }}>
           <Space direction="vertical" size={20}>
             <Content span={12}>
               <Space direction="vertical">
