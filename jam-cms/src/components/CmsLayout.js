@@ -8,26 +8,25 @@ import {
   SettingOutlined,
   FormOutlined,
   FolderOpenOutlined,
-  CodeOutlined,
 } from '@ant-design/icons';
 
 // import app components
 import Edges from './Edges';
 import CmsHeader from './CmsHeader';
 import JamCmsLogo from '../icons/jamCMS.svg';
-import JamCmsLogoJar from '../icons/jamCMS_jar.svg';
 
 import { useStore } from '../store';
 import getRoute from '../routes';
 
 const CmsLayout = (props) => {
-  const { pageTitle, actionBar, rightSidebar, children } = props;
+  const { pageTitle, mode, rightSidebar, onBack, children } = props;
 
   const [
     {
       authState: { authUser },
       globalState: { leftSidebar },
       cmsState: { siteID, sites },
+      editorState: { sidebar },
     },
     dispatch,
   ] = useStore();
@@ -36,114 +35,110 @@ const CmsLayout = (props) => {
 
   return (
     <Container>
-      <Layout.Sider
-        className="sider"
-        collapsible
-        collapsed={!leftSidebar}
-        onCollapse={() => dispatch({ type: `SET_LEFT_SIDEBAR`, payload: !leftSidebar })}
-        theme="dark"
-        width={250}
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-        }}
-      >
-        <div>
-          <StyledPageHeader
-            title={
-              <>
-                <JamCmsLogo className={`jam-cms-logo ${leftSidebar && `active`}`} />
-                <JamCmsLogoJar className={`jam-cms-logo-jar ${!leftSidebar && `active`}`} />
-              </>
-            }
-          />
+      {mode !== 'editor' && (
+        <Layout.Sider
+          className="sider"
+          theme="dark"
+          width={250}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+          }}
+        >
+          <div>
+            <StyledPageHeader
+              title={
+                <>
+                  <JamCmsLogo className={`jam-cms-logo`} />
+                </>
+              }
+            />
 
-          <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
-            <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
-              <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
-            </Menu.Item>
+            <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
+              <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
+                <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
+              </Menu.Item>
 
-            <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
-              <Link to={getRoute(`media`, { siteID })}>Media</Link>
-            </Menu.Item>
+              <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
+                <Link to={getRoute(`media`, { siteID })}>Media</Link>
+              </Menu.Item>
 
-            <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
-              {site?.postTypes &&
-                Object.values(site.postTypes).map((o) => {
-                  return (
-                    <Menu.Item key={o.title}>
-                      <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                        {' '}
-                        {o.title}
-                      </Link>
-                    </Menu.Item>
-                  );
-                })}
-            </Menu.SubMenu>
+              <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
+                {site?.postTypes &&
+                  Object.values(site.postTypes).map((o) => {
+                    return (
+                      <Menu.Item key={o.title}>
+                        <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
+                          {o.title}
+                        </Link>
+                      </Menu.Item>
+                    );
+                  })}
+              </Menu.SubMenu>
 
-            {/* <Menu.Item key="Forms" icon={<FormOutlined />}>
+              {/* <Menu.Item key="Forms" icon={<FormOutlined />}>
               <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
             </Menu.Item> */}
 
-            {(authUser?.capabilities?.manage_options ||
-              authUser?.capabilities?.list_users ||
-              authUser?.capabilities?.wpseo_manage_options) && (
-              <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
-                {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="General">
-                    <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
-                  </Menu.Item>
-                )}
+              {(authUser?.capabilities?.manage_options ||
+                authUser?.capabilities?.list_users ||
+                authUser?.capabilities?.wpseo_manage_options) && (
+                <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
+                  {authUser?.capabilities?.manage_options && (
+                    <Menu.Item key="General">
+                      <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
+                    </Menu.Item>
+                  )}
 
-                {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="Collections">
-                    <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
-                  </Menu.Item>
-                )}
+                  {authUser?.capabilities?.manage_options && (
+                    <Menu.Item key="Collections">
+                      <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+                    </Menu.Item>
+                  )}
 
-                {authUser?.capabilities?.list_users && (
-                  <Menu.Item key="Editors">
-                    <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
-                  </Menu.Item>
-                )}
+                  {authUser?.capabilities?.list_users && (
+                    <Menu.Item key="Editors">
+                      <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
+                    </Menu.Item>
+                  )}
 
-                {/* {authUser?.capabilities?.wpseo_manage_options &&
+                  {/* {authUser?.capabilities?.wpseo_manage_options &&
                 <Menu.Item key="SEO">
                 <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
               </Menu.Item>
               } */}
-              </Menu.SubMenu>
-            )}
+                </Menu.SubMenu>
+              )}
+            </Menu>
+          </div>
+        </Layout.Sider>
+      )}
 
-            {process.env.NODE_ENV === 'development' && (
-              <Menu.Item key="Development" icon={<CodeOutlined />}>
-                <Link to={getRoute(`dev`, { siteID })}>Development</Link>
-              </Menu.Item>
-            )}
-          </Menu>
-        </div>
-      </Layout.Sider>
-
-      <Layout style={{ marginLeft: leftSidebar ? 250 : 80, marginRight: rightSidebar ? 250 : 0 }}>
+      <Layout
+        style={{
+          marginLeft: mode === 'editor' ? 0 : 250,
+          marginRight: rightSidebar && sidebar ? 300 : 0,
+        }}
+      >
         <Layout.Header style={{ padding: 0 }}>
-          <Edges size="md">
-            <CmsHeader title={pageTitle} actionBar={actionBar} />
+          <Edges size={mode !== 'editor' && 'md'}>
+            <CmsHeader title={pageTitle} actionBar={mode} onBack={onBack} />
           </Edges>
         </Layout.Header>
 
         <Layout.Content style={{ paddingBottom: 100 }}>
           <StyledDivider />
-          <Edges size="md">{children}</Edges>
+          <Edges size={mode === 'editor' ? 'full' : 'md'}>{children}</Edges>
         </Layout.Content>
       </Layout>
 
-      {rightSidebar && (
+      {rightSidebar && sidebar && (
         <Layout.Sider
           className="sider"
           theme="light"
-          width={250}
+          width={300}
           style={{
             overflow: 'auto',
             height: '100vh',
@@ -201,7 +196,7 @@ const StyledPageHeader = styled(PageHeader)`
 `;
 
 const StyledDivider = styled(Divider)`
-  margin: 8px 0 32px;
+  margin: 8px 0 20px;
 `;
 
 export default CmsLayout;

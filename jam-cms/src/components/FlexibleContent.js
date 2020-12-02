@@ -22,7 +22,7 @@ const FlexibleContent = (props) => {
 
   const [
     {
-      editorState: { site },
+      editorState: { site, editable: editorEditable },
     },
     dispatch,
   ] = useStore();
@@ -56,7 +56,10 @@ const FlexibleContent = (props) => {
   return (
     site && (
       <>
-        {header && (editableHeader && editable ? generateWrapper(header, 'header') : header)}
+        {header &&
+          (editableHeader && editable && editorEditable
+            ? generateWrapper(header, 'header')
+            : header)}
 
         {renderedBlocks.length > 0 || children ? (
           <>
@@ -67,7 +70,7 @@ const FlexibleContent = (props) => {
                 // Extract global settings from data, so we can apply it to the block wrapper in the next step.
                 // This way the settings don't have to be applied for each block separately.
                 const { settings, ...rest } = data;
-                return editable ? (
+                return editable && editorEditable ? (
                   generateWrapper(<Component {...rest} />, index, settings)
                 ) : (
                   <Component key={index} {...rest} />
@@ -79,7 +82,7 @@ const FlexibleContent = (props) => {
           </>
         ) : (
           <>
-            {editable && (
+            {editable && editorEditable && (
               <Empty
                 style={{ padding: 60 }}
                 image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
@@ -93,7 +96,10 @@ const FlexibleContent = (props) => {
           </>
         )}
 
-        {footer && (editableFooter && editable ? generateWrapper(footer, 'footer') : footer)}
+        {footer &&
+          (editableFooter && editable && editorEditable
+            ? generateWrapper(footer, 'footer')
+            : footer)}
       </>
     )
   );

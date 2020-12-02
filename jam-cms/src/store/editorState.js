@@ -7,6 +7,8 @@ export const editorState = {
   editorIndex: null,
   hasChanged: false,
   viewport: 'desktop',
+  editable: true,
+  sidebar: true,
 };
 
 export const editorReducer = (state, action) => {
@@ -71,6 +73,14 @@ export const editorReducer = (state, action) => {
 
       case `SET_EDITOR_VIEWPORT`:
         draft.viewport = payload;
+        break;
+
+      case `SET_EDITOR_SIDEBAR`:
+        draft.sidebar = payload;
+        break;
+
+      case `SET_EDITOR_EDITABLE`:
+        draft.editable = payload;
         break;
 
       case `CLEAR_EDITOR`:

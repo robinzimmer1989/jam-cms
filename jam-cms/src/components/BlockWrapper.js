@@ -3,12 +3,20 @@ import styled, { css } from 'styled-components';
 import { PlusCircleTwoTone, UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons';
 
 // import app components
-import Edges from './Edges';
 import { useStore } from '../store';
 import { colors } from '../theme';
 
 const BlockWrapper = (props) => {
-  const { index, renderedBlocks, isTemplate, onClick, children, onOpenDialog, onMoveElement, settings } = props;
+  const {
+    index,
+    renderedBlocks,
+    isTemplate,
+    onClick,
+    children,
+    onOpenDialog,
+    onMoveElement,
+    settings,
+  } = props;
 
   const [
     {
@@ -24,11 +32,13 @@ const BlockWrapper = (props) => {
   const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index });
 
   return (
-    <Container active={isActive} viewport={viewport}>
+    <Container
+      active={isActive}
+      viewport={viewport}
+      onClick={() => dispatch({ type: `SET_EDITOR_SIDEBAR`, payload: true })}
+    >
       <Content onClick={onClick || handleOpenBlock} active={isActive} viewport={viewport}>
-        <ContentWrapper settings={settings}>
-          <Edges size={settings?.edges || 'none'}>{children}</Edges>
-        </ContentWrapper>
+        <ContentWrapper>{children}</ContentWrapper>
       </Content>
 
       <BlockName className="blockName" children={blockName} />
@@ -43,7 +53,10 @@ const BlockWrapper = (props) => {
       )}
 
       {!isTemplate && index !== 'footer' && (
-        <AddButtonBottom className={`icon`} onClick={() => onOpenDialog(index === 'header' ? 0 : index + 1)}>
+        <AddButtonBottom
+          className={`icon`}
+          onClick={() => onOpenDialog(index === 'header' ? 0 : index + 1)}
+        >
           <PlusCircleTwoTone />
         </AddButtonBottom>
       )}
@@ -54,7 +67,10 @@ const BlockWrapper = (props) => {
             <UpCircleTwoTone />
           </MoveIcon>
 
-          <MoveIcon onClick={() => onMoveElement(index, index + 1)} disabled={index === renderedBlocks.length - 1}>
+          <MoveIcon
+            onClick={() => onMoveElement(index, index + 1)}
+            disabled={index === renderedBlocks.length - 1}
+          >
             <DownCircleTwoTone />
           </MoveIcon>
         </MoveIcons>
