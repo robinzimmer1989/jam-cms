@@ -1,5 +1,6 @@
 import createDataTree from './createDataTree';
 import formatSlug from './formatSlug';
+import getParentSlug from './getParentSlug';
 import generateSlug from './generateSlug';
 import getCleanedFileName from './getCleanedFileName';
 import sortBy from './sortBy';
@@ -17,6 +18,7 @@ import convertFileSize from './convertFileSize';
 export {
   createDataTree,
   formatSlug,
+  getParentSlug,
   generateSlug,
   getCleanedFileName,
   sortBy,
