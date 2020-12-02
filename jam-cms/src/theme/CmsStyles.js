@@ -75,4 +75,8 @@ export default createGlobalStyle`
     }
   }
 
+  .ant-modal-body {
+    background: #f8f9ff;
+  }
+
 `;
