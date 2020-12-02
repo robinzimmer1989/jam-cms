@@ -3,7 +3,6 @@ import { Button, Space } from 'antd';
 
 // import app components
 import Input from './Input';
-import { formatSlug } from '../utils';
 import { useStore } from '../store';
 
 const CollectionForm = (props) => {
