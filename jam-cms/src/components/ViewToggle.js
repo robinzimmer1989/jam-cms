@@ -1,6 +1,11 @@
 import React from 'react';
 import { Button, Tooltip, Space } from 'antd';
-import { FullscreenOutlined, MobileOutlined, TabletOutlined, DesktopOutlined } from '@ant-design/icons';
+import {
+  FullscreenOutlined,
+  MobileOutlined,
+  TabletOutlined,
+  DesktopOutlined,
+} from '@ant-design/icons';
 
 // import app components
 import { useStore } from '../store';
@@ -18,7 +23,7 @@ const ViewToggle = (props) => {
   const elements = [
     { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
     { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
-    { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Laptop' },
+    { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Desktop' },
   ];
 
   if (!hideFullscreen) {
