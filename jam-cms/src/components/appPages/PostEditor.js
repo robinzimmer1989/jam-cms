@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { PageHeader, Divider } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
+import { navigate } from '@reach/router';
 import Parser from 'html-react-parser';
 
 // import app components
@@ -16,6 +17,7 @@ import PostSettings from '../PostSettings';
 import { formatBlocks } from '../../utils';
 import { useStore } from '../../store';
 import { postActions } from '../../actions';
+import getRoute from '../../routes';
 
 const PostEditor = (props) => {
   const { postTypeID, postID, theme, blocks } = props;
@@ -253,8 +255,12 @@ const PostEditor = (props) => {
     });
   };
 
+  const handleBack = () => {
+    navigate(getRoute(`collection`, { siteID, postTypeID }));
+  };
+
   return (
-    <CmsLayout pageTitle="Editor" actionBar="editor" rightSidebar={getSidebar()}>
+    <CmsLayout pageTitle="Editor" mode="editor" rightSidebar={getSidebar()} onBack={handleBack}>
       <PostHeader postType={postType} />
 
       <PageWrapper theme={theme}>
