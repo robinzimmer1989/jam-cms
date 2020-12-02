@@ -26,7 +26,7 @@ const Iframe = ({ theme, children }) => {
       iframe.current.node.contentDocument.body.scrollHeight !== 0
     ) {
       // Calculate height automatically based on body height of iframe
-      setHeight(iframe.current.node.contentDocument.body.scrollHeight + 30);
+      setHeight(iframe.current.node.contentDocument.body.scrollHeight);
     }
   };
 
@@ -34,7 +34,11 @@ const Iframe = ({ theme, children }) => {
 
   return (
     <div>
-      <Frame style={{ width: '100%', height, overflow: 'auto' }} onLoad={() => handleResize(iframeRef)} ref={iframeRef}>
+      <Frame
+        style={{ width: '100%', height, overflow: 'auto' }}
+        onLoad={() => handleResize(iframeRef)}
+        ref={iframeRef}
+      >
         <FrameContextConsumer>
           {(frameContext) => (
             <StyleSheetManager target={frameContext.document.head}>
