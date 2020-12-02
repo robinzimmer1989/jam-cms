@@ -9,7 +9,6 @@ import removeFromTree from './removeFromTree';
 import convertToPropsSchema from './convertToPropsSchema';
 import deepCopyTree from './deepCopyTree';
 import formatFieldForEditor from './formatFieldForEditor';
-import formatFieldForDevelopment from './formatFieldForDevelopment';
 import formatBlocks from './formatBlocks';
 import * as auth from './auth';
 import generateRandomString from './generateRandomString';
@@ -27,7 +26,6 @@ export {
   convertToPropsSchema,
   deepCopyTree,
   formatFieldForEditor,
-  formatFieldForDevelopment,
   formatBlocks,
   auth,
   generateRandomString,

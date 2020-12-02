@@ -1,20 +1,17 @@
 import formatFieldForEditor from './formatFieldForEditor';
-import formatFieldForDevelopment from './formatFieldForDevelopment';
 import convertToPropsSchema from './convertToPropsSchema';
 
-export default function formatBlocks(blocks, site, development = false) {
+export default function formatBlocks(blocks, site) {
   let modifiedBlocks = [];
 
-  if (!development && (!blocks || !site)) {
+  if (!blocks || !site) {
     return modifiedBlocks;
   }
 
   modifiedBlocks = blocks.map((block) => {
     return {
       ...block,
-      fields: block.fields.map((field) =>
-        development ? formatFieldForDevelopment(field) : formatFieldForEditor(field, site)
-      ),
+      fields: block.fields.map((field) => formatFieldForEditor(field, site)),
     };
   });
 
