@@ -13,7 +13,6 @@ import Form from './appPages/Form';
 import GeneralSettings from './appPages/GeneralSettings';
 import Editors from './appPages/Editors';
 import Seo from './appPages/Seo';
-import Development from './appPages/Development';
 
 import {
   ROUTE_MEDIA,
@@ -24,7 +23,6 @@ import {
   ROUTE_SETTINGS_COLLECTIONS,
   ROUTE_SETTINGS_SEO,
   ROUTE_SITE_EDITORS,
-  ROUTE_DEV,
 } from '../routes';
 import { siteActions } from '../actions';
 import { useStore } from '../store';
@@ -80,10 +78,6 @@ const Router = (props) => {
           />
         )}
         {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
-
-        {process.env.NODE_ENV === 'development' && (
-          <Development path={ROUTE_DEV} theme={theme} blocks={blocks} />
-        )}
       </ReachRouter>
     </>
   );

@@ -13,7 +13,6 @@ export const ROUTE_PROFILE = '/profile';
 export const ROUTE_FORMS = '/forms';
 export const ROUTE_FORM = '/form';
 export const ROUTE_SITE_EDITORS = '/editors';
-export const ROUTE_DEV = '/dev';
 
 const getRoute = (route, args) => {
   const siteID = args?.siteID || 'default';
@@ -70,9 +69,6 @@ const getRoute = (route, args) => {
 
     case 'settings-collection':
       return `${ROUTE_APP}${base}${ROUTE_SETTINGS_COLLECTIONS}/${args?.postTypeID}`;
-
-    case 'dev':
-      return `${ROUTE_APP}${base}${ROUTE_DEV}`;
 
     default:
       return `/`;
