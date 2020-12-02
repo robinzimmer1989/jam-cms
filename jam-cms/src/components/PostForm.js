@@ -19,7 +19,7 @@ const PostForm = (props) => {
 
   const [title, setTitle] = useState(defaultTitle);
   const [slug, setSlug] = useState(defaultSlug);
-  const [parentID, setParentID] = useState('');
+  const [parentID, setParentID] = useState(0);
 
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
@@ -40,7 +40,7 @@ const PostForm = (props) => {
 
     setTitle('');
     setSlug('');
-    setParentID('');
+    setParentID(0);
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
