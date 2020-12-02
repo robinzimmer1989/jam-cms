@@ -325,19 +325,15 @@ The menu id must be unqiue throughout the entire site.
 
 The project is still in an early alpha version with many changes to come. Here are some current issues:
 
-- Limited ACF field support
 - WYSIWYG editor needs improvement
-- Premature Development screen
-- Design tweaks
-- (...)
 
 ## Roadmap
 
 - Tests (!!!)
 - Dashboard (Analytics integration)
 - Add more ACF fields
-- Add link selector similiar to WordPress
 - Revisions
 - Forms
 - Netlify API integration
+- Design tweaks
 - (...)
