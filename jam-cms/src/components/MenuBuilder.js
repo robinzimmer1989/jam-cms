@@ -5,7 +5,12 @@ import { PlusOutlined } from '@ant-design/icons';
 
 // import app components
 import Input from './Input';
-import { recursivelyUpdateTree, removeFromTree, deepCopyTree, generateRandomString } from '../utils';
+import {
+  recursivelyUpdateTree,
+  removeFromTree,
+  deepCopyTree,
+  generateRandomString,
+} from '../utils';
 import { useStore } from '../store';
 
 const MenuBuilder = (props) => {
@@ -124,7 +129,10 @@ const MenuBuilder = (props) => {
       return;
     }
 
-    setItems([...items, { key: generateRandomString(), ...customLink, postTypeID: null, postID: null, children: [] }]);
+    setItems([
+      ...items,
+      { key: generateRandomString(), ...customLink, postTypeID: null, postID: null, children: [] },
+    ]);
     setCustomLink({ title: '', url: '' });
   };
 
@@ -154,7 +162,13 @@ const MenuBuilder = (props) => {
                           onClick={() =>
                             setItems([
                               ...items,
-                              { key: generateRandomString(), title, postTypeID, postID: id, children: [] },
+                              {
+                                key: generateRandomString(),
+                                title,
+                                postTypeID,
+                                postID: id,
+                                children: [],
+                              },
                             ])
                           }
                           shape="circle"
@@ -181,7 +195,12 @@ const MenuBuilder = (props) => {
                     onChange={(e) => setCustomLink({ ...customLink, url: e.target.value })}
                     placeholder="https://"
                   />
-                  <Button style={{ marginBottom: 20 }} children={`Add`} type="primary" onClick={handleAddCustomLink} />
+                  <Button
+                    style={{ marginBottom: 20 }}
+                    children={`Add`}
+                    type="primary"
+                    onClick={handleAddCustomLink}
+                  />
                 </Space>
               )}
             </ItemsContainer>
@@ -202,11 +221,24 @@ const MenuBuilder = (props) => {
                 <Collapse>
                   <Collapse.Panel header={header}>
                     <Space direction="vertical">
-                      <Input label="title" value={node.title} onChange={(e) => handleUpdate(e, 'title', node.key)} />
+                      <Input
+                        label="title"
+                        value={node.title}
+                        onChange={(e) => handleUpdate(e, 'title', node.key)}
+                      />
                       {node.url && (
-                        <Input label="Url" value={node.url} onChange={(e) => handleUpdate(e, 'url', node.key)} />
+                        <Input
+                          label="Url"
+                          value={node.url}
+                          onChange={(e) => handleUpdate(e, 'url', node.key)}
+                        />
                       )}
-                      <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} />
+                      <Button
+                        size="small"
+                        danger
+                        children={`Remove`}
+                        onClick={() => handleRemove(node.key)}
+                      />
                     </Space>
                   </Collapse.Panel>
                 </Collapse>
@@ -221,6 +253,12 @@ const MenuBuilder = (props) => {
 };
 
 const Container = styled.div`
+  overflow: auto;
+
+  .ant-tree {
+    background-color: transparent;
+  }
+
   .ant-row {
     height: 400px;
   }
