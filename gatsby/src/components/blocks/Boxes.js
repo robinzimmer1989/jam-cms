@@ -1,10 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
-import Img from 'gatsby-image'
+import React from 'react';
+import styled from 'styled-components';
+import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges'
-import Button from '../Button'
+import Edges from '../Edges';
+import Button from '../Button';
 
 export const fields = {
   name: 'boxes',
@@ -36,22 +36,6 @@ export const fields = {
           label: 'Add Image',
         },
         {
-          id: 'alignment',
-          type: 'select',
-          label: 'Image Alignment',
-          defaultValue: 'top',
-          options: [
-            {
-              name: 'Top',
-              value: 'top',
-            },
-            {
-              name: 'Left',
-              value: 'left',
-            },
-          ],
-        },
-        {
           id: 'title',
           type: 'text',
           label: 'Title',
@@ -70,10 +54,10 @@ export const fields = {
       ],
     },
   ],
-}
+};
 
 const Boxes = (props) => {
-  const { title, columns, boxes } = props
+  const { title, columns, boxes } = props;
 
   return (
     <Container>
@@ -106,10 +90,14 @@ const Boxes = (props) => {
                   {box.title && <h4 children={box.title} />}
                   {box.text && <p children={box.text} />}
                   {box.button && box.button.url && box.button.title && (
-                    <Button {...box.button} color={box.color || 'primary'} variant={box.variant || 'filled'} />
+                    <Button
+                      {...box.button}
+                      color={box.color || 'primary'}
+                      variant={box.variant || 'filled'}
+                    />
                   )}
                 </Box>
-              )
+              );
             })}
 
           <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
@@ -118,26 +106,26 @@ const Boxes = (props) => {
         </BoxesContainer>
       </Edges>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   min-height: 300px;
-`
+`;
 
 const BoxesContainer = styled.div`
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-`
+`;
 
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 120px;
   margin-bottom: 12px;
-`
+`;
 
 const Box = styled.div`
   width: 100%;
@@ -165,6 +153,6 @@ const Box = styled.div`
       width: calc(100% / 4 - 10px);
     `}
   }
-`
+`;
 
-export default Boxes
+export default Boxes;
