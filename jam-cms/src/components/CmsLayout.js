@@ -161,14 +161,8 @@ const Container = styled(Layout)`
 `;
 
 const StyledPageHeader = styled(PageHeader)`
-  .jam-cms-logo,
-  .jam-cms-logo-jar {
+  .jam-cms-logo {
     margin: 0 auto;
-    display: none;
-
-    &.active {
-      display: block;
-    }
 
     path {
       fill: #f8f9ff;
