@@ -44,11 +44,11 @@ const EditorPostTitle = (props) => {
 
       <Skeleton done={!!site && !!post} width={`80%`} height={19}>
         <Row style={{ height: 36 }}>
-          <Typography children={post?.id === site?.frontPage ? '/' : slug} />
+          <Typography children={post?.id === site?.frontPage ? '/' : `${slug}/`} />
 
           {post?.id !== site?.frontPage && (
             <Typography.Paragraph
-              children={formatSlug(post?.slug || '')}
+              children={post?.slug}
               editable={{ onChange: (value) => handleChange('slug', formatSlug(value)) }}
             />
           )}
