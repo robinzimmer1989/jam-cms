@@ -4,7 +4,7 @@ import React from 'react';
 import CmsLayout from '../CmsLayout';
 import MediaLibrary from '../MediaLibrary';
 
-const Media = (props) => {
+const Media = () => {
   return (
     <CmsLayout pageTitle={`Media`}>
       <MediaLibrary />
