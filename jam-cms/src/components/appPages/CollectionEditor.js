@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { PageHeader, Divider, Space } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
+import { navigate } from '@reach/router';
 import Parser from 'html-react-parser';
 
 // import app components
@@ -15,6 +16,7 @@ import CollectionSettings from '../CollectionSettings';
 import { formatBlocks } from '../../utils';
 import { siteActions } from '../../actions';
 import { useStore } from '../../store';
+import getRoute from '../../routes';
 
 const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const [
@@ -60,7 +62,9 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
     if (postType?.template?.[editorIndex]) {
       sidebar = {
         title: {
-          title: Parser(postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].name),
+          title: Parser(
+            postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].name
+          ),
           onBack: () =>
             dispatch({
               type: 'SET_EDITOR_INDEX',
@@ -161,8 +165,17 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
     });
   };
 
+  const handleBack = () => {
+    navigate(getRoute(`settings-collections`, { siteID }));
+  };
+
   return (
-    <CmsLayout pageTitle={`${postType?.title} Template`} actionBar={'editor'} rightSidebar={getSidebar()}>
+    <CmsLayout
+      pageTitle={`${postType?.title} Template`}
+      mode={'editor'}
+      rightSidebar={getSidebar()}
+      onBack={handleBack}
+    >
       <Space direction="vertical" size={30}>
         <PageWrapper theme={theme}>
           <FlexibleContent
