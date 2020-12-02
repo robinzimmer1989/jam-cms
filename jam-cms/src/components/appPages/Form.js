@@ -32,7 +32,7 @@ const Form = (props) => {
     };
   }, [formID]);
 
-  return <CmsLayout pageTitle="Form" actionBar="editor"></CmsLayout>;
+  return <CmsLayout pageTitle="Form" mode="editor"></CmsLayout>;
 };
 
 export default Form;
