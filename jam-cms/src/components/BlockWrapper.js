@@ -15,7 +15,6 @@ const BlockWrapper = (props) => {
     children,
     onOpenDialog,
     onMoveElement,
-    settings,
   } = props;
 
   const [
