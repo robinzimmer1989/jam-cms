@@ -123,7 +123,7 @@ const CmsLayout = (props) => {
         }}
       >
         <Layout.Header style={{ padding: 0 }}>
-          <Edges size={mode !== 'editor' && 'md'}>
+          <Edges size={mode !== 'editor' ? 'md' : ''}>
             <CmsHeader title={pageTitle} actionBar={mode} onBack={onBack} />
           </Edges>
         </Layout.Header>
