@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheetManager, createGlobalStyle } from 'styled-components';
+import React, { useEffect, useState, useRef } from 'react';
+import styled, { StyleSheetManager, createGlobalStyle } from 'styled-components';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import { useStore } from '../store';
@@ -12,38 +12,40 @@ const Iframe = ({ theme, children }) => {
     },
   ] = useStore();
 
-  const iframeRef = React.createRef();
+  const iframeRef = useRef();
 
   const [height, setHeight] = useState(0);
 
-  const handleResize = (iframe) => {
+  const handleResize = () => {
     if (viewport === 'fullscreen') {
       typeof window !== `undefined` && setHeight(window.innerHeight);
     } else if (
-      iframe.current &&
-      iframe.current.node &&
-      iframe.current.node.contentDocument &&
-      iframe.current.node.contentDocument.body.scrollHeight !== 0
+      iframeRef.current &&
+      iframeRef.current.node &&
+      iframeRef.current.node.contentDocument &&
+      iframeRef.current.node.contentDocument.body.scrollHeight !== 0
     ) {
       // Calculate height automatically based on body height of iframe
-      setHeight(iframe.current.node.contentDocument.body.scrollHeight);
+      setHeight(iframeRef.current.node.contentDocument.body.scrollHeight);
     }
   };
 
-  useEffect(() => handleResize(iframeRef), [children, viewport]);
+  useEffect(() => {
+    handleResize();
+  }, [children, viewport]);
 
   return (
-    <div>
+    <Container>
       <Frame
         style={{ width: '100%', height, overflow: 'auto' }}
-        onLoad={() => handleResize(iframeRef)}
+        onLoad={() => handleResize()}
         ref={iframeRef}
       >
         <FrameContextConsumer>
           {(frameContext) => (
             <StyleSheetManager target={frameContext.document.head}>
               <div>
-                <ThemeCSS />
+                <ThemeStyles />
                 <Fonts fonts={theme.fonts} />
                 {children}
               </div>
@@ -51,11 +53,15 @@ const Iframe = ({ theme, children }) => {
           )}
         </FrameContextConsumer>
       </Frame>
-    </div>
+    </Container>
   );
 };
 
-const ThemeCSS = createGlobalStyle`
+const Container = styled.div`
+  display: flex;
+`;
+
+const ThemeStyles = createGlobalStyle`
   ${({ theme }) => theme.css}
 
   .blockName {
