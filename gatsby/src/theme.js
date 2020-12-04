@@ -1,4 +1,4 @@
-import { css } from 'styled-components'
+import { css } from 'styled-components';
 
 export default {
   fonts: {
@@ -91,7 +91,7 @@ export default {
       text-align: left;
     }
 
-    * {
+    body {
       font-family: 'Roboto Condensed';
       font-size: 16px;
       font-weight: 400;
@@ -145,4 +145,4 @@ export default {
       text-transform: none;
     }
   `,
-}
+};
