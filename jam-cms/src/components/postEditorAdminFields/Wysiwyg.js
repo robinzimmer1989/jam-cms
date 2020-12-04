@@ -1,46 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { Modal } from 'antd';
-import createImagePlugin from 'draft-js-image-plugin';
 import draftToHtml from 'draftjs-to-html';
-import { ContentState, EditorState, convertToRaw, AtomicBlockUtils, convertFromHTML } from 'draft-js';
-import { FileImageOutlined } from '@ant-design/icons';
-
-// import app components
-import MediaLibrary from '../MediaLibrary';
-
-const imagePlugin = createImagePlugin();
-
-const WysiwygImageUpload = (props) => {
-  const { editorState, onChange } = props;
-
-  const [open, setOpen] = useState(false);
-
-  const handleSelect = (image) => {
-    const { url, width, height, alt } = image;
-
-    const contentState = editorState.getCurrentContent();
-    const contentStateWithEntity = contentState.createEntity('IMAGE', 'IMMUTABLE', { width, height, alt, src: url });
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
-
-    onChange(newEditorState);
-
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <IconContainer className="rdw-dropdown-wrapper" onClick={() => setOpen(true)}>
-        <FileImageOutlined />
-      </IconContainer>
-
-      <Modal title={'Media Library'} visible={open} onCancel={() => setOpen(false)} width={1000}>
-        <MediaLibrary onSelect={handleSelect} />
-      </Modal>
-    </>
-  );
-};
+import htmlToDraft from 'html-to-draftjs';
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
 
 let Editor = () => <></>;
 
@@ -50,7 +12,10 @@ const Wysiwyg = (props) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editor, setEditor] = useState(null);
 
+  const editorRef = useRef(null);
+
   useEffect(() => {
+    // We have to lazy load the component like this because SSR doesn't work otherwise
     Editor = require('react-draft-wysiwyg').Editor;
     setEditor(true);
   }, []);
@@ -59,8 +24,12 @@ const Wysiwyg = (props) => {
   // Afterward, we gonna use local state and send the converted html back to the store
   useEffect(() => {
     if (value) {
-      const blocksFromHTML = convertFromHTML(value);
-      const contentState = ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+      const blocksFromHTML = htmlToDraft(value);
+      const contentState = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+
       const editorState = EditorState.createWithContent(contentState);
 
       setEditorState(editorState);
@@ -74,88 +43,79 @@ const Wysiwyg = (props) => {
     const contentState = editorState.getCurrentContent();
     const rawState = convertToRaw(contentState);
     const html = draftToHtml(rawState);
+
     onChange(html);
   };
 
   return (
     <EditorContainer>
       {editor && (
-        <Editor
-          toolbarCustomButtons={[<WysiwygImageUpload modifier={imagePlugin.addImage} />]}
-          plugins={[imagePlugin]}
-          toolbar={{
-            options: ['inline', 'blockType', 'list', 'textAlign'],
-            inline: {
-              inDropdown: true,
-            },
-            blockType: {
-              inDropdown: true,
-            },
-            list: {
-              inDropdown: true,
-            },
-            textAlign: {
-              inDropdown: true,
-            },
-          }}
-          editorState={editorState}
-          onEditorStateChange={handleChange}
-          placeholder={`Write something...`}
-        />
+        <div>
+          <Editor
+            editorState={editorState}
+            onEditorStateChange={handleChange}
+            placeholder="Write something..."
+            ref={editorRef}
+            toolbar={{
+              options: ['inline', 'blockType', 'textAlign'],
+              inline: {
+                inDropdown: true,
+                options: ['bold', 'italic', 'underline'],
+              },
+              blockType: {
+                inDropdown: true,
+                options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote'],
+              },
+              textAlign: {
+                inDropdown: true,
+              },
+            }}
+          />
+        </div>
       )}
     </EditorContainer>
   );
 };
 
 const EditorContainer = styled.div`
-  h1 {
-    font-size: 24px;
+  position: relative;
+
+  .rdw-editor-main {
+    min-height: 120px;
+    padding: 10px;
+    background: #f8f9ff;
   }
 
-  h2 {
-    font-size: 22px;
+  .rdw-dropdown-wrapper {
+    position: relative;
   }
 
-  h3 {
-    font-size: 20px;
+  .rdw-dropdown-optionwrapper {
+    overflow-y: auto;
   }
 
-  p {
-    font-size: 14px;
+  .rdw-inline-dropdownoption {
+    align-items: center;
+  }
+
+  .rdw-editor-main {
+    overflow: unset;
   }
 
   .public-DraftStyleDefault-block {
     margin: 0;
   }
 
-  .rdw-editor-toolbar {
-    padding: 0;
-    margin: 0;
+  .DraftEditor-editorContainer {
     border: none;
   }
 
-  .rdw-dropdown-wrapper {
-    width: 30px;
+  .rdw-image-alignment-options-popup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
   }
-
-  .rdw-dropdown-selectedtext {
-    overflow: hidden;
-  }
-
-  .rdw-dropdown-carettoopen,
-  .rdw-dropdown-carettoclose {
-    display: none;
-  }
-
-  .rdw-dropdown-optionwrapper {
-    width: 100px;
-  }
-`;
-
-const IconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 export default Wysiwyg;
