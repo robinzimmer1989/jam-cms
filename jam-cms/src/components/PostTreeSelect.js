@@ -26,7 +26,6 @@ const PostTreeSelect = (props) => {
         treeNodeFilterProp="title"
         value={value}
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-        placeholder="Please select"
         allowClear
         treeDefaultExpandAll
         onChange={onChange}
