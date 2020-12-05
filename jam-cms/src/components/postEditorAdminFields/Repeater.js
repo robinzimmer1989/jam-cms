@@ -38,42 +38,44 @@ const Repeater = (props) => {
   };
 
   return (
-    <>
-      {values &&
-        values.map((value, index) => {
-          return (
-            <Collapse key={index}>
-              <Collapse.Panel header={`Item ${index + 1}`}>
-                <Space direction="vertical" size={30}>
-                  {items &&
-                    items.map((field, subIndex) => {
-                      return (
-                        <div key={subIndex}>
-                          {getField({
-                            field: { ...field, value: value[field.id] },
-                            index,
-                            site,
-                            onChangeElement: (value) => handleChange(value, index),
-                            dispatch,
-                          })}
-                        </div>
-                      );
-                    })}
+    <Space direction="vertical">
+      <Space direction="vertical" size={10}>
+        {values &&
+          values.map((value, index) => {
+            return (
+              <Collapse key={index}>
+                <Collapse.Panel header={`Item ${index + 1}`}>
+                  <Space direction="vertical" size={30}>
+                    {items &&
+                      items.map((field, subIndex) => {
+                        return (
+                          <div key={subIndex}>
+                            {getField({
+                              field: { ...field, value: value[field.id] },
+                              index,
+                              site,
+                              onChangeElement: (value) => handleChange(value, index),
+                              dispatch,
+                            })}
+                          </div>
+                        );
+                      })}
 
-                  <Button
-                    size="small"
-                    danger
-                    children={`Remove`}
-                    onClick={() => handleRemove(index)}
-                  />
-                </Space>
-              </Collapse.Panel>
-            </Collapse>
-          );
-        })}
+                    <Button
+                      size="small"
+                      danger
+                      children={`Remove`}
+                      onClick={() => handleRemove(index)}
+                    />
+                  </Space>
+                </Collapse.Panel>
+              </Collapse>
+            );
+          })}
+      </Space>
 
       <Button onClick={() => handleAdd(items.length)}>Add</Button>
-    </>
+    </Space>
   );
 };
 
