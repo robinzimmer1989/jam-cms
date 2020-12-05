@@ -6,56 +6,6 @@ import Img from 'gatsby-image';
 import Edges from '../Edges';
 import Button from '../Button';
 
-export const fields = {
-  name: 'boxes',
-  label: 'Boxes',
-  fields: [
-    {
-      id: 'title',
-      type: 'text',
-      label: 'Title',
-    },
-    {
-      id: 'columns',
-      type: 'number',
-      label: 'Columns',
-      defaultValue: 3,
-      min: 1,
-      max: 4,
-      step: 1,
-    },
-    {
-      id: 'boxes',
-      type: 'repeater',
-      label: 'Boxes',
-      defaultValue: [],
-      items: [
-        {
-          id: 'image',
-          type: 'image',
-          label: 'Add Image',
-        },
-        {
-          id: 'title',
-          type: 'text',
-          label: 'Title',
-        },
-        {
-          id: 'text',
-          type: 'text',
-          label: 'Text',
-          rows: 3,
-        },
-        {
-          id: 'button',
-          type: 'link',
-          label: 'Button',
-        },
-      ],
-    },
-  ],
-};
-
 const Boxes = (props) => {
   const { title, columns, boxes } = props;
 
@@ -155,4 +105,54 @@ const Box = styled.div`
   }
 `;
 
-export default Boxes;
+export default {
+  id: 'boxes',
+  label: 'Boxes',
+  component: Boxes,
+  category: 'default',
+  fields: [
+    {
+      id: 'title',
+      type: 'text',
+      label: 'Title',
+    },
+    {
+      id: 'columns',
+      type: 'number',
+      label: 'Columns',
+      defaultValue: 3,
+      min: 1,
+      max: 4,
+      step: 1,
+    },
+    {
+      id: 'boxes',
+      type: 'repeater',
+      label: 'Boxes',
+      defaultValue: [],
+      items: [
+        {
+          id: 'image',
+          type: 'image',
+          label: 'Add Image',
+        },
+        {
+          id: 'title',
+          type: 'text',
+          label: 'Title',
+        },
+        {
+          id: 'text',
+          type: 'text',
+          label: 'Text',
+          rows: 3,
+        },
+        {
+          id: 'button',
+          type: 'link',
+          label: 'Button',
+        },
+      ],
+    },
+  ],
+};

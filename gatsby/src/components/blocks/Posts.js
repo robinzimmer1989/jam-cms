@@ -1,51 +1,16 @@
-import React from 'react'
-import styled from 'styled-components'
-import Img from 'gatsby-image'
+import React from 'react';
+import styled from 'styled-components';
+import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges'
-import Button from '../Button'
-
-export const fields = {
-  name: 'posts',
-  label: 'Posts',
-  fields: [
-    {
-      id: 'posts',
-      type: 'collection',
-      label: 'Collection',
-    },
-    {
-      id: 'buttonTitle',
-      type: 'text',
-      defaultValue: 'Read More',
-      label: 'Button Title',
-    },
-    {
-      id: 'numberofposts',
-      type: 'number',
-      label: 'Number of Posts',
-      defaultValue: 3,
-      min: -1,
-      step: 2,
-    },
-    {
-      id: 'columns',
-      type: 'number',
-      label: 'Columns',
-      defaultValue: 3,
-      min: 1,
-      max: 4,
-      step: 1,
-    },
-  ],
-}
+import Edges from '../Edges';
+import Button from '../Button';
 
 const Posts = (props) => {
-  let { posts, buttonTitle, numberOfPosts, columns } = props
+  let { posts, buttonTitle, numberOfPosts, columns } = props;
 
   if (posts && numberOfPosts && numberOfPosts > 0) {
-    posts = posts.slice(0, numberOfPosts)
+    posts = posts.slice(0, numberOfPosts);
   }
 
   return (
@@ -76,9 +41,14 @@ const Posts = (props) => {
 
                   {post.title && <h4 children={post.title} />}
 
-                  <Button url={post.slug} title={buttonTitle} color={'primary'} variant={'filled'} />
+                  <Button
+                    url={post.slug}
+                    title={buttonTitle}
+                    color={'primary'}
+                    variant={'filled'}
+                  />
                 </Box>
-              )
+              );
             })}
 
           <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
@@ -87,20 +57,20 @@ const Posts = (props) => {
         </BoxesContainer>
       </Edges>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   position: relative;
   min-height: 300px;
-`
+`;
 
 const BoxesContainer = styled.div`
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-`
+`;
 
 const ImageContainer = styled.div`
   position: relative;
@@ -108,7 +78,7 @@ const ImageContainer = styled.div`
   height: 120px;
   margin-bottom: 12px;
   background: #f7f7f7;
-`
+`;
 
 const Box = styled.div`
   width: 100%;
@@ -137,6 +107,41 @@ const Box = styled.div`
       width: calc(100% / 4 - 10px);
     `}
   }
-`
+`;
 
-export default Posts
+export default {
+  id: 'posts',
+  label: 'Posts',
+  component: Posts,
+  category: 'default',
+  fields: [
+    {
+      id: 'posts',
+      type: 'collection',
+      label: 'Collection',
+    },
+    {
+      id: 'buttonTitle',
+      type: 'text',
+      defaultValue: 'Read More',
+      label: 'Button Title',
+    },
+    {
+      id: 'numberofposts',
+      type: 'number',
+      label: 'Number of Posts',
+      defaultValue: 3,
+      min: -1,
+      step: 2,
+    },
+    {
+      id: 'columns',
+      type: 'number',
+      label: 'Columns',
+      defaultValue: 3,
+      min: 1,
+      max: 4,
+      step: 1,
+    },
+  ],
+};

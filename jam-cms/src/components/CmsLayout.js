@@ -6,7 +6,6 @@ import {
   PieChartOutlined,
   BlockOutlined,
   SettingOutlined,
-  FormOutlined,
   FolderOpenOutlined,
 } from '@ant-design/icons';
 
@@ -24,11 +23,9 @@ const CmsLayout = (props) => {
   const [
     {
       authState: { authUser },
-      globalState: { leftSidebar },
       cmsState: { siteID, sites },
       editorState: { sidebar },
     },
-    dispatch,
   ] = useStore();
 
   const site = sites[siteID] || null;
@@ -77,10 +74,6 @@ const CmsLayout = (props) => {
                     );
                   })}
               </Menu.SubMenu>
-
-              {/* <Menu.Item key="Forms" icon={<FormOutlined />}>
-              <Link to={getRoute(`forms`, { siteID })}>Forms</Link>
-            </Menu.Item> */}
 
               {(authUser?.capabilities?.manage_options ||
                 authUser?.capabilities?.list_users ||

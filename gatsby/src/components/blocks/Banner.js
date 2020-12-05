@@ -5,24 +5,6 @@ import Img from 'gatsby-image';
 // import app components
 import Edges from '../Edges';
 
-export const fields = {
-  name: 'banner',
-  label: 'Banner',
-  fields: [
-    {
-      id: 'image',
-      type: 'image',
-      placeholder: '',
-      label: 'Image',
-    },
-    {
-      id: 'headline',
-      type: 'text',
-      label: 'Headline',
-    },
-  ],
-};
-
 const Banner = (props) => {
   const { image, headline } = props;
 
@@ -68,4 +50,22 @@ const ContentContainer = styled.div`
   color: #fff;
 `;
 
-export default Banner;
+export default {
+  id: 'banner',
+  label: 'Banner',
+  component: Banner,
+  category: 'default',
+  fields: [
+    {
+      id: 'image',
+      type: 'image',
+      placeholder: '',
+      label: 'Image',
+    },
+    {
+      id: 'headline',
+      type: 'text',
+      label: 'Headline',
+    },
+  ],
+};

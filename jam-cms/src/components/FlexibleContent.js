@@ -63,8 +63,8 @@ const FlexibleContent = (props) => {
 
         {renderedBlocks.length > 0 || children ? (
           <>
-            {renderedBlocks.map(({ name, data }, index) => {
-              const Component = blocks?.[name]?.component;
+            {renderedBlocks.map(({ id, data }, index) => {
+              const Component = blocks?.[id]?.component;
 
               if (Component) {
                 // Extract global settings from data, so we can apply it to the block wrapper in the next step.

@@ -4,7 +4,7 @@ export default function convertToPropsSchema(blocks) {
     o.fields.forEach((o) => (data[o.id] = o.value));
 
     return {
-      name: o.name,
+      id: o.id,
       data,
     };
   });

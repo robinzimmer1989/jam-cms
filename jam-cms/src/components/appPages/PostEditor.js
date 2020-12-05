@@ -55,10 +55,6 @@ const PostEditor = (props) => {
     };
   }, [postID]);
 
-  useEffect(() => {
-    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false });
-  }, []);
-
   const renderTemplateContent = (post) => {
     // if post type has a template assigned, then overwrite content in editor store
     // Because we don't wanna loose information in case the user changes the template along the way,
@@ -66,7 +62,7 @@ const PostEditor = (props) => {
     if (postType?.template && postType.template.length > 0) {
       const nextContent = produce(postType.template, (draft) => {
         post.content.map((o, i) => {
-          if (postType?.template?.[i]?.name === o.name) {
+          if (postType?.template?.[i]?.id === o.id) {
             o.fields.map((p, j) => {
               set(draft, `${i}.fields.${j}.value`, p.value);
             });
@@ -88,10 +84,7 @@ const PostEditor = (props) => {
   const getFields = () => {
     if (siteComponent) {
       // loop through default blocks and replace value if found
-      return blocks?.[site.settings[editorIndex].name].fields.fields.map((o) => {
-        // TODO: We might have to move to an object structure for fields instead of array.
-        // There is a problem when fields get removed and we try to add an array element and then skip something in between.
-        // The p?.id should fix it for now.
+      return blocks?.[site.settings[editorIndex].id].fields.map((o) => {
         const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id);
 
         if (setting) {
@@ -102,10 +95,7 @@ const PostEditor = (props) => {
       });
     } else if (post && post.content[editorIndex]) {
       // loop through default blocks and replace value if found
-      return blocks?.[post.content[editorIndex].name].fields.fields.map((o) => {
-        // TODO: We might have to move to an object structure for fields instead of array.
-        // There is a problem when fields get removed and we try to add an array element and then skip something in between.
-        // The p?.id should fix it for now.
+      return blocks?.[post.content[editorIndex].id].fields.map((o) => {
         const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id);
 
         if (setting) {
@@ -132,7 +122,7 @@ const PostEditor = (props) => {
         title: {
           title: siteComponent
             ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
-            : Parser(post.content[editorIndex].label || post.content[editorIndex].name),
+            : Parser(post.content[editorIndex].label || post.content[editorIndex].id),
           onBack: () =>
             dispatch({
               type: 'SET_EDITOR_INDEX',
@@ -220,10 +210,10 @@ const PostEditor = (props) => {
     });
   };
 
-  const handleSelectElement = (name, index) => {
+  const handleSelectElement = (id, index) => {
     // Assign the default value
-    const block = produce(blocks[name], (draft) => {
-      draft.fields.fields = draft.fields.fields.map((o) => {
+    const block = produce(blocks[id], (draft) => {
+      draft.fields = draft.fields.map((o) => {
         return { ...o, value: o.defaultValue || null };
       });
 
@@ -231,7 +221,7 @@ const PostEditor = (props) => {
     });
 
     const nextPost = produce(post, (draft) => {
-      draft.content.splice(index, 0, block.fields);
+      draft.content.splice(index, 0, block);
       return draft;
     });
 

@@ -9,8 +9,8 @@ const BlockForm = (props) => {
 
   const [, dispatch] = useStore();
 
-  const handleSelect = (name) => {
-    onSelect(name, index);
+  const handleSelect = (id) => {
+    onSelect(id, index);
 
     dispatch({ type: 'SET_EDITOR_INDEX', payload: index });
     dispatch({ type: 'CLOSE_DIALOG' });
@@ -21,7 +21,9 @@ const BlockForm = (props) => {
       {blocks &&
         Object.keys(blocks)
           .filter((key) => key !== 'header' && key !== 'footer')
-          .map((key) => <Button key={key} children={blocks[key].fields.label} onClick={() => handleSelect(key)} />)}
+          .map((key) => (
+            <Button key={key} children={blocks[key].label} onClick={() => handleSelect(key)} />
+          ))}
     </>
   );
 };

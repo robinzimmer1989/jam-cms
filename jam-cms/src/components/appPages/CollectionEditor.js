@@ -30,14 +30,12 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const postType = site?.postTypes?.[postTypeID];
 
   useEffect(() => {
-    dispatch({ type: `SET_LEFT_SIDEBAR`, payload: false });
-
     siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch);
   }, []);
 
   const getFields = () => {
     if (postType?.template?.[editorIndex]) {
-      return blocks[postType.template[editorIndex].name].fields.fields.map((o) => {
+      return blocks[postType.template[editorIndex].id].fields.map((o) => {
         const setting = postType.template[editorIndex].fields.find((p) => p.id === o.id);
 
         if (setting) {
@@ -63,7 +61,7 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
       sidebar = {
         title: {
           title: Parser(
-            postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].name
+            postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].id
           ),
           onBack: () =>
             dispatch({
@@ -139,9 +137,9 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
     });
   };
 
-  const handleSelectElement = (name, index) => {
+  const handleSelectElement = (id, index) => {
     const nextPostType = produce(postType, (draft) => {
-      draft.template.splice(index, 0, blocks[name].fields);
+      draft.template.splice(index, 0, blocks[id]);
       return draft;
     });
 

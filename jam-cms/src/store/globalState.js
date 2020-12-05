@@ -2,7 +2,6 @@ import produce from 'immer';
 
 export const globalState = {
   menu: false,
-  leftSidebar: true,
   dialog: {
     open: false,
     width: 500,
@@ -35,10 +34,6 @@ export const globalReducer = (state, action) => {
           width: 500,
           component: null,
         };
-        break;
-
-      case `SET_LEFT_SIDEBAR`:
-        draft.leftSidebar = payload;
         break;
 
       default:

@@ -26,7 +26,7 @@ const BlockWrapper = (props) => {
 
   const isActive = editorIndex === index;
 
-  const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].name;
+  const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].id;
 
   const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index });
 

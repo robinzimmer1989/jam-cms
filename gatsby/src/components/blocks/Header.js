@@ -1,31 +1,13 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'gatsby'
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'gatsby';
 
 // import app components
-import Edges from '../Edges'
-import Logo from '../../icons/logo.svg'
-
-export const fields = {
-  name: 'header',
-  label: 'Header',
-  fields: [
-    {
-      id: 'menu',
-      type: 'menu',
-      label: 'Menu',
-    },
-    {
-      id: 'breakpoint',
-      type: 'number',
-      label: 'Breakpoint',
-      defaultValue: 960,
-    },
-  ],
-}
+import Edges from '../Edges';
+import Logo from '../../icons/logo.svg';
 
 const Header = (props) => {
-  const { menu, breakpoint } = props
+  const { menu, breakpoint } = props;
 
   return (
     <Container breakpoint={breakpoint}>
@@ -43,7 +25,7 @@ const Header = (props) => {
                     <MenuItem key={i} to={o.slug}>
                       {o.title}
                     </MenuItem>
-                  )
+                  );
                 })}
               </Navigation>
 
@@ -53,8 +35,8 @@ const Header = (props) => {
         </Grid>
       </Edges>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   height: 80px;
@@ -74,7 +56,7 @@ const Container = styled.div`
       display: none;
     }
   }
-`
+`;
 
 const Grid = styled.div`
   display: flex;
@@ -82,7 +64,7 @@ const Grid = styled.div`
   align-items: center;
   height: 100%;
   padding: 5px 0;
-`
+`;
 
 const LogoContainer = styled(Link)`
   display: flex;
@@ -93,21 +75,39 @@ const LogoContainer = styled(Link)`
     height: 60px;
     width: auto;
   }
-`
+`;
 
 const Navigation = styled.ul`
   display: none;
   flex: 1;
   justify-content: flex-end;
   margin: 0;
-`
+`;
 
-const Hamburger = styled.div``
+const Hamburger = styled.div``;
 
 const MenuItem = styled.li`
   margin: 0 10px;
   text-decoration: none;
   transform: translateX(10px);
-`
+`;
 
-export default Header
+export default {
+  id: 'header',
+  label: 'Header',
+  component: Header,
+  category: 'default',
+  fields: [
+    {
+      id: 'menu',
+      type: 'menu',
+      label: 'Menu',
+    },
+    {
+      id: 'breakpoint',
+      type: 'number',
+      label: 'Breakpoint',
+      defaultValue: 960,
+    },
+  ],
+};
