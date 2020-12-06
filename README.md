@@ -1,6 +1,11 @@
 <img src="https://raw.githubusercontent.com/robinzimmer1989/jam-cms/adf550c8b95751b8924b11b6a2fc9bf0b1c34cd0/src/icons/jamCMS.svg" alt="jamCMS Logo" />
 
-#### Alpha version
+### Alpha version
+
+## Latest Updates
+
+- Support for flexible content (sub-)field
+- Simplying of block/field structure (see Development section)
 
 ## Introduction
 
@@ -140,66 +145,68 @@ export default {
 }
 ```
 
-The "blocks" property is an object of all the content blocks. Each block has a fields object and the actual React component.
+The "blocks" property is an object of all content blocks.
 
 ```
-import Header, { fields as headerFields } from './Header'
-import Footer, { fields as footerFields } from './Footer'
-import Banner, { fields as bannerFields } from './Banner'
+import header from './Header';
+import footer from './Footer';
+import banner from './Banner';
 
-const blocks = {
-  header: {
-    component: Header,
-    fields: headerFields,
-  },
-  footer: {
-    component: Footer,
-    fields: footerFields,
-  },
-  banner: {
-    component: Banner,
-    fields: bannerFields,
-  },
-}
-
-export default blocks
+export default { header, footer, banner };
 ```
 
-The individual component looks something like this. We have a fields object, which defines the editor fields and passed in props, and the React component.
-The "name" key in the fields object must be unique. The id of each field represents the prop which is passed into the react component. Right now, only lowercase strings without special characters are supported. A list of all field types can be found in the next section.
+The individual component looks something like this.
+
+At the bottom we have a default export with id, label, component and fields.
+Important: The id of the block must be a lowercase string.
+
+The id for each field represents the prop which gets passed into the React component (i.e. headline and image).
+A list of all field types can be found in the next section.
 
 ```
-import React from 'react'
-import Img from 'gatsby-image'
+import React from 'react';
+import Img from 'gatsby-image';
 
-export const fields = {
-  name: 'banner',
+const Banner = (props) => {
+  const { image, headline } = props;
+
+  return (
+    <>
+      <div>
+        {image?.childImageSharp?.fluid && (
+          <Img
+            fluid={image.childImageSharp.fluid}
+            objectFit="cover"
+            objectPosition="50% 50%"
+            alt={image.alt}
+            style={{ width: '100%', height: '100%' }}
+          />
+        )}
+      </div>
+
+      <h1 children={headline} />
+    </>
+  );
+};
+
+export default {
+  id: 'banner',
   label: 'Banner',
+  component: Banner,
   fields: [
     {
       id: 'image',
       type: 'image',
-      label: 'Image'
+      label: 'Image',
+    },
+    {
+      id: 'headline',
+      type: 'text',
+      label: 'Headline',
     },
   ],
-}
+};
 
-const Banner = ({ image }) => {
-  return (
-    <div style={{position: 'relative', height: '300px'}}>
-      {image?.childImageSharp?.fluid && (
-        <Img
-          fluid={image.childImageSharp.fluid}
-          objectFit="cover"
-          objectPosition="50% 50%"
-          style={{ width: '100%', height: '100%' }}
-        />
-      )}
-    </div>
-  )
-}
-
-export default Banner
 ```
 
 ## Supported field types
@@ -321,11 +328,44 @@ The menu id must be unqiue throughout the entire site.
 }
 ```
 
-## Known issues
+#### Flexible Content
 
-The project is still in an early alpha version with many changes to come. Here are some current issues:
-
-- WYSIWYG editor needs improvement
+```
+{
+  id: 'foo',
+  type: 'flexible_content',
+  label: 'Bar',
+  items: [
+    {
+      id: 'layout1',
+      label: 'Text',
+      fields: [
+        {
+          id: 'text',
+          type: 'wysiwyg',
+          label: 'Text',
+        },
+      ],
+    },
+    {
+      id: 'layout2',
+      label: 'Text & Image',
+      fields: [
+        {
+          id: 'text',
+          type: 'wysiwyg',
+          label: 'Text',
+        },
+        {
+          id: 'image',
+          type: 'image',
+          label: 'Image',
+        },
+      ],
+    },
+  ],
+},
+```
 
 ## Roadmap
 
