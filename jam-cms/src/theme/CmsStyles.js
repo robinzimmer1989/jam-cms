@@ -79,13 +79,13 @@ export default createGlobalStyle`
     background: #f8f9ff;
   }
 
-  .ant-collapse-header {
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     padding: 6px 16px 6px 30px;
-    
-    > .ant-collapse-arrow {
-      top: 50%;
-      transform: translateY(-50%);
-      left: 10px;
-    }
+  }
+
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
   }
 `;
