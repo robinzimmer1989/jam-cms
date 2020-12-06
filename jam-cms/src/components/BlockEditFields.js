@@ -219,7 +219,9 @@ const BlockEditFields = (props) => {
       </Space>
 
       {!isTemplate && !isSiteComponent && (
-        <Button onClick={onDeleteElement} children={`Delete Block`} danger />
+        <ButtonContainer>
+          <Button onClick={onDeleteElement} children={`Delete Block`} danger block />
+        </ButtonContainer>
       )}
     </Container>
   );
@@ -231,6 +233,10 @@ const Container = styled.div`
   justify-content: space-between;
   min-height: calc(100% - 75px);
   padding: 15px;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 20px;
 `;
 
 export default BlockEditFields;
