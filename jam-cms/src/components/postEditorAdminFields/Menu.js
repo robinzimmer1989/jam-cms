@@ -3,11 +3,11 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 
 const Menu = (props) => {
-  const { label, onClick } = props;
+  const { onClick } = props;
 
   return (
     <Container>
-      <Button children={label} onClick={onClick} />
+      <Button children="Edit" onClick={onClick} />
     </Container>
   );
 };
