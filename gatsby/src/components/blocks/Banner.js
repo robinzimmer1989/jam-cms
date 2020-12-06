@@ -59,7 +59,6 @@ export default {
     {
       id: 'image',
       type: 'image',
-      placeholder: '',
       label: 'Image',
     },
     {
