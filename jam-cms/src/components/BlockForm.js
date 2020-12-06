@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import styled from 'styled-components';
 
 // import app components
 import { useStore } from '../store';
@@ -17,15 +18,25 @@ const BlockForm = (props) => {
   };
 
   return (
-    <>
+    <Container>
       {blocks &&
         Object.keys(blocks)
           .filter((key) => key !== 'header' && key !== 'footer')
           .map((key) => (
             <Button key={key} children={blocks[key].label} onClick={() => handleSelect(key)} />
           ))}
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+
+  button {
+    width: 130px;
+    margin: 0 10px 20px;
+  }
+`;
 
 export default BlockForm;
