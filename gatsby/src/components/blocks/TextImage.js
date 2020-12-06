@@ -31,7 +31,7 @@ const TextImage = (props) => {
               />
             )}
           </ImageContainer>
-          <ContentContainer alignment={alignment}>
+          <TextContainer alignment={alignment}>
             <div>
               {text && <Wysiwyg children={text} />}
 
@@ -53,7 +53,7 @@ const TextImage = (props) => {
                 </Buttons>
               )}
             </div>
-          </ContentContainer>
+          </TextContainer>
         </Inner>
       </Edges>
     </Container>
@@ -74,7 +74,7 @@ const ImageContainer = styled.div`
   order: ${({ alignment }) => (alignment === 'left' ? 1 : 3)};
 `;
 
-const ContentContainer = styled.div`
+const TextContainer = styled.div`
   width: 50%;
   padding: ${({ alignment }) => (alignment === 'left' ? '30px 0 30px 30px' : '30px 30px 30px 0')};
   display: flex;
