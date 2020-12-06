@@ -20,6 +20,7 @@ import Link from './postEditorAdminFields/Link';
 import Select from './postEditorAdminFields/Select';
 import Number from './postEditorAdminFields/Number';
 import Settings from './postEditorAdminFields/Settings';
+import FlexibleContent from './postEditorAdminFields/FlexibleContent';
 
 import { useStore } from '../store';
 
@@ -129,6 +130,17 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       );
       break;
 
+    case 'flexible_content':
+      component = (
+        <FlexibleContent
+          {...field}
+          site={site}
+          dispatch={dispatch}
+          onChange={(items) => onChangeElement({ ...field, value: items }, index)}
+        />
+      );
+      break;
+
     case 'image':
       component = (
         <ImagePicker
@@ -204,15 +216,20 @@ const BlockEditFields = (props) => {
       <Space direction="vertical" size={30}>
         {fields &&
           fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
-        {!isTemplate && !isSiteComponent && (
-          <Button onClick={onDeleteElement} children={`Delete Block`} danger />
-        )}
       </Space>
+
+      {!isTemplate && !isSiteComponent && (
+        <Button onClick={onDeleteElement} children={`Delete Block`} danger />
+      )}
     </Container>
   );
 };
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100% - 75px);
   padding: 15px;
 `;
 
