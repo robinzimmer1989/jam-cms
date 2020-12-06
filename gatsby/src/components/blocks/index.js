@@ -4,6 +4,6 @@ import banner from './Banner';
 import boxes from './Boxes';
 import posts from './Posts';
 import textimage from './TextImage';
-import text from './Text';
+import texteditor from './TextEditor';
 
-export default { header, footer, banner, boxes, posts, textimage, text };
+export default { header, footer, banner, boxes, posts, textimage, texteditor };
