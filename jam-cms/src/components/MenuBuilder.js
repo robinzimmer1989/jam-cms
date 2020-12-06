@@ -215,11 +215,9 @@ const MenuBuilder = (props) => {
             onDrop={onDrop}
             treeData={items}
             titleRender={(node) => {
-              const header = node.url ? `${node.title} - Custom` : node.title;
-
               return (
                 <Collapse>
-                  <Collapse.Panel header={header}>
+                  <Collapse.Panel header={node.title}>
                     <Space direction="vertical">
                       <Input
                         label="title"
