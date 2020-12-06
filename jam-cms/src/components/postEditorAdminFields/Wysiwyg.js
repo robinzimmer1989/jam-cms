@@ -86,6 +86,19 @@ const EditorContainer = styled.div`
     background: #f8f9ff;
   }
 
+  .rdw-inline-dropdown {
+    width: auto;
+  }
+
+  .rdw-dropdown-selectedtext {
+    padding: 0 8px;
+  }
+
+  .rdw-dropdown-carettoopen,
+  .rdw-dropdown-carettoclose {
+    display: none;
+  }
+
   .rdw-dropdown-wrapper {
     position: relative;
   }
