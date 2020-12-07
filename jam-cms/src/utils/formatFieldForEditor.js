@@ -1,5 +1,3 @@
-import Parser from 'html-react-parser';
-
 import generateSlug from './generateSlug';
 
 export default function formatFieldForEditor(field, site) {
@@ -23,38 +21,14 @@ export default function formatFieldForEditor(field, site) {
   ) {
     return {
       ...field,
-      value: '<i>Write something...</i>',
+      value: 'Write something...',
     };
   }
 
   if (field.type === 'text' && !field?.value) {
     return {
       ...field,
-      value: Parser('<i>Write something...</i>'),
-    };
-  }
-
-  if (field.type === 'image' && !field?.value) {
-    return {
-      ...field,
-      value: {
-        alt: '',
-        childImageSharp: {
-          fluid: {
-            aspectRatio: 1,
-            base64: '',
-            sizes: '(max-width: 1200px) 100vw, 1200px',
-            src: 'https://www.fpcanada.org/wp-content/uploads/woocommerce-placeholder.png',
-            srcSet: '',
-          },
-        },
-        filename: 'placeholder.jpeg',
-        height: 1200,
-        width: 1200,
-        title: 'placeholder',
-        type: 'image',
-        url: 'https://www.fpcanada.org/wp-content/uploads/woocommerce-placeholder.png',
-      },
+      value: 'Write something...',
     };
   }
 
