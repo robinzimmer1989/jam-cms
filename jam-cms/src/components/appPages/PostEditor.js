@@ -12,6 +12,7 @@ import PageWrapper from '../PageWrapper';
 import EditorSidebar from '../EditorSidebar';
 import FlexibleContent from '../FlexibleContent';
 import PostSettings from '../PostSettings';
+import Loader from '../Loader';
 
 import { formatBlocks } from '../../utils';
 import { useStore } from '../../store';
@@ -228,17 +229,21 @@ const PostEditor = (props) => {
 
   return (
     <CmsLayout pageTitle="Editor" mode="editor" rightSidebar={getSidebar()} onBack={handleBack}>
-      <PageWrapper theme={theme}>
-        <FlexibleContent
-          blocks={blocks}
-          renderedBlocks={formatBlocks(post?.content, site)}
-          editableHeader={true}
-          editableFooter={true}
-          isTemplate={postType?.template && postType.template.length}
-          onOpenDialog={handleOpenDialog}
-          onMoveElement={handleMoveElement}
-        />
-      </PageWrapper>
+      {post ? (
+        <PageWrapper theme={theme}>
+          <FlexibleContent
+            blocks={blocks}
+            renderedBlocks={formatBlocks(post?.content, site)}
+            editableHeader={true}
+            editableFooter={true}
+            isTemplate={postType?.template && postType.template.length}
+            onOpenDialog={handleOpenDialog}
+            onMoveElement={handleMoveElement}
+          />
+        </PageWrapper>
+      ) : (
+        <Loader />
+      )}
     </CmsLayout>
   );
 };
