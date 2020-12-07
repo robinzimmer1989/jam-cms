@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { PageHeader, Divider } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 import { navigate } from '@reach/router';
@@ -10,7 +9,7 @@ import BlockForm from '../BlockForm';
 import BlockEditFields from '../BlockEditFields';
 import CmsLayout from '../CmsLayout';
 import PageWrapper from '../PageWrapper';
-import PostHeader from '../PostHeader';
+import EditorSidebar from '../EditorSidebar';
 import FlexibleContent from '../FlexibleContent';
 import PostSettings from '../PostSettings';
 
@@ -25,7 +24,7 @@ const PostEditor = (props) => {
   const [
     {
       cmsState: { sites, siteID },
-      editorState: { site, post, editorIndex },
+      editorState: { site, post, editorIndex, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -108,51 +107,29 @@ const PostEditor = (props) => {
   };
 
   const getSidebar = () => {
-    let sidebar = {
-      title: '',
-      icon: {
-        onClick: null,
-        component: null,
-      },
-      children: null,
-    };
+    let title;
+    let children;
 
-    if (post?.content[editorIndex] || siteComponent) {
-      sidebar = {
-        title: {
-          title: siteComponent
-            ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
-            : Parser(post.content[editorIndex].label || post.content[editorIndex].id),
-          onBack: () =>
-            dispatch({
-              type: 'SET_EDITOR_INDEX',
-              payload: null,
-            }),
-        },
-        children: (
-          <BlockEditFields
-            fields={getFields()}
-            onChangeElement={handleChangeElement}
-            onDeleteElement={handleDeleteElement}
-            isTemplate={postType?.template && postType.template.length}
-            isSiteComponent={!!siteComponent}
-          />
-        ),
-      };
-    } else {
-      sidebar = {
-        title: { title: 'Settings', onBack: null },
-        children: <PostSettings />,
-      };
+    if (sidebar === 'post-settings') {
+      title = 'Settings';
+      children = <PostSettings />;
+    } else if (post?.content[editorIndex] || siteComponent) {
+      title = siteComponent
+        ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
+        : Parser(post.content[editorIndex].label || post.content[editorIndex].id);
+
+      children = (
+        <BlockEditFields
+          fields={getFields()}
+          onChangeElement={handleChangeElement}
+          onDeleteElement={handleDeleteElement}
+          isTemplate={postType?.template && postType.template.length}
+          isSiteComponent={!!siteComponent}
+        />
+      );
     }
 
-    return (
-      <>
-        <PageHeader {...sidebar.title} style={{ paddingLeft: 20 }} />
-        <Divider style={{ margin: 0 }} />
-        {sidebar.children}
-      </>
-    );
+    return <EditorSidebar title={title} children={children} />;
   };
 
   const handleChangeElement = (field, index) => {
@@ -251,8 +228,6 @@ const PostEditor = (props) => {
 
   return (
     <CmsLayout pageTitle="Editor" mode="editor" rightSidebar={getSidebar()} onBack={handleBack}>
-      <PostHeader postType={postType} />
-
       <PageWrapper theme={theme}>
         <FlexibleContent
           blocks={blocks}

@@ -28,15 +28,18 @@ const BlockWrapper = (props) => {
 
   const blockName = index === 'header' || index === 'footer' ? index : renderedBlocks[index].id;
 
-  const handleOpenBlock = () => dispatch({ type: `SET_EDITOR_INDEX`, payload: index });
+  const handleOpenBlock = () => {
+    dispatch({ type: 'SET_EDITOR_INDEX', payload: index });
+  };
+
+  const handleClick = () => {
+    dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: blockName });
+    onClick() || handleOpenBlock();
+  };
 
   return (
-    <Container
-      active={isActive}
-      viewport={viewport}
-      onClick={() => dispatch({ type: `SET_EDITOR_SIDEBAR`, payload: true })}
-    >
-      <Content onClick={onClick || handleOpenBlock} active={isActive} viewport={viewport}>
+    <Container active={isActive} viewport={viewport}>
+      <Content onClick={handleClick} active={isActive} viewport={viewport}>
         <ContentWrapper>{children}</ContentWrapper>
       </Content>
 

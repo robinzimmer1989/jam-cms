@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { PageHeader, Divider, Space } from 'antd';
+import { Space } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 import { navigate } from '@reach/router';
@@ -12,6 +12,7 @@ import FlexibleContent from '../FlexibleContent';
 import BlockForm from '../BlockForm';
 import BlockEditFields from '../BlockEditFields';
 import CollectionSettings from '../CollectionSettings';
+import EditorSidebar from '../EditorSidebar';
 
 import { formatBlocks } from '../../utils';
 import { siteActions } from '../../actions';
@@ -22,7 +23,7 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const [
     {
       cmsState: { sites, siteID },
-      editorState: { site, editorIndex },
+      editorState: { site, editorIndex, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -48,49 +49,27 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   };
 
   const getSidebar = () => {
-    let sidebar = {
-      title: '',
-      icon: {
-        onClick: null,
-        component: null,
-      },
-      children: null,
-    };
+    let title;
+    let children;
 
-    if (postType?.template?.[editorIndex]) {
-      sidebar = {
-        title: {
-          title: Parser(
-            postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].id
-          ),
-          onBack: () =>
-            dispatch({
-              type: 'SET_EDITOR_INDEX',
-              payload: null,
-            }),
-        },
-        children: (
-          <BlockEditFields
-            fields={getFields()}
-            onChangeElement={handleChangeElement}
-            onDeleteElement={handleDeleteElement}
-          />
-        ),
-      };
-    } else {
-      sidebar = {
-        title: { title: 'Settings', onBack: null },
-        children: <CollectionSettings postTypeID={postTypeID} />,
-      };
+    if (sidebar === 'post-settings') {
+      title = 'Settings';
+      children = <CollectionSettings postTypeID={postTypeID} />;
+    } else if (postType?.template?.[editorIndex]) {
+      title = Parser(
+        postType?.template?.[editorIndex].label || postType?.template?.[editorIndex].id
+      );
+
+      children = (
+        <BlockEditFields
+          fields={getFields()}
+          onChangeElement={handleChangeElement}
+          onDeleteElement={handleDeleteElement}
+        />
+      );
     }
 
-    return (
-      <>
-        <PageHeader {...sidebar.title} style={{ paddingLeft: 20 }} />
-        <Divider style={{ margin: 0 }} />
-        {sidebar.children}
-      </>
-    );
+    return <EditorSidebar title={title} children={children} />;
   };
 
   const handleChangeElement = (field, index) => {

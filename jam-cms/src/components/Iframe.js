@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import styled, { StyleSheetManager, createGlobalStyle } from 'styled-components';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 
@@ -12,38 +12,14 @@ const Iframe = ({ theme, children }) => {
     },
   ] = useStore();
 
-  const iframeRef = useRef();
-
-  const [height, setHeight] = useState(0);
-
-  const handleResize = () => {
-    if (viewport === 'fullscreen') {
-      typeof window !== `undefined` && setHeight(window.innerHeight);
-    } else if (viewport === 'mobile') {
-      setHeight(640);
-    } else if (viewport === 'tablet') {
-      setHeight(900);
-    } else if (
-      iframeRef.current &&
-      iframeRef.current.node &&
-      iframeRef.current.node.contentDocument &&
-      iframeRef.current.node.contentDocument.body.scrollHeight !== 0
-    ) {
-      // Calculate height automatically based on body height of iframe
-      setHeight(iframeRef.current.node.contentDocument.body.scrollHeight);
-    }
-  };
-
-  useEffect(() => {
-    handleResize();
-  }, [children, viewport]);
-
   return (
     <Container>
       <Frame
-        style={{ width: '100%', height, overflow: 'auto' }}
-        onLoad={() => handleResize()}
-        ref={iframeRef}
+        style={{
+          width: '100%',
+          height: viewport === 'fullscreen' ? '100vh' : 'calc(100vh - 64px)',
+          overflow: 'auto',
+        }}
       >
         <FrameContextConsumer>
           {(frameContext) => (

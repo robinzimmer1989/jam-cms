@@ -126,7 +126,7 @@ const FlexibleContent = (props) => {
             })}
         </Space>
 
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} trigger={['click']}>
           <Button>Add</Button>
         </Dropdown>
       </Space>

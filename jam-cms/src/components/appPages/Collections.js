@@ -25,7 +25,9 @@ const CollectionSettings = () => {
     const result = await collectionActions.addCollection({ siteID, title, slug }, dispatch);
 
     if (result?.data?.createPostType) {
-      navigate(getRoute(`settings-collection`, { siteID, postTypeID: result.data.createPostType.id }));
+      navigate(
+        getRoute(`settings-collection`, { siteID, postTypeID: result.data.createPostType.id })
+      );
     }
   };
 
@@ -76,7 +78,14 @@ const CollectionSettings = () => {
           );
 
           return (
-            <ListItem key={o.id} link={link} actions={actions} title={o.title} subtitle={`/${o.slug}`} hideImage />
+            <ListItem
+              key={o.id}
+              link={link}
+              actions={actions}
+              title={o.title}
+              subtitle={`/${o.slug}`}
+              hideImage
+            />
           );
         })}
     </CmsLayout>

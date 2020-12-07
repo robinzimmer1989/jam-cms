@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
-import { PageHeader, Layout, Menu, Divider } from 'antd';
+import { PageHeader, Layout, Menu } from 'antd';
 import {
   PieChartOutlined,
   BlockOutlined,
@@ -12,6 +12,7 @@ import {
 // import app components
 import Edges from './Edges';
 import CmsHeader from './CmsHeader';
+import EditorHeader from './EditorHeader';
 import JamCmsLogo from '../icons/jamCMS.svg';
 
 import { useStore } from '../store';
@@ -115,15 +116,22 @@ const CmsLayout = (props) => {
           marginRight: rightSidebar && sidebar ? 300 : 0,
         }}
       >
-        <Layout.Header style={{ padding: 0 }}>
-          <Edges size={mode !== 'editor' ? 'md' : ''}>
+        <Layout.Header>
+          {mode === 'editor' ? (
+            <EditorHeader title={pageTitle} onBack={onBack} />
+          ) : (
             <CmsHeader title={pageTitle} actionBar={mode} onBack={onBack} />
-          </Edges>
+          )}
         </Layout.Header>
 
-        <Layout.Content style={{ paddingBottom: 100 }}>
-          <StyledDivider />
-          <Edges size={mode === 'editor' ? 'full' : 'md'}>{children}</Edges>
+        <Layout.Content>
+          {mode === 'editor' ? (
+            children
+          ) : (
+            <Content>
+              <Edges size="md">{children}</Edges>
+            </Content>
+          )}
         </Layout.Content>
       </Layout>
 
@@ -182,8 +190,9 @@ const StyledPageHeader = styled(PageHeader)`
   }
 `;
 
-const StyledDivider = styled(Divider)`
-  margin: 8px 0 20px;
+const Content = styled.div`
+  width: 100%;
+  padding: 40px 0;
 `;
 
 export default CmsLayout;

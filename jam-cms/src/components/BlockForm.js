@@ -10,9 +10,10 @@ const BlockForm = (props) => {
 
   const [, dispatch] = useStore();
 
-  const handleSelect = (id) => {
-    onSelect(id, index);
+  const handleSelect = (blockName) => {
+    onSelect(blockName, index);
 
+    dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: blockName });
     dispatch({ type: 'SET_EDITOR_INDEX', payload: index });
     dispatch({ type: 'CLOSE_DIALOG' });
   };

@@ -8,7 +8,7 @@ export const editorState = {
   hasChanged: false,
   viewport: 'desktop',
   editable: true,
-  sidebar: true,
+  sidebar: false,
 };
 
 export const editorReducer = (state, action) => {
@@ -89,6 +89,9 @@ export const editorReducer = (state, action) => {
         draft.form = null;
         draft.hasChanged = false;
         draft.editorIndex = null;
+        draft.viewport = 'desktop';
+        draft.editable = true;
+        draft.sidebar = false;
         break;
 
       default:

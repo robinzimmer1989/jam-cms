@@ -15,6 +15,7 @@ import ImagePicker from './postEditorAdminFields/ImagePicker';
 
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
+import { generateSlug } from '../utils';
 
 const PostSettings = () => {
   const [
@@ -27,7 +28,8 @@ const PostSettings = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const posts = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts;
+  const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
+  const posts = postType?.posts;
 
   // Remove own post for display in the page parent drop down
   const otherPosts = { ...posts };
@@ -74,7 +76,32 @@ const PostSettings = () => {
 
   return (
     <Container>
-      <Space direction="vertical" size={20}>
+      <Space direction="vertical">
+        <Skeleton done={!!post} height={32}>
+          <Input
+            value={post?.title || ''}
+            onChange={(e) => handleChangePost('title', e.target.value)}
+            label={'Title'}
+          />
+        </Skeleton>
+
+        <Skeleton done={!!post} height={32}>
+          <Input
+            value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+            onChange={(e) => handleChangePost('slug', e.target.value)}
+            label={'Slug'}
+            disabled={post?.id === site?.frontPage}
+          />
+        </Skeleton>
+
+        <Skeleton done={!!post} height={32}>
+          <Input
+            value={generateSlug(postType, post?.id, site?.frontPage)}
+            label={'Permalink'}
+            disabled
+          />
+        </Skeleton>
+
         <Skeleton done={!!post} height={32}>
           <Select
             value={post?.status || ''}

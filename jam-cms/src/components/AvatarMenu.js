@@ -22,7 +22,7 @@ const AvatarMenu = (props) => {
   );
 
   return (
-    <Dropdown overlay={dropDownMenu} arrow>
+    <Dropdown overlay={dropDownMenu} arrow trigger={['click']}>
       <div>
         <Button size={32} icon={<UserOutlined />} shape="circle" ghost={ghost} />
       </div>

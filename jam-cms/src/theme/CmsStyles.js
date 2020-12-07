@@ -27,7 +27,13 @@ export default createGlobalStyle`
   }
 
   .ant-layout-header {
-    background: transparent;
+    height: unset;
+    background: #fff;
+    padding: 0;
+  }
+
+  .ant-layout-content {
+    display: flex;
   }
 
   .ant-layout-footer {
@@ -39,8 +45,7 @@ export default createGlobalStyle`
   }
 
   .ant-page-header {
-    padding-left: 0;
-    padding-right: 0;
+    padding: 12px 0;
   }
 
   .ant-card {
