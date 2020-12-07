@@ -19,6 +19,10 @@ const Iframe = ({ theme, children }) => {
   const handleResize = () => {
     if (viewport === 'fullscreen') {
       typeof window !== `undefined` && setHeight(window.innerHeight);
+    } else if (viewport === 'mobile') {
+      setHeight(640);
+    } else if (viewport === 'tablet') {
+      setHeight(900);
     } else if (
       iframeRef.current &&
       iframeRef.current.node &&

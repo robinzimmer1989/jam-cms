@@ -64,10 +64,12 @@ const Page = styled.div`
       ? css``
       : viewport === `tablet`
       ? css`
+          width: 100%;
           max-width: 768px;
         `
       : viewport === `mobile` &&
         css`
+          width: 100%;
           max-width: 360px;
         `}
 `;
