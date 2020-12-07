@@ -94,13 +94,15 @@ const PostSettings = () => {
           />
         </Skeleton>
 
-        <Skeleton done={!!post} height={32}>
-          <Input
-            value={generateSlug(postType, post?.id, site?.frontPage)}
-            label={'Permalink'}
-            disabled
-          />
-        </Skeleton>
+        {post?.id !== site?.frontPage && (
+          <Skeleton done={!!post} height={32}>
+            <Input
+              value={generateSlug(postType, post?.id, site?.frontPage)}
+              label={'Permalink'}
+              disabled
+            />
+          </Skeleton>
+        )}
 
         <Skeleton done={!!post} height={32}>
           <Select
