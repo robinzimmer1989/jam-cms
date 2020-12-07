@@ -70,6 +70,7 @@ const Wysiwyg = (props) => {
                 inDropdown: true,
               },
             }}
+            stripPastedStyles={true}
           />
         </div>
       )}
