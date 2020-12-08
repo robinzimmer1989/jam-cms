@@ -31,6 +31,7 @@ const LinkSelector = (props) => {
 
   const handleSubmit = async () => {
     onChange(link);
+    setLink({ title: '', url: '', target: '' });
     dispatch({ type: `CLOSE_DIALOG` });
   };
 
