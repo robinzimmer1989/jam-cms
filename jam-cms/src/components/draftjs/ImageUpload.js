@@ -7,7 +7,7 @@ import { FileImageOutlined } from '@ant-design/icons';
 import 'draft-js-image-plugin/lib/plugin.css';
 
 // import app components
-import MediaLibrary from './MediaLibrary';
+import MediaLibrary from '../MediaLibrary';
 
 const WysiwygImageUpload = (props) => {
   const { editorState, onChange } = props;
@@ -38,7 +38,13 @@ const WysiwygImageUpload = (props) => {
         <FileImageOutlined />
       </IconContainer>
 
-      <Modal title={'Media Library'} visible={open} onCancel={() => setOpen(false)} width={1000}>
+      <Modal
+        title={'Media Library'}
+        visible={open}
+        onCancel={() => setOpen(false)}
+        width={1000}
+        footer={null}
+      >
         <MediaLibrary onSelect={handleSelect} />
       </Modal>
     </>

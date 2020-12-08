@@ -4,6 +4,10 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { ContentState, EditorState, convertToRaw } from 'draft-js';
 
+import LinkSelect from '../draftjs/LinkSelect';
+import addLinkPlugin from '../draftjs/addLinkPlugin';
+import { colors } from '../../theme';
+
 let Editor = () => <></>;
 
 const Wysiwyg = (props) => {
@@ -52,12 +56,13 @@ const Wysiwyg = (props) => {
       {editor && (
         <div>
           <Editor
+            toolbarCustomButtons={[<LinkSelect modifier={addLinkPlugin} />]}
             editorState={editorState}
             onEditorStateChange={handleChange}
             placeholder="Write something..."
             ref={editorRef}
             toolbar={{
-              options: ['inline', 'blockType', 'textAlign'],
+              options: ['inline', 'blockType', 'textAlign', 'list'],
               inline: {
                 inDropdown: true,
                 options: ['bold', 'italic', 'underline'],
@@ -67,6 +72,9 @@ const Wysiwyg = (props) => {
                 options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote'],
               },
               textAlign: {
+                inDropdown: true,
+              },
+              list: {
                 inDropdown: true,
               },
             }}
@@ -80,6 +88,16 @@ const Wysiwyg = (props) => {
 
 const EditorContainer = styled.div`
   position: relative;
+
+  .rdw-editor-toolbar {
+    padding: 0;
+    margin: 0;
+    border: none;
+
+    a {
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
 
   .rdw-editor-main {
     min-height: 120px;
@@ -102,6 +120,13 @@ const EditorContainer = styled.div`
 
   .rdw-dropdown-wrapper {
     position: relative;
+    width: auto;
+    margin: 0 2px 2px 0;
+
+    &:hover {
+      box-shadow: none;
+      border-color: ${colors.primary.dark};
+    }
   }
 
   .rdw-dropdown-optionwrapper {
@@ -129,6 +154,10 @@ const EditorContainer = styled.div`
     top: 0;
     right: 0;
     width: auto;
+  }
+
+  .rdw-link-decorator-icon {
+    display: none;
   }
 `;
 
