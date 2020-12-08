@@ -11,7 +11,10 @@ const EditorSidebar = (props) => {
 
   const [, dispatch] = useStore();
 
-  const handleClose = () => dispatch({ type: `SET_EDITOR_SIDEBAR`, payload: null });
+  const handleClose = () => {
+    dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: null });
+    dispatch({ type: 'SET_EDITOR_INDEX', payload: null });
+  };
 
   return (
     <Container>
