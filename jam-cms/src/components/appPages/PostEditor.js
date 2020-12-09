@@ -228,7 +228,12 @@ const PostEditor = (props) => {
   };
 
   return (
-    <CmsLayout pageTitle="Editor" mode="editor" rightSidebar={getSidebar()} onBack={handleBack}>
+    <CmsLayout
+      pageTitle={post?.title}
+      mode="editor"
+      rightSidebar={getSidebar()}
+      onBack={handleBack}
+    >
       {post ? (
         <PageWrapper theme={theme}>
           <FlexibleContent
