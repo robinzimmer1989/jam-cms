@@ -101,7 +101,7 @@ const FlexibleContent = (props) => {
                               {getField({
                                 field: {
                                   ...field,
-                                  value: value?.fields?.[fieldIndex]?.value,
+                                  value: value?.[field.id],
                                 },
                                 index,
                                 site,
