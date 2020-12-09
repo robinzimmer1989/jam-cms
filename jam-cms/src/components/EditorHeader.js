@@ -140,7 +140,13 @@ const EditorHeader = (props) => {
   );
 
   buttons.push(
-    <Button children="Update" type="primary" onClick={handleSavePost} loading={loading} />
+    <Button
+      key={'update'}
+      children="Update"
+      type="primary"
+      onClick={handleSavePost}
+      loading={loading}
+    />
   );
 
   return (
