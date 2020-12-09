@@ -2,11 +2,6 @@
 
 ### Alpha version
 
-## Latest Updates
-
-- Support for flexible content (sub-)field
-- Simplying of block/field structure (see Development section)
-
 ## Introduction
 
 jamCMS is a layer on top of other CMS's like WordPress.
