@@ -37,10 +37,7 @@ module.exports = {
       resolve: `gatsby-plugin-webfonts`,
       options: {
         fonts: {
-          google: [
-            { family: `Nerko One`, variant: ['400'] },
-            { family: `Roboto Condensed`, variant: ['400'] },
-          ],
+          google: [{ family: `Open Sans`, variant: ['400', '500', '700'] }],
         },
       },
     },

@@ -33,14 +33,16 @@ const TextEditor = (props) => {
   return (
     <Container>
       <Edges size="xs">
-        <Content>{flex.map((block) => getFlexElement(block))}</Content>
+        <Content>
+          {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)}
+        </Content>
       </Edges>
     </Container>
   );
 };
 
 const Container = styled.div`
-  padding: 30px 0;
+  padding: 40px 0;
   min-height: 40px;
 `;
 
@@ -69,6 +71,7 @@ export default {
       items: [
         {
           id: 'layout1',
+          type: 'layout',
           label: 'Text',
           fields: [
             {
@@ -80,6 +83,7 @@ export default {
         },
         {
           id: 'layout2',
+          type: 'layout',
           label: 'Text & Image',
           fields: [
             {

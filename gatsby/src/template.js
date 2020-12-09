@@ -1,7 +1,7 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
-import theme from './theme';
+import { jamCms } from './theme';
 import blocks from './components/blocks';
 
 const Template = (props) => {
@@ -14,7 +14,7 @@ const Template = (props) => {
 
   return (
     <>
-      <ThemeCSS theme={theme} />
+      <ThemeCss theme={jamCms} />
       <Header {...header} />
       {post.content.map(({ id, fields }, index) => {
         const Component = blocks?.[id]?.component;
@@ -25,7 +25,7 @@ const Template = (props) => {
   );
 };
 
-const ThemeCSS = createGlobalStyle`
+const ThemeCss = createGlobalStyle`
   ${({ theme }) => theme.css}
 `;
 

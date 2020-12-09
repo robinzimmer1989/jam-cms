@@ -3,7 +3,7 @@ import { css } from 'styled-components';
 export default {
   fonts: {
     google: {
-      families: ['Nerko+One:400,400i,700', 'Roboto+Condensed:400,700'],
+      families: ['Open+Sans:400,500,700'],
     },
   },
   css: css`
@@ -91,26 +91,34 @@ export default {
       text-align: left;
     }
 
+    /* Custom Styles */
+
     body {
-      font-family: 'Roboto Condensed';
+      font-family: 'Open Sans';
       font-size: 16px;
       font-weight: 400;
       letter-spacing: 1;
-      line-height: 1;
+      line-height: 1.5;
       text-transform: none;
+      background: #fafcfd;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
     h1 {
-      font-family: 'Nerko One';
+      font-family: 'Open Sans';
       font-size: 40px;
       font-weight: 400;
       letter-spacing: 1;
-      line-height: 1;
+      line-height: 1.2;
       text-transform: none;
     }
 
     h2 {
-      font-family: 'Nerko One';
+      font-family: 'Open Sans';
       font-size: 32px;
       font-weight: 400;
       letter-spacing: 1;
@@ -119,7 +127,7 @@ export default {
     }
 
     h3 {
-      font-family: 'Nerko One';
+      font-family: 'Open Sans';
       font-size: 28px;
       font-weight: 400;
       letter-spacing: 1;
@@ -128,7 +136,7 @@ export default {
     }
 
     h4 {
-      font-family: 'Nerko One';
+      font-family: 'Open Sans';
       font-size: 24px;
       font-weight: 400;
       letter-spacing: 1;
@@ -137,7 +145,7 @@ export default {
     }
 
     h5 {
-      font-family: 'Nerko One';
+      font-family: 'Open Sans';
       font-size: 20px;
       font-weight: 400;
       letter-spacing: 1;

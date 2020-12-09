@@ -26,6 +26,12 @@ const Container = styled.div`
     margin-bottom: 20px;
   }
 
+  h1,
+  h2,
+  h3 {
+    margin-bottom: 20px;
+  }
+
   img {
     margin-bottom: 20px;
 
@@ -38,6 +44,10 @@ const Container = styled.div`
       float: right;
       margin-left: 20px;
     }
+  }
+
+  a {
+    text-decoration: underline;
   }
 
   .clear {

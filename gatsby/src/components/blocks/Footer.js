@@ -1,22 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'gatsby';
 
 // import app components
 import Edges from '../Edges';
+import { colors } from '../../theme';
 
 const Footer = (props) => {
-  const { footerMenu, ...rest } = props;
+  const { footerMenu } = props;
 
   return (
-    <Container {...rest}>
-      <Edges sixe="lg">
+    <Container>
+      <Edges size="lg">
         <Grid>
           {footerMenu && (
-            <Navigation>
+            <Nav>
               {footerMenu.map((o, i) => {
-                return <MenuItem key={i}>{o.title}</MenuItem>;
+                return (
+                  <NavItem key={i} to={o.url}>
+                    {o.title}
+                  </NavItem>
+                );
               })}
-            </Navigation>
+            </Nav>
           )}
         </Grid>
       </Edges>
@@ -24,24 +30,28 @@ const Footer = (props) => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding: 40px 0 60px;
+  background: ${colors.primary};
+  color: ${colors.primaryContrast};
+`;
 
 const Grid = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
 `;
 
-const Navigation = styled.ul`
+const Nav = styled.nav`
   flex: 1;
   display: flex;
   flex-direction: column;
   margin: 0;
 `;
 
-const MenuItem = styled.li`
-  margin: 0 10px;
+const NavItem = styled(Link)`
+  display: block;
+  padding: 10px 0;
 `;
 
 export default {
@@ -53,17 +63,7 @@ export default {
     {
       id: 'footerMenu',
       type: 'menu',
-      placeholder: '',
-      label: 'Edit Menu',
-    },
-    {
-      id: 'height',
-      type: 'number',
-      label: 'Height',
-      defaultValue: 80,
-      min: 60,
-      max: 200,
-      step: 2,
+      label: 'Footer Menu',
     },
   ],
 };

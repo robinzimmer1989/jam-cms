@@ -4,12 +4,13 @@ import Img from 'gatsby-image';
 
 // import app components
 import Edges from '../Edges';
+import Wysiwyg from '../Wysiwyg';
 
 const Banner = (props) => {
-  const { image, headline } = props;
+  const { image, text, height } = props;
 
   return (
-    <Container>
+    <Container height={height}>
       <ImageContainer>
         {image?.childImageSharp?.fluid && (
           <Img
@@ -24,7 +25,7 @@ const Banner = (props) => {
 
       <ContentContainer>
         <Edges size={'md'}>
-          <h1 children={headline} />
+          <Wysiwyg children={text} />
         </Edges>
       </ContentContainer>
     </Container>
@@ -33,7 +34,13 @@ const Banner = (props) => {
 
 const Container = styled.div`
   position: relative;
-  height: 300px;
+  height: ${({ height }) => (height === 'small' ? '200px' : '350px')};
+
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(238, 58, 136, 1) 11.2%,
+    rgba(128, 162, 245, 1) 91.1%
+  );
 `;
 
 const ImageContainer = styled.div`
@@ -62,9 +69,25 @@ export default {
       label: 'Image',
     },
     {
-      id: 'headline',
-      type: 'text',
+      id: 'text',
+      type: 'wysiwyg',
       label: 'Headline',
+    },
+    {
+      id: 'height',
+      type: 'select',
+      label: 'Height',
+      defaultValue: 'small',
+      options: [
+        {
+          name: 'Small',
+          value: 'small',
+        },
+        {
+          name: 'Big',
+          value: 'big',
+        },
+      ],
     },
   ],
 };

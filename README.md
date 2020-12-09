@@ -134,7 +134,7 @@ import { css } from 'styled-components'
 export default {
   fonts: {
     google: {
-      families: ['Nerko+One:400,400i,700', 'Roboto+Condensed:400,700'],
+      families: ['Open+Sans:400,500,700'],
     },
   },
   css: css`

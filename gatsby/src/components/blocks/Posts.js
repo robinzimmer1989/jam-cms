@@ -39,21 +39,20 @@ const Posts = (props) => {
                     )}
                   </ImageContainer>
 
-                  {post.title && <h4 children={post.title} />}
+                  {post.title && (
+                    <HeadlineContainer>
+                      <h4 children={post.title} />
+                    </HeadlineContainer>
+                  )}
 
-                  <Button
-                    url={post.slug}
-                    title={buttonTitle}
-                    color={'primary'}
-                    variant={'filled'}
-                  />
+                  <Button url={post.slug} title={buttonTitle} />
                 </Box>
               );
             })}
 
-          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
-          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
-          <Box columns={columns} style={{ height: 0, opacity: 0, overflow: 0 }} />
+          <Box columns={columns} style={{ height: 0, opacity: 0, margin: 0 }} />
+          <Box columns={columns} style={{ height: 0, opacity: 0, margin: 0 }} />
+          <Box columns={columns} style={{ height: 0, opacity: 0, margin: 0 }} />
         </BoxesContainer>
       </Edges>
     </Container>
@@ -63,6 +62,7 @@ const Posts = (props) => {
 const Container = styled.div`
   position: relative;
   min-height: 300px;
+  padding: 40px 0;
 `;
 
 const BoxesContainer = styled.div`
@@ -107,6 +107,10 @@ const Box = styled.div`
       width: calc(100% / 4 - 10px);
     `}
   }
+`;
+
+const HeadlineContainer = styled.div`
+  margin-bottom: 20px;
 `;
 
 export default {
