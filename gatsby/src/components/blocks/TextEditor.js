@@ -10,18 +10,16 @@ import Edges from '../Edges';
 const TextEditor = (props) => {
   const { flex } = props;
 
-  const getFlexElement = ({ id, fields }) => {
-    const data = {};
-    fields.forEach((o) => (data[o.id] = o.value));
-
+  const getFlexElement = (block) => {
     let el;
-    switch (id) {
+
+    switch (block.id) {
       case 'layout1':
-        el = <Text {...data} />;
+        el = <Text {...block} />;
         break;
 
       case 'layout2':
-        el = <TextImage {...data} />;
+        el = <TextImage {...block} />;
         break;
 
       default:
