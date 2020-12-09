@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Parser from 'html-react-parser';
 
+// import app components
+import { colors } from '../theme';
+
 const Wysiwyg = (props) => {
   const { children } = props;
 
@@ -48,6 +51,12 @@ const Container = styled.div`
 
   a {
     text-decoration: underline;
+    color: ${colors.secondary};
+  }
+
+  ul {
+    list-style: disc;
+    margin-left: 18px;
   }
 
   .clear {
