@@ -1,5 +1,5 @@
-import React from 'react';
-import { PageHeader, Button, Tag, Dropdown, Menu } from 'antd';
+import React, { useState } from 'react';
+import { PageHeader, Button, Tag, Dropdown, Menu, message, Typography, Space } from 'antd';
 import {
   MenuOutlined,
   CodeOutlined,
@@ -12,16 +12,64 @@ import {
 
 // import app components
 import { useStore } from '../store';
+import { postActions, siteActions } from '../actions';
 
 const EditorHeader = (props) => {
   const { title, onBack } = props;
 
   const [
     {
-      editorState: { hasChanged, editable, viewport, sidebar },
+      editorState: { site, post, hasChanged, editable, viewport, sidebar },
     },
     dispatch,
   ] = useStore();
+
+  const [loading, setLoading] = useState(false);
+
+  const handleSavePost = async () => {
+    const { id, settings, frontPage } = site;
+
+    setLoading(true);
+    await postActions.updatePost({ siteID: id, ...post }, dispatch);
+    await siteActions.updateSite({ id, settings, frontPage }, dispatch);
+    setLoading(false);
+
+    message.success('Updated successfully');
+  };
+
+  const handleClickBack = () => {
+    if (hasChanged) {
+      dispatch({
+        type: 'SET_DIALOG',
+        payload: {
+          open: true,
+          title: 'Unsaved changes',
+          component: (
+            <Space direction="vertical" size={20}>
+              <Typography children={'There are unsaved changes. Are you sure?'} />
+              <Space>
+                <Button
+                  children="Discard changes"
+                  onClick={() => {
+                    dispatch({ type: 'CLOSE_DIALOG' });
+                    onBack();
+                  }}
+                />
+                <Button
+                  children="Back to Editor"
+                  type="primary"
+                  onClick={() => dispatch({ type: 'CLOSE_DIALOG' })}
+                />
+              </Space>
+            </Space>
+          ),
+          width: 400,
+        },
+      });
+    } else {
+      onBack();
+    }
+  };
 
   const tags = [];
 
@@ -91,12 +139,16 @@ const EditorHeader = (props) => {
     />
   );
 
+  buttons.push(
+    <Button children="Update" type="primary" onClick={handleSavePost} loading={loading} />
+  );
+
   return (
     <PageHeader
       title={title}
       extra={buttons}
       tags={tags}
-      onBack={onBack}
+      onBack={handleClickBack}
       style={{ paddingLeft: 40, paddingRight: 40 }}
     />
   );
