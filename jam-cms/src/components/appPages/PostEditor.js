@@ -72,7 +72,7 @@ const PostEditor = (props) => {
       });
 
       dispatch({
-        type: `UPDATE_EDITOR_POST`,
+        type: `ADD_EDITOR_POST`,
         payload: {
           ...post,
           content: nextContent,
