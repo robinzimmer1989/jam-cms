@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import slugify from 'slugify';
 
 // import app components
-import Text from './textEditor/Text';
-import TextImage from './textEditor/TextImage';
+import Text from './documentation/Text';
+import TextImage from './documentation/TextImage';
 import Edges from '../Edges';
 
 import { colors } from '../../theme';
@@ -11,18 +12,16 @@ import { colors } from '../../theme';
 const Documentation = (props) => {
   const { topics } = props;
 
-  const getFlexElement = ({ id, fields }) => {
-    const data = {};
-    fields.forEach((o) => (data[o.id] = o.value));
-
+  const getFlexElement = (block) => {
     let el;
-    switch (id) {
+
+    switch (block.id) {
       case 'layout1':
-        el = <Text {...data} />;
+        el = <Text {...block} />;
         break;
 
       case 'layout2':
-        el = <TextImage {...data} />;
+        el = <TextImage {...block} />;
         break;
 
       default:
@@ -35,9 +34,29 @@ const Documentation = (props) => {
     <Container>
       <Edges size="md">
         <Grid>
-          <Sidebar></Sidebar>
+          <Sidebar>
+            {topics &&
+              topics.map((o, i) => {
+                return (
+                  <SidebarItem key={i} href={`#${slugify(o.title)}`}>
+                    {o.title}
+                  </SidebarItem>
+                );
+              })}
+          </Sidebar>
           <Content>
-            {/* {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)} */}
+            {topics &&
+              topics.map((o, i) => {
+                return (
+                  <Section id={slugify(o.title)} key={i}>
+                    <h3>{o.title}</h3>
+                    {o.flex &&
+                      o.flex.map((p, j) => {
+                        return <Fragment key={j}>{getFlexElement(p)}</Fragment>;
+                      })}
+                  </Section>
+                );
+              })}
           </Content>
         </Grid>
       </Edges>
@@ -58,11 +77,18 @@ const Sidebar = styled.div`
   width: 200px;
 `;
 
+const SidebarItem = styled.a`
+  display: block;
+  padding: 10px 20px;
+  width: 100%;
+`;
+
 const Content = styled.div`
   width: 100%;
 
   @media (min-width: 768px) {
     width: calc(100% - 200px);
+    padding-left: 40px;
   }
 
   > div {
@@ -74,6 +100,11 @@ const Content = styled.div`
       margin-bottom: 0;
     }
   }
+`;
+
+const Section = styled.div`
+  padding: 40px 0;
+  border-bottom: 1px solid #eee;
 `;
 
 export default {
