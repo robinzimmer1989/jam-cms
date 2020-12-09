@@ -13,7 +13,7 @@ const TextImage = (props) => {
       <ImageContainer alignment={alignment}>
         {image?.childImageSharp?.fluid && (
           <Img
-            fixed={image.childImageSharp.fluid}
+            fluid={image.childImageSharp.fluid}
             objectFit="cover"
             objectPosition="50% 50%"
             alt={image.alt}
