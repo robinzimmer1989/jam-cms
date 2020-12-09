@@ -14,15 +14,11 @@ const FlexibleContent = (props) => {
 
   const handleAdd = (id, index) => {
     const layout = items.find((o) => o.id === id);
-
     const newValues = produce(values, (draft) => {
-      const fields = [];
-      layout.fields.map((field) => {
-        fields.push({ ...field, value: field.defaultValue || '' });
+      draft.push({
+        id,
+        ...layout.fields.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}),
       });
-
-      draft.push({ ...layout, value: fields });
-
       return draft;
     });
 
@@ -38,9 +34,9 @@ const FlexibleContent = (props) => {
     onChange(newValues);
   };
 
-  const handleChange = (item, index, fieldIndex) => {
+  const handleChange = (item, index) => {
     const newValues = produce(values, (draft) => {
-      draft[index].fields[fieldIndex].value = item.value;
+      draft[index][item.id] = item.value;
       return draft;
     });
 
@@ -103,10 +99,13 @@ const FlexibleContent = (props) => {
                           return (
                             <div key={field.id}>
                               {getField({
-                                field: { ...field, value: value.fields[fieldIndex].value },
+                                field: {
+                                  ...field,
+                                  value: value?.fields?.[fieldIndex]?.value,
+                                },
                                 index,
                                 site,
-                                onChangeElement: (value) => handleChange(value, index, fieldIndex),
+                                onChangeElement: (value) => handleChange(value, index),
                                 dispatch,
                               })}
                             </div>
