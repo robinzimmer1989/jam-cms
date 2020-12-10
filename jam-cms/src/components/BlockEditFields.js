@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Button, Space } from 'antd';
+import { Button, Space, Collapse } from 'antd';
 
 // import app components
 import MenuBuilder from './MenuBuilder';
@@ -194,10 +194,18 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
   }
 
   return (
-    <div key={index}>
-      <Caption children={field.label} />
-      {component}
-    </div>
+    <Fragment key={index}>
+      {field.type === 'repeater' || field.type === 'flexible_content' ? (
+        <Collapse className="block-collapse">
+          <Collapse.Panel header={field.label || field.id}>{component}</Collapse.Panel>
+        </Collapse>
+      ) : (
+        <FieldContainer>
+          <Caption children={field.label} />
+          {component}
+        </FieldContainer>
+      )}
+    </Fragment>
   );
 };
 
@@ -213,10 +221,10 @@ const BlockEditFields = (props) => {
 
   return (
     <Container>
-      <Space direction="vertical" size={30}>
+      <div>
         {fields &&
           fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
-      </Space>
+      </div>
 
       {!isTemplate && !isSiteComponent && (
         <ButtonContainer>
@@ -231,12 +239,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: calc(100% - 75px);
-  padding: 15px;
+  min-height: calc(100vh - 75px);
+
+  .block-collapse {
+    .ant-collapse-header {
+      padding: 12px 16px 12px 30px;
+    }
+  }
+`;
+
+const FieldContainer = styled.div`
+  padding: 12px 12px;
 `;
 
 const ButtonContainer = styled.div`
   margin-top: 20px;
+  padding: 0 4px;
 `;
 
 export default BlockEditFields;

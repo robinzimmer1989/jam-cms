@@ -69,7 +69,6 @@ const Wysiwyg = (props) => {
               },
               blockType: {
                 inDropdown: true,
-                options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote'],
               },
               textAlign: {
                 inDropdown: true,
@@ -100,9 +99,7 @@ const EditorContainer = styled.div`
   }
 
   .rdw-editor-main {
-    min-height: 120px;
-    padding: 10px;
-    background: #f8f9ff;
+    min-height: 220px;
   }
 
   .rdw-inline-dropdown {
@@ -158,6 +155,11 @@ const EditorContainer = styled.div`
 
   .rdw-link-decorator-icon {
     display: none;
+  }
+
+  .rdw-editor-main pre {
+    margin-bottom: 0;
+    padding: 2px 4px;
   }
 `;
 

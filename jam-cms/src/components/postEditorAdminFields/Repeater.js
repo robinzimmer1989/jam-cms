@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Collapse, Button, Space } from 'antd';
+import { Collapse, Button, Popconfirm } from 'antd';
 import produce from 'immer';
-import { UpCircleTwoTone, DownCircleTwoTone } from '@ant-design/icons';
+import {
+  UpCircleTwoTone,
+  DownCircleTwoTone,
+  DeleteTwoTone,
+  QuestionCircleOutlined,
+} from '@ant-design/icons';
 
 // import app components
 import { getField } from '../BlockEditFields';
@@ -55,63 +60,63 @@ const Repeater = (props) => {
 
   return (
     <Container>
-      <Space direction="vertical">
-        <Space direction="vertical" size={10}>
-          {values &&
-            values.map((value, index) => {
-              return (
-                <Collapse key={index}>
-                  <Collapse.Panel
-                    header={`Item ${index + 1}`}
-                    extra={
-                      <MoveIcons className={`icon`} onClick={(e) => e.stopPropagation()}>
-                        <MoveIcon
-                          onClick={() => handleMoveElement(index, index - 1)}
-                          disabled={index === 0}
-                        >
-                          <UpCircleTwoTone />
-                        </MoveIcon>
+      {values &&
+        values.map((value, index) => {
+          return (
+            <Collapse key={index} bordered={false}>
+              <Collapse.Panel
+                header={`Item ${index + 1}`}
+                extra={
+                  <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
+                    <Icon>
+                      <Popconfirm
+                        title="Are you sure？"
+                        onConfirm={() => handleRemove(index)}
+                        icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
+                        placement="left"
+                      >
+                        <DeleteTwoTone twoToneColor="#ff4d4f" />
+                      </Popconfirm>
+                    </Icon>
 
-                        <MoveIcon
-                          onClick={() => handleMoveElement(index, index + 1)}
-                          disabled={index === values.length - 1}
-                        >
-                          <DownCircleTwoTone />
-                        </MoveIcon>
-                      </MoveIcons>
-                    }
-                  >
-                    <Space direction="vertical" size={30}>
-                      {items &&
-                        items.map((field, subIndex) => {
-                          return (
-                            <div key={subIndex}>
-                              {getField({
-                                field: { ...field, value: value[field.id] },
-                                index,
-                                site,
-                                onChangeElement: (value) => handleChange(value, index),
-                                dispatch,
-                              })}
-                            </div>
-                          );
+                    <Icon
+                      onClick={() => handleMoveElement(index, index - 1)}
+                      disabled={index === 0}
+                    >
+                      <UpCircleTwoTone />
+                    </Icon>
+
+                    <Icon
+                      onClick={() => handleMoveElement(index, index + 1)}
+                      disabled={index === values.length - 1}
+                    >
+                      <DownCircleTwoTone />
+                    </Icon>
+                  </Icons>
+                }
+              >
+                {items &&
+                  items.map((field, subIndex) => {
+                    return (
+                      <div key={subIndex}>
+                        {getField({
+                          field: { ...field, value: value[field.id] },
+                          index,
+                          site,
+                          onChangeElement: (value) => handleChange(value, index),
+                          dispatch,
                         })}
+                      </div>
+                    );
+                  })}
+              </Collapse.Panel>
+            </Collapse>
+          );
+        })}
 
-                      <Button
-                        size="small"
-                        danger
-                        children={`Remove`}
-                        onClick={() => handleRemove(index)}
-                      />
-                    </Space>
-                  </Collapse.Panel>
-                </Collapse>
-              );
-            })}
-        </Space>
-
-        <Button onClick={() => handleAdd(items.length)}>Add</Button>
-      </Space>
+      <Button onClick={() => handleAdd(items.length)} block>
+        Add Repeater
+      </Button>
     </Container>
   );
 };
@@ -122,7 +127,7 @@ const Container = styled.div`
   }
 `;
 
-const MoveIcons = styled.div`
+const Icons = styled.div`
   position: absolute;
   z-index: 2;
   right: 5px;
@@ -131,7 +136,7 @@ const MoveIcons = styled.div`
   display: flex;
 `;
 
-const MoveIcon = styled.div`
+const Icon = styled.div`
   width: 20px;
   height: 100%;
   display: flex;
