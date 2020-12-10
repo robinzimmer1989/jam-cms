@@ -1,39 +1,36 @@
-const axios = require("axios")
-const path = require("path")
+const axios = require('axios');
+const path = require('path');
 
 exports.createPages = async ({ actions, reporter }, pluginOptions) => {
-  const { createPage } = actions
-  const { template } = pluginOptions
-
-  const source = process.env.GATSBY_CMS_SOURCE
-  const apiKey = process.env.GATSBY_CMS_API_KEY
+  const { createPage } = actions;
+  const { template, source, apiKey } = pluginOptions;
 
   if (!source) {
-    reporter.error("Source url is required")
-    return
+    reporter.error('Source url is required');
+    return;
   }
 
   if (!apiKey) {
-    reporter.error("Api key is required")
-    return
+    reporter.error('Api key is required');
+    return;
   }
 
-  let activity
+  let activity;
 
   try {
-    activity = reporter.activityTimer(`Fetching data...`)
-    activity.start()
+    activity = reporter.activityTimer(`Fetching data...`);
+    activity.start();
 
-    const url = `${source.replace(/\/+$/, "")}/getBuildSite?apiKey=${apiKey}`
-    const response = await axios.get(url)
+    const url = `${source.replace(/\/+$/, '')}/getBuildSite?apiKey=${apiKey}`;
+    const response = await axios.get(url);
 
-    activity.end()
+    activity.end();
 
     const {
       data: { header, footer, posts },
-    } = await response
+    } = await response;
 
-    const templatePath = path.resolve(template)
+    const templatePath = path.resolve(template);
 
     await Promise.all(
       posts &&
@@ -46,12 +43,12 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
               footer,
               post,
             },
-          })
+          });
         })
-    )
+    );
   } catch (err) {
     if (err.response && err.response.data.message) {
-      reporter.error(err.response.data.message)
+      reporter.error(err.response.data.message);
     }
   }
-}
+};

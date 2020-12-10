@@ -19,6 +19,7 @@ const EditorHeader = (props) => {
 
   const [
     {
+      config,
       editorState: { site, post, hasChanged, editable, viewport, sidebar },
     },
     dispatch,
@@ -30,8 +31,8 @@ const EditorHeader = (props) => {
     const { id, settings, frontPage } = site;
 
     setLoading(true);
-    await postActions.updatePost({ siteID: id, ...post }, dispatch);
-    await siteActions.updateSite({ id, settings, frontPage }, dispatch);
+    await postActions.updatePost({ siteID: id, ...post }, dispatch, config);
+    await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
     setLoading(false);
 
     message.success('Updated successfully');
@@ -146,6 +147,7 @@ const EditorHeader = (props) => {
       type="primary"
       onClick={handleSavePost}
       loading={loading}
+      disabled={!hasChanged}
     />
   );
 

@@ -1,4 +1,5 @@
-export const ROUTE_APP = `/${process.env.GATSBY_CMS_ROUTE || 'cms'}`;
+export const ROUTE_APP =
+  typeof window !== 'undefined' && `/${window.location.pathname.split('/')[1]}`;
 export const ROUTE_SIGN_IN = '/sign-in';
 export const ROUTE_SIGN_UP = '/sign-up';
 export const ROUTE_SITE = '/site';

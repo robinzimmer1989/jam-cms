@@ -16,6 +16,7 @@ const MediaLibrary = (props) => {
 
   const [
     {
+      config,
       cmsState: { siteID, sites },
     },
     dispatch,
@@ -35,7 +36,7 @@ const MediaLibrary = (props) => {
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
-      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch);
+      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch, config);
     }
   };
 
@@ -48,7 +49,7 @@ const MediaLibrary = (props) => {
 
     if (status !== 'uploading') {
       setLoading(true);
-      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch);
+      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch, config);
     }
     if (status === 'done') {
       message.success(`${name} file uploaded successfully.`);

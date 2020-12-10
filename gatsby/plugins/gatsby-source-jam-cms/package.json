@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-jam-cms",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "axios": "^0.21.0",
     "cross-env": "5.0.5",

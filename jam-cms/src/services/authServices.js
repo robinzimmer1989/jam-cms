@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const signIn = async ({ username, password }) => {
+export const signIn = async ({ username, password }, dispatch, config) => {
   try {
-    const source = process.env.GATSBY_CMS_AUTH || process.env.GATSBY_CMS_SOURCE;
+    const source = config?.auth || config?.source;
 
     const result = await axios.post(source.replace(/\/+$/, ''), {
       username,

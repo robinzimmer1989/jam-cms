@@ -10,7 +10,7 @@ import { useStore } from '../store';
 import getRoute from '../routes';
 
 const SiteForm = () => {
-  const [, dispatch] = useStore();
+  const [{ config }, dispatch] = useStore();
 
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,11 @@ const SiteForm = () => {
 
     setLoading(true);
 
-    const result = await siteActions.addSite({ ownerID: getCurrentUser().sub, title }, dispatch);
+    const result = await siteActions.addSite(
+      { ownerID: getCurrentUser(config).sub, title },
+      dispatch,
+      config
+    );
 
     if (result) {
       navigate(getRoute(`dashboard`, { siteID: result.id }));

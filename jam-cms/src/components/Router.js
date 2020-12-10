@@ -32,6 +32,7 @@ const Router = (props) => {
 
   const [
     {
+      config,
       authState: { authUser },
       cmsState: { sites },
     },
@@ -40,7 +41,7 @@ const Router = (props) => {
 
   useEffect(() => {
     const loadSite = async () => {
-      await siteActions.getSite({ siteID }, dispatch);
+      await siteActions.getSite({ siteID }, dispatch, config);
     };
 
     loadSite();

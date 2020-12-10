@@ -14,7 +14,7 @@ import { convertFileSize } from '../utils';
 const MediaImage = (props) => {
   const { file, onSelect, onClose } = props;
 
-  const [, dispatch] = useStore();
+  const [{ config }, dispatch] = useStore();
 
   const [data, setData] = useState({ ...file });
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ const MediaImage = (props) => {
     const { id, altText, siteID } = data;
 
     setLoading('update');
-    const result = await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch);
+    const result = await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch, config);
     setLoading(false);
 
     if (result) {
@@ -35,7 +35,7 @@ const MediaImage = (props) => {
 
   const handlDeleteMediaItem = async () => {
     setLoading('delete');
-    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch);
+    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch, config);
     setLoading(false);
 
     if (result) {

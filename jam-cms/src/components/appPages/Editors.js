@@ -14,6 +14,7 @@ import { useStore } from '../../store';
 const Editors = () => {
   const [
     {
+      config,
       cmsState: { siteID, sites },
     },
     dispatch,
@@ -29,7 +30,7 @@ const Editors = () => {
 
   const loadUsers = async (page) => {
     if (page > -1) {
-      await userActions.getUsers({ siteID, page, limit: 10 }, dispatch);
+      await userActions.getUsers({ siteID, page, limit: 10 }, dispatch, config);
     }
   };
 
@@ -46,15 +47,15 @@ const Editors = () => {
     });
 
   const handleAdd = async ({ email, role }) => {
-    await userActions.addUser({ siteID, email, role }, dispatch);
+    await userActions.addUser({ siteID, email, role }, dispatch, config);
   };
 
   const handleUpdate = async ({ id, role }) => {
-    await userActions.updateUser({ siteID, id, role }, dispatch);
+    await userActions.updateUser({ siteID, id, role }, dispatch, config);
   };
 
   const handleDelete = async ({ id }) => {
-    await userActions.deleteUser({ siteID, id }, dispatch);
+    await userActions.deleteUser({ siteID, id }, dispatch, config);
   };
 
   return (

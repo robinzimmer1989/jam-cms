@@ -1,7 +1,7 @@
 import { collectionServices } from '../services';
 
-export const addCollection = async ({ siteID, title, slug }, dispatch) => {
-  const result = await collectionServices.addCollection({ siteID, title, slug });
+export const addCollection = async ({ siteID, title, slug }, dispatch, config) => {
+  const result = await collectionServices.addCollection({ siteID, title, slug }, dispatch, config);
 
   if (result) {
     dispatch({
@@ -12,8 +12,12 @@ export const addCollection = async ({ siteID, title, slug }, dispatch) => {
   return result;
 };
 
-export const updateCollection = async ({ siteID, id, title, slug, template }, dispatch) => {
-  const result = await collectionServices.updateCollection({ siteID, id, title, slug, template });
+export const updateCollection = async ({ siteID, id, title, slug, template }, dispatch, config) => {
+  const result = await collectionServices.updateCollection(
+    { siteID, id, title, slug, template },
+    dispatch,
+    config
+  );
 
   if (result) {
     dispatch({
@@ -24,8 +28,8 @@ export const updateCollection = async ({ siteID, id, title, slug, template }, di
   return result;
 };
 
-export const deleteCollection = async ({ siteID, id }, dispatch) => {
-  const result = await collectionServices.deleteCollection({ siteID, id });
+export const deleteCollection = async ({ siteID, id }, dispatch, config) => {
+  const result = await collectionServices.deleteCollection({ siteID, id }, dispatch, config);
 
   if (result) {
     dispatch({

@@ -6,9 +6,12 @@ import BaseLayout from '../BaseLayout';
 import Edges from '../Edges';
 
 import { getCurrentUser } from '../../utils/auth';
+import { useStore } from '../../store';
 
 const Home = () => {
-  const user = getCurrentUser();
+  const [{ config }] = useStore();
+
+  const user = getCurrentUser(config);
 
   return (
     <BaseLayout>

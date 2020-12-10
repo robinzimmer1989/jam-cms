@@ -19,16 +19,17 @@ const Master = (props) => {
 
   const [
     {
+      config,
       globalState: { dialog },
     },
     dispatch,
   ] = useStore();
 
-  const loggedIn = isLoggedIn();
+  const loggedIn = isLoggedIn(config);
 
   useEffect(() => {
     const loadUser = async () => {
-      await userActions.getAuthUser({}, dispatch);
+      await userActions.getAuthUser({}, dispatch, config);
     };
 
     loggedIn && loadUser();

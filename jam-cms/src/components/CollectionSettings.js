@@ -14,6 +14,7 @@ import { collectionActions } from '../actions';
 const CollectionSettings = ({ postTypeID }) => {
   const [
     {
+      config,
       cmsState: { siteID },
       editorState: { site },
     },
@@ -28,7 +29,11 @@ const CollectionSettings = ({ postTypeID }) => {
     const { id, title, slug, template } = postType;
 
     setLoading(true);
-    await collectionActions.updateCollection({ siteID, id, title, slug, template }, dispatch);
+    await collectionActions.updateCollection(
+      { siteID, id, title, slug, template },
+      dispatch,
+      config
+    );
     setLoading(false);
 
     notification.success({

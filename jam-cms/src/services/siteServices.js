@@ -4,8 +4,8 @@ import { get } from 'lodash';
 // import app components
 import { db } from '.';
 
-export const getSites = async () => {
-  let result = await db('getSites', {});
+export const getSites = async ({}, dispatch, config) => {
+  let result = await db('getSites', {}, dispatch, config);
 
   if (result) {
     result = result.reduce((obj, item) => {
@@ -17,8 +17,8 @@ export const getSites = async () => {
   return result;
 };
 
-export const getSite = async ({ siteID }) => {
-  let result = await db('getSite', { siteID });
+export const getSite = async ({ siteID }, dispatch, config) => {
+  let result = await db('getSite', { siteID }, dispatch, config);
 
   if (result) {
     result = transformSite(result);
@@ -27,8 +27,8 @@ export const getSite = async ({ siteID }) => {
   return result;
 };
 
-export const addSite = async ({ title }) => {
-  let result = await db('createSite', { title });
+export const addSite = async ({ title }, dispatch, config) => {
+  let result = await db('createSite', { title }, dispatch, config);
 
   if (result) {
     result = transformSite(result);
@@ -37,26 +37,35 @@ export const addSite = async ({ title }) => {
   return result;
 };
 
-export const updateSite = async ({
-  id,
-  title,
-  settings,
-  frontPage,
-  deploymentBuildHook,
-  deploymentBadgeImage,
-  deploymentBadgeLink,
-  apiKey,
-}) => {
-  let result = await db('updateSite', {
+export const updateSite = async (
+  {
     id,
     title,
-    settings: JSON.stringify(settings),
+    settings,
     frontPage,
     deploymentBuildHook,
     deploymentBadgeImage,
     deploymentBadgeLink,
     apiKey,
-  });
+  },
+  dispatch,
+  config
+) => {
+  let result = await db(
+    'updateSite',
+    {
+      id,
+      title,
+      settings: JSON.stringify(settings),
+      frontPage,
+      deploymentBuildHook,
+      deploymentBadgeImage,
+      deploymentBadgeLink,
+      apiKey,
+    },
+    dispatch,
+    config
+  );
 
   if (result) {
     result = transformSite(result);
@@ -65,8 +74,8 @@ export const updateSite = async ({
   return result;
 };
 
-export const deleteSite = async ({ id }) => {
-  let result = await db('deleteSite', { id });
+export const deleteSite = async ({ id }, dispatch, config) => {
+  let result = await db('deleteSite', { id }, dispatch, config);
 
   if (result) {
     result = transformSite(result);

@@ -22,6 +22,7 @@ import getRoute from '../../routes';
 const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const [
     {
+      config,
       cmsState: { sites, siteID },
       editorState: { site, editorIndex, sidebar },
     },
@@ -31,7 +32,7 @@ const CollectionEditor = ({ postTypeID, theme, blocks }) => {
   const postType = site?.postTypes?.[postTypeID];
 
   useEffect(() => {
-    siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch);
+    siteActions.addSiteToEditor({ site: sites[siteID] }, dispatch, config);
   }, []);
 
   const getFields = () => {

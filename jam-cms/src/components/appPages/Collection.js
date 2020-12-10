@@ -19,6 +19,7 @@ const Collection = (props) => {
 
   const [
     {
+      config,
       cmsState: { sites },
     },
     dispatch,
@@ -38,16 +39,17 @@ const Collection = (props) => {
   const handleAddPost = async ({ title, slug, parentID }) => {
     await postActions.addPost(
       { siteID, postTypeID, status: 'draft', title, slug, parentID },
-      dispatch
+      dispatch,
+      config
     );
   };
 
   const handleDeletePost = async ({ postID }) => {
-    await postActions.deletePost({ siteID, id: postID }, dispatch);
+    await postActions.deletePost({ siteID, id: postID }, dispatch, config);
   };
 
   const handleTrashPost = async ({ postID }) => {
-    await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch);
+    await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch, config);
   };
 
   const filterItems = (

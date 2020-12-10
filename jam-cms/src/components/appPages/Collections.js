@@ -14,6 +14,7 @@ import getRoute from '../../routes';
 const CollectionSettings = () => {
   const [
     {
+      config,
       cmsState: { siteID, sites },
     },
     dispatch,
@@ -22,7 +23,7 @@ const CollectionSettings = () => {
   const postTypes = sites[siteID]?.postTypes;
 
   const handleAddPostType = async ({ title, slug }) => {
-    const result = await collectionActions.addCollection({ siteID, title, slug }, dispatch);
+    const result = await collectionActions.addCollection({ siteID, title, slug }, dispatch, config);
 
     if (result?.data?.createPostType) {
       navigate(
@@ -32,7 +33,7 @@ const CollectionSettings = () => {
   };
 
   const handleDeletePostType = async ({ postTypeID }) => {
-    await collectionActions.deleteCollection({ siteID, id: postTypeID }, dispatch);
+    await collectionActions.deleteCollection({ siteID, id: postTypeID }, dispatch, config);
   };
 
   const handleOpenDialog = () => {

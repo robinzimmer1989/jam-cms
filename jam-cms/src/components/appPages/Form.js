@@ -14,6 +14,7 @@ const Form = (props) => {
 
   const [
     {
+      config,
       cmsState: { sites, siteID },
       editorState: { form },
     },
@@ -22,7 +23,7 @@ const Form = (props) => {
 
   useEffect(() => {
     const loadForm = async () => {
-      await formActions.getForm({ site: sites[siteID], id: formID }, dispatch);
+      await formActions.getForm({ site: sites[siteID], id: formID }, dispatch, config);
     };
 
     loadForm();

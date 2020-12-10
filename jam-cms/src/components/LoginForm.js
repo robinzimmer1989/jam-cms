@@ -10,8 +10,11 @@ import Spacer from './Spacer';
 import { authActions } from '../actions';
 import getRoute from '../routes';
 import { auth } from '../utils';
+import { useStore } from '../store';
 
 export default () => {
+  const [{ config }, dispatch] = useStore();
+
   const [data, setData] = useState({
     username: ``,
     password: ``,
@@ -19,7 +22,7 @@ export default () => {
     loading: false,
   });
 
-  const isAuthed = auth.isLoggedIn();
+  const isAuthed = auth.isLoggedIn(config);
 
   useEffect(() => {
     isAuthed && navigate(getRoute(`app`));
@@ -35,7 +38,7 @@ export default () => {
     handleChange({ target: { name: 'loading', value: true } });
 
     try {
-      const result = await authActions.signIn({ username, password });
+      const result = await authActions.signIn({ username, password }, dispatch, config);
 
       if (result?.success) {
         navigate(getRoute(`app`));
@@ -57,7 +60,13 @@ export default () => {
         </Spacer>
 
         <Spacer mb={20}>
-          <Input label={`Password`} value={data.password} type="password" onChange={handleChange} name="password" />
+          <Input
+            label={`Password`}
+            value={data.password}
+            type="password"
+            onChange={handleChange}
+            name="password"
+          />
         </Spacer>
 
         {data?.error && (

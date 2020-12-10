@@ -3,8 +3,8 @@ import { navigate } from '@reach/router';
 import { siteServices } from '../services';
 import getRoute from '../routes';
 
-export const addSite = async ({ title, ownerID }, dispatch) => {
-  const result = await siteServices.addSite({ title, ownerID });
+export const addSite = async ({ title, ownerID }, dispatch, config) => {
+  const result = await siteServices.addSite({ title, ownerID }, dispatch, config);
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });
@@ -15,10 +15,7 @@ export const addSite = async ({ title, ownerID }, dispatch) => {
 };
 
 export const updateSite = async (
-  { id, title, settings, frontPage, deploymentBuildHook, deploymentBadgeImage, deploymentBadgeLink, apiKey },
-  dispatch
-) => {
-  const result = await siteServices.updateSite({
+  {
     id,
     title,
     settings,
@@ -27,7 +24,24 @@ export const updateSite = async (
     deploymentBadgeImage,
     deploymentBadgeLink,
     apiKey,
-  });
+  },
+  dispatch,
+  config
+) => {
+  const result = await siteServices.updateSite(
+    {
+      id,
+      title,
+      settings,
+      frontPage,
+      deploymentBuildHook,
+      deploymentBadgeImage,
+      deploymentBadgeLink,
+      apiKey,
+    },
+    dispatch,
+    config
+  );
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });
@@ -38,8 +52,8 @@ export const updateSite = async (
   return result;
 };
 
-export const deleteSite = async ({ id }, dispatch) => {
-  const result = await siteServices.deleteSite({ id });
+export const deleteSite = async ({ id }, dispatch, config) => {
+  const result = await siteServices.deleteSite({ id }, dispatch, config);
 
   if (result) {
     dispatch({ type: `DELETE_SITE`, payload: result });
@@ -48,8 +62,8 @@ export const deleteSite = async ({ id }, dispatch) => {
   return result;
 };
 
-export const getSites = async (args, dispatch) => {
-  const result = await siteServices.getSites();
+export const getSites = async (args, dispatch, config) => {
+  const result = await siteServices.getSites(args, dispatch, config);
 
   if (result) {
     dispatch({ type: `ADD_SITES`, payload: result });
@@ -58,8 +72,8 @@ export const getSites = async (args, dispatch) => {
   return result;
 };
 
-export const getSite = async ({ siteID }, dispatch) => {
-  const result = await siteServices.getSite({ siteID });
+export const getSite = async ({ siteID }, dispatch, config) => {
+  const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });

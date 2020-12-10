@@ -16,6 +16,7 @@ import getRoute from '../../routes';
 const Home = () => {
   const [
     {
+      config,
       cmsState: { sites },
     },
     dispatch,
@@ -25,8 +26,8 @@ const Home = () => {
 
   useEffect(() => {
     const loadSites = async () => {
-      if (!!process.env.GATSBY_CMS_MULTISITE) {
-        await siteActions.getSites({}, dispatch);
+      if (!!config.multisite) {
+        await siteActions.getSites({}, dispatch, config);
       } else {
         navigate(getRoute(`dashboard`));
       }

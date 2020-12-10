@@ -13,6 +13,7 @@ import getRoute from '../../routes';
 const Forms = () => {
   const [
     {
+      config,
       cmsState: { siteID, sites },
     },
     dispatch,
@@ -21,11 +22,11 @@ const Forms = () => {
   const forms = sites[siteID]?.forms;
 
   const handleAddForm = async ({ title }) => {
-    await formActions.addForm({ siteID, title }, dispatch);
+    await formActions.addForm({ siteID, title }, dispatch, config);
   };
 
   const handleDeleteForm = async ({ id }) => {
-    await formActions.deleteForm({ id }, dispatch);
+    await formActions.deleteForm({ id }, dispatch, config);
   };
 
   const handleOpenDialog = () => {
@@ -41,7 +42,9 @@ const Forms = () => {
 
   return (
     <CmsLayout pageTitle={`Forms`}>
-      <PageHeader>{/* <Button children={`Add`} onClick={handleOpenDialog} type="primary" /> */}</PageHeader>
+      <PageHeader>
+        {/* <Button children={`Add`} onClick={handleOpenDialog} type="primary" /> */}
+      </PageHeader>
 
       {forms &&
         Object.values(forms).map((o) => {
@@ -61,7 +64,9 @@ const Forms = () => {
             </Button>,
           ];
 
-          return <ListItem key={o.id} link={editLink} actions={actions} title={o.title} hideImage />;
+          return (
+            <ListItem key={o.id} link={editLink} actions={actions} title={o.title} hideImage />
+          );
         })}
     </CmsLayout>
   );

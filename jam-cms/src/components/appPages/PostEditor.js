@@ -24,6 +24,7 @@ const PostEditor = (props) => {
 
   const [
     {
+      config,
       cmsState: { sites, siteID },
       editorState: { site, post, editorIndex, sidebar },
     },
@@ -36,7 +37,7 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     const loadPost = async () => {
-      const result = await postActions.getPost({ siteID, postID }, dispatch);
+      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
 
       if (result) {
         dispatch({

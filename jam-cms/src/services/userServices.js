@@ -1,32 +1,32 @@
 import { db } from '.';
 
-export const addUser = async ({ siteID, email, role }) => {
-  let result = await db('createUser', { siteID, email, role });
+export const addUser = async ({ siteID, email, role }, dispatch, config) => {
+  let result = await db('createUser', { siteID, email, role }, dispatch, config);
   return result;
 };
 
-export const getAuthUser = async () => {
-  let result = await db('getAuthUser', {});
+export const getAuthUser = async ({}, dispatch, config) => {
+  let result = await db('getAuthUser', {}, dispatch, config);
   return result;
 };
 
-export const getUser = async ({ id }) => {
-  let result = await db('getUser', { id });
+export const getUser = async ({ id }, dispatch, config) => {
+  let result = await db('getUser', { id }, dispatch, config);
   return result;
 };
 
-export const getUsers = async ({ siteID, page, limit }) => {
-  let result = await db('getUsers', { siteID, page, limit });
+export const getUsers = async ({ siteID, page, limit }, dispatch, config) => {
+  let result = await db('getUsers', { siteID, page, limit }, dispatch, config);
   return result;
 };
 
-export const updateUser = async ({ siteID, id, role }) => {
-  let result = await db('updateUser', { siteID, id, role });
+export const updateUser = async ({ siteID, id, role }, dispatch, config) => {
+  let result = await db('updateUser', { siteID, id, role }, dispatch, config);
 
   return result;
 };
 
-export const deleteUser = async ({ siteID, id }) => {
-  let result = await db('deleteUser', { siteID, id });
+export const deleteUser = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('deleteUser', { siteID, id }, dispatch, config);
   return result;
 };

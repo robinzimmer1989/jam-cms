@@ -9,7 +9,7 @@ import { useStore } from '../store';
 const FormForm = (props) => {
   const { siteID } = props;
 
-  const [, dispatch] = useStore();
+  const [{ config }, dispatch] = useStore();
 
   const [title, setTitle] = useState('');
 
@@ -18,7 +18,7 @@ const FormForm = (props) => {
       return;
     }
 
-    await formActions.addForm({ siteID, title }, dispatch);
+    await formActions.addForm({ siteID, title }, dispatch, config);
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };

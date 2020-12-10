@@ -23,6 +23,8 @@ module.exports = {
       resolve: `gatsby-source-jam-cms`,
       options: {
         template: path.join(__dirname, `./src/template.js`),
+        source: process.env.GATSBY_CMS_SOURCE,
+        apiKey: process.env.GATSBY_CMS_API_KEY,
       },
     },
     {

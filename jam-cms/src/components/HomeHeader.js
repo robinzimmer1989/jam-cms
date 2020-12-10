@@ -4,20 +4,25 @@ import styled from 'styled-components';
 import { Row } from 'antd';
 
 // import app components
+import Edges from './Edges';
 import AvatarMenu from './AvatarMenu';
 import JamCmsLogo from '../icons/jamCMS.svg';
 import { isLoggedIn } from '../utils/auth';
 import getRoute from '../routes';
+import { useStore } from '../store';
 
 const HomeHeader = () => {
+  const [{ config }] = useStore();
   return (
     <Container>
-      <Row justify="space-between" align="center">
-        <Logo to={getRoute(`app`)}>
-          <JamCmsLogo />
-        </Logo>
-        <Row align="center">{isLoggedIn() && <AvatarMenu ghost={true} />}</Row>
-      </Row>
+      <Edges size="md">
+        <Row justify="space-between" align="center">
+          <Logo to={getRoute(`app`)}>
+            <JamCmsLogo />
+          </Logo>
+          <Row align="center">{isLoggedIn(config) && <AvatarMenu ghost={true} />}</Row>
+        </Row>
+      </Edges>
     </Container>
   );
 };

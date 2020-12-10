@@ -13,6 +13,7 @@ import { siteActions } from '../../actions';
 const GeneralSettings = () => {
   const [
     {
+      config,
       cmsState: { sites, siteID },
       editorState: { site },
     },
@@ -43,7 +44,7 @@ const GeneralSettings = () => {
     const { id } = site;
 
     setLoading(loader);
-    await siteActions.updateSite({ id, ...args }, dispatch);
+    await siteActions.updateSite({ id, ...args }, dispatch, config);
     setLoading(null);
 
     notification.success({
