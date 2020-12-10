@@ -16,11 +16,11 @@ const Documentation = (props) => {
     let el;
 
     switch (block.id) {
-      case 'layout1':
+      case 'text':
         el = <Text {...block} />;
         break;
 
-      case 'layout2':
+      case 'textimage':
         el = <TextImage {...block} />;
         break;
 
@@ -49,7 +49,7 @@ const Documentation = (props) => {
               topics.map((o, i) => {
                 return (
                   <Section id={slugify(o.title)} key={i}>
-                    <h3>{o.title}</h3>
+                    <h2>{o.title}</h2>
                     {o.flex &&
                       o.flex.map((p, j) => {
                         return <Fragment key={j}>{getFlexElement(p)}</Fragment>;
@@ -74,7 +74,10 @@ const Grid = styled.div`
 `;
 
 const Sidebar = styled.div`
+  position: sticky;
+  top: 0;
   width: 200px;
+  height: 500px;
 `;
 
 const SidebarItem = styled.a`
@@ -103,8 +106,12 @@ const Content = styled.div`
 `;
 
 const Section = styled.div`
-  padding: 40px 0;
+  padding: 60px 0 40px;
   border-bottom: 1px solid #eee;
+
+  &:first-child {
+    padding-top: 0;
+  }
 `;
 
 export default {
@@ -129,7 +136,7 @@ export default {
           label: 'Flexible Content',
           items: [
             {
-              id: 'layout1',
+              id: 'text',
               type: 'layout',
               label: 'Text',
               fields: [
@@ -141,7 +148,7 @@ export default {
               ],
             },
             {
-              id: 'layout2',
+              id: 'textimage',
               type: 'layout',
               label: 'Text & Image',
               fields: [

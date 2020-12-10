@@ -31,7 +31,10 @@ const Container = styled.div`
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-bottom: 20px;
   }
 
@@ -57,6 +60,12 @@ const Container = styled.div`
   ul {
     list-style: disc;
     margin-left: 18px;
+    margin-bottom: 20px;
+  }
+
+  pre {
+    padding: 4px 10px;
+    background: #f7f7f7;
   }
 
   .clear {
