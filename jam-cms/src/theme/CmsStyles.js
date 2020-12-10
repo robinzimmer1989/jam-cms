@@ -84,6 +84,14 @@ export default createGlobalStyle`
     background: #f8f9ff;
   }
 
+  .ant-collapse {
+    border: none;
+  }
+
+  .ant-collapse > .ant-collapse-item {
+    border: none;
+  }
+
   .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     padding: 6px 16px 6px 30px;
   }
@@ -92,5 +100,14 @@ export default createGlobalStyle`
     top: 50%;
     transform: translateY(-50%);
     left: 10px;
+  }
+
+  .ant-collapse-content > .ant-collapse-content-box {
+    padding: 4px;
+    background: #fff;
+  }
+
+  .ant-collapse-borderless > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+    
   }
 `;
