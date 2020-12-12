@@ -182,7 +182,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                     onChange={(menu) => onChangeElement({ ...field, value: menu }, index)}
                   />
                 ),
-                width: 1600,
+                width: 1000,
               },
             })
           }

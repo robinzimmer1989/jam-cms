@@ -208,41 +208,43 @@ const MenuBuilder = (props) => {
         </Col>
 
         <Col span="12">
-          <Tree
-            className="draggable-tree"
-            draggable
-            blockNode
-            onDrop={onDrop}
-            treeData={items}
-            titleRender={(node) => {
-              return (
-                <Collapse>
-                  <Collapse.Panel header={node.title}>
-                    <Space direction="vertical">
-                      <Input
-                        label="title"
-                        value={node.title}
-                        onChange={(e) => handleUpdate(e, 'title', node.key)}
-                      />
-                      {node.url && (
+          <Card>
+            <Tree
+              className="draggable-tree"
+              draggable
+              blockNode
+              onDrop={onDrop}
+              treeData={items}
+              titleRender={(node) => {
+                return (
+                  <Collapse>
+                    <Collapse.Panel header={node.title}>
+                      <Space direction="vertical">
                         <Input
-                          label="Url"
-                          value={node.url}
-                          onChange={(e) => handleUpdate(e, 'url', node.key)}
+                          label="title"
+                          value={node.title}
+                          onChange={(e) => handleUpdate(e, 'title', node.key)}
                         />
-                      )}
-                      <Button
-                        size="small"
-                        danger
-                        children={`Remove`}
-                        onClick={() => handleRemove(node.key)}
-                      />
-                    </Space>
-                  </Collapse.Panel>
-                </Collapse>
-              );
-            }}
-          />
+                        {node.url && (
+                          <Input
+                            label="Url"
+                            value={node.url}
+                            onChange={(e) => handleUpdate(e, 'url', node.key)}
+                          />
+                        )}
+                        <Button
+                          size="small"
+                          danger
+                          children={`Remove`}
+                          onClick={() => handleRemove(node.key)}
+                        />
+                      </Space>
+                    </Collapse.Panel>
+                  </Collapse>
+                );
+              }}
+            />
+          </Card>
         </Col>
       </Row>
       <Button children={`Update`} onClick={handleSubmit} type="primary" />
@@ -253,16 +255,22 @@ const MenuBuilder = (props) => {
 const Container = styled.div`
   overflow: auto;
 
+  .ant-col {
+    margin-bottom: 20px;
+  }
+
   .ant-tree {
     background-color: transparent;
   }
 
-  .ant-row {
-    height: 400px;
+  .ant-card-body {
+    height: 360px;
+
+    overflow: auto;
   }
 
-  .ant-card-body {
-    padding: 24px 0 0 24px;
+  .ant-collapse-content {
+    padding: 20px;
   }
 
   .rst__rowContents {
@@ -273,7 +281,10 @@ const Container = styled.div`
 const ItemsContainer = styled.div`
   max-height: 290px;
   overflow-y: auto;
-  padding-right: 24px;
+`;
+
+const MenuItemsContainer = styled.div`
+  padding: 20px;
 `;
 
 export default MenuBuilder;
