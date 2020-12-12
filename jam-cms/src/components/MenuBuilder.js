@@ -265,7 +265,6 @@ const Container = styled.div`
 
   .ant-card-body {
     height: 360px;
-
     overflow: auto;
   }
 

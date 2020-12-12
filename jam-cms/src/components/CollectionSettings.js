@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import produce from 'immer';
-import { Button, Space, notification } from 'antd';
+import { Button, Space, message } from 'antd';
 import { set } from 'lodash';
 
 // import app components
@@ -36,11 +36,7 @@ const CollectionSettings = ({ postTypeID }) => {
     );
     setLoading(false);
 
-    notification.success({
-      message: 'Success',
-      description: 'Updated successfully',
-      placement: 'bottomRight',
-    });
+    message.success('Updated successfully');
   };
 
   const handleChange = (e) => {

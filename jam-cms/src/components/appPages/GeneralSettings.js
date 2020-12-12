@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Space, notification } from 'antd';
+import { Button, Card, Space, message } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -47,11 +47,7 @@ const GeneralSettings = () => {
     await siteActions.updateSite({ id, ...args }, dispatch, config);
     setLoading(null);
 
-    notification.success({
-      message: 'Success',
-      description: 'Updated successfully',
-      placement: 'bottomRight',
-    });
+    message.success('Updated successfully');
   };
 
   return (
