@@ -31,6 +31,8 @@ const PostEditor = (props) => {
     dispatch,
   ] = useStore();
 
+  console.log(site?.settings?.header);
+
   const postType = sites[siteID]?.postTypes?.[postTypeID];
 
   const siteComponent = editorIndex === 'header' || editorIndex === 'footer';
@@ -84,7 +86,7 @@ const PostEditor = (props) => {
 
   const getFields = () => {
     if (siteComponent) {
-      // loop through default blocks and replace value if found
+      // Instead of looping through the db entrues, we loop through the content blocks and then assign the value
       return blocks?.[site.settings[editorIndex].id].fields.map((o) => {
         const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id);
 
@@ -95,7 +97,7 @@ const PostEditor = (props) => {
         }
       });
     } else if (post && post.content[editorIndex]) {
-      // loop through default blocks and replace value if found
+      // Instead of looping through the db entrues, we loop through the content blocks and then assign the value
       return blocks?.[post.content[editorIndex].id].fields.map((o) => {
         const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id);
 
@@ -117,7 +119,7 @@ const PostEditor = (props) => {
       children = <PostSettings />;
     } else if (post?.content[editorIndex] || siteComponent) {
       title = siteComponent
-        ? editorIndex.charAt(0).toUpperCase() + editorIndex.slice(1)
+        ? Parser(site.settings[editorIndex].label || site.settings[editorIndex].id)
         : Parser(post.content[editorIndex].label || post.content[editorIndex].id);
 
       children = (
@@ -146,6 +148,8 @@ const PostEditor = (props) => {
         type: `UPDATE_EDITOR_SITE`,
         payload: nextSite,
       });
+
+      console.log(field);
     } else {
       const nextPost = produce(post, (draft) => {
         return set(draft, `content.${editorIndex}.fields.${index}`, field);
