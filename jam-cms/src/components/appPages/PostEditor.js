@@ -37,7 +37,7 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     const loadPost = async () => {
-      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+      const result = await postActions.getPost({ siteID, postID, blocks }, dispatch, config);
 
       if (result) {
         dispatch({
@@ -110,28 +110,38 @@ const PostEditor = (props) => {
 
   const getSidebar = () => {
     let title;
-    let children;
+    let content;
 
     if (sidebar === 'post-settings') {
       title = 'Settings';
-      children = <PostSettings />;
-    } else if (post?.content[editorIndex] || siteComponent) {
-      title = siteComponent
-        ? Parser(site.settings[editorIndex].label || site.settings[editorIndex].id)
-        : Parser(post.content[editorIndex].label || post.content[editorIndex].id);
+      content = <PostSettings />;
+    } else if (post?.content[editorIndex]) {
+      title = Parser(post.content[editorIndex].label || post.content[editorIndex].id);
 
-      children = (
+      content = (
         <BlockEditFields
           fields={getFields()}
           onChangeElement={handleChangeElement}
           onDeleteElement={handleDeleteElement}
           isTemplate={postType?.template && postType.template.length}
-          isSiteComponent={!!siteComponent}
+          isSiteComponent={false}
+        />
+      );
+    } else if (siteComponent) {
+      title = Parser(site.settings[editorIndex].label || site.settings[editorIndex].id);
+
+      content = (
+        <BlockEditFields
+          fields={getFields()}
+          onChangeElement={handleChangeElement}
+          onDeleteElement={handleDeleteElement}
+          isTemplate={false}
+          isSiteComponent={true}
         />
       );
     }
 
-    return <EditorSidebar title={title} children={children} />;
+    return <EditorSidebar title={title} children={content} />;
   };
 
   const handleChangeElement = (field) => {

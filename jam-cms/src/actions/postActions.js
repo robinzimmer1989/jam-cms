@@ -1,3 +1,6 @@
+import { set } from 'lodash';
+import produce from 'immer';
+
 import { postServices } from '../services';
 
 export const addPost = async (
@@ -18,17 +21,25 @@ export const addPost = async (
   return result;
 };
 
-export const getPost = async ({ siteID, postID }, dispatch, config) => {
+export const getPost = async ({ siteID, postID, blocks }, dispatch, config) => {
   const result = await postServices.getPost({ siteID, postID }, dispatch, config);
 
   if (result) {
+    const nextResult = produce(result, (draft) => {
+      draft.content.map((o, i) => {
+        blocks?.[o?.id]?.label && set(draft.content, `${i}.label`, blocks[o.id].label);
+      });
+
+      return draft;
+    });
+
     dispatch({
       type: `ADD_POST`,
-      payload: result,
+      payload: nextResult,
     });
     dispatch({
       type: `ADD_EDITOR_POST`,
-      payload: result,
+      payload: nextResult,
     });
   }
 

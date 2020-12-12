@@ -75,7 +75,7 @@ export const getSites = async (args, dispatch, config) => {
 };
 
 export const getSite = async ({ siteID, blocks }, dispatch, config) => {
-  let result = await siteServices.getSite({ siteID }, dispatch, config);
+  const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
     const nextResult = produce(result, (draft) => {
