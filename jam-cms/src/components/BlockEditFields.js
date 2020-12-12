@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Button, Space, Collapse } from 'antd';
+import { Button, Collapse } from 'antd';
 
 // import app components
 import MenuBuilder from './MenuBuilder';
