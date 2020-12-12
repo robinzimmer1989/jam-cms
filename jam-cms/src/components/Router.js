@@ -41,7 +41,7 @@ const Router = (props) => {
 
   useEffect(() => {
     const loadSite = async () => {
-      await siteActions.getSite({ siteID }, dispatch, config);
+      await siteActions.getSite({ siteID, blocks }, dispatch, config);
     };
 
     loadSite();

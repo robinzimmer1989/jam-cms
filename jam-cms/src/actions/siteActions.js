@@ -1,4 +1,6 @@
 import { navigate } from '@reach/router';
+import { set } from 'lodash';
+import produce from 'immer';
 
 import { siteServices } from '../services';
 import getRoute from '../routes';
@@ -72,11 +74,17 @@ export const getSites = async (args, dispatch, config) => {
   return result;
 };
 
-export const getSite = async ({ siteID }, dispatch, config) => {
-  const result = await siteServices.getSite({ siteID }, dispatch, config);
+export const getSite = async ({ siteID, blocks }, dispatch, config) => {
+  let result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_SITE`, payload: result });
+    const nextResult = produce(result, (draft) => {
+      set(draft, `settings.header.label`, blocks.header.label);
+      set(draft, `settings.footer.label`, blocks.footer.label);
+      return draft;
+    });
+
+    dispatch({ type: `ADD_SITE`, payload: nextResult });
   }
 
   return result;
