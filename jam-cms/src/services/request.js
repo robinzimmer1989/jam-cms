@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
@@ -25,16 +26,12 @@ const db = async (endpoint, params, dispatch, config) => {
       },
     });
 
-    const { data, status } = result;
-
-    if (status === 200) {
-      return data;
-    } else {
-      authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
-      return false;
-    }
+    const { data } = result;
+    return data;
   } catch (err) {
-    console.log(err);
+    if (err?.response?.data?.message) {
+      message.error(err.response.data.message);
+    }
   }
 };
 

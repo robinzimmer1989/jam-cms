@@ -1,9 +1,9 @@
+import { message } from 'antd';
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
 import { db } from '.';
 import { auth } from '../utils';
-import { useStore } from '../store';
 import getRoute from '../routes';
 import { authActions } from '../actions';
 
@@ -14,20 +14,24 @@ export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
     authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
   }
 
-  const formData = new FormData();
-  formData.append('file', file);
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  let result = await axios.post(`${config?.source}/createMediaItem?siteID=${siteID}`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${user.token}`,
-    },
-  });
+    let result = await axios.post(`${config?.source}/createMediaItem?siteID=${siteID}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
 
-  const { data, status } = result;
+    const { data } = result;
 
-  if (status === 200) {
     return data;
+  } catch (err) {
+    if (err?.response?.data?.message) {
+      message.error(err.response.data.message);
+    }
   }
 };
 
