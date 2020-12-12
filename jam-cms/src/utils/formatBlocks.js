@@ -11,7 +11,7 @@ export default function formatBlocks(blocks, site) {
   modifiedBlocks = blocks.map((block) => {
     return {
       ...block,
-      fields: block.fields.map((field) => formatFieldForEditor(field, site)),
+      fields: Object.values(block.fields).map((field) => formatFieldForEditor(field, site)),
     };
   });
 

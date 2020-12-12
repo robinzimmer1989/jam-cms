@@ -31,8 +31,6 @@ const PostEditor = (props) => {
     dispatch,
   ] = useStore();
 
-  console.log(site?.settings?.header);
-
   const postType = sites[siteID]?.postTypes?.[postTypeID];
 
   const siteComponent = editorIndex === 'header' || editorIndex === 'footer';
@@ -88,7 +86,7 @@ const PostEditor = (props) => {
     if (siteComponent) {
       // Instead of looping through the db entrues, we loop through the content blocks and then assign the value
       return blocks?.[site.settings[editorIndex].id].fields.map((o) => {
-        const setting = site.settings[editorIndex].fields.find((p) => p?.id === o.id);
+        const setting = site.settings[editorIndex].fields[o.id];
 
         if (setting) {
           return { ...o, value: setting.value };
@@ -99,7 +97,7 @@ const PostEditor = (props) => {
     } else if (post && post.content[editorIndex]) {
       // Instead of looping through the db entrues, we loop through the content blocks and then assign the value
       return blocks?.[post.content[editorIndex].id].fields.map((o) => {
-        const setting = post.content[editorIndex].fields.find((p) => p?.id === o.id);
+        const setting = post.content[editorIndex].fields[o.id];
 
         if (setting) {
           return { ...o, value: setting.value };
@@ -136,23 +134,21 @@ const PostEditor = (props) => {
     return <EditorSidebar title={title} children={children} />;
   };
 
-  const handleChangeElement = (field, index) => {
+  const handleChangeElement = (field) => {
     dispatch({ type: `CLOSE_DIALOG` });
 
     if (siteComponent) {
       const nextSite = produce(site, (draft) => {
-        return set(draft, `settings.${editorIndex}.fields.${index}`, field);
+        return set(draft, `settings.${editorIndex}.fields.${field.id}`, field);
       });
 
       dispatch({
         type: `UPDATE_EDITOR_SITE`,
         payload: nextSite,
       });
-
-      console.log(field);
     } else {
       const nextPost = produce(post, (draft) => {
-        return set(draft, `content.${editorIndex}.fields.${index}`, field);
+        return set(draft, `content.${editorIndex}.fields.${field.id}`, field);
       });
 
       dispatch({

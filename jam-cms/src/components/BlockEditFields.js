@@ -24,16 +24,13 @@ import FlexibleContent from './postEditorAdminFields/FlexibleContent';
 
 import { useStore } from '../store';
 
-export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
+export const getField = ({ field, site, onChangeElement, dispatch }) => {
   let component;
 
   switch (field.type) {
     case 'text':
       component = (
-        <Text
-          {...field}
-          onChange={(e) => onChangeElement({ ...field, value: e.target.value }, index)}
-        />
+        <Text {...field} onChange={(e) => onChangeElement({ ...field, value: e.target.value })} />
       );
       break;
 
@@ -41,17 +38,14 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <Wysiwyg
           {...field}
-          onChange={(editorState) => onChangeElement({ ...field, value: editorState }, index)}
+          onChange={(editorState) => onChangeElement({ ...field, value: editorState })}
         />
       );
       break;
 
     case 'number':
       component = (
-        <Number
-          {...field}
-          onChange={(number) => onChangeElement({ ...field, value: number }, index)}
-        />
+        <Number {...field} onChange={(number) => onChangeElement({ ...field, value: number })} />
       );
       break;
 
@@ -59,7 +53,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <Link
           {...field}
-          onRemove={() => onChangeElement({ ...field, value: null }, index)}
+          onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
             dispatch({
               type: `SET_DIALOG`,
@@ -68,9 +62,8 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                 title: 'Link',
                 component: (
                   <LinkSelector
-                    index={index}
                     {...field}
-                    onChange={(value) => onChangeElement({ ...field, value }, index)}
+                    onChange={(value) => onChangeElement({ ...field, value })}
                   />
                 ),
                 width: 500,
@@ -85,7 +78,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <Select
           {...field}
-          onChange={(optionValue) => onChangeElement({ ...field, value: optionValue }, index)}
+          onChange={(optionValue) => onChangeElement({ ...field, value: optionValue })}
         />
       );
       break;
@@ -94,7 +87,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <Settings
           {...field}
-          onChange={(newValue) => onChangeElement({ ...field, value: newValue }, index)}
+          onChange={(newValue) => onChangeElement({ ...field, value: newValue })}
         />
       );
       break;
@@ -104,7 +97,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
         <CollectionSelector
           {...field}
           site={site}
-          onSelect={(postTypeID) => onChangeElement({ ...field, value: postTypeID }, index)}
+          onSelect={(postTypeID) => onChangeElement({ ...field, value: postTypeID })}
         />
       );
       break;
@@ -114,7 +107,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
         <FormSelector
           {...field}
           site={site}
-          onSelect={(formID) => onChangeElement({ ...field, value: formID }, index)}
+          onSelect={(formID) => onChangeElement({ ...field, value: formID })}
         />
       );
       break;
@@ -125,7 +118,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
           {...field}
           site={site}
           dispatch={dispatch}
-          onChange={(items) => onChangeElement({ ...field, value: items }, index)}
+          onChange={(items) => onChangeElement({ ...field, value: items })}
         />
       );
       break;
@@ -136,7 +129,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
           {...field}
           site={site}
           dispatch={dispatch}
-          onChange={(items) => onChangeElement({ ...field, value: items }, index)}
+          onChange={(items) => onChangeElement({ ...field, value: items })}
         />
       );
       break;
@@ -145,7 +138,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
       component = (
         <ImagePicker
           {...field}
-          onRemove={() => onChangeElement({ ...field, value: null }, index)}
+          onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
             dispatch({
               type: `SET_DIALOG`,
@@ -153,7 +146,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                 open: true,
                 component: (
                   <MediaLibrary
-                    onSelect={(image) => onChangeElement({ ...field, value: image }, index)}
+                    onSelect={(image) => onChangeElement({ ...field, value: image })}
                     allow={['image']}
                   />
                 ),
@@ -177,9 +170,8 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
                 title: 'Menu',
                 component: (
                   <MenuBuilder
-                    index={index}
                     {...field}
-                    onChange={(menu) => onChangeElement({ ...field, value: menu }, index)}
+                    onChange={(menu) => onChangeElement({ ...field, value: menu })}
                   />
                 ),
                 width: 1000,
@@ -194,7 +186,7 @@ export const getField = ({ field, index, site, onChangeElement, dispatch }) => {
   }
 
   return (
-    <Fragment key={index}>
+    <Fragment key={field.id}>
       {field.type === 'repeater' || field.type === 'flexible_content' ? (
         <Collapse className="block-collapse">
           <Collapse.Panel header={field.label || field.id}>{component}</Collapse.Panel>
@@ -222,8 +214,7 @@ const BlockEditFields = (props) => {
   return (
     <Container>
       <div>
-        {fields &&
-          fields.map((field, index) => getField({ field, index, site, onChangeElement, dispatch }))}
+        {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
       </div>
 
       {!isTemplate && !isSiteComponent && (
