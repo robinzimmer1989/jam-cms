@@ -86,6 +86,7 @@ export default createGlobalStyle`
 
   .ant-collapse {
     border: none;
+    background: transparent;
   }
 
   .ant-collapse > .ant-collapse-item {
@@ -103,7 +104,7 @@ export default createGlobalStyle`
   }
 
   .ant-collapse-content > .ant-collapse-content-box {
-    padding: 4px;
+    padding: 0;
     background: #fff;
   }
 
