@@ -11,7 +11,7 @@ export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
   const user = auth.getUser(config);
 
   if (!user?.token) {
-    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)), dispatch, config });
+    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
   }
 
   const formData = new FormData();

@@ -15,7 +15,7 @@ const AvatarMenu = (props) => {
   const [{ config }, dispatch] = useStore();
 
   const handleSignOut = async () =>
-    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)), dispatch, config });
+    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
 
   const dropDownMenu = (
     <StyledMenu>

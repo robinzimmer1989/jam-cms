@@ -9,7 +9,7 @@ const db = async (endpoint, params, dispatch, config) => {
   const user = auth.getUser(config);
 
   if (!user?.token) {
-    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)), dispatch, config });
+    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
   }
 
   try {
@@ -30,7 +30,7 @@ const db = async (endpoint, params, dispatch, config) => {
     if (status === 200) {
       return data;
     } else {
-      authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)), dispatch, config });
+      authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
       return false;
     }
   } catch (err) {

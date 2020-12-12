@@ -19,7 +19,7 @@ export const getAuthUser = async ({}, dispatch, config) => {
 
   if (result) {
     if (result.hasOwnProperty('success') && !result.success) {
-      authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)), dispatch, config });
+      authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
     } else {
       dispatch({ type: `ADD_AUTH_USER`, payload: result });
     }
