@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import produce from 'immer';
-import { Space, Select as AntSelect, Checkbox } from 'antd';
+import { Space, Select as AntSelect, Checkbox, Tabs } from 'antd';
 import { set } from 'lodash';
 
 // import app components
@@ -31,6 +31,8 @@ const PostSettings = () => {
   const otherPosts = { ...posts };
   post && delete otherPosts[post.id];
 
+  const [tab, setTab] = useState('general');
+
   const handleChangePost = (name, value) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
 
@@ -56,96 +58,115 @@ const PostSettings = () => {
   };
 
   return (
-    <Container>
-      <Space direction="vertical">
-        <Input
-          value={post?.title || ''}
-          onChange={(e) => handleChangePost('title', e.target.value)}
-          label={'Title'}
-        />
+    <>
+      <Container>
+        <Tabs defaultActiveKey="all" onChange={(v) => setTab(v)}>
+          <Tabs.TabPane key={'general'} tab={'General'} />
+          <Tabs.TabPane key={'seo'} tab={'SEO'} />
+        </Tabs>
 
-        <Input
-          value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
-          onChange={(e) => handleChangePost('slug', e.target.value)}
-          label={'Slug'}
-          disabled={post?.id === site?.frontPage}
-        />
+        <Space direction="vertical">
+          {tab === 'general' && (
+            <>
+              <Input
+                value={post?.title || ''}
+                onChange={(e) => handleChangePost('title', e.target.value)}
+                label={'Title'}
+              />
 
-        {post?.id !== site?.frontPage && (
-          <Input
-            value={generateSlug(postType, post?.id, site?.frontPage)}
-            label={'Permalink'}
-            disabled
-          />
-        )}
+              <Input
+                value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+                onChange={(e) => handleChangePost('slug', e.target.value)}
+                label={'Slug'}
+                disabled={post?.id === site?.frontPage}
+              />
 
-        <Select
-          value={post?.status || ''}
-          onChange={(value) => handleChangePost('status', value)}
-          label={'Status'}
-        >
-          <AntSelect.Option value={'publish'} children={'Publish'} />
-          <AntSelect.Option value={'draft'} children={'Draft'} />
-          <AntSelect.Option value={'trash'} children={'Trash'} />
-        </Select>
+              {post?.id !== site?.frontPage && (
+                <Input
+                  value={generateSlug(postType, post?.id, site?.frontPage)}
+                  label={'Permalink'}
+                  disabled
+                />
+              )}
 
-        {post?.postTypeID === 'page' && (
-          <PostTreeSelect
-            label="Parent"
-            items={Object.values(otherPosts)}
-            value={post?.parentID}
-            onChange={(value) => handleChangePost('parentID', value)}
-          />
-        )}
+              <Select
+                value={post?.status || ''}
+                onChange={(value) => handleChangePost('status', value)}
+                label={'Status'}
+              >
+                <AntSelect.Option value={'publish'} children={'Publish'} />
+                <AntSelect.Option value={'draft'} children={'Draft'} />
+                <AntSelect.Option value={'trash'} children={'Trash'} />
+              </Select>
 
-        <Input
-          value={post?.seoTitle || ''}
-          onChange={(e) => handleChangePost('seoTitle', e.target.value)}
-          label={'SEO Title'}
-        />
+              {post?.postTypeID === 'page' && (
+                <PostTreeSelect
+                  label="Parent"
+                  items={Object.values(otherPosts)}
+                  value={post?.parentID}
+                  onChange={(value) => handleChangePost('parentID', value)}
+                />
+              )}
 
-        <Input
-          value={post?.seoDescription || ''}
-          onChange={(e) => handleChangePost('seoDescription', e.target.value)}
-          label={'SEO Description'}
-          rows={4}
-        />
+              {post?.postTypeID !== 'page' && (
+                <Space direction="vertical" size={2}>
+                  <Caption children="Featured Image" />
+                  <ImagePicker
+                    value={post?.featuredImage}
+                    onRemove={() => handleSelectImage(null)}
+                    onClick={() =>
+                      dispatch({
+                        type: `SET_DIALOG`,
+                        payload: {
+                          open: true,
+                          component: (
+                            <MediaLibrary onSelect={handleSelectImage} allow={['image']} />
+                          ),
+                          width: 1000,
+                        },
+                      })
+                    }
+                  />
+                </Space>
+              )}
 
-        {post?.postTypeID !== 'page' && (
-          <Space direction="vertical" size={2}>
-            <Caption children="Featured Image" />
-            <ImagePicker
-              value={post?.featuredImage}
-              onRemove={() => handleSelectImage(null)}
-              onClick={() =>
-                dispatch({
-                  type: `SET_DIALOG`,
-                  payload: {
-                    open: true,
-                    component: <MediaLibrary onSelect={handleSelectImage} allow={['image']} />,
-                    width: 1000,
-                  },
-                })
-              }
-            />
-          </Space>
-        )}
+              {post?.postTypeID === 'page' && (
+                <Checkbox
+                  value={post?.id}
+                  checked={post?.id === site?.frontPage}
+                  onChange={(e) =>
+                    handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
+                  }
+                  children="Front Page"
+                />
+              )}
+            </>
+          )}
 
-        {post?.postTypeID === 'page' && (
-          <Checkbox
-            value={post?.id}
-            checked={post?.id === site?.frontPage}
-            onChange={(e) => handleChangeSite('frontPage', e.target.checked ? e.target.value : '')}
-            children="Front Page"
-          />
-        )}
-      </Space>
-    </Container>
+          {tab === 'seo' && (
+            <>
+              <Input
+                value={post?.seoTitle || ''}
+                onChange={(e) => handleChangePost('seoTitle', e.target.value)}
+                label={'SEO Title'}
+              />
+
+              <Input
+                value={post?.seoDescription || ''}
+                onChange={(e) => handleChangePost('seoDescription', e.target.value)}
+                label={'SEO Description'}
+                rows={4}
+              />
+            </>
+          )}
+        </Space>
+      </Container>
+    </>
   );
 };
 
 const Container = styled.div`
-  padding: 15px;
+  padding: 0 15px 30px;
 `;
 
 export default PostSettings;
