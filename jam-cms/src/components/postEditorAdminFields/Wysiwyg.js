@@ -87,6 +87,9 @@ const Wysiwyg = (props) => {
 
 const EditorContainer = styled.div`
   position: relative;
+  padding: 5px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
 
   .rdw-editor-toolbar {
     padding: 0;

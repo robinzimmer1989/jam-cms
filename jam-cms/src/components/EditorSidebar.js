@@ -33,6 +33,12 @@ const EditorSidebar = (props) => {
 
 const Container = styled.div`
   width: 100%;
+  height: 100vh;
+  background: #f8f9ff;
+
+  .ant-page-header {
+    background: #fff;
+  }
 `;
 
 export default EditorSidebar;

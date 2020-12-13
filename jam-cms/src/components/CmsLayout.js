@@ -32,7 +32,7 @@ const CmsLayout = (props) => {
   const site = sites[siteID] || null;
 
   return (
-    <Container>
+    <Layout>
       {mode !== 'editor' && (
         <Layout.Sider
           className="sider"
@@ -150,16 +150,9 @@ const CmsLayout = (props) => {
           {rightSidebar}
         </Layout.Sider>
       )}
-    </Container>
+    </Layout>
   );
 };
-
-const Container = styled(Layout)`
-  .sider,
-  .sider * {
-    transition: none !important;
-  }
-`;
 
 const StyledPageHeader = styled(PageHeader)`
   .jam-cms-logo {

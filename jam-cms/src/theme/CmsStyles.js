@@ -3,10 +3,8 @@ import { createGlobalStyle } from 'styled-components';
 export default createGlobalStyle`
 
   body, iframe {
-    && {
-      background: #f8f9ff;
-      overflow-y: auto !important;
-    }
+    background: #f8f9ff;
+    overflow-y: auto !important;
   }
   
 
