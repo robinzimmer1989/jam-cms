@@ -3,8 +3,10 @@ import { createGlobalStyle } from 'styled-components';
 export default createGlobalStyle`
 
   body, iframe {
-    background: #f8f9ff;
-    overflow-y: auto !important;
+    && {
+      background: #f8f9ff;
+      overflow-y: auto !important;
+    }
   }
   
 
@@ -23,13 +25,17 @@ export default createGlobalStyle`
   }
 
   .ant-layout {
-    background: transparent;
+    && {
+      background: transparent;
+    }
   }
 
   .ant-layout-header {
-    height: unset;
-    background: #fff;
-    padding: 0;
+    && {
+      height: unset;
+      background: #fff;
+      padding: 0;
+    }
   }
 
   .ant-layout-content {
