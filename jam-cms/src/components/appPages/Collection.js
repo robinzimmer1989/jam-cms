@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Button, Popconfirm, PageHeader, Tabs } from 'antd';
 
 // import app components
@@ -36,11 +36,15 @@ const Collection = (props) => {
   sortBy(filteredPosts, 'createdAt');
 
   const handleAddPost = async ({ title, slug, parentID }) => {
-    await postActions.addPost(
+    const result = await postActions.addPost(
       { siteID, postTypeID, status: 'draft', title, slug, parentID },
       dispatch,
       config
     );
+
+    if (result?.id) {
+      navigate(getRoute(`editor`, { siteID, postTypeID, postID: result.id }));
+    }
   };
 
   const handleDeletePost = async ({ postID }) => {
