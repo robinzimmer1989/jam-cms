@@ -153,6 +153,8 @@ const PostEditor = (props) => {
     });
 
     dispatch({ type: `SET_EDITOR_INDEX`, payload: null });
+
+    dispatch({ type: `SET_EDITOR_SIDEBAR`, payload: false });
   };
 
   const handleMoveElement = (index, newIndex) => {
