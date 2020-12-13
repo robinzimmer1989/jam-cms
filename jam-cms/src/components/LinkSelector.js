@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Checkbox, Button, Select, Tabs } from 'antd';
+import { Space, Checkbox, Button } from 'antd';
 
 // import app components
 import Input from './Input';
