@@ -7,11 +7,18 @@ import { ContentState, EditorState, convertToRaw } from 'draft-js';
 import LinkSelect from '../draftjs/LinkSelect';
 import addLinkPlugin from '../draftjs/addLinkPlugin';
 import { colors } from '../../theme';
+import { useStore } from '../../store';
 
 let Editor = () => <></>;
 
 const Wysiwyg = (props) => {
   const { value, onChange } = props;
+
+  const [
+    {
+      editorState: { editorIndex },
+    },
+  ] = useStore();
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editor, setEditor] = useState(null);
@@ -38,7 +45,7 @@ const Wysiwyg = (props) => {
 
       setEditorState(editorState);
     }
-  }, []);
+  }, [editorIndex]);
 
   const handleChange = (editorState) => {
     setEditorState(editorState);
