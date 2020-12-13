@@ -55,6 +55,13 @@ const Container = styled.div`
   a {
     text-decoration: underline;
     color: ${colors.secondary};
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  li {
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   ul {
@@ -66,6 +73,8 @@ const Container = styled.div`
   pre {
     padding: 4px 10px;
     background: #f7f7f7;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
   .clear {

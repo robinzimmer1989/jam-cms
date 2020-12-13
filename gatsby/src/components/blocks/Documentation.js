@@ -71,25 +71,36 @@ const Container = styled.div`
 
 const Grid = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const Sidebar = styled.div`
-  position: sticky;
-  top: 0;
-  width: 200px;
-  height: 500px;
+  width: 100%;
+  margin-bottom: 30px;
+
+  @media (min-width: 960px) {
+    position: sticky;
+    top: 0;
+    width: 200px;
+    height: 500px;
+    margin-bottom: 0;
+  }
 `;
 
 const SidebarItem = styled.a`
   display: block;
-  padding: 10px 20px;
+  padding: 10px 0;
   width: 100%;
+
+  @media (min-width: 960px) {
+    padding: 10px 20px;
+  }
 `;
 
 const Content = styled.div`
   width: 100%;
 
-  @media (min-width: 768px) {
+  @media (min-width: 960px) {
     width: calc(100% - 200px);
     padding-left: 40px;
   }

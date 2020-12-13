@@ -61,25 +61,47 @@ const TextImage = (props) => {
 };
 
 const Container = styled.div`
-  margin: 50px 0;
+  padding: 50px 0;
 `;
 
 const Inner = styled.div`
   position: relative;
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const ImageContainer = styled.div`
-  width: 50%;
-  order: ${({ alignment }) => (alignment === 'left' ? 1 : 3)};
+  position: relative;
+  width: 100%;
+  height: 220px;
+  order: 1;
+  margin-bottom: 30px;
+
+  @media (min-width: 768px) {
+    width: 50%;
+    height: unset;
+    order: ${({ alignment }) => (alignment === 'left' ? 1 : 3)};
+    margin-bottom: 0;
+  }
+
+  .gatsby-image-wrapper {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
 `;
 
 const TextContainer = styled.div`
-  width: 50%;
-  padding: ${({ alignment }) => (alignment === 'left' ? '30px 0 30px 30px' : '30px 30px 30px 0')};
-  display: flex;
-  align-items: center;
   order: 2;
+
+  @media (min-width: 768px) {
+    width: 50%;
+    padding: ${({ alignment }) => (alignment === 'left' ? '50px 0 50px 50px' : '50px 50px 50px 0')};
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const Buttons = styled.div`
