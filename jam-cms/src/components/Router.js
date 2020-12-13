@@ -6,22 +6,16 @@ import Dashboard from './appPages/Dashboard';
 import Media from './appPages/Media';
 import Collections from './appPages/Collections';
 import Collection from './appPages/Collection';
-import CollectionEditor from './appPages/CollectionEditor';
 import PostEditor from './appPages/PostEditor';
-import Forms from './appPages/Forms';
-import Form from './appPages/Form';
 import GeneralSettings from './appPages/GeneralSettings';
 import Editors from './appPages/Editors';
-import Seo from './appPages/Seo';
 
 import {
   ROUTE_MEDIA,
   ROUTE_COLLECTIONS,
   ROUTE_EDITOR,
-  ROUTE_FORMS,
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_COLLECTIONS,
-  ROUTE_SETTINGS_SEO,
   ROUTE_SITE_EDITORS,
 } from '../routes';
 import { siteActions } from '../actions';
@@ -62,21 +56,11 @@ const Router = (props) => {
           theme={theme}
           blocks={blocks}
         />
-        {/* <Forms path={ROUTE_FORMS} /> */}
-        {/* <Form path={`${ROUTE_FORMS}/:formID`} /> */}
-        {/* <Seo path={ROUTE_SETTINGS_SEO} /> */}
         {authUser?.capabilities?.manage_options && (
           <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
         )}
         {authUser?.capabilities?.manage_options && (
           <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
-        )}
-        {authUser?.capabilities?.manage_options && (
-          <CollectionEditor
-            path={`${ROUTE_SETTINGS_COLLECTIONS}/:postTypeID`}
-            theme={theme}
-            blocks={blocks}
-          />
         )}
         {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
       </ReachRouter>

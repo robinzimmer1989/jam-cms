@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, PageHeader, Popconfirm } from 'antd';
-import { Link, navigate } from '@reach/router';
 
 // import app components
 import CmsLayout from '../CmsLayout';
@@ -9,7 +8,6 @@ import ListItem from '../ListItem';
 
 import { collectionActions } from '../../actions';
 import { useStore } from '../../store';
-import getRoute from '../../routes';
 
 const CollectionSettings = () => {
   const [
@@ -22,13 +20,11 @@ const CollectionSettings = () => {
 
   const postTypes = sites[siteID]?.postTypes;
 
-  const handleAddPostType = async ({ title, slug }) => {
-    const result = await collectionActions.addCollection({ siteID, title, slug }, dispatch, config);
-
-    if (result?.data?.createPostType) {
-      navigate(
-        getRoute(`settings-collection`, { siteID, postTypeID: result.data.createPostType.id })
-      );
+  const handleAddPostType = async ({ id, title, slug }) => {
+    if (id) {
+      await collectionActions.updateCollection({ siteID, id, title, slug }, dispatch, config);
+    } else {
+      await collectionActions.addCollection({ siteID, title, slug }, dispatch, config);
     }
   };
 
@@ -36,13 +32,21 @@ const CollectionSettings = () => {
     await collectionActions.deleteCollection({ siteID, id: postTypeID }, dispatch, config);
   };
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (id = null, title = '', slug = '') => {
     dispatch({
       type: 'SET_DIALOG',
       payload: {
         open: true,
         title: `Collection`,
-        component: <CollectionForm siteID={siteID} onSubmit={handleAddPostType} />,
+        component: (
+          <CollectionForm
+            id={id}
+            title={title}
+            slug={slug}
+            siteID={siteID}
+            onSubmit={handleAddPostType}
+          />
+        ),
       },
     });
   };
@@ -50,13 +54,11 @@ const CollectionSettings = () => {
   return (
     <CmsLayout pageTitle={`Collections`}>
       <PageHeader>
-        <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
+        <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
 
       {postTypes &&
         Object.values(postTypes).map((o) => {
-          const link = getRoute(`settings-collection`, { siteID, postTypeID: o.id });
-
           const actions = [];
 
           if (o.id !== 'page') {
@@ -70,18 +72,19 @@ const CollectionSettings = () => {
                 <Button size="small" children={`Delete`} danger />
               </Popconfirm>
             );
-          }
 
-          actions.push(
-            <Button size="small">
-              <Link to={link} children={`Edit`} />
-            </Button>
-          );
+            actions.push(
+              <Button
+                size="small"
+                children={`Edit`}
+                onClick={() => handleOpenDialog(o.id, o.title, o.slug)}
+              />
+            );
+          }
 
           return (
             <ListItem
               key={o.id}
-              link={link}
               actions={actions}
               title={o.title}
               subtitle={`/${o.slug}`}

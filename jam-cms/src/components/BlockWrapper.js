@@ -7,15 +7,7 @@ import { useStore } from '../store';
 import { colors } from '../theme';
 
 const BlockWrapper = (props) => {
-  const {
-    index,
-    renderedBlocks,
-    isTemplate,
-    onClick,
-    children,
-    onOpenDialog,
-    onMoveElement,
-  } = props;
+  const { index, renderedBlocks, onClick, children, onOpenDialog, onMoveElement } = props;
 
   const [
     {
@@ -45,7 +37,7 @@ const BlockWrapper = (props) => {
 
       <BlockName className="blockName" children={blockName} />
 
-      {!isTemplate && index !== 'header' && (
+      {index !== 'header' && (
         <AddButtonTop
           className={`icon`}
           onClick={() => onOpenDialog(index === 'footer' ? renderedBlocks.length : index)}
@@ -54,7 +46,7 @@ const BlockWrapper = (props) => {
         </AddButtonTop>
       )}
 
-      {!isTemplate && index !== 'footer' && (
+      {index !== 'footer' && (
         <AddButtonBottom
           className={`icon`}
           onClick={() => onOpenDialog(index === 'header' ? 0 : index + 1)}
@@ -63,7 +55,7 @@ const BlockWrapper = (props) => {
         </AddButtonBottom>
       )}
 
-      {!isTemplate && index !== 'header' && index !== 'footer' && (
+      {index !== 'header' && index !== 'footer' && (
         <MoveIcons className={`icon`}>
           <MoveIcon onClick={() => onMoveElement(index, index - 1)} disabled={index === 0}>
             <UpCircleTwoTone />

@@ -15,7 +15,6 @@ const FlexibleContent = (props) => {
     editableHeader,
     editableFooter,
     editable = true,
-    isTemplate,
     onOpenDialog,
     onMoveElement,
   } = props;
@@ -44,7 +43,6 @@ const FlexibleContent = (props) => {
         index={index}
         onClick={() => dispatch({ type: `SET_EDITOR_INDEX`, payload: index })}
         renderedBlocks={renderedBlocks}
-        isTemplate={isTemplate}
         onOpenDialog={onOpenDialog}
         onMoveElement={onMoveElement}
         children={component}

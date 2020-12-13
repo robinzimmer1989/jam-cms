@@ -14,7 +14,7 @@ export const addCollection = async ({ siteID, title, slug }, dispatch, config) =
   return result;
 };
 
-export const updateCollection = async ({ siteID, id, title, slug, template }, dispatch, config) => {
+export const updateCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
   let result = await db(
     'updateCollection',
     {
@@ -22,7 +22,6 @@ export const updateCollection = async ({ siteID, id, title, slug, template }, di
       siteID,
       title,
       slug,
-      template: template ? JSON.stringify(template) : null,
     },
     dispatch,
     config

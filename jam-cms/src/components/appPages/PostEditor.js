@@ -44,8 +44,6 @@ const PostEditor = (props) => {
           type: `ADD_EDITOR_SITE`,
           payload: sites[siteID],
         });
-
-        renderTemplateContent(result);
       }
     };
 
@@ -55,32 +53,6 @@ const PostEditor = (props) => {
       dispatch({ type: `CLEAR_EDITOR` });
     };
   }, [postID]);
-
-  const renderTemplateContent = (post) => {
-    // if post type has a template assigned, then overwrite content in editor store
-    // Because we don't wanna loose information in case the user changes the template along the way,
-    // We'll loop through the existing fields and populate the template accordingly
-    if (postType?.template && postType.template.length > 0) {
-      const nextContent = produce(postType.template, (draft) => {
-        post.content.map((o, i) => {
-          if (postType?.template?.[i]?.id === o.id) {
-            o.fields.map((p, j) => {
-              set(draft, `${i}.fields.${j}.value`, p.value);
-            });
-          }
-        });
-        return draft;
-      });
-
-      dispatch({
-        type: `ADD_EDITOR_POST`,
-        payload: {
-          ...post,
-          content: nextContent,
-        },
-      });
-    }
-  };
 
   const getFields = () => {
     if (siteComponent) {
@@ -123,7 +95,6 @@ const PostEditor = (props) => {
           fields={getFields()}
           onChangeElement={handleChangeElement}
           onDeleteElement={handleDeleteElement}
-          isTemplate={postType?.template && postType.template.length}
           isSiteComponent={false}
         />
       );
@@ -135,7 +106,6 @@ const PostEditor = (props) => {
           fields={getFields()}
           onChangeElement={handleChangeElement}
           onDeleteElement={handleDeleteElement}
-          isTemplate={false}
           isSiteComponent={true}
         />
       );
@@ -143,8 +113,11 @@ const PostEditor = (props) => {
 
     return <EditorSidebar title={title} children={content} />;
   };
-
+  console.log(post);
   const handleChangeElement = (field) => {
+    console.log(field);
+    console.log(editorIndex);
+
     dispatch({ type: `CLOSE_DIALOG` });
 
     if (siteComponent) {
@@ -202,10 +175,9 @@ const PostEditor = (props) => {
   const handleSelectElement = (id, index) => {
     // Assign the default value
     const block = produce(blocks[id], (draft) => {
-      draft.fields = draft.fields.map((o) => {
-        return { ...o, value: o.defaultValue || null };
-      });
-
+      const obj = {};
+      draft.fields.map((o) => (obj[o.id] = { ...o, value: o.defaultValue || null }));
+      draft.fields = obj;
       return draft;
     });
 
@@ -252,7 +224,6 @@ const PostEditor = (props) => {
             renderedBlocks={formatBlocks(post?.content, site)}
             editableHeader={true}
             editableFooter={true}
-            isTemplate={postType?.template && postType.template.length}
             onOpenDialog={handleOpenDialog}
             onMoveElement={handleMoveElement}
           />

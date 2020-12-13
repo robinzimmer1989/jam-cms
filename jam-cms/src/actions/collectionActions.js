@@ -12,9 +12,9 @@ export const addCollection = async ({ siteID, title, slug }, dispatch, config) =
   return result;
 };
 
-export const updateCollection = async ({ siteID, id, title, slug, template }, dispatch, config) => {
+export const updateCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
   const result = await collectionServices.updateCollection(
-    { siteID, id, title, slug, template },
+    { siteID, id, title, slug },
     dispatch,
     config
   );

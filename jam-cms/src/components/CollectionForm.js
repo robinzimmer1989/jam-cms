@@ -6,7 +6,7 @@ import Input from './Input';
 import { useStore } from '../store';
 
 const CollectionForm = (props) => {
-  const { title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
+  const { id, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
 
   const [, dispatch] = useStore();
 
@@ -18,7 +18,7 @@ const CollectionForm = (props) => {
       return;
     }
 
-    await onSubmit({ title, slug });
+    await onSubmit({ id, title, slug });
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -27,7 +27,7 @@ const CollectionForm = (props) => {
     <Space direction="vertical">
       <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
       <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
-      <Button children={`Add`} onClick={handleSubmit} type="primary" />
+      <Button children="Add" onClick={handleSubmit} type="primary" />
     </Space>
   );
 };

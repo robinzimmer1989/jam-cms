@@ -202,7 +202,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
 };
 
 const BlockEditFields = (props) => {
-  const { fields, isTemplate, isSiteComponent, onDeleteElement, onChangeElement } = props;
+  const { fields, isSiteComponent, onDeleteElement, onChangeElement } = props;
 
   const [
     {
@@ -217,7 +217,7 @@ const BlockEditFields = (props) => {
         {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
       </div>
 
-      {!isTemplate && !isSiteComponent && (
+      {!isSiteComponent && (
         <ButtonContainer>
           <Button onClick={onDeleteElement} children={`Delete Block`} danger block />
         </ButtonContainer>

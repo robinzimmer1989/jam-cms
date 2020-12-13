@@ -26,14 +26,10 @@ const CollectionSettings = ({ postTypeID }) => {
   const postType = site?.postTypes?.[postTypeID];
 
   const handleUpdate = async () => {
-    const { id, title, slug, template } = postType;
+    const { id, title, slug } = postType;
 
     setLoading(true);
-    await collectionActions.updateCollection(
-      { siteID, id, title, slug, template },
-      dispatch,
-      config
-    );
+    await collectionActions.updateCollection({ siteID, id, title, slug }, dispatch, config);
     setLoading(false);
 
     message.success('Updated successfully');
