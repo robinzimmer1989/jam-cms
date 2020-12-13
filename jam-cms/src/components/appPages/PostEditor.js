@@ -113,11 +113,8 @@ const PostEditor = (props) => {
 
     return <EditorSidebar title={title} children={content} />;
   };
-  console.log(post);
-  const handleChangeElement = (field) => {
-    console.log(field);
-    console.log(editorIndex);
 
+  const handleChangeElement = (field) => {
     dispatch({ type: `CLOSE_DIALOG` });
 
     if (siteComponent) {
