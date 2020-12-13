@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from '@reach/router';
-import styled, { css } from 'styled-components';
 import { Button, Popconfirm, PageHeader, Tabs } from 'antd';
 
 // import app components
 import CmsLayout from '../CmsLayout';
 import PostForm from '../PostForm';
 import ListItem from '../ListItem';
+import Tag from '../Tag';
 
 import { postActions } from '../../actions';
 import { useStore } from '../../store';
-import { colors } from '../../theme';
 import getRoute from '../../routes';
 import { createDataTree, sortBy, generateSlug } from '../../utils';
 
@@ -145,36 +144,5 @@ const Collection = (props) => {
     </CmsLayout>
   );
 };
-
-const Tag = styled.span`
-  display: inline-block;
-  padding: 2px 4px;
-  margin-left: 10px;
-  transform: translateY(-2px);
-  font-size: 9px;
-  text-transform: uppercase;
-  border-radius: 4px;
-
-  ${({ children }) =>
-    children === 'front' &&
-    css`
-      background: ${colors.success};
-      color: #fff;
-    `}
-
-  ${({ children }) =>
-    children === 'draft' &&
-    css`
-      background: ${colors.primary.dark};
-      color: #fff;
-    `}
-
-  ${({ children }) =>
-    children === 'trash' &&
-    css`
-      background: ${colors.warning};
-      color: #fff;
-    `}
-`;
 
 export default Collection;

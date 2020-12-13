@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PageHeader, Button, Tag, Dropdown, Menu, message, Typography, Space } from 'antd';
+import { PageHeader, Button, Dropdown, Menu, message, Typography, Space } from 'antd';
 import {
   MenuOutlined,
   CodeOutlined,
@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
+import Tag from './Tag';
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 
@@ -74,8 +75,12 @@ const EditorHeader = (props) => {
 
   const tags = [];
 
-  if (hasChanged) {
-    tags.push(<Tag key={'has-changed'} color="blue" children={`Unsaved Changes`} />);
+  if (post?.status === 'draft' || post?.status === 'trash') {
+    tags.push(<Tag key={'status'} children={post?.status} />);
+  }
+
+  if (site?.frontPage && post?.id && site.frontPage === post.id) {
+    tags.push(<Tag key="front" children={'front'} />);
   }
 
   const buttons = [];
