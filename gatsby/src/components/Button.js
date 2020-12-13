@@ -11,7 +11,6 @@ const Button = (props) => {
   return url.includes('http') ? (
     <ExternalLink
       href={url}
-      className="jamcmsButton"
       color={color}
       variant={variant}
       children={title}
@@ -20,7 +19,6 @@ const Button = (props) => {
   ) : (
     <InternalLink
       to={url}
-      className="jamcmsButton"
       color={color}
       variant={variant}
       children={title}
