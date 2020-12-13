@@ -1,19 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Collapse, Button, Popconfirm } from 'antd';
+import { Collapse, Popconfirm } from 'antd';
 import produce from 'immer';
 import {
   UpCircleTwoTone,
   DownCircleTwoTone,
   DeleteTwoTone,
   QuestionCircleOutlined,
+  PlusCircleTwoTone,
 } from '@ant-design/icons';
 
 // import app components
 import { getField } from '../BlockEditFields';
 
 const Repeater = (props) => {
-  const { site, items, value, onChange, dispatch } = props;
+  const { id, label, site, items, value, onChange, dispatch } = props;
 
   const values = value || [];
 
@@ -59,65 +60,75 @@ const Repeater = (props) => {
   };
 
   return (
-    <Container>
-      {values &&
-        values.map((value, index) => {
-          return (
-            <Collapse key={index} bordered={false}>
-              <Collapse.Panel
-                header={`Item ${index + 1}`}
-                extra={
-                  <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
-                    <Icon>
-                      <Popconfirm
-                        title="Are you sure？"
-                        onConfirm={() => handleRemove(index)}
-                        icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
-                        placement="left"
-                      >
-                        <DeleteTwoTone twoToneColor="#ff4d4f" />
-                      </Popconfirm>
-                    </Icon>
+    <Collapse className="block-collapse">
+      <Collapse.Panel
+        header={`${label || id} (${values ? values.length : 0})`}
+        extra={
+          <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
+            <Icon onClick={() => handleAdd(items.length)} block>
+              <PlusCircleTwoTone />
+            </Icon>
+          </Icons>
+        }
+      >
+        <Container>
+          {values &&
+            values.map((value, index) => {
+              console.log(value);
+              return (
+                <Collapse key={index} bordered={false}>
+                  <Collapse.Panel
+                    header={`Item ${index + 1}`}
+                    extra={
+                      <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
+                        <Icon>
+                          <Popconfirm
+                            title="Are you sure？"
+                            onConfirm={() => handleRemove(index)}
+                            icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
+                            placement="left"
+                          >
+                            <DeleteTwoTone twoToneColor="#ff4d4f" />
+                          </Popconfirm>
+                        </Icon>
 
-                    <Icon
-                      onClick={() => handleMoveElement(index, index - 1)}
-                      disabled={index === 0}
-                    >
-                      <UpCircleTwoTone />
-                    </Icon>
+                        <Icon
+                          onClick={() => handleMoveElement(index, index - 1)}
+                          disabled={index === 0}
+                        >
+                          <UpCircleTwoTone />
+                        </Icon>
 
-                    <Icon
-                      onClick={() => handleMoveElement(index, index + 1)}
-                      disabled={index === values.length - 1}
-                    >
-                      <DownCircleTwoTone />
-                    </Icon>
-                  </Icons>
-                }
-              >
-                {items &&
-                  items.map((field, subIndex) => {
-                    return (
-                      <div key={subIndex}>
-                        {getField({
-                          field: { ...field, value: value[field.id] },
-                          index,
-                          site,
-                          onChangeElement: (value) => handleChange(value, index),
-                          dispatch,
-                        })}
-                      </div>
-                    );
-                  })}
-              </Collapse.Panel>
-            </Collapse>
-          );
-        })}
-
-      <Button onClick={() => handleAdd(items.length)} block>
-        Add Repeater
-      </Button>
-    </Container>
+                        <Icon
+                          onClick={() => handleMoveElement(index, index + 1)}
+                          disabled={index === values.length - 1}
+                        >
+                          <DownCircleTwoTone />
+                        </Icon>
+                      </Icons>
+                    }
+                  >
+                    {items &&
+                      items.map((field, subIndex) => {
+                        return (
+                          <div key={subIndex}>
+                            {getField({
+                              field: { ...field, value: value[field.id] },
+                              index,
+                              site,
+                              onChangeElement: (value) => handleChange(value, index),
+                              dispatch,
+                            })}
+                          </div>
+                        );
+                      })}
+                  </Collapse.Panel>
+                </Collapse>
+              );
+            })}
+        </Container>
+      </Collapse.Panel>
+    </Collapse>
   );
 };
 

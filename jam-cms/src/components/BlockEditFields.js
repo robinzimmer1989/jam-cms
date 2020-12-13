@@ -188,12 +188,10 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
   return (
     <Fragment key={field.id}>
       {field.type === 'repeater' || field.type === 'flexible_content' ? (
-        <Collapse className="block-collapse">
-          <Collapse.Panel header={field.label || field.id}>{component}</Collapse.Panel>
-        </Collapse>
+        component
       ) : (
         <FieldContainer>
-          <Caption children={field.label} />
+          <Caption children={field.label || field.id} />
           {component}
         </FieldContainer>
       )}
@@ -233,6 +231,8 @@ const Container = styled.div`
   min-height: calc(100vh - 75px);
 
   .block-collapse {
+    position: relative;
+
     .ant-collapse-header {
       padding: 12px 16px 12px 30px;
     }

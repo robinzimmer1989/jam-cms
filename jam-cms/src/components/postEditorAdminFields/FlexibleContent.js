@@ -7,13 +7,14 @@ import {
   DownCircleTwoTone,
   DeleteTwoTone,
   QuestionCircleOutlined,
+  PlusCircleTwoTone,
 } from '@ant-design/icons';
 
 // import app components
 import { getField } from '../BlockEditFields';
 
 const FlexibleContent = (props) => {
-  const { site, items, value, onChange, dispatch } = props;
+  const { id, label, site, items, value, onChange, dispatch } = props;
 
   const values = value || [];
 
@@ -69,69 +70,80 @@ const FlexibleContent = (props) => {
   const menu = <Menu>{menuItems}</Menu>;
 
   return (
-    <Container>
-      {values &&
-        values.map((value, index) => {
-          const layout = items.find((o) => o.id === value.id);
+    <Collapse className="block-collapse">
+      <Collapse.Panel
+        header={`${label || id} (${values ? values.length : 0})`}
+        extra={
+          <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
+            <Icon block>
+              <Dropdown overlay={menu} trigger={['click']}>
+                <PlusCircleTwoTone />
+              </Dropdown>
+            </Icon>
+          </Icons>
+        }
+      >
+        <Container>
+          {values &&
+            values.map((value, index) => {
+              const layout = items.find((o) => o.id === value.id);
 
-          return (
-            <Collapse key={index} bordered={false}>
-              <Collapse.Panel
-                header={layout?.label || 'NA'}
-                extra={
-                  <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
-                    <Icon>
-                      <Popconfirm
-                        title="Are you sure？"
-                        onConfirm={() => handleRemove(index)}
-                        icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
-                        placement="left"
-                      >
-                        <DeleteTwoTone twoToneColor="#ff4d4f" />
-                      </Popconfirm>
-                    </Icon>
-                    <Icon
-                      onClick={() => handleMoveElement(index, index - 1)}
-                      disabled={index === 0}
-                    >
-                      <UpCircleTwoTone />
-                    </Icon>
+              return (
+                <Collapse key={index} bordered={false}>
+                  <Collapse.Panel
+                    header={layout?.label || 'NA'}
+                    extra={
+                      <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
+                        <Icon>
+                          <Popconfirm
+                            title="Are you sure？"
+                            onConfirm={() => handleRemove(index)}
+                            icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
+                            placement="left"
+                          >
+                            <DeleteTwoTone twoToneColor="#ff4d4f" />
+                          </Popconfirm>
+                        </Icon>
+                        <Icon
+                          onClick={() => handleMoveElement(index, index - 1)}
+                          disabled={index === 0}
+                        >
+                          <UpCircleTwoTone />
+                        </Icon>
 
-                    <Icon
-                      onClick={() => handleMoveElement(index, index + 1)}
-                      disabled={index === values.length - 1}
-                    >
-                      <DownCircleTwoTone />
-                    </Icon>
-                  </Icons>
-                }
-              >
-                {layout?.fields &&
-                  layout.fields.map((field, fieldIndex) => {
-                    return (
-                      <div key={field.id}>
-                        {getField({
-                          field: {
-                            ...field,
-                            value: value?.[field.id],
-                          },
-                          index,
-                          site,
-                          onChangeElement: (value) => handleChange(value, index),
-                          dispatch,
-                        })}
-                      </div>
-                    );
-                  })}
-              </Collapse.Panel>
-            </Collapse>
-          );
-        })}
-
-      <Dropdown overlay={menu} trigger={['click']}>
-        <Button block>Add Flexible Content</Button>
-      </Dropdown>
-    </Container>
+                        <Icon
+                          onClick={() => handleMoveElement(index, index + 1)}
+                          disabled={index === values.length - 1}
+                        >
+                          <DownCircleTwoTone />
+                        </Icon>
+                      </Icons>
+                    }
+                  >
+                    {layout?.fields &&
+                      layout.fields.map((field, fieldIndex) => {
+                        return (
+                          <div key={field.id}>
+                            {getField({
+                              field: {
+                                ...field,
+                                value: value?.[field.id],
+                              },
+                              index,
+                              site,
+                              onChangeElement: (value) => handleChange(value, index),
+                              dispatch,
+                            })}
+                          </div>
+                        );
+                      })}
+                  </Collapse.Panel>
+                </Collapse>
+              );
+            })}
+        </Container>
+      </Collapse.Panel>
+    </Collapse>
   );
 };
 
