@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from 'antd';
 import { Modifier, EditorState } from 'draft-js';
+import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
 import { LinkOutlined } from '@ant-design/icons';
 
 // import app components
@@ -22,16 +23,38 @@ const WysiwygLinkSelect = (props) => {
   const linkInstance = linkKey && contentState.getEntity(linkKey);
   const data = linkInstance && linkInstance.getData();
 
-  const handleSelect = (link) => {
+  // TODO: Get selected word and pass in to link modal as default
+
+  const handleChange = (link) => {
     if (link) {
       const { title, url } = link;
 
-      const selectionState = editorState.getSelection();
+      // https://stackoverflow.com/a/63977337/14726146
+      let selection = editorState.getSelection();
+      const entityRange = getEntityRange(editorState, getSelectionEntity(editorState));
+
+      if (entityRange) {
+        const isBackward = selection.getIsBackward();
+
+        if (isBackward) {
+          selection = selection.merge({
+            anchorOffset: entityRange.end,
+            focusOffset: entityRange.start,
+          });
+        } else {
+          selection = selection.merge({
+            anchorOffset: entityRange.start,
+            focusOffset: entityRange.end,
+          });
+        }
+      }
 
       const contentState = editorState.getCurrentContent();
 
+      // TODO: If no URL, then create normal text instead of link
+
       const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', {
-        url: formatSlug(url),
+        url: url.includes('http') ? url : formatSlug(url, true),
         title,
       });
 
@@ -39,7 +62,7 @@ const WysiwygLinkSelect = (props) => {
 
       const contentStateWithLink = Modifier.replaceText(
         editorState.getCurrentContent(),
-        editorState.getSelection(),
+        selection,
         title,
         editorState.getCurrentInlineStyle(),
         entityKey
@@ -70,7 +93,7 @@ const WysiwygLinkSelect = (props) => {
         width={600}
         footer={null}
       >
-        {open && <LinkSelector value={data} onChange={handleSelect} />}
+        {open && <LinkSelector value={data} onChange={handleChange} removable={!!linkInstance} />}
       </Modal>
     </>
   );
