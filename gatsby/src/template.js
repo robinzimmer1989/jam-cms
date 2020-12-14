@@ -1,6 +1,8 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 
+import Seo from './components/Seo';
+
 import { jamCms } from './theme';
 import blocks from './components/blocks';
 
@@ -14,6 +16,7 @@ const Template = (props) => {
 
   return (
     <>
+      <Seo {...post} />
       <ThemeCss theme={jamCms} />
       <Header {...header} />
       {post.content.map(({ id, fields }, index) => {
