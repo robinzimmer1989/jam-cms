@@ -9,6 +9,7 @@ import AvatarMenu from './AvatarMenu';
 import JamCmsLogo from '../icons/jamCMS.svg';
 import { isLoggedIn } from '../utils/auth';
 import getRoute from '../routes';
+import { colors } from '../theme';
 import { useStore } from '../store';
 
 const HomeHeader = () => {
@@ -39,7 +40,7 @@ const Logo = styled(Link)`
     width: 100px;
 
     path {
-      fill: #f8f9ff;
+      fill: ${colors.background.light};
     }
   }
 `;

@@ -5,7 +5,7 @@ const colors = {
   },
   background: {
     dark: '#E5EFEF',
-    light: '#f8f9ff',
+    light: '#f9f9f9',
   },
   text: {
     dark: '#232323',

@@ -5,6 +5,7 @@ import { CloseOutlined } from '@ant-design/icons';
 
 // import app components
 import { useStore } from '../store';
+import { colors } from '../theme';
 
 const EditorSidebar = (props) => {
   const { title, children } = props;
@@ -34,7 +35,7 @@ const EditorSidebar = (props) => {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background: #f8f9ff;
+  background: ${colors.background.light};
 
   .ant-page-header {
     background: #fff;

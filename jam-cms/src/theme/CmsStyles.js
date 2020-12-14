@@ -1,9 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 
+import colors from './colors';
+
 export default createGlobalStyle`
 
   body, iframe {
-    background: #f8f9ff;
+    background: ${colors.background.light};
     overflow-y: auto !important;
   }
   
@@ -85,7 +87,7 @@ export default createGlobalStyle`
   }
 
   .ant-modal-body {
-    background: #f8f9ff;
+    background: ${colors.background.light};
   }
 
   .ant-collapse {

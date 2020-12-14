@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Image as AntImage } from 'antd';
 
+import { colors } from '../theme';
+
 const Image = (props) => {
   const { image, bg, width, height, preview = false, ...rest } = props;
 
@@ -35,7 +37,7 @@ const Image = (props) => {
 const Container = styled.div`
   height: ${({ height }) => (height ? `${height}px` : '100%')};
   width: ${({ width }) => (width ? `${width}px` : '100%')};
-  background: #f7f7f7;
+  background: ${colors.background.light};
 
   .ant-image {
     width: 100%;

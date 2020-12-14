@@ -15,6 +15,7 @@ import CmsHeader from './CmsHeader';
 import EditorHeader from './EditorHeader';
 import JamCmsLogo from '../icons/jamCMS.svg';
 
+import { colors } from '../theme';
 import { useStore } from '../store';
 import getRoute from '../routes';
 
@@ -159,7 +160,7 @@ const StyledPageHeader = styled(PageHeader)`
     margin: 0 auto;
 
     path {
-      fill: #f8f9ff;
+      fill: ${colors.background.light};
     }
   }
 
