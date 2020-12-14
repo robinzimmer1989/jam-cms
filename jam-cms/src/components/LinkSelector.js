@@ -8,7 +8,7 @@ import { generateSlug } from '../utils';
 import { useStore } from '../store';
 
 const LinkSelector = (props) => {
-  const { value = {}, placeholder, onChange } = props;
+  const { value = {}, placeholder, onChange, removable } = props;
 
   const [
     {
@@ -29,8 +29,14 @@ const LinkSelector = (props) => {
     setLink({ ...link, [name]: newValue });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     onChange(link);
+    setLink({ title: '', url: '', target: '' });
+    dispatch({ type: `CLOSE_DIALOG` });
+  };
+
+  const handleRemove = () => {
+    onChange({ title: link.title, url: '', target: '' });
     setLink({ title: '', url: '', target: '' });
     dispatch({ type: `CLOSE_DIALOG` });
   };
@@ -70,9 +76,9 @@ const LinkSelector = (props) => {
         />
 
         <Input
-          label="Title"
+          label="Text"
           value={link?.title || ''}
-          placeholder={placeholder || 'Title'}
+          placeholder={placeholder || 'Text'}
           onChange={(e) => handleChange('title', e.target.value)}
         />
 
@@ -83,7 +89,10 @@ const LinkSelector = (props) => {
           children="Open in new tab"
         />
 
-        <Button children={`Update`} onClick={handleSubmit} type="primary" />
+        <Space>
+          {removable && <Button children={'Remove'} onClick={handleRemove} danger />}
+          <Button children={'Update'} onClick={handleSubmit} type="primary" />
+        </Space>
       </Space>
     </>
   );
