@@ -5,7 +5,6 @@ import htmlToDraft from 'html-to-draftjs';
 import { ContentState, EditorState, convertToRaw } from 'draft-js';
 
 import LinkSelect from '../draftjs/LinkSelect';
-import addLinkPlugin from '../draftjs/addLinkPlugin';
 import { colors } from '../../theme';
 import { useStore } from '../../store';
 
@@ -63,7 +62,7 @@ const Wysiwyg = (props) => {
       {editor && (
         <div>
           <Editor
-            toolbarCustomButtons={[<LinkSelect modifier={addLinkPlugin} />]}
+            toolbarCustomButtons={[<LinkSelect />]}
             editorState={editorState}
             onEditorStateChange={handleChange}
             placeholder="Write something..."
