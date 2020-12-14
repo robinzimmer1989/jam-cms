@@ -47,7 +47,7 @@ export const getPost = async ({ siteID, postID, blocks }, dispatch, config) => {
 };
 
 export const updatePost = async (
-  { siteID, id, slug, status, title, content, seoTitle, seoDescription, parentID, featuredImage },
+  { siteID, id, slug, status, title, content, seo, parentID, featuredImage },
   dispatch,
   config
 ) => {
@@ -59,8 +59,7 @@ export const updatePost = async (
       status,
       title,
       content,
-      seoTitle,
-      seoDescription,
+      seo,
       parentID,
       featuredImage,
     },

@@ -146,14 +146,15 @@ const PostSettings = () => {
           {tab === 'seo' && (
             <>
               <Input
-                value={post?.seoTitle || ''}
-                onChange={(e) => handleChangePost('seoTitle', e.target.value)}
+                value={post?.seo?.title || ''}
+                onChange={(e) => handleChangePost('seo.title', e.target.value)}
                 label={'SEO Title'}
+                placeholder={post?.title}
               />
 
               <Input
-                value={post?.seoDescription || ''}
-                onChange={(e) => handleChangePost('seoDescription', e.target.value)}
+                value={post?.seo?.description || ''}
+                onChange={(e) => handleChangePost('seo.description', e.target.value)}
                 label={'SEO Description'}
                 rows={4}
               />

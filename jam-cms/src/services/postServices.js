@@ -16,7 +16,7 @@ export const getPost = async ({ siteID, postID }, dispatch, config) => {
 };
 
 export const updatePost = async (
-  { siteID, id, title, slug, status, content, seoTitle, seoDescription, parentID, featuredImage },
+  { siteID, id, title, slug, status, content, seo, parentID, featuredImage },
   dispatch,
   config
 ) => {
@@ -29,8 +29,7 @@ export const updatePost = async (
       slug,
       status,
       content: JSON.stringify(content),
-      seoTitle,
-      seoDescription,
+      seo: JSON.stringify(seo),
       parentID,
       featuredImage: JSON.stringify(featuredImage),
     },
