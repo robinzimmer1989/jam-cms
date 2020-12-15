@@ -41,7 +41,7 @@ const ImageContainer = styled.div`
   height: 80px;
   width: 80px;
   margin-right: 10px;
-  background: ${colors.background.light};
+  background: ${colors.background.dark};
 `;
 
 const Buttons = styled.div`

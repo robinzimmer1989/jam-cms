@@ -240,12 +240,12 @@ const Container = styled.div`
 `;
 
 const FieldContainer = styled.div`
-  padding: 12px 12px;
+  padding: 12px;
 `;
 
 const ButtonContainer = styled.div`
   margin-top: 20px;
-  padding: 0 4px;
+  padding: 12px;
 `;
 
 export default BlockEditFields;

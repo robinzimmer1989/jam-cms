@@ -80,7 +80,11 @@ const WysiwygLinkSelect = (props) => {
 
   return (
     <>
-      <IconContainer className="rdw-dropdown-wrapper" onClick={() => setOpen(true)} active={!!data}>
+      <IconContainer
+        className="rdw-dropdown-wrapper rdw-link-select"
+        onClick={() => setOpen(true)}
+        active={!!data}
+      >
         <a className="rdw-dropdown-selectedtext">
           <LinkOutlined />
         </a>

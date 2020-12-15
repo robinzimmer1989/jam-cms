@@ -47,6 +47,7 @@ export default createGlobalStyle`
   }
 
   .ant-layout-sider {
+    background: ${colors.background.light};
     box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   }
 

@@ -7,7 +7,7 @@ const Menu = (props) => {
 
   return (
     <Container>
-      <Button children="Edit" onClick={onClick} block />
+      <Button children="Edit" onClick={onClick} />
     </Container>
   );
 };
