@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { ContentState, EditorState, convertToRaw } from 'draft-js';
@@ -70,8 +70,7 @@ const Wysiwyg = (props) => {
             toolbar={{
               options: ['inline', 'blockType', 'textAlign', 'list'],
               inline: {
-                inDropdown: true,
-                options: ['bold', 'italic', 'underline'],
+                options: ['bold', 'italic'],
               },
               blockType: {
                 inDropdown: true,
@@ -91,16 +90,28 @@ const Wysiwyg = (props) => {
   );
 };
 
+const icon = css`
+  height: 30px;
+  margin: 0 1px;
+  background: #fff;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background: ${colors.background.dark};
+  }
+`;
+
 const EditorContainer = styled.div`
   position: relative;
-  padding: 5px;
-  background: #fff;
-  border: 1px solid #d9d9d9;
 
   .rdw-editor-toolbar {
+    position: relative;
+    z-index: 2;
     padding: 0;
-    margin: 0;
+    margin: 0 0 4px;
     border: none;
+    background: transparent;
+    transform: translateX(-1px);
 
     a {
       color: rgba(0, 0, 0, 0.85);
@@ -108,15 +119,10 @@ const EditorContainer = styled.div`
   }
 
   .rdw-editor-main {
-    min-height: 220px;
-  }
-
-  .rdw-inline-dropdown {
-    width: auto;
-  }
-
-  .rdw-dropdown-selectedtext {
-    padding: 0 8px;
+    padding: 4px;
+    min-height: 100px;
+    background: #fff;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
   }
 
   .rdw-dropdown-carettoopen,
@@ -124,46 +130,27 @@ const EditorContainer = styled.div`
     display: none;
   }
 
-  .rdw-dropdown-wrapper {
-    position: relative;
-    width: auto;
-    margin: 0 2px 2px 0;
-
-    &:hover {
-      box-shadow: none;
-      border-color: ${colors.primary.dark};
-    }
-  }
-
   .rdw-dropdown-optionwrapper {
-    overflow-y: auto;
+    overflow: auto;
   }
 
-  .rdw-inline-dropdownoption {
-    align-items: center;
+  .rdw-option-wrapper,
+  .rdw-dropdown-wrapper {
+    ${icon}
   }
 
-  .rdw-editor-main {
-    overflow: unset;
+  .rdw-option-wrapper,
+  .rdw-text-align-dropdown,
+  .rdw-list-dropdown {
+    width: 30px;
+  }
+
+  .rdw-option-active {
+    background: ${colors.background.dark};
   }
 
   .public-DraftStyleDefault-block {
     margin: 0;
-  }
-
-  .DraftEditor-editorContainer {
-    border: none;
-  }
-
-  .rdw-image-alignment-options-popup {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: auto;
-  }
-
-  .rdw-link-decorator-icon {
-    display: none;
   }
 
   .rdw-editor-main pre {
