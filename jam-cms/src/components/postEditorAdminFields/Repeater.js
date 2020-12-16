@@ -74,7 +74,6 @@ const Repeater = (props) => {
         <Container>
           {values &&
             values.map((value, index) => {
-              console.log(value);
               return (
                 <Collapse key={index} bordered={false}>
                   <Collapse.Panel
