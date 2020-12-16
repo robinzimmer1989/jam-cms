@@ -51,7 +51,7 @@ const LinkSelector = (props) => {
       );
 
       setLink({
-        title: post.title,
+        title: link.title || post.title,
         url: generateSlug(postType, post.id, sites[siteID]?.frontPage),
         target: false,
       });

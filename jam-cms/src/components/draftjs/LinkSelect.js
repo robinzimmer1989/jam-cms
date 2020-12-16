@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from 'antd';
 import { Modifier, EditorState } from 'draft-js';
+import getFragmentFromSelection from 'draft-js/lib/getFragmentFromSelection';
 import { getEntityRange, getSelectionEntity } from 'draftjs-utils';
 import { LinkOutlined } from '@ant-design/icons';
 
@@ -20,10 +21,23 @@ const WysiwygLinkSelect = (props) => {
   const startOffset = editorState.getSelection().getStartOffset();
   const blockWithLinkAtBeginning = contentState.getBlockForKey(startKey);
   const linkKey = blockWithLinkAtBeginning && blockWithLinkAtBeginning.getEntityAt(startOffset);
-  const linkInstance = linkKey && contentState.getEntity(linkKey);
-  const data = linkInstance && linkInstance.getData();
 
-  // TODO: Get selected word and pass in to link modal as default
+  let data = {
+    title: '',
+    utl: '',
+  };
+
+  // If a link is selected we want to get the entire link text, whereas when a text is selected we just want the selection
+  if (linkKey) {
+    const linkInstance = contentState.getEntity(linkKey);
+
+    if (linkInstance) {
+      data = linkInstance.getData();
+    }
+  } else {
+    const selectedText = getFragmentFromSelection(editorState);
+    data.title = selectedText ? selectedText.map((x) => x.getText()).join('\n') : '';
+  }
 
   const handleChange = (link) => {
     if (link) {
@@ -51,26 +65,27 @@ const WysiwygLinkSelect = (props) => {
 
       const contentState = editorState.getCurrentContent();
 
-      // TODO: If no URL, then create normal text instead of link
+      let newContentState, newEditorState;
 
-      const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', {
-        url: url.includes('http') ? url : formatSlug(url, true),
-        title,
-      });
+      // Add or remove link depending on if url is provided
+      if (url) {
+        const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', {
+          url: url.includes('http') ? url : formatSlug(url, true),
+          title,
+        });
 
-      const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-
-      const contentStateWithLink = Modifier.replaceText(
-        editorState.getCurrentContent(),
-        selection,
-        title,
-        editorState.getCurrentInlineStyle(),
-        entityKey
-      );
-
-      const newEditorState = EditorState.set(editorState, {
-        currentContent: contentStateWithLink,
-      });
+        newContentState = Modifier.replaceText(
+          contentState,
+          selection,
+          title,
+          editorState.getCurrentInlineStyle(),
+          contentStateWithEntity.getLastCreatedEntityKey()
+        );
+        newEditorState = EditorState.set(editorState, { currentContent: newContentState });
+      } else {
+        newContentState = Modifier.applyEntity(contentState, selection, null);
+        newEditorState = EditorState.push(editorState, newContentState, 'apply-entity');
+      }
 
       onChange(newEditorState);
     }
@@ -97,7 +112,7 @@ const WysiwygLinkSelect = (props) => {
         width={600}
         footer={null}
       >
-        {open && <LinkSelector value={data} onChange={handleChange} removable={!!linkInstance} />}
+        {open && <LinkSelector value={data} onChange={handleChange} removable={!!data.url} />}
       </Modal>
     </>
   );
