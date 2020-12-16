@@ -126,7 +126,8 @@ const EditorContainer = styled.div`
   }
 
   .rdw-dropdown-carettoopen,
-  .rdw-dropdown-carettoclose {
+  .rdw-dropdown-carettoclose,
+  .rdw-link-decorator-icon {
     display: none;
   }
 
@@ -156,6 +157,10 @@ const EditorContainer = styled.div`
   .rdw-editor-main pre {
     margin-bottom: 0;
     padding: 2px 4px;
+  }
+
+  .rdw-block-dropdown {
+    width: 100px;
   }
 `;
 
