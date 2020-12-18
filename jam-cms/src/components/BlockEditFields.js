@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Button, Collapse } from 'antd';
+import { Button } from 'antd';
 
 // import app components
 import MenuBuilder from './MenuBuilder';
@@ -18,6 +18,8 @@ import Menu from './postEditorAdminFields/Menu';
 import Repeater from './postEditorAdminFields/Repeater';
 import Link from './postEditorAdminFields/Link';
 import Select from './postEditorAdminFields/Select';
+import Checkbox from './postEditorAdminFields/Checkbox';
+import Radio from './postEditorAdminFields/Radio';
 import Number from './postEditorAdminFields/Number';
 import Settings from './postEditorAdminFields/Settings';
 import FlexibleContent from './postEditorAdminFields/FlexibleContent';
@@ -35,18 +37,11 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
       break;
 
     case 'wysiwyg':
-      component = (
-        <Wysiwyg
-          {...field}
-          onChange={(editorState) => onChangeElement({ ...field, value: editorState })}
-        />
-      );
+      component = <Wysiwyg {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
       break;
 
     case 'number':
-      component = (
-        <Number {...field} onChange={(number) => onChangeElement({ ...field, value: number })} />
-      );
+      component = <Number {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
       break;
 
     case 'link':
@@ -75,20 +70,22 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
       break;
 
     case 'select':
+      component = <Select {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
+      break;
+
+    case 'checkbox':
       component = (
-        <Select
-          {...field}
-          onChange={(optionValue) => onChangeElement({ ...field, value: optionValue })}
-        />
+        <Checkbox {...field} onChange={(value) => onChangeElement({ ...field, value })} />
       );
+      break;
+
+    case 'radio':
+      component = <Radio {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
       break;
 
     case 'settings':
       component = (
-        <Settings
-          {...field}
-          onChange={(newValue) => onChangeElement({ ...field, value: newValue })}
-        />
+        <Settings {...field} onChange={(value) => onChangeElement({ ...field, value })} />
       );
       break;
 
@@ -97,7 +94,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
         <CollectionSelector
           {...field}
           site={site}
-          onSelect={(postTypeID) => onChangeElement({ ...field, value: postTypeID })}
+          onSelect={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;
@@ -107,7 +104,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
         <FormSelector
           {...field}
           site={site}
-          onSelect={(formID) => onChangeElement({ ...field, value: formID })}
+          onSelect={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;
@@ -118,7 +115,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
           {...field}
           site={site}
           dispatch={dispatch}
-          onChange={(items) => onChangeElement({ ...field, value: items })}
+          onChange={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;
@@ -129,7 +126,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
           {...field}
           site={site}
           dispatch={dispatch}
-          onChange={(items) => onChangeElement({ ...field, value: items })}
+          onChange={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;
@@ -146,7 +143,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
                 open: true,
                 component: (
                   <MediaLibrary
-                    onSelect={(image) => onChangeElement({ ...field, value: image })}
+                    onSelect={(value) => onChangeElement({ ...field, value })}
                     allow={['image']}
                   />
                 ),
@@ -171,7 +168,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
                 component: (
                   <MenuBuilder
                     {...field}
-                    onChange={(menu) => onChangeElement({ ...field, value: menu })}
+                    onChange={(value) => onChangeElement({ ...field, value })}
                   />
                 ),
                 width: 1000,
