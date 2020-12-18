@@ -6,9 +6,8 @@ const Select = (props) => {
 
   return (
     <AntSelect defaultValue={value || defaultValue || ''} onChange={onChange}>
-      {options.map((o) => (
-        <AntSelect.Option key={o.value} value={o.value} children={o.name} />
-      ))}
+      {options &&
+        options.map((o) => <AntSelect.Option key={o.value} value={o.value} children={o.name} />)}
     </AntSelect>
   );
 };
