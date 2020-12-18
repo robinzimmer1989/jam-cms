@@ -23,6 +23,7 @@ import Radio from './postEditorAdminFields/Radio';
 import Number from './postEditorAdminFields/Number';
 import Settings from './postEditorAdminFields/Settings';
 import FlexibleContent from './postEditorAdminFields/FlexibleContent';
+import DatePicker from './postEditorAdminFields/DatePicker';
 
 import { useStore } from '../store';
 
@@ -42,6 +43,12 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
 
     case 'number':
       component = <Number {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
+      break;
+
+    case 'date_picker':
+      component = (
+        <DatePicker {...field} onChange={(value) => onChangeElement({ ...field, value })} />
+      );
       break;
 
     case 'link':
@@ -99,7 +106,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
       );
       break;
 
-    case 'formSelector':
+    case 'form':
       component = (
         <FormSelector
           {...field}
