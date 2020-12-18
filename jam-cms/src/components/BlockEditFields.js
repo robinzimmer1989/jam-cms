@@ -13,7 +13,7 @@ import CollectionSelector from './postEditorAdminFields/CollectionSelector';
 import FormSelector from './postEditorAdminFields/FormSelector';
 import Text from './postEditorAdminFields/Text';
 import Wysiwyg from './postEditorAdminFields/Wysiwyg';
-import ImagePicker from './postEditorAdminFields/ImagePicker';
+import FilePicker from './postEditorAdminFields/FilePicker';
 import Menu from './postEditorAdminFields/Menu';
 import Repeater from './postEditorAdminFields/Repeater';
 import Link from './postEditorAdminFields/Link';
@@ -133,7 +133,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
 
     case 'image':
       component = (
-        <ImagePicker
+        <FilePicker
           {...field}
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
@@ -146,6 +146,27 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
                     onSelect={(value) => onChangeElement({ ...field, value })}
                     allow={['image']}
                   />
+                ),
+                width: 1000,
+              },
+            })
+          }
+        />
+      );
+      break;
+
+    case 'file':
+      component = (
+        <FilePicker
+          {...field}
+          onRemove={() => onChangeElement({ ...field, value: null })}
+          onClick={() =>
+            dispatch({
+              type: `SET_DIALOG`,
+              payload: {
+                open: true,
+                component: (
+                  <MediaLibrary onSelect={(value) => onChangeElement({ ...field, value })} />
                 ),
                 width: 1000,
               },
