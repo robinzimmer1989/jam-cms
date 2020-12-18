@@ -6,13 +6,13 @@ import Img from 'gatsby-image';
 // import app components
 import { colors } from '../../theme';
 
-const ImagePicker = (props) => {
+const FilePicker = (props) => {
   const { buttonText = 'Edit', onClick, onRemove, value = '' } = props;
 
   return (
     <Container>
-      <ImageContainer>
-        {value?.childImageSharp?.fluid && (
+      <ImageContainer type={value?.icon}>
+        {value?.type === 'image' && value?.childImageSharp?.fluid && (
           <Img
             fluid={value.childImageSharp.fluid}
             objectFit="cover"
@@ -21,11 +21,20 @@ const ImagePicker = (props) => {
             style={{ width: '100%', height: '100%' }}
           />
         )}
+
+        {value?.type === 'application' && (
+          <File>
+            <img src={value?.icon} />
+          </File>
+        )}
       </ImageContainer>
       <Buttons>
         <Space direction="vertical">
-          {value && <Button children="Remove" onClick={onRemove} danger size="small" />}
-          <Button children={buttonText} onClick={onClick} size="small" />
+          {value?.filename && <FileName>{value.filename}</FileName>}
+          <Space>
+            {value && <Button children="Remove" onClick={onRemove} danger size="small" />}
+            <Button children={buttonText} onClick={onClick} size="small" />
+          </Space>
         </Space>
       </Buttons>
     </Container>
@@ -41,11 +50,25 @@ const ImageContainer = styled.div`
   height: 80px;
   width: 80px;
   margin-right: 10px;
-  background: ${colors.background.dark};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${colors.background.dark};
+`;
+
+const File = styled.div`
+  img {
+    height: 30px;
+  }
+`;
+
+const FileName = styled.article`
+  font-size: 12px;
+  line-height: 16px;
 `;
 
 const Buttons = styled.div`
   flex: 1;
 `;
 
-export default ImagePicker;
+export default FilePicker;
