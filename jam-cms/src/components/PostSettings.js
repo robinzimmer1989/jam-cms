@@ -51,8 +51,8 @@ const PostSettings = () => {
     });
   };
 
-  const handleSelectImage = (image) => {
-    handleChangePost('featuredImage', image);
+  const handleSelectImage = (name, image) => {
+    handleChangePost(name, image);
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -113,14 +113,17 @@ const PostSettings = () => {
                   <Caption children="Featured Image" />
                   <ImagePicker
                     value={post?.featuredImage}
-                    onRemove={() => handleSelectImage(null)}
+                    onRemove={() => handleSelectImage('featuredImage', null)}
                     onClick={() =>
                       dispatch({
                         type: `SET_DIALOG`,
                         payload: {
                           open: true,
                           component: (
-                            <MediaLibrary onSelect={handleSelectImage} allow={['image']} />
+                            <MediaLibrary
+                              onSelect={(v) => handleSelectImage('featuredImage', v)}
+                              allow={['image']}
+                            />
                           ),
                           width: 1000,
                         },
@@ -158,6 +161,29 @@ const PostSettings = () => {
                 label={'SEO Description'}
                 rows={4}
               />
+
+              <Space direction="vertical" size={2}>
+                <Caption children="Open Graph Image" />
+                <ImagePicker
+                  value={post?.seo?.ogImage}
+                  onRemove={() => handleSelectImage('seo.ogImage', null)}
+                  onClick={() =>
+                    dispatch({
+                      type: `SET_DIALOG`,
+                      payload: {
+                        open: true,
+                        component: (
+                          <MediaLibrary
+                            onSelect={(v) => handleSelectImage('seo.ogImage', v)}
+                            allow={['image']}
+                          />
+                        ),
+                        width: 1000,
+                      },
+                    })
+                  }
+                />
+              </Space>
             </>
           )}
         </Space>
