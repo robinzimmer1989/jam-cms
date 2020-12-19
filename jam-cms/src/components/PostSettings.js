@@ -10,7 +10,7 @@ import Select from './Select';
 import Caption from './Caption';
 import PostTreeSelect from './PostTreeSelect';
 import MediaLibrary from './MediaLibrary';
-import ImagePicker from './postEditorAdminFields/ImagePicker';
+import FilePicker from './postEditorAdminFields/FilePicker';
 
 import { useStore } from '../store';
 import { generateSlug } from '../utils';
@@ -111,7 +111,7 @@ const PostSettings = () => {
               {post?.postTypeID !== 'page' && (
                 <Space direction="vertical" size={2}>
                   <Caption children="Featured Image" />
-                  <ImagePicker
+                  <FilePicker
                     value={post?.featuredImage}
                     onRemove={() => handleSelectImage('featuredImage', null)}
                     onClick={() =>
@@ -164,7 +164,7 @@ const PostSettings = () => {
 
               <Space direction="vertical" size={2}>
                 <Caption children="Open Graph Image" />
-                <ImagePicker
+                <FilePicker
                   value={post?.seo?.ogImage}
                   onRemove={() => handleSelectImage('seo.ogImage', null)}
                   onClick={() =>
