@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Collapse, Button, Popconfirm, Menu, Dropdown } from 'antd';
+import { Collapse, Popconfirm, Menu, Dropdown } from 'antd';
 import produce from 'immer';
 import {
   UpCircleTwoTone,
@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
-import { getField } from '../BlockEditFields';
+import { getField } from '../EditorFields';
 
 const FlexibleContent = (props) => {
   const { id, label, site, items, value, onChange, dispatch } = props;

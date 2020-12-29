@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
-import { getField } from '../BlockEditFields';
+import { getField } from '../EditorFields';
 
 const Repeater = (props) => {
   const { id, label, site, items, value, onChange, dispatch } = props;
