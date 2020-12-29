@@ -74,17 +74,11 @@ export const getSites = async (args, dispatch, config) => {
   return result;
 };
 
-export const getSite = async ({ siteID, blocks }, dispatch, config) => {
+export const getSite = async ({ siteID }, dispatch, config) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
-    const nextResult = produce(result, (draft) => {
-      set(draft, `settings.header.label`, blocks.header.label);
-      set(draft, `settings.footer.label`, blocks.footer.label);
-      return draft;
-    });
-
-    dispatch({ type: `ADD_SITE`, payload: nextResult });
+    dispatch({ type: `ADD_SITE`, payload: result });
   }
 
   return result;

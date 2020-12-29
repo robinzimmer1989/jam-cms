@@ -29,7 +29,7 @@ const HomeHeader = () => {
 };
 
 const Container = styled.div`
-  height: 64px;
+  height: 50px;
 `;
 
 const Logo = styled(Link)`

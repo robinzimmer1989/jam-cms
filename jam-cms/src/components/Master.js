@@ -15,12 +15,12 @@ import { userActions } from '../actions';
 import { isLoggedIn } from '../utils/auth';
 
 const Master = (props) => {
-  const { theme, blocks } = props;
+  const { theme, templates } = props;
 
   const [
     {
       config,
-      globalState: { dialog },
+      appState: { dialog },
     },
     dispatch,
   ] = useStore();
@@ -44,7 +44,7 @@ const Master = (props) => {
           path={`${ROUTE_APP}${ROUTE_SITE}/:siteID/*`}
           component={CmsRouter}
           theme={theme}
-          blocks={blocks}
+          templates={templates}
         />
 
         <SignIn path={`${ROUTE_APP}${ROUTE_SIGN_IN}`} />

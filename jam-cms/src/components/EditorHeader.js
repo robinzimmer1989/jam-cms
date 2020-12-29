@@ -16,12 +16,12 @@ import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 
 const EditorHeader = (props) => {
-  const { title, onBack } = props;
+  const { title, templates, onBack } = props;
 
   const [
     {
       config,
-      editorState: { site, post, hasChanged, editable, viewport, sidebar },
+      editorState: { site, post, hasChanged, viewport, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -31,8 +31,14 @@ const EditorHeader = (props) => {
   const handleSavePost = async () => {
     const { id, settings, frontPage } = site;
 
+    // Add template object to request, but only in development mode
+    const templateObject =
+      process.env.NODE_ENV === 'development' &&
+      templates?.[post?.postTypeID] &&
+      templates[post.postTypeID].find((o) => o.id === post?.template);
+
     setLoading(true);
-    await postActions.updatePost({ siteID: id, ...post }, dispatch, config);
+    await postActions.updatePost({ siteID: id, ...post, templateObject }, dispatch, config);
     await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
     setLoading(false);
 
@@ -111,16 +117,6 @@ const EditorHeader = (props) => {
           );
         })}
       </Menu.ItemGroup>
-
-      {process.env.NODE_ENV === 'development' && (
-        <Menu.ItemGroup title="Development">
-          <Menu.Item
-            children={editable ? 'Disable Select' : 'Enable Select'}
-            icon={<CodeOutlined />}
-            onClick={() => dispatch({ type: `SET_EDITOR_EDITABLE`, payload: !editable })}
-          />
-        </Menu.ItemGroup>
-      )}
     </Menu>
   );
 
@@ -135,11 +131,11 @@ const EditorHeader = (props) => {
       key={'settings'}
       icon={<SettingOutlined />}
       shape="circle"
-      type="default"
+      type={sidebar ? 'primary' : 'default'}
       onClick={() =>
         dispatch({
           type: `SET_EDITOR_SIDEBAR`,
-          payload: sidebar === 'post-settings' ? null : 'post-settings',
+          payload: sidebar ? null : 'settings',
         })
       }
     />

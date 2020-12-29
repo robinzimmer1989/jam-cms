@@ -38,6 +38,10 @@ export default createGlobalStyle`
     }
   }
 
+  .ant-page-header-content {
+    padding-bottom: 12px;
+  }
+
   .ant-layout-content {
     display: flex;
   }
@@ -51,7 +55,7 @@ export default createGlobalStyle`
   }
 
   .ant-page-header {
-    padding: 12px 0;
+    padding: 5px 0;
   }
 
   .ant-card {

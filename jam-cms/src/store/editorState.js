@@ -4,10 +4,8 @@ export const editorState = {
   site: null,
   post: null,
   form: null,
-  editorIndex: null,
   hasChanged: false,
   viewport: 'desktop',
-  editable: true,
   sidebar: false,
 };
 
@@ -33,7 +31,6 @@ export const editorReducer = (state, action) => {
        ******************************/
       case `UPDATE_EDITOR_COLLECTION`:
         draft.site.postTypes[payload.id] = payload;
-        draft.hasChanged = true;
         break;
 
       /******************************
@@ -63,10 +60,6 @@ export const editorReducer = (state, action) => {
       /******************************
        * General Settings
        ******************************/
-      case `SET_EDITOR_INDEX`:
-        draft.editorIndex = payload;
-        break;
-
       case `SET_HAS_CHANGED`:
         draft.hasChanged = payload;
         break;
@@ -79,18 +72,12 @@ export const editorReducer = (state, action) => {
         draft.sidebar = payload;
         break;
 
-      case `SET_EDITOR_EDITABLE`:
-        draft.editable = payload;
-        break;
-
       case `CLEAR_EDITOR`:
         draft.site = null;
         draft.post = null;
         draft.form = null;
         draft.hasChanged = false;
-        draft.editorIndex = null;
         draft.viewport = 'desktop';
-        draft.editable = true;
         draft.sidebar = false;
         break;
 

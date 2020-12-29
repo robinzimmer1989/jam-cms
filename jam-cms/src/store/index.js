@@ -1,26 +1,29 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
 import { configReducer } from './configState';
+import { globalReducer } from './globalState';
 import { authState, authReducer } from './authState';
-import { globalState, globalReducer } from './globalState';
+import { appState, appReducer } from './appState';
 import { editorState, editorReducer } from './editorState';
 import { cmsState, sitesReducer } from './cmsState';
 
 export const StateContext = createContext({});
 
-export const StoreProvider = ({ children, config }) => {
+export const StoreProvider = ({ children, config, globalOptions }) => {
   const initialState = {
     config,
+    globalOptions,
     authState,
-    globalState,
+    appState,
     editorState,
     cmsState,
   };
 
-  const reducer = ({ authState, globalState, editorState, cmsState }, action) => ({
+  const reducer = ({ authState, appState, editorState, cmsState }, action) => ({
     config: configReducer(config, action),
+    globalOptions: globalReducer(globalOptions, action),
     authState: authReducer(authState, action),
-    globalState: globalReducer(globalState, action),
+    appState: appReducer(appState, action),
     editorState: editorReducer(editorState, action),
     cmsState: sitesReducer(cmsState, action),
   });

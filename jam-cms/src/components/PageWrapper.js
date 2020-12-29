@@ -7,7 +7,7 @@ import { FullscreenExitOutlined } from '@ant-design/icons';
 import Iframe from './Iframe';
 import { useStore } from '../store';
 
-const PageWrapper = ({ theme, children }) => {
+const PageWrapper = ({ theme, onClick, children }) => {
   const [
     {
       editorState: { site, viewport },
@@ -32,7 +32,7 @@ const PageWrapper = ({ theme, children }) => {
       )}
 
       {site && (
-        <Page viewport={viewport}>
+        <Page viewport={viewport} onClick={onClick}>
           <Iframe theme={theme}>{children}</Iframe>
         </Page>
       )}

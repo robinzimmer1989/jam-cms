@@ -6,13 +6,12 @@ import getCleanedFileName from './getCleanedFileName';
 import sortBy from './sortBy';
 import recursivelyUpdateTree from './recursivelyUpdateTree';
 import removeFromTree from './removeFromTree';
-import convertToPropsSchema from './convertToPropsSchema';
 import deepCopyTree from './deepCopyTree';
 import formatFieldForEditor from './formatFieldForEditor';
-import formatBlocks from './formatBlocks';
 import * as auth from './auth';
 import generateRandomString from './generateRandomString';
 import convertFileSize from './convertFileSize';
+import formatFieldsToProps from './formatFieldsToProps';
 
 export {
   createDataTree,
@@ -23,11 +22,10 @@ export {
   sortBy,
   recursivelyUpdateTree,
   removeFromTree,
-  convertToPropsSchema,
   deepCopyTree,
   formatFieldForEditor,
-  formatBlocks,
   auth,
   generateRandomString,
   convertFileSize,
+  formatFieldsToProps,
 };

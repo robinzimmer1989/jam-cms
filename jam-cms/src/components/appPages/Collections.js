@@ -9,7 +9,7 @@ import ListItem from '../ListItem';
 import { collectionActions } from '../../actions';
 import { useStore } from '../../store';
 
-const CollectionSettings = () => {
+const Collections = () => {
   const [
     {
       config,
@@ -96,4 +96,4 @@ const CollectionSettings = () => {
   );
 };
 
-export default CollectionSettings;
+export default Collections;

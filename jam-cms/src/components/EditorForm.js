@@ -42,6 +42,7 @@ const EditorForm = (props) => {
       <Space direction="vertical" size={2}>
         <Caption children="Role" />
         <Select defaultValue={role || defaultRole} onChange={(v) => setRole(v)}>
+          <Select.Option value={'subscriber'} children={'Subscriber'} />
           <Select.Option value={'editor'} children={'Editor'} />
           <Select.Option value={'administrator'} children={'Admin'} />
         </Select>

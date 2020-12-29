@@ -13,7 +13,8 @@ export const ROUTE_SETTINGS_COLLECTIONS = '/settings/collections';
 export const ROUTE_PROFILE = '/profile';
 export const ROUTE_FORMS = '/forms';
 export const ROUTE_FORM = '/form';
-export const ROUTE_SITE_EDITORS = '/editors';
+export const ROUTE_EDITORS = '/editors';
+export const ROUTE_OPTIONS = '/options';
 
 const getRoute = (route, args) => {
   const siteID = args?.siteID || 'default';
@@ -36,7 +37,7 @@ const getRoute = (route, args) => {
       return `${ROUTE_APP}${base}`;
 
     case 'editors':
-      return `${ROUTE_APP}${base}${ROUTE_SITE_EDITORS}`;
+      return `${ROUTE_APP}${base}${ROUTE_EDITORS}`;
 
     case 'media':
       return `${ROUTE_APP}${base}${ROUTE_MEDIA}`;
@@ -49,6 +50,9 @@ const getRoute = (route, args) => {
 
     case 'editor':
       return `${ROUTE_APP}${base}${ROUTE_COLLECTIONS}/${args?.postTypeID}${ROUTE_EDITOR}/${args?.postID}`;
+
+    case 'options':
+      return `${ROUTE_APP}${base}${ROUTE_OPTIONS}`;
 
     case 'forms':
       return `${ROUTE_APP}${base}${ROUTE_FORMS}`;

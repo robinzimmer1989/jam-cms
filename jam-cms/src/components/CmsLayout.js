@@ -7,6 +7,7 @@ import {
   BlockOutlined,
   SettingOutlined,
   FolderOpenOutlined,
+  ControlOutlined,
 } from '@ant-design/icons';
 
 // import app components
@@ -20,10 +21,11 @@ import { useStore } from '../store';
 import getRoute from '../routes';
 
 const CmsLayout = (props) => {
-  const { pageTitle, mode, rightSidebar, onBack, children } = props;
+  const { pageTitle, mode, rightSidebar, templates, onBack, children } = props;
 
   const [
     {
+      globalOptions,
       authState: { authUser },
       cmsState: { siteID, sites },
       editorState: { sidebar },
@@ -77,6 +79,12 @@ const CmsLayout = (props) => {
                   })}
               </Menu.SubMenu>
 
+              {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
+                <Menu.Item key="Options" icon={<ControlOutlined />}>
+                  <Link to={getRoute(`options`, { siteID })}>Theme Options</Link>
+                </Menu.Item>
+              )}
+
               {(authUser?.capabilities?.manage_options ||
                 authUser?.capabilities?.list_users ||
                 authUser?.capabilities?.wpseo_manage_options) && (
@@ -119,7 +127,7 @@ const CmsLayout = (props) => {
       >
         <Layout.Header>
           {mode === 'editor' ? (
-            <EditorHeader title={pageTitle} onBack={onBack} />
+            <EditorHeader title={pageTitle} onBack={onBack} templates={templates} />
           ) : (
             <CmsHeader title={pageTitle} actionBar={mode} onBack={onBack} />
           )}

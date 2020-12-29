@@ -17,7 +17,7 @@ const Iframe = ({ theme, children }) => {
       <Frame
         style={{
           width: '100%',
-          height: viewport === 'fullscreen' ? '100vh' : 'calc(100vh - 64px)',
+          height: viewport === 'fullscreen' ? '100vh' : 'calc(100vh - 50px)',
           overflow: 'auto',
         }}
       >

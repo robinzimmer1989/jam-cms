@@ -21,25 +21,17 @@ export const addPost = async (
   return result;
 };
 
-export const getPost = async ({ siteID, postID, blocks }, dispatch, config) => {
+export const getPost = async ({ siteID, postID }, dispatch, config) => {
   const result = await postServices.getPost({ siteID, postID }, dispatch, config);
 
   if (result) {
-    const nextResult = produce(result, (draft) => {
-      draft.content.map((o, i) => {
-        blocks?.[o?.id]?.label && set(draft.content, `${i}.label`, blocks[o.id].label);
-      });
-
-      return draft;
-    });
-
     dispatch({
       type: `ADD_POST`,
-      payload: nextResult,
+      payload: result,
     });
     dispatch({
       type: `ADD_EDITOR_POST`,
-      payload: nextResult,
+      payload: result,
     });
   }
 
@@ -47,7 +39,19 @@ export const getPost = async ({ siteID, postID, blocks }, dispatch, config) => {
 };
 
 export const updatePost = async (
-  { siteID, id, slug, status, title, content, seo, parentID, featuredImage },
+  {
+    siteID,
+    id,
+    slug,
+    status,
+    title,
+    content,
+    seo,
+    parentID,
+    featuredImage,
+    template,
+    templateObject,
+  },
   dispatch,
   config
 ) => {
@@ -62,6 +66,8 @@ export const updatePost = async (
       seo,
       parentID,
       featuredImage,
+      template,
+      templateObject,
     },
     dispatch,
     config

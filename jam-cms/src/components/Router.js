@@ -9,6 +9,8 @@ import Collection from './appPages/Collection';
 import PostEditor from './appPages/PostEditor';
 import GeneralSettings from './appPages/GeneralSettings';
 import Editors from './appPages/Editors';
+import Options from './appPages/Options';
+import FourOhFour from './appPages/FourOhFour';
 
 import {
   ROUTE_MEDIA,
@@ -16,17 +18,19 @@ import {
   ROUTE_EDITOR,
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_COLLECTIONS,
-  ROUTE_SITE_EDITORS,
+  ROUTE_EDITORS,
+  ROUTE_OPTIONS,
 } from '../routes';
 import { siteActions } from '../actions';
 import { useStore } from '../store';
 
 const Router = (props) => {
-  const { siteID = 'default', theme, blocks } = props;
+  const { siteID = 'default', theme, templates } = props;
 
   const [
     {
       config,
+      globalOptions,
       authState: { authUser },
       cmsState: { sites },
     },
@@ -35,7 +39,7 @@ const Router = (props) => {
 
   useEffect(() => {
     const loadSite = async () => {
-      await siteActions.getSite({ siteID, blocks }, dispatch, config);
+      await siteActions.getSite({ siteID }, dispatch, config);
     };
 
     loadSite();
@@ -54,15 +58,22 @@ const Router = (props) => {
         <PostEditor
           path={`${ROUTE_COLLECTIONS}/:postTypeID${ROUTE_EDITOR}/:postID`}
           theme={theme}
-          blocks={blocks}
+          templates={templates}
         />
+
+        {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
+          <Options path={`${ROUTE_OPTIONS}`} />
+        )}
+
         {authUser?.capabilities?.manage_options && (
           <GeneralSettings path={ROUTE_SETTINGS_GENERAL} />
         )}
         {authUser?.capabilities?.manage_options && (
           <Collections path={ROUTE_SETTINGS_COLLECTIONS} />
         )}
-        {authUser?.capabilities?.list_users && <Editors path={ROUTE_SITE_EDITORS} />}
+        {authUser?.capabilities?.list_users && <Editors path={ROUTE_EDITORS} />}
+
+        <FourOhFour path="*" />
       </ReachRouter>
     </>
   );

@@ -11,7 +11,7 @@ const Loader = () => {
 };
 
 const LoadingContainer = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - 50px);
   width: 100%;
   display: flex;
   align-items: center;

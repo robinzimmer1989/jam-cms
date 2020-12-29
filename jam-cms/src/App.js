@@ -16,20 +16,20 @@ import { CmsStyles } from './theme';
 const Master = React.lazy(() => import('./components/Master'));
 
 const App = (props) => {
-  const { theme, blocks, config } = props;
+  const { templates, theme, config, globalOptions } = props;
 
   return (
     <>
-      <CmsStyles />
-      <ThemeProvider theme={theme || {}}>
-        <StoreProvider config={config}>
-          {typeof window !== 'undefined' && (
-            <React.Suspense fallback={<Loader />}>
-              <Master theme={theme} blocks={blocks} />
-            </React.Suspense>
-          )}
-        </StoreProvider>
-      </ThemeProvider>
+      {typeof window !== 'undefined' && (
+        <React.Suspense fallback={<Loader />}>
+          <ThemeProvider theme={theme || {}}>
+            <CmsStyles />
+            <StoreProvider config={config} globalOptions={globalOptions}>
+              <Master theme={theme} templates={templates} />
+            </StoreProvider>
+          </ThemeProvider>
+        </React.Suspense>
+      )}
     </>
   );
 };
