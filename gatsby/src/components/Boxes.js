@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges';
-import Button from '../Button';
-import Wysiwyg from '../Wysiwyg';
+import Edges from './Edges';
+import Button from './Button';
+import Wysiwyg from './Wysiwyg';
 
 const Boxes = (props) => {
   const { introduction, columns, boxes } = props;

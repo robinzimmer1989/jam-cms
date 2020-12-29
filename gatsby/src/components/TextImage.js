@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges';
-import Wysiwyg from '../Wysiwyg';
-import Button from '../Button';
+import Edges from './Edges';
+import Wysiwyg from './Wysiwyg';
+import Button from './Button';
 
 const TextImage = (props) => {
   const { image, alignment, text, buttons } = props;

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges';
-import Button from '../Button';
+import Edges from './Edges';
+import Button from './Button';
 
 const Posts = (props) => {
   let { posts, buttonTitle, numberOfPosts, columns } = props;

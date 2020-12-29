@@ -1,4 +1,5 @@
 import colors from './colors';
-import jamCms from './jamCms';
+import theme from './theme';
+import globalOptions from './globalOptions';
 
-export { colors, jamCms };
+export { colors, theme, globalOptions };

@@ -2,13 +2,14 @@ import React from 'react';
 import JamCms from 'jam-cms';
 
 // import app components
-import { jamCms } from '../theme';
-import blocks from '../components/blocks';
+import templates from '../templates';
+import { theme, globalOptions } from '../theme';
 
 const Cms = () => (
   <JamCms
-    blocks={blocks}
-    theme={jamCms}
+    templates={templates}
+    theme={theme}
+    globalOptions={globalOptions}
     config={{
       source: process.env.GATSBY_CMS_SOURCE,
       auth: process.env.GATSBY_CMS_AUTH,

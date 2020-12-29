@@ -5,9 +5,9 @@ import slugify from 'slugify';
 // import app components
 import Text from './documentation/Text';
 import TextImage from './documentation/TextImage';
-import Edges from '../Edges';
+import Edges from './Edges';
 
-import { colors } from '../../theme';
+import { colors } from '../theme';
 
 const Documentation = (props) => {
   const { topics } = props;

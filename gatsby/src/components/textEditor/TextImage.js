@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Img from 'gatsby-image';
 
 // import app components
-import Wysiwyg from '../../Wysiwyg';
+import Wysiwyg from '../Wysiwyg';
 
 const TextImage = (props) => {
   const { text, image, alignment } = props;

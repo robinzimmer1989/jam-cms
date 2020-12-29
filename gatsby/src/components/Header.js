@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import Edges from '../Edges';
-import Logo from '../../icons/jamCMS.svg';
-import { colors } from '../../theme';
+import Edges from './Edges';
+import Logo from '../icons/jamCMS.svg';
+import { colors } from '../theme';
 
 const Header = (props) => {
   const { menu, breakpoint } = props;
@@ -180,22 +180,4 @@ const Hamburger = styled.button`
   }
 `;
 
-export default {
-  id: 'header',
-  label: 'Header',
-  component: Header,
-  category: 'default',
-  fields: [
-    {
-      id: 'menu',
-      type: 'menu',
-      label: 'Menu',
-    },
-    {
-      id: 'breakpoint',
-      type: 'number',
-      label: 'Breakpoint',
-      defaultValue: 960,
-    },
-  ],
-};
+export default Header;

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Img from 'gatsby-image';
 
 // import app components
-import Edges from '../Edges';
-import Wysiwyg from '../Wysiwyg';
+import Edges from './Edges';
+import Wysiwyg from './Wysiwyg';
 
 const Banner = (props) => {
   const { image, text, height } = props;

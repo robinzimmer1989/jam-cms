@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // import app components
-import Wysiwyg from '../../Wysiwyg';
+import Wysiwyg from '../Wysiwyg';
 
 const Text = (props) => {
   const { text } = props;

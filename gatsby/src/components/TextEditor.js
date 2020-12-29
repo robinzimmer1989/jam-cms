@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Text from './textEditor/Text';
 import TextImage from './textEditor/TextImage';
 
-import Edges from '../Edges';
+import Edges from './Edges';
 
 const TextEditor = (props) => {
   const { flex } = props;

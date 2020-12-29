@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import Edges from '../Edges';
-import { colors } from '../../theme';
+import Edges from './Edges';
+import { colors } from '../theme';
 
 const Footer = (props) => {
   const { footerMenu } = props;
@@ -54,16 +54,4 @@ const NavItem = styled(Link)`
   padding: 10px 0;
 `;
 
-export default {
-  id: 'footer',
-  label: 'Footer',
-  component: Footer,
-  category: 'default',
-  fields: [
-    {
-      id: 'footerMenu',
-      type: 'menu',
-      label: 'Footer Menu',
-    },
-  ],
-};
+export default Footer;

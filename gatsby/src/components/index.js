@@ -7,4 +7,6 @@ import textimage from './TextImage';
 import texteditor from './TextEditor';
 import documentation from './Documentation';
 
-export default { header, footer, banner, boxes, posts, textimage, texteditor, documentation };
+import test from './Test';
+
+export default { header, footer, banner, boxes, posts, textimage, texteditor, documentation, test };
