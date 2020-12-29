@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Button } from 'antd';
 
 // import app components
 import MenuBuilder from './MenuBuilder';
@@ -9,21 +8,22 @@ import LinkSelector from './LinkSelector';
 import Caption from './Caption';
 
 // Admin fields
-import CollectionSelector from './postEditorAdminFields/CollectionSelector';
-import FormSelector from './postEditorAdminFields/FormSelector';
-import Text from './postEditorAdminFields/Text';
-import Wysiwyg from './postEditorAdminFields/Wysiwyg';
-import FilePicker from './postEditorAdminFields/FilePicker';
-import Menu from './postEditorAdminFields/Menu';
-import Repeater from './postEditorAdminFields/Repeater';
-import Link from './postEditorAdminFields/Link';
-import Select from './postEditorAdminFields/Select';
-import Checkbox from './postEditorAdminFields/Checkbox';
-import Radio from './postEditorAdminFields/Radio';
-import Number from './postEditorAdminFields/Number';
-import Settings from './postEditorAdminFields/Settings';
-import FlexibleContent from './postEditorAdminFields/FlexibleContent';
-import DatePicker from './postEditorAdminFields/DatePicker';
+import CollectionSelector from './editorFields/CollectionSelector';
+import FormSelector from './editorFields/FormSelector';
+import Text from './editorFields/Text';
+import Wysiwyg from './editorFields/Wysiwyg';
+import FilePicker from './editorFields/FilePicker';
+import Menu from './editorFields/Menu';
+import Repeater from './editorFields/Repeater';
+import Link from './editorFields/Link';
+import Select from './editorFields/Select';
+import Checkbox from './editorFields/Checkbox';
+import Radio from './editorFields/Radio';
+import Number from './editorFields/Number';
+import Settings from './editorFields/Settings';
+import FlexibleContent from './editorFields/FlexibleContent';
+import DatePicker from './editorFields/DatePicker';
+import Group from './editorFields/Group';
 
 import { useStore } from '../store';
 
@@ -31,6 +31,17 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
   let component;
 
   switch (field.type) {
+    case 'group':
+      component = (
+        <Group
+          {...field}
+          site={site}
+          dispatch={dispatch}
+          onChange={(value) => onChangeElement({ ...field, value })}
+        />
+      );
+      break;
+
     case 'text':
       component = (
         <Text {...field} onChange={(e) => onChangeElement({ ...field, value: e.target.value })} />
@@ -88,12 +99,6 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
 
     case 'radio':
       component = <Radio {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
-      break;
-
-    case 'settings':
-      component = (
-        <Settings {...field} onChange={(value) => onChangeElement({ ...field, value })} />
-      );
       break;
 
     case 'collection':
@@ -212,7 +217,7 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
 
   return (
     <Fragment key={field.id}>
-      {field.type === 'repeater' || field.type === 'flexible_content' ? (
+      {field.type === 'repeater' || field.type === 'flexible_content' || field.type === 'group' ? (
         component
       ) : (
         <FieldContainer>
@@ -224,8 +229,8 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
   );
 };
 
-const BlockEditFields = (props) => {
-  const { fields, isSiteComponent, onDeleteElement, onChangeElement } = props;
+const EditorFields = (props) => {
+  const { fields, onChangeElement } = props;
 
   const [
     {
@@ -239,12 +244,6 @@ const BlockEditFields = (props) => {
       <div>
         {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
       </div>
-
-      {!isSiteComponent && (
-        <ButtonContainer>
-          <Button onClick={onDeleteElement} children={`Delete Block`} danger block />
-        </ButtonContainer>
-      )}
     </Container>
   );
 };
@@ -252,8 +251,6 @@ const BlockEditFields = (props) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: calc(100vh - 75px);
 
   .block-collapse {
     position: relative;
@@ -268,9 +265,4 @@ const FieldContainer = styled.div`
   padding: 12px;
 `;
 
-const ButtonContainer = styled.div`
-  margin-top: 20px;
-  padding: 12px;
-`;
-
-export default BlockEditFields;
+export default EditorFields;
