@@ -4,8 +4,8 @@ import { get } from 'lodash';
 // import app components
 import { db } from '.';
 
-export const addCollection = async ({ siteID, title, slug }, dispatch, config) => {
-  let result = await db('createCollection', { siteID, title, slug }, dispatch, config);
+export const addCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
+  let result = await db('createCollection', { siteID, id, title, slug }, dispatch, config);
 
   if (result) {
     result = transformCollection(result);

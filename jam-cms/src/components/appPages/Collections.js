@@ -21,10 +21,10 @@ const Collections = () => {
   const postTypes = sites[siteID]?.postTypes;
 
   const handleAddPostType = async ({ id, title, slug }) => {
-    if (id) {
+    if (postTypes?.[id]) {
       await collectionActions.updateCollection({ siteID, id, title, slug }, dispatch, config);
     } else {
-      await collectionActions.addCollection({ siteID, title, slug }, dispatch, config);
+      await collectionActions.addCollection({ siteID, id, title, slug }, dispatch, config);
     }
   };
 

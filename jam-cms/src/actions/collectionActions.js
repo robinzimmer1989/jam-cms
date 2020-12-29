@@ -1,7 +1,11 @@
 import { collectionServices } from '../services';
 
-export const addCollection = async ({ siteID, title, slug }, dispatch, config) => {
-  const result = await collectionServices.addCollection({ siteID, title, slug }, dispatch, config);
+export const addCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
+  const result = await collectionServices.addCollection(
+    { siteID, id, title, slug },
+    dispatch,
+    config
+  );
 
   if (result) {
     dispatch({
