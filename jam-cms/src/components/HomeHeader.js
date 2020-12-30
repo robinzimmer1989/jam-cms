@@ -38,6 +38,7 @@ const Logo = styled(Link)`
 
   svg {
     width: 100px;
+    height: 50px;
 
     path {
       fill: ${colors.background.light};
