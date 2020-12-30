@@ -277,13 +277,6 @@ const Container = styled.div`
   }
 `;
 
-const ItemsContainer = styled.div`
-  max-height: 290px;
-  overflow-y: auto;
-`;
-
-const MenuItemsContainer = styled.div`
-  padding: 20px;
-`;
+const ItemsContainer = styled.div``;
 
 export default MenuBuilder;
