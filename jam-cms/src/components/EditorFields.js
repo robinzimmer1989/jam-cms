@@ -20,7 +20,6 @@ import Select from './editorFields/Select';
 import Checkbox from './editorFields/Checkbox';
 import Radio from './editorFields/Radio';
 import Number from './editorFields/Number';
-import Settings from './editorFields/Settings';
 import FlexibleContent from './editorFields/FlexibleContent';
 import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
