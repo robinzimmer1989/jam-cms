@@ -123,7 +123,6 @@ export default {
   id: 'boxes',
   label: 'Boxes',
   component: Boxes,
-  category: 'default',
   fields: [
     {
       id: 'introduction',

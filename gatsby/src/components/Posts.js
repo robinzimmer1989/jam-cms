@@ -117,7 +117,6 @@ export default {
   id: 'posts',
   label: 'Posts',
   component: Posts,
-  category: 'default',
   fields: [
     {
       id: 'posts',

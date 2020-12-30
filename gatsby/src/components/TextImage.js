@@ -116,7 +116,6 @@ export default {
   id: 'textimage',
   label: 'Text & Image',
   component: TextImage,
-  category: 'default',
   fields: [
     {
       id: 'image',

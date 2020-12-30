@@ -60,7 +60,6 @@ export default {
   id: 'texteditor',
   label: 'Text Editor',
   component: TextEditor,
-  category: 'default',
   fields: [
     {
       id: 'flex',

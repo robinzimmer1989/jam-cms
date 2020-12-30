@@ -55,7 +55,6 @@ export default {
   id: 'banner',
   label: 'Banner',
   component: Banner,
-  category: 'default',
   fields: [
     {
       id: 'image',

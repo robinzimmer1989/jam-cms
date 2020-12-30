@@ -14,7 +14,6 @@ export default {
   id: 'test',
   label: 'Test',
   component: Test,
-  category: 'default',
   fields: [
     {
       id: 'date',
