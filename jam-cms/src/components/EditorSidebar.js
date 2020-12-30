@@ -74,7 +74,7 @@ const EditorSidebar = (props) => {
       });
     } else {
       const nextPost = produce(post, (draft) => {
-        return set(draft, `content.${field.id}.value`, field.value);
+        return set(draft, `content.${field.id}`, field);
       });
 
       dispatch({
