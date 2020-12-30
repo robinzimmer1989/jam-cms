@@ -18,4 +18,23 @@ export default [
       },
     ],
   },
+  {
+    id: 'sidebarmenu',
+    label: 'Sidebar Menu',
+    type: 'menu',
+    hide: true,
+  },
+  {
+    id: 'footer',
+    label: 'Footer',
+    type: 'group',
+    hide: true,
+    fields: [
+      {
+        id: 'footermenu',
+        type: 'menu',
+        label: 'Menu',
+      },
+    ],
+  },
 ];

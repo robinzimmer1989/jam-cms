@@ -35,12 +35,6 @@ const Banner = (props) => {
 const Container = styled.div`
   position: relative;
   height: ${({ height }) => (height === 'small' ? '200px' : '350px')};
-
-  background-image: linear-gradient(
-    109.6deg,
-    rgba(238, 58, 136, 1) 11.2%,
-    rgba(128, 162, 245, 1) 91.1%
-  );
 `;
 
 const ImageContainer = styled.div`
@@ -54,7 +48,7 @@ const ContentContainer = styled.div`
   width: 100%;
   transform: translateY(-50%);
   z-index: 1;
-  color: #fff;
+  color: #203041;
 `;
 
 export default {

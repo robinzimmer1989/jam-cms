@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 
 // import app components
 import Layout from '../../components/Layout';
@@ -8,7 +7,6 @@ import boxes from '../../components/Boxes';
 import posts from '../../components/Posts';
 import textimage from '../../components/TextImage';
 import texteditor from '../../components/TextEditor';
-import documentation from '../../components/Documentation';
 
 const blocks = {
   banner,
@@ -16,7 +14,6 @@ const blocks = {
   posts,
   textimage,
   texteditor,
-  documentation,
 };
 
 const Template = (props) => {
@@ -26,44 +23,14 @@ const Template = (props) => {
 
   return (
     <Layout {...props.pageContext}>
-      <SidebarContent>
-        <Sidebar>{content?.sidebar?.title}</Sidebar>
-        <Content>
-          {content?.flex &&
-            content.flex.map(({ id, ...fields }, index) => {
-              const Component = blocks?.[id]?.component;
-              return (
-                Component && <Component key={index} {...fields} globalOptions={globalOptions} />
-              );
-            })}
-        </Content>
-      </SidebarContent>
+      {content?.flex &&
+        content.flex.map(({ id, ...fields }, index) => {
+          const Component = blocks?.[id]?.component;
+          return Component && <Component key={index} {...fields} globalOptions={globalOptions} />;
+        })}
     </Layout>
   );
 };
-
-const SidebarContent = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 300px;
-`;
-
-const Sidebar = styled.div`
-  width: 100%;
-
-  @media (min-width: 960px) {
-    width: 250px;
-  }
-`;
-
-const Content = styled.div`
-  width: 100%;
-
-  @media (min-width: 960px) {
-    width: calc(100% - 250px);
-    padding-left: 50px;
-  }
-`;
 
 export default Template;
 
@@ -78,22 +45,14 @@ export const PageDefaultTemplate = {
       global: true,
     },
     {
-      id: 'sidebar',
-      label: 'Sidebar',
-      type: 'group',
-      fields: [
-        {
-          id: 'title',
-          label: 'Title',
-          type: 'text',
-        },
-      ],
-    },
-    {
       id: 'flex',
       label: 'Blocks',
       type: 'flexible_content',
       items: Object.values(blocks),
+    },
+    {
+      id: 'footer',
+      global: true,
     },
   ],
 };

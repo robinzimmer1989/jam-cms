@@ -30,7 +30,7 @@ const TextEditor = (props) => {
 
   return (
     <Container>
-      <Edges size="xs">
+      <Edges size="md">
         <Content>
           {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)}
         </Content>
