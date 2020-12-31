@@ -68,6 +68,11 @@ const PostEditor = (props) => {
           {!!Component && post?.content ? (
             <Component
               pageContext={{
+                id: post.id,
+                seo: post.seo,
+                title: post.title,
+                createdAt: post.createdAt,
+                featuredImage: post.featuredImage,
                 content: formatFieldsToProps(post.content, site),
                 globalOptions: formatFieldsToProps(site?.settings, site),
               }}
