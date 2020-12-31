@@ -142,7 +142,6 @@ export default {
       id: 'boxes',
       type: 'repeater',
       label: 'Boxes',
-      defaultValue: [],
       items: [
         {
           id: 'image',
