@@ -1,3 +1,6 @@
+import { set } from 'lodash';
+import produce from 'immer';
+
 import generateSlug from './generateSlug';
 
 export default function formatFieldForEditor(field, site) {
@@ -30,6 +33,28 @@ export default function formatFieldForEditor(field, site) {
       ...field,
       value: 'Write something...',
     };
+  }
+
+  if (field.type === 'flexible_content') {
+    const nextFlexibleContentField = produce(field, (draft) => {
+      draft.value.map((o, i) => {
+        Object.keys(o).map((key) => {
+          if (key !== 'id') {
+            const subField = draft.items
+              .find((p) => p.id === o.id)
+              .fields.find((q) => q.id === key);
+            const formattedSubField = formatFieldForEditor(
+              { ...subField, value: draft.value[i][key] },
+              site
+            );
+
+            return set(draft, `value.${i}.${key}`, formattedSubField.value);
+          }
+        });
+      });
+    });
+
+    return nextFlexibleContentField;
   }
 
   return field;
