@@ -43,6 +43,11 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
               path: o.slug,
               component: templatePath,
               context: {
+                id: o.id,
+                seo: o.seo,
+                title: o.title,
+                createdAt: o.createdAt,
+                featuredImage: o.featuredImage,
                 globalOptions: settings,
                 content: o.content,
               },
