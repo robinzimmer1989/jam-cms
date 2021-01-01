@@ -8,4 +8,4 @@ A CMS for the JAMStack world. Made for developers.
 
 [Demo](https://jam-cms.com/demo/)
 
-[Documentation](https://jam-cms.com/docs/)
+[Documentation](https://jam-cms.com/documentation/)
