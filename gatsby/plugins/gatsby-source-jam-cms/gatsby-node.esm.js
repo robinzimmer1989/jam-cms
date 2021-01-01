@@ -48,8 +48,9 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
                 title: o.title,
                 createdAt: o.createdAt,
                 featuredImage: o.featuredImage,
-                globalOptions: settings,
+                postTypeID: o.postTypeID,
                 content: o.content,
+                globalOptions: settings,
               },
             });
           } else {
