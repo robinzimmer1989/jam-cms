@@ -57,6 +57,10 @@ export default function formatFieldForEditor(field, site) {
   }
 
   if (field.type === 'repeater') {
+    if (!field.value) {
+      return { ...field, value: [] };
+    }
+
     const nextRepeaterField = produce(field, (draft) => {
       draft.value.map((o, i) => {
         Object.keys(o).map((key) => {
