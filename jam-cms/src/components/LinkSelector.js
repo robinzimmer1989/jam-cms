@@ -52,7 +52,7 @@ const LinkSelector = (props) => {
 
       setLink({
         title: link.title || post.title,
-        url: generateSlug(postType, post.id, sites[siteID]?.frontPage),
+        url: generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
         target: false,
       });
     }
