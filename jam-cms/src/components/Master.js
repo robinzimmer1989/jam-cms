@@ -13,7 +13,6 @@ import Collection from './appPages/Collection';
 import GeneralSettings from './appPages/GeneralSettings';
 import Editors from './appPages/Editors';
 import Options from './appPages/Options';
-import FourOhFour from './appPages/FourOhFour';
 
 import Loader from './Loader';
 import PrivateRoute from './PrivateRoute';
