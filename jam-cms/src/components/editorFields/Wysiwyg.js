@@ -114,6 +114,7 @@ const EditorContainer = styled.div`
   .rdw-editor-main {
     padding: 4px;
     min-height: 100px;
+    max-height: 300px;
     background: #fff;
     box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
   }
@@ -154,6 +155,48 @@ const EditorContainer = styled.div`
 
   .rdw-block-dropdown {
     width: 100px;
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  h4 {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  h5 {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  h6 {
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  p,
+  li {
+    font-size: 13px;
+    line-height: 18px;
   }
 `;
 

@@ -270,6 +270,10 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background: ${colors.background.light};
+
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
 `;
 
 const TabsContainer = styled.div`
@@ -280,7 +284,7 @@ const TabsContainer = styled.div`
 `;
 
 const TabContainer = styled.div`
-  padding: 0 15px 30px;
+  padding: 20px 15px;
 `;
 
 export default EditorSidebar;

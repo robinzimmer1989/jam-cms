@@ -272,6 +272,11 @@ const Container = styled.div`
     padding: 20px;
   }
 
+  .ant-collapse-content > .ant-collapse-content-box {
+    border-bottom: none;
+    background: transparent;
+  }
+
   .rst__rowContents {
     min-width: 150px;
   }

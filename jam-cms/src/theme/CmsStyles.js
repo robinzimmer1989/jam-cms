@@ -8,7 +8,6 @@ export default createGlobalStyle`
     background: ${colors.background.light};
     overflow-y: auto !important;
   }
-  
 
   a {
     text-decoration: none;
@@ -31,11 +30,9 @@ export default createGlobalStyle`
   }
 
   .ant-layout-header {
-    && {
-      height: unset;
-      background: #fff;
-      padding: 0;
-    }
+    height: 50px;
+    background: #fff;
+    padding: 0;
   }
 
   .ant-page-header-content {
@@ -96,7 +93,7 @@ export default createGlobalStyle`
 
   .ant-collapse {
     border: none;
-    background: transparent;
+    background: #f0f0f0;
   }
 
   .ant-collapse > .ant-collapse-item {
@@ -115,10 +112,7 @@ export default createGlobalStyle`
 
   .ant-collapse-content > .ant-collapse-content-box {
     padding: 0;
-    background: #fff;
-  }
-
-  .ant-collapse-borderless > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
-    
+    background: #f7f7f7;
+    border-bottom: 1px solid #d9d9d9;
   }
 `;
