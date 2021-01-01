@@ -41,7 +41,7 @@ const WysiwygLinkSelect = (props) => {
 
   const handleChange = (link) => {
     if (link) {
-      const { title, url } = link;
+      const { title, url, target } = link;
 
       // https://stackoverflow.com/a/63977337/14726146
       let selection = editorState.getSelection();
@@ -70,6 +70,7 @@ const WysiwygLinkSelect = (props) => {
       // Add or remove link depending on if url is provided
       if (url) {
         const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', {
+          target,
           url: url.includes('http') ? url : formatSlug(url, true),
           title,
         });
