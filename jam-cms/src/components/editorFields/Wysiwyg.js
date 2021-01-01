@@ -198,6 +198,11 @@ const EditorContainer = styled.div`
     font-size: 13px;
     line-height: 18px;
   }
+
+  a {
+    text-decoration: underline;
+    color: ${colors.primary.dark};
+  }
 `;
 
 export default Wysiwyg;
