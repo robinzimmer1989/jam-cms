@@ -1,6 +1,6 @@
 {
   "name": "jam-cms",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@babel/polyfill": "^7.12.1",
@@ -80,7 +80,7 @@
     "wordpress"
   ],
   "author": "Robin Zimmer",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/robinzimmer1989/jam-cms/issues"
   },
