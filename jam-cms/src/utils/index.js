@@ -12,6 +12,7 @@ import * as auth from './auth';
 import generateRandomString from './generateRandomString';
 import convertFileSize from './convertFileSize';
 import formatFieldsToProps from './formatFieldsToProps';
+import getStorageKey from './getStorageKey';
 
 export {
   createDataTree,
@@ -28,4 +29,5 @@ export {
   generateRandomString,
   convertFileSize,
   formatFieldsToProps,
+  getStorageKey,
 };
