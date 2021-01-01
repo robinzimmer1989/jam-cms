@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Parser from 'html-react-parser';
+import { RichText } from 'jam-cms';
 
 // import app components
 import { colors } from '../theme';
@@ -10,7 +10,7 @@ const Wysiwyg = (props) => {
 
   return (
     <Container>
-      {children && Parser(children)}
+      <RichText children={children} />
       <div className="clear" />
     </Container>
   );

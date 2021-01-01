@@ -26,6 +26,7 @@ export const getPost = async ({ siteID, postID }, dispatch, config) => {
       type: `ADD_POST`,
       payload: result,
     });
+
     dispatch({
       type: `ADD_EDITOR_POST`,
       payload: result,

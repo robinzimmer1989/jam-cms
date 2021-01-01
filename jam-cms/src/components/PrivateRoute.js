@@ -3,7 +3,6 @@ import { navigate } from '@reach/router';
 
 // import app components
 import { isLoggedIn } from '../utils/auth';
-import getRoute from '../routes';
 import { useStore } from '../store';
 
 const PrivateRoute = (props) => {
@@ -15,7 +14,7 @@ const PrivateRoute = (props) => {
     const { location } = props;
 
     if (!isLoggedIn(config) && location.pathname !== `/`) {
-      navigate(getRoute(`sign-in`));
+      navigate('/');
     }
   });
 

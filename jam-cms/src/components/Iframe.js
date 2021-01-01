@@ -43,10 +43,6 @@ const Container = styled.div`
 
 const ThemeStyles = createGlobalStyle`
   ${({ theme }) => theme.css}
-
-  a {
-    pointer-events: none;
-  }
 `;
 
 export default Iframe;

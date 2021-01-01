@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
-import { Button, Card } from 'antd';
+import { Button, Card, Space } from 'antd';
 
 // import app components
 import Input from './Input';
-import Spacer from './Spacer';
 
 import { authActions } from '../actions';
-import getRoute from '../routes';
+import { ROUTE_APP } from '../routes';
 import { auth } from '../utils';
-import { useStore } from '../store';
 
-export default () => {
-  const [{ config }, dispatch] = useStore();
+const LoginForm = (props) => {
+  const { url } = props;
 
   const [data, setData] = useState({
     username: ``,
@@ -22,10 +20,10 @@ export default () => {
     loading: false,
   });
 
-  const isAuthed = auth.isLoggedIn(config);
+  const isAuthed = auth.isLoggedIn();
 
   useEffect(() => {
-    isAuthed && navigate(getRoute(`app`));
+    isAuthed && navigate(ROUTE_APP);
   }, [isAuthed]);
 
   const handleLogin = async () => {
@@ -38,10 +36,10 @@ export default () => {
     handleChange({ target: { name: 'loading', value: true } });
 
     try {
-      const result = await authActions.signIn({ username, password }, dispatch, config);
+      const result = await authActions.signIn({ username, password }, url);
 
       if (result?.success) {
-        navigate(getRoute(`app`));
+        navigate(ROUTE_APP);
       } else {
         handleChange({ target: { name: 'error', value: result?.message } });
       }
@@ -53,32 +51,51 @@ export default () => {
   const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   return (
-    <Spacer mt={30} mb={30}>
+    <Container>
       <Card title={`Sign In`}>
-        <Spacer mb={20}>
-          <Input label={`Username`} value={data.username} onChange={handleChange} name="username" />
-        </Spacer>
+        {url ? (
+          <Space direction="vertical" size={20}>
+            <Space direction="vertical">
+              <Input
+                label={`Username`}
+                value={data.username}
+                onChange={handleChange}
+                name="username"
+              />
 
-        <Spacer mb={20}>
-          <Input
-            label={`Password`}
-            value={data.password}
-            type="password"
-            onChange={handleChange}
-            name="password"
-          />
-        </Spacer>
+              <Input
+                label={`Password`}
+                value={data.password}
+                type="password"
+                onChange={handleChange}
+                name="password"
+              />
 
-        {data?.error && (
-          <Spacer mb={20}>
-            <Error children={data.error} />
-          </Spacer>
+              {data?.error && <Error children={data.error} />}
+            </Space>
+
+            <Button
+              loading={data.loading}
+              children={`Submit`}
+              onClick={handleLogin}
+              type="primary"
+              block
+            />
+          </Space>
+        ) : (
+          <p>Please provide a URL.</p>
         )}
-
-        <Button loading={data.loading} children={`Submit`} onClick={handleLogin} type="primary" />
       </Card>
-    </Spacer>
+    </Container>
   );
 };
+
+export default LoginForm;
+
+const Container = styled.div`
+  .ant-space {
+    width: 100%;
+  }
+`;
 
 const Error = styled.div``;

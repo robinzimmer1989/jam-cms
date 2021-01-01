@@ -4,14 +4,13 @@ import { navigate } from '@reach/router';
 
 import { db } from '.';
 import { auth } from '../utils';
-import getRoute from '../routes';
 import { authActions } from '../actions';
 
 export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
   const user = auth.getUser(config);
 
   if (!user?.token) {
-    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
+    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
   }
 
   try {

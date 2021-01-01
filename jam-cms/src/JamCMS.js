@@ -15,23 +15,19 @@ import { CmsStyles } from './theme';
 
 const Master = React.lazy(() => import('./components/Master'));
 
-const App = (props) => {
-  const { templates, theme, config, globalOptions } = props;
+const JamCMS = (props) => {
+  const { templates, theme, source, globalOptions, pageProps } = props;
 
   return (
-    <>
-      {typeof window !== 'undefined' && (
-        <React.Suspense fallback={<Loader />}>
-          <ThemeProvider theme={theme || {}}>
-            <CmsStyles />
-            <StoreProvider config={config} globalOptions={globalOptions}>
-              <Master theme={theme} templates={templates} />
-            </StoreProvider>
-          </ThemeProvider>
-        </React.Suspense>
-      )}
-    </>
+    <React.Suspense fallback={<Loader />}>
+      <ThemeProvider theme={theme || {}}>
+        <CmsStyles />
+        <StoreProvider source={source} globalOptions={globalOptions}>
+          <Master theme={theme} templates={templates} pageProps={pageProps} />
+        </StoreProvider>
+      </ThemeProvider>
+    </React.Suspense>
   );
 };
 
-export default App;
+export default JamCMS;

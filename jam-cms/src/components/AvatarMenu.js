@@ -5,7 +5,6 @@ import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 // import app components
-import getRoute from '../routes';
 import { useStore } from '../store';
 import { authActions } from '../actions';
 
@@ -15,7 +14,7 @@ const AvatarMenu = (props) => {
   const [{ config }, dispatch] = useStore();
 
   const handleSignOut = async () =>
-    authActions.signOut({ callback: () => navigate(getRoute(`sign-in`)) }, dispatch, config);
+    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
 
   const dropDownMenu = (
     <StyledMenu>

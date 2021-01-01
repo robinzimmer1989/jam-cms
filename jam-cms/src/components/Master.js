@@ -5,22 +5,44 @@ import { Modal } from 'antd';
 // import components
 import Home from './appPages/Home';
 import Profile from './appPages/Profile';
-import SignIn from './appPages/SignIn';
-import CmsRouter from './Router';
+import PostEditor from './appPages/PostEditor';
+import Dashboard from './appPages/Dashboard';
+import Media from './appPages/Media';
+import Collections from './appPages/Collections';
+import Collection from './appPages/Collection';
+import GeneralSettings from './appPages/GeneralSettings';
+import Editors from './appPages/Editors';
+import Options from './appPages/Options';
+import FourOhFour from './appPages/FourOhFour';
+
+import Loader from './Loader';
 import PrivateRoute from './PrivateRoute';
 
-import { ROUTE_APP, ROUTE_PROFILE, ROUTE_SITE, ROUTE_SIGN_IN } from '../routes';
 import { useStore } from '../store';
-import { userActions } from '../actions';
+import { userActions, siteActions } from '../actions';
 import { isLoggedIn } from '../utils/auth';
+import {
+  ROUTE_APP,
+  ROUTE_PROFILE,
+  ROUTE_SITE,
+  ROUTE_MEDIA,
+  ROUTE_COLLECTIONS,
+  ROUTE_SETTINGS_GENERAL,
+  ROUTE_SETTINGS_COLLECTIONS,
+  ROUTE_EDITORS,
+  ROUTE_OPTIONS,
+} from '../routes';
 
 const Master = (props) => {
-  const { theme, templates } = props;
+  const { theme, templates, pageProps } = props;
 
   const [
     {
       config,
+      globalOptions,
+      authState: { authUser },
       appState: { dialog },
+      cmsState: { sites, siteID },
     },
     dispatch,
   ] = useStore();
@@ -32,22 +54,66 @@ const Master = (props) => {
       await userActions.getAuthUser({}, dispatch, config);
     };
 
+    const loadSite = async () => {
+      await siteActions.getSite({ siteID: 'default' }, dispatch, config);
+    };
+
     loggedIn && loadUser();
+    loggedIn && loadSite();
   }, [loggedIn]);
+
+  if (!sites[siteID]) {
+    return <Loader />;
+  }
 
   return (
     <>
       <Router>
         <PrivateRoute path={`${ROUTE_APP}`} component={Home} />
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
+        <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} component={Dashboard} />
+        <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} component={Media} />
         <PrivateRoute
-          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID/*`}
-          component={CmsRouter}
-          theme={theme}
-          templates={templates}
+          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_COLLECTIONS}/:postTypeID`}
+          component={Collection}
         />
 
-        <SignIn path={`${ROUTE_APP}${ROUTE_SIGN_IN}`} />
+        {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_OPTIONS}`}
+            component={Options}
+          />
+        )}
+
+        {authUser?.capabilities?.manage_options && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_GENERAL}`}
+            component={GeneralSettings}
+          />
+        )}
+
+        {authUser?.capabilities?.manage_options && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_COLLECTIONS}`}
+            component={Collections}
+          />
+        )}
+
+        {authUser?.capabilities?.list_users && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_EDITORS}`}
+            component={Editors}
+          />
+        )}
+
+        <PrivateRoute
+          path={'*'}
+          component={PostEditor}
+          theme={theme}
+          templates={templates}
+          postTypeID={pageProps.pageContext.postTypeID}
+          postID={pageProps.pageContext.id}
+        />
       </Router>
 
       {dialog.open && (

@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Empty } from 'antd';
+import { Empty, Layout } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout';
 import PageWrapper from '../PageWrapper';
+import EditorHeader from '../EditorHeader';
 import EditorSidebar from '../EditorSidebar';
 import Loader from '../Loader';
+import FourOhFour from '../FourOhFour';
 
 import { formatFieldsToProps } from '../../utils';
 import { useStore } from '../../store';
@@ -15,13 +16,13 @@ import { postActions } from '../../actions';
 import getRoute from '../../routes';
 
 const PostEditor = (props) => {
-  const { postTypeID, postID, theme, templates } = props;
+  const { postID, theme, templates } = props;
 
   const [
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post },
+      editorState: { sidebar, site, post },
     },
     dispatch,
   ] = useStore();
@@ -32,67 +33,114 @@ const PostEditor = (props) => {
 
   const Component = template?.component;
 
-  useEffect(() => {
-    const loadPost = async () => {
-      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+  // The post id is only available during initial load
+  const path = window.location.pathname.replace(/\/$/, '');
+  const slug = path.substr(path.lastIndexOf('/') + 1);
 
-      if (result) {
-        dispatch({
-          type: `ADD_EDITOR_SITE`,
-          payload: sites[siteID],
-        });
-      }
+  let postIdBySlug;
+
+  if (site) {
+    Object.values(site.postTypes).map((o) =>
+      Object.values(o.posts).map((p) => {
+        if (p.slug === slug || (slug === '' && site.frontPage === p.id)) {
+          postIdBySlug = p.id;
+        }
+      })
+    );
+  }
+
+  useEffect(() => {
+    const loadPost = async (postID) => {
+      await postActions.getPost({ siteID, postID }, dispatch, config);
     };
 
-    loadPost();
+    if (postID) {
+      loadPost(postID);
+    } else if (postIdBySlug) {
+      loadPost(postIdBySlug);
+    }
+
+    dispatch({
+      type: `ADD_EDITOR_SITE`,
+      payload: sites[siteID],
+    });
 
     return function cleanup() {
       dispatch({ type: `CLEAR_EDITOR` });
     };
-  }, [postID]);
-
-  const handleBack = () => {
-    navigate(getRoute(`collection`, { siteID, postTypeID }));
-  };
+  }, [postIdBySlug, postID]);
 
   return (
-    <CmsLayout
-      pageTitle={post?.title}
-      mode="editor"
-      rightSidebar={<EditorSidebar templates={templates} />}
-      onBack={handleBack}
-      templates={templates}
-    >
-      {post ? (
-        <PageWrapper theme={theme}>
-          {!!Component && post?.content ? (
-            <Component
-              pageContext={{
-                id: post.id,
-                seo: post.seo,
-                title: post.title,
-                createdAt: post.createdAt,
-                featuredImage: post.featuredImage,
-                content: formatFieldsToProps(post.content, site),
-                globalOptions: formatFieldsToProps(site?.settings, site),
-              }}
-            />
+    <Layout>
+      <Layout style={{ marginRight: sidebar ? 300 : 0 }}>
+        <Layout.Header>
+          <EditorHeader
+            postID={postID || postIdBySlug}
+            template={!!Component && post?.content}
+            title={post?.title}
+            onBack={() =>
+              navigate(getRoute('collection', { siteID, postTypeID: post?.postTypeID || 'page' }))
+            }
+            templates={templates}
+          />
+        </Layout.Header>
+
+        <Layout.Content>
+          {postID || postIdBySlug ? (
+            <>
+              {site && post ? (
+                <PageWrapper theme={theme}>
+                  {!!Component && post?.content ? (
+                    <Component
+                      pageContext={{
+                        id: post.id,
+                        seo: post.seo,
+                        title: post.title,
+                        createdAt: post.createdAt,
+                        featuredImage: post.featuredImage,
+                        content: formatFieldsToProps(post.content, site),
+                        postTypeID: post.postTypeID,
+                        globalOptions: formatFieldsToProps(site?.settings, site),
+                      }}
+                    />
+                  ) : (
+                    <EmptyContainer>
+                      <Empty
+                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                        imageStyle={{
+                          height: 120,
+                        }}
+                        description={'No Template'}
+                      />
+                    </EmptyContainer>
+                  )}
+                </PageWrapper>
+              ) : (
+                <Loader />
+              )}
+            </>
           ) : (
-            <EmptyContainer>
-              <Empty
-                image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                imageStyle={{
-                  height: 120,
-                }}
-                description={'No Template'}
-              />
-            </EmptyContainer>
+            <FourOhFour />
           )}
-        </PageWrapper>
-      ) : (
-        <Loader />
+        </Layout.Content>
+      </Layout>
+
+      {sidebar && (
+        <Layout.Sider
+          className="sider"
+          theme="light"
+          width={300}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            right: 0,
+          }}
+        >
+          <EditorSidebar templates={templates} />
+        </Layout.Sider>
       )}
-    </CmsLayout>
+    </Layout>
   );
 };
 

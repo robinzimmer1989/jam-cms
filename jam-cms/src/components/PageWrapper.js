@@ -10,7 +10,7 @@ import { useStore } from '../store';
 const PageWrapper = ({ theme, onClick, children }) => {
   const [
     {
-      editorState: { site, viewport },
+      editorState: { viewport },
     },
     dispatch,
   ] = useStore();
@@ -31,11 +31,9 @@ const PageWrapper = ({ theme, onClick, children }) => {
         </Tooltip>
       )}
 
-      {site && (
-        <Page viewport={viewport} onClick={onClick}>
-          <Iframe theme={theme}>{children}</Iframe>
-        </Page>
-      )}
+      <Page viewport={viewport} onClick={onClick}>
+        <Iframe theme={theme}>{children}</Iframe>
+      </Page>
     </>
   );
 };
@@ -43,7 +41,7 @@ const PageWrapper = ({ theme, onClick, children }) => {
 const Page = styled.div`
   margin: 0 auto;
   width: 100%;
-  box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
+  background: #fff;
 
   ${({ viewport }) =>
     viewport === `fullscreen`
@@ -55,10 +53,6 @@ const Page = styled.div`
           height: 100%;
           z-index: 20;
           overflow: hidden;
-
-          * {
-            pointer-events: none;
-          }
         `
       : viewport === `desktop`
       ? css``

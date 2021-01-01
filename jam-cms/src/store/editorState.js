@@ -77,8 +77,6 @@ export const editorReducer = (state, action) => {
         draft.post = null;
         draft.form = null;
         draft.hasChanged = false;
-        draft.viewport = 'desktop';
-        draft.sidebar = false;
         break;
 
       default:

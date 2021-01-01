@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import { PageHeader, Button, Dropdown, Menu, message, Typography, Space } from 'antd';
 import {
   MenuOutlined,
-  CodeOutlined,
   FullscreenOutlined,
   MobileOutlined,
   TabletOutlined,
   DesktopOutlined,
-  SettingOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 
 // import app components
 import Tag from './Tag';
+import Skeleton from './Skeleton';
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 
 const EditorHeader = (props) => {
-  const { title, templates, onBack } = props;
+  const { postID, template, title, templates, onBack } = props;
+
+  const disabled = !postID || !template;
 
   const [
     {
@@ -59,10 +61,11 @@ const EditorHeader = (props) => {
                 <Button
                   children="Discard changes"
                   onClick={() => {
-                    dispatch({ type: 'CLOSE_DIALOG' });
                     onBack();
+                    dispatch({ type: 'CLOSE_DIALOG' });
                   }}
                 />
+
                 <Button
                   children="Back to Editor"
                   type="primary"
@@ -121,17 +124,18 @@ const EditorHeader = (props) => {
   );
 
   buttons.push(
-    <Dropdown key={'menu'} overlay={dropDownMenu} arrow trigger={['click']}>
-      <Button icon={<MenuOutlined />} shape="circle" type="default" />
+    <Dropdown key={'menu'} overlay={dropDownMenu} arrow trigger={['click']} disabled={disabled}>
+      <Button icon={views.find((o) => o.type === viewport).icon} shape="circle" type="default" />
     </Dropdown>
   );
 
   buttons.push(
     <Button
       key={'settings'}
-      icon={<SettingOutlined />}
+      icon={<EditOutlined />}
       shape="circle"
       type={sidebar ? 'primary' : 'default'}
+      disabled={disabled}
       onClick={() =>
         dispatch({
           type: `SET_EDITOR_SIDEBAR`,
@@ -154,11 +158,20 @@ const EditorHeader = (props) => {
 
   return (
     <PageHeader
-      title={title}
+      title={
+        postID ? (
+          <Skeleton done={!!title} width={120} height={32}>
+            {title}
+          </Skeleton>
+        ) : (
+          'Not Found'
+        )
+      }
       extra={buttons}
       tags={tags}
       onBack={handleClickBack}
-      style={{ paddingLeft: 40, paddingRight: 40 }}
+      backIcon={<MenuOutlined />}
+      style={{ paddingLeft: 20, paddingRight: 20 }}
     />
   );
 };

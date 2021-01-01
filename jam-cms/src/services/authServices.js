@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-export const signIn = async ({ username, password }, dispatch, config) => {
+export const signIn = async ({ username, password }, url) => {
   try {
-    const source = config?.auth || config?.source;
-
-    const result = await axios.post(source.replace(/\/+$/, ''), {
+    const result = await axios.post(url.replace(/\/+$/, ''), {
       username,
       password,
     });
@@ -17,4 +15,4 @@ export const signIn = async ({ username, password }, dispatch, config) => {
   }
 };
 
-export const resetPassword = async ({ email }) => {};
+export const resetPassword = async ({ email }, url) => {};

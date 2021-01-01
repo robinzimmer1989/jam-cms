@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
 import { Button, Popconfirm, PageHeader, Tabs } from 'antd';
+import produce from 'immer';
+import { set } from 'lodash';
 
 // import app components
 import CmsLayout from '../CmsLayout';
@@ -10,7 +12,6 @@ import Tag from '../Tag';
 
 import { postActions } from '../../actions';
 import { useStore } from '../../store';
-import getRoute from '../../routes';
 import { createDataTree, sortBy, generateSlug } from '../../utils';
 
 const Collection = (props) => {
@@ -27,7 +28,6 @@ const Collection = (props) => {
   const [filter, setFilter] = useState(`all`);
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
-  const title = postType?.title;
   const posts = postType?.posts ? Object.values(postType.posts) : [];
 
   const treePosts = createDataTree(posts);
@@ -43,7 +43,14 @@ const Collection = (props) => {
     );
 
     if (result?.id) {
-      navigate(getRoute(`editor`, { siteID, postTypeID, postID: result.id }));
+      // Add post to post type so we can then generate the slug and the route the newly created post
+      const nextPostType = produce(postType, (draft) => {
+        return set(draft, `posts.${result.id}`, result);
+      });
+
+      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
+
+      navigate(`/${slug}`);
     }
   };
 
@@ -64,12 +71,12 @@ const Collection = (props) => {
   );
 
   const renderPost = (o, level) => {
-    const editLink = getRoute(`editor`, { siteID, postTypeID, postID: o.id });
+    const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;
 
     const actions = [
-      <Button size="small">
-        <Link to={editLink}>Edit</Link>
-      </Button>,
+      <Link to={slug}>
+        <Button size="small">Edit</Button>
+      </Link>,
     ];
 
     if (o.status === 'trash') {
@@ -109,9 +116,8 @@ const Collection = (props) => {
         <ListItem
           level={level}
           actions={actions}
-          link={editLink}
           title={o.title}
-          subtitle={generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}
+          subtitle={slug}
           status={badges}
           image={o.featuredImage}
           hideImage={postTypeID === 'page'}
@@ -123,7 +129,7 @@ const Collection = (props) => {
   };
 
   return (
-    <CmsLayout pageTitle={title}>
+    <CmsLayout pageTitle={postType?.title}>
       <PageHeader
         title={filterItems}
         extra={

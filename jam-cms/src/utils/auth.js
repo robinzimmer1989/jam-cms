@@ -1,24 +1,28 @@
+import getStorageKey from './getStorageKey';
+const storageKey = getStorageKey();
+
 const isBrowser = typeof window !== `undefined`;
 
-const defaultStorageKey = 'jam-cms-user';
+export const setUser = (user) => {
+  if (storageKey) {
+    window.localStorage[storageKey] = JSON.stringify(user);
+  }
+};
 
-export const setUser = (user, config) =>
-  (window.localStorage[config?.storageKey || defaultStorageKey] = JSON.stringify(user));
-
-export const getUser = (config) => {
-  if (window.localStorage[config?.storageKey || defaultStorageKey]) {
-    let user = JSON.parse(window.localStorage[config?.storageKey || defaultStorageKey]);
+export const getUser = () => {
+  if (storageKey && window.localStorage[storageKey]) {
+    let user = JSON.parse(window.localStorage[storageKey]);
     return user ? user : {};
   }
   return {};
 };
 
-export const isLoggedIn = (config) => {
+export const isLoggedIn = () => {
   if (!isBrowser) {
     return false;
   }
 
-  const user = getUser(config);
+  const user = getUser();
 
   if (user) {
     return !!user.token;
@@ -27,12 +31,13 @@ export const isLoggedIn = (config) => {
   return false;
 };
 
-export const getCurrentUser = (config) => isBrowser && getUser(config);
+export const getCurrentUser = () => isBrowser && getUser();
 
-export const logout = (callback, config) => {
+export const logout = (callback) => {
   if (!isBrowser) {
     return;
   }
-  setUser({}, config);
+  setUser({});
+
   callback();
 };

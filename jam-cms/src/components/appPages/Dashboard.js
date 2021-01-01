@@ -4,7 +4,6 @@ import { Alert, Space } from 'antd';
 
 // import app components
 import CmsLayout from '../CmsLayout';
-
 import { useStore } from '../../store';
 
 const Dashboard = () => {
@@ -23,7 +22,15 @@ const Dashboard = () => {
           {errors && (
             <Space direction="vertical">
               {errors.map((o, i) => {
-                return <Alert key={i} message={o.title} description={o.description} type="error" showIcon />;
+                return (
+                  <Alert
+                    key={i}
+                    message={o.title}
+                    description={o.description}
+                    type="error"
+                    showIcon
+                  />
+                );
               })}
             </Space>
           )}
