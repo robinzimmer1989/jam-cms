@@ -17,7 +17,10 @@ export default function formatFieldForEditor(field, site) {
     return {
       ...field,
       value: posts.map((o) => {
-        return { ...o, slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage) };
+        return {
+          ...o,
+          slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage, true),
+        };
       }),
     };
   }
