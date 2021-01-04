@@ -54,11 +54,7 @@ const PostEditor = (props) => {
       await postActions.getPost({ siteID, postID }, dispatch, config);
     };
 
-    if (postID) {
-      loadPost(postID);
-    } else if (postIdBySlug) {
-      loadPost(postIdBySlug);
-    }
+    postIdBySlug && loadPost(postIdBySlug);
 
     dispatch({
       type: `ADD_EDITOR_SITE`,
@@ -68,7 +64,7 @@ const PostEditor = (props) => {
     return function cleanup() {
       dispatch({ type: `CLEAR_EDITOR` });
     };
-  }, [postIdBySlug, postID]);
+  }, [postIdBySlug]);
 
   return (
     <Layout>
