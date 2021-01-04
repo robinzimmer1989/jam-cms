@@ -65,6 +65,7 @@ const File = styled.div`
 const FileName = styled.article`
   font-size: 12px;
   line-height: 16px;
+  word-break: break-word;
 `;
 
 const Buttons = styled.div`
