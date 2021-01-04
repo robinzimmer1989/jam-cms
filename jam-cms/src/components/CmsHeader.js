@@ -27,18 +27,6 @@ const CmsHeader = (props) => {
     />
   );
 
-  if (site?.frontendUrl) {
-    buttons.push(
-      <Button
-        key="visit-site-button"
-        size="small"
-        children={`Visit Site`}
-        href={site?.frontendUrl}
-        target="_blank"
-      />
-    );
-  }
-
   buttons.push(<AvatarMenu key="avatar-menu" />);
 
   return <PageHeader title={title} extra={buttons} style={{ paddingLeft: 40, paddingRight: 40 }} />;
