@@ -38,7 +38,7 @@ const DeploymentBadge = (props) => {
       });
     }
 
-    axios.post(site.deploymentBuildHook);
+    await axios.post(site.deploymentBuildHook);
 
     setSrc(`${deploymentBadgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`);
   };
