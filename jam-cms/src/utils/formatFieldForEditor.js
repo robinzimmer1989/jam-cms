@@ -80,6 +80,10 @@ export default function formatFieldForEditor(field, site) {
   }
 
   if (field.type === 'flexible_content') {
+    if (!field.value) {
+      return { ...field, value: [] };
+    }
+
     const nextFlexibleContentField = produce(field, (draft) => {
       draft.value.map((o, i) => {
         Object.keys(o).map((key) => {
