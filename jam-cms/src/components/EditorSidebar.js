@@ -14,7 +14,6 @@ import MediaLibrary from './MediaLibrary';
 import FilePicker from './editorFields/FilePicker';
 
 import { useStore } from '../store';
-import { generateSlug } from '../utils';
 import { colors } from '../theme';
 
 const EditorSidebar = (props) => {
@@ -137,14 +136,6 @@ const EditorSidebar = (props) => {
               label={'Slug'}
               disabled={post?.id === site?.frontPage}
             />
-
-            {post?.id !== site?.frontPage && (
-              <Input
-                value={generateSlug(postType, post?.id, site?.frontPage)}
-                label={'Permalink'}
-                disabled
-              />
-            )}
 
             {postTypeTemplates && postTypeTemplates.length > 1 && (
               <Select
