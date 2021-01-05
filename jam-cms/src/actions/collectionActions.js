@@ -10,10 +10,10 @@ export const addCollection = async ({ siteID, id, title, slug }, dispatch, confi
   if (result) {
     dispatch({
       type: `ADD_COLLECTION`,
-      payload: result,
+      payload: { ...result, siteID },
     });
   }
-  return result;
+  return { ...result, siteID };
 };
 
 export const updateCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
@@ -26,10 +26,10 @@ export const updateCollection = async ({ siteID, id, title, slug }, dispatch, co
   if (result) {
     dispatch({
       type: `UPDATE_COLLECTION`,
-      payload: result,
+      payload: { ...result, siteID },
     });
   }
-  return result;
+  return { ...result, siteID };
 };
 
 export const deleteCollection = async ({ siteID, id }, dispatch, config) => {
@@ -38,8 +38,8 @@ export const deleteCollection = async ({ siteID, id }, dispatch, config) => {
   if (result) {
     dispatch({
       type: `DELETE_COLLECTION`,
-      payload: result,
+      payload: { ...result, siteID },
     });
   }
-  return result;
+  return { ...result, siteID };
 };

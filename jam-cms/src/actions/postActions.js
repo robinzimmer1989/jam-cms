@@ -1,18 +1,18 @@
 import { postServices } from '../services';
 
 export const addPost = async (
-  { siteID, slug, postTypeID, status, title, content, parentID },
+  { siteID, postTypeID, status, title, content, parentID },
   dispatch,
   config
 ) => {
   const result = await postServices.addPost(
-    { siteID, slug, postTypeID, status, title, content, parentID },
+    { siteID, postTypeID, status, title, content, parentID },
     dispatch,
     config
   );
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: result });
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
   }
 
   return result;
@@ -24,12 +24,12 @@ export const getPost = async ({ siteID, postID }, dispatch, config) => {
   if (result) {
     dispatch({
       type: `ADD_POST`,
-      payload: result,
+      payload: { ...result, siteID },
     });
 
     dispatch({
       type: `ADD_EDITOR_POST`,
-      payload: result,
+      payload: { ...result, siteID },
     });
   }
 
@@ -72,7 +72,7 @@ export const updatePost = async (
   );
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: result });
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
   }
 };
 
@@ -80,6 +80,6 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
   const result = await postServices.deletePost({ siteID, id }, dispatch, config);
 
   if (result) {
-    dispatch({ type: `DELETE_POST`, payload: result });
+    dispatch({ type: `DELETE_POST`, payload: { ...result, siteID } });
   }
 };
