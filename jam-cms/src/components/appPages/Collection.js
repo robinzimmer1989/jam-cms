@@ -37,7 +37,7 @@ const Collection = (props) => {
 
   const handleAddPost = async ({ title, slug, parentID }) => {
     const result = await postActions.addPost(
-      { siteID, postTypeID, status: 'draft', title, slug, parentID },
+      { siteID, postTypeID, status: 'draft', title, parentID },
       dispatch,
       config
     );

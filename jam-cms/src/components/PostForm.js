@@ -4,11 +4,10 @@ import { Space, Button } from 'antd';
 // import app components
 import Input from './Input';
 import PostTreeSelect from './PostTreeSelect';
-import { formatSlug } from '../utils';
 import { useStore } from '../store';
 
 const PostForm = (props) => {
-  const { postTypeID, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
+  const { postTypeID, onSubmit } = props;
 
   const [
     {
@@ -17,29 +16,15 @@ const PostForm = (props) => {
     dispatch,
   ] = useStore();
 
-  const [title, setTitle] = useState(defaultTitle);
-  const [slug, setSlug] = useState(defaultSlug);
+  const [title, setTitle] = useState('');
   const [parentID, setParentID] = useState(0);
 
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
   const handleSubmit = async () => {
-    if (!title || slug === '/') {
-      return;
-    }
-
-    let formattedSlug;
-
-    if (slug) {
-      formattedSlug = formatSlug(slug);
-    } else {
-      formattedSlug = formatSlug(title);
-    }
-
-    await onSubmit({ title, slug: formattedSlug, parentID });
+    await onSubmit({ title, parentID });
 
     setTitle('');
-    setSlug('');
     setParentID(0);
 
     dispatch({ type: 'CLOSE_DIALOG' });
@@ -53,12 +38,6 @@ const PostForm = (props) => {
         onChange={(e) => setTitle(e.target.value)}
         placeholder={``}
       />
-      <Input
-        label="Slug"
-        value={slug}
-        onChange={(e) => setSlug(e.target.value)}
-        placeholder={`(Optional)`}
-      />
 
       {postTypeID === 'page' && (
         <PostTreeSelect
@@ -69,7 +48,7 @@ const PostForm = (props) => {
         />
       )}
 
-      <Button children={`Add`} onClick={handleSubmit} type="primary" />
+      <Button children={`Add`} onClick={handleSubmit} type="primary" disabled={!title} />
     </Space>
   );
 };

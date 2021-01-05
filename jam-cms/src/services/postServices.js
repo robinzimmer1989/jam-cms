@@ -1,12 +1,7 @@
 import { db } from '.';
 
-export const addPost = async ({ siteID, slug, postTypeID, title, parentID }, dispatch, config) => {
-  let result = await db(
-    'createPost',
-    { siteID, title, slug, postTypeID, parentID },
-    dispatch,
-    config
-  );
+export const addPost = async ({ siteID, postTypeID, title, parentID }, dispatch, config) => {
+  let result = await db('createPost', { siteID, title, postTypeID, parentID }, dispatch, config);
   return result;
 };
 
