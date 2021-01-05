@@ -83,10 +83,3 @@ export const getSite = async ({ siteID }, dispatch, config) => {
 
   return result;
 };
-
-export const addSiteToEditor = ({ site }, dispatch) => {
-  dispatch({
-    type: `ADD_EDITOR_SITE`,
-    payload: site,
-  });
-};

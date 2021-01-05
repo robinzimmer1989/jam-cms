@@ -6,14 +6,15 @@ export const addCollection = async ({ siteID, id, title, slug }, dispatch, confi
     dispatch,
     config
   );
+  const formattedResult = { ...result, siteID };
 
   if (result) {
     dispatch({
       type: `ADD_COLLECTION`,
-      payload: { ...result, siteID },
+      payload: formattedResult,
     });
   }
-  return { ...result, siteID };
+  return formattedResult;
 };
 
 export const updateCollection = async ({ siteID, id, title, slug }, dispatch, config) => {
@@ -22,24 +23,26 @@ export const updateCollection = async ({ siteID, id, title, slug }, dispatch, co
     dispatch,
     config
   );
+  const formattedResult = { ...result, siteID };
 
   if (result) {
     dispatch({
       type: `UPDATE_COLLECTION`,
-      payload: { ...result, siteID },
+      payload: formattedResult,
     });
   }
-  return { ...result, siteID };
+  return formattedResult;
 };
 
 export const deleteCollection = async ({ siteID, id }, dispatch, config) => {
   const result = await collectionServices.deleteCollection({ siteID, id }, dispatch, config);
+  const formattedResult = { ...result, siteID };
 
   if (result) {
     dispatch({
       type: `DELETE_COLLECTION`,
-      payload: { ...result, siteID },
+      payload: formattedResult,
     });
   }
-  return { ...result, siteID };
+  return formattedResult;
 };

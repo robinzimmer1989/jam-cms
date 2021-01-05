@@ -12,8 +12,6 @@ export const getForm = async ({ site, id }, dispatch, config) => {
   //     type: `ADD_EDITOR_FORM`,
   //     payload: result.data.getForm,
   //   })
-  //   // Every time the user edits a post we need to restore the original site state
-  //   siteActions.addSiteToEditor({ site }, dispatch, config)
   // }
   // return result
 };

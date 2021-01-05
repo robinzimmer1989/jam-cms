@@ -10,30 +10,25 @@ export const addPost = async (
     dispatch,
     config
   );
+  const formattedResult = { ...result, siteID };
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `ADD_POST`, payload: formattedResult });
   }
 
-  return result;
+  return formattedResult;
 };
 
 export const getPost = async ({ siteID, postID }, dispatch, config) => {
   const result = await postServices.getPost({ siteID, postID }, dispatch, config);
+  const formattedResult = { ...result, siteID };
 
   if (result) {
-    dispatch({
-      type: `ADD_POST`,
-      payload: { ...result, siteID },
-    });
-
-    dispatch({
-      type: `ADD_EDITOR_POST`,
-      payload: { ...result, siteID },
-    });
+    dispatch({ type: `ADD_POST`, payload: formattedResult });
+    dispatch({ type: `ADD_EDITOR_POST`, payload: formattedResult });
   }
 
-  return result;
+  return formattedResult;
 };
 
 export const updatePost = async (
@@ -70,16 +65,23 @@ export const updatePost = async (
     dispatch,
     config
   );
+  const formattedResult = { ...result, siteID };
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `ADD_POST`, payload: formattedResult });
+    dispatch({ type: `ADD_EDITOR_POST`, payload: formattedResult });
   }
+
+  return formattedResult;
 };
 
 export const deletePost = async ({ siteID, id }, dispatch, config) => {
   const result = await postServices.deletePost({ siteID, id }, dispatch, config);
+  const formattedResult = { ...result, siteID };
 
   if (result) {
-    dispatch({ type: `DELETE_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `DELETE_POST`, payload: formattedResult });
   }
+
+  return formattedResult;
 };
