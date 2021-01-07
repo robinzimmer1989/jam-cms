@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
+// import external css files
+import 'minireset.css';
+import 'antd/dist/antd.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'draft-js-image-plugin/lib/plugin.css';
+import 'draft-js/dist/Draft.css';
+
 // import components
 import Home from './appPages/Home';
 import Profile from './appPages/Profile';
@@ -17,6 +24,7 @@ import Options from './appPages/Options';
 import Loader from './Loader';
 import PrivateRoute from './PrivateRoute';
 
+import { CmsStyles } from '../theme';
 import { useStore } from '../store';
 import { userActions, siteActions } from '../actions';
 import { isLoggedIn } from '../utils/auth';
@@ -66,7 +74,9 @@ const Master = (props) => {
   }
 
   return (
-    <>
+    <div id="jam-cms">
+      <CmsStyles />
+
       <Router>
         <PrivateRoute path={`${ROUTE_APP}`} component={Home} />
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
@@ -127,7 +137,7 @@ const Master = (props) => {
           footer={null}
         />
       )}
-    </>
+    </div>
   );
 };
 
