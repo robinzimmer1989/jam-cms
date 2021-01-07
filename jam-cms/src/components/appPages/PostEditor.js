@@ -68,7 +68,7 @@ const PostEditor = (props) => {
 
   return (
     <Layout>
-      <Layout style={{ marginRight: sidebar ? 300 : 0 }}>
+      <Layout style={{ marginRight: sidebar ? 320 : 0 }}>
         <Layout.Header>
           <EditorHeader
             postID={postID || postIdBySlug}
@@ -125,7 +125,7 @@ const PostEditor = (props) => {
         <Layout.Sider
           className="sider"
           theme="light"
-          width={300}
+          width={320}
           style={{
             overflow: 'auto',
             height: '100vh',
