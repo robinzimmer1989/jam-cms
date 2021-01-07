@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Collapse, Popconfirm, Menu, Dropdown } from 'antd';
 import produce from 'immer';
@@ -18,7 +18,10 @@ const FlexibleContent = (props) => {
 
   const values = value || [];
 
-  const handleAdd = (id, index) => {
+  const [parentActive, setParentActive] = useState([]);
+  const [childActive, setChildActive] = useState([]);
+
+  const handleAdd = (id) => {
     const layout = items.find((o) => o.id === id);
     const newValues = produce(values, (draft) => {
       draft.push({
@@ -29,6 +32,9 @@ const FlexibleContent = (props) => {
     });
 
     onChange(newValues);
+
+    setParentActive(['parent']);
+    handleToggleChild(values.length);
   };
 
   const handleRemove = (index) => {
@@ -63,15 +69,37 @@ const FlexibleContent = (props) => {
     onChange(newValues);
   };
 
+  const handleToggleParent = () => {
+    if (parentActive.length > 0) {
+      setParentActive([]);
+    } else {
+      setParentActive(['parent']);
+    }
+  };
+
+  const handleToggleChild = (key) => {
+    const newKeys = produce(childActive, (draft) => {
+      if (childActive.includes(key)) {
+        draft = draft.filter((k) => k !== key);
+      } else {
+        draft.push(key);
+      }
+
+      return draft;
+    });
+    setChildActive(newKeys);
+  };
+
   const menuItems = items.map((o) => (
-    <Menu.Item key={o.id} children={o.label} onClick={() => handleAdd(o.id, items.length)} />
+    <Menu.Item key={o.id} children={o.label} onClick={() => handleAdd(o.id)} />
   ));
 
   const menu = <Menu>{menuItems}</Menu>;
 
   return (
-    <Collapse className="block-collapse">
+    <Collapse activeKey={parentActive} onChange={handleToggleParent}>
       <Collapse.Panel
+        key="parent"
         header={`${label || id} (${values ? values.length : 0})`}
         extra={
           <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
@@ -89,8 +117,13 @@ const FlexibleContent = (props) => {
               const layout = items.find((o) => o.id === value.id);
 
               return (
-                <Collapse key={index} bordered={false}>
+                <Collapse
+                  key={index}
+                  activeKey={childActive}
+                  onChange={() => handleToggleChild(index)}
+                >
                   <Collapse.Panel
+                    key={index}
                     header={layout?.label || 'NA'}
                     extra={
                       <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>

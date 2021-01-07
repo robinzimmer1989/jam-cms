@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Collapse, Popconfirm } from 'antd';
 import produce from 'immer';
@@ -18,13 +18,19 @@ const Repeater = (props) => {
 
   const values = value || [];
 
-  const handleAdd = (index) => {
+  const [parentActive, setParentActive] = useState([]);
+  const [childActive, setChildActive] = useState([]);
+
+  const handleAdd = () => {
     const newValues = produce(values, (draft) => {
       draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}));
       return draft;
     });
 
     onChange(newValues);
+
+    setParentActive(['parent']);
+    handleToggleChild(values.length);
   };
 
   const handleRemove = (index) => {
@@ -59,13 +65,35 @@ const Repeater = (props) => {
     onChange(newValues);
   };
 
+  const handleToggleParent = () => {
+    if (parentActive.length > 0) {
+      setParentActive([]);
+    } else {
+      setParentActive(['parent']);
+    }
+  };
+
+  const handleToggleChild = (key) => {
+    const newKeys = produce(childActive, (draft) => {
+      if (childActive.includes(key)) {
+        draft = draft.filter((k) => k !== key);
+      } else {
+        draft.push(key);
+      }
+
+      return draft;
+    });
+    setChildActive(newKeys);
+  };
+
   return (
-    <Collapse className="block-collapse">
+    <Collapse activeKey={parentActive} onChange={handleToggleParent}>
       <Collapse.Panel
+        key="parent"
         header={`${label || id} (${values ? values.length : 0})`}
         extra={
           <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
-            <Icon onClick={() => handleAdd(items.length)} block>
+            <Icon onClick={() => handleAdd()} block>
               <PlusCircleTwoTone />
             </Icon>
           </Icons>
@@ -75,8 +103,13 @@ const Repeater = (props) => {
           {values &&
             values.map((value, index) => {
               return (
-                <Collapse key={index} bordered={false}>
+                <Collapse
+                  key={index}
+                  activeKey={childActive}
+                  onChange={() => handleToggleChild(index)}
+                >
                   <Collapse.Panel
+                    key={index}
                     header={`Item ${index + 1}`}
                     extra={
                       <Icons className={`icon`} onClick={(e) => e.stopPropagation()}>
