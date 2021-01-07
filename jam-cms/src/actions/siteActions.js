@@ -1,6 +1,4 @@
 import { navigate } from '@reach/router';
-import { set } from 'lodash';
-import produce from 'immer';
 
 import { siteServices } from '../services';
 import getRoute from '../routes';
