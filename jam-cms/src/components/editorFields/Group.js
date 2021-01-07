@@ -20,7 +20,7 @@ const Group = (props) => {
   };
 
   return (
-    <Collapse className="block-collapse">
+    <Collapse>
       <Collapse.Panel header={`${label || id}`}>
         {fields &&
           fields.map((field, index) => {
