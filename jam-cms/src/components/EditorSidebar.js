@@ -262,8 +262,9 @@ const Container = styled.div`
   height: 100vh;
   background: ${colors.background.light};
 
-  .ant-tabs-nav {
+  .ant-tabs > .ant-tabs-nav {
     margin-bottom: 0;
+    border-bottom: 1px solid ${colors.text.light};
   }
 `;
 

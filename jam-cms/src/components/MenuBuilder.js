@@ -11,6 +11,7 @@ import {
   deepCopyTree,
   generateRandomString,
 } from '../utils';
+import { colors } from '../theme';
 import { useStore } from '../store';
 
 const MenuBuilder = (props) => {
@@ -140,7 +141,7 @@ const MenuBuilder = (props) => {
     <Container>
       <Row justify="space-between">
         <Col span="11">
-          <Card>
+          <Card style={{ border: `1px solid ${colors.text.light}` }}>
             <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
               {Object.values(sites[siteID]?.postTypes).map((o) => {
                 return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />;
@@ -208,7 +209,7 @@ const MenuBuilder = (props) => {
         </Col>
 
         <Col span="12">
-          <Card>
+          <Card style={{ border: `1px solid ${colors.text.light}` }}>
             <Tree
               className="draggable-tree"
               draggable

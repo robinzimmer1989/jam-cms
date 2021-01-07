@@ -10,6 +10,7 @@ import Input from './Input';
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
 import { convertFileSize } from '../utils';
+import { colors } from '../theme';
 
 const MediaImage = (props) => {
   const { file, onSelect, onClose } = props;
@@ -46,7 +47,7 @@ const MediaImage = (props) => {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={12} style={{ border: '1px solid #f0f0f0', background: '#fff', padding: 0 }}>
+        <Col span={12} style={{ background: `${colors.background.light}`, padding: 0 }}>
           {file.type === 'image' && file?.childImageSharp?.fluid && (
             <Img
               fluid={file.childImageSharp.fluid}

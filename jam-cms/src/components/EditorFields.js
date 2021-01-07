@@ -25,6 +25,7 @@ import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
 
 import { useStore } from '../store';
+import { colors } from '../theme';
 
 export const getField = ({ field, site, onChangeElement, dispatch }) => {
   let component;
@@ -240,28 +241,24 @@ const EditorFields = (props) => {
 
   return (
     <Container>
-      <div>
-        {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
-      </div>
+      {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
     </Container>
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+  > .ant-collapse {
+    border: none;
+    border-bottom: 1px solid #d9d9d9;
+  }
 
-  .block-collapse {
-    position: relative;
-
-    .ant-collapse-header {
-      padding: 12px 16px 12px 30px;
-    }
+  .ant-collapse-header {
+    padding: 12px 16px 12px 30px;
   }
 `;
 
 const FieldContainer = styled.div`
-  padding: 12px;
+  padding: 8px 4px;
 `;
 
 export default EditorFields;

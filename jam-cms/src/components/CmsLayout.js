@@ -11,7 +11,6 @@ import {
 } from '@ant-design/icons';
 
 // import app components
-import Edges from './Edges';
 import CmsHeader from './CmsHeader';
 import JamCmsLogo from '../icons/jamCMS.svg';
 
@@ -46,7 +45,13 @@ const CmsLayout = (props) => {
         }}
       >
         <div>
-          <StyledPageHeader title={<JamCmsLogo className={`jam-cms-logo`} />} />
+          <StyledPageHeader
+            title={
+              <Link to="/">
+                <JamCmsLogo className={`jam-cms-logo`} />
+              </Link>
+            }
+          />
 
           <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
             <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
@@ -119,9 +124,7 @@ const CmsLayout = (props) => {
         </Layout.Header>
 
         <Layout.Content>
-          <Content>
-            <Edges size="md">{children}</Edges>
-          </Content>
+          <Content>{children}</Content>
         </Layout.Content>
       </Layout>
     </Layout>
@@ -130,19 +133,12 @@ const CmsLayout = (props) => {
 
 const StyledPageHeader = styled(PageHeader)`
   .jam-cms-logo {
+    width: 100px;
     margin: 0 auto;
 
     path {
       fill: ${colors.background.light};
     }
-  }
-
-  .jam-cms-logo {
-    width: 100px;
-  }
-
-  .jam-cms-logo-jar {
-    width: 30px;
   }
 
   .ant-page-header-heading-left {
@@ -159,7 +155,9 @@ const StyledPageHeader = styled(PageHeader)`
 
 const Content = styled.div`
   width: 100%;
-  padding: 40px 0;
+  height: calc(100vh - 50px);
+  padding: 20px 40px;
+  overflow: auto;
 `;
 
 export default CmsLayout;

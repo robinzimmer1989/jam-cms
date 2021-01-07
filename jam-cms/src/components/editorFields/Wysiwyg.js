@@ -87,10 +87,12 @@ const icon = css`
   height: 30px;
   margin: 0 1px;
   background: #fff;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d9d9d9;
+  box-shadow: none;
 
   &:hover {
-    background: ${colors.background.dark};
+    background: ${colors.background.light};
+    box-shadow: none;
   }
 `;
 
@@ -116,7 +118,7 @@ const EditorContainer = styled.div`
     min-height: 100px;
     max-height: 300px;
     background: #fff;
-    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
+    border: 1px solid #d9d9d9;
   }
 
   .rdw-dropdown-carettoopen,
@@ -141,7 +143,7 @@ const EditorContainer = styled.div`
   }
 
   .rdw-option-active {
-    background: ${colors.background.dark};
+    background: ${colors.text.light};
   }
 
   .public-DraftStyleDefault-block {

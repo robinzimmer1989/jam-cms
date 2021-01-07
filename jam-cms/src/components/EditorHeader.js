@@ -194,7 +194,7 @@ const EditorHeader = (props) => {
       tags={tags}
       onBack={handleClickBack}
       backIcon={<MenuOutlined />}
-      style={{ paddingLeft: 20, paddingRight: 20 }}
+      style={{ paddingLeft: 20, paddingRight: 20, borderBottom: '1px solid #d9e1ef' }}
     />
   );
 };
