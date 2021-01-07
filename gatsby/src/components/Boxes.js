@@ -139,9 +139,9 @@ export default {
       step: 1,
     },
     {
-      id: 'boxes',
+      id: 'items',
       type: 'repeater',
-      label: 'Boxes',
+      label: 'Items',
       items: [
         {
           id: 'image',
