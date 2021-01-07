@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Empty, Layout } from 'antd';
@@ -16,7 +16,7 @@ import { postActions } from '../../actions';
 import getRoute from '../../routes';
 
 const PostEditor = (props) => {
-  const { postID, theme, templates } = props;
+  const { theme, templates } = props;
 
   const [
     {
@@ -39,10 +39,10 @@ const PostEditor = (props) => {
 
   let postIdBySlug;
 
-  if (site) {
-    Object.values(site.postTypes).map((o) =>
+  if (sites[siteID]) {
+    Object.values(sites[siteID].postTypes).map((o) =>
       Object.values(o.posts).map((p) => {
-        if (p.slug === slug || (slug === '' && site.frontPage === p.id)) {
+        if (p.slug === slug || (slug === '' && sites[siteID].frontPage === p.id)) {
           postIdBySlug = p.id;
         }
       })
@@ -71,7 +71,7 @@ const PostEditor = (props) => {
       <Layout style={{ marginRight: sidebar ? 320 : 0 }}>
         <Layout.Header>
           <EditorHeader
-            postID={postID || postIdBySlug}
+            postID={postIdBySlug}
             template={!!Component && post?.content}
             title={post?.title}
             onBack={() =>
@@ -82,7 +82,7 @@ const PostEditor = (props) => {
         </Layout.Header>
 
         <Layout.Content>
-          {postID || postIdBySlug ? (
+          {postIdBySlug ? (
             <>
               {site && post ? (
                 <PageWrapper theme={theme}>
