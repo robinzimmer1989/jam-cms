@@ -4,6 +4,7 @@ import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import { useStore } from '../store';
 import Fonts from './Fonts';
+import minireset from '../theme/styles/minireset';
 
 const Iframe = ({ theme, children }) => {
   const [
@@ -42,7 +43,8 @@ const Container = styled.div`
 `;
 
 const ThemeStyles = createGlobalStyle`
-  ${({ theme }) => theme.css}
+  ${minireset}
+  ${({ theme }) => theme.css}  
 `;
 
 export default Iframe;
