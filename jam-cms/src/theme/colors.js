@@ -4,12 +4,12 @@ const colors = {
     light: '#eef5ff',
   },
   background: {
-    dark: '#E5EFEF',
-    light: '#f9f9f9',
+    dark: '#001529',
+    light: '#f0f2f5',
   },
   text: {
     dark: '#232323',
-    light: '#9aa1b7',
+    light: '#d9e1ef',
   },
   success: '#3BB143',
   warning: '#e24141',
