@@ -1,7 +1,7 @@
 import { createGlobalStyle, css } from 'styled-components';
 
 import colors from './colors';
-import minireset from './styles/minireset';
+import minireset from './minireset';
 
 const styles = css`
   background: ${colors.background.light};
