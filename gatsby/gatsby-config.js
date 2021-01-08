@@ -27,6 +27,21 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-wordpress-experimental`,
+      options: {
+        url: `${process.env.GATSBY_CMS_WP}/graphql`,
+        verbose: true,
+        schema: {
+          queryDepth: 6,
+          typePrefix: `Wp`,
+        },
+        develop: {
+          nodeUpdateInterval: 9999999,
+          hardCacheMediaFiles: false,
+        },
+      },
+    },
+    {
       resolve: `gatsby-plugin-react-svg`,
       options: {
         rule: {
