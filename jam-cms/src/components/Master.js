@@ -2,13 +2,6 @@ import React, { useEffect } from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
-// import external css files
-import 'minireset.css';
-import 'antd/dist/antd.css';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js-image-plugin/lib/plugin.css';
-import 'draft-js/dist/Draft.css';
-
 // import components
 import Home from './appPages/Home';
 import Profile from './appPages/Profile';
