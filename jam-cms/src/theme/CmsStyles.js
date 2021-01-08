@@ -18,6 +18,8 @@ const styles = css`
   }
 
   .ant-layout-header {
+    position: relative;
+    z-index: 1;
     height: 50px;
     background: #fff;
     padding: 0;
@@ -98,6 +100,7 @@ const styles = css`
     top: 50%;
     transform: translateY(-50%);
     left: 10px;
+    padding: 0;
   }
 
   .ant-collapse-content > .ant-collapse-content-box {

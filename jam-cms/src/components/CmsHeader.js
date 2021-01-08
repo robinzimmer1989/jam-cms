@@ -29,7 +29,13 @@ const CmsHeader = (props) => {
 
   buttons.push(<AvatarMenu key="avatar-menu" />);
 
-  return <PageHeader title={title} extra={buttons} style={{ paddingLeft: 40, paddingRight: 40 }} />;
+  return (
+    <PageHeader
+      title={title}
+      extra={buttons}
+      style={{ paddingLeft: 40, paddingRight: 40, borderBottom: '1px solid #d9e1ef' }}
+    />
+  );
 };
 
 export default CmsHeader;
