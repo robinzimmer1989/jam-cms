@@ -38,16 +38,7 @@ export const addSite = async ({ title }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  {
-    id,
-    title,
-    settings,
-    frontPage,
-    deploymentBuildHook,
-    deploymentBadgeImage,
-    deploymentBadgeLink,
-    apiKey,
-  },
+  { id, title, settings, frontPage, deployment, apiKey },
   dispatch,
   config
 ) => {
@@ -58,9 +49,7 @@ export const updateSite = async (
       title,
       settings: JSON.stringify(settings),
       frontPage,
-      deploymentBuildHook,
-      deploymentBadgeImage,
-      deploymentBadgeLink,
+      deployment: JSON.stringify(deployment),
       apiKey,
     },
     dispatch,
@@ -76,6 +65,16 @@ export const updateSite = async (
 
 export const deleteSite = async ({ id }, dispatch, config) => {
   let result = await db('deleteSite', { id }, dispatch, config);
+
+  if (result) {
+    result = transformSite(result);
+  }
+
+  return result;
+};
+
+export const deploySite = async ({ id }, dispatch, config) => {
+  let result = await db('deploySite', { id }, dispatch, config);
 
   if (result) {
     result = transformSite(result);

@@ -15,16 +15,7 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  {
-    id,
-    title,
-    settings,
-    frontPage,
-    deploymentBuildHook,
-    deploymentBadgeImage,
-    deploymentBadgeLink,
-    apiKey,
-  },
+  { id, title, settings, frontPage, deployment, apiKey },
   dispatch,
   config
 ) => {
@@ -34,9 +25,7 @@ export const updateSite = async (
       title,
       settings,
       frontPage,
-      deploymentBuildHook,
-      deploymentBadgeImage,
-      deploymentBadgeLink,
+      deployment,
       apiKey,
     },
     dispatch,
@@ -76,6 +65,16 @@ export const getSite = async ({ siteID }, dispatch, config) => {
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });
+  }
+
+  return result;
+};
+
+export const deploySite = async ({ id }, dispatch, config) => {
+  const result = await siteServices.deploySite({ id }, dispatch, config);
+
+  if (result) {
+    dispatch({ type: 'ADD_SITE', payload: result });
   }
 
   return result;

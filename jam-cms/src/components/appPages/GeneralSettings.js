@@ -70,22 +70,22 @@ const GeneralSettings = () => {
           <Space direction="vertical" size={20}>
             <Input
               label="Build Hook"
-              value={site?.deploymentBuildHook}
-              name="deploymentBuildHook"
+              value={site?.deployment?.buildHook}
+              name="deployment.buildHook"
               onChange={handleChange}
             />
 
             <Input
               label="Badge Image"
-              value={site?.deploymentBadgeImage}
-              name="deploymentBadgeImage"
+              value={site?.deployment?.badgeImage}
+              name="deployment.badgeImage"
               onChange={handleChange}
             />
 
             <Input
               label="Badge Link"
-              value={site?.deploymentBadgeLink}
-              name="deploymentBadgeLink"
+              value={site?.deployment?.badgeLink}
+              name="deployment.badgeLink"
               onChange={handleChange}
             />
 
@@ -94,9 +94,7 @@ const GeneralSettings = () => {
               onClick={() =>
                 handleUpdate(
                   {
-                    deploymentBuildHook: site.deploymentBuildHook,
-                    deploymentBadgeImage: site.deploymentBadgeImage,
-                    deploymentBadgeLink: site.deploymentBadgeLink,
+                    deployment: site?.deployment,
                   },
                   'deployment'
                 )

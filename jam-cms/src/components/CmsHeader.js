@@ -1,5 +1,6 @@
 import React from 'react';
-import { PageHeader, Button } from 'antd';
+import { PageHeader, Button, Badge, Popover, Alert } from 'antd';
+import { QuestionOutlined } from '@ant-design/icons';
 
 // import app components
 import DeploymentBadge from './DeploymentBadge';
@@ -19,12 +20,44 @@ const CmsHeader = (props) => {
 
   const buttons = [];
 
+  buttons.push(<DeploymentBadge key="deployment-badge" deployment={site.deployment} />);
+
+  const helpContent = (
+    <div>
+      {site?.deployment?.undeployedChanges && (
+        <p>
+          <Alert
+            message="There are unpublished changes. Click the deployment button to publish the latest updates."
+            type="info"
+            showIcon
+          />
+        </p>
+      )}
+
+      <p>Welcome to the JamCMS backend.</p>
+
+      <p>
+        If you want to learn more about the JamStack, visit:{' '}
+        <a href="https://jamstack.org/what-is-jamstack/" target="_blank">
+          jamstack.org/what-is-jamstack
+        </a>
+      </p>
+    </div>
+  );
+
   buttons.push(
-    <DeploymentBadge
-      key="deployment-badge"
-      deploymentBadgeImage={site.deploymentBadgeImage}
-      deploymentBuildHook={site.deploymentBuildHook}
-    />
+    <Popover
+      key={'help'}
+      title="Help"
+      content={helpContent}
+      arrow
+      trigger={['click']}
+      placement="bottomRight"
+    >
+      <Badge dot={site?.deployment?.undeployedChanges}>
+        <Button icon={<QuestionOutlined />} shape="circle" type="default" />
+      </Badge>
+    </Popover>
   );
 
   buttons.push(<AvatarMenu key="avatar-menu" />);

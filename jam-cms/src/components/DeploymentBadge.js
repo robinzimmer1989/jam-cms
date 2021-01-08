@@ -1,35 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Space, Button, notification } from 'antd';
-import axios from 'axios';
+import { Space, Button, notification, Tooltip } from 'antd';
+import { DeploymentUnitOutlined } from '@ant-design/icons';
 
 // import app components
 import { useStore } from '../store';
+import { siteActions } from '../actions';
 
 const DeploymentBadge = (props) => {
-  const { deploymentBadgeImage, deploymentBuildHook } = props;
+  const {
+    deployment: { badgeImage, buildHook, lastBuild },
+  } = props;
 
   const [
     {
-      cmsState: { siteID, sites },
+      config,
+      cmsState: { siteID, sites, deploymentImage },
     },
+    dispatch,
   ] = useStore();
 
   const site = sites[siteID];
-
-  const [src, setSrc] = useState(deploymentBadgeImage);
 
   useEffect(() => {
     let interval = null;
 
     interval = setInterval(() => {
-      setSrc(`${deploymentBadgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`);
+      // We use a central deployment badge image instead of the one in the site object to avoid a flickering
+      // when deploy is triggered and user navigates between pages
+      dispatch({
+        type: 'SET_DEPLOYMENT_IMAGE',
+        payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
+      });
     }, 10000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleDeploy = async () => {
+    // Test site before deploying
     if (!site?.frontPage) {
       return notification.error({
         message: 'Error',
@@ -38,15 +47,24 @@ const DeploymentBadge = (props) => {
       });
     }
 
-    await axios.post(site.deploymentBuildHook);
+    await siteActions.deploySite({ id: siteID }, dispatch, config);
 
-    setSrc(`${deploymentBadgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`);
+    dispatch({
+      type: 'SET_DEPLOYMENT_IMAGE',
+      payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
+    });
   };
 
   return (
-    <Space>
-      {deploymentBuildHook && <Button size="small" children={`Deploy`} onClick={handleDeploy} />}
-      {deploymentBadgeImage && <DeploymentStatus src={src} />}
+    <Space size={20}>
+      {(deploymentImage || badgeImage) && lastBuild && (
+        <DeploymentStatus src={deploymentImage || badgeImage} />
+      )}
+      {buildHook && (
+        <Tooltip title="Deploy Website" placement="bottom">
+          <Button icon={<DeploymentUnitOutlined />} shape="circle" onClick={handleDeploy} />
+        </Tooltip>
+      )}
     </Space>
   );
 };

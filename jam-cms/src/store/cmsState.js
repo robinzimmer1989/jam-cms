@@ -4,6 +4,7 @@ import { unionBy, set, get } from 'lodash';
 const DEFAULT_STATE = {
   siteID: null,
   sites: {},
+  deploymentImage: '',
 };
 
 export const cmsState = { ...DEFAULT_STATE };
@@ -13,6 +14,10 @@ export const sitesReducer = (state, action) => {
 
   return produce(state, (draft) => {
     switch (action.type) {
+      case `SET_DEPLOYMENT_IMAGE`:
+        draft.deploymentImage = payload;
+        break;
+
       /******************************
        * Sites
        ******************************/

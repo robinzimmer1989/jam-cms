@@ -38,6 +38,7 @@ const EditorHeader = (props) => {
   const [
     {
       config,
+      cmsState: { sites, siteID },
       editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
     },
     dispatch,
@@ -77,6 +78,16 @@ const EditorHeader = (props) => {
 
         const slug = generateSlug(nextPostType, result.id, site?.frontPage, true);
         navigate(slug);
+      }
+
+      // In case the user only updates the post, the new deployment status isn't available (only for site updates)
+      // To overcome this issue we need to manually update the site.
+      if (!siteHasChanged) {
+        const nextSite = produce(sites[siteID], (draft) => {
+          return set(draft, `deployment.undeployedChanges`, true);
+        });
+
+        dispatch({ type: 'ADD_SITE', payload: nextSite });
       }
     }
 
