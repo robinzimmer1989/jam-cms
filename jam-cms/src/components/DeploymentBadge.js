@@ -45,8 +45,8 @@ const DeploymentBadge = (props) => {
 
   return (
     <Space>
-      {deploymentBadgeImage && <DeploymentStatus src={src} />}
       {deploymentBuildHook && <Button size="small" children={`Deploy`} onClick={handleDeploy} />}
+      {deploymentBadgeImage && <DeploymentStatus src={src} />}
     </Space>
   );
 };
