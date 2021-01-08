@@ -3,8 +3,8 @@ import produce from 'immer';
 export const editorState = {
   site: null,
   post: null,
-  form: null,
-  hasChanged: false,
+  siteHasChanged: false,
+  postHasChanged: false,
   viewport: 'desktop',
   sidebar: false,
 };
@@ -19,11 +19,12 @@ export const editorReducer = (state, action) => {
        ******************************/
       case `ADD_EDITOR_SITE`:
         draft.site = payload;
+        draft.siteHasChanged = false;
         break;
 
       case `UPDATE_EDITOR_SITE`:
         draft.site = payload;
-        draft.hasChanged = true;
+        draft.siteHasChanged = true;
         break;
 
       /******************************
@@ -38,32 +39,17 @@ export const editorReducer = (state, action) => {
        ******************************/
       case `ADD_EDITOR_POST`:
         draft.post = payload;
+        draft.postHasChanged = false;
         break;
 
       case `UPDATE_EDITOR_POST`:
         draft.post = payload;
-        draft.hasChanged = true;
-        break;
-
-      /******************************
-       * Forms
-       ******************************/
-      case `ADD_EDITOR_FORM`:
-        draft.form = payload;
-        break;
-
-      case `UPDATE_EDITOR_FORM`:
-        draft.form = payload;
-        draft.hasChanged = true;
+        draft.postHasChanged = true;
         break;
 
       /******************************
        * General Settings
        ******************************/
-      case `SET_HAS_CHANGED`:
-        draft.hasChanged = payload;
-        break;
-
       case `SET_EDITOR_VIEWPORT`:
         draft.viewport = payload;
         break;
@@ -74,9 +60,11 @@ export const editorReducer = (state, action) => {
 
       case `CLEAR_EDITOR`:
         draft.site = null;
+        draft.siteHasChanged = false;
+
         draft.post = null;
-        draft.form = null;
-        draft.hasChanged = false;
+        draft.postHasChanged = false;
+
         break;
 
       default:

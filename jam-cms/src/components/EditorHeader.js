@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import { PageHeader, Button, Dropdown, Menu, message, Typography, Space } from 'antd';
 import {
-  MenuOutlined,
   FullscreenOutlined,
   MobileOutlined,
   TabletOutlined,
@@ -27,7 +26,7 @@ const EditorHeader = (props) => {
   const [
     {
       config,
-      editorState: { site, post, hasChanged, viewport, sidebar },
+      editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -45,24 +44,28 @@ const EditorHeader = (props) => {
 
     setLoading(true);
 
-    await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
+    if (siteHasChanged) {
+      await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
+    }
 
-    const result = await postActions.updatePost(
-      { siteID: id, ...post, templateObject },
-      dispatch,
-      config
-    );
+    if (postHasChanged) {
+      const result = await postActions.updatePost(
+        { siteID: id, ...post, templateObject },
+        dispatch,
+        config
+      );
 
-    if (result) {
-      // We need to generate the slug and navigate to it in case the user has changed the post name
-      const postType = site?.postTypes?.[result.postTypeID];
+      if (result) {
+        // We need to generate the slug and navigate to it in case the user has changed the post name
+        const postType = site?.postTypes?.[result.postTypeID];
 
-      const nextPostType = produce(postType, (draft) => {
-        return set(draft, `posts.${result.id}`, result);
-      });
+        const nextPostType = produce(postType, (draft) => {
+          return set(draft, `posts.${result.id}`, result);
+        });
 
-      const slug = generateSlug(nextPostType, result.id, site?.frontPage, true);
-      navigate(slug);
+        const slug = generateSlug(nextPostType, result.id, site?.frontPage, true);
+        navigate(slug);
+      }
     }
 
     setLoading(false);
@@ -71,7 +74,7 @@ const EditorHeader = (props) => {
   };
 
   const handleClickBack = () => {
-    if (hasChanged) {
+    if (siteHasChanged || postHasChanged) {
       dispatch({
         type: 'SET_DIALOG',
         payload: {
@@ -175,7 +178,7 @@ const EditorHeader = (props) => {
       type="primary"
       onClick={handleSavePost}
       loading={loading}
-      disabled={!hasChanged}
+      disabled={!siteHasChanged && !postHasChanged}
     />
   );
 
@@ -193,7 +196,6 @@ const EditorHeader = (props) => {
       extra={buttons}
       tags={tags}
       onBack={handleClickBack}
-      backIcon={<MenuOutlined />}
       style={{ paddingLeft: 20, paddingRight: 20, borderBottom: '1px solid #d9e1ef' }}
     />
   );

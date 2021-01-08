@@ -46,7 +46,6 @@ export const updateSite = async (
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });
     dispatch({ type: `ADD_EDITOR_SITE`, payload: result });
-    dispatch({ type: `SET_HAS_CHANGED`, payload: false });
   }
 
   return result;
