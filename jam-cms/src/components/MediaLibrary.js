@@ -31,8 +31,11 @@ const MediaLibrary = (props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadMediaItems(page || 0);
-  }, []);
+    // We need to add this check, because deployment causes a new site fetch
+    if (page === null) {
+      loadMediaItems(page || 0);
+    }
+  }, [page]);
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
