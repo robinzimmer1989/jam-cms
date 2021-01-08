@@ -118,6 +118,10 @@ export default createGlobalStyle`
 
   .ant-popover {
     max-width: 400px;
+
+    p {
+      margin-bottom: 10px;
+    }
   }
   
   #jam-cms {
