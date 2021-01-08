@@ -7,14 +7,13 @@ const Menu = (props) => {
 
   return (
     <Container>
-      <Button children="Edit" onClick={onClick} block size="small" />
+      <Button children="Edit" onClick={onClick} size="medium" />
     </Container>
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
+  margin-top: 8px;
 `;
 
 export default Menu;
