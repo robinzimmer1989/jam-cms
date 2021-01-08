@@ -115,6 +115,10 @@ export default createGlobalStyle`
     background: ${colors.background.light};
     ${styles}
   }
+
+  .ant-popover {
+    max-width: 400px;
+  }
   
   #jam-cms {
     ${styles}

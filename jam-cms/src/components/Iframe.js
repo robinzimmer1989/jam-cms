@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { StyleSheetManager, createGlobalStyle } from 'styled-components';
+import styled, { StyleSheetManager, createGlobalStyle, css } from 'styled-components';
 import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import { useStore } from '../store';
@@ -9,7 +9,7 @@ import minireset from '../theme/styles/minireset';
 const Iframe = ({ theme, children }) => {
   const [
     {
-      editorState: { viewport },
+      editorState: { viewport, siteHasChanged, postHasChanged },
     },
   ] = useStore();
 
@@ -25,11 +25,11 @@ const Iframe = ({ theme, children }) => {
         <FrameContextConsumer>
           {(frameContext) => (
             <StyleSheetManager target={frameContext.document.head}>
-              <div>
+              <>
                 <ThemeStyles />
                 <Fonts fonts={theme.fonts} />
-                {children}
-              </div>
+                <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
+              </>
             </StyleSheetManager>
           )}
         </FrameContextConsumer>
@@ -44,7 +44,19 @@ const Container = styled.div`
 
 const ThemeStyles = createGlobalStyle`
   ${minireset}
-  ${({ theme }) => theme.css}  
+  ${({ theme }) => theme.css}
+
+  
+`;
+
+const Content = styled.div`
+  ${({ disableLinks }) =>
+    disableLinks &&
+    css`
+      a {
+        pointer-events: none !important;
+      }
+    `}
 `;
 
 export default Iframe;

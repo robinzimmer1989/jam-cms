@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
-import { PageHeader, Button, Dropdown, Menu, message, Typography, Space } from 'antd';
+import {
+  PageHeader,
+  Button,
+  Dropdown,
+  Menu,
+  message,
+  Typography,
+  Space,
+  Popover,
+  Badge,
+  Alert,
+} from 'antd';
 import {
   FullscreenOutlined,
   MobileOutlined,
   TabletOutlined,
   DesktopOutlined,
   EditOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons';
 import produce from 'immer';
 import { set } from 'lodash';
@@ -120,6 +132,48 @@ const EditorHeader = (props) => {
 
   const buttons = [];
 
+  const helpContent = (
+    <div>
+      {(siteHasChanged || postHasChanged) && (
+        <p>
+          <Alert
+            message="We've disabled the links on the page to make sure that no content gets lost."
+            type="info"
+            showIcon
+          />
+        </p>
+      )}
+
+      <p>
+        This is the editor mode. It works the same way as you're used to it from other CMS's like
+        WordPress.
+      </p>
+      <p>
+        For content edits click the pen icon. It will open the sidebar and will display multiple
+        tabs at the very top.
+      </p>
+      <p>
+        You can change the screen size by clicking on the monitor icon on the right. Here you can
+        toggle between phone, tablet, desktop and fullscreen.
+      </p>
+    </div>
+  );
+
+  buttons.push(
+    <Popover
+      key={'help'}
+      title="Help"
+      content={helpContent}
+      arrow
+      trigger={['click']}
+      placement="bottomRight"
+    >
+      <Badge dot={siteHasChanged || postHasChanged}>
+        <Button icon={<QuestionOutlined />} shape="circle" type="default" />
+      </Badge>
+    </Popover>
+  );
+
   const views = [
     { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
     { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
@@ -160,6 +214,7 @@ const EditorHeader = (props) => {
       key={'settings'}
       icon={<EditOutlined />}
       shape="circle"
+      ghost={sidebar}
       type={sidebar ? 'primary' : 'default'}
       disabled={disabled}
       onClick={() =>
