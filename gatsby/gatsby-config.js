@@ -32,7 +32,7 @@ module.exports = {
         url: `${process.env.GATSBY_CMS_WP}/graphql`,
         verbose: true,
         schema: {
-          queryDepth: 6,
+          queryDepth: 8,
           typePrefix: `Wp`,
         },
         develop: {
