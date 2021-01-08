@@ -119,6 +119,8 @@ const EditorContainer = styled.div`
     max-height: 300px;
     background: #fff;
     border: 1px solid #d9d9d9;
+    font-size: 13px;
+    line-height: 18px;
   }
 
   .rdw-dropdown-carettoopen,
@@ -193,12 +195,6 @@ const EditorContainer = styled.div`
     font-size: 12px;
     font-weight: bold;
     line-height: 1.2;
-  }
-
-  p,
-  li {
-    font-size: 13px;
-    line-height: 18px;
   }
 
   a {
