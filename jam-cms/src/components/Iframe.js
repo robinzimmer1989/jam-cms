@@ -4,7 +4,7 @@ import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import { useStore } from '../store';
 import Fonts from './Fonts';
-import minireset from '../theme/styles/minireset';
+import minireset from '../theme/minireset';
 
 const Iframe = ({ theme, children }) => {
   const [
