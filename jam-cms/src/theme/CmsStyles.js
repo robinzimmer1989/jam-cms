@@ -96,13 +96,6 @@ const styles = css`
     border-bottom: 1px solid #d9d9d9;
   }
 
-  .ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
-    top: 50%;
-    transform: translateY(-50%);
-    left: 10px;
-    padding: 0;
-  }
-
   .ant-collapse-content > .ant-collapse-content-box {
     padding: 4px;
   }
