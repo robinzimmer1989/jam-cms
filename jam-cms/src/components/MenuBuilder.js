@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Row, Col, List, Tree, Collapse, Space, Card, Tabs } from 'antd';
+import { Button, Row, Col, Tree, Collapse, Space, Card, Tabs } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 // import app components
 import Input from './Input';
+import ListItem from './ListItem';
+import Tag from './Tag';
 import {
   recursivelyUpdateTree,
   removeFromTree,
@@ -141,7 +143,9 @@ const MenuBuilder = (props) => {
     <Container>
       <Row justify="space-between">
         <Col span="11">
-          <Card style={{ border: `1px solid ${colors.text.light}` }}>
+          <Card
+            style={{ border: `1px solid ${colors.text.light}`, height: '360px', overflow: 'auto' }}
+          >
             <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
               {Object.values(sites[siteID]?.postTypes).map((o) => {
                 return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />;
@@ -151,65 +155,79 @@ const MenuBuilder = (props) => {
             </Tabs>
 
             <ItemsContainer>
-              {posts &&
-                Object.values(posts).map(({ id, title, postTypeID }) => {
-                  return (
-                    <List.Item
-                      key={id}
-                      extra={[
-                        <Button
-                          key="add"
-                          size="small"
-                          onClick={() =>
-                            setItems([
-                              ...items,
-                              {
-                                key: generateRandomString(),
-                                title,
-                                postTypeID,
-                                postID: id,
-                                children: [],
-                              },
-                            ])
-                          }
-                          shape="circle"
-                        >
-                          <PlusOutlined />
-                        </Button>,
-                      ]}
-                    >
-                      {title}
-                    </List.Item>
-                  );
-                })}
+              <Space direction="vertical">
+                {posts &&
+                  Object.values(posts)
+                    .filter(({ status }) => status !== 'trash')
+                    .map(({ id, title, status, postTypeID }) => {
+                      const badges = [];
 
-              {filter === 'custom-link' && (
-                <Space direction="vertical" size={20}>
-                  <Input
-                    label="Title"
-                    value={customLink.title}
-                    onChange={(e) => setCustomLink({ ...customLink, title: e.target.value })}
-                  />
-                  <Input
-                    label="Url"
-                    value={customLink.url}
-                    onChange={(e) => setCustomLink({ ...customLink, url: e.target.value })}
-                    placeholder="https://"
-                  />
-                  <Button
-                    style={{ marginBottom: 20 }}
-                    children={`Add`}
-                    type="primary"
-                    onClick={handleAddCustomLink}
-                  />
-                </Space>
-              )}
+                      if (status === 'draft') {
+                        badges.push(<Tag key="status" children={status} />);
+                      }
+
+                      return (
+                        <ListItem
+                          key={id}
+                          title={title}
+                          status={badges}
+                          hideImage
+                          actions={[
+                            <Button
+                              key="add"
+                              size="small"
+                              disabled={status === 'draft'}
+                              onClick={() =>
+                                setItems([
+                                  ...items,
+                                  {
+                                    key: generateRandomString(),
+                                    title,
+                                    postTypeID,
+                                    postID: id,
+                                    children: [],
+                                  },
+                                ])
+                              }
+                              shape="circle"
+                            >
+                              <PlusOutlined />
+                            </Button>,
+                          ]}
+                        />
+                      );
+                    })}
+
+                {filter === 'custom-link' && (
+                  <Space direction="vertical" size={20}>
+                    <Input
+                      label="Title"
+                      value={customLink.title}
+                      onChange={(e) => setCustomLink({ ...customLink, title: e.target.value })}
+                    />
+                    <Input
+                      label="Url"
+                      value={customLink.url}
+                      onChange={(e) => setCustomLink({ ...customLink, url: e.target.value })}
+                      placeholder="https://"
+                    />
+                    <Button
+                      style={{ marginBottom: 20 }}
+                      children={`Add`}
+                      type="primary"
+                      onClick={handleAddCustomLink}
+                    />
+                  </Space>
+                )}
+              </Space>
             </ItemsContainer>
           </Card>
         </Col>
 
         <Col span="12">
-          <Card style={{ border: `1px solid ${colors.text.light}` }}>
+          <Card
+            style={{ border: `1px solid ${colors.text.light}`, height: '360px', overflow: 'auto' }}
+          >
             <Tree
               className="draggable-tree"
               draggable
@@ -218,7 +236,7 @@ const MenuBuilder = (props) => {
               treeData={items}
               titleRender={(node) => {
                 return (
-                  <Collapse>
+                  <Collapse expandIconPosition="right">
                     <Collapse.Panel header={node.title}>
                       <Space direction="vertical">
                         <Input
@@ -262,11 +280,6 @@ const Container = styled.div`
 
   .ant-tree {
     background-color: transparent;
-  }
-
-  .ant-card-body {
-    height: 360px;
-    overflow: auto;
   }
 
   .ant-collapse-content {
