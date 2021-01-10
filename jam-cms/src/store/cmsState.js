@@ -30,6 +30,10 @@ export const sitesReducer = (state, action) => {
         set(draft, `sites.${payload.id}`, payload);
         break;
 
+      case `ADD_SITE_SETTING`:
+        set(draft, `sites.${payload.id}.${payload.key}`, payload.value);
+        break;
+
       case `DELETE_SITE`:
         draft.siteID = null;
         delete draft.sites[payload.id];

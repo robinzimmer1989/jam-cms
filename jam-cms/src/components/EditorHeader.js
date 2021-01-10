@@ -38,7 +38,7 @@ const EditorHeader = (props) => {
   const [
     {
       config,
-      cmsState: { sites, siteID },
+      cmsState: { siteID },
       editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
     },
     dispatch,
@@ -47,18 +47,18 @@ const EditorHeader = (props) => {
   const [loading, setLoading] = useState('');
 
   const handleSaveDraft = () => {
-    handleSave('draft');
+    handleSave('draft', 'draft');
   };
 
   const handlePublish = () => {
-    handleSave('publish');
+    handleSave('publish', 'publish');
   };
 
   const handleUpdate = () => {
-    handleSave('publish');
+    handleSave('update', 'publish');
   };
 
-  const handleSave = async (status) => {
+  const handleSave = async (type, status) => {
     const { id, settings, frontPage } = site;
 
     // Add template object to request, but only in development mode
@@ -67,7 +67,7 @@ const EditorHeader = (props) => {
       templates?.[post?.postTypeID] &&
       templates[post.postTypeID].find((o) => o.id === post?.template);
 
-    setLoading(status);
+    setLoading(type);
 
     let postResult, siteResult;
 
@@ -75,7 +75,7 @@ const EditorHeader = (props) => {
       siteResult = await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
     }
 
-    if (postHasChanged) {
+    if (postHasChanged || type === 'publish') {
       postResult = await postActions.updatePost(
         { siteID: id, ...post, status, templateObject },
         dispatch,
@@ -97,11 +97,14 @@ const EditorHeader = (props) => {
       // In case the user only updates the post, the new deployment status isn't available (only for site updates)
       // To overcome this issue we need to manually update the site.
       if (!siteHasChanged) {
-        const nextSite = produce(sites[siteID], (draft) => {
-          return set(draft, `deployment.undeployedChanges`, true);
+        dispatch({
+          type: 'ADD_SITE_SETTING',
+          payload: {
+            id: siteID,
+            key: 'deployment.undeployedChanges',
+            value: true,
+          },
         });
-
-        dispatch({ type: 'ADD_SITE', payload: nextSite });
       }
     }
 
@@ -272,7 +275,6 @@ const EditorHeader = (props) => {
         type="primary"
         onClick={handlePublish}
         loading={loading === 'publish'}
-        disabled={!siteHasChanged && !postHasChanged}
       />
     );
 
@@ -283,7 +285,7 @@ const EditorHeader = (props) => {
         children="Update"
         type="primary"
         onClick={handleUpdate}
-        loading={loading === 'publish'}
+        loading={loading === 'update'}
         disabled={!siteHasChanged && !postHasChanged}
       />
     );
