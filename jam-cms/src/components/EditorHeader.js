@@ -58,25 +58,29 @@ const EditorHeader = (props) => {
     setLoading(true);
 
     if (siteHasChanged) {
-      await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
+      const siteResult = await siteActions.updateSite(
+        { id, settings, frontPage },
+        dispatch,
+        config
+      );
     }
 
     if (postHasChanged) {
-      const result = await postActions.updatePost(
+      const postResult = await postActions.updatePost(
         { siteID: id, ...post, templateObject },
         dispatch,
         config
       );
 
-      if (result) {
+      if (postResult) {
         // We need to generate the slug and navigate to it in case the user has changed the post name
-        const postType = site?.postTypes?.[result.postTypeID];
+        const postType = site?.postTypes?.[postResult.postTypeID];
 
         const nextPostType = produce(postType, (draft) => {
-          return set(draft, `posts.${result.id}`, result);
+          return set(draft, `posts.${postResult.id}`, postResult);
         });
 
-        const slug = generateSlug(nextPostType, result.id, site?.frontPage, true);
+        const slug = generateSlug(nextPostType, postResult.id, site?.frontPage, true);
         navigate(slug);
       }
 
@@ -93,7 +97,9 @@ const EditorHeader = (props) => {
 
     setLoading(false);
 
-    message.success('Updated successfully');
+    if (postResult || siteResult) {
+      message.success('Updated successfully');
+    }
   };
 
   const handleClickBack = () => {
