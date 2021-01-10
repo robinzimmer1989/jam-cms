@@ -44,9 +44,21 @@ const EditorHeader = (props) => {
     dispatch,
   ] = useStore();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
 
-  const handleSavePost = async () => {
+  const handleSaveDraft = () => {
+    handleSave('draft');
+  };
+
+  const handlePublish = () => {
+    handleSave('publish');
+  };
+
+  const handleUpdate = () => {
+    handleSave('publish');
+  };
+
+  const handleSave = async (status) => {
     const { id, settings, frontPage } = site;
 
     // Add template object to request, but only in development mode
@@ -55,7 +67,7 @@ const EditorHeader = (props) => {
       templates?.[post?.postTypeID] &&
       templates[post.postTypeID].find((o) => o.id === post?.template);
 
-    setLoading(true);
+    setLoading(status);
 
     let postResult, siteResult;
 
@@ -65,7 +77,7 @@ const EditorHeader = (props) => {
 
     if (postHasChanged) {
       postResult = await postActions.updatePost(
-        { siteID: id, ...post, templateObject },
+        { siteID: id, ...post, status, templateObject },
         dispatch,
         config
       );
@@ -93,7 +105,7 @@ const EditorHeader = (props) => {
       }
     }
 
-    setLoading(false);
+    setLoading('');
 
     if (postResult || siteResult) {
       message.success('Updated successfully');
@@ -241,16 +253,40 @@ const EditorHeader = (props) => {
     />
   );
 
-  buttons.push(
-    <Button
-      key={'update'}
-      children="Update"
-      type="primary"
-      onClick={handleSavePost}
-      loading={loading}
-      disabled={!siteHasChanged && !postHasChanged}
-    />
-  );
+  post?.status === 'draft' &&
+    buttons.push(
+      <Button
+        key={'save-draft'}
+        children="Save Draft"
+        onClick={handleSaveDraft}
+        loading={loading === 'draft'}
+        disabled={!siteHasChanged && !postHasChanged}
+      />
+    );
+
+  post?.status === 'draft' &&
+    buttons.push(
+      <Button
+        key={'publish'}
+        children="Publish"
+        type="primary"
+        onClick={handlePublish}
+        loading={loading === 'publish'}
+        disabled={!siteHasChanged && !postHasChanged}
+      />
+    );
+
+  (post?.status === 'publish' || post?.status === 'trash') &&
+    buttons.push(
+      <Button
+        key={'update'}
+        children="Update"
+        type="primary"
+        onClick={handleUpdate}
+        loading={loading === 'publish'}
+        disabled={!siteHasChanged && !postHasChanged}
+      />
+    );
 
   return (
     <PageHeader
