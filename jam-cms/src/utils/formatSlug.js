@@ -8,5 +8,13 @@ export default function formatSlug(slug, trailingSlash = false) {
     .filter((s) => !!s)
     .join('/');
 
-  return trailingSlash ? `/${formattedSlug}` : formattedSlug;
+  if (formattedSlug.substr(-1) !== '/') {
+    formattedSlug = `${formattedSlug}/`;
+  }
+
+  if (trailingSlash) {
+    formattedSlug = `/${formattedSlug}`;
+  }
+
+  return formattedSlug;
 }
