@@ -23,8 +23,8 @@ const Template = (props) => {
 
   return (
     <Layout {...props.pageContext}>
-      {content?.flex &&
-        content.flex.map(({ id, ...fields }, index) => {
+      {content?.blocks?.flex &&
+        content.blocks.flex.map(({ id, ...fields }, index) => {
           const Component = blocks?.[id]?.component;
           return Component && <Component key={index} {...fields} globalOptions={globalOptions} />;
         })}
@@ -45,10 +45,17 @@ export const PageDefaultTemplate = {
       global: true,
     },
     {
-      id: 'flex',
-      label: 'Blocks',
-      type: 'flexible_content',
-      items: Object.values(blocks),
+      id: 'blocks',
+      label: 'Content',
+      type: 'group',
+      fields: [
+        {
+          id: 'flex',
+          label: 'Blocks',
+          type: 'flexible_content',
+          items: Object.values(blocks),
+        },
+      ],
     },
     {
       id: 'footer',

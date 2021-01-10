@@ -7,10 +7,10 @@ import Edges from './Edges';
 import Button from './Button';
 
 const Posts = (props) => {
-  let { posts, buttonTitle, numberOfPosts, columns } = props;
+  let { posts, buttonTitle, numberofposts, columns } = props;
 
-  if (posts && numberOfPosts && numberOfPosts > 0) {
-    posts = posts.slice(0, numberOfPosts);
+  if (posts && numberofposts && numberofposts > 0) {
+    posts = posts.slice(0, numberofposts);
   }
 
   return (
@@ -26,7 +26,7 @@ const Posts = (props) => {
                       <Img
                         fluid={post.featuredImage.childImageSharp.fluid}
                         imgStyle={{
-                          objectFit: 'cover',
+                          objectFit: 'contain',
                           maxWidth: post.featuredImage.width,
                           maxHeight: post.featuredImage.height,
                           top: '50%',
@@ -77,7 +77,8 @@ const ImageContainer = styled.div`
   width: 100%;
   height: 120px;
   margin-bottom: 12px;
-  background: #f7f7f7;
+  background: #fff;
+  box-shadow: 0px 4px 8px 0px rgba(4, 73, 89, 0.05);
 `;
 
 const Box = styled.div`

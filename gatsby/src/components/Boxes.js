@@ -8,7 +8,7 @@ import Button from './Button';
 import Wysiwyg from './Wysiwyg';
 
 const Boxes = (props) => {
-  const { introduction, columns, boxes } = props;
+  const { introduction, columns, items } = props;
 
   return (
     <Container>
@@ -20,12 +20,12 @@ const Boxes = (props) => {
         )}
 
         <BoxesContainer>
-          {boxes &&
-            boxes.map((box, index) => {
+          {items &&
+            items.map((box, index) => {
               return (
                 <Box key={index} columns={columns}>
-                  <ImageContainer>
-                    {box.image?.childImageSharp?.fluid && (
+                  {box.image?.childImageSharp?.fluid && (
+                    <ImageContainer>
                       <Img
                         fluid={box.image.childImageSharp.fluid}
                         imgStyle={{
@@ -39,8 +39,8 @@ const Boxes = (props) => {
                         alt={box.image.alt}
                         style={{ width: '100%', height: '100%' }}
                       />
-                    )}
-                  </ImageContainer>
+                    </ImageContainer>
+                  )}
 
                   {box.text && <Wysiwyg children={box.text} />}
 

@@ -5,15 +5,17 @@ import { LoginForm } from 'jam-cms';
 import Layout from '../components/Layout';
 import Edges from '../components/Edges';
 
-const Login = () => (
-  <Layout>
-    <Edges size="xs">
-      <Container>
-        <LoginForm url={process.env.GATSBY_CMS_AUTH} />
-      </Container>
-    </Edges>
-  </Layout>
-);
+const Login = () => {
+  return (
+    <Layout>
+      <Edges size="xs">
+        <Container>
+          <LoginForm url={process.env.GATSBY_CMS_AUTH} />
+        </Container>
+      </Edges>
+    </Layout>
+  );
+};
 
 const Container = styled.div`
   padding: 40px 0;

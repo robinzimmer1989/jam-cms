@@ -26,6 +26,7 @@ const Container = styled.div`
   }
 
   p {
+    margin-top: 20px;
     margin-bottom: 20px;
   }
 
@@ -71,8 +72,8 @@ const Container = styled.div`
   }
 
   pre {
-    padding: 4px 10px;
-    background: #f7f7f7;
+    padding: 0 5px;
+    background: ${colors.background};
     white-space: pre-wrap;
     word-wrap: break-word;
   }

@@ -19,12 +19,12 @@ const Template = (props) => {
       <Edges size="lg">
         <SidebarContent>
           <Sidebar>
-            {globalOptions?.sidebarmenu && (
+            {globalOptions?.sidebar?.sidebarmenu && (
               <Nav>
-                {globalOptions.sidebarmenu.map((o, i) => {
+                {globalOptions.sidebar.sidebarmenu.map((o, i) => {
                   return (
-                    <NavItem key={i} to={o.url}>
-                      {o.title}
+                    <NavItem key={i} to={o.url} activeClassName="active">
+                      <span>{o.title}</span>
                     </NavItem>
                   );
                 })}
@@ -32,10 +32,10 @@ const Template = (props) => {
             )}
           </Sidebar>
           <Content>
-            {content?.title && <Headline>{content.title}</Headline>}
-            {content?.text && (
+            {content?.content?.title && <Headline>{content.content.title}</Headline>}
+            {content?.content?.text && (
               <WysiwygContainer>
-                <Wysiwyg>{content.text}</Wysiwyg>
+                <Wysiwyg>{content.content.text}</Wysiwyg>
               </WysiwygContainer>
             )}
           </Content>
@@ -52,13 +52,25 @@ const SidebarContent = styled.div`
 `;
 
 const Sidebar = styled.div`
+  position: relative;
   width: 100%;
   padding: 30px;
+  background: ${colors.secondary};
 
   @media (min-width: 768px) {
     width: 250px;
-    padding: 40px 40px 40px 0;
+    padding: 40px 0 40px 0;
     border-right: 1px solid #eee;
+
+    &:before {
+      content: '';
+      position: absolute;
+      right: 100%;
+      top: 0;
+      width: 50vw;
+      height: 100%;
+      background: ${colors.secondary};
+    }
   }
 `;
 
@@ -68,9 +80,25 @@ const Nav = styled.nav`
 
 const NavItem = styled(Link)`
   display: block;
-  padding: 10px 0;
   text-decoration: none;
   color: ${colors.primary};
+  margin-bottom: 12px;
+
+  span {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 8px 16px;
+    transform: translateX(-16px);
+    transition: ease all 0.2s;
+  }
+
+  &.active,
+  &:hover {
+    span {
+      background: ${colors.primary};
+      color: ${colors.primaryContrast};
+    }
+  }
 `;
 
 const Content = styled.div`
@@ -82,12 +110,20 @@ const Content = styled.div`
 `;
 
 const Headline = styled.h1`
-  padding: 40px;
+  padding: 30px 10px;
   border-bottom: 1px solid #eee;
+
+  @media (min-width: 768px) {
+    padding: 40px;
+  }
 `;
 
 const WysiwygContainer = styled.div`
-  padding: 40px 40px 100px;
+  padding: 20px 10px 40px;
+
+  @media (min-width: 768px) {
+    padding: 40px 40px 100px;
+  }
 `;
 
 export default Template;
@@ -103,18 +139,29 @@ export const PageDocumentationTemplate = {
       global: true,
     },
     {
-      id: 'sidebarmenu',
+      id: 'sidebar',
       global: true,
     },
     {
-      id: 'title',
-      label: 'Title',
-      type: 'text',
+      id: 'content',
+      label: 'Content',
+      type: 'group',
+      fields: [
+        {
+          id: 'title',
+          label: 'Title',
+          type: 'text',
+        },
+        {
+          id: 'text',
+          label: 'Text',
+          type: 'wysiwyg',
+        },
+      ],
     },
     {
-      id: 'text',
-      label: 'Text',
-      type: 'wysiwyg',
+      id: 'footer',
+      global: true,
     },
   ],
 };

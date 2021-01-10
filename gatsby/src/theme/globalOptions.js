@@ -19,10 +19,17 @@ export default [
     ],
   },
   {
-    id: 'sidebarmenu',
-    label: 'Sidebar Menu',
-    type: 'menu',
+    id: 'sidebar',
+    label: 'Sidebar',
+    type: 'group',
     hide: true,
+    fields: [
+      {
+        id: 'sidebarmenu',
+        label: 'Sidebar Menu',
+        type: 'menu',
+      },
+    ],
   },
   {
     id: 'footer',

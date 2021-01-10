@@ -64,7 +64,7 @@ export default {
     {
       id: 'flex',
       type: 'flexible_content',
-      label: 'Flexible Content',
+      label: 'Rich Text',
       items: [
         {
           id: 'layout1',

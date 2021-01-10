@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import Edges from './Edges';
 import Logo from '../icons/jamCMS.svg';
+import Github from '../icons/github.svg';
 import { colors } from '../theme';
 
 const Header = (props) => {
@@ -14,47 +14,62 @@ const Header = (props) => {
 
   return (
     <Container breakpoint={breakpoint} open={open}>
-      <Edges size="lg" style={{ height: '100%' }}>
-        <Grid>
-          <LogoContainer to={`/`}>
-            <Logo />
-          </LogoContainer>
+      <Grid>
+        <LogoContainer to={`/`}>
+          <Logo />
+        </LogoContainer>
 
-          {menu && (
-            <>
-              <Nav className="navigation" breakpoint={breakpoint} open={open}>
-                {menu.map((o, i) => {
-                  return (
-                    <NavItem key={i} to={o.url} breakpoint={breakpoint}>
-                      {o.title}
-                    </NavItem>
-                  );
-                })}
-              </Nav>
-
-              <Hamburger
-                className="hamburger"
-                open={open}
-                onClick={() => setOpen(!open)}
+        {menu && (
+          <>
+            <Nav className="navigation" breakpoint={breakpoint} open={open}>
+              {menu.map((o, i) => {
+                return (
+                  <NavItem key={i} to={o.url} breakpoint={breakpoint}>
+                    {o.title}
+                  </NavItem>
+                );
+              })}
+              <ExternalNavItem
+                href="https://github.com/robinzimmer1989/jam-cms"
+                target="_blank"
                 breakpoint={breakpoint}
               >
-                <div />
-                <div />
-                <div />
-              </Hamburger>
-            </>
-          )}
-        </Grid>
-      </Edges>
+                <Github />
+              </ExternalNavItem>
+            </Nav>
+
+            <Hamburger
+              className="hamburger"
+              open={open}
+              onClick={() => setOpen(!open)}
+              breakpoint={breakpoint}
+            >
+              <div />
+              <div />
+              <div />
+            </Hamburger>
+          </>
+        )}
+      </Grid>
     </Container>
   );
 };
 
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 80px;
-  background: ${colors.primary};
-  color: ${colors.primaryContrast};
+  z-index: 10;
+  padding: 15px 20px;
+  background: #fff;
+  color: ${colors.primary};
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 2px 2px rgba(0, 0, 0, 0.02),
+    0 4px 4px rgba(0, 0, 0, 0.02), 0 6px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.02);
+
+  @media (min-width: ${({ breakpoint }) => breakpoint}px) {
+    padding: 15px 40px;
+  }
 
   .navigation {
     @media (min-width: ${({ breakpoint }) => breakpoint}px) {
@@ -87,7 +102,7 @@ const LogoContainer = styled(Link)`
     width: auto;
 
     path {
-      fill: #fff;
+      fill: ${colors.primary};
     }
   }
 `;
@@ -114,19 +129,38 @@ const Nav = styled.nav`
   }
 `;
 
-const NavItem = styled(Link)`
+const link = css`
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: ${colors.primaryContrast};
+  color: ${colors.primary};
+  background: ${colors.background};
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+
+  &:hover {
+    background: #d1d7e0;
+  }
 
   @media (max-width: ${({ breakpoint }) => breakpoint - 1}px) {
     display: block;
-    margin: 10px 0;
+    text-align: center;
+    margin: 5px 0;
   }
 
   @media (min-width: ${({ breakpoint }) => breakpoint}px) {
-    margin: 0 20px;
+    margin: 0 12px;
     transform: translateX(10px);
   }
+`;
+
+const NavItem = styled(Link)`
+  ${link}
+`;
+
+const ExternalNavItem = styled.a`
+  ${link}
 `;
 
 const Hamburger = styled.button`
@@ -146,7 +180,7 @@ const Hamburger = styled.button`
       open &&
       css`
         position: fixed;
-        right: 5%;
+        right: 20px;
         top: 20px;
         z-index: 101;
       `}
@@ -159,7 +193,7 @@ const Hamburger = styled.button`
   div {
     width: 2rem;
     height: 0.25rem;
-    background: ${colors.primaryContrast};
+    background: ${({ open }) => (open ? colors.primaryContrast : colors.primary)};
     border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;

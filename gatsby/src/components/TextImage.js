@@ -19,7 +19,7 @@ const TextImage = (props) => {
               <Img
                 fluid={image.childImageSharp.fluid}
                 imgStyle={{
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   maxWidth: '100%',
                   maxHeight: '100%',
                   top: '50%',
@@ -38,17 +38,8 @@ const TextImage = (props) => {
               {buttons && (
                 <Buttons>
                   {buttons.map(
-                    (o, i) =>
-                      o.button &&
-                      o.button.url &&
-                      o.button.title && (
-                        <Button
-                          key={i}
-                          color={o.color || 'primary'}
-                          variant={o.variant || 'filled'}
-                          {...o.button}
-                        />
-                      )
+                    ({ button, variant }, i) =>
+                      button.url && button.title && <Button key={i} variant={variant} {...button} />
                   )}
                 </Buttons>
               )}
@@ -76,6 +67,7 @@ const ImageContainer = styled.div`
   height: 220px;
   order: 1;
   margin-bottom: 30px;
+  box-shadow: 0px 4px 8px 0px rgba(4, 73, 89, 0.05);
 
   @media (min-width: 768px) {
     width: 50%;

@@ -4,10 +4,11 @@ import Img from 'gatsby-image';
 
 // import app components
 import Edges from './Edges';
-import Wysiwyg from './Wysiwyg';
+import Button, { fields as buttonFields } from './Button';
+import { colors } from '../theme';
 
 const Banner = (props) => {
-  const { image, text, height } = props;
+  const { image, headline, subline, buttons, height } = props;
 
   return (
     <Container height={height}>
@@ -24,8 +25,17 @@ const Banner = (props) => {
       </ImageContainer>
 
       <ContentContainer>
-        <Edges size={'md'}>
-          <Wysiwyg children={text} />
+        <Edges size="md">
+          {headline && <h1 children={headline} />}
+          {subline && <h3 children={subline} />}
+
+          {buttons && buttons.length > 0 && (
+            <Buttons>
+              {buttons.map((o) => (
+                <Button {...o.button} variant={o.variant} />
+              ))}
+            </Buttons>
+          )}
         </Edges>
       </ContentContainer>
     </Container>
@@ -34,7 +44,9 @@ const Banner = (props) => {
 
 const Container = styled.div`
   position: relative;
-  height: ${({ height }) => (height === 'small' ? '200px' : '350px')};
+  min-height: ${({ height }) => (height === 'small' ? '250px' : '500px')};
+  padding: 40px 0;
+  background: ${colors.secondary};
 `;
 
 const ImageContainer = styled.div`
@@ -48,7 +60,31 @@ const ContentContainer = styled.div`
   width: 100%;
   transform: translateY(-50%);
   z-index: 1;
-  color: #203041;
+  color: ${colors.primary};
+
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+
+    @media (min-width: 768px) {
+      font-size: 50px;
+    }
+  }
+
+  h3 {
+    text-align: center;
+  }
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+
+  a {
+    margin: 10px;
+  }
 `;
 
 export default {
@@ -62,9 +98,20 @@ export default {
       label: 'Image',
     },
     {
-      id: 'text',
-      type: 'wysiwyg',
+      id: 'headline',
+      type: 'text',
       label: 'Headline',
+    },
+    {
+      id: 'subline',
+      type: 'text',
+      label: 'Subline',
+    },
+    {
+      id: 'buttons',
+      type: 'repeater',
+      label: 'Button',
+      items: buttonFields,
     },
     {
       id: 'height',

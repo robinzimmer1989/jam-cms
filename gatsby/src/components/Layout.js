@@ -1,5 +1,5 @@
 import React from 'react';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 // import app components
 import Header from './Header';
@@ -15,7 +15,7 @@ const Layout = (props) => {
       <Seo {...post} />
       <ThemeCss theme={theme} />
       <Header {...globalOptions?.header} />
-      {children}
+      <Content>{children}</Content>
       <Footer {...globalOptions?.footer} />
     </>
   );
@@ -23,6 +23,10 @@ const Layout = (props) => {
 
 const ThemeCss = createGlobalStyle`
   ${({ theme }) => theme.css}
+`;
+
+const Content = styled.div`
+  min-height: calc(100vh - 80px - 130px);
 `;
 
 export default Layout;
