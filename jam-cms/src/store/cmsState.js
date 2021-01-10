@@ -96,7 +96,7 @@ export const sitesReducer = (state, action) => {
       case `DELETE_MEDIA_ITEM`:
         draft.sites[payload.siteID].mediaItems.items = draft.sites[
           payload.siteID
-        ].mediaItems.items.filter((o) => o.id !== payload.id);
+        ].mediaItems.items.filter((o) => o.id !== parseInt(payload.id));
         break;
 
       /******************************

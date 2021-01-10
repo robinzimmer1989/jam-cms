@@ -35,8 +35,10 @@ const MediaImage = (props) => {
   };
 
   const handlDeleteMediaItem = async () => {
+    const { siteID } = data;
+
     setLoading('delete');
-    const result = await mediaActions.deleteMediaItem({ ...file }, dispatch, config);
+    const result = await mediaActions.deleteMediaItem({ ...file, siteID }, dispatch, config);
     setLoading(false);
 
     if (result) {
