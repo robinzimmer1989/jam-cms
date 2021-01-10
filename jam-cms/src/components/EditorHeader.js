@@ -57,16 +57,14 @@ const EditorHeader = (props) => {
 
     setLoading(true);
 
+    let postResult, siteResult;
+
     if (siteHasChanged) {
-      const siteResult = await siteActions.updateSite(
-        { id, settings, frontPage },
-        dispatch,
-        config
-      );
+      siteResult = await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
     }
 
     if (postHasChanged) {
-      const postResult = await postActions.updatePost(
+      postResult = await postActions.updatePost(
         { siteID: id, ...post, templateObject },
         dispatch,
         config
