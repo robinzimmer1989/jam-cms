@@ -278,7 +278,7 @@ const EditorHeader = (props) => {
       />
     );
 
-  (post?.status === 'publish' || post?.status === 'trash') &&
+  (post?.status === 'publish' || post?.status === 'trash' || !post) &&
     buttons.push(
       <Button
         key={'update'}
