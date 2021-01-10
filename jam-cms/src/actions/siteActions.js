@@ -15,7 +15,7 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, title, settings, frontPage, deployment, apiKey },
+  { id, title, globalOptions, frontPage, deployment, apiKey },
   dispatch,
   config
 ) => {
@@ -23,7 +23,7 @@ export const updateSite = async (
     {
       id,
       title,
-      settings,
+      globalOptions,
       frontPage,
       deployment,
       apiKey,

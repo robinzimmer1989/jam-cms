@@ -59,7 +59,7 @@ const EditorHeader = (props) => {
   };
 
   const handleSave = async (type, status) => {
-    const { id, settings, frontPage } = site;
+    const { id, globalOptions, frontPage } = site;
 
     // Add template object to request, but only in development mode
     const templateObject =
@@ -72,7 +72,7 @@ const EditorHeader = (props) => {
     let postResult, siteResult;
 
     if (siteHasChanged) {
-      siteResult = await siteActions.updateSite({ id, settings, frontPage }, dispatch, config);
+      siteResult = await siteActions.updateSite({ id, globalOptions, frontPage }, dispatch, config);
     }
 
     if (postHasChanged || type === 'publish') {

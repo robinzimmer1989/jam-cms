@@ -38,13 +38,13 @@ const Options = () => {
     return globalOptions
       .filter((o) => !o.hide)
       .map((o) => {
-        return { ...o, value: site?.settings?.[o.id]?.value || null };
+        return { ...o, value: site?.globalOptions?.[o.id]?.value || null };
       });
   };
 
   const handleChange = (field) => {
     const nextSite = produce(site, (draft) => {
-      return set(draft, `settings.${field.id}`, field);
+      return set(draft, `globalOptions.${field.id}`, field);
     });
 
     dispatch({
@@ -55,7 +55,11 @@ const Options = () => {
 
   const handleUpdate = async () => {
     setLoading(true);
-    await siteActions.updateSite({ id: siteID, settings: site.settings }, dispatch, config);
+    await siteActions.updateSite(
+      { id: siteID, globalOptions: site.globalOptions },
+      dispatch,
+      config
+    );
     setLoading(false);
 
     message.success('Updated successfully');

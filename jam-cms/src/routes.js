@@ -3,7 +3,6 @@ export const ROUTE_SITE = '/site';
 export const ROUTE_MEDIA = '/media';
 export const ROUTE_COLLECTIONS = '/collections';
 export const ROUTE_SETTINGS_GENERAL = '/settings';
-export const ROUTE_SETTINGS_THEME = '/settings/theme';
 export const ROUTE_SETTINGS_SEO = '/settings/seo';
 export const ROUTE_SETTINGS_COLLECTIONS = '/settings/collections';
 export const ROUTE_PROFILE = '/profile';

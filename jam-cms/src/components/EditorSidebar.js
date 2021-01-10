@@ -64,7 +64,7 @@ const EditorSidebar = (props) => {
   const handleChangeContent = (field) => {
     if (field.global) {
       const nextSite = produce(site, (draft) => {
-        return set(draft, `settings.${field.id}`, field);
+        return set(draft, `globalOptions.${field.id}`, field);
       });
 
       dispatch({
@@ -92,7 +92,7 @@ const EditorSidebar = (props) => {
           return {
             global: true,
             ...globalField,
-            value: site?.settings?.[o.id]?.value || null,
+            value: site?.globalOptions?.[o.id]?.value || null,
           };
         }
       } else {

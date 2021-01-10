@@ -96,7 +96,7 @@ const PostEditor = (props) => {
                         featuredImage: post.featuredImage,
                         content: formatFieldsToProps(post.content, site),
                         postTypeID: post.postTypeID,
-                        globalOptions: formatFieldsToProps(site?.settings, site),
+                        globalOptions: formatFieldsToProps(site?.globalOptions, site),
                       }}
                     />
                   ) : (

@@ -28,7 +28,7 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
     activity.end();
 
     const {
-      data: { settings, posts },
+      data: { globalOptions, posts },
     } = await response;
 
     const missingTemplates = {};
@@ -50,7 +50,7 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
                 featuredImage: o.featuredImage,
                 postTypeID: o.postTypeID,
                 content: o.content,
-                globalOptions: settings,
+                globalOptions,
               },
             });
           } else {

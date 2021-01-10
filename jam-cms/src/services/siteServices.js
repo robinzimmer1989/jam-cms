@@ -38,7 +38,7 @@ export const addSite = async ({ title }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, title, settings, frontPage, deployment, apiKey },
+  { id, title, globalOptions, frontPage, deployment, apiKey },
   dispatch,
   config
 ) => {
@@ -47,7 +47,7 @@ export const updateSite = async (
     {
       id,
       title,
-      settings: JSON.stringify(settings),
+      globalOptions: JSON.stringify(globalOptions),
       frontPage,
       deployment: JSON.stringify(deployment),
       apiKey,
