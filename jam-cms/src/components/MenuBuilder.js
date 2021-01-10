@@ -12,6 +12,7 @@ import {
   removeFromTree,
   deepCopyTree,
   generateRandomString,
+  generateSlug,
 } from '../utils';
 import { colors } from '../theme';
 import { useStore } from '../store';
@@ -186,6 +187,12 @@ const MenuBuilder = (props) => {
                                     postTypeID,
                                     postID: id,
                                     children: [],
+                                    url: generateSlug(
+                                      postType,
+                                      id,
+                                      sites?.[siteID]?.frontPage,
+                                      true
+                                    ),
                                   },
                                 ])
                               }
@@ -249,6 +256,7 @@ const MenuBuilder = (props) => {
                             label="Url"
                             value={node.url}
                             onChange={(e) => handleUpdate(e, 'url', node.key)}
+                            disabled={node.postTypeID}
                           />
                         )}
                         <Button
