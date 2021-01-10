@@ -25,23 +25,6 @@ export default function formatFieldForEditor(field, site) {
     };
   }
 
-  if (
-    field.type === 'wysiwyg' &&
-    (!field?.value || field?.value.replace(/(\r\n|\n|\r)/gm, '') === '<p></p>')
-  ) {
-    return {
-      ...field,
-      value: 'Write something...',
-    };
-  }
-
-  if (field.type === 'text' && !field?.value) {
-    return {
-      ...field,
-      value: 'Write something...',
-    };
-  }
-
   if (field.type === 'group') {
     const nextGroupField = produce(field, (draft) => {
       Object.keys(draft.value).map((key) => {
