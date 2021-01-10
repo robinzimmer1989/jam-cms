@@ -3,7 +3,7 @@ import getParentSlug from './getParentSlug';
 
 export default function generateSlug(postType, postID, frontPage, trailingSlash = false) {
   if (postID === frontPage) {
-    return '';
+    return trailingSlash ? '/' : '';
   }
 
   if (!postType?.posts?.[postID]) {
