@@ -42,7 +42,7 @@ const WysiwygImageUpload = (props) => {
         title={'Media Library'}
         visible={open}
         onCancel={() => setOpen(false)}
-        width={1000}
+        width={1024}
         footer={null}
       >
         <MediaLibrary onSelect={handleSelect} />

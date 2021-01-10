@@ -164,7 +164,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
                     allow={['image']}
                   />
                 ),
-                width: 1000,
+                width: 1024,
               },
             })
           }
@@ -185,7 +185,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
                 component: (
                   <MediaLibrary onSelect={(value) => onChangeElement({ ...field, value })} />
                 ),
-                width: 1000,
+                width: 1024,
               },
             })
           }
@@ -209,7 +209,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
                     onChange={(value) => onChangeElement({ ...field, value })}
                   />
                 ),
-                width: 1000,
+                width: 1024,
               },
             })
           }

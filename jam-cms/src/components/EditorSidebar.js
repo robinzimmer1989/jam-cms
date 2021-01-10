@@ -185,7 +185,7 @@ const EditorSidebar = (props) => {
                             allow={['image']}
                           />
                         ),
-                        width: 1000,
+                        width: 1024,
                       },
                     })
                   }
@@ -240,7 +240,7 @@ const EditorSidebar = (props) => {
                           allow={['image']}
                         />
                       ),
-                      width: 1000,
+                      width: 1024,
                     },
                   })
                 }
