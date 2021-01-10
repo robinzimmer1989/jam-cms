@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Empty, Layout } from 'antd';
@@ -29,7 +29,7 @@ const PostEditor = (props) => {
 
   const template =
     templates?.[post?.postTypeID] &&
-    templates[post.postTypeID].find((o) => o.id === post?.template);
+    templates[post.postTypeID].find((o) => o?.id === post?.template);
 
   const Component = template?.component;
 
@@ -85,7 +85,7 @@ const PostEditor = (props) => {
           {postIdBySlug ? (
             <>
               {site && post ? (
-                <PageWrapper theme={theme}>
+                <PageWrapper theme={theme} template={!!Component && post?.content}>
                   {!!Component && post?.content ? (
                     <Component
                       pageContext={{
@@ -144,7 +144,7 @@ const EmptyContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 50px);
+  height: 100vh;
   text-align: center;
 `;
 

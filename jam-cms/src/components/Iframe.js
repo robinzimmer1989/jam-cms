@@ -4,9 +4,10 @@ import Frame, { FrameContextConsumer } from 'react-frame-component';
 
 import { useStore } from '../store';
 import Fonts from './Fonts';
+import { CmsStyles } from '../theme';
 import minireset from '../theme/minireset';
 
-const Iframe = ({ theme, children }) => {
+const Iframe = ({ theme, template, children }) => {
   const [
     {
       editorState: { viewport, siteHasChanged, postHasChanged },
@@ -26,9 +27,18 @@ const Iframe = ({ theme, children }) => {
           {(frameContext) => (
             <StyleSheetManager target={frameContext.document.head}>
               <>
-                <ThemeStyles />
-                <Fonts fonts={theme.fonts} />
-                <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
+                {template ? (
+                  <>
+                    <ThemeStyles />
+                    <Fonts fonts={theme.fonts} />
+                    <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
+                  </>
+                ) : (
+                  <>
+                    <CmsStyles />
+                    <div id="jam-cms">{children}</div>
+                  </>
+                )}
               </>
             </StyleSheetManager>
           )}
