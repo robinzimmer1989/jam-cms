@@ -2,11 +2,11 @@
   "name": "gatsby-source-jam-cms",
   "version": "0.0.5",
   "dependencies": {
-    "axios": "^0.21.0",
-    "cross-env": "5.0.5",
-    "gatsby": "^2.24.67",
-    "gatsby-plugin-sharp": "^2.6.36",
-    "gatsby-transformer-sharp": "^2.5.15"
+    "axios": "^0.21.1",
+    "cross-env": "7.0.3",
+    "gatsby": "^2.30.1",
+    "gatsby-plugin-sharp": "^2.12.0",
+    "gatsby-transformer-sharp": "^2.10.0"
   },
   "main": "index.js",
   "devDependencies": {},
