@@ -49,7 +49,6 @@ const ListItem = (props) => {
 
 const Container = styled.div`
   margin-left: ${({ level }) => `${level * 30}px`};
-  margin-bottom: 20px;
 
   .ant-card-body {
     padding: 0 20px;

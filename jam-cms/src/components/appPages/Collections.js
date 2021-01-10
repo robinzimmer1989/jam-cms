@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, PageHeader, Popconfirm } from 'antd';
+import { Button, PageHeader, Popconfirm, Space } from 'antd';
 
 // import app components
 import CmsLayout from '../CmsLayout';
@@ -57,41 +57,43 @@ const Collections = () => {
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
 
-      {postTypes &&
-        Object.values(postTypes).map((o) => {
-          const actions = [];
+      <Space direction="vertical" size={20}>
+        {postTypes &&
+          Object.values(postTypes).map((o) => {
+            const actions = [];
 
-          if (o.id !== 'page') {
-            actions.push(
-              <Popconfirm
-                title="Are you sure?"
-                onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button size="small" children={`Delete`} danger />
-              </Popconfirm>
-            );
+            if (o.id !== 'page') {
+              actions.push(
+                <Popconfirm
+                  title="Are you sure?"
+                  onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button size="small" children={`Delete`} danger />
+                </Popconfirm>
+              );
 
-            actions.push(
-              <Button
-                size="small"
-                children={`Edit`}
-                onClick={() => handleOpenDialog(o.id, o.title, o.slug)}
+              actions.push(
+                <Button
+                  size="small"
+                  children={`Edit`}
+                  onClick={() => handleOpenDialog(o.id, o.title, o.slug)}
+                />
+              );
+            }
+
+            return (
+              <ListItem
+                key={o.id}
+                actions={actions}
+                title={o.title}
+                subtitle={`/${o.slug}`}
+                hideImage
               />
             );
-          }
-
-          return (
-            <ListItem
-              key={o.id}
-              actions={actions}
-              title={o.title}
-              subtitle={`/${o.slug}`}
-              hideImage
-            />
-          );
-        })}
+          })}
+      </Space>
     </CmsLayout>
   );
 };

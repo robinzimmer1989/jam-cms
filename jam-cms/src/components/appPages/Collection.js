@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, Popconfirm, PageHeader, Tabs } from 'antd';
+import { Button, Popconfirm, PageHeader, Tabs, Space } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -150,7 +150,9 @@ const Collection = (props) => {
         }
       />
 
-      {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
+      <Space direction="vertical" size={20}>
+        {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
+      </Space>
     </CmsLayout>
   );
 };
