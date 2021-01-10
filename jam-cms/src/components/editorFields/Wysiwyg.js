@@ -10,7 +10,7 @@ import { colors } from '../../theme';
 let Editor = () => <></>;
 
 const Wysiwyg = (props) => {
-  const { value, onChange } = props;
+  const { index, value, onChange } = props;
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [editor, setEditor] = useState(null);
@@ -37,7 +37,7 @@ const Wysiwyg = (props) => {
 
       setEditorState(editorState);
     }
-  }, []);
+  }, [index]);
 
   const handleChange = (editorState) => {
     setEditorState(editorState);

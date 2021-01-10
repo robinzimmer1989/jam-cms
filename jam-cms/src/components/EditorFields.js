@@ -25,9 +25,8 @@ import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
 
 import { useStore } from '../store';
-import { colors } from '../theme';
 
-export const getField = ({ field, site, onChangeElement, dispatch }) => {
+export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
   let component;
 
   switch (field.type) {
@@ -49,7 +48,13 @@ export const getField = ({ field, site, onChangeElement, dispatch }) => {
       break;
 
     case 'wysiwyg':
-      component = <Wysiwyg {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
+      component = (
+        <Wysiwyg
+          {...field}
+          index={index}
+          onChange={(value) => onChangeElement({ ...field, value })}
+        />
+      );
       break;
 
     case 'number':
