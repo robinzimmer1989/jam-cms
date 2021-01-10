@@ -74,11 +74,10 @@ const MediaLibrary = (props) => {
 
   const handleCloseDialog = () => {
     setActiveFile(null);
-    dispatch({ type: 'CLOSE_DIALOG' });
   };
 
   const handleSelect = (image) => {
-    handleCloseDialog();
+    dispatch({ type: 'CLOSE_DIALOG' });
     onSelect(image);
   };
 
