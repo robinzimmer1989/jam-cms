@@ -44,7 +44,7 @@ const Banner = (props) => {
 
 const Container = styled.div`
   position: relative;
-  min-height: ${({ height }) => (height === 'small' ? '250px' : '500px')};
+  height: ${({ height }) => (height === 'small' ? '250px' : '500px')};
   padding: 40px 0;
   background: ${colors.secondary};
 `;
