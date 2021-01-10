@@ -11,6 +11,7 @@ import {
   Popover,
   Badge,
   Alert,
+  Skeleton,
 } from 'antd';
 import {
   FullscreenOutlined,
@@ -25,7 +26,6 @@ import { set } from 'lodash';
 
 // import app components
 import Tag from './Tag';
-import Skeleton from './Skeleton';
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 import { generateSlug } from '../utils';
@@ -250,15 +250,7 @@ const EditorHeader = (props) => {
 
   return (
     <PageHeader
-      title={
-        postID ? (
-          <Skeleton done={!!title} width={120} height={32}>
-            {title}
-          </Skeleton>
-        ) : (
-          'Not Found'
-        )
-      }
+      title={postID ? title || <Skeleton.Input active style={{ width: 120 }} /> : 'Not Found'}
       extra={buttons}
       tags={tags}
       onBack={handleClickBack}
