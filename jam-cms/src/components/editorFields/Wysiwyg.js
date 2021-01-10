@@ -148,53 +148,69 @@ const EditorContainer = styled.div`
     background: ${colors.text.light};
   }
 
-  .public-DraftStyleDefault-block {
-    margin: 0;
-  }
-
-  .rdw-editor-main pre {
-    margin-bottom: 0;
-    padding: 2px 4px;
-  }
-
   .rdw-block-dropdown {
     width: 100px;
+  }
+
+  .public-DraftStyleDefault-block {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .public-DraftStyleDefault-listLTR {
+    .public-DraftStyleDefault-block {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  pre {
+    .public-DraftStyleDefault-block {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
   }
 
   h1 {
     font-size: 22px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 12px;
   }
 
   h2 {
     font-size: 20px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 10px;
   }
 
   h3 {
     font-size: 18px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 8px;
   }
 
   h4 {
     font-size: 16px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 6px;
   }
 
   h5 {
     font-size: 14px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 4px;
   }
 
   h6 {
     font-size: 12px;
     font-weight: bold;
     line-height: 1.2;
+    margin-bottom: 4px;
   }
 
   a {
