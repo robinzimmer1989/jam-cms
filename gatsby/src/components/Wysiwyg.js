@@ -76,6 +76,7 @@ const Container = styled.div`
     background: ${colors.background};
     white-space: pre-wrap;
     word-wrap: break-word;
+    margin: 0;
   }
 
   .clear {
