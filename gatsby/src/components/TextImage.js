@@ -68,6 +68,7 @@ const ImageContainer = styled.div`
   order: 1;
   margin-bottom: 30px;
   box-shadow: 0px 4px 8px 0px rgba(4, 73, 89, 0.05);
+  background: #fff;
 
   @media (min-width: 768px) {
     width: 50%;
