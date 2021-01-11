@@ -31,8 +31,8 @@ const Banner = (props) => {
 
           {buttons && buttons.length > 0 && (
             <Buttons>
-              {buttons.map((o) => (
-                <Button {...o.button} variant={o.variant} />
+              {buttons.map((o, i) => (
+                <Button key={i} {...o.button} variant={o.variant} />
               ))}
             </Buttons>
           )}
