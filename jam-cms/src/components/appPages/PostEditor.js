@@ -10,7 +10,7 @@ import EditorSidebar from '../EditorSidebar';
 import Loader from '../Loader';
 import FourOhFour from '../FourOhFour';
 
-import { formatFieldsToProps } from '../../utils';
+import { formatFieldsToProps, generateSlug } from '../../utils';
 import { useStore } from '../../store';
 import { postActions } from '../../actions';
 import getRoute from '../../routes';
@@ -34,15 +34,16 @@ const PostEditor = (props) => {
   const Component = template?.component;
 
   // The post id is only available during initial load
-  const path = window.location.pathname.replace(/\/$/, '');
-  const slug = path.substr(path.lastIndexOf('/') + 1);
+  const pathname = window.location.pathname.replace(/\/$/, '');
 
   let postIdBySlug;
 
   if (sites[siteID]) {
     Object.values(sites[siteID].postTypes).map((o) =>
       Object.values(o.posts).map((p) => {
-        if (p.slug === slug || (slug === '' && sites[siteID].frontPage === p.id)) {
+        const slug = generateSlug(o, p.id, sites?.[siteID]?.frontPage, true);
+
+        if (slug === `${pathname}/`) {
           postIdBySlug = p.id;
         }
       })
