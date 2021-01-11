@@ -88,7 +88,7 @@ const Collections = () => {
                 key={o.id}
                 actions={actions}
                 title={o.title}
-                subtitle={`/${o.slug}`}
+                subtitle={o.slug || '/'}
                 hideImage
               />
             );
