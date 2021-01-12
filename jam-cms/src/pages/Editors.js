@@ -4,12 +4,12 @@ import { Button, PageHeader, Spin, Popconfirm } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import ListItem from '../ListItem';
-import EditorForm from '../EditorForm';
+import CmsLayout from '../components/CmsLayout';
+import ListItem from '../components/ListItem';
+import EditorForm from '../components/EditorForm';
 
-import { userActions } from '../../actions';
-import { useStore } from '../../store';
+import { userActions } from '../actions';
+import { useStore } from '../store';
 
 const Editors = () => {
   const [

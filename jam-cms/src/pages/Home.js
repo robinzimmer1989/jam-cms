@@ -3,15 +3,15 @@ import { navigate } from '@reach/router';
 import { PageHeader, Space, Button } from 'antd';
 
 // import app components
-import BaseLayout from '../BaseLayout';
-import Edges from '../Edges';
-import SiteForm from '../SiteForm';
-import ListItem from '../ListItem';
-import Loader from '../Loader';
+import BaseLayout from '../components/BaseLayout';
+import Edges from '../components/Edges';
+import SiteForm from '../components/SiteForm';
+import ListItem from '../components/ListItem';
+import Loader from '../components/Loader';
 
-import { siteActions } from '../../actions';
-import { useStore } from '../../store';
-import getRoute from '../../routes';
+import { siteActions } from '../actions';
+import { useStore } from '../store';
+import getRoute from '../routes';
 
 const Home = () => {
   const [

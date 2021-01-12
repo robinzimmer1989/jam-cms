@@ -1,8 +1,8 @@
 import React from 'react';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import MediaLibrary from '../MediaLibrary';
+import CmsLayout from '../components/CmsLayout';
+import MediaLibrary from '../components/MediaLibrary';
 
 const Media = () => {
   return (

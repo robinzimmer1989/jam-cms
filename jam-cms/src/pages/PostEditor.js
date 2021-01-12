@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { Empty, Layout } from 'antd';
 
 // import app components
-import PageWrapper from '../PageWrapper';
-import EditorHeader from '../EditorHeader';
-import EditorSidebar from '../EditorSidebar';
-import Loader from '../Loader';
-import FourOhFour from '../FourOhFour';
+import PageWrapper from '../components/PageWrapper';
+import EditorHeader from '../components/EditorHeader';
+import EditorSidebar from '../components/EditorSidebar';
+import Loader from '../components/Loader';
+import FourOhFour from '../components/FourOhFour';
 
-import { formatFieldsToProps, generateSlug } from '../../utils';
-import { useStore } from '../../store';
-import { postActions } from '../../actions';
-import getRoute from '../../routes';
+import { formatFieldsToProps, generateSlug } from '../utils';
+import { useStore } from '../store';
+import { postActions } from '../actions';
+import getRoute from '../routes';
 
 const PostEditor = (props) => {
   const { theme, templates } = props;

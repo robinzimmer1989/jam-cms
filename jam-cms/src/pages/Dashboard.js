@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Alert, Space } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import { useStore } from '../../store';
+import CmsLayout from '../components/CmsLayout';
+import { useStore } from '../store';
 
 const Dashboard = () => {
   const [

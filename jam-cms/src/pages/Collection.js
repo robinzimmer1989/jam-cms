@@ -5,14 +5,14 @@ import produce from 'immer';
 import { set } from 'lodash';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import PostForm from '../PostForm';
-import ListItem from '../ListItem';
-import Tag from '../Tag';
+import CmsLayout from '../components/CmsLayout';
+import PostForm from '../components/PostForm';
+import ListItem from '../components/ListItem';
+import Tag from '../components/Tag';
 
-import { postActions } from '../../actions';
-import { useStore } from '../../store';
-import { createDataTree, sortBy, generateSlug } from '../../utils';
+import { postActions } from '../actions';
+import { useStore } from '../store';
+import { createDataTree, sortBy, generateSlug } from '../utils';
 
 const Collection = (props) => {
   const { siteID, postTypeID } = props;

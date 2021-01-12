@@ -4,11 +4,11 @@ import produce from 'immer';
 import { set } from 'lodash';
 
 // import app components
-import Input from '../Input';
-import CmsLayout from '../CmsLayout';
+import Input from '../components/Input';
+import CmsLayout from '../components/CmsLayout';
 
-import { useStore } from '../../store';
-import { siteActions } from '../../actions';
+import { useStore } from '../store';
+import { siteActions } from '../actions';
 
 const GeneralSettings = () => {
   const [

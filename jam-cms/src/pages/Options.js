@@ -4,11 +4,11 @@ import { set } from 'lodash';
 import { Button, Card, Space, message } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import EditorFields from '../EditorFields';
+import CmsLayout from '../components/CmsLayout';
+import EditorFields from '../components/EditorFields';
 
-import { siteActions } from '../../actions';
-import { useStore } from '../../store';
+import { siteActions } from '../actions';
+import { useStore } from '../store';
 
 const Options = () => {
   const [

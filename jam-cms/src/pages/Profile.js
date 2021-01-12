@@ -2,10 +2,10 @@ import React from 'react';
 import { Card, PageHeader } from 'antd';
 
 // import app components
-import Edges from '../Edges';
+import Edges from '../components/Edges';
 
-import { getCurrentUser } from '../../utils/auth';
-import { useStore } from '../../store';
+import { getCurrentUser } from '../utils/auth';
+import { useStore } from '../store';
 
 const Home = () => {
   const [{ config }] = useStore();

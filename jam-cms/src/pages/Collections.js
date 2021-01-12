@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, PageHeader, Popconfirm, Space } from 'antd';
 
 // import app components
-import CmsLayout from '../CmsLayout';
-import CollectionForm from '../CollectionForm';
-import ListItem from '../ListItem';
+import CmsLayout from '../components/CmsLayout';
+import CollectionForm from '../components/CollectionForm';
+import ListItem from '../components/ListItem';
 
-import { collectionActions } from '../../actions';
-import { useStore } from '../../store';
+import { collectionActions } from '../actions';
+import { useStore } from '../store';
 
 const Collections = () => {
   const [

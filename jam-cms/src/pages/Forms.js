@@ -2,13 +2,13 @@ import React from 'react';
 import { Button, PageHeader, Popconfirm } from 'antd';
 import { Link } from '@reach/router';
 // import app components
-import CmsLayout from '../CmsLayout';
-import FormForm from '../FormForm';
-import ListItem from '../ListItem';
+import CmsLayout from '../components/CmsLayout';
+import FormForm from '../components/FormForm';
+import ListItem from '../components/ListItem';
 
-import { formActions } from '../../actions';
-import { useStore } from '../../store';
-import getRoute from '../../routes';
+import { formActions } from '../actions';
+import { useStore } from '../store';
+import getRoute from '../routes';
 
 const Forms = () => {
   const [

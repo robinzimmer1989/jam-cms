@@ -3,16 +3,16 @@ import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
 // import components
-import Home from './appPages/Home';
-import Profile from './appPages/Profile';
-import PostEditor from './appPages/PostEditor';
-import Dashboard from './appPages/Dashboard';
-import Media from './appPages/Media';
-import Collections from './appPages/Collections';
-import Collection from './appPages/Collection';
-import GeneralSettings from './appPages/GeneralSettings';
-import Editors from './appPages/Editors';
-import Options from './appPages/Options';
+import Home from '../pages/Home';
+import Profile from '../pages/Profile';
+import PostEditor from '../pages/PostEditor';
+import Dashboard from '../pages/Dashboard';
+import Media from '../pages/Media';
+import Collections from '../pages/Collections';
+import Collection from '../pages/Collection';
+import GeneralSettings from '../pages/GeneralSettings';
+import Editors from '../pages/Editors';
+import Options from '../pages/Options';
 
 import Loader from './Loader';
 import PrivateRoute from './PrivateRoute';
