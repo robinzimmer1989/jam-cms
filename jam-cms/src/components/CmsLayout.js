@@ -154,6 +154,7 @@ const StyledPageHeader = styled(PageHeader)`
 `;
 
 const Content = styled.div`
+  position: relative;
   width: 100%;
   height: calc(100vh - 50px);
   padding: 20px 40px 60px;

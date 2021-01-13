@@ -5,6 +5,7 @@ import { Alert, Space } from 'antd';
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import { useStore } from '../store';
+import { version } from '../../package.json';
 
 const Dashboard = () => {
   const [
@@ -18,7 +19,7 @@ const Dashboard = () => {
   return (
     <>
       <CmsLayout pageTitle={`Dashboard`}>
-        <Container>
+        <Content>
           {errors && (
             <Space direction="vertical">
               {errors.map((o, i) => {
@@ -34,12 +35,25 @@ const Dashboard = () => {
               })}
             </Space>
           )}
-        </Container>
+        </Content>
+        <Footer>{version}</Footer>
       </CmsLayout>
     </>
   );
 };
 
-const Container = styled.div``;
+const Content = styled.div``;
+
+const Footer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 40px;
+`;
 
 export default Dashboard;
