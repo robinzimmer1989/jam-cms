@@ -28,6 +28,12 @@ const Container = styled.div`
   p {
     margin-top: 20px;
     margin-bottom: 20px;
+
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 0px;
+    }
   }
 
   h1,
