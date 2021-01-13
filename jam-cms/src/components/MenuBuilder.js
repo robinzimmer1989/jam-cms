@@ -294,11 +294,11 @@ const Boxes = styled.div`
 `;
 
 const PostsBox = styled.div`
-  background: #f7f7f7;
   width: 320px;
   height: 360px;
   padding: 10px 10px 6px;
   overflow: auto;
+  border-right: 1px solid #d9d9d9;
 `;
 
 const MenuBox = styled.div`
@@ -316,7 +316,7 @@ const MenuBox = styled.div`
 
 const StyledListItem = styled(ListItem)`
   .ant-card {
-    box-shadow: none;
+    box-shadow: none !important;
     background: ${colors.background.light};
     border: 1px solid #d9d9d9;
     margin-bottom: 4px;
