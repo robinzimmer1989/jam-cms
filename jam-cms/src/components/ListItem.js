@@ -5,7 +5,7 @@ import { Link } from '@reach/router';
 import Img from 'gatsby-image';
 
 const ListItem = (props) => {
-  const { level = 0, link, actions, title, subtitle, status, image, hideImage } = props;
+  const { level = 0, link, actions, title, subtitle, status, image, hideImage, ...rest } = props;
 
   const metaTitle = link ? (
     <Link to={link} style={{ flex: 1 }}>
@@ -22,7 +22,7 @@ const ListItem = (props) => {
   );
 
   return (
-    <Container level={level}>
+    <Container level={level} {...rest}>
       <Card>
         <List.Item actions={actions}>
           <List.Item.Meta
