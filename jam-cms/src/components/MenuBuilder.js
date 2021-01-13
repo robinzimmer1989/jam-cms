@@ -312,6 +312,7 @@ const MenuBox = styled.div`
   > div {
     max-width: 400px;
     margin: 0 auto;
+    transform: translateX(-15px);
   }
 `;
 
