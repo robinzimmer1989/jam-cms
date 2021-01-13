@@ -288,9 +288,7 @@ const Container = styled.div`
 const Boxes = styled.div`
   display: flex;
   justify-content: space-between;
-  background: #fff;
   margin-bottom: 20px;
-  border: 1px solid #d9d9d9;
 `;
 
 const PostsBox = styled.div`
@@ -298,14 +296,17 @@ const PostsBox = styled.div`
   height: 360px;
   padding: 10px 10px 6px;
   overflow: auto;
-  border-right: 1px solid #d9d9d9;
+  background: #fff;
+  border: 1px solid #d9d9d9;
 `;
 
 const MenuBox = styled.div`
   height: 360px;
-  flex: 1;
+  width: calc(100% - 360px);
   padding: 10px 10px 6px;
   margin: 0 auto;
+  background: #fff;
+  border: 1px solid #d9d9d9;
   overflow: auto;
 
   > div {
