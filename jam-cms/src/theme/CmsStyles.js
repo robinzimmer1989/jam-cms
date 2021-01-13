@@ -56,6 +56,10 @@ const styles = css`
     box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
   }
 
+  .ant-list-item {
+    padding: 10px 0;
+  }
+
   .ant-space-vertical {
     width: 100%;
   }
