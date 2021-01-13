@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import {
   PageHeader,
@@ -21,8 +21,6 @@ import {
   EditOutlined,
   QuestionOutlined,
 } from '@ant-design/icons';
-import produce from 'immer';
-import { set } from 'lodash';
 
 // import app components
 import Tag from './Tag';
@@ -38,13 +36,25 @@ const EditorHeader = (props) => {
   const [
     {
       config,
-      cmsState: { siteID },
+      cmsState: { sites, siteID },
       editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
     },
     dispatch,
   ] = useStore();
 
   const [loading, setLoading] = useState('');
+
+  const postname = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id]?.slug;
+  const frontPage = sites[siteID]?.frontPage;
+
+  useEffect(() => {
+    if (postname) {
+      // We need to generate the slug and navigate to it in case the user has changed the post name
+      const postType = sites[siteID]?.postTypes?.[post.postTypeID];
+      const slug = generateSlug(postType, post.id, frontPage, true);
+      navigate(slug);
+    }
+  }, [postname, frontPage]);
 
   const handleSaveDraft = () => {
     handleSave('draft', 'draft');
@@ -58,7 +68,7 @@ const EditorHeader = (props) => {
     handleSave('update', 'publish');
   };
 
-  const handleSave = async (type, status) => {
+  const handleSave = async (action, status) => {
     const { id, globalOptions, frontPage } = site;
 
     // Add template object to request, but only in development mode
@@ -67,7 +77,7 @@ const EditorHeader = (props) => {
       templates?.[post?.postTypeID] &&
       templates[post.postTypeID].find((o) => o.id === post?.template);
 
-    setLoading(type);
+    setLoading(action);
 
     let postResult, siteResult;
 
@@ -75,27 +85,14 @@ const EditorHeader = (props) => {
       siteResult = await siteActions.updateSite({ id, globalOptions, frontPage }, dispatch, config);
     }
 
-    if (postHasChanged || type === 'publish') {
+    if (postHasChanged || action === 'publish') {
       postResult = await postActions.updatePost(
         { siteID: id, ...post, status, templateObject },
         dispatch,
         config
       );
 
-      if (postResult) {
-        // We need to generate the slug and navigate to it in case the user has changed the post name
-        const postType = site?.postTypes?.[postResult.postTypeID];
-
-        const nextPostType = produce(postType, (draft) => {
-          return set(draft, `posts.${postResult.id}`, postResult);
-        });
-
-        const slug = generateSlug(nextPostType, postResult.id, site?.frontPage, true);
-        navigate(slug);
-      }
-
-      // In case the user only updates the post, the new deployment status isn't available (only for site updates)
-      // To overcome this issue we need to manually update the site.
+      // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
       if (!siteHasChanged) {
         dispatch({
           type: 'ADD_SITE_SETTING',
