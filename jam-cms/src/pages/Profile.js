@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, PageHeader } from 'antd';
+import { Card } from 'antd';
 
 // import app components
-import Edges from '../components/Edges';
+import CmsLayout from '../components/CmsLayout';
+import Caption from '../components/Caption';
 
 import { getCurrentUser } from '../utils/auth';
 import { useStore } from '../store';
@@ -13,15 +14,12 @@ const Home = () => {
   const user = getCurrentUser(config);
 
   return (
-    <>
-      <Edges size="md">
-        <PageHeader title="Profile" />
-
-        <Card>
-          <p>Email: {user.email}</p>
-        </Card>
-      </Edges>
-    </>
+    <CmsLayout pageTitle={`Profile`}>
+      <Card title={`Personal Information`}>
+        <Caption children="Email" />
+        <p>{user.email}</p>
+      </Card>
+    </CmsLayout>
   );
 };
 

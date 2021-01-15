@@ -23,7 +23,7 @@ const getRoute = (route, args) => {
       return `${ROUTE_APP}${base}`;
 
     case 'profile':
-      return `${ROUTE_APP}${base}${ROUTE_PROFILE}`;
+      return `${ROUTE_APP}${ROUTE_PROFILE}`;
 
     case 'editors':
       return `${ROUTE_APP}${base}${ROUTE_EDITORS}`;

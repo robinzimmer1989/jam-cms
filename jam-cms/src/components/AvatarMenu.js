@@ -1,5 +1,5 @@
 import React from 'react';
-import { navigate } from '@reach/router';
+import { navigate, Link } from '@reach/router';
 import styled from 'styled-components';
 import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -7,6 +7,7 @@ import { UserOutlined } from '@ant-design/icons';
 // import app components
 import { useStore } from '../store';
 import { authActions } from '../actions';
+import getRoute from '../routes';
 
 const AvatarMenu = (props) => {
   const { ghost } = props;
@@ -18,6 +19,9 @@ const AvatarMenu = (props) => {
 
   const dropDownMenu = (
     <StyledMenu>
+      <Menu.Item>
+        <Link to={getRoute('profile')}>Profile</Link>
+      </Menu.Item>
       <Menu.Item onClick={handleSignOut}>Sign Out</Menu.Item>
     </StyledMenu>
   );
