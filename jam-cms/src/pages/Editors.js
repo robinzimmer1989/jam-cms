@@ -91,7 +91,9 @@ const Editors = () => {
               </Button>,
             ];
 
-            return <ListItem key={o.id} title={o.email} subtitle={o.role} actions={actions} />;
+            return (
+              <StyledListItem key={o.id} title={o.email} subtitle={o.role} actions={actions} />
+            );
           })}
       </InfiniteScroll>
     </CmsLayout>
@@ -103,6 +105,11 @@ const LoadingContainer = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
+`;
+
+const StyledListItem = styled(ListItem)`
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 export default Editors;
