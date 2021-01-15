@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, PageHeader, Popconfirm, Space } from 'antd';
+import styled from 'styled-components';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -57,45 +58,48 @@ const Collections = () => {
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
 
-      <Space direction="vertical" size={20}>
-        {postTypes &&
-          Object.values(postTypes).map((o) => {
-            const actions = [];
+      {postTypes &&
+        Object.values(postTypes).map((o) => {
+          const actions = [];
 
-            if (o.id !== 'page') {
-              actions.push(
-                <Popconfirm
-                  title="Are you sure?"
-                  onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button size="small" children={`Delete`} danger />
-                </Popconfirm>
-              );
+          if (o.id !== 'page') {
+            actions.push(
+              <Popconfirm
+                title="Are you sure?"
+                onConfirm={() => handleDeletePostType({ postTypeID: o.id })}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size="small" children={`Delete`} danger />
+              </Popconfirm>
+            );
 
-              actions.push(
-                <Button
-                  size="small"
-                  children={`Edit`}
-                  onClick={() => handleOpenDialog(o.id, o.title, o.slug)}
-                />
-              );
-            }
-
-            return (
-              <ListItem
-                key={o.id}
-                actions={actions}
-                title={o.title}
-                subtitle={o.slug || '/'}
-                hideImage
+            actions.push(
+              <Button
+                size="small"
+                children={`Edit`}
+                onClick={() => handleOpenDialog(o.id, o.title, o.slug)}
               />
             );
-          })}
-      </Space>
+          }
+
+          return (
+            <StyledListItem
+              key={o.id}
+              actions={actions}
+              title={o.title}
+              subtitle={o.slug || '/'}
+              hideImage
+            />
+          );
+        })}
     </CmsLayout>
   );
 };
+
+const StyledListItem = styled(ListItem)`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
 
 export default Collections;
