@@ -45,7 +45,7 @@ const CmsLayout = (props) => {
         }}
       >
         <div>
-          <StyledPageHeader
+          <SidebarHeader
             title={
               <Link to="/">
                 <JamCmsLogo className={`jam-cms-logo`} />
@@ -119,9 +119,7 @@ const CmsLayout = (props) => {
           marginLeft: 250,
         }}
       >
-        <Layout.Header>
-          <CmsHeader title={pageTitle} />
-        </Layout.Header>
+        <CmsHeader title={pageTitle} />
 
         <Layout.Content>
           <Content>{children}</Content>
@@ -131,7 +129,7 @@ const CmsLayout = (props) => {
   );
 };
 
-const StyledPageHeader = styled(PageHeader)`
+const SidebarHeader = styled(PageHeader)`
   .jam-cms-logo {
     width: 100px;
     margin: 0 auto;
@@ -156,9 +154,10 @@ const StyledPageHeader = styled(PageHeader)`
 const Content = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100vh - 50px);
-  padding: 20px 40px 60px;
-  overflow: auto;
+  min-height: 100vh;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 70px 40px 60px;
 `;
 
 export default CmsLayout;

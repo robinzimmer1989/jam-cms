@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import { PageHeader, Button, Badge, Popover, Alert } from 'antd';
 import { QuestionOutlined } from '@ant-design/icons';
 
@@ -63,12 +64,24 @@ const CmsHeader = (props) => {
   buttons.push(<AvatarMenu key="avatar-menu" />);
 
   return (
-    <PageHeader
-      title={title}
-      extra={buttons}
-      style={{ paddingLeft: 40, paddingRight: 40, borderBottom: '1px solid #d9e1ef' }}
-    />
+    <Container>
+      <PageHeader
+        title={title}
+        extra={buttons}
+        style={{ paddingLeft: 40, paddingRight: 40, borderBottom: '1px solid #d9e1ef' }}
+      />
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  width: calc(100% - 250px);
+  height: 50px;
+  background: #fff;
+`;
 
 export default CmsHeader;
