@@ -50,6 +50,11 @@ export const NewsDefaultTemplate = {
       fields: textEditor.fields,
     },
     {
+      id: 'gallery',
+      label: 'Gallery',
+      type: 'gallery',
+    },
+    {
       id: 'footer',
       global: true,
     },
