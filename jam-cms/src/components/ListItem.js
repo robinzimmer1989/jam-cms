@@ -39,16 +39,20 @@ const ListItem = (props) => {
         <List.Item actions={actions}>
           <List.Item.Meta
             avatar={
-              showImage && image?.childImageSharp?.fluid ? (
-                <Img
-                  fluid={image.childImageSharp.fluid}
-                  objectFit="cover"
-                  objectPosition="50% 50%"
-                  alt={image.alt}
-                  style={{ width: '50px', height: '50px' }}
-                />
-              ) : (
-                <ImagePlaceholder />
+              showImage && (
+                <>
+                  {image?.childImageSharp?.fluid ? (
+                    <Img
+                      fluid={image.childImageSharp.fluid}
+                      objectFit="cover"
+                      objectPosition="50% 50%"
+                      alt={image.alt}
+                      style={{ width: '50px', height: '50px' }}
+                    />
+                  ) : (
+                    <ImagePlaceholder />
+                  )}
+                </>
               )
             }
             title={metaTitle}
