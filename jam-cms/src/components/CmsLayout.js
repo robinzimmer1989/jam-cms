@@ -81,9 +81,7 @@ const CmsLayout = (props) => {
               </Menu.Item>
             )}
 
-            {(authUser?.capabilities?.manage_options ||
-              authUser?.capabilities?.list_users ||
-              authUser?.capabilities?.wpseo_manage_options) && (
+            {(authUser?.capabilities?.manage_options || authUser?.capabilities?.list_users) && (
               <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
                 {authUser?.capabilities?.manage_options && (
                   <Menu.Item key="General">
@@ -102,12 +100,6 @@ const CmsLayout = (props) => {
                     <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
                   </Menu.Item>
                 )}
-
-                {/* {authUser?.capabilities?.wpseo_manage_options &&
-                <Menu.Item key="SEO">
-                <Link to={getRoute(`settings-seo`, { siteID })}>SEO</Link>
-              </Menu.Item>
-              } */}
               </Menu.SubMenu>
             )}
           </Menu>
