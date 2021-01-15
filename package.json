@@ -2,7 +2,7 @@
   "private": true,
   "workspaces": [
     "gatsby",
-    "gatsby/plugins/gatsby-source-jam-cms",
+    "gatsby-source-jam-cms",
     "jam-cms"
   ]
 }
