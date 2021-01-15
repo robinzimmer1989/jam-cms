@@ -101,42 +101,50 @@ const MediaLibrary = (props) => {
           </Upload.Dragger>
         )}
 
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={handleLoadMore}
-          hasMore={page > -1}
-          loader={
-            <LoadingContainer key={0}>
-              <Spin size="large" />
-            </LoadingContainer>
-          }
-        >
-          {items &&
-            items
-              .filter((o) => (allow ? allow.includes(o.type) : o))
-              .map((o) => {
-                return (
-                  <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                    {o.type === 'image' && (
-                      <Img
-                        fluid={o.childImageSharp.fluid}
-                        objectFit="cover"
-                        objectPosition="50% 50%"
-                        alt={o.alt}
-                        style={{ width: '100%', height: '100%' }}
-                      />
-                    )}
+        <MediaItems>
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={handleLoadMore}
+            hasMore={page > -1}
+            loader={
+              <LoadingContainer key={0}>
+                <Spin size="large" />
+              </LoadingContainer>
+            }
+          >
+            {items &&
+              items
+                .filter((o) => (allow ? allow.includes(o.type) : o))
+                .map((o) => {
+                  return (
+                    <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
+                      {o.type === 'image' && (
+                        <Img
+                          fluid={o.childImageSharp.fluid}
+                          objectFit="cover"
+                          objectPosition="50% 50%"
+                          alt={o.alt}
+                          style={{ width: '100%', height: '100%' }}
+                        />
+                      )}
 
-                    {o.type === 'application' && (
-                      <File>
-                        <img src={o.icon} />
-                        <span>{o.title}</span>
-                      </File>
-                    )}
-                  </MediaItem>
-                );
-              })}
-        </InfiniteScroll>
+                      {o.type === 'application' && (
+                        <File>
+                          <img src={o.icon} />
+                          <span>{o.title}</span>
+                        </File>
+                      )}
+                    </MediaItem>
+                  );
+                })}
+
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+          </InfiniteScroll>
+        </MediaItems>
       </Space>
 
       {!!activeFile && (
@@ -162,6 +170,14 @@ const MediaLibrary = (props) => {
   );
 };
 
+const MediaItems = styled.div`
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+`;
+
 const MediaItem = styled.div`
   float: left;
   position: relative;
@@ -170,7 +186,6 @@ const MediaItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20px;
   margin-bottom: 20px;
   cursor: pointer;
   background-color: #fff;
@@ -181,6 +196,11 @@ const MediaItem = styled.div`
     max-width: 150px;
     width: auto;
   }
+`;
+
+const DummyItem = styled.div`
+  height: 0;
+  width: 140px;
 `;
 
 const File = styled.div`
