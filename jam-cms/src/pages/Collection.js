@@ -120,7 +120,7 @@ const Collection = (props) => {
           subtitle={slug}
           status={badges}
           image={o.featuredImage}
-          hideImage={postTypeID === 'page'}
+          showImage={postTypeID !== 'page'}
         />
 
         {o.childNodes.map((p) => renderPost(p, level + 1))}

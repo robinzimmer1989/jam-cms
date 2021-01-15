@@ -167,7 +167,6 @@ const MenuBuilder = (props) => {
                     key={id}
                     title={title}
                     status={badges}
-                    hideImage
                     actions={[
                       <Button
                         key="add"

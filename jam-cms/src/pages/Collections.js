@@ -84,13 +84,7 @@ const Collections = () => {
           }
 
           return (
-            <StyledListItem
-              key={o.id}
-              actions={actions}
-              title={o.title}
-              subtitle={o.slug || '/'}
-              hideImage
-            />
+            <StyledListItem key={o.id} actions={actions} title={o.title} subtitle={o.slug || '/'} />
           );
         })}
     </CmsLayout>

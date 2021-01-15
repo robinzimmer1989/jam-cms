@@ -4,8 +4,20 @@ import { Card, List, Typography } from 'antd';
 import { Link } from '@reach/router';
 import Img from 'gatsby-image';
 
+import { colors } from '../theme';
+
 const ListItem = (props) => {
-  const { level = 0, link, actions, title, subtitle, status, image, hideImage, ...rest } = props;
+  const {
+    level = 0,
+    link,
+    actions,
+    title,
+    subtitle,
+    status,
+    image,
+    showImage = false,
+    ...rest
+  } = props;
 
   const metaTitle = link ? (
     <Link to={link} style={{ flex: 1 }}>
@@ -27,8 +39,7 @@ const ListItem = (props) => {
         <List.Item actions={actions}>
           <List.Item.Meta
             avatar={
-              !hideImage &&
-              image?.childImageSharp?.fluid && (
+              showImage && image?.childImageSharp?.fluid ? (
                 <Img
                   fluid={image.childImageSharp.fluid}
                   objectFit="cover"
@@ -36,6 +47,8 @@ const ListItem = (props) => {
                   alt={image.alt}
                   style={{ width: '50px', height: '50px' }}
                 />
+              ) : (
+                <ImagePlaceholder />
               )
             }
             title={metaTitle}
@@ -53,6 +66,12 @@ const Container = styled.div`
   .ant-card-body {
     padding: 0 20px;
   }
+`;
+
+const ImagePlaceholder = styled.div`
+  width: 50px;
+  height: 50px;
+  background: ${colors.text.light};
 `;
 
 export default ListItem;

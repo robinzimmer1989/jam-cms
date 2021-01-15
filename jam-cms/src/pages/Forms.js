@@ -64,9 +64,7 @@ const Forms = () => {
             </Button>,
           ];
 
-          return (
-            <ListItem key={o.id} link={editLink} actions={actions} title={o.title} hideImage />
-          );
+          return <ListItem key={o.id} link={editLink} actions={actions} title={o.title} />;
         })}
     </CmsLayout>
   );

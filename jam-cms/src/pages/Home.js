@@ -79,7 +79,6 @@ const Home = () => {
                       />,
                     ]}
                     link={getRoute(`dashboard`, { siteID: id })}
-                    hideImage={true}
                   />
                 );
               })}
