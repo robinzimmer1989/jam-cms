@@ -1,7 +1,6 @@
 import { createGlobalStyle, css } from 'styled-components';
 
 import colors from './colors';
-import minireset from './minireset';
 
 const styles = css`
   background: ${colors.background.light};
@@ -109,7 +108,6 @@ const styles = css`
 `;
 
 export default createGlobalStyle`
-  ${minireset}
 
   .ant-modal-body {
     background: ${colors.background.light};
@@ -124,7 +122,7 @@ export default createGlobalStyle`
     }
   }
   
-  #jam-cms {
+  .jam-cms {
     ${styles}
   }
 `;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { Empty, Layout } from 'antd';
+import { Empty } from 'antd';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
@@ -16,13 +16,13 @@ import { postActions } from '../actions';
 import getRoute from '../routes';
 
 const PostEditor = (props) => {
-  const { theme, templates } = props;
+  const { templates } = props;
 
   const [
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { sidebar, site, post },
+      editorState: { site, post },
     },
     dispatch,
   ] = useStore();
@@ -68,76 +68,57 @@ const PostEditor = (props) => {
   }, [postIdBySlug]);
 
   return (
-    <Layout>
-      <Layout style={{ marginRight: sidebar ? 320 : 0 }}>
-        <Layout.Header>
-          <EditorHeader
-            postID={postIdBySlug}
-            template={!!Component && post?.content}
-            title={post?.title}
-            onBack={() =>
-              navigate(getRoute('collection', { siteID, postTypeID: post?.postTypeID || 'page' }))
-            }
-            templates={templates}
-          />
-        </Layout.Header>
+    <>
+      <EditorHeader
+        className="jam-cms"
+        postID={postIdBySlug}
+        template={!!Component && post?.content}
+        title={post?.title}
+        onBack={() =>
+          navigate(getRoute('collection', { siteID, postTypeID: post?.postTypeID || 'page' }))
+        }
+        templates={templates}
+      />
 
-        <Layout.Content>
-          {postIdBySlug ? (
-            <>
-              {site && post ? (
-                <PageWrapper theme={theme} template={!!Component && post?.content}>
-                  {!!Component && post?.content ? (
-                    <Component
-                      pageContext={{
-                        id: post.id,
-                        seo: post.seo,
-                        title: post.title,
-                        createdAt: post.createdAt,
-                        featuredImage: post.featuredImage,
-                        content: formatFieldsToProps(post.content, site),
-                        postTypeID: post.postTypeID,
-                        globalOptions: formatFieldsToProps(site?.globalOptions, site),
-                      }}
-                    />
-                  ) : (
-                    <EmptyContainer>
-                      <Empty
-                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                        imageStyle={{
-                          height: 120,
-                        }}
-                        description={'No Template'}
-                      />
-                    </EmptyContainer>
-                  )}
-                </PageWrapper>
+      {postIdBySlug ? (
+        <>
+          {site && post ? (
+            <PageWrapper template={!!Component && post?.content}>
+              {!!Component && post?.content ? (
+                <Component
+                  pageContext={{
+                    id: post.id,
+                    seo: post.seo,
+                    title: post.title,
+                    createdAt: post.createdAt,
+                    featuredImage: post.featuredImage,
+                    content: formatFieldsToProps(post.content, site),
+                    postTypeID: post.postTypeID,
+                    globalOptions: formatFieldsToProps(site?.globalOptions, site),
+                  }}
+                />
               ) : (
-                <Loader />
+                <EmptyContainer className="jam-cms">
+                  <Empty
+                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                    imageStyle={{
+                      height: 120,
+                    }}
+                    description={'No Template'}
+                  />
+                </EmptyContainer>
               )}
-            </>
+            </PageWrapper>
           ) : (
-            <FourOhFour />
+            <Loader />
           )}
-        </Layout.Content>
-      </Layout>
-
-      {sidebar && (
-        <Layout.Sider
-          className="sider"
-          theme="light"
-          width={320}
-          style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            right: 0,
-          }}
-        >
-          <EditorSidebar templates={templates} />
-        </Layout.Sider>
+        </>
+      ) : (
+        <FourOhFour />
       )}
-    </Layout>
+
+      <EditorSidebar className="jam-cms" templates={templates} />
+    </>
   );
 };
 

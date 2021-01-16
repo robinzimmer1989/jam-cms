@@ -34,7 +34,7 @@ import {
 } from '../routes';
 
 const Master = (props) => {
-  const { theme, templates, pageProps } = props;
+  const { templates } = props;
 
   const [
     {
@@ -67,7 +67,7 @@ const Master = (props) => {
   }
 
   return (
-    <div id="jam-cms">
+    <>
       <CmsStyles />
 
       <Router>
@@ -108,14 +108,7 @@ const Master = (props) => {
           />
         )}
 
-        <PrivateRoute
-          path={'*'}
-          component={PostEditor}
-          theme={theme}
-          templates={templates}
-          postTypeID={pageProps.pageContext.postTypeID}
-          postID={pageProps.pageContext.id}
-        />
+        <PrivateRoute path={'*'} component={PostEditor} templates={templates} />
       </Router>
 
       {dialog.open && (
@@ -130,7 +123,7 @@ const Master = (props) => {
           footer={null}
         />
       )}
-    </div>
+    </>
   );
 };
 

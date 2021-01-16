@@ -1,4 +1,10 @@
 const colors = {
+  primaryColor: '#2b88fb',
+  primaryColorContrast: '#fff',
+  secondaryColor: '#001529',
+  secondaryColorContrast: '#fff',
+  tertiaryColor: '#d9e1ef',
+
   primary: {
     dark: '#2b88fb',
     light: '#eef5ff',

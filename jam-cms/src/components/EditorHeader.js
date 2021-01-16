@@ -1,29 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import styled from 'styled-components';
+import { message, Badge, Alert, Skeleton, Button, Popover, Space, Row, Typography } from 'antd';
 import {
-  PageHeader,
-  Button,
-  Dropdown,
-  Menu,
-  message,
-  Typography,
-  Space,
-  Popover,
-  Badge,
-  Alert,
-  Skeleton,
-} from 'antd';
-import {
-  FullscreenOutlined,
-  MobileOutlined,
-  TabletOutlined,
-  DesktopOutlined,
-  EditOutlined,
-  QuestionOutlined,
+  ArrowLeftOutlined as ArrowLeftIcon,
+  EditOutlined as EditIcon,
+  QuestionOutlined as HelpIcon,
 } from '@ant-design/icons';
 
 // import app components
 import Tag from './Tag';
+
+import { colors } from '../theme';
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 import { generateSlug } from '../utils';
@@ -37,7 +25,7 @@ const EditorHeader = (props) => {
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
+      editorState: { site, post, siteHasChanged, postHasChanged, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -157,8 +145,6 @@ const EditorHeader = (props) => {
     tags.push(<Tag key="front" children={'front'} />);
   }
 
-  const buttons = [];
-
   const helpContent = (
     <div>
       {(siteHasChanged || postHasChanged) && (
@@ -186,116 +172,109 @@ const EditorHeader = (props) => {
     </div>
   );
 
-  buttons.push(
-    <Popover
-      key={'help'}
-      title="Help"
-      content={helpContent}
-      arrow
-      trigger={['click']}
-      placement="bottomRight"
-    >
-      <Badge dot={siteHasChanged || postHasChanged}>
-        <Button icon={<QuestionOutlined />} shape="circle" type="default" />
-      </Badge>
-    </Popover>
-  );
-
-  const views = [
-    { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
-    { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
-    { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Desktop' },
-    {
-      type: 'fullscreen',
-      icon: <FullscreenOutlined style={{ fontSize: '14px' }} />,
-      title: 'Fullscreen',
-    },
-  ];
-
-  const dropDownMenu = (
-    <Menu>
-      <Menu.ItemGroup title="View">
-        {views.map((o) => {
-          return (
-            <Menu.Item
-              key={o.type}
-              children={o.title}
-              icon={o.icon}
-              onClick={() => dispatch({ type: `SET_EDITOR_VIEWPORT`, payload: o.type })}
-              className={viewport === o.type && 'active'}
-            />
-          );
-        })}
-      </Menu.ItemGroup>
-    </Menu>
-  );
-
-  buttons.push(
-    <Dropdown key={'menu'} overlay={dropDownMenu} arrow trigger={['click']} disabled={disabled}>
-      <Button icon={views.find((o) => o.type === viewport).icon} shape="circle" type="default" />
-    </Dropdown>
-  );
-
-  buttons.push(
-    <Button
-      key={'settings'}
-      icon={<EditOutlined />}
-      shape="circle"
-      ghost={sidebar}
-      type={sidebar ? 'primary' : 'default'}
-      disabled={disabled}
-      onClick={() =>
-        dispatch({
-          type: `SET_EDITOR_SIDEBAR`,
-          payload: sidebar ? null : 'settings',
-        })
-      }
-    />
-  );
-
-  post?.status === 'draft' &&
-    buttons.push(
-      <Button
-        key={'save-draft'}
-        children="Save Draft"
-        onClick={handleSaveDraft}
-        loading={loading === 'draft'}
-        disabled={!siteHasChanged && !postHasChanged}
-      />
-    );
-
-  post?.status === 'draft' &&
-    buttons.push(
-      <Button
-        key={'publish'}
-        children="Publish"
-        type="primary"
-        onClick={handlePublish}
-        loading={loading === 'publish'}
-      />
-    );
-
-  (post?.status === 'publish' || post?.status === 'trash' || !post) &&
-    buttons.push(
-      <Button
-        key={'update'}
-        children="Update"
-        type="primary"
-        onClick={handleUpdate}
-        loading={loading === 'update'}
-        disabled={!siteHasChanged && !postHasChanged}
-      />
-    );
-
   return (
-    <PageHeader
-      title={postID ? title || <Skeleton.Input active style={{ width: 120 }} /> : 'Not Found'}
-      extra={buttons}
-      tags={tags}
-      onBack={handleClickBack}
-      style={{ paddingLeft: 20, paddingRight: 20, borderBottom: '1px solid #d9e1ef' }}
-    />
+    <Container>
+      <Row>
+        <Space>
+          <Button
+            icon={<ArrowLeftIcon />}
+            onClick={handleClickBack}
+            shape="circle"
+            type="default"
+          />
+
+          {postID ? (
+            title ? (
+              <span class="ant-page-header-heading-title" title={title}>
+                {title}
+              </span>
+            ) : (
+              <Skeleton.Input active style={{ width: 120 }} />
+            )
+          ) : (
+            'Not Found'
+          )}
+
+          {tags}
+        </Space>
+      </Row>
+
+      <Row>
+        <Space>
+          <Popover
+            key={'help'}
+            title="Help"
+            content={helpContent}
+            arrow
+            trigger={['click']}
+            placement="bottomRight"
+          >
+            <Badge dot={siteHasChanged || postHasChanged}>
+              <Button icon={<HelpIcon />} shape="circle" type="default" />
+            </Badge>
+          </Popover>
+
+          <Button
+            key={'settings'}
+            icon={<EditIcon />}
+            shape="circle"
+            ghost={sidebar}
+            type={sidebar ? 'primary' : 'default'}
+            disabled={disabled}
+            onClick={() =>
+              dispatch({
+                type: `SET_EDITOR_SIDEBAR`,
+                payload: sidebar ? null : 'settings',
+              })
+            }
+          />
+
+          {post?.status === 'draft' && (
+            <>
+              <Button
+                children="Save Draft"
+                onClick={handleSaveDraft}
+                loading={loading === 'draft'}
+                disabled={!siteHasChanged && !postHasChanged}
+              />
+              <Button
+                children="Publish"
+                type="primary"
+                onClick={handlePublish}
+                loading={loading === 'publish'}
+              />
+            </>
+          )}
+
+          {(post?.status === 'publish' || post?.status === 'trash' || !post) && (
+            <Button
+              key={'update'}
+              children="Update"
+              type="primary"
+              onClick={handleUpdate}
+              loading={loading === 'update'}
+              disabled={!siteHasChanged && !postHasChanged}
+            />
+          )}
+        </Space>
+      </Row>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid ${colors.tertiaryColor};
+`;
 
 export default EditorHeader;

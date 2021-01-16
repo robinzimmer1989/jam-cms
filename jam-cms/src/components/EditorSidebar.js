@@ -17,7 +17,7 @@ import { useStore } from '../store';
 import { colors } from '../theme';
 
 const EditorSidebar = (props) => {
-  const { templates } = props;
+  const { templates, ...rest } = props;
 
   const [
     {
@@ -104,7 +104,7 @@ const EditorSidebar = (props) => {
   };
 
   return (
-    <Container>
+    <Container active={sidebar} {...rest}>
       <TabsContainer>
         <Tabs
           activeKey={sidebar}
@@ -116,8 +116,8 @@ const EditorSidebar = (props) => {
           }
         >
           <Tabs.TabPane key={'settings'} tab={'General'} />
-          <Tabs.TabPane key={'seo'} tab={'SEO'} />
           <Tabs.TabPane key={'content'} tab={'Content'} />
+          <Tabs.TabPane key={'seo'} tab={'SEO'} />
         </Tabs>
       </TabsContainer>
 
@@ -258,9 +258,16 @@ const EditorSidebar = (props) => {
 };
 
 const Container = styled.div`
-  width: 100%;
-  height: 100vh;
+  position: fixed;
+  z-index: 9999;
+  right: 0;
+  top: 50px;
+  width: 320px;
+  height: calc(100vh - 50px);
   background: ${colors.background.light};
+  border-left: 1px solid ${colors.tertiaryColor};
+  transition: ease 0.2s all;
+  transform: ${({ active }) => (active ? 'translateX(0)' : 'translateX(120%)')};
 
   .ant-tabs > .ant-tabs-nav {
     margin-bottom: 0;
