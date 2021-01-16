@@ -95,6 +95,12 @@ const CmsLayout = (props) => {
                   </Menu.Item>
                 )}
 
+                {authUser?.capabilities?.manage_options && (
+                  <Menu.Item key="Taxonomies">
+                    <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
+                  </Menu.Item>
+                )}
+
                 {authUser?.capabilities?.list_users && (
                   <Menu.Item key="Editors">
                     <Link to={getRoute(`editors`, { siteID })}>Editors</Link>

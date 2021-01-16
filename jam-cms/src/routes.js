@@ -4,6 +4,7 @@ export const ROUTE_MEDIA = '/media';
 export const ROUTE_COLLECTIONS = '/collections';
 export const ROUTE_SETTINGS_GENERAL = '/settings';
 export const ROUTE_SETTINGS_COLLECTIONS = `${ROUTE_SETTINGS_GENERAL}/collections`;
+export const ROUTE_SETTINGS_TAXONOMIES = `${ROUTE_SETTINGS_GENERAL}/taxonomies`;
 export const ROUTE_PROFILE = '/profile';
 export const ROUTE_FORMS = '/forms';
 export const ROUTE_FORM = '/form';
@@ -44,6 +45,9 @@ const getRoute = (route, args) => {
 
     case 'settings-collections':
       return `${ROUTE_APP}${base}${ROUTE_SETTINGS_COLLECTIONS}`;
+
+    case 'settings-taxonomies':
+      return `${ROUTE_APP}${base}${ROUTE_SETTINGS_TAXONOMIES}`;
 
     default:
       return `/`;

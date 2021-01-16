@@ -11,6 +11,7 @@ import Media from '../pages/Media';
 import Collections from '../pages/Collections';
 import Collection from '../pages/Collection';
 import GeneralSettings from '../pages/GeneralSettings';
+import Taxonomies from '../pages/Taxonomies';
 import Editors from '../pages/Editors';
 import Options from '../pages/Options';
 
@@ -29,6 +30,7 @@ import {
   ROUTE_COLLECTIONS,
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_COLLECTIONS,
+  ROUTE_SETTINGS_TAXONOMIES,
   ROUTE_EDITORS,
   ROUTE_OPTIONS,
 } from '../routes';
@@ -98,6 +100,13 @@ const Master = (props) => {
           <PrivateRoute
             path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_COLLECTIONS}`}
             component={Collections}
+          />
+        )}
+
+        {authUser?.capabilities?.manage_options && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_TAXONOMIES}`}
+            component={Taxonomies}
           />
         )}
 
