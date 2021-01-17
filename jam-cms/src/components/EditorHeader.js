@@ -250,44 +250,38 @@ const EditorHeader = (props) => {
         </FieldsContainer>
       </Row>
 
-      <Row>
-        <Space>
-          <Button
-            children="Discard Changes"
-            onClick={() => handleDiscardRequest(false)}
-            disabled={!siteHasChanged && !postHasChanged}
-          />
+      {(siteHasChanged || postHasChanged) && (
+        <Row>
+          <Space>
+            <Button children="Discard" onClick={() => handleDiscardRequest(false)} />
 
-          {post?.status === 'draft' && (
-            <>
+            {post?.status === 'draft' && (
+              <>
+                <Button
+                  children="Save Draft"
+                  onClick={handleSaveDraft}
+                  loading={loading === 'draft'}
+                />
+                <Button
+                  children="Publish"
+                  type="primary"
+                  onClick={handlePublish}
+                  loading={loading === 'publish'}
+                />
+              </>
+            )}
+
+            {(post?.status === 'publish' || post?.status === 'trash' || !post) && (
               <Button
-                children="Save Draft"
-                onClick={handleSaveDraft}
-                loading={loading === 'draft'}
-                disabled={!siteHasChanged && !postHasChanged}
-              />
-              <Button
-                children="Publish"
+                children="Update"
                 type="primary"
-                onClick={handlePublish}
-                loading={loading === 'publish'}
-                disabled={!siteHasChanged && !postHasChanged}
+                onClick={handleUpdate}
+                loading={loading === 'update'}
               />
-            </>
-          )}
-
-          {(post?.status === 'publish' || post?.status === 'trash' || !post) && (
-            <Button
-              key={'update'}
-              children="Update"
-              type="primary"
-              onClick={handleUpdate}
-              loading={loading === 'update'}
-              disabled={!siteHasChanged && !postHasChanged}
-            />
-          )}
-        </Space>
-      </Row>
+            )}
+          </Space>
+        </Row>
+      )}
 
       <Row>
         <FieldsContainer alignRight>
