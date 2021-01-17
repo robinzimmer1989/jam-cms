@@ -22,7 +22,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       {content?.blocks?.flex &&
         content.blocks.flex.map(({ id, ...fields }, index) => {
           const Component = blocks?.[id]?.component;

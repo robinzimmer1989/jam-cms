@@ -45,7 +45,6 @@ const Banner = (props) => {
 const Container = styled.div`
   position: relative;
   height: ${({ height }) => (height === 'small' ? '250px' : '500px')};
-  padding: 40px 0;
   background: ${colors.secondary};
 `;
 
@@ -60,11 +59,12 @@ const ContentContainer = styled.div`
   width: 100%;
   transform: translateY(-50%);
   z-index: 1;
-  color: ${colors.primary};
+  padding: 40px 0;
 
   h1 {
     text-align: center;
     margin-bottom: 10px;
+    color: ${colors.primary};
 
     @media (min-width: 768px) {
       font-size: 50px;
@@ -73,6 +73,7 @@ const ContentContainer = styled.div`
 
   h3 {
     text-align: center;
+    color: ${colors.primary};
   }
 `;
 

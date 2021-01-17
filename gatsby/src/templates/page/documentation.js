@@ -15,7 +15,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       <Edges size="lg">
         <SidebarContent>
           <Sidebar>

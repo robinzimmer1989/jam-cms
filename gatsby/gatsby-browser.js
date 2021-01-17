@@ -3,14 +3,12 @@ import JamCms from 'jam-cms';
 
 // import app components
 import templates from './src/templates';
-import { theme, globalOptions } from './src/theme';
+import { globalOptions } from './src/theme';
 
-export const wrapPageElement = ({ element, props }) => {
+export const wrapPageElement = ({ element }) => {
   return (
     <JamCms
-      pageProps={props}
       templates={templates}
-      theme={theme}
       globalOptions={globalOptions}
       source={process.env.GATSBY_CMS_SOURCE}
     >

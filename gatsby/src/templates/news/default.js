@@ -16,7 +16,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       <Banner headline={title} height="small" />
       <Edges size="sm">
         <Content>

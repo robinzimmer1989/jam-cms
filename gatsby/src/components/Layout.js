@@ -8,21 +8,22 @@ import Seo from './Seo';
 import { theme } from '../theme';
 
 const Layout = (props) => {
-  const { globalOptions, post, children } = props;
+  const { pageContext, children } = props;
 
   return (
     <>
-      <Seo {...post} />
+      <Seo {...pageContext?.post} />
       <ThemeCss theme={theme} />
-      <Header {...globalOptions?.header} />
+
+      {pageContext?.globalOptions?.header && <Header {...pageContext?.globalOptions?.header} />}
       <Content>{children}</Content>
-      <Footer {...globalOptions?.footer} />
+      {pageContext?.globalOptions?.footer && <Footer {...pageContext?.globalOptions?.footer} />}
     </>
   );
 };
 
 const ThemeCss = createGlobalStyle`
-  ${({ theme }) => theme.css}
+  ${theme}
 `;
 
 const Content = styled.div`
