@@ -22,7 +22,7 @@ const PostEditor = (props) => {
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post },
+      editorState: { site, post, sidebar },
     },
     dispatch,
   ] = useStore();
@@ -86,6 +86,7 @@ const PostEditor = (props) => {
             <PageWrapper template={!!Component && post?.content}>
               {!!Component && post?.content ? (
                 <Component
+                  jamCMS={{ sidebar: !!sidebar }}
                   pageContext={{
                     id: post.id,
                     seo: post.seo,

@@ -23,7 +23,6 @@ const PageWrapper = ({ template, onClick, children }) => {
 };
 
 const Page = styled.div`
-  margin: 0 auto;
   padding-top: 50px;
   width: 100%;
   background: #fff;

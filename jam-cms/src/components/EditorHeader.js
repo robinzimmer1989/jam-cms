@@ -1,15 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
 import styled from 'styled-components';
-import { message, Badge, Alert, Skeleton, Button, Popover, Space, Row, Typography } from 'antd';
+import produce from 'immer';
+import { set } from 'lodash';
 import {
-  ArrowLeftOutlined as ArrowLeftIcon,
+  message,
+  Badge,
+  Alert,
+  Menu,
+  Button,
+  Popover,
+  Space,
+  Row,
+  Typography,
+  Dropdown,
+} from 'antd';
+import {
+  MenuOutlined as MenuIcon,
   EditOutlined as EditIcon,
   QuestionOutlined as HelpIcon,
+  PlusOutlined as AddIcon,
 } from '@ant-design/icons';
 
 // import app components
 import Tag from './Tag';
+import PostForm from './PostForm';
 
 import { colors } from '../theme';
 import { useStore } from '../store';
@@ -31,18 +46,6 @@ const EditorHeader = (props) => {
   ] = useStore();
 
   const [loading, setLoading] = useState('');
-
-  const postname = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id]?.slug;
-  const frontPage = sites[siteID]?.frontPage;
-
-  useEffect(() => {
-    if (postname) {
-      // We need to generate the slug and navigate to it in case the user has changed the post name
-      const postType = sites[siteID]?.postTypes?.[post.postTypeID];
-      const slug = generateSlug(postType, post.id, frontPage, true);
-      navigate(slug);
-    }
-  }, [postname, frontPage]);
 
   const handleSaveDraft = () => {
     handleSave('draft', 'draft');
@@ -97,10 +100,48 @@ const EditorHeader = (props) => {
 
     if (postResult || siteResult) {
       message.success('Updated successfully');
+
+      // We need to generate the slug and navigate to it in case the user has changed the post name
+      const nextPostType = produce(site.postTypes[post.postTypeID], (draft) => {
+        return set(draft, `posts.${post.id}`, post);
+      });
+
+      const slug = generateSlug(nextPostType, post.id, site.frontPage, true);
+      navigate(slug);
     }
   };
 
-  const handleClickBack = () => {
+  const handleAddPost = async ({ postTypeID, title, parentID }) => {
+    const result = await postActions.addPost(
+      { siteID, postTypeID, status: 'draft', title, parentID },
+      dispatch,
+      config
+    );
+
+    if (result?.id) {
+      // Add post to post type so we can then generate the slug and the route the newly created post
+      const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
+        return set(draft, `posts.${result.id}`, result);
+      });
+      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
+      navigate(`/${slug}`);
+    }
+  };
+
+  const handleDiscard = (returnToDashboard) => {
+    if (returnToDashboard) {
+      onBack();
+    } else {
+      siteHasChanged && dispatch({ type: 'ADD_EDITOR_SITE', payload: sites[siteID] });
+      postHasChanged &&
+        dispatch({
+          type: 'ADD_EDITOR_POST',
+          payload: sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id],
+        });
+    }
+  };
+
+  const handleDiscardRequest = (returnToDashboard = false) => {
     if (siteHasChanged || postHasChanged) {
       dispatch({
         type: 'SET_DIALOG',
@@ -114,7 +155,7 @@ const EditorHeader = (props) => {
                 <Button
                   children="Discard changes"
                   onClick={() => {
-                    onBack();
+                    handleDiscard(returnToDashboard);
                     dispatch({ type: 'CLOSE_DIALOG' });
                   }}
                 />
@@ -172,61 +213,49 @@ const EditorHeader = (props) => {
     </div>
   );
 
+  const addPostMenu = (
+    <StyledMenu>
+      {site?.postTypes &&
+        Object.values(site.postTypes).map((o) => {
+          return (
+            <Menu.Item
+              key={o.id}
+              onClick={() =>
+                dispatch({
+                  type: 'SET_DIALOG',
+                  payload: {
+                    open: true,
+                    title: `Add`,
+                    component: <PostForm onSubmit={handleAddPost} postTypeID={o.id} />,
+                  },
+                })
+              }
+            >
+              {o.title}
+            </Menu.Item>
+          );
+        })}
+    </StyledMenu>
+  );
+
   return (
     <Container>
       <Row>
-        <Space>
-          <Button
-            icon={<ArrowLeftIcon />}
-            onClick={handleClickBack}
-            shape="circle"
-            type="default"
-          />
-
-          {postID ? (
-            title ? (
-              <span class="ant-page-header-heading-title" title={title}>
-                {title}
-              </span>
-            ) : (
-              <Skeleton.Input active style={{ width: 120 }} />
-            )
-          ) : (
-            'Not Found'
-          )}
-
+        <FieldsContainer>
+          <Space>
+            <MenuIcon onClick={() => handleDiscardRequest(true)} />
+            <span className="ant-page-header-heading-title">{postID ? title : 'Not Found'}</span>
+          </Space>
           {tags}
-        </Space>
+        </FieldsContainer>
       </Row>
 
       <Row>
         <Space>
-          <Popover
-            key={'help'}
-            title="Help"
-            content={helpContent}
-            arrow
-            trigger={['click']}
-            placement="bottomRight"
-          >
-            <Badge dot={siteHasChanged || postHasChanged}>
-              <Button icon={<HelpIcon />} shape="circle" type="default" />
-            </Badge>
-          </Popover>
-
           <Button
-            key={'settings'}
-            icon={<EditIcon />}
-            shape="circle"
-            ghost={sidebar}
-            type={sidebar ? 'primary' : 'default'}
-            disabled={disabled}
-            onClick={() =>
-              dispatch({
-                type: `SET_EDITOR_SIDEBAR`,
-                payload: sidebar ? null : 'settings',
-              })
-            }
+            children="Discard Changes"
+            onClick={() => handleDiscardRequest(false)}
+            disabled={!siteHasChanged && !postHasChanged}
           />
 
           {post?.status === 'draft' && (
@@ -242,6 +271,7 @@ const EditorHeader = (props) => {
                 type="primary"
                 onClick={handlePublish}
                 loading={loading === 'publish'}
+                disabled={!siteHasChanged && !postHasChanged}
               />
             </>
           )}
@@ -258,13 +288,57 @@ const EditorHeader = (props) => {
           )}
         </Space>
       </Row>
+
+      <Row>
+        <FieldsContainer alignRight>
+          <Space>
+            <Dropdown overlay={addPostMenu} arrow trigger={['click']}>
+              <div>
+                <Button
+                  icon={<AddIcon />}
+                  shape="circle"
+                  type="default"
+                  disabled={postHasChanged || siteHasChanged}
+                />
+              </div>
+            </Dropdown>
+
+            <Popover
+              title="Help"
+              content={helpContent}
+              arrow
+              trigger={['click']}
+              placement="bottomRight"
+            >
+              <Badge dot={siteHasChanged || postHasChanged}>
+                <Button icon={<HelpIcon />} shape="circle" type="default" />
+              </Badge>
+            </Popover>
+
+            <Button
+              key={'settings'}
+              icon={<EditIcon />}
+              shape="circle"
+              ghost={sidebar}
+              type={sidebar ? 'primary' : 'default'}
+              disabled={disabled}
+              onClick={() =>
+                dispatch({
+                  type: `SET_EDITOR_SIDEBAR`,
+                  payload: sidebar ? null : 'settings',
+                })
+              }
+            />
+          </Space>
+        </FieldsContainer>
+      </Row>
     </Container>
   );
 };
 
 const Container = styled.div`
   position: fixed;
-  z-index: 9999;
+  z-index: 1000;
   left: 0;
   top: 0;
   height: 50px;
@@ -275,6 +349,17 @@ const Container = styled.div`
   padding: 0 20px;
   background: #fff;
   border-bottom: 1px solid ${colors.tertiaryColor};
+`;
+
+const FieldsContainer = styled.div`
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: ${({ alignRight }) => (alignRight ? 'flex-end' : 'flex-start')};
+`;
+
+const StyledMenu = styled(Menu)`
+  width: 150px;
 `;
 
 export default EditorHeader;
