@@ -35,7 +35,7 @@ const Collection = (props) => {
   const filteredPosts = filter !== `all` ? treePosts.filter((o) => o.status === filter) : treePosts;
   sortBy(filteredPosts, 'createdAt');
 
-  const handleAddPost = async ({ title, slug, parentID }) => {
+  const handleAddPost = async ({ title, parentID }) => {
     const result = await postActions.addPost(
       { siteID, postTypeID, status: 'draft', title, parentID },
       dispatch,

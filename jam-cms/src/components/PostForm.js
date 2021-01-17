@@ -22,7 +22,7 @@ const PostForm = (props) => {
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
   const handleSubmit = async () => {
-    await onSubmit({ title, parentID });
+    await onSubmit({ postTypeID, title, parentID });
 
     setTitle('');
     setParentID(0);

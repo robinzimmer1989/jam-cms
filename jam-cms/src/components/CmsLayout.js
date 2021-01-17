@@ -32,7 +32,7 @@ const CmsLayout = (props) => {
   const site = sites[siteID];
 
   return (
-    <Layout>
+    <Layout className="jam-cms">
       <Layout.Sider
         className="sider"
         theme="dark"
@@ -150,7 +150,6 @@ const SidebarHeader = styled(PageHeader)`
 `;
 
 const Content = styled.div`
-  position: relative;
   width: 100%;
   min-height: 100vh;
   max-width: 1024px;

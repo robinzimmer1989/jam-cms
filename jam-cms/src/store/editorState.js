@@ -5,7 +5,6 @@ export const editorState = {
   post: null,
   siteHasChanged: false,
   postHasChanged: false,
-  viewport: 'desktop',
   sidebar: false,
 };
 
@@ -50,10 +49,6 @@ export const editorReducer = (state, action) => {
       /******************************
        * General Settings
        ******************************/
-      case `SET_EDITOR_VIEWPORT`:
-        draft.viewport = payload;
-        break;
-
       case `SET_EDITOR_SIDEBAR`:
         draft.sidebar = payload;
         break;

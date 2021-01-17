@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
+import { isLoggedIn } from 'jam-cms';
 
 // import app components
 import Logo from '../icons/jamCMS.svg';
@@ -13,7 +14,7 @@ const Header = (props) => {
   const [open, setOpen] = useState();
 
   return (
-    <Container breakpoint={breakpoint} open={open}>
+    <Container isLoggedIn={isLoggedIn()} breakpoint={breakpoint} open={open}>
       <Grid>
         <LogoContainer to={`/`}>
           <Logo />
@@ -57,7 +58,7 @@ const Header = (props) => {
 
 const Container = styled.div`
   position: fixed;
-  top: 0;
+  top: ${({ isLoggedIn }) => (isLoggedIn ? '50px' : 0)};
   left: 0;
   width: 100%;
   z-index: 10;

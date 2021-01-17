@@ -1,29 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
+import styled from 'styled-components';
+import produce from 'immer';
+import { set } from 'lodash';
 import {
-  PageHeader,
-  Button,
-  Dropdown,
-  Menu,
   message,
-  Typography,
-  Space,
-  Popover,
   Badge,
   Alert,
-  Skeleton,
+  Menu,
+  Button,
+  Popover,
+  Space,
+  Row,
+  Typography,
+  Dropdown,
 } from 'antd';
 import {
-  FullscreenOutlined,
-  MobileOutlined,
-  TabletOutlined,
-  DesktopOutlined,
-  EditOutlined,
-  QuestionOutlined,
+  MenuOutlined as MenuIcon,
+  EditOutlined as EditIcon,
+  QuestionOutlined as HelpIcon,
+  PlusOutlined as AddIcon,
 } from '@ant-design/icons';
 
 // import app components
 import Tag from './Tag';
+import PostForm from './PostForm';
+
+import { colors } from '../theme';
 import { useStore } from '../store';
 import { postActions, siteActions } from '../actions';
 import { generateSlug } from '../utils';
@@ -37,24 +40,12 @@ const EditorHeader = (props) => {
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post, siteHasChanged, postHasChanged, viewport, sidebar },
+      editorState: { site, post, siteHasChanged, postHasChanged, sidebar },
     },
     dispatch,
   ] = useStore();
 
   const [loading, setLoading] = useState('');
-
-  const postname = sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id]?.slug;
-  const frontPage = sites[siteID]?.frontPage;
-
-  useEffect(() => {
-    if (postname) {
-      // We need to generate the slug and navigate to it in case the user has changed the post name
-      const postType = sites[siteID]?.postTypes?.[post.postTypeID];
-      const slug = generateSlug(postType, post.id, frontPage, true);
-      navigate(slug);
-    }
-  }, [postname, frontPage]);
 
   const handleSaveDraft = () => {
     handleSave('draft', 'draft');
@@ -109,10 +100,48 @@ const EditorHeader = (props) => {
 
     if (postResult || siteResult) {
       message.success('Updated successfully');
+
+      // We need to generate the slug and navigate to it in case the user has changed the post name
+      const nextPostType = produce(site.postTypes[post.postTypeID], (draft) => {
+        return set(draft, `posts.${post.id}`, post);
+      });
+
+      const slug = generateSlug(nextPostType, post.id, site.frontPage, true);
+      navigate(slug);
     }
   };
 
-  const handleClickBack = () => {
+  const handleAddPost = async ({ postTypeID, title, parentID }) => {
+    const result = await postActions.addPost(
+      { siteID, postTypeID, status: 'draft', title, parentID },
+      dispatch,
+      config
+    );
+
+    if (result?.id) {
+      // Add post to post type so we can then generate the slug and the route the newly created post
+      const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
+        return set(draft, `posts.${result.id}`, result);
+      });
+      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
+      navigate(`/${slug}`);
+    }
+  };
+
+  const handleDiscard = (returnToDashboard) => {
+    if (returnToDashboard) {
+      onBack();
+    } else {
+      siteHasChanged && dispatch({ type: 'ADD_EDITOR_SITE', payload: sites[siteID] });
+      postHasChanged &&
+        dispatch({
+          type: 'ADD_EDITOR_POST',
+          payload: sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id],
+        });
+    }
+  };
+
+  const handleDiscardRequest = (returnToDashboard = false) => {
     if (siteHasChanged || postHasChanged) {
       dispatch({
         type: 'SET_DIALOG',
@@ -126,7 +155,7 @@ const EditorHeader = (props) => {
                 <Button
                   children="Discard changes"
                   onClick={() => {
-                    onBack();
+                    handleDiscard(returnToDashboard);
                     dispatch({ type: 'CLOSE_DIALOG' });
                   }}
                 />
@@ -157,8 +186,6 @@ const EditorHeader = (props) => {
     tags.push(<Tag key="front" children={'front'} />);
   }
 
-  const buttons = [];
-
   const helpContent = (
     <div>
       {(siteHasChanged || postHasChanged) && (
@@ -186,116 +213,147 @@ const EditorHeader = (props) => {
     </div>
   );
 
-  buttons.push(
-    <Popover
-      key={'help'}
-      title="Help"
-      content={helpContent}
-      arrow
-      trigger={['click']}
-      placement="bottomRight"
-    >
-      <Badge dot={siteHasChanged || postHasChanged}>
-        <Button icon={<QuestionOutlined />} shape="circle" type="default" />
-      </Badge>
-    </Popover>
-  );
-
-  const views = [
-    { type: 'mobile', icon: <MobileOutlined style={{ fontSize: '14px' }} />, title: 'Phone' },
-    { type: 'tablet', icon: <TabletOutlined style={{ fontSize: '14px' }} />, title: 'Tablet' },
-    { type: 'desktop', icon: <DesktopOutlined style={{ fontSize: '14px' }} />, title: 'Desktop' },
-    {
-      type: 'fullscreen',
-      icon: <FullscreenOutlined style={{ fontSize: '14px' }} />,
-      title: 'Fullscreen',
-    },
-  ];
-
-  const dropDownMenu = (
-    <Menu>
-      <Menu.ItemGroup title="View">
-        {views.map((o) => {
+  const addPostMenu = (
+    <StyledMenu>
+      {site?.postTypes &&
+        Object.values(site.postTypes).map((o) => {
           return (
             <Menu.Item
-              key={o.type}
-              children={o.title}
-              icon={o.icon}
-              onClick={() => dispatch({ type: `SET_EDITOR_VIEWPORT`, payload: o.type })}
-              className={viewport === o.type && 'active'}
-            />
+              key={o.id}
+              onClick={() =>
+                dispatch({
+                  type: 'SET_DIALOG',
+                  payload: {
+                    open: true,
+                    title: `Add`,
+                    component: <PostForm onSubmit={handleAddPost} postTypeID={o.id} />,
+                  },
+                })
+              }
+            >
+              {o.title}
+            </Menu.Item>
           );
         })}
-      </Menu.ItemGroup>
-    </Menu>
+    </StyledMenu>
   );
-
-  buttons.push(
-    <Dropdown key={'menu'} overlay={dropDownMenu} arrow trigger={['click']} disabled={disabled}>
-      <Button icon={views.find((o) => o.type === viewport).icon} shape="circle" type="default" />
-    </Dropdown>
-  );
-
-  buttons.push(
-    <Button
-      key={'settings'}
-      icon={<EditOutlined />}
-      shape="circle"
-      ghost={sidebar}
-      type={sidebar ? 'primary' : 'default'}
-      disabled={disabled}
-      onClick={() =>
-        dispatch({
-          type: `SET_EDITOR_SIDEBAR`,
-          payload: sidebar ? null : 'settings',
-        })
-      }
-    />
-  );
-
-  post?.status === 'draft' &&
-    buttons.push(
-      <Button
-        key={'save-draft'}
-        children="Save Draft"
-        onClick={handleSaveDraft}
-        loading={loading === 'draft'}
-        disabled={!siteHasChanged && !postHasChanged}
-      />
-    );
-
-  post?.status === 'draft' &&
-    buttons.push(
-      <Button
-        key={'publish'}
-        children="Publish"
-        type="primary"
-        onClick={handlePublish}
-        loading={loading === 'publish'}
-      />
-    );
-
-  (post?.status === 'publish' || post?.status === 'trash' || !post) &&
-    buttons.push(
-      <Button
-        key={'update'}
-        children="Update"
-        type="primary"
-        onClick={handleUpdate}
-        loading={loading === 'update'}
-        disabled={!siteHasChanged && !postHasChanged}
-      />
-    );
 
   return (
-    <PageHeader
-      title={postID ? title || <Skeleton.Input active style={{ width: 120 }} /> : 'Not Found'}
-      extra={buttons}
-      tags={tags}
-      onBack={handleClickBack}
-      style={{ paddingLeft: 20, paddingRight: 20, borderBottom: '1px solid #d9e1ef' }}
-    />
+    <Container>
+      <Row>
+        <FieldsContainer>
+          <Space>
+            <MenuIcon onClick={() => handleDiscardRequest(true)} />
+            <span className="ant-page-header-heading-title">{postID ? title : 'Not Found'}</span>
+          </Space>
+          {tags}
+        </FieldsContainer>
+      </Row>
+
+      {(siteHasChanged || postHasChanged) && (
+        <Row>
+          <Space>
+            <Button children="Discard" onClick={() => handleDiscardRequest(false)} />
+
+            {post?.status === 'draft' && (
+              <>
+                <Button
+                  children="Save Draft"
+                  onClick={handleSaveDraft}
+                  loading={loading === 'draft'}
+                />
+                <Button
+                  children="Publish"
+                  type="primary"
+                  onClick={handlePublish}
+                  loading={loading === 'publish'}
+                />
+              </>
+            )}
+
+            {(post?.status === 'publish' || post?.status === 'trash' || !post) && (
+              <Button
+                children="Update"
+                type="primary"
+                onClick={handleUpdate}
+                loading={loading === 'update'}
+              />
+            )}
+          </Space>
+        </Row>
+      )}
+
+      <Row>
+        <FieldsContainer alignRight>
+          <Space>
+            <Dropdown overlay={addPostMenu} arrow trigger={['click']}>
+              <div>
+                <Button
+                  icon={<AddIcon />}
+                  shape="circle"
+                  type="default"
+                  disabled={postHasChanged || siteHasChanged}
+                />
+              </div>
+            </Dropdown>
+
+            <Popover
+              title="Help"
+              content={helpContent}
+              arrow
+              trigger={['click']}
+              placement="bottomRight"
+            >
+              <Badge dot={siteHasChanged || postHasChanged}>
+                <Button icon={<HelpIcon />} shape="circle" type="default" />
+              </Badge>
+            </Popover>
+
+            <Button
+              key={'settings'}
+              icon={<EditIcon />}
+              shape="circle"
+              ghost={sidebar}
+              type={sidebar ? 'primary' : 'default'}
+              disabled={disabled}
+              onClick={() =>
+                dispatch({
+                  type: `SET_EDITOR_SIDEBAR`,
+                  payload: sidebar ? null : 'settings',
+                })
+              }
+            />
+          </Space>
+        </FieldsContainer>
+      </Row>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid ${colors.tertiaryColor};
+`;
+
+const FieldsContainer = styled.div`
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: ${({ alignRight }) => (alignRight ? 'flex-end' : 'flex-start')};
+`;
+
+const StyledMenu = styled(Menu)`
+  width: 150px;
+`;
 
 export default EditorHeader;
