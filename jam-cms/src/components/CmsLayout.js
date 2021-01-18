@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
 import { PageHeader, Layout, Menu } from 'antd';
@@ -28,8 +28,6 @@ const CmsLayout = (props) => {
       cmsState: { siteID, sites },
     },
   ] = useStore();
-
-  const site = sites[siteID];
 
   return (
     <Layout className="jam-cms">
@@ -62,34 +60,37 @@ const CmsLayout = (props) => {
               <Link to={getRoute(`media`, { siteID })}>Media</Link>
             </Menu.Item>
 
-            <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
-              {site?.postTypes &&
-                Object.values(site.postTypes).map((o) => {
+            <Menu.SubMenu key={'Collections'} icon={<BlockOutlined />} title="Collections">
+              {sites?.[siteID]?.postTypes &&
+                sites?.[siteID]?.taxonomies &&
+                Object.values(sites[siteID].postTypes).map((o) => {
                   const postTypeTaxonomies = [];
-                  site?.taxonomies &&
-                    Object.values(site.taxonomies).map(
-                      (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
-                    );
+
+                  Object.values(sites[siteID].taxonomies).map(
+                    (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
+                  );
 
                   return (
-                    <Menu.SubMenu key={o.id} title={o.title}>
-                      <Menu.Item key={o.id}>
+                    <Fragment key={o.title}>
+                      <Menu.Item>
                         <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                          View all
+                          {o.title}
                         </Link>
                       </Menu.Item>
 
                       {postTypeTaxonomies &&
                         postTypeTaxonomies.map((p) => {
                           return (
-                            <Menu.Item key={p.id}>
+                            <Menu.Item key={p.title}>
                               <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
                                 {p.title}
                               </Link>
                             </Menu.Item>
                           );
                         })}
-                    </Menu.SubMenu>
+
+                      <Menu.Divider />
+                    </Fragment>
                   );
                 })}
             </Menu.SubMenu>
