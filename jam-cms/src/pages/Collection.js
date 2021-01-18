@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, Popconfirm, PageHeader, Tabs, Space, Select } from 'antd';
+import { Button, Popconfirm, PageHeader, Tabs, Space, Select, Input } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -27,19 +27,31 @@ const Collection = (props) => {
 
   const [filter, setFilter] = useState('all');
   const [category, setCategory] = useState('');
+  const [search, setSearch] = useState('');
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
 
-  const postsByCategory = !!category
+  let visiblePosts = [];
+
+  // Filter by category
+  visiblePosts = !!category
     ? posts.filter((o) => o?.taxonomies?.[category?.taxonomy]?.includes(category.term))
     : posts;
 
-  const treePosts = createDataTree(postsByCategory);
+  // Filter by post status
+  visiblePosts = filter !== 'all' ? visiblePosts.filter((o) => o.status === filter) : visiblePosts;
 
-  const filteredPosts = filter !== 'all' ? treePosts.filter((o) => o.status === filter) : treePosts;
+  // Filter by search query
+  visiblePosts = search
+    ? visiblePosts.filter((o) => o.title.toLowerCase().includes(search))
+    : visiblePosts;
 
-  sortBy(filteredPosts, 'createdAt');
+  // Sort posts by date
+  sortBy(visiblePosts, 'createdAt');
+
+  // Create data tree
+  visiblePosts = createDataTree(visiblePosts);
 
   const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
     o?.postTypes.includes(postTypeID)
@@ -108,6 +120,14 @@ const Collection = (props) => {
       </Select>
     );
   }
+
+  extra.push(
+    <Input.Search
+      allowClear
+      defaultValue={search}
+      onChange={(e) => setSearch(e.target.value.toLowerCase())}
+    />
+  );
 
   extra.push(
     <Button
@@ -190,7 +210,7 @@ const Collection = (props) => {
       <PageHeader title={filterItems} extra={extra} />
 
       <Space direction="vertical" size={20}>
-        {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
+        {visiblePosts && visiblePosts.map((item) => renderPost(item, 0))}
       </Space>
     </CmsLayout>
   );
