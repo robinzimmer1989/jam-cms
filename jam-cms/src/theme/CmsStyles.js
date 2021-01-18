@@ -109,6 +109,10 @@ const styles = css`
 
 export default createGlobalStyle`
 
+  body {
+    overflow-y: scroll;
+  }
+
   .ant-modal-body {
     background: ${colors.background.light};
     ${styles}
