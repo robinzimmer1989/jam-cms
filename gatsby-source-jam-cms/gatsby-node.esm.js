@@ -36,7 +36,9 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
     await Promise.all(
       posts &&
         posts.map(async (o) => {
-          const templatePath = path.resolve(`./src/templates/${o.postTypeID}/${o.template}.js`);
+          const templatePath = path.resolve(
+            `./src/templates/postTypes/${o.postTypeID}/${o.template}.js`
+          );
 
           if (fs.existsSync(templatePath)) {
             await createPage({
@@ -55,9 +57,9 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
             });
           } else {
             // Only show error message about missing template once
-            if (!missingTemplates[`${o.postTypeID}/${o.template}`]) {
-              reporter.error(`Template ${o.postTypeID}/${o.template}.js not found`);
-              missingTemplates[`${o.postTypeID}/${o.template}`] = true;
+            if (!missingTemplates[`postTypes/${o.postTypeID}/${o.template}`]) {
+              reporter.error(`Template /postTypes/${o.postTypeID}/${o.template}.js not found`);
+              missingTemplates[`postTypes/${o.postTypeID}/${o.template}`] = true;
             }
           }
         })

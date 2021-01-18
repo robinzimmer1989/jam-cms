@@ -27,9 +27,7 @@ const PostEditor = (props) => {
     dispatch,
   ] = useStore();
 
-  const template =
-    templates?.[post?.postTypeID] &&
-    templates[post.postTypeID].find((o) => o?.id === post?.template);
+  const template = templates?.postTypes?.[post?.postTypeID]?.[post?.template];
 
   const Component = template?.component;
 
@@ -74,10 +72,10 @@ const PostEditor = (props) => {
         postID={postIdBySlug}
         template={!!Component && post?.content}
         title={post?.title}
+        templates={templates}
         onBack={() =>
           navigate(getRoute('collection', { siteID, postTypeID: post?.postTypeID || 'page' }))
         }
-        templates={templates}
       />
 
       {postIdBySlug ? (
@@ -127,7 +125,7 @@ const EmptyContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 50px);
   text-align: center;
 `;
 

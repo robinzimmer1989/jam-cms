@@ -33,7 +33,7 @@ const Content = styled.div`
 
 export default Template;
 
-export const NewsDefaultTemplate = {
+export const NewsDefault = {
   id: 'default',
   label: 'News',
   postTypeID: 'news',

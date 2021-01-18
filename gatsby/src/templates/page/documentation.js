@@ -128,7 +128,7 @@ const WysiwygContainer = styled.div`
 
 export default Template;
 
-export const PageDocumentationTemplate = {
+export const PageDocumentation = {
   id: 'documentation',
   label: 'Documentation',
   postTypeID: 'page',

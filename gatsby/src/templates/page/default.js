@@ -34,7 +34,7 @@ const Template = (props) => {
 
 export default Template;
 
-export const PageDefaultTemplate = {
+export const PageDefault = {
   id: 'default',
   label: 'Default',
   postTypeID: 'page',

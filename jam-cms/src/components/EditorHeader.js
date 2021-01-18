@@ -65,8 +65,7 @@ const EditorHeader = (props) => {
     // Add template object to request, but only in development mode
     const templateObject =
       process.env.NODE_ENV === 'development' &&
-      templates?.[post?.postTypeID] &&
-      templates[post.postTypeID].find((o) => o.id === post?.template);
+      templates?.postTypes?.[post?.postTypeID]?.[post?.template];
 
     setLoading(action);
 

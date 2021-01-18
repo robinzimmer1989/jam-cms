@@ -30,8 +30,8 @@ const EditorSidebar = (props) => {
 
   const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
   const posts = postType?.posts;
-  const postTypeTemplates = templates?.[postType?.id];
-  const template = postTypeTemplates && postTypeTemplates.find((o) => o.id === post?.template);
+  const postTypeTemplates = templates?.postTypes?.[post?.postTypeID];
+  const template = postTypeTemplates?.[post?.template];
 
   // Remove own post for display in the page parent drop down
   const otherPosts = { ...posts };
@@ -137,13 +137,13 @@ const EditorSidebar = (props) => {
               disabled={post?.id === site?.frontPage}
             />
 
-            {postTypeTemplates && postTypeTemplates.length > 1 && (
+            {postTypeTemplates && Object.values(postTypeTemplates).length > 1 && (
               <Select
                 value={post?.template}
                 onChange={(value) => handleChangePost('template', value)}
                 label={'Template'}
               >
-                {postTypeTemplates.map((o) => (
+                {Object.values(postTypeTemplates).map((o) => (
                   <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
                 ))}
               </Select>
