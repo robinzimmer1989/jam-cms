@@ -41,7 +41,7 @@ const Logo = styled(Link)`
     height: 50px;
 
     path {
-      fill: ${colors.background.light};
+      fill: ${colors.secondaryContrast};
     }
   }
 `;

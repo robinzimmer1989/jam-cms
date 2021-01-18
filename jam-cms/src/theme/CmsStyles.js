@@ -3,7 +3,7 @@ import { createGlobalStyle, css } from 'styled-components';
 import colors from './colors';
 
 const styles = css`
-  background: ${colors.background.light};
+  background: ${colors.secondaryContrast};
 
   * {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
@@ -91,7 +91,7 @@ const styles = css`
 
   .ant-collapse {
     position: relative;
-    background-color: ${colors.background.light};
+    background-color: ${colors.secondaryContrast};
   }
 
   .ant-collapse > .ant-collapse-item {
@@ -114,7 +114,7 @@ export default createGlobalStyle`
   }
 
   .ant-modal-body {
-    background: ${colors.background.light};
+    background: ${colors.secondaryContrast};
     ${styles}
   }
 

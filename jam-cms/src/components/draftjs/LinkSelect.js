@@ -126,7 +126,7 @@ const IconContainer = styled.div`
 
   svg {
     path {
-      fill: ${({ active }) => (active ? colors.primary.dark : 'inherit')};
+      fill: ${({ active }) => (active ? colors.primary : 'inherit')};
     }
   }
 `;

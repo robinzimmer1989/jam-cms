@@ -153,7 +153,7 @@ const SidebarHeader = styled(PageHeader)`
     margin: 0 auto;
 
     path {
-      fill: ${colors.background.light};
+      fill: ${colors.secondaryContrast};
     }
   }
 

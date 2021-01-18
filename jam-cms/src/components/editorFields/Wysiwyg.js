@@ -91,7 +91,7 @@ const icon = css`
   box-shadow: none;
 
   &:hover {
-    background: ${colors.background.light};
+    background: ${colors.secondaryContrast};
     box-shadow: none;
   }
 `;
@@ -116,7 +116,6 @@ const EditorContainer = styled.div`
   .rdw-editor-main {
     padding: 4px;
     min-height: 100px;
-    max-height: 300px;
     background: #fff;
     border: 1px solid #d9d9d9;
     font-size: 13px;
@@ -145,7 +144,7 @@ const EditorContainer = styled.div`
   }
 
   .rdw-option-active {
-    background: ${colors.text.light};
+    background: ${colors.tertiary};
   }
 
   .rdw-block-dropdown {
@@ -215,7 +214,7 @@ const EditorContainer = styled.div`
 
   a {
     text-decoration: underline;
-    color: ${colors.primary.dark};
+    color: ${colors.primary};
   }
 `;
 

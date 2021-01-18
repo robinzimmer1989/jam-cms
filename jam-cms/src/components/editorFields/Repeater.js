@@ -47,7 +47,7 @@ const Repeater = (props) => {
   };
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? colors.text.light : '#fff',
+    background: isDraggingOver ? colors.tertiary : '#fff',
     padding: 2,
   });
 
@@ -226,7 +226,7 @@ const AddButton = styled.div`
   align-items: center;
   height: 46px;
   width: 100%;
-  border: 2px dotted ${colors.text.light};
+  border: 2px dotted ${colors.tertiary};
   cursor: pointer;
   transition: ease all 0.2s;
 
