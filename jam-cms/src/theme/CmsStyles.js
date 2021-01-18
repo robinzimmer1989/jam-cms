@@ -114,6 +114,13 @@ export default createGlobalStyle`
     ${styles}
   }
 
+  .ant-menu-item-group-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
   .ant-popover {
     max-width: 400px;
 

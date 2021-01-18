@@ -65,12 +65,31 @@ const CmsLayout = (props) => {
             <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
               {site?.postTypes &&
                 Object.values(site.postTypes).map((o) => {
+                  const postTypeTaxonomies = [];
+                  site?.taxonomies &&
+                    Object.values(site.taxonomies).map(
+                      (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
+                    );
+
                   return (
-                    <Menu.Item key={o.title}>
-                      <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                        {o.title}
-                      </Link>
-                    </Menu.Item>
+                    <Menu.SubMenu key={o.id} title={o.title}>
+                      <Menu.Item key={o.id}>
+                        <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
+                          View all
+                        </Link>
+                      </Menu.Item>
+
+                      {postTypeTaxonomies &&
+                        postTypeTaxonomies.map((p) => {
+                          return (
+                            <Menu.Item key={p.id}>
+                              <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
+                                {p.title}
+                              </Link>
+                            </Menu.Item>
+                          );
+                        })}
+                    </Menu.SubMenu>
                   );
                 })}
             </Menu.SubMenu>
@@ -92,6 +111,12 @@ const CmsLayout = (props) => {
                 {authUser?.capabilities?.manage_options && (
                   <Menu.Item key="Collections">
                     <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+                  </Menu.Item>
+                )}
+
+                {authUser?.capabilities?.manage_options && (
+                  <Menu.Item key="Taxonomies">
+                    <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
                   </Menu.Item>
                 )}
 

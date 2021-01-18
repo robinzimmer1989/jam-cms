@@ -1,51 +1,49 @@
 import React, { useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, Select as AntSelect } from 'antd';
 
 // import app components
+import Select from './Select';
 import Input from './Input';
 import { useStore } from '../store';
 
-const CollectionForm = (props) => {
-  const { id: defaultId, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
+const TermForm = (props) => {
+  const {
+    site,
+    id,
+    title: defaultTitle = '',
+    slug: defaultSlug = '',
+    parentID: defaultParentID = null,
+    description: defaultDescription = '',
+    onSubmit,
+  } = props;
 
-  const collectionExists = !!defaultId;
+  const termExists = !!id;
 
   const [, dispatch] = useStore();
 
   const [title, setTitle] = useState(defaultTitle);
-  const [id, setId] = useState(defaultId);
   const [slug, setSlug] = useState(defaultSlug);
+  const [parentID, setParentID] = useState(defaultParentID);
+  const [description, setDescription] = useState(defaultDescription);
 
   const handleSubmit = async () => {
-    if (!title || !id) {
+    if (!title) {
       return;
     }
 
-    await onSubmit({ id, title, slug });
+    await onSubmit({ id, title, slug, parentID, description });
 
     dispatch({ type: 'CLOSE_DIALOG' });
-  };
-
-  const handleChangeId = (e) => {
-    const formattedId = e.target.value.replace(/[^a-zA-Z ]/g, '').toLowerCase();
-    setId(formattedId);
   };
 
   return (
     <Space direction="vertical" size={20}>
       <Space direction="vertical">
         <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <Input
-          label="name"
-          value={id}
-          instructions="The id must match the template file id (i.e. post)"
-          onChange={handleChangeId}
-          disabled={collectionExists}
-        />
         <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
       </Space>
       <Button
-        children={collectionExists ? 'Update' : 'Add'}
+        children={termExists ? 'Update' : 'Add'}
         onClick={handleSubmit}
         type="primary"
         block
@@ -54,4 +52,4 @@ const CollectionForm = (props) => {
   );
 };
 
-export default CollectionForm;
+export default TermForm;

@@ -168,6 +168,28 @@ const EditorSidebar = (props) => {
               />
             )}
 
+            {post?.taxonomies &&
+              Object.keys(post.taxonomies).map((k) => {
+                const o = sites[siteID].taxonomies[k];
+
+                return (
+                  <Select
+                    key={k}
+                    onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
+                    allowClear
+                    placeholder="Select category"
+                    mode="multiple"
+                    label={o.title}
+                    defaultValue={post.taxonomies[k]}
+                  >
+                    {o.terms &&
+                      o.terms.map((p) => {
+                        return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
+                      })}
+                  </Select>
+                );
+              })}
+
             {post?.postTypeID !== 'page' && (
               <Space direction="vertical" size={2}>
                 <Caption children="Featured Image" />

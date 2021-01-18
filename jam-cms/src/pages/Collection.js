@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, Popconfirm, PageHeader, Tabs, Space } from 'antd';
+import { Button, Popconfirm, PageHeader, Tabs, Space, Select } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -25,15 +25,25 @@ const Collection = (props) => {
     dispatch,
   ] = useStore();
 
-  const [filter, setFilter] = useState(`all`);
+  const [filter, setFilter] = useState('all');
+  const [category, setCategory] = useState('');
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
 
-  const treePosts = createDataTree(posts);
+  const postsByCategory = !!category
+    ? posts.filter((o) => o?.taxonomies?.[category?.taxonomy]?.includes(category.term))
+    : posts;
 
-  const filteredPosts = filter !== `all` ? treePosts.filter((o) => o.status === filter) : treePosts;
+  const treePosts = createDataTree(postsByCategory);
+
+  const filteredPosts = filter !== 'all' ? treePosts.filter((o) => o.status === filter) : treePosts;
+
   sortBy(filteredPosts, 'createdAt');
+
+  const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
+    o?.postTypes.includes(postTypeID)
+  );
 
   const handleAddPost = async ({ title, parentID }) => {
     const result = await postActions.addPost(
@@ -68,6 +78,53 @@ const Collection = (props) => {
         return <Tabs.TabPane key={name} tab={name.toUpperCase()} />;
       })}
     </Tabs>
+  );
+
+  const extra = [];
+
+  if (taxonomies && taxonomies.length > 0) {
+    extra.push(
+      <Select
+        key="taxonomies"
+        style={{ width: 160 }}
+        onChange={(v, o) => setCategory(o?.taxonomy ? { taxonomy: o.taxonomy, term: v } : '')}
+        allowClear
+        placeholder="Select category"
+      >
+        {taxonomies.map((o) => {
+          return (
+            <Select.OptGroup key={o.id} label={o.title}>
+              {o.terms &&
+                o.terms.map((p) => {
+                  return (
+                    <Select.Option key={p.id} value={p.id} taxonomy={o.id}>
+                      {p.title}
+                    </Select.Option>
+                  );
+                })}
+            </Select.OptGroup>
+          );
+        })}
+      </Select>
+    );
+  }
+
+  extra.push(
+    <Button
+      key="add"
+      children={`Add`}
+      onClick={() =>
+        dispatch({
+          type: 'SET_DIALOG',
+          payload: {
+            open: true,
+            title: `Add`,
+            component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
+          },
+        })
+      }
+      type="primary"
+    />
   );
 
   const renderPost = (o, level) => {
@@ -130,25 +187,7 @@ const Collection = (props) => {
 
   return (
     <CmsLayout pageTitle={postType?.title}>
-      <PageHeader
-        title={filterItems}
-        extra={
-          <Button
-            children={`Add`}
-            onClick={() =>
-              dispatch({
-                type: 'SET_DIALOG',
-                payload: {
-                  open: true,
-                  title: `Add`,
-                  component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
-                },
-              })
-            }
-            type="primary"
-          />
-        }
-      />
+      <PageHeader title={filterItems} extra={extra} />
 
       <Space direction="vertical" size={20}>
         {filteredPosts && filteredPosts.map((item) => renderPost(item, 0))}
