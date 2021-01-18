@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Space, Button } from 'antd';
+import { Space, Button, Select as AntSelect } from 'antd';
 
 // import app components
 import Input from './Input';
+import Select from './Select';
 import PostTreeSelect from './PostTreeSelect';
 import { useStore } from '../store';
 
 const PostForm = (props) => {
-  const { postTypeID, onSubmit } = props;
+  const { postTypeID: defaultPostTypeID, onSubmit } = props;
 
   const [
     {
@@ -17,6 +18,7 @@ const PostForm = (props) => {
   ] = useStore();
 
   const [title, setTitle] = useState('');
+  const [postTypeID, setPostTypeID] = useState(defaultPostTypeID || 'page');
   const [parentID, setParentID] = useState(0);
 
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
@@ -38,6 +40,16 @@ const PostForm = (props) => {
         onChange={(e) => setTitle(e.target.value)}
         placeholder={``}
       />
+
+      {!defaultPostTypeID &&
+        sites[siteID]?.postTypes &&
+        Object.values(sites[siteID].postTypes).length > 1 && (
+          <Select label="Post Type" value={postTypeID} onChange={(v) => setPostTypeID(v)}>
+            {Object.values(sites[siteID].postTypes).map((o) => (
+              <AntSelect.Option key={o.id} value={o.id} children={o.title} />
+            ))}
+          </Select>
+        )}
 
       {postTypeID === 'page' && (
         <PostTreeSelect
