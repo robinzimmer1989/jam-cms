@@ -16,7 +16,7 @@ const TaxonomyForm = (props) => {
     onSubmit,
   } = props;
 
-  const collectionExists = !!defaultId;
+  const taxonomyExists = !!defaultId;
 
   const [, dispatch] = useStore();
 
@@ -30,7 +30,7 @@ const TaxonomyForm = (props) => {
       return;
     }
 
-    await onSubmit({ id, title, slug });
+    await onSubmit({ id, title, slug, postTypes });
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -49,7 +49,7 @@ const TaxonomyForm = (props) => {
           value={id}
           instructions="The id must match the template file id (i.e. post)"
           onChange={handleChangeId}
-          disabled={collectionExists}
+          disabled={taxonomyExists}
         />
         <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
 
@@ -68,7 +68,12 @@ const TaxonomyForm = (props) => {
             ))}
         </Select>
       </Space>
-      <Button children="Add" onClick={handleSubmit} type="primary" block />
+      <Button
+        children={taxonomyExists ? 'Update' : 'Add'}
+        onClick={handleSubmit}
+        type="primary"
+        block
+      />
     </Space>
   );
 };

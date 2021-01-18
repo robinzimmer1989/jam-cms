@@ -55,6 +55,45 @@ export const sitesReducer = (state, action) => {
         break;
 
       /******************************
+       * Taxonomies
+       ******************************/
+      case `ADD_TAXONOMY`:
+        set(draft, `sites.${payload.siteID}.taxonomies.${payload.id}`, payload);
+        break;
+
+      case `UPDATE_TAXONOMY`:
+        set(draft, `sites.${payload.siteID}.taxonomies.${payload.id}`, payload);
+        break;
+
+      case `DELETE_TAXONOMY`:
+        delete draft.sites[payload.siteID].taxonomies[payload.id];
+        break;
+
+      /******************************
+       * Terms
+       ******************************/
+      case `ADD_TERM`:
+        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms.push(payload);
+        break;
+
+      case `UPDATE_TERM`:
+        const termIndex = draft.sites[payload.siteID].taxonomies[
+          payload.taxonomyID
+        ].terms.findIndex((o) => o.id === payload.id);
+        set(
+          draft,
+          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${termIndex}`,
+          payload
+        );
+        break;
+
+      case `DELETE_TERM`:
+        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms = draft.sites[
+          payload.siteID
+        ].taxonomies[payload.taxonomyID].terms.filter((o) => o.id !== parseInt(payload.id));
+        break;
+
+      /******************************
        * Forms
        ******************************/
       case `ADD_FORM`:

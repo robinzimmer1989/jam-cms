@@ -4,13 +4,15 @@ import styled from 'styled-components';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import TaxonomyForm from '../components/TaxonomyForm';
+import TermForm from '../components/TermForm';
 import ListItem from '../components/ListItem';
 
-import { taxonomyActions } from '../actions';
+import { termActions } from '../actions';
 import { useStore } from '../store';
 
-const Taxonomies = () => {
+const Taxonomy = (props) => {
+  const { taxonomyID } = props;
+
   const [
     {
       config,
@@ -19,37 +21,44 @@ const Taxonomies = () => {
     dispatch,
   ] = useStore();
 
-  const taxonomies = sites[siteID]?.taxonomies;
+  const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
 
-  const handleUpsert = async ({ id, title, slug, postTypes }) => {
-    if (taxonomies?.[id]) {
-      await taxonomyActions.updateTaxonomy(
-        { siteID, id, title, slug, postTypes },
+  console.log(taxonomy);
+
+  const handleUpsert = async ({ id, title, slug, parentID, description }) => {
+    if (id) {
+      await termActions.updateTerm(
+        { siteID, taxonomyID, id, title, slug, parentID, description },
         dispatch,
         config
       );
     } else {
-      await taxonomyActions.addTaxonomy({ siteID, id, title, slug, postTypes }, dispatch, config);
+      await termActions.addTerm(
+        { siteID, taxonomyID, id, title, slug, parentID, description },
+        dispatch,
+        config
+      );
     }
   };
 
-  const handleDelete = async ({ taxonomyID }) => {
-    await taxonomyActions.deleteTaxonomy({ siteID, id: taxonomyID }, dispatch, config);
+  const handleDelete = async ({ termID }) => {
+    await termActions.deleteTerm({ siteID, taxonomyID, id: termID }, dispatch, config);
   };
 
-  const handleOpenDialog = (id = null, title = '', slug = '', postTypes = []) => {
+  const handleOpenDialog = (id = null, title = '', slug = '', parentID = 0, description = '') => {
     dispatch({
       type: 'SET_DIALOG',
       payload: {
         open: true,
         title: `Taxonomy`,
         component: (
-          <TaxonomyForm
+          <TermForm
             site={sites[siteID]}
             id={id}
             title={title}
             slug={slug}
-            postTypes={postTypes}
+            description={description}
+            parentID={parentID}
             onSubmit={handleUpsert}
           />
         ),
@@ -58,19 +67,19 @@ const Taxonomies = () => {
   };
 
   return (
-    <CmsLayout pageTitle={`Taxonomies`}>
+    <CmsLayout pageTitle={taxonomy?.title}>
       <PageHeader>
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
 
-      {taxonomies &&
-        Object.values(taxonomies).map((o) => {
+      {taxonomy &&
+        taxonomy.terms.map((o) => {
           const actions = [];
 
           actions.push(
             <Popconfirm
               title="Are you sure?"
-              onConfirm={() => handleDelete({ taxonomyID: o.id })}
+              onConfirm={() => handleDelete({ termID: o.id })}
               okText="Yes"
               cancelText="No"
             >
@@ -82,12 +91,17 @@ const Taxonomies = () => {
             <Button
               size="small"
               children={`Edit`}
-              onClick={() => handleOpenDialog(o.id, o.title, o.slug, o.postTypes)}
+              onClick={() => handleOpenDialog(o.id, o.title, o.slug, o.parentID, o.description)}
             />
           );
 
           return (
-            <StyledListItem key={o.id} actions={actions} title={o.title} subtitle={o.slug || '/'} />
+            <StyledListItem
+              key={o.id}
+              actions={actions}
+              title={`${o.title} (${o.count})`}
+              subtitle={o.slug || '/'}
+            />
           );
         })}
     </CmsLayout>
@@ -99,4 +113,4 @@ const StyledListItem = styled(ListItem)`
   margin-bottom: 20px;
 `;
 
-export default Taxonomies;
+export default Taxonomy;
