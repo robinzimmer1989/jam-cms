@@ -260,14 +260,12 @@ const EditorSidebar = (props) => {
 const Container = styled.div`
   position: fixed;
   z-index: 1000;
-  right: 0;
+  right: ${({ active }) => (active ? '0' : '-320px')};
   top: 50px;
   width: 320px;
   height: calc(100vh - 50px);
   background: ${colors.background.light};
   border-left: 1px solid ${colors.tertiaryColor};
-  transition: ease 0.2s all;
-  transform: ${({ active }) => (active ? 'translateX(0)' : 'translateX(120%)')};
   overflow: auto;
 
   .ant-tabs > .ant-tabs-nav {
