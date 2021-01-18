@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react';
-import { navigate } from '@reach/router';
 import styled from 'styled-components';
 import { Empty } from 'antd';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
-import EditorHeader from '../components/EditorHeader';
-import EditorSidebar from '../components/EditorSidebar';
 import Loader from '../components/Loader';
 import FourOhFour from '../components/FourOhFour';
+import EditorSidebar from '../components/EditorSidebar';
 
 import { formatFieldsToProps, generateSlug } from '../utils';
 import { useStore } from '../store';
 import { postActions } from '../actions';
-import getRoute from '../routes';
 
 const PostEditor = (props) => {
   const { templates } = props;
@@ -67,35 +64,27 @@ const PostEditor = (props) => {
 
   return (
     <>
-      <EditorHeader
-        className="jam-cms"
-        postID={postIdBySlug}
-        template={!!Component && post?.content}
-        title={post?.title}
-        templates={templates}
-        onBack={() =>
-          navigate(getRoute('collection', { siteID, postTypeID: post?.postTypeID || 'page' }))
-        }
-      />
-
       {postIdBySlug ? (
         <>
           {site && post ? (
             <PageWrapper template={!!Component && post?.content}>
               {!!Component && post?.content ? (
-                <Component
-                  jamCMS={{ sidebar: !!sidebar }}
-                  pageContext={{
-                    id: post.id,
-                    seo: post.seo,
-                    title: post.title,
-                    createdAt: post.createdAt,
-                    featuredImage: post.featuredImage,
-                    content: formatFieldsToProps(post.content, site),
-                    postTypeID: post.postTypeID,
-                    globalOptions: formatFieldsToProps(site?.globalOptions, site),
-                  }}
-                />
+                <>
+                  <Component
+                    jamCMS={{ sidebar: !!sidebar }}
+                    pageContext={{
+                      id: post.id,
+                      seo: post.seo,
+                      title: post.title,
+                      createdAt: post.createdAt,
+                      featuredImage: post.featuredImage,
+                      content: formatFieldsToProps(post.content, site),
+                      postTypeID: post.postTypeID,
+                      globalOptions: formatFieldsToProps(site?.globalOptions, site),
+                    }}
+                  />
+                  <EditorSidebar className="jam-cms" templates={templates} />
+                </>
               ) : (
                 <EmptyContainer className="jam-cms">
                   <Empty
@@ -115,8 +104,6 @@ const PostEditor = (props) => {
       ) : (
         <FourOhFour />
       )}
-
-      <EditorSidebar className="jam-cms" templates={templates} />
     </>
   );
 };
