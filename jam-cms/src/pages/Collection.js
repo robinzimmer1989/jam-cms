@@ -123,6 +123,7 @@ const Collection = (props) => {
 
   extra.push(
     <Input.Search
+      key="search"
       allowClear
       defaultValue={search}
       onChange={(e) => setSearch(e.target.value.toLowerCase())}
