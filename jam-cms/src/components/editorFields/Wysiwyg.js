@@ -165,6 +165,8 @@ const EditorContainer = styled.div`
   }
 
   pre {
+    margin: 0;
+
     .public-DraftStyleDefault-block {
       margin-top: 0;
       margin-bottom: 0;
