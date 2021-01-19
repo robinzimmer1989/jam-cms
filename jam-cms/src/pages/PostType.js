@@ -40,7 +40,10 @@ const PostType = (props) => {
     : posts;
 
   // Filter by post status
-  visiblePosts = filter !== 'all' ? visiblePosts.filter((o) => o.status === filter) : visiblePosts;
+  visiblePosts =
+    filter === 'all'
+      ? visiblePosts.filter((o) => o.status !== 'trash')
+      : visiblePosts.filter((o) => o.status === filter);
 
   // Filter by search query
   visiblePosts = search
@@ -89,7 +92,12 @@ const PostType = (props) => {
   const filterItems = (
     <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
       {['all', 'publish', 'draft', 'trash'].map((name) => {
-        return <Tabs.TabPane key={name} tab={name.toUpperCase()} />;
+        const count =
+          name === 'all'
+            ? posts.filter((o) => o.status !== 'trash').length
+            : posts.filter((o) => o.status === name).length;
+
+        return <Tabs.TabPane key={name} tab={`${name.toUpperCase()} (${count})`} />;
       })}
     </Tabs>
   );
