@@ -267,85 +267,141 @@ const EditorSidebar = (props) => {
         }
       />
 
-      {sidebar === 'content' && (
-        <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
-      )}
+      <TabContainer>
+        {sidebar === 'content' && (
+          <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
+        )}
 
-      {sidebar === 'settings' && (
-        <TabContainer>
-          <Space direction="vertical" size={20}>
-            <Input
-              value={post?.title || ''}
-              onChange={(e) => handleChangePost('title', e.target.value)}
-              label={'Title'}
-            />
-
-            <Input
-              value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
-              onChange={(e) => handleChangePost('slug', e.target.value)}
-              label={'Slug'}
-              disabled={post?.id === site?.frontPage}
-            />
-
-            {postTypeTemplates && Object.values(postTypeTemplates).length > 1 && (
-              <Select
-                value={post?.template}
-                onChange={(value) => handleChangePost('template', value)}
-                label={'Template'}
-              >
-                {Object.values(postTypeTemplates).map((o) => (
-                  <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
-                ))}
-              </Select>
-            )}
-
-            <Select
-              value={post?.status || ''}
-              onChange={(value) => handleChangePost('status', value)}
-              label={'Status'}
-            >
-              <AntSelect.Option value={'publish'} children={'Publish'} />
-              <AntSelect.Option value={'draft'} children={'Draft'} />
-              <AntSelect.Option value={'trash'} children={'Trash'} />
-            </Select>
-
-            {post?.postTypeID === 'page' && (
-              <PostTreeSelect
-                label="Parent"
-                items={Object.values(otherPosts)}
-                value={post?.parentID}
-                onChange={(value) => handleChangePost('parentID', value)}
+        {sidebar === 'settings' && (
+          <TabContent>
+            <Space direction="vertical" size={20}>
+              <Input
+                value={post?.title || ''}
+                onChange={(e) => handleChangePost('title', e.target.value)}
+                label={'Title'}
               />
-            )}
 
-            {post?.taxonomies &&
-              Object.keys(post.taxonomies).map((k) => {
-                const o = sites[siteID].taxonomies[k];
+              <Input
+                value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+                onChange={(e) => handleChangePost('slug', e.target.value)}
+                label={'Slug'}
+                disabled={post?.id === site?.frontPage}
+              />
 
-                return (
-                  <Select
-                    key={k}
-                    onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
-                    allowClear
-                    placeholder="Select category"
-                    mode="multiple"
-                    label={o.title}
-                    defaultValue={post.taxonomies[k]}
-                  >
-                    {o.terms &&
-                      o.terms.map((p) => {
-                        return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
-                      })}
-                  </Select>
-                );
-              })}
+              {postTypeTemplates && Object.values(postTypeTemplates).length > 1 && (
+                <Select
+                  value={post?.template}
+                  onChange={(value) => handleChangePost('template', value)}
+                  label={'Template'}
+                >
+                  {Object.values(postTypeTemplates).map((o) => (
+                    <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
+                  ))}
+                </Select>
+              )}
 
-            {post?.postTypeID !== 'page' && (
+              <Select
+                value={post?.status || ''}
+                onChange={(value) => handleChangePost('status', value)}
+                label={'Status'}
+              >
+                <AntSelect.Option value={'publish'} children={'Publish'} />
+                <AntSelect.Option value={'draft'} children={'Draft'} />
+                <AntSelect.Option value={'trash'} children={'Trash'} />
+              </Select>
+
+              {post?.postTypeID === 'page' && (
+                <PostTreeSelect
+                  label="Parent"
+                  items={Object.values(otherPosts)}
+                  value={post?.parentID}
+                  onChange={(value) => handleChangePost('parentID', value)}
+                />
+              )}
+
+              {post?.taxonomies &&
+                Object.keys(post.taxonomies).map((k) => {
+                  const o = sites[siteID].taxonomies[k];
+
+                  return (
+                    <Select
+                      key={k}
+                      onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
+                      allowClear
+                      placeholder="Select category"
+                      mode="multiple"
+                      label={o.title}
+                      defaultValue={post.taxonomies[k]}
+                    >
+                      {o.terms &&
+                        o.terms.map((p) => {
+                          return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
+                        })}
+                    </Select>
+                  );
+                })}
+
+              {post?.postTypeID !== 'page' && (
+                <Space direction="vertical" size={2}>
+                  <Caption children="Featured Image" />
+                  <FilePicker
+                    value={post?.featuredImage}
+                    onRemove={() => handleSelectImage('featuredImage', null)}
+                    onClick={() =>
+                      dispatch({
+                        type: `SET_DIALOG`,
+                        payload: {
+                          open: true,
+                          component: (
+                            <MediaLibrary
+                              onSelect={(v) => handleSelectImage('featuredImage', v)}
+                              allow={['image']}
+                            />
+                          ),
+                          width: 1024,
+                        },
+                      })
+                    }
+                  />
+                </Space>
+              )}
+
+              {post?.postTypeID === 'page' && (
+                <Checkbox
+                  value={post?.id}
+                  checked={post?.id === site?.frontPage}
+                  onChange={(e) =>
+                    handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
+                  }
+                  children="Front Page"
+                />
+              )}
+            </Space>
+          </TabContent>
+        )}
+
+        {sidebar === 'seo' && (
+          <TabContent>
+            <Space direction="vertical" size={25}>
+              <Input
+                value={post?.seo?.title || ''}
+                onChange={(e) => handleChangePost('seo.title', e.target.value)}
+                label={'SEO Title'}
+                placeholder={post?.title}
+              />
+
+              <Input
+                value={post?.seo?.description || ''}
+                onChange={(e) => handleChangePost('seo.description', e.target.value)}
+                label={'SEO Description'}
+                rows={4}
+              />
+
               <Space direction="vertical" size={2}>
-                <Caption children="Featured Image" />
+                <Caption children="Open Graph Image" />
                 <FilePicker
-                  value={post?.featuredImage}
-                  onRemove={() => handleSelectImage('featuredImage', null)}
+                  value={post?.seo?.ogImage}
+                  onRemove={() => handleSelectImage('seo.ogImage', null)}
                   onClick={() =>
                     dispatch({
                       type: `SET_DIALOG`,
@@ -353,7 +409,7 @@ const EditorSidebar = (props) => {
                         open: true,
                         component: (
                           <MediaLibrary
-                            onSelect={(v) => handleSelectImage('featuredImage', v)}
+                            onSelect={(v) => handleSelectImage('seo.ogImage', v)}
                             allow={['image']}
                           />
                         ),
@@ -363,64 +419,10 @@ const EditorSidebar = (props) => {
                   }
                 />
               </Space>
-            )}
-
-            {post?.postTypeID === 'page' && (
-              <Checkbox
-                value={post?.id}
-                checked={post?.id === site?.frontPage}
-                onChange={(e) =>
-                  handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
-                }
-                children="Front Page"
-              />
-            )}
-          </Space>
-        </TabContainer>
-      )}
-
-      {sidebar === 'seo' && (
-        <TabContainer>
-          <Space direction="vertical" size={25}>
-            <Input
-              value={post?.seo?.title || ''}
-              onChange={(e) => handleChangePost('seo.title', e.target.value)}
-              label={'SEO Title'}
-              placeholder={post?.title}
-            />
-
-            <Input
-              value={post?.seo?.description || ''}
-              onChange={(e) => handleChangePost('seo.description', e.target.value)}
-              label={'SEO Description'}
-              rows={4}
-            />
-
-            <Space direction="vertical" size={2}>
-              <Caption children="Open Graph Image" />
-              <FilePicker
-                value={post?.seo?.ogImage}
-                onRemove={() => handleSelectImage('seo.ogImage', null)}
-                onClick={() =>
-                  dispatch({
-                    type: `SET_DIALOG`,
-                    payload: {
-                      open: true,
-                      component: (
-                        <MediaLibrary
-                          onSelect={(v) => handleSelectImage('seo.ogImage', v)}
-                          allow={['image']}
-                        />
-                      ),
-                      width: 1024,
-                    },
-                  })
-                }
-              />
             </Space>
-          </Space>
-        </TabContainer>
-      )}
+          </TabContent>
+        )}
+      </TabContainer>
 
       <Actions>
         <Space>
@@ -508,21 +510,6 @@ const Container = styled.div`
   padding-bottom: 62px;
   background: ${colors.secondaryContrast};
   border-right: 1px solid ${colors.tertiary};
-  overflow: auto;
-  white-space: pre-wrap;
-  scrollbar-width: thin;
-
-  &&::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &&::-webkit-scrollbar-track {
-    border-radius: 4px;
-  }
-
-  &&::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-  }
 
   .ant-tabs > .ant-tabs-nav {
     margin-bottom: 0;
@@ -540,6 +527,26 @@ const TabsContainer = styled.div`
 `;
 
 const TabContainer = styled.div`
+  overflow: auto;
+  white-space: pre-wrap;
+  height: calc(100vh - 50px - 62px);
+  scrollbar-width: thin;
+
+  &&::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &&::-webkit-scrollbar-track {
+    border-radius: 4px;
+  }
+
+  &&::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: ${colors.tertiary};
+  }
+`;
+
+const TabContent = styled.div`
   padding: 20px 15px;
 `;
 
