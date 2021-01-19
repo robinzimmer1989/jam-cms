@@ -105,8 +105,8 @@ const EditorSidebar = (props) => {
     handleSave('publish', 'publish');
   };
 
-  const handleUpdate = () => {
-    handleSave('update', 'publish');
+  const handleUpdate = (status) => {
+    handleSave('update', status);
   };
 
   const handleSave = async (action, status) => {
@@ -453,11 +453,11 @@ const EditorSidebar = (props) => {
             </>
           )}
 
-          {(post?.status === 'publish' || post?.status === 'trash' || !post) && (
+          {(post?.status === 'publish' || post?.status === 'trash') && (
             <Button
               children="Update"
               type="primary"
-              onClick={handleUpdate}
+              onClick={() => handleUpdate(post.status)}
               loading={loading === 'update'}
               disabled={!postHasChanged && !siteHasChanged}
               block
