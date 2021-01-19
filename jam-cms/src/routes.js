@@ -1,9 +1,9 @@
 export const ROUTE_APP = '/jam-cms';
 export const ROUTE_SITE = '/site';
 export const ROUTE_MEDIA = '/media';
-export const ROUTE_COLLECTIONS = '/collections';
+export const ROUTE_POST_TYPE = '/collections';
 export const ROUTE_SETTINGS_GENERAL = '/settings';
-export const ROUTE_SETTINGS_COLLECTIONS = `${ROUTE_SETTINGS_GENERAL}/collections`;
+export const ROUTE_SETTINGS_POST_TYPES = `${ROUTE_SETTINGS_GENERAL}/post-types`;
 export const ROUTE_SETTINGS_TAXONOMIES = `${ROUTE_SETTINGS_GENERAL}/taxonomies`;
 export const ROUTE_TAXONOMY = '/taxonomy';
 export const ROUTE_PROFILE = '/profile';
@@ -32,11 +32,8 @@ const getRoute = (route, args) => {
     case 'media':
       return `${ROUTE_APP}${base}${ROUTE_MEDIA}`;
 
-    case 'collections':
-      return `${ROUTE_APP}${base}${ROUTE_COLLECTIONS}`;
-
     case 'collection':
-      return `${ROUTE_APP}${base}${ROUTE_COLLECTIONS}/${args?.postTypeID}`;
+      return `${ROUTE_APP}${base}${ROUTE_POST_TYPE}/${args?.postTypeID}`;
 
     case 'taxonomy':
       return `${ROUTE_APP}${base}${ROUTE_TAXONOMY}/${args?.taxonomyID}`;
@@ -47,8 +44,8 @@ const getRoute = (route, args) => {
     case 'settings-general':
       return `${ROUTE_APP}${base}${ROUTE_SETTINGS_GENERAL}`;
 
-    case 'settings-collections':
-      return `${ROUTE_APP}${base}${ROUTE_SETTINGS_COLLECTIONS}`;
+    case 'settings-post-types':
+      return `${ROUTE_APP}${base}${ROUTE_SETTINGS_POST_TYPES}`;
 
     case 'settings-taxonomies':
       return `${ROUTE_APP}${base}${ROUTE_SETTINGS_TAXONOMIES}`;

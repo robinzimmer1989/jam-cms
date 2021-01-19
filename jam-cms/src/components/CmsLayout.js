@@ -110,8 +110,8 @@ const CmsLayout = (props) => {
                 )}
 
                 {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="Collections">
-                    <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+                  <Menu.Item key="Post Types">
+                    <Link to={getRoute(`settings-post-types`, { siteID })}>Post Types</Link>
                   </Menu.Item>
                 )}
 

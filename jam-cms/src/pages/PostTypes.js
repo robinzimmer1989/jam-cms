@@ -10,7 +10,7 @@ import ListItem from '../components/ListItem';
 import { collectionActions } from '../actions';
 import { useStore } from '../store';
 
-const Collections = () => {
+const PostTypes = () => {
   const [
     {
       config,
@@ -53,7 +53,7 @@ const Collections = () => {
   };
 
   return (
-    <CmsLayout pageTitle={`Collections`}>
+    <CmsLayout pageTitle={`PostTypes`}>
       <PageHeader>
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
@@ -96,4 +96,4 @@ const StyledListItem = styled(ListItem)`
   margin-bottom: 20px;
 `;
 
-export default Collections;
+export default PostTypes;
