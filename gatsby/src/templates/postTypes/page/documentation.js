@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import Layout from '../../components/Layout';
-import Edges from '../../components/Edges';
-import Wysiwyg from '../../components/Wysiwyg';
+import Layout from '../../../components/Layout';
+import Edges from '../../../components/Edges';
+import Wysiwyg from '../../../components/Wysiwyg';
 
-import { colors } from '../../theme';
+import { colors } from '../../../theme';
 
 const Template = (props) => {
   const {

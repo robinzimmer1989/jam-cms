@@ -1,12 +1,12 @@
 import React from 'react';
 
 // import app components
-import Layout from '../../components/Layout';
-import banner from '../../components/Banner';
-import boxes from '../../components/Boxes';
-import posts from '../../components/Posts';
-import textimage from '../../components/TextImage';
-import texteditor from '../../components/TextEditor';
+import Layout from '../../../components/Layout';
+import banner from '../../../components/Banner';
+import boxes from '../../../components/Boxes';
+import posts from '../../../components/Posts';
+import textimage from '../../../components/TextImage';
+import texteditor from '../../../components/TextEditor';
 
 const blocks = {
   banner,

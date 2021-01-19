@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 // import app components
-import Layout from '../../components/Layout';
-import Edges from '../../components/Edges';
-import banner from '../../components/Banner';
-import textEditor from '../../components/TextEditor';
+import Layout from '../../../components/Layout';
+import Edges from '../../../components/Edges';
+import banner from '../../../components/Banner';
+import textEditor from '../../../components/TextEditor';
 
 const Banner = banner.component;
 const TextEditor = textEditor.component;

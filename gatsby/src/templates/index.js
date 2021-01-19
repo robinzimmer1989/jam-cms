@@ -1,6 +1,6 @@
-import { PageDefault } from './page/default';
-import { PageDocumentation } from './page/documentation';
-import { NewsDefault } from './news/default';
+import { PageDefault } from './postTypes/page/default';
+import { PageDocumentation } from './postTypes/page/documentation';
+import { NewsDefault } from './postTypes/news/default';
 
 export default {
   postTypes: {
