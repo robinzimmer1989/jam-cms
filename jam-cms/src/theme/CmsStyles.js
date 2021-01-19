@@ -74,6 +74,7 @@ const styles = css`
 
   .ant-tabs-tab-btn {
     font-size: 11px;
+    font-weight: 500;
   }
 
   .ant-menu-item,
