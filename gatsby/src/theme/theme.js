@@ -11,13 +11,50 @@ export default css`
     letter-spacing: 1;
     line-height: 1.5;
     text-transform: none;
-    background: #fafcfd;
+    background-color: #fafcfd;
     color: ${colors.primary};
   }
 
   a {
     text-decoration: none;
     color: inherit;
+
+    &:hover {
+      color: inherit;
+    }
+
+    &:active {
+      color: inherit;
+    }
+
+    &:active,
+    &:hover {
+      text-decoration: none;
+      outline: 0;
+    }
+
+    &:focus {
+      text-decoration: none;
+      outline: 0;
+    }
+
+    &[disabled] {
+      color: inherit;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    color: inherit;
+    font-weight: 500;
   }
 
   h1 {
