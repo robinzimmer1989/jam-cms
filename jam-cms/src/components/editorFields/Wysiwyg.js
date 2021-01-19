@@ -109,6 +109,7 @@ const EditorContainer = styled.div`
     transform: translateX(-1px);
 
     a {
+      pointer-events: all !important;
       color: rgba(0, 0, 0, 0.85);
     }
   }
