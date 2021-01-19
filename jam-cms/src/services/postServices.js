@@ -55,3 +55,8 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
   let result = await db('deletePost', { siteID, id }, dispatch, config);
   return result;
 };
+
+export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('duplicatePost', { siteID, id }, dispatch, config);
+  return result;
+};

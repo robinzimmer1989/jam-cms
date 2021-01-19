@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, Popconfirm, PageHeader, Tabs, Space, Select, Input } from 'antd';
+import { Button, PageHeader, Tabs, Space, Select, Input, Menu, Dropdown } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -79,6 +79,10 @@ const PostType = (props) => {
 
       navigate(`/${slug}`);
     }
+  };
+
+  const handleDuplicatePost = async ({ postID }) => {
+    await postActions.duplicatePost({ siteID, id: postID }, dispatch, config);
   };
 
   const handleDeletePost = async ({ postID }) => {
@@ -161,33 +165,31 @@ const PostType = (props) => {
   const renderPost = (o, level) => {
     const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;
 
-    const actions = [
-      <Link to={slug}>
-        <Button size="small">Edit</Button>
-      </Link>,
-    ];
+    const actions = [];
 
-    if (o.status === 'trash') {
-      actions.unshift(
-        <Popconfirm
-          title="Are you sure?"
-          onConfirm={() => handleDeletePost({ postID: o.id })}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button size="small" children={`Delete`} danger />
-        </Popconfirm>
-      );
-    } else {
-      actions.unshift(
-        <Button
-          size="small"
-          onClick={() => handleTrashPost({ postID: o.id })}
-          children={`Trash`}
-          danger
-        />
-      );
-    }
+    const menu = (
+      <Menu>
+        <Menu.Item key="duplicate" onClick={() => handleDuplicatePost({ postID: o.id })}>
+          Duplicate
+        </Menu.Item>
+
+        {o.status === 'trash' ? (
+          <Menu.Item key="delete" danger onClick={() => handleDeletePost({ postID: o.id })}>
+            Delete
+          </Menu.Item>
+        ) : (
+          <Menu.Item key="trash" danger onClick={() => handleTrashPost({ postID: o.id })}>
+            Trash
+          </Menu.Item>
+        )}
+      </Menu>
+    );
+
+    actions.unshift(
+      <Dropdown.Button overlay={menu} trigger={['click']}>
+        <Link to={slug}>Edit</Link>
+      </Dropdown.Button>
+    );
 
     let badges = [];
 

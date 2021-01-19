@@ -83,3 +83,13 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
 
   return result;
 };
+
+export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
+  const result = await postServices.duplicatePost({ siteID, id }, dispatch, config);
+
+  if (result) {
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+  }
+
+  return result;
+};
