@@ -55,7 +55,7 @@ const EditorSidebar = (props) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
 
     dispatch({
-      type: `UPDATE_EDITOR_POST`,
+      type: 'UPDATE_EDITOR_POST',
       payload: nextPost,
     });
   };
@@ -64,7 +64,7 @@ const EditorSidebar = (props) => {
     const nextSite = produce(site, (draft) => set(draft, `${name}`, value));
 
     dispatch({
-      type: `UPDATE_EDITOR_SITE`,
+      type: 'UPDATE_EDITOR_SITE',
       payload: nextSite,
     });
   };
@@ -82,7 +82,7 @@ const EditorSidebar = (props) => {
       });
 
       dispatch({
-        type: `UPDATE_EDITOR_SITE`,
+        type: 'UPDATE_EDITOR_SITE',
         payload: nextSite,
       });
     } else {
@@ -91,7 +91,7 @@ const EditorSidebar = (props) => {
       });
 
       dispatch({
-        type: `UPDATE_EDITOR_POST`,
+        type: 'UPDATE_EDITOR_POST',
         payload: nextPost,
       });
     }
@@ -228,6 +228,8 @@ const EditorSidebar = (props) => {
     );
 
     if (result?.id) {
+      dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' });
+
       // Add post to post type so we can then generate the slug and the route the newly created post
       const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
         return set(draft, `posts.${result.id}`, result);
@@ -244,13 +246,13 @@ const EditorSidebar = (props) => {
           activeKey={sidebar}
           onChange={(value) =>
             dispatch({
-              type: `SET_EDITOR_SIDEBAR`,
+              type: 'SET_EDITOR_SIDEBAR',
               payload: value,
             })
           }
         >
-          <Tabs.TabPane key={'settings'} tab={'General'} />
           <Tabs.TabPane key={'content'} tab={'Content'} />
+          <Tabs.TabPane key={'settings'} tab={'Settings'} />
           <Tabs.TabPane key={'seo'} tab={'SEO'} />{' '}
         </Tabs>
       </TabsContainer>
@@ -264,6 +266,10 @@ const EditorSidebar = (props) => {
           })
         }
       />
+
+      {sidebar === 'content' && (
+        <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
+      )}
 
       {sidebar === 'settings' && (
         <TabContainer>
@@ -416,10 +422,6 @@ const EditorSidebar = (props) => {
         </TabContainer>
       )}
 
-      {sidebar === 'content' && (
-        <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
-      )}
-
       <Actions>
         <Space>
           <Button
@@ -490,12 +492,7 @@ const EditorSidebar = (props) => {
       <Button
         icon={<EditIcon />}
         type={'primary'}
-        onClick={() =>
-          dispatch({
-            type: 'SET_EDITOR_SIDEBAR',
-            payload: 'settings',
-          })
-        }
+        onClick={() => dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' })}
       />
     </Buttons>
   );
