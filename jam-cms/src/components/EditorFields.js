@@ -24,6 +24,7 @@ import Number from './editorFields/Number';
 import FlexibleContent from './editorFields/FlexibleContent';
 import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
+import Gallery from './editorFields/Gallery';
 
 import { useStore } from '../store';
 
@@ -169,6 +170,16 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
               },
             })
           }
+        />
+      );
+      break;
+
+    case 'gallery':
+      component = (
+        <Gallery
+          {...field}
+          dispatch={dispatch}
+          onChange={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;

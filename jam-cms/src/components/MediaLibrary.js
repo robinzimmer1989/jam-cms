@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import produce from 'immer';
 import InfiniteScroll from 'react-infinite-scroller';
 import Img from 'gatsby-image';
-import { Modal, Upload, Button, Space, message, Spin } from 'antd';
+import { Modal, Upload, Button, Space, message, Spin, Checkbox } from 'antd';
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 
 // import app components
@@ -10,9 +11,10 @@ import MediaImage from './MediaImage';
 
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
+import { colors } from '../theme';
 
 const MediaLibrary = (props) => {
-  const { onSelect, allow } = props;
+  const { onSelect, allow, multiple, selected: defaultSelected = [] } = props;
 
   const [
     {
@@ -29,6 +31,7 @@ const MediaLibrary = (props) => {
   const [activeFile, setActiveFile] = useState(null);
   const [uploader, setUploader] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState(defaultSelected);
 
   useEffect(() => {
     // We need to add this check, because deployment causes a new site fetch
@@ -76,76 +79,119 @@ const MediaLibrary = (props) => {
     setActiveFile(null);
   };
 
-  const handleSelect = (image) => {
+  const handleClickCheckbox = (image) => {
+    const nextSelection = produce(selected, (draft) => {
+      const index = selected.findIndex((o) => o.id === image.id);
+
+      if (index > -1) {
+        draft.splice(index, 1);
+      } else {
+        draft.push(image);
+      }
+
+      return draft;
+    });
+
+    setSelected(nextSelection);
+  };
+
+  const handleSelect = (item) => {
+    if (multiple) {
+      handleClickCheckbox(item);
+      setActiveFile(null);
+    } else {
+      dispatch({ type: 'CLOSE_DIALOG' });
+      onSelect && onSelect(item);
+    }
+  };
+
+  const handleSelectMultiple = () => {
     dispatch({ type: 'CLOSE_DIALOG' });
-    onSelect(image);
+    onSelect && onSelect(selected);
   };
 
   return (
     <>
-      <Space direction="vertical" size={20}>
-        <Button
-          icon={<UploadOutlined />}
-          children="Upload"
-          type="primary"
-          onClick={() => setUploader(!uploader)}
-          loading={loading}
-        />
+      <Container actionBar={multiple && selected.length > 0}>
+        <Space direction="vertical" size={20}>
+          <Button
+            icon={<UploadOutlined />}
+            children="Upload"
+            type="primary"
+            onClick={() => setUploader(!uploader)}
+            loading={loading}
+          />
 
-        {uploader && (
-          <Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-          </Upload.Dragger>
-        )}
+          {uploader && (
+            <Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">Click or drag file to this area to upload</p>
+            </Upload.Dragger>
+          )}
 
-        <MediaItems>
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={handleLoadMore}
-            hasMore={page > -1}
-            loader={
-              <LoadingContainer key={0}>
-                <Spin size="large" />
-              </LoadingContainer>
-            }
-          >
-            {items &&
-              items
-                .filter((o) => (allow ? allow.includes(o.type) : o))
-                .map((o) => {
-                  return (
-                    <MediaItem key={o.id} onClick={() => setActiveFile(o)} span={6}>
-                      {o.type === 'image' && (
-                        <Img
-                          fluid={o.childImageSharp.fluid}
-                          objectFit="cover"
-                          objectPosition="50% 50%"
-                          alt={o.alt}
-                          style={{ width: '100%', height: '100%' }}
-                        />
-                      )}
+          <MediaItems>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={handleLoadMore}
+              hasMore={page > -1}
+              loader={
+                <LoadingContainer key={0}>
+                  <Spin size="large" />
+                </LoadingContainer>
+              }
+            >
+              {items &&
+                items
+                  .filter((o) => (allow ? allow.includes(o.type) : o))
+                  .map((o) => {
+                    return (
+                      <MediaItem key={o.id}>
+                        <MediaItemInner onClick={() => setActiveFile(o)}>
+                          {o.type === 'image' && (
+                            <Img
+                              fluid={o.childImageSharp.fluid}
+                              objectFit="cover"
+                              objectPosition="50% 50%"
+                              alt={o.alt}
+                              style={{ width: '100%', height: '100%' }}
+                            />
+                          )}
 
-                      {o.type === 'application' && (
-                        <File>
-                          <img src={o.icon} />
-                          <span>{o.title}</span>
-                        </File>
-                      )}
-                    </MediaItem>
-                  );
-                })}
+                          {o.type === 'application' && (
+                            <File>
+                              <img src={o.icon} />
+                              <span>{o.title}</span>
+                            </File>
+                          )}
+                        </MediaItemInner>
 
-            <DummyItem />
-            <DummyItem />
-            <DummyItem />
-            <DummyItem />
-            <DummyItem />
-          </InfiniteScroll>
-        </MediaItems>
-      </Space>
+                        {multiple && (
+                          <CheckboxContainer onClick={() => handleClickCheckbox(o)}>
+                            <Checkbox checked={!!selected.find((p) => p.id === o.id)} />
+                          </CheckboxContainer>
+                        )}
+                      </MediaItem>
+                    );
+                  })}
+
+              <DummyItem />
+              <DummyItem />
+              <DummyItem />
+              <DummyItem />
+              <DummyItem />
+            </InfiniteScroll>
+          </MediaItems>
+
+          {multiple && selected.length > 0 && (
+            <ActionBar>
+              {`${selected.length} selected`}
+              <Button onClick={handleSelectMultiple} children="Select" type="primary" />
+            </ActionBar>
+          )}
+        </Space>
+      </Container>
 
       {!!activeFile && (
         <Modal
@@ -158,17 +204,17 @@ const MediaLibrary = (props) => {
           width={1024}
         >
           {activeFile && (
-            <MediaImage
-              file={activeFile}
-              onSelect={onSelect && handleSelect}
-              onClose={handleCloseDialog}
-            />
+            <MediaImage file={activeFile} onSelect={handleSelect} onClose={handleCloseDialog} />
           )}
         </Modal>
       )}
     </>
   );
 };
+
+const Container = styled.div`
+  padding-bottom: ${({ actionBar }) => (actionBar ? '40px' : 0)};
+`;
 
 const MediaItems = styled.div`
   > div {
@@ -198,6 +244,22 @@ const MediaItem = styled.div`
   }
 `;
 
+const MediaItemInner = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CheckboxContainer = styled.div`
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  z-index: 1;
+  padding: 4px;
+`;
+
 const DummyItem = styled.div`
   height: 0;
   width: 140px;
@@ -225,6 +287,19 @@ const LoadingContainer = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
+`;
+
+const ActionBar = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid ${colors.tertiary};
 `;
 
 export default MediaLibrary;
