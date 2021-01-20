@@ -17,7 +17,7 @@ const TextImage = (props) => {
             objectFit="cover"
             objectPosition="50% 50%"
             alt={image.alt}
-            style={{ width: '100%', height: '100%' }}
+            style={{ position: 'absolute', width: '100%', height: '100%' }}
           />
         )}
       </ImageContainer>
@@ -45,11 +45,14 @@ const TextContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
+  position: relative;
   width: 100%;
+  height: 220px;
   order: ${({ alignment }) => (alignment === 'left' ? 1 : 3)};
 
   @media (min-width: 768px) {
     width: 50%;
+    height: unset;
   }
 `;
 
