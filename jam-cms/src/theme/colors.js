@@ -4,7 +4,7 @@ const colors = {
   secondaryContrast: '#f0f2f5',
   tertiary: '#d9e1ef',
   success: '#3BB143',
-  warning: '#e24141',
+  warning: '#ff4d4f',
 };
 
 export default colors;

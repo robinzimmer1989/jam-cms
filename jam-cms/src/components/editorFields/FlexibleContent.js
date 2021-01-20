@@ -148,10 +148,12 @@ const FlexibleContent = (props) => {
                                     <Popconfirm
                                       title="Are you sure？"
                                       onConfirm={() => handleRemove(index)}
-                                      icon={<QuestionCircleOutlined style={{ color: '#ff4d4f' }} />}
+                                      icon={
+                                        <QuestionCircleOutlined style={{ color: colors.warning }} />
+                                      }
                                       placement="left"
                                     >
-                                      <DeleteTwoTone twoToneColor="#ff4d4f" />
+                                      <DeleteTwoTone twoToneColor={colors.warning} />
                                     </Popconfirm>
                                   </DeleteIconContainer>
                                 </DeleteIcon>
