@@ -20,6 +20,7 @@ export const updatePost = async (
     content,
     seo,
     parentID,
+    taxonomies,
     featuredImage,
     template,
     templateObject,
@@ -38,6 +39,7 @@ export const updatePost = async (
       content: JSON.stringify(content),
       seo: JSON.stringify(seo),
       parentID,
+      taxonomies: JSON.stringify(taxonomies),
       featuredImage: JSON.stringify(featuredImage),
       template,
       templateObject: JSON.stringify(templateObject),
@@ -51,5 +53,10 @@ export const updatePost = async (
 
 export const deletePost = async ({ siteID, id }, dispatch, config) => {
   let result = await db('deletePost', { siteID, id }, dispatch, config);
+  return result;
+};
+
+export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('duplicatePost', { siteID, id }, dispatch, config);
   return result;
 };

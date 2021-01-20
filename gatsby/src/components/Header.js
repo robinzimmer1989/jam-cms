@@ -8,12 +8,12 @@ import Github from '../icons/github.svg';
 import { colors } from '../theme';
 
 const Header = (props) => {
-  const { menu, breakpoint } = props;
+  const { jamCMS, menu, breakpoint } = props;
 
   const [open, setOpen] = useState();
 
   return (
-    <Container breakpoint={breakpoint} open={open}>
+    <Container sidebar={jamCMS?.sidebar} breakpoint={breakpoint} open={open}>
       <Grid>
         <LogoContainer to={`/`}>
           <Logo />
@@ -58,8 +58,8 @@ const Header = (props) => {
 const Container = styled.div`
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: ${({ sidebar }) => (sidebar ? '320px' : 0)};
+  width: ${({ sidebar }) => (sidebar ? 'calc(100% - 320px)' : '100%')};
   z-index: 10;
   padding: 15px 20px;
   background: #fff;
@@ -111,14 +111,13 @@ const Nav = styled.nav`
   @media (max-width: ${({ breakpoint }) => breakpoint - 1}px) {
     position: fixed;
     z-index: 100;
-    right: 0;
+    right: -360px;
     top: 0;
     height: 100%;
-    width: 100%;
-    max-width: 360px;
+    width: 360px;
     padding: 80px 30px;
     background: ${colors.primary};
-    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
+    transform: ${({ open }) => (open ? 'translateX(-100%)' : 'translateX(0)')};
     transition: ease-in-out 0.2s all;
   }
 

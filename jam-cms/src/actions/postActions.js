@@ -39,6 +39,7 @@ export const updatePost = async (
     content,
     seo,
     parentID,
+    taxonomies,
     featuredImage,
     template,
     templateObject,
@@ -56,6 +57,7 @@ export const updatePost = async (
       content,
       seo,
       parentID,
+      taxonomies,
       featuredImage,
       template,
       templateObject,
@@ -77,6 +79,16 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
 
   if (result) {
     dispatch({ type: `DELETE_POST`, payload: { ...result, siteID } });
+  }
+
+  return result;
+};
+
+export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
+  const result = await postServices.duplicatePost({ siteID, id }, dispatch, config);
+
+  if (result) {
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
   }
 
   return result;

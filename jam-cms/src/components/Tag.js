@@ -21,7 +21,7 @@ const Tag = styled.span`
   ${({ children }) =>
     children === 'draft' &&
     css`
-      background: ${colors.primary.dark};
+      background: ${colors.primary};
       color: #fff;
     `}
 

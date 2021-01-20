@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Collapse, Popconfirm } from 'antd';
 import produce from 'immer';
 import { DeleteTwoTone, QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -47,7 +47,7 @@ const Repeater = (props) => {
   };
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? colors.text.light : '#fff',
+    background: isDraggingOver ? colors.tertiary : '#fff',
     padding: 2,
   });
 
@@ -174,7 +174,7 @@ const Repeater = (props) => {
       )}
 
       <AddContainer>
-        <AddButton onClick={handleAdd}>
+        <AddButton siblings={values && values.length > 0} onClick={handleAdd}>
           <PlusOutlined />
         </AddButton>
       </AddContainer>
@@ -226,13 +226,23 @@ const AddButton = styled.div`
   align-items: center;
   height: 46px;
   width: 100%;
-  border: 2px dotted ${colors.text.light};
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: ease all 0.2s;
+  transition: ease-in all 0.2s;
 
   &:hover {
-    border-color: #7e7e7e;
+    border-color: ${colors.tertiary};
   }
+
+  ${({ siblings }) =>
+    !siblings &&
+    css`
+      border-color: ${colors.tertiary};
+
+      &:hover {
+        border-color: #c9cfdb;
+      }
+    `}
 `;
 
 export default Repeater;

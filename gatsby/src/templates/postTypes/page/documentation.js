@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import Layout from '../../components/Layout';
-import Edges from '../../components/Edges';
-import Wysiwyg from '../../components/Wysiwyg';
+import Layout from '../../../components/Layout';
+import Edges from '../../../components/Edges';
+import Wysiwyg from '../../../components/Wysiwyg';
 
-import { colors } from '../../theme';
+import { colors } from '../../../theme';
 
 const Template = (props) => {
   const {
@@ -15,7 +15,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       <Edges size="lg">
         <SidebarContent>
           <Sidebar>
@@ -128,7 +128,7 @@ const WysiwygContainer = styled.div`
 
 export default Template;
 
-export const PageDocumentationTemplate = {
+export const PageDocumentation = {
   id: 'documentation',
   label: 'Documentation',
   postTypeID: 'page',

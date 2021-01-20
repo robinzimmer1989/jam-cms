@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 // import app components
-import Layout from '../../components/Layout';
-import Edges from '../../components/Edges';
-import banner from '../../components/Banner';
-import textEditor from '../../components/TextEditor';
+import Layout from '../../../components/Layout';
+import Edges from '../../../components/Edges';
+import banner from '../../../components/Banner';
+import textEditor from '../../../components/TextEditor';
 
 const Banner = banner.component;
 const TextEditor = textEditor.component;
@@ -16,7 +16,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       <Banner headline={title} height="small" />
       <Edges size="sm">
         <Content>
@@ -33,7 +33,7 @@ const Content = styled.div`
 
 export default Template;
 
-export const NewsDefaultTemplate = {
+export const NewsDefault = {
   id: 'default',
   label: 'News',
   postTypeID: 'news',

@@ -1,8 +1,16 @@
-import { PageDefaultTemplate } from './page/default';
-import { PageDocumentationTemplate } from './page/documentation';
-import { NewsDefaultTemplate } from './news/default';
+import { PageDefault } from './postTypes/page/default';
+import { PageDocumentation } from './postTypes/page/documentation';
+import { NewsDefault } from './postTypes/news/default';
 
 export default {
-  page: [PageDefaultTemplate, PageDocumentationTemplate],
-  news: [NewsDefaultTemplate],
+  postTypes: {
+    page: {
+      default: PageDefault,
+      documentation: PageDocumentation,
+    },
+    news: {
+      default: NewsDefault,
+    },
+  },
+  taxonomies: {},
 };

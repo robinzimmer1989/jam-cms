@@ -5,5 +5,17 @@ import * as formActions from './formActions';
 import * as mediaActions from './mediaActions';
 import * as postActions from './postActions';
 import * as siteActions from './siteActions';
+import * as taxonomyActions from './taxonomyActions';
+import * as termActions from './termActions';
 
-export { authActions, userActions, collectionActions, formActions, mediaActions, postActions, siteActions };
+export {
+  authActions,
+  userActions,
+  collectionActions,
+  formActions,
+  mediaActions,
+  postActions,
+  siteActions,
+  taxonomyActions,
+  termActions,
+};

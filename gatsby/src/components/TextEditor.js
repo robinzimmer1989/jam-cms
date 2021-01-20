@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Text from './textEditor/Text';
 import TextImage from './textEditor/TextImage';
 
-import Edges from './Edges';
-
 const TextEditor = (props) => {
   const { flex } = props;
 
@@ -30,11 +28,9 @@ const TextEditor = (props) => {
 
   return (
     <Container>
-      <Edges size="md">
-        <Content>
-          {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)}
-        </Content>
-      </Edges>
+      <Content>
+        {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)}
+      </Content>
     </Container>
   );
 };
@@ -45,6 +41,10 @@ const Container = styled.div`
 `;
 
 const Content = styled.div`
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
+
   > div {
     &:first-child {
       margin-top: 0;

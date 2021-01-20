@@ -104,6 +104,11 @@ const transformSite = (site) => {
       draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});
     }
 
+    // Convert taxonomies to object structure
+    if (get(draft, `taxonomies.items`)) {
+      draft.taxonomies = draft.taxonomies.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});
+    }
+
     // Convert forms to object structure
     if (get(draft, `forms.items`)) {
       draft.forms = draft.forms.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});

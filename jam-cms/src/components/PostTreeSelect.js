@@ -19,7 +19,7 @@ const PostTreeSelect = (props) => {
   };
 
   return (
-    <Space direction="vertical" size={2}>
+    <Space direction="vertical" size={6}>
       <Caption children={label} />
       <TreeSelect
         showSearch

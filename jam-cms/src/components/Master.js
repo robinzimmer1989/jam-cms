@@ -8,9 +8,11 @@ import Profile from '../pages/Profile';
 import PostEditor from '../pages/PostEditor';
 import Dashboard from '../pages/Dashboard';
 import Media from '../pages/Media';
-import Collections from '../pages/Collections';
-import Collection from '../pages/Collection';
+import PostTypes from '../pages/PostTypes';
+import PostType from '../pages/PostType';
 import GeneralSettings from '../pages/GeneralSettings';
+import Taxonomies from '../pages/Taxonomies';
+import Taxonomy from '../pages/Taxonomy';
 import Editors from '../pages/Editors';
 import Options from '../pages/Options';
 
@@ -26,15 +28,17 @@ import {
   ROUTE_PROFILE,
   ROUTE_SITE,
   ROUTE_MEDIA,
-  ROUTE_COLLECTIONS,
+  ROUTE_POST_TYPE,
   ROUTE_SETTINGS_GENERAL,
-  ROUTE_SETTINGS_COLLECTIONS,
+  ROUTE_SETTINGS_POST_TYPES,
+  ROUTE_SETTINGS_TAXONOMIES,
   ROUTE_EDITORS,
   ROUTE_OPTIONS,
+  ROUTE_TAXONOMY,
 } from '../routes';
 
 const Master = (props) => {
-  const { theme, templates, pageProps } = props;
+  const { templates } = props;
 
   const [
     {
@@ -67,17 +71,26 @@ const Master = (props) => {
   }
 
   return (
-    <div id="jam-cms">
+    <>
       <CmsStyles />
 
       <Router>
         <PrivateRoute path={`${ROUTE_APP}`} component={Home} />
+
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_PROFILE}`} component={Profile} />
+
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} component={Dashboard} />
+
         <PrivateRoute path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} component={Media} />
+
         <PrivateRoute
-          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_COLLECTIONS}/:postTypeID`}
-          component={Collection}
+          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_POST_TYPE}/:postTypeID`}
+          component={PostType}
+        />
+
+        <PrivateRoute
+          path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`}
+          component={Taxonomy}
         />
 
         {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
@@ -96,8 +109,15 @@ const Master = (props) => {
 
         {authUser?.capabilities?.manage_options && (
           <PrivateRoute
-            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_COLLECTIONS}`}
-            component={Collections}
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_POST_TYPES}`}
+            component={PostTypes}
+          />
+        )}
+
+        {authUser?.capabilities?.manage_options && (
+          <PrivateRoute
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_TAXONOMIES}`}
+            component={Taxonomies}
           />
         )}
 
@@ -108,14 +128,7 @@ const Master = (props) => {
           />
         )}
 
-        <PrivateRoute
-          path={'*'}
-          component={PostEditor}
-          theme={theme}
-          templates={templates}
-          postTypeID={pageProps.pageContext.postTypeID}
-          postID={pageProps.pageContext.id}
-        />
+        <PrivateRoute path={'*'} component={PostEditor} templates={templates} />
       </Router>
 
       {dialog.open && (
@@ -130,7 +143,7 @@ const Master = (props) => {
           footer={null}
         />
       )}
-    </div>
+    </>
   );
 };
 

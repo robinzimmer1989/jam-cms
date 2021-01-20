@@ -87,11 +87,11 @@ const icon = css`
   height: 30px;
   margin: 0 1px;
   background: #fff;
-  border: 1px solid #d9d9d9;
+  border: none;
   box-shadow: none;
 
   &:hover {
-    background: ${colors.background.light};
+    background: ${colors.secondaryContrast};
     box-shadow: none;
   }
 `;
@@ -109,16 +109,14 @@ const EditorContainer = styled.div`
     transform: translateX(-1px);
 
     a {
+      pointer-events: all !important;
       color: rgba(0, 0, 0, 0.85);
     }
   }
 
   .rdw-editor-main {
-    padding: 4px;
     min-height: 100px;
-    max-height: 300px;
     background: #fff;
-    border: 1px solid #d9d9d9;
     font-size: 13px;
     line-height: 18px;
   }
@@ -145,11 +143,12 @@ const EditorContainer = styled.div`
   }
 
   .rdw-option-active {
-    background: ${colors.text.light};
+    background: ${colors.tertiary};
   }
 
   .rdw-block-dropdown {
-    width: 100px;
+    width: auto;
+    padding: 0 4px;
   }
 
   .public-DraftStyleDefault-block {
@@ -165,6 +164,8 @@ const EditorContainer = styled.div`
   }
 
   pre {
+    margin: 0;
+
     .public-DraftStyleDefault-block {
       margin-top: 0;
       margin-bottom: 0;
@@ -215,7 +216,7 @@ const EditorContainer = styled.div`
 
   a {
     text-decoration: underline;
-    color: ${colors.primary.dark};
+    color: ${colors.primary};
   }
 `;
 

@@ -1,27 +1,36 @@
 import React, { useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, Select as AntSelect } from 'antd';
 
 // import app components
+import Select from './Select';
 import Input from './Input';
 import { useStore } from '../store';
 
-const CollectionForm = (props) => {
-  const { id: defaultId, title: defaultTitle = '', slug: defaultSlug = '', onSubmit } = props;
+const TaxonomyForm = (props) => {
+  const {
+    site,
+    id: defaultId,
+    title: defaultTitle = '',
+    slug: defaultSlug = '',
+    postTypes: defaultPostTypes = [],
+    onSubmit,
+  } = props;
 
-  const collectionExists = !!defaultId;
+  const taxonomyExists = !!defaultId;
 
   const [, dispatch] = useStore();
 
   const [title, setTitle] = useState(defaultTitle);
   const [id, setId] = useState(defaultId);
   const [slug, setSlug] = useState(defaultSlug);
+  const [postTypes, setPostTypes] = useState(defaultPostTypes);
 
   const handleSubmit = async () => {
     if (!title || !id) {
       return;
     }
 
-    await onSubmit({ id, title, slug });
+    await onSubmit({ id, title, slug, postTypes });
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -40,12 +49,27 @@ const CollectionForm = (props) => {
           value={id}
           instructions="The id must match the template file id (i.e. post)"
           onChange={handleChangeId}
-          disabled={collectionExists}
+          disabled={taxonomyExists}
         />
         <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
+
+        <Select
+          label="Collections"
+          mode="multiple"
+          allowClear
+          style={{ width: '100%' }}
+          placeholder="Please select"
+          defaultValue={postTypes}
+          onChange={(v) => setPostTypes(v)}
+        >
+          {site?.postTypes &&
+            Object.values(site.postTypes).map((o) => (
+              <AntSelect.Option key={o.id} value={o.id} children={o.title} />
+            ))}
+        </Select>
       </Space>
       <Button
-        children={collectionExists ? 'Update' : 'Add'}
+        children={taxonomyExists ? 'Update' : 'Add'}
         onClick={handleSubmit}
         type="primary"
         block
@@ -54,4 +78,4 @@ const CollectionForm = (props) => {
   );
 };
 
-export default CollectionForm;
+export default TaxonomyForm;

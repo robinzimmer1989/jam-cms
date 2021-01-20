@@ -1,8 +1,18 @@
 import React from 'react';
+import { Link } from '@reach/router';
 import styled from 'styled-components';
-import { Empty } from 'antd';
+import { Empty, Button } from 'antd';
+
+import getRoute from '../routes';
+import { useStore } from '../store';
 
 const FourOhFour = () => {
+  const [
+    {
+      cmsState: { siteID },
+    },
+  ] = useStore();
+
   return (
     <EmptyContainer>
       <Empty
@@ -11,7 +21,11 @@ const FourOhFour = () => {
           height: 120,
         }}
         description={'Page not found'}
-      />
+      >
+        <Link to={getRoute('dashboard', { siteID })}>
+          <Button type="primary">Back to Dashboard</Button>
+        </Link>
+      </Empty>
     </EmptyContainer>
   );
 };

@@ -1,80 +1,44 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Button, Tooltip } from 'antd';
-import { FullscreenExitOutlined } from '@ant-design/icons';
 
 // import app components
-import Iframe from './Iframe';
+
 import { useStore } from '../store';
 
-const PageWrapper = ({ theme, template, onClick, children }) => {
+const PageWrapper = (props) => {
+  const { template, children } = props;
+
   const [
     {
-      editorState: { viewport },
+      editorState: { siteHasChanged, postHasChanged, sidebar },
     },
-    dispatch,
   ] = useStore();
 
   return (
-    <>
-      {viewport === `fullscreen` && (
-        <Tooltip key={`view-fullscreen`} title={`Exit Fullscreen`} placement="left">
-          <FullScreenExitButton>
-            <Button
-              onClick={() => dispatch({ type: `SET_EDITOR_VIEWPORT`, payload: `desktop` })}
-              icon={<FullscreenExitOutlined />}
-              shape="circle"
-              type="primary"
-              size="large"
-            />
-          </FullScreenExitButton>
-        </Tooltip>
+    <Container sidebar={!!sidebar}>
+      {template ? (
+        <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
+      ) : (
+        <div id="jam-cms">{children}</div>
       )}
-
-      <Page viewport={viewport} onClick={onClick}>
-        <Iframe theme={theme} template={template}>
-          {children}
-        </Iframe>
-      </Page>
-    </>
+    </Container>
   );
 };
 
-const Page = styled.div`
-  margin: 0 auto;
-  width: 100%;
+const Container = styled.div`
+  width: ${({ sidebar }) => (sidebar ? 'calc(100% - 320px)' : '100%')};
+  margin-left: ${({ sidebar }) => (sidebar ? '320px' : 0)};
   background: #fff;
-
-  ${({ viewport }) =>
-    viewport === `fullscreen`
-      ? css`
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 20;
-          overflow: hidden;
-        `
-      : viewport === `desktop`
-      ? css``
-      : viewport === `tablet`
-      ? css`
-          width: 100%;
-          max-width: 768px;
-        `
-      : viewport === `mobile` &&
-        css`
-          width: 100%;
-          max-width: 360px;
-        `}
 `;
 
-const FullScreenExitButton = styled.div`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 25;
+const Content = styled.div`
+  ${({ disableLinks }) =>
+    disableLinks &&
+    css`
+      a {
+        pointer-events: none !important;
+      }
+    `}
 `;
 
 export default PageWrapper;

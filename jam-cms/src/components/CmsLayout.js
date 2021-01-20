@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
 import { PageHeader, Layout, Menu } from 'antd';
@@ -29,10 +29,8 @@ const CmsLayout = (props) => {
     },
   ] = useStore();
 
-  const site = sites[siteID];
-
   return (
-    <Layout>
+    <Layout className="jam-cms">
       <Layout.Sider
         className="sider"
         theme="dark"
@@ -62,15 +60,37 @@ const CmsLayout = (props) => {
               <Link to={getRoute(`media`, { siteID })}>Media</Link>
             </Menu.Item>
 
-            <Menu.SubMenu key={'collections-sub'} icon={<BlockOutlined />} title="Collections">
-              {site?.postTypes &&
-                Object.values(site.postTypes).map((o) => {
+            <Menu.SubMenu key={'Collections'} icon={<BlockOutlined />} title="Collections">
+              {sites?.[siteID]?.postTypes &&
+                sites?.[siteID]?.taxonomies &&
+                Object.values(sites[siteID].postTypes).map((o) => {
+                  const postTypeTaxonomies = [];
+
+                  Object.values(sites[siteID].taxonomies).map(
+                    (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
+                  );
+
                   return (
-                    <Menu.Item key={o.title}>
-                      <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                        {o.title}
-                      </Link>
-                    </Menu.Item>
+                    <Fragment key={o.title}>
+                      <Menu.Item>
+                        <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
+                          {o.title}
+                        </Link>
+                      </Menu.Item>
+
+                      {postTypeTaxonomies &&
+                        postTypeTaxonomies.map((p) => {
+                          return (
+                            <Menu.Item key={p.title}>
+                              <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
+                                {p.title}
+                              </Link>
+                            </Menu.Item>
+                          );
+                        })}
+
+                      <Menu.Divider />
+                    </Fragment>
                   );
                 })}
             </Menu.SubMenu>
@@ -90,8 +110,14 @@ const CmsLayout = (props) => {
                 )}
 
                 {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="Collections">
-                    <Link to={getRoute(`settings-collections`, { siteID })}>Collections</Link>
+                  <Menu.Item key="Post Types">
+                    <Link to={getRoute(`settings-post-types`, { siteID })}>Post Types</Link>
+                  </Menu.Item>
+                )}
+
+                {authUser?.capabilities?.manage_options && (
+                  <Menu.Item key="Taxonomies">
+                    <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
                   </Menu.Item>
                 )}
 
@@ -127,7 +153,7 @@ const SidebarHeader = styled(PageHeader)`
     margin: 0 auto;
 
     path {
-      fill: ${colors.background.light};
+      fill: ${colors.secondaryContrast};
     }
   }
 
@@ -144,7 +170,6 @@ const SidebarHeader = styled(PageHeader)`
 `;
 
 const Content = styled.div`
-  position: relative;
   width: 100%;
   min-height: 100vh;
   max-width: 1024px;

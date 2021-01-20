@@ -53,7 +53,7 @@ const ImageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.text.light};
+  background-color: ${colors.tertiary};
 `;
 
 const File = styled.div`

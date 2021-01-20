@@ -1,10 +1,9 @@
 import { createGlobalStyle, css } from 'styled-components';
 
 import colors from './colors';
-import minireset from './minireset';
 
 const styles = css`
-  background: ${colors.background.light};
+  background: ${colors.secondaryContrast};
 
   * {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
@@ -75,6 +74,7 @@ const styles = css`
 
   .ant-tabs-tab-btn {
     font-size: 11px;
+    font-weight: 500;
   }
 
   .ant-menu-item,
@@ -92,7 +92,7 @@ const styles = css`
 
   .ant-collapse {
     position: relative;
-    background-color: ${colors.background.light};
+    background-color: ${colors.secondaryContrast};
   }
 
   .ant-collapse > .ant-collapse-item {
@@ -106,14 +106,30 @@ const styles = css`
   .ant-collapse-content > .ant-collapse-content-box {
     padding: 4px;
   }
+
+  .ant-collapse-arrow {
+    padding: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+  }
 `;
 
 export default createGlobalStyle`
-  ${minireset}
+
+  body {
+    overflow-y: scroll;
+  }
 
   .ant-modal-body {
-    background: ${colors.background.light};
+    background: ${colors.secondaryContrast};
     ${styles}
+  }
+
+  .ant-menu-item-group-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   }
 
   .ant-popover {
@@ -124,7 +140,7 @@ export default createGlobalStyle`
     }
   }
   
-  #jam-cms {
+  .jam-cms {
     ${styles}
   }
 `;

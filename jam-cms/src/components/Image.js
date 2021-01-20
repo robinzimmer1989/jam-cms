@@ -37,7 +37,7 @@ const Image = (props) => {
 const Container = styled.div`
   height: ${({ height }) => (height ? `${height}px` : '100%')};
   width: ${({ width }) => (width ? `${width}px` : '100%')};
-  background: ${colors.background.light};
+  background: ${colors.secondaryContrast};
 
   .ant-image {
     width: 100%;

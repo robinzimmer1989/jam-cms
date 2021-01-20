@@ -1,12 +1,12 @@
 import React from 'react';
 
 // import app components
-import Layout from '../../components/Layout';
-import banner from '../../components/Banner';
-import boxes from '../../components/Boxes';
-import posts from '../../components/Posts';
-import textimage from '../../components/TextImage';
-import texteditor from '../../components/TextEditor';
+import Layout from '../../../components/Layout';
+import banner from '../../../components/Banner';
+import boxes from '../../../components/Boxes';
+import posts from '../../../components/Posts';
+import textimage from '../../../components/TextImage';
+import texteditor from '../../../components/TextEditor';
 
 const blocks = {
   banner,
@@ -22,7 +22,7 @@ const Template = (props) => {
   } = props;
 
   return (
-    <Layout {...props.pageContext}>
+    <Layout {...props}>
       {content?.blocks?.flex &&
         content.blocks.flex.map(({ id, ...fields }, index) => {
           const Component = blocks?.[id]?.component;
@@ -34,7 +34,7 @@ const Template = (props) => {
 
 export default Template;
 
-export const PageDefaultTemplate = {
+export const PageDefault = {
   id: 'default',
   label: 'Default',
   postTypeID: 'page',

@@ -4,12 +4,12 @@ import { Select as AntSelect, Space } from 'antd';
 import Caption from './Caption';
 
 const Select = (props) => {
-  const { value, name, onChange, children, label } = props;
+  const { value, name, onChange, children, label, ...rest } = props;
 
   return (
-    <Space direction="vertical" size={2}>
+    <Space direction="vertical" size={6}>
       {label && <Caption children={label} />}
-      <AntSelect value={value} onChange={onChange} name={name} children={children} />
+      <AntSelect value={value} onChange={onChange} name={name} children={children} {...rest} />
     </Space>
   );
 };

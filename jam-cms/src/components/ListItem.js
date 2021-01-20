@@ -75,7 +75,7 @@ const Container = styled.div`
 const ImagePlaceholder = styled.div`
   width: 50px;
   height: 50px;
-  background: ${colors.text.light};
+  background: ${colors.tertiary};
 `;
 
 export default ListItem;

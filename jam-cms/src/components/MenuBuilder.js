@@ -318,7 +318,7 @@ const MenuBox = styled.div`
 const StyledListItem = styled(ListItem)`
   .ant-card {
     box-shadow: none !important;
-    background: ${colors.background.light};
+    background: ${colors.secondaryContrast};
     border: 1px solid #d9d9d9;
     margin-bottom: 4px;
   }
