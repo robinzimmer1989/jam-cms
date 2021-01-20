@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import { Space } from 'antd';
 
 // import app components
 import MenuBuilder from './MenuBuilder';
@@ -226,8 +227,10 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
         component
       ) : (
         <FieldContainer>
-          <Caption children={field.label || field.id} />
-          {component}
+          <Space direction="vertical" size={6}>
+            <Caption children={field.label || field.id} />
+            {component}
+          </Space>
         </FieldContainer>
       )}
     </Fragment>

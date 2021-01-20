@@ -87,7 +87,7 @@ const icon = css`
   height: 30px;
   margin: 0 1px;
   background: #fff;
-  border: 1px solid #d9d9d9;
+  border: none;
   box-shadow: none;
 
   &:hover {
@@ -115,10 +115,8 @@ const EditorContainer = styled.div`
   }
 
   .rdw-editor-main {
-    padding: 4px;
     min-height: 100px;
     background: #fff;
-    border: 1px solid #d9d9d9;
     font-size: 13px;
     line-height: 18px;
   }
@@ -149,7 +147,8 @@ const EditorContainer = styled.div`
   }
 
   .rdw-block-dropdown {
-    width: 100px;
+    width: auto;
+    padding: 0 4px;
   }
 
   .public-DraftStyleDefault-block {

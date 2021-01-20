@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Collapse, Popconfirm, Menu, Dropdown } from 'antd';
 import produce from 'immer';
 import { DeleteTwoTone, QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -190,7 +190,7 @@ const FlexibleContent = (props) => {
 
       <AddContainer>
         <Dropdown overlay={menu} trigger={['click']}>
-          <AddButton>
+          <AddButton siblings={values && values.length > 0}>
             <PlusOutlined />
           </AddButton>
         </Dropdown>
@@ -206,7 +206,7 @@ const Container = styled.div`
     position: relative;
   }
 
-  .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  .ant-collapse-header {
     cursor: grab;
   }
 `;
@@ -243,13 +243,23 @@ const AddButton = styled.div`
   align-items: center;
   height: 46px;
   width: 100%;
-  border: 2px dotted ${colors.tertiary};
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: ease all 0.2s;
+  transition: ease-in all 0.2s;
 
   &:hover {
-    border-color: #7e7e7e;
+    border-color: ${colors.tertiary};
   }
+
+  ${({ siblings }) =>
+    !siblings &&
+    css`
+      border-color: ${colors.tertiary};
+
+      &:hover {
+        border-color: #c9cfdb;
+      }
+    `}
 `;
 
 export default FlexibleContent;

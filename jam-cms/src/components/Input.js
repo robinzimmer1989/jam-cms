@@ -18,7 +18,7 @@ const Input = (props) => {
   } = props;
 
   return (
-    <Space direction="vertical" size={2}>
+    <Space direction="vertical" size={6}>
       {label && <Caption className={className} children={label} />}
       {instructions && <Typography type="secondary" children={instructions} />}
       {!!rows ? (
