@@ -28,7 +28,6 @@ const PageWrapper = (props) => {
 const Container = styled.div`
   width: ${({ sidebar }) => (sidebar ? 'calc(100% - 320px)' : '100%')};
   margin-left: ${({ sidebar }) => (sidebar ? '320px' : 0)};
-  background: #fff;
 `;
 
 const Content = styled.div`
