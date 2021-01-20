@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button, Space } from 'antd';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import produce from 'immer';
 import Img from 'gatsby-image';
-import { DeleteTwoTone, PlusOutlined } from '@ant-design/icons';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  CloseCircleOutlined,
+  PlusOutlined,
+  LeftCircleOutlined,
+  RightCircleOutlined,
+} from '@ant-design/icons';
 
 // import app components
 import MediaLibrary from '../MediaLibrary';
@@ -15,15 +18,29 @@ const Gallery = (props) => {
 
   const values = value || [];
 
-  const handleRemove = () => {};
-
-  const handleSelect = (value) => {
+  const handleRemove = (index) => {
     const newValues = produce(values, (draft) => {
-      draft.push(value);
+      draft.splice(index, 1);
       return draft;
     });
 
     onChange(newValues);
+  };
+
+  const handleMoveElement = (index, newIndex) => {
+    const newValues = produce(values, (draft) => {
+      if (newIndex > -1 && newIndex < draft.length) {
+        const temp = draft[index];
+        draft[index] = draft[newIndex];
+        draft[newIndex] = temp;
+      }
+      return draft;
+    });
+    onChange(newValues);
+  };
+
+  const handleSelect = (items) => {
+    onChange(items);
   };
 
   const handleClickAdd = () => {
@@ -31,36 +48,85 @@ const Gallery = (props) => {
       type: `SET_DIALOG`,
       payload: {
         open: true,
-        component: <MediaLibrary onSelect={handleSelect} allow={['image']} />,
+        component: (
+          <MediaLibrary onSelect={handleSelect} allow={['image']} selected={values} multiple />
+        ),
         width: 1024,
       },
     });
   };
 
-  return (
-    <Container>
-      {values &&
-        values.map((o) => {
-          return (
-            <ImageContainer>
-              {o?.childImageSharp?.fluid && (
-                <Img
-                  fluid={o.childImageSharp.fluid}
-                  objectFit="cover"
-                  objectPosition="50% 50%"
-                  alt={o.alt}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              )}
-            </ImageContainer>
-          );
-        })}
-
+  const renderButtons = () => {
+    const addButton = (
       <AddContainer>
         <AddButton onClick={handleClickAdd}>
           <PlusOutlined />
         </AddButton>
       </AddContainer>
+    );
+
+    if (values?.length === 0 || values.length % 3 === 0) {
+      return (
+        <>
+          {addButton}
+          {addButton}
+          {addButton}
+        </>
+      );
+    } else if (values.length % 3 === 1) {
+      return (
+        <>
+          {addButton}
+          {addButton}
+        </>
+      );
+    } else {
+      return addButton;
+    }
+  };
+
+  return (
+    <Container>
+      {values &&
+        values.map((o, i) => {
+          return (
+            <GalleryItem key={i}>
+              <ImageContainer>
+                {o?.childImageSharp?.fluid && (
+                  <Img
+                    fluid={o.childImageSharp.fluid}
+                    objectFit="cover"
+                    objectPosition="50% 50%"
+                    alt={o.alt}
+                    style={{ width: '100%', height: '100%' }}
+                  />
+                )}
+              </ImageContainer>
+
+              <LeftIcon
+                disabled={i - 1 === -1}
+                className="icon"
+                onClick={() => i - 1 > -1 && handleMoveElement(i, i - 1)}
+              >
+                <LeftCircleOutlined style={{ color: colors.secondary }} />
+              </LeftIcon>
+
+              <RightIcon
+                disabled={i === values.length - 1}
+                className="icon"
+                onClick={() => i < values.length && handleMoveElement(i, i + 1)}
+              >
+                <RightCircleOutlined style={{ color: colors.secondary }} />
+              </RightIcon>
+
+              <RemoveIcon className="icon" onClick={() => handleRemove(i)}>
+                <CloseCircleOutlined style={{ color: colors.warning }} />
+              </RemoveIcon>
+            </GalleryItem>
+          );
+        })}
+
+      {renderButtons()}
     </Container>
   );
 };
@@ -68,17 +134,76 @@ const Gallery = (props) => {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
+const GalleryItem = styled.div`
+  position: relative;
+  height: 100px;
+  width: 100px;
+  margin-bottom: 6px;
+
+  &:hover {
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: rgba(240, 242, 245, 0.8);
+    }
+
+    .icon {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+`;
+
+const icon = css`
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  padding: 4px;
+  transition: ease all 0.2s;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      svg {
+        opacity: 0.2;
+      }
+    `}
+`;
+
+const RemoveIcon = styled.div`
+  ${icon}
+  right: 2px;
+  top: 2px;
+`;
+
+const LeftIcon = styled.div`
+  ${icon}
+  left: 25px;
+  bottom: 2px;
+`;
+
+const RightIcon = styled.div`
+  ${icon}
+  right: 25px;
+  bottom: 2px;
 `;
 
 const ImageContainer = styled.div`
-  height: 68px;
-  width: 68px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.text.light};
+  background-color: ${colors.secondaryContrast};
 `;
 
 const AddContainer = styled.div`
@@ -89,15 +214,11 @@ const AddButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 68px;
-  width: 68px;
-  border: 2px dotted ${colors.text.light};
+  height: 100px;
+  width: 100px;
+  border: 2px solid ${colors.tertiary};
   cursor: pointer;
   transition: ease all 0.2s;
-
-  &:hover {
-    border-color: #7e7e7e;
-  }
 `;
 
 export default Gallery;
