@@ -25,6 +25,7 @@ import FlexibleContent from './editorFields/FlexibleContent';
 import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
 import Gallery from './editorFields/Gallery';
+import GoogleMap from './editorFields/GoogleMap';
 
 import { useStore } from '../store';
 
@@ -225,6 +226,16 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
               },
             })
           }
+        />
+      );
+      break;
+
+    case 'google_map':
+      component = (
+        <GoogleMap
+          {...field}
+          site={site}
+          onChange={(value) => onChangeElement({ ...field, value })}
         />
       );
       break;

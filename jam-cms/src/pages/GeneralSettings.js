@@ -117,6 +117,24 @@ const GeneralSettings = () => {
             />
           </Space>
         </Card>
+
+        <Card title={`API keys`}>
+          <Space direction="vertical" size={20}>
+            <Input
+              label="Google Maps API Key"
+              value={site?.googleMapsApi}
+              name="googleMapsApi"
+              onChange={handleChange}
+            />
+
+            <Button
+              loading={loading === 'general'}
+              onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'general')}
+              children={`Update`}
+              type="primary"
+            />
+          </Space>
+        </Card>
       </Space>
     </CmsLayout>
   );

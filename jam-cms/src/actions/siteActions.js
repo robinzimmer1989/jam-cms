@@ -15,18 +15,17 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, title, globalOptions, frontPage, deployment, apiKey },
+  { id, globalOptions, deployment, title, googleMapsApi },
   dispatch,
   config
 ) => {
   const result = await siteServices.updateSite(
     {
       id,
-      title,
       globalOptions,
-      frontPage,
       deployment,
-      apiKey,
+      title,
+      googleMapsApi,
     },
     dispatch,
     config
