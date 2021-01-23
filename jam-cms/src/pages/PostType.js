@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, PageHeader, Tabs, Space, Select, Input, Menu, Dropdown } from 'antd';
+import { Button, PageHeader, Tabs, Space, Select, Input, Menu, Dropdown, message } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
@@ -91,6 +91,8 @@ const PostType = (props) => {
 
   const handleTrashPost = async ({ postID }) => {
     await postActions.updatePost({ siteID, id: postID, status: 'trash' }, dispatch, config);
+
+    message.info('Post has been trashed');
   };
 
   const filterItems = (
