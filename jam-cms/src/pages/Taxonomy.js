@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, PageHeader, Popconfirm, Space } from 'antd';
-import styled from 'styled-components';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -75,7 +74,7 @@ const Taxonomy = (props) => {
 
     return (
       <React.Fragment key={o.id}>
-        <StyledListItem level={level} actions={actions} title={o.title} subtitle={o.slug} />
+        <ListItem level={level} actions={actions} title={o.title} subtitle={o.slug} />
 
         {o.childNodes.map((p) => renderTerm(p, level + 1))}
       </React.Fragment>
@@ -88,14 +87,11 @@ const Taxonomy = (props) => {
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
 
-      {terms && terms.map((item) => renderTerm(item, 0))}
+      <Space direction="vertical" size={8}>
+        {terms && terms.map((item) => renderTerm(item, 0))}
+      </Space>
     </CmsLayout>
   );
 };
-
-const StyledListItem = styled(ListItem)`
-  margin-top: 20px;
-  margin-bottom: 20px;
-`;
 
 export default Taxonomy;
