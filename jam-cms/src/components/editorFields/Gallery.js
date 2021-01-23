@@ -56,35 +56,6 @@ const Gallery = (props) => {
     });
   };
 
-  const renderButtons = () => {
-    const addButton = (
-      <AddContainer>
-        <AddButton onClick={handleClickAdd}>
-          <PlusOutlined />
-        </AddButton>
-      </AddContainer>
-    );
-
-    if (values?.length === 0 || values.length % 3 === 0) {
-      return (
-        <>
-          {addButton}
-          {addButton}
-          {addButton}
-        </>
-      );
-    } else if (values.length % 3 === 1) {
-      return (
-        <>
-          {addButton}
-          {addButton}
-        </>
-      );
-    } else {
-      return addButton;
-    }
-  };
-
   return (
     <Container>
       {values &&
@@ -126,7 +97,11 @@ const Gallery = (props) => {
           );
         })}
 
-      {renderButtons()}
+      <AddContainer>
+        <AddButton onClick={handleClickAdd}>
+          <PlusOutlined />
+        </AddButton>
+      </AddContainer>
     </Container>
   );
 };
@@ -134,14 +109,14 @@ const Gallery = (props) => {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 `;
 
 const GalleryItem = styled.div`
   position: relative;
-  height: 100px;
-  width: 100px;
-  margin-bottom: 6px;
+  height: 75px;
+  width: 75px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 
   &:hover {
     &:before {
@@ -187,13 +162,13 @@ const RemoveIcon = styled.div`
 
 const LeftIcon = styled.div`
   ${icon}
-  left: 25px;
+  left: calc(50% - 25px);
   bottom: 2px;
 `;
 
 const RightIcon = styled.div`
   ${icon}
-  right: 25px;
+  right: calc(50% - 25px);
   bottom: 2px;
 `;
 
@@ -214,9 +189,9 @@ const AddButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  width: 100px;
-  border: 2px solid ${colors.tertiary};
+  height: 75px;
+  width: 75px;
+  border: 1px solid ${colors.tertiary};
   cursor: pointer;
   transition: ease all 0.2s;
 `;
