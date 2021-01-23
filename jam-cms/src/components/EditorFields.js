@@ -29,9 +29,8 @@ import GoogleMap from './editorFields/GoogleMap';
 
 import { useStore } from '../store';
 
-export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
+export const getField = ({ index, field, site, onChangeElement, dispatch, level = 1 }) => {
   let component;
-
   switch (field.type) {
     case 'group':
       component = (
@@ -248,7 +247,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch }) => {
       {field.type === 'repeater' || field.type === 'flexible_content' || field.type === 'group' ? (
         component
       ) : (
-        <FieldContainer>
+        <FieldContainer level={level + 1}>
           <Space direction="vertical" size={6}>
             <Caption children={field.label || field.id} />
             {component}
@@ -271,7 +270,8 @@ const EditorFields = (props) => {
 
   return (
     <Container>
-      {fields && fields.map((field) => getField({ field, site, onChangeElement, dispatch }))}
+      {fields &&
+        fields.map((field) => getField({ field, site, onChangeElement, dispatch, level: 0 }))}
     </Container>
   );
 };
@@ -288,7 +288,7 @@ const Container = styled.div`
 `;
 
 const FieldContainer = styled.div`
-  padding: 8px 4px;
+  padding: 8px ${({ level }) => (level === 1 ? '16px' : '4px')};
 `;
 
 export default EditorFields;
