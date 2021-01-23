@@ -25,7 +25,7 @@ const RichText = (props) => {
     });
   };
 
-  return typeof children === 'string' ? parse(children) : children;
+  return typeof children === 'string' ? parse(children) : '';
 };
 
 export default RichText;
