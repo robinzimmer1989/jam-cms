@@ -1,4 +1,4 @@
-export default function (length = 12) {
+export default function generateRandomString(length = 12) {
   var result = '';
   var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
