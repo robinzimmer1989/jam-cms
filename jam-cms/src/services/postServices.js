@@ -60,3 +60,13 @@ export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
   let result = await db('duplicatePost', { siteID, id }, dispatch, config);
   return result;
 };
+
+export const reorderPosts = async ({ siteID, postIDs }, dispatch, config) => {
+  let result = await db(
+    'reorderPosts',
+    { siteID, postIDs: JSON.stringify(postIDs) },
+    dispatch,
+    config
+  );
+  return result;
+};

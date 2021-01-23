@@ -93,3 +93,31 @@ export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
 
   return result;
 };
+
+export const reorderPosts = async ({ siteID, postType, posts }, dispatch, config) => {
+  const postIDs = posts.reduce(
+    (ac, a) => ({
+      ...ac,
+      [a.id]: a.order,
+    }),
+    {}
+  );
+
+  // We're not gonna wait until the function is completed to give the user an instant feedback
+  postServices.reorderPosts({ siteID, postIDs }, dispatch, config);
+
+  dispatch({
+    type: 'UPDATE_COLLECTION',
+    payload: {
+      siteID,
+      ...postType,
+      posts: posts.reduce(
+        (ac, a) => ({
+          ...ac,
+          [a.id]: a,
+        }),
+        {}
+      ),
+    },
+  });
+};

@@ -3,6 +3,7 @@ import { Link, navigate } from '@reach/router';
 import { Button, PageHeader, Tabs, Space, Select, Input, Menu, Dropdown, message } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -12,7 +13,8 @@ import Tag from '../components/Tag';
 
 import { postActions } from '../actions';
 import { useStore } from '../store';
-import { createDataTree, sortBy, generateSlug } from '../utils';
+import { createDataTree, generateSlug } from '../utils';
+import { colors } from '../theme';
 
 const PostType = (props) => {
   const { siteID, postTypeID } = props;
@@ -50,8 +52,8 @@ const PostType = (props) => {
     ? visiblePosts.filter((o) => o.title.toLowerCase().includes(search))
     : visiblePosts;
 
-  // Sort posts by date
-  sortBy(visiblePosts, 'createdAt');
+  // Sort posts by menu order
+  visiblePosts = visiblePosts.sort((a, b) => (a.order > b.order ? 1 : -1));
 
   // Create data tree
   visiblePosts = createDataTree(visiblePosts);
@@ -220,13 +222,91 @@ const PostType = (props) => {
     );
   };
 
+  const getListStyle = (isDraggingOver) => ({
+    background: isDraggingOver ? colors.tertiary : 'transparent',
+  });
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    userSelect: 'none',
+    marginBottom: '8px',
+    ...draggableStyle,
+  });
+
+  const handleDragEnd = async (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const index = result.source.index;
+    const newIndex = result.destination.index;
+
+    if (index === newIndex) {
+      return;
+    }
+
+    const nextPosts = produce(visiblePosts, (draft) => {
+      if (newIndex > -1 && newIndex < draft.length) {
+        const temp = draft[index];
+        draft[index] = draft[newIndex];
+        draft[newIndex] = temp;
+
+        draft.map((o, i) => {
+          return (draft[i] = { ...o, order: i });
+        });
+      }
+
+      return draft;
+    });
+
+    await postActions.reorderPosts({ siteID, postType, posts: nextPosts }, dispatch, config);
+  };
+
   return (
     <CmsLayout pageTitle={postType?.title}>
       <PageHeader title={filterItems} extra={extra} />
 
-      <Space direction="vertical" size={20}>
-        {visiblePosts && visiblePosts.map((item) => renderPost(item, 0))}
-      </Space>
+      {visiblePosts && (
+        <Space direction="vertical" size={8}>
+          {filter === 'all' && postTypeID !== 'page' ? (
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                  >
+                    {visiblePosts.map((o, i) => {
+                      return (
+                        <Draggable key={o.id} draggableId={`item-${o.id}`} index={i}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style
+                              )}
+                            >
+                              {renderPost(o, 0)}
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          ) : (
+            visiblePosts.map((o) => renderPost(o, 0))
+          )}
+        </Space>
+      )}
     </CmsLayout>
   );
 };
