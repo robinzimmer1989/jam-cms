@@ -31,6 +31,7 @@ const Input = (props) => {
           placeholder={placeholder}
           rows={rows}
           className={className}
+          {...rest}
         />
       ) : type === 'password' ? (
         <AntInput.Password

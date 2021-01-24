@@ -24,6 +24,10 @@ const PostForm = (props) => {
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
   const handleSubmit = async () => {
+    if (!title) {
+      return;
+    }
+
     await onSubmit({ postTypeID, title, parentID });
 
     setTitle('');
@@ -38,7 +42,8 @@ const PostForm = (props) => {
         label="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder={``}
+        placeholder={''}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
       />
 
       {!defaultPostTypeID &&

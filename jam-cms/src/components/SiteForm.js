@@ -39,7 +39,12 @@ const SiteForm = () => {
 
   return (
     <Space direction="vertical">
-      <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <Input
+        label="Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+      />
       <Button loading={loading} children={`Add`} onClick={handleSubmit} type="primary" />
     </Space>
   );

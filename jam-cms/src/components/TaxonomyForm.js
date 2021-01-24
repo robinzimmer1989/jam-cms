@@ -43,15 +43,28 @@ const TaxonomyForm = (props) => {
   return (
     <Space direction="vertical" size={20}>
       <Space direction="vertical">
-        <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Input
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        />
+
         <Input
           label="name"
           value={id}
           instructions="The id must match the template file id (i.e. post)"
           onChange={handleChangeId}
           disabled={taxonomyExists}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         />
-        <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
+
+        <Input
+          label="slug"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        />
 
         <Select
           label="Collections"
@@ -68,6 +81,7 @@ const TaxonomyForm = (props) => {
             ))}
         </Select>
       </Space>
+
       <Button
         children={taxonomyExists ? 'Update' : 'Add'}
         onClick={handleSubmit}

@@ -16,7 +16,7 @@ const EditorForm = (props) => {
   const [role, setRole] = useState(defaultRole);
 
   const handleSubmit = async () => {
-    if (!email) {
+    if (!email || !role) {
       return;
     }
 
@@ -37,6 +37,7 @@ const EditorForm = (props) => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder={``}
         disabled={!!defaultEmail}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
       />
 
       <Space direction="vertical" size={2}>

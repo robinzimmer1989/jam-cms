@@ -39,14 +39,27 @@ const TermForm = (props) => {
   return (
     <Space direction="vertical" size={20}>
       <Space direction="vertical">
-        <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <Input label="slug" value={slug} onChange={(e) => setSlug(e.target.value)} />
+        <Input
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        />
+
+        <Input
+          label="slug"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        />
+
         <Input
           rows={4}
           label="Description"
           value={description}
           allowClear
           onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         />
 
         <Select value={parentID} onChange={(value) => setParentID(value)} label={'Parent'}>
@@ -57,6 +70,7 @@ const TermForm = (props) => {
               .map((o) => <AntSelect.Option key={o.id} value={o.id} children={o.title} />)}
         </Select>
       </Space>
+
       <Button
         children={termExists ? 'Update' : 'Add'}
         onClick={handleSubmit}

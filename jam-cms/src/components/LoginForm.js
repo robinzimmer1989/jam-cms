@@ -60,6 +60,7 @@ const LoginForm = (props) => {
                 label={`Username`}
                 value={data.username}
                 onChange={handleChange}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                 name="username"
               />
 
@@ -68,6 +69,7 @@ const LoginForm = (props) => {
                 value={data.password}
                 type="password"
                 onChange={handleChange}
+                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
                 name="password"
               />
 
