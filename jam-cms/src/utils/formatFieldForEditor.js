@@ -10,9 +10,9 @@ import generateSlug from './generateSlug';
 export default function formatFieldForEditor(field, site) {
   // Post relationship fields
   if (field.type === 'collection' && field?.value) {
-    const posts = Object.values(site?.postTypes?.[field.value]?.posts || {}).filter(
-      (post) => post.status === 'publish'
-    );
+    const posts = Object.values(site?.postTypes?.[field.value]?.posts || {})
+      .filter((post) => post.status === 'publish')
+      .sort((a, b) => (a.order > b.order ? 1 : -1));
 
     return {
       ...field,
