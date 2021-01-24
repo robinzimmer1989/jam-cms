@@ -447,7 +447,7 @@ const EditorSidebar = (props) => {
                 type="primary"
                 onClick={handlePublish}
                 loading={loading === 'publish'}
-                disabled={!postHasChanged && !siteHasChanged}
+                disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
                 block
               />
             </>
