@@ -8,7 +8,7 @@ import Loader from '../components/Loader';
 import FourOhFour from '../components/FourOhFour';
 import EditorSidebar from '../components/EditorSidebar';
 
-import { formatFieldsToProps, generateSlug } from '../utils';
+import { formatFieldsToProps, formatTaxonomiesForEditor, generateSlug } from '../utils';
 import { useStore } from '../store';
 import { postActions } from '../actions';
 
@@ -79,6 +79,8 @@ const PostEditor = (props) => {
                       createdAt: post.createdAt,
                       featuredImage: post.featuredImage,
                       content: formatFieldsToProps(post.content, site),
+                      taxonomies: formatTaxonomiesForEditor(post, site),
+                      query: post.query,
                       postTypeID: post.postTypeID,
                       globalOptions: formatFieldsToProps(site?.globalOptions, site),
                     }}

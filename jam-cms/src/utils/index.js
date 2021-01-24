@@ -8,6 +8,7 @@ import recursivelyUpdateTree from './recursivelyUpdateTree';
 import removeFromTree from './removeFromTree';
 import deepCopyTree from './deepCopyTree';
 import formatFieldForEditor from './formatFieldForEditor';
+import formatTaxonomiesForEditor from './formatTaxonomiesForEditor';
 import * as auth from './auth';
 import generateRandomString from './generateRandomString';
 import convertFileSize from './convertFileSize';
@@ -25,6 +26,7 @@ export {
   removeFromTree,
   deepCopyTree,
   formatFieldForEditor,
+  formatTaxonomiesForEditor,
   auth,
   generateRandomString,
   convertFileSize,
