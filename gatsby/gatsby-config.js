@@ -16,8 +16,10 @@ module.exports = {
     {
       resolve: `gatsby-source-jam-cms`,
       options: {
-        source: process.env.GATSBY_CMS_SOURCE,
-        apiKey: process.env.GATSBY_CMS_API_KEY,
+        source: process.env.GATSBY_JAM_CMS_URL,
+        apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
+        templates: path.join(__dirname, 'src/templates'), // optional
+        globalOptions: path.join(__dirname, 'src/globalOptions'), // optional
       },
     },
     {
