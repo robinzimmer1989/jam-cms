@@ -76,3 +76,24 @@ export const resetPassword = async ({ key, login, password }, url) => {
 
   return result?.data;
 };
+
+export const refreshToken = async ({ refreshToken }, url) => {
+  const endpoint = getEndpoint(url);
+
+  const result = await axios.post(endpoint, {
+    query: `
+      mutation {
+        refreshJwtAuthToken(
+          input: {
+            jwtRefreshToken: "${refreshToken}"
+            clientMutationId: "refreshToken"
+          }
+        ) {
+          authToken
+        }
+      }
+    `,
+  });
+
+  return result?.data;
+};

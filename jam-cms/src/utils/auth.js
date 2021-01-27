@@ -1,6 +1,6 @@
 import getStorageKey from './getStorageKey';
-const storageKey = getStorageKey();
 
+const storageKey = getStorageKey();
 const isBrowser = typeof window !== `undefined`;
 
 export const setUser = (user) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
@@ -21,7 +21,7 @@ import PrivateRoute from './PrivateRoute';
 
 import { CmsStyles } from '../theme';
 import { useStore } from '../store';
-import { userActions, siteActions } from '../actions';
+import { authActions, userActions, siteActions } from '../actions';
 import { isLoggedIn } from '../utils/auth';
 import {
   ROUTE_APP,
@@ -53,6 +53,9 @@ const Master = (props) => {
 
   const loggedIn = isLoggedIn(config);
 
+  // timer for refresh token
+  const [timer, setTimer] = useState(0);
+
   useEffect(() => {
     const loadUser = async () => {
       await userActions.getAuthUser({}, dispatch, config);
@@ -62,9 +65,28 @@ const Master = (props) => {
       await siteActions.getSite({ siteID: 'default' }, dispatch, config);
     };
 
-    loggedIn && loadUser();
-    loggedIn && loadSite();
+    if (loggedIn) {
+      !authUser && loadUser();
+      !sites[siteID] && loadSite();
+    }
   }, [loggedIn]);
+
+  useEffect(() => {
+    // activate timer for refresh token
+    setInterval(() => {
+      setTimer((timer) => timer + 1);
+    }, 60000);
+  }, [loggedIn]);
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      await authActions.refreshToken({}, config);
+    };
+
+    if (loggedIn && timer > 0) {
+      refreshToken();
+    }
+  }, [timer]);
 
   if (!sites[siteID]) {
     return <Loader />;

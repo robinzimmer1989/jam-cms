@@ -25,3 +25,17 @@ export const resetPassword = async ({ key, login, password }, url) => {
   const result = await authServices.resetPassword({ key, login, password }, url);
   return result;
 };
+
+export const refreshToken = async ({}, config) => {
+  const { refreshToken } = auth.getUser();
+
+  if (refreshToken) {
+    const result = await authServices.refreshToken({ refreshToken }, config.source);
+
+    if (result?.data?.refreshJwtAuthToken) {
+      auth.setUser({ refreshToken, ...result.data.refreshJwtAuthToken });
+    }
+
+    return result;
+  }
+};
