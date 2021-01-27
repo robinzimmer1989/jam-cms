@@ -3,11 +3,13 @@ import styled from 'styled-components';
 
 import { LoginForm } from 'jam-cms';
 
-const Login = () => {
+const Login = (props) => {
+  const { source } = props;
+
   return (
     <Container>
       <CardWrapper>
-        <LoginForm url={`${process.env.GATSBY_JAM_CMS_URL}/wp-json/jwt-auth/v1/token`} />
+        <LoginForm url={source} />
       </CardWrapper>
     </Container>
   );
