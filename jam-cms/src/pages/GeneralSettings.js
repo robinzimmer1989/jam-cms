@@ -57,9 +57,16 @@ const GeneralSettings = () => {
           <Space direction="vertical" size={20}>
             <Input label="Title" value={site?.title} name="title" onChange={handleChange} />
 
+            <Input
+              label="Frontend URL"
+              value={site?.siteUrl}
+              name="siteUrl"
+              onChange={handleChange}
+            />
+
             <Button
               loading={loading === 'general'}
-              onClick={() => handleUpdate({ title: site.title }, 'general')}
+              onClick={() => handleUpdate({ title: site.title, siteUrl: site.siteUrl }, 'general')}
               children={`Update`}
               type="primary"
             />
