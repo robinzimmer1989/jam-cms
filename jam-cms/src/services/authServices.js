@@ -1,18 +1,78 @@
 import axios from 'axios';
 
-export const signIn = async ({ username, password }, url) => {
+const getEndpoint = (url) => `${url.replace(/\/+$/, '')}/graphql`;
+
+export const signIn = async ({ email, password }, url) => {
   try {
-    const result = await axios.post(url.replace(/\/+$/, ''), {
-      username,
-      password,
+    const endpoint = getEndpoint(url);
+
+    const result = await axios.post(endpoint, {
+      query: `
+        mutation  {
+          login(
+            input: {
+              username: "${email}"
+              password: "${password}"
+              clientMutationId: "login"
+            }
+          ) {
+            authToken
+            refreshToken
+          }
+        }
+      `,
     });
 
-    const { data } = result;
-
-    return data;
+    return result?.data;
   } catch (err) {
     console.log(err);
   }
 };
 
-export const resetPassword = async ({ email }, url) => {};
+export const forgetPassword = async ({ email }, url) => {
+  const endpoint = getEndpoint(url);
+
+  const result = await axios.post(endpoint, {
+    query: `
+      mutation {
+        sendPasswordResetEmail(
+          input: {
+            username: "${email}"
+            clientMutationId: "forgotPassword"
+          }
+        ) {
+          user {
+            email
+          }
+        }
+      }
+    `,
+  });
+
+  return result?.data;
+};
+
+export const resetPassword = async ({ key, login, password }, url) => {
+  const endpoint = getEndpoint(url);
+
+  const result = await axios.post(endpoint, {
+    query: `
+      mutation {
+        resetUserPassword(
+          input: {
+            key: "${key}"
+            login: "${login}"
+            password: "${password}"
+            clientMutationId: "changePassword"
+          }
+        ) {
+          user {
+            email
+          }
+        }
+      }
+    `,
+  });
+
+  return result?.data;
+};

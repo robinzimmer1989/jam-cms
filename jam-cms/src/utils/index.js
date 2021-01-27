@@ -14,6 +14,8 @@ import generateRandomString from './generateRandomString';
 import convertFileSize from './convertFileSize';
 import formatFieldsToProps from './formatFieldsToProps';
 import getStorageKey from './getStorageKey';
+import validateEmail from './validateEmail';
+import getParameter from './getParameter';
 
 export {
   createDataTree,
@@ -32,4 +34,6 @@ export {
   convertFileSize,
   formatFieldsToProps,
   getStorageKey,
+  validateEmail,
+  getParameter,
 };

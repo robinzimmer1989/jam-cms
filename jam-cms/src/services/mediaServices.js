@@ -9,7 +9,7 @@ import { authActions } from '../actions';
 export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
   const user = auth.getUser(config);
 
-  if (!user?.token) {
+  if (!user?.authToken) {
     authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
   }
 
@@ -17,12 +17,18 @@ export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    let result = await axios.post(`${config?.source}/createMediaItem?siteID=${siteID}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
+    const cleanedUrl = config?.source.replace(/\/+$/, '');
+
+    let result = await axios.post(
+      `${cleanedUrl}/wp-json/jamcms/v1/createMediaItem?siteID=${siteID}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${user.authToken}`,
+        },
+      }
+    );
 
     const { data } = result;
 

@@ -25,7 +25,7 @@ export const isLoggedIn = () => {
   const user = getUser();
 
   if (user) {
-    return !!user.token;
+    return !!user.authToken;
   }
 
   return false;

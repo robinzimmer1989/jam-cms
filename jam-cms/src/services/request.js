@@ -8,7 +8,7 @@ import { authActions } from '../actions';
 const db = async (endpoint, params, dispatch, config) => {
   const user = auth.getUser(config);
 
-  if (!user?.token) {
+  if (!user?.authToken) {
     authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
   }
 
@@ -18,18 +18,23 @@ const db = async (endpoint, params, dispatch, config) => {
       (key) => typeof params[key] !== 'undefined' && formData.append(key, params[key])
     );
 
-    const result = await axios.post(`${config?.source.replace(/\/+$/, '')}/${endpoint}`, formData, {
+    const cleanedUrl = config?.source.replace(/\/+$/, '');
+
+    const result = await axios.post(`${cleanedUrl}/wp-json/jamcms/v1/${endpoint}`, formData, {
       headers: {
         'Content-Type': 'x-www-form-urlencoded',
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${user.authToken}`,
       },
     });
 
-    const { data } = result;
-    return data;
+    return result?.data;
   } catch (err) {
     if (err?.response?.data?.message) {
       message.error(err.response.data.message);
+
+      if (endpoint === 'getAuthUser') {
+        authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+      }
     }
   }
 };
