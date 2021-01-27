@@ -271,7 +271,9 @@ const EditorFields = (props) => {
   return (
     <Container>
       {fields &&
-        fields.map((field) => getField({ field, site, onChangeElement, dispatch, level: 0 }))}
+        fields
+          .filter((field) => !!field)
+          .map((field) => getField({ field, site, onChangeElement, dispatch, level: 0 }))}
     </Container>
   );
 };
