@@ -60,10 +60,15 @@ const CmsLayout = (props) => {
               <Link to={getRoute(`media`, { siteID })}>Media</Link>
             </Menu.Item>
 
-            <Menu.SubMenu key={'Collections'} icon={<BlockOutlined />} title="Collections">
+            <Menu.SubMenu
+              key={'Collections'}
+              icon={<BlockOutlined />}
+              title="Collections"
+              popupOffset={[1, 0]}
+            >
               {sites?.[siteID]?.postTypes &&
                 sites?.[siteID]?.taxonomies &&
-                Object.values(sites[siteID].postTypes).map((o) => {
+                Object.values(sites[siteID].postTypes).map((o, i) => {
                   const postTypeTaxonomies = [];
 
                   Object.values(sites[siteID].taxonomies).map(
@@ -89,7 +94,7 @@ const CmsLayout = (props) => {
                           );
                         })}
 
-                      <Menu.Divider />
+                      {Object.values(sites[siteID].postTypes).length - 1 !== i && <Menu.Divider />}
                     </Fragment>
                   );
                 })}
@@ -102,7 +107,12 @@ const CmsLayout = (props) => {
             )}
 
             {(authUser?.capabilities?.manage_options || authUser?.capabilities?.list_users) && (
-              <Menu.SubMenu key={'settings-sub'} icon={<SettingOutlined />} title="Settings">
+              <Menu.SubMenu
+                key={'settings-sub'}
+                icon={<SettingOutlined />}
+                title="Settings"
+                popupOffset={[1, 0]}
+              >
                 {authUser?.capabilities?.manage_options && (
                   <Menu.Item key="General">
                     <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
