@@ -4,7 +4,12 @@ import produce from 'immer';
 import InfiniteScroll from 'react-infinite-scroller';
 import Img from 'gatsby-image';
 import { Modal, Upload, Button, Space, message, Spin, Checkbox } from 'antd';
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import {
+  UploadOutlined,
+  InboxOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+} from '@ant-design/icons';
 
 // import app components
 import MediaImage from './MediaImage';
@@ -32,6 +37,8 @@ const MediaLibrary = (props) => {
   const [uploader, setUploader] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(defaultSelected);
+
+  const activeFileIndex = activeFile && items.findIndex((o) => o.id === activeFile.id);
 
   useEffect(() => {
     // We need to add this check, because deployment causes a new site fetch
@@ -203,9 +210,29 @@ const MediaLibrary = (props) => {
           footer={null}
           width={1024}
         >
-          {activeFile && (
-            <MediaImage file={activeFile} onSelect={handleSelect} onClose={handleCloseDialog} />
-          )}
+          <PrevButton>
+            <Button
+              shape="circle"
+              icon={<ArrowLeftOutlined />}
+              size={'large'}
+              onClick={() => setActiveFile(items[activeFileIndex - 1])}
+              disabled={activeFileIndex === 0}
+            />
+          </PrevButton>
+          <MediaImage
+            file={activeFile}
+            onSelect={onSelect && handleSelect}
+            onClose={handleCloseDialog}
+          />
+          <NextButton>
+            <Button
+              shape="circle"
+              icon={<ArrowRightOutlined />}
+              size={'large'}
+              onClick={() => setActiveFile(items[activeFileIndex + 1])}
+              disabled={activeFileIndex === items.length - 1}
+            />
+          </NextButton>
         </Modal>
       )}
     </>
@@ -300,6 +327,22 @@ const ActionBar = styled.div`
   padding: 20px;
   background: #fff;
   border-top: 1px solid ${colors.tertiary};
+`;
+
+const PrevButton = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -50px;
+`;
+
+const NextButton = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -50px;
 `;
 
 export default MediaLibrary;

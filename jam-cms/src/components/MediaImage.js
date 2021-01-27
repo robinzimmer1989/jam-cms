@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Space, Row, Col, Popconfirm, message, Typography } from 'antd';
 import Img from 'gatsby-image';
@@ -19,6 +19,10 @@ const MediaImage = (props) => {
 
   const [data, setData] = useState({ ...file });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setData(file);
+  }, [file]);
 
   const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
