@@ -37,7 +37,6 @@ export default Template;
 export const PageDefault = {
   id: 'default',
   label: 'Default',
-  postTypeID: 'page',
   component: Template,
   fields: [
     {

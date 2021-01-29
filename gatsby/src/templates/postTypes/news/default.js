@@ -36,7 +36,6 @@ export default Template;
 export const NewsDefault = {
   id: 'default',
   label: 'News',
-  postTypeID: 'news',
   component: Template,
   query: `
     query {

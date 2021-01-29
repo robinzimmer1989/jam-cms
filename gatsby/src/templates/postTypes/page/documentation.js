@@ -59,6 +59,7 @@ const Sidebar = styled.div`
 
   @media (min-width: 768px) {
     width: 250px;
+    min-height: calc(100vh - 80px - 130px);
     padding: 40px 0 40px 0;
     border-right: 1px solid #eee;
 
@@ -131,7 +132,6 @@ export default Template;
 export const PageDocumentation = {
   id: 'documentation',
   label: 'Documentation',
-  postTypeID: 'page',
   component: Template,
   fields: [
     {

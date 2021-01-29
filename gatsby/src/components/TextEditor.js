@@ -132,8 +132,6 @@ export default {
               id: 'gallery',
               type: 'gallery',
               label: 'Gallery',
-              min: 1,
-              max: 9,
             },
           ],
         },
