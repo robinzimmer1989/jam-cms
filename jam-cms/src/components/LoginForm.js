@@ -64,8 +64,8 @@ const LoginForm = (props) => {
 
       if (result?.data?.login?.authToken) {
         navigate(ROUTE_APP);
-      } else {
-        setData({ ...data, error: result?.message });
+      } else if (result?.errors?.[0]?.message) {
+        setData({ ...data, error: 'Email or password wrong.' });
       }
     } catch (err) {
       console.log('error...: ', err);
