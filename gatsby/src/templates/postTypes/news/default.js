@@ -38,6 +38,15 @@ export const NewsDefault = {
   label: 'News',
   postTypeID: 'news',
   component: Template,
+  query: `
+    query {
+      posts {
+        nodes {
+          title
+        }
+      }
+    }
+  `,
   fields: [
     {
       id: 'header',
@@ -48,11 +57,6 @@ export const NewsDefault = {
       label: 'Content',
       type: 'group',
       fields: textEditor.fields,
-    },
-    {
-      id: 'gallery',
-      label: 'Gallery',
-      type: 'gallery',
     },
     {
       id: 'footer',
