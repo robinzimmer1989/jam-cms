@@ -30,10 +30,10 @@ const db = async (endpoint, params, dispatch, config) => {
     return result?.data;
   } catch (err) {
     if (err?.response?.data?.message) {
-      message.error(err.response.data.message);
-
-      if (endpoint === 'getAuthUser') {
+      if (endpoint === 'getAuthUser' || endpoint === 'getSite') {
         authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+      } else {
+        message.error(err.response.data.message);
       }
     }
   }
