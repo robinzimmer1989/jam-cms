@@ -4,6 +4,7 @@ import styled from 'styled-components';
 // import app components
 import Text from './textEditor/Text';
 import TextImage from './textEditor/TextImage';
+import Images from './textEditor/Images';
 
 const TextEditor = (props) => {
   const { flex } = props;
@@ -18,6 +19,10 @@ const TextEditor = (props) => {
 
       case 'layout2':
         el = <TextImage {...block} />;
+        break;
+
+      case 'images':
+        el = <Images {...block} />;
         break;
 
       default:
@@ -108,6 +113,27 @@ export default {
                   value: 'right',
                 },
               ],
+            },
+          ],
+        },
+        {
+          id: 'images',
+          type: 'layout',
+          label: 'Images',
+          fields: [
+            {
+              id: 'columns',
+              type: 'number',
+              label: 'Columns',
+              min: 1,
+              max: 4,
+            },
+            {
+              id: 'gallery',
+              type: 'gallery',
+              label: 'Gallery',
+              min: 1,
+              max: 9,
             },
           ],
         },
