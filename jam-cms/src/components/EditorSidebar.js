@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import produce from 'immer';
-import { Space, Select as AntSelect, Checkbox, Tabs, Button, Typography, message } from 'antd';
+import {
+  Space,
+  Select as AntSelect,
+  Checkbox,
+  Tabs,
+  Button,
+  Typography,
+  Tooltip,
+  message,
+} from 'antd';
 import {
   ArrowLeftOutlined as CloseIcon,
   EditOutlined as EditIcon,
@@ -468,34 +477,40 @@ const EditorSidebar = (props) => {
     </Container>
   ) : (
     <Buttons>
-      <Button
-        icon={<DashboardIcon />}
-        type="primary"
-        disabled={postHasChanged || siteHasChanged}
-        onClick={() => navigate(getRoute(`dashboard`, { siteID }))}
-      />
+      <Tooltip title="Back to jamCMS" placement="right">
+        <Button
+          icon={<DashboardIcon />}
+          type="primary"
+          disabled={postHasChanged || siteHasChanged}
+          onClick={() => navigate(getRoute(`collection`, { siteID, postTypeID: post.postTypeID }))}
+        />
+      </Tooltip>
 
-      <Button
-        icon={<AddIcon />}
-        type="primary"
-        disabled={postHasChanged || siteHasChanged}
-        onClick={() =>
-          dispatch({
-            type: 'SET_DIALOG',
-            payload: {
-              open: true,
-              title: `Add`,
-              component: <PostForm onSubmit={handleAddPost} />,
-            },
-          })
-        }
-      />
+      <Tooltip title="Add" placement="right">
+        <Button
+          icon={<AddIcon />}
+          type="primary"
+          disabled={postHasChanged || siteHasChanged}
+          onClick={() =>
+            dispatch({
+              type: 'SET_DIALOG',
+              payload: {
+                open: true,
+                title: `Add`,
+                component: <PostForm onSubmit={handleAddPost} />,
+              },
+            })
+          }
+        />
+      </Tooltip>
 
-      <Button
-        icon={<EditIcon />}
-        type={'primary'}
-        onClick={() => dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' })}
-      />
+      <Tooltip title="Edit" placement="right">
+        <Button
+          icon={<EditIcon />}
+          type={'primary'}
+          onClick={() => dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' })}
+        />
+      </Tooltip>
     </Buttons>
   );
 };
