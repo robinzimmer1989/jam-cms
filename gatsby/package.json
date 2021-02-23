@@ -13,7 +13,7 @@
     "gatsby-plugin-styled-components": "^3.8.0",
     "gatsby-plugin-webfonts": "^1.1.4",
     "gatsby-source-filesystem": "^2.9.0",
-    "gatsby-source-jam-cms": "^0.3.0",
+    "gatsby-source-jam-cms": "0.4.0",
     "gatsby-transformer-sharp": "^2.10.0",
     "html-react-parser": "^1.1.1",
     "immer": "^8.0.0",
