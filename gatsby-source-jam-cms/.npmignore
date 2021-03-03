@@ -2,3 +2,4 @@ demo
 .babelrc
 webpack.config.js
 yarn-error.log
+node_modules
