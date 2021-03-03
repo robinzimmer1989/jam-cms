@@ -382,7 +382,7 @@ const EditorSidebar = (props) => {
                   onChange={(e) =>
                     handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
                   }
-                  children="Front Page"
+                  children="Set as Homepage"
                 />
               )}
             </Space>

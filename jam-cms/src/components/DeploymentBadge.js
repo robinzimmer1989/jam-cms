@@ -42,7 +42,7 @@ const DeploymentBadge = (props) => {
     if (!site?.frontPage) {
       return notification.error({
         message: 'Error',
-        description: 'Please add a front page',
+        description: 'Please add a homepage',
         placement: 'bottomRight',
       });
     }
