@@ -119,7 +119,7 @@ const Box = styled.div`
   }
 `;
 
-export default {
+const config = {
   id: 'boxes',
   label: 'Boxes',
   component: Boxes,
@@ -163,3 +163,5 @@ export default {
     },
   ],
 };
+
+export default config;

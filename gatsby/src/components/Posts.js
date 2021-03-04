@@ -114,7 +114,7 @@ const HeadlineContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-export default {
+const config = {
   id: 'posts',
   label: 'Posts',
   component: Posts,
@@ -149,3 +149,5 @@ export default {
     },
   ],
 };
+
+export default config;

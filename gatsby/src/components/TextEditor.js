@@ -61,7 +61,7 @@ const Content = styled.div`
   }
 `;
 
-export default {
+const config = {
   id: 'texteditor',
   label: 'Text Editor',
   component: TextEditor,
@@ -139,3 +139,5 @@ export default {
     },
   ],
 };
+
+export default config;

@@ -1,4 +1,4 @@
-export default [
+const globalOptions = [
   {
     id: 'header',
     label: 'Header',
@@ -45,3 +45,5 @@ export default [
     ],
   },
 ];
+
+export default globalOptions;

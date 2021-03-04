@@ -105,7 +105,7 @@ const Buttons = styled.div`
   }
 `;
 
-export default {
+const config = {
   id: 'textimage',
   label: 'Text & Image',
   component: TextImage,
@@ -166,3 +166,5 @@ export default {
     },
   ],
 };
+
+export default config;

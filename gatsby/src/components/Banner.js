@@ -88,7 +88,7 @@ const Buttons = styled.div`
   }
 `;
 
-export default {
+const config = {
   id: 'banner',
   label: 'Banner',
   component: Banner,
@@ -132,3 +132,5 @@ export default {
     },
   ],
 };
+
+export default config;
