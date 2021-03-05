@@ -12,7 +12,7 @@ import {
 
 // import app components
 import CmsHeader from './CmsHeader';
-import JamCmsLogo from '../icons/jamCMS.svg';
+import Logo from '../icons/jamCMS.svg';
 
 import { colors } from '../theme';
 import { useStore } from '../store';
@@ -45,9 +45,9 @@ const CmsLayout = (props) => {
         <div>
           <SidebarHeader
             title={
-              <Link to="/">
-                <JamCmsLogo className={`jam-cms-logo`} />
-              </Link>
+              <LogoContainer to="/">
+                <Logo />
+              </LogoContainer>
             }
           />
 
@@ -158,15 +158,6 @@ const CmsLayout = (props) => {
 };
 
 const SidebarHeader = styled(PageHeader)`
-  .jam-cms-logo {
-    width: 100px;
-    margin: 0 auto;
-
-    path {
-      fill: ${colors.secondaryContrast};
-    }
-  }
-
   .ant-page-header-heading-left {
     width: 100%;
   }
@@ -176,6 +167,20 @@ const SidebarHeader = styled(PageHeader)`
     margin: 0;
     text-align: center;
     color: #fff;
+  }
+`;
+
+const LogoContainer = styled(Link)`
+  display: block;
+  padding: 20px;
+
+  svg {
+    width: 120px;
+    margin: 0 auto;
+
+    path {
+      fill: ${colors.secondaryContrast};
+    }
   }
 `;
 
