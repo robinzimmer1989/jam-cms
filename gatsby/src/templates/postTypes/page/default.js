@@ -2,18 +2,19 @@ import React from 'react';
 
 // import app components
 import Layout from '../../../components/Layout';
-import banner from '../../../components/Banner';
-import boxes from '../../../components/Boxes';
-import posts from '../../../components/Posts';
-import textimage from '../../../components/TextImage';
-import texteditor from '../../../components/TextEditor';
+
+import Banner from '../../../components/banner/Banner';
+import Boxes from '../../../components/boxes/Boxes';
+import Posts from '../../../components/posts/Posts';
+import TextImage from '../../../components/textImage/TextImage';
+import TextEditor from '../../../components/textEditor/TextEditor';
 
 const blocks = {
-  banner,
-  boxes,
-  posts,
-  textimage,
-  texteditor,
+  banner: Banner,
+  boxes: Boxes,
+  posts: Posts,
+  textimage: TextImage,
+  texteditor: TextEditor,
 };
 
 const Template = (props) => {
@@ -25,7 +26,7 @@ const Template = (props) => {
     <Layout {...props}>
       {content?.blocks?.flex &&
         content.blocks.flex.map(({ id, ...fields }, index) => {
-          const Component = blocks?.[id]?.component;
+          const Component = blocks?.[id];
           return Component && <Component key={index} {...fields} globalOptions={globalOptions} />;
         })}
     </Layout>
@@ -33,32 +34,3 @@ const Template = (props) => {
 };
 
 export default Template;
-
-export const PageDefault = {
-  id: 'default',
-  label: 'Default',
-  component: Template,
-  fields: [
-    {
-      id: 'header',
-      global: true,
-    },
-    {
-      id: 'blocks',
-      label: 'Content',
-      type: 'group',
-      fields: [
-        {
-          id: 'flex',
-          label: 'Blocks',
-          type: 'flexible_content',
-          items: Object.values(blocks),
-        },
-      ],
-    },
-    {
-      id: 'footer',
-      global: true,
-    },
-  ],
-};

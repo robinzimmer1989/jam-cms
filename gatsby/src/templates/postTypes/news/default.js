@@ -4,8 +4,8 @@ import styled from 'styled-components';
 // import app components
 import Layout from '../../../components/Layout';
 import Edges from '../../../components/Edges';
-import banner from '../../../components/Banner';
-import textEditor from '../../../components/TextEditor';
+import banner from '../../../components/banner/Banner';
+import textEditor from '../../../components/textEditor/TextEditor';
 
 const Banner = banner.component;
 const TextEditor = textEditor.component;
@@ -32,34 +32,3 @@ const Content = styled.div`
 `;
 
 export default Template;
-
-export const NewsDefault = {
-  id: 'default',
-  label: 'News',
-  component: Template,
-  query: `
-    query {
-      posts {
-        nodes {
-          title
-        }
-      }
-    }
-  `,
-  fields: [
-    {
-      id: 'header',
-      global: true,
-    },
-    {
-      id: 'text',
-      label: 'Content',
-      type: 'group',
-      fields: textEditor.fields,
-    },
-    {
-      id: 'footer',
-      global: true,
-    },
-  ],
-};
