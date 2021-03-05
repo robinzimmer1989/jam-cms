@@ -4,11 +4,8 @@ import styled from 'styled-components';
 // import app components
 import Layout from '../../../components/Layout';
 import Edges from '../../../components/Edges';
-import banner from '../../../components/banner/Banner';
-import textEditor from '../../../components/textEditor/TextEditor';
-
-const Banner = banner.component;
-const TextEditor = textEditor.component;
+import Banner from '../../../components/banner/Banner';
+import TextEditor from '../../../components/textEditor/TextEditor';
 
 const Template = (props) => {
   const {
