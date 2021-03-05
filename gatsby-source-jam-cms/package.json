@@ -6,7 +6,7 @@
     "babel-preset-gatsby": "^1.0.0",
     "cross-env": "7.0.3",
     "esm": "^3.2.25",
-    "gatsby": "^3.0.0",
+    "gatsby": "3.0.0",
     "gatsby-plugin-sharp": "^3.0.0",
     "gatsby-transformer-sharp": "^3.0.0",
     "jam-cms": "^0.5.0",

@@ -1870,9 +1870,9 @@
     strip-json-comments "^3.1.1"
 
 "@gatsbyjs/reach-router@^1.3.5":
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/@gatsbyjs/reach-router/-/reach-router-1.3.5.tgz#e5d86b341957611153279da353d0a39a82f34a8e"
-  integrity sha512-O7sTZajwCtbjuuUYwjEZdSw7CmAxA6ugDaXtw4hfKoTfj4RZUAB8nYRlecUVuNAQbgHiXJSx2jKfu1hmE9mggA==
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/@gatsbyjs/reach-router/-/reach-router-1.3.6.tgz#4e8225836959be247890b66f21a3198a0589e34d"
+  integrity sha512-RW9ZBir9kqtw4IWm+Z+DLWGOeoJxoaTvNVrnR5fV9zD8EmfAhbBN/hS6i6VnTMFZ7rdd6mnpx2/XtnMvYfsaVQ==
   dependencies:
     invariant "^2.2.3"
     prop-types "^15.6.1"
@@ -7169,10 +7169,10 @@ gatsby-plugin-utils@^1.0.0:
   dependencies:
     joi "^17.2.1"
 
-gatsby-plugin-webfonts@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-webfonts/-/gatsby-plugin-webfonts-1.1.4.tgz#f6fb8daf0acc4c59511c98964fceca35504014ac"
-  integrity sha512-u0K7CYzG9IlL5Q/qZI14+bFNYK7I68wkjw4FzZ35EEBECmRhPAnttZLDa5slXdbUBWnwT3SU6uX0o5EKYUlFLA==
+gatsby-plugin-webfonts@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-webfonts/-/gatsby-plugin-webfonts-2.0.0.tgz#8b39444e985a576031ef2ee3b1280b4dc6b1b4d0"
+  integrity sha512-qjsScI70Aprb+S2JXyW86X7FEIR77EPQO61RFvbPv8CcB13ivUrPNCLRu1ki3EHRHMa2mzKbFPYb08oGG8E+fw==
   dependencies:
     axios "^0.21.1"
     cssnano "^4.1.10"
@@ -7305,7 +7305,7 @@ gatsby-transformer-sharp@^3.0.0:
     semver "^7.3.4"
     sharp "^0.27.0"
 
-gatsby@^3.0.0:
+gatsby@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-3.0.0.tgz#b133289353bf803155d6ea680a5cf1289edc16b6"
   integrity sha512-UVVtg2VBwfa2XW3VZFHAN2htJujg5bIU7wOVk+eZYISQrF0ljLYUqZxaq1pWSvFdUvfPbPhh7QyvFfNkWYB8ZQ==
