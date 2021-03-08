@@ -62,6 +62,10 @@ const PostEditor = (props) => {
     };
   }, [postIdBySlug]);
 
+  // Generate query variable i.e. 'wpPage'
+  const postTypeQuery =
+    post && `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
+
   return (
     <>
       {postIdBySlug ? (
@@ -72,16 +76,20 @@ const PostEditor = (props) => {
                 <>
                   <Component
                     jamCMS={{ sidebar: !!sidebar }}
+                    data={{
+                      [postTypeQuery]: {
+                        id: post.id,
+                        seo: post.seo,
+                        title: post.title,
+                        createdAt: post.createdAt,
+                        featuredImage: post.featuredImage,
+                        taxonomies: formatTaxonomiesForEditor(post, site),
+                        query: post.query,
+                        postTypeID: post.postTypeID,
+                        acf: formatFieldsToProps(post.content, site),
+                      },
+                    }}
                     pageContext={{
-                      id: post.id,
-                      seo: post.seo,
-                      title: post.title,
-                      createdAt: post.createdAt,
-                      featuredImage: post.featuredImage,
-                      content: formatFieldsToProps(post.content, site),
-                      taxonomies: formatTaxonomiesForEditor(post, site),
-                      query: post.query,
-                      postTypeID: post.postTypeID,
                       globalOptions: formatFieldsToProps(site?.globalOptions, site),
                     }}
                   />
