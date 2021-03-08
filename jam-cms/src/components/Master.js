@@ -13,7 +13,7 @@ import PostType from '../pages/PostType';
 import GeneralSettings from '../pages/GeneralSettings';
 import Taxonomies from '../pages/Taxonomies';
 import Taxonomy from '../pages/Taxonomy';
-import Editors from '../pages/Editors';
+import Users from '../pages/Users';
 import Options from '../pages/Options';
 
 import Loader from './Loader';
@@ -32,7 +32,7 @@ import {
   ROUTE_SETTINGS_GENERAL,
   ROUTE_SETTINGS_POST_TYPES,
   ROUTE_SETTINGS_TAXONOMIES,
-  ROUTE_EDITORS,
+  ROUTE_USERS,
   ROUTE_OPTIONS,
   ROUTE_TAXONOMY,
 } from '../routes';
@@ -145,8 +145,8 @@ const Master = (props) => {
 
         {authUser?.capabilities?.list_users && (
           <PrivateRoute
-            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_EDITORS}`}
-            component={Editors}
+            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`}
+            component={Users}
           />
         )}
 
