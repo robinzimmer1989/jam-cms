@@ -6,12 +6,12 @@ import InfiniteScroll from 'react-infinite-scroller';
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import ListItem from '../components/ListItem';
-import EditorForm from '../components/EditorForm';
+import UserForm from '../components/UserForm';
 
 import { userActions } from '../actions';
 import { useStore } from '../store';
 
-const Editors = () => {
+const Users = () => {
   const [
     {
       config,
@@ -42,7 +42,7 @@ const Editors = () => {
       payload: {
         open: true,
         title: `Add`,
-        component: <EditorForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
+        component: <UserForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
       },
     });
 
@@ -59,7 +59,7 @@ const Editors = () => {
   };
 
   return (
-    <CmsLayout pageTitle={`Editors`}>
+    <CmsLayout pageTitle={`Users`}>
       <PageHeader>
         <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
       </PageHeader>
@@ -112,4 +112,4 @@ const StyledListItem = styled(ListItem)`
   margin-bottom: 20px;
 `;
 
-export default Editors;
+export default Users;
