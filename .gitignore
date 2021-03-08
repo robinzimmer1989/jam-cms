@@ -10,6 +10,7 @@ dist
 # misc
 jam-cms/README.md
 gatsby/public
+gatsby/.wordpress-cache
 .DS_Store
 .env
 .env.local
