@@ -1,5 +1,5 @@
-const axios = require('axios');
 const path = require('path');
+const axios = require('axios');
 const fs = require('fs');
 
 let templatesPath, globalOptionsPath;
@@ -32,8 +32,7 @@ exports.onCreateWebpackConfig = ({ actions, plugins }) => {
   });
 };
 
-exports.createPages = async ({ actions, reporter }, pluginOptions) => {
-  const { createPage } = actions;
+exports.createPages = async ({ actions, reporter, graphql }, pluginOptions) => {
   const { source, apiKey } = pluginOptions;
 
   if (!source) {
@@ -46,54 +45,90 @@ exports.createPages = async ({ actions, reporter }, pluginOptions) => {
     return;
   }
 
-  let activity;
+  // Remove trailing slash
+  const url = source.replace(/\/+$/, '');
 
   try {
-    activity = reporter.activityTimer('jamCMS: Fetching data...');
-    activity.start();
-
-    const url = `${source.replace(/\/+$/, '')}/wp-json/jamcms/v1/getBuildSite?apiKey=${apiKey}`;
-    const response = await axios.get(url);
-
-    activity.end();
+    const response = await axios.get(`${url}/wp-json/jamcms/v1/getBuildSite?apiKey=${apiKey}`);
 
     const {
-      data: { globalOptions, posts },
+      data: { globalOptions },
     } = await response;
 
-    const missingTemplates = {};
+    // Get all post types
+    const {
+      data: { allWpContentType },
+    } = await graphql(/* GraphQL */ `
+      query ALL_CONTENT_TYPES {
+        allWpContentType {
+          nodes {
+            graphqlSingleName
+          }
+        }
+      }
+    `);
 
-    await Promise.all(
-      posts &&
-        posts.map(async (o) => {
+    for (const contentType of allWpContentType.nodes) {
+      const { graphqlSingleName: postType } = contentType;
+
+      // Don't create single pages for media items
+      if (postType === 'mediaItem') {
+        continue;
+      }
+
+      // Capitalize post type name
+      const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
+      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
+
+      const { data } = await graphql(/* GraphQL */ `
+        query ALL_CONTENT_NODES {
+            ${gatsbyNodeListFieldName}{
+            nodes {
+              databaseId
+              id
+              uri
+              template {
+                templateName
+              }
+            }
+          }
+        }
+      `);
+      const { nodes } = data[gatsbyNodeListFieldName];
+
+      // Initialize missing templates object
+      const missingTemplates = {};
+
+      await Promise.all(
+        nodes.map(async (node, i) => {
+          const {
+            id,
+            uri,
+            template: { templateName },
+          } = node;
+
           const templatePath = path.resolve(
-            `./src/templates/postTypes/${o.postTypeID}/${o.template}.js`
+            `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}.js`
           );
 
           if (fs.existsSync(templatePath)) {
-            await createPage({
-              path: o.slug,
+            await actions.createPage({
               component: templatePath,
-              context: {
-                id: o.id,
-                seo: o.seo,
-                title: o.title,
-                createdAt: o.createdAt,
-                featuredImage: o.featuredImage,
-                postTypeID: o.postTypeID,
-                content: o.content,
-                globalOptions,
-              },
+              path: uri,
+              context: { id, globalOptions },
             });
           } else {
             // Only show error message about missing template once
-            if (!missingTemplates[`postTypes/${o.postTypeID}/${o.template}`]) {
-              reporter.error(`Template /postTypes/${o.postTypeID}/${o.template}.js not found`);
-              missingTemplates[`postTypes/${o.postTypeID}/${o.template}`] = true;
+            if (!missingTemplates[templatePath]) {
+              reporter.warn(
+                `Template file not found. Gatsby won't create any pages for ${postType}/${templateName.toLowerCase()}`
+              );
+              missingTemplates[templatePath] = true;
             }
           }
         })
-    );
+      );
+    }
   } catch (err) {
     if (err.response && err.response.data.message) {
       reporter.error(err.response.data.message);
