@@ -13,6 +13,9 @@ module.exports = {
   plugins: [
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-source-jam-cms`,
       options: {
@@ -20,6 +23,15 @@ module.exports = {
         apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
         templates: path.join(__dirname, 'src/templates'), // optional
         globalOptions: path.join(__dirname, 'src/globalOptions'), // optional
+      },
+    },
+    {
+      resolve: `gatsby-source-wordpress`,
+      options: {
+        url: `${process.env.GATSBY_JAM_CMS_URL}/graphql`,
+        develop: {
+          hardCacheMediaFiles: true,
+        },
       },
     },
     {
