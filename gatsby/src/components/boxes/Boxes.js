@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 // import app components
 import Edges from '../Edges';
-import Button from '../Button';
+import Button from '../button/Button';
 import Wysiwyg from '../Wysiwyg';
 
 const Boxes = (props) => {
@@ -24,20 +24,20 @@ const Boxes = (props) => {
             items.map((box, index) => {
               return (
                 <Box key={index} columns={columns}>
-                  {box.image?.childImageSharp?.fluid && (
+                  {getImage(box?.image?.localFile) && (
                     <ImageContainer>
-                      <Img
-                        fluid={box.image.childImageSharp.fluid}
+                      <GatsbyImage
+                        image={getImage(box.image.localFile)}
+                        alt={box.image.altText}
+                        objectFit="contain"
+                        style={{ width: '100%', height: '100%' }}
                         imgStyle={{
-                          objectFit: 'contain',
                           maxWidth: box.image.width,
                           maxHeight: box.image.height,
                           top: '50%',
                           left: '50%',
                           transform: 'translate(-50%, -50%)',
                         }}
-                        alt={box.image.alt}
-                        style={{ width: '100%', height: '100%' }}
                       />
                     </ImageContainer>
                   )}

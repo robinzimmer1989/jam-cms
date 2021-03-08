@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 // import app components
 import Wysiwyg from '../Wysiwyg';
@@ -11,12 +11,10 @@ const TextImage = (props) => {
   return (
     <Container>
       <ImageContainer alignment={alignment}>
-        {image?.childImageSharp?.fluid && (
-          <Img
-            fluid={image.childImageSharp.fluid}
-            objectFit="cover"
-            objectPosition="50% 50%"
-            alt={image.alt}
+        {getImage(image?.localFile) && (
+          <GatsbyImage
+            image={getImage(image.localFile)}
+            alt={image.altText}
             style={{ position: 'absolute', width: '100%', height: '100%' }}
           />
         )}
