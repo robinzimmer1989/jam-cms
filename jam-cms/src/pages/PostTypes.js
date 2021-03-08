@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, PageHeader, Popconfirm, Space } from 'antd';
+import { Button, PageHeader, Popconfirm } from 'antd';
 import styled from 'styled-components';
 
 // import app components
@@ -62,7 +62,7 @@ const PostTypes = () => {
         Object.values(postTypes).map((o) => {
           const actions = [];
 
-          if (o.id !== 'page') {
+          if (o.id !== 'page' && o.id !== 'post') {
             actions.push(
               <Popconfirm
                 title="Are you sure?"
