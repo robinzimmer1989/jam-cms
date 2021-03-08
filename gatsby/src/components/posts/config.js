@@ -6,12 +6,7 @@ const config = {
   component: Posts,
   fields: [
     {
-      id: 'posts',
-      type: 'collection',
-      label: 'Collection',
-    },
-    {
-      id: 'buttonTitle',
+      id: 'buttontitle',
       type: 'text',
       defaultValue: 'Read More',
       label: 'Button Title',

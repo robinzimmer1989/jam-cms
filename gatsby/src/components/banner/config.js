@@ -1,5 +1,5 @@
 import Banner from './Banner';
-import { fields as buttonFields } from '../Button';
+import buttonFields from '../button/config';
 
 const config = {
   id: 'banner',
