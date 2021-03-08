@@ -12,7 +12,9 @@ const TextEditor = (props) => {
   const getFlexElement = (block) => {
     let el;
 
-    switch (block.id) {
+    const id = block.id || block.fieldGroupName.split('_').pop().toLowerCase();
+
+    switch (id) {
       case 'layout1':
         el = <Text {...block} />;
         break;
