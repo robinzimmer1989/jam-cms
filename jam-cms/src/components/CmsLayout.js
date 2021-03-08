@@ -98,6 +98,16 @@ const CmsLayout = (props) => {
                     </Fragment>
                   );
                 })}
+
+              {authUser?.capabilities?.list_users && (
+                <>
+                  <Menu.Divider />
+
+                  <Menu.Item key="Users">
+                    <Link to={getRoute(`users`, { siteID })}>Users</Link>
+                  </Menu.Item>
+                </>
+              )}
             </Menu.SubMenu>
 
             {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
@@ -128,12 +138,6 @@ const CmsLayout = (props) => {
                 {authUser?.capabilities?.manage_options && (
                   <Menu.Item key="Taxonomies">
                     <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
-                  </Menu.Item>
-                )}
-
-                {authUser?.capabilities?.list_users && (
-                  <Menu.Item key="Editors">
-                    <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
                   </Menu.Item>
                 )}
               </Menu.SubMenu>
