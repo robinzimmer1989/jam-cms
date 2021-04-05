@@ -1,6 +1,6 @@
 {
   "name": "jam-cms",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
     "@babel/polyfill": "^7.12.1",
@@ -13,6 +13,7 @@
     "draft-js-image-plugin": "^2.0.7",
     "draftjs-to-html": "^0.9.1",
     "gatsby-image": "^3.0.0",
+    "gatsby-plugin-image": "^1.2.0",
     "google-map-react": "^2.1.9",
     "html-react-parser": "^1.2.4",
     "html-to-draftjs": "^1.5.0",
