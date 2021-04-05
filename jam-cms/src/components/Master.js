@@ -38,7 +38,7 @@ import {
 } from '../routes';
 
 const Master = (props) => {
-  const { templates } = props;
+  const { templates, defaultComponent } = props;
 
   const [
     {
@@ -150,7 +150,12 @@ const Master = (props) => {
           />
         )}
 
-        <PrivateRoute path={'*'} component={PostEditor} templates={templates} />
+        <PrivateRoute
+          path={'*'}
+          component={PostEditor}
+          templates={templates}
+          defaultComponent={defaultComponent}
+        />
       </Router>
 
       {dialog.open && (
