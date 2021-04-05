@@ -29,8 +29,14 @@ try {
 }
 
 // eslint-disable-next-line react/prop-types,react/display-name
-module.exports = ({ element, props }, { source }) => (
-  <JamCms {...props} templates={templates} globalOptions={globalOptions} source={source}>
+module.exports = ({ element, props }, { source, settings }) => (
+  <JamCms
+    {...props}
+    templates={templates}
+    globalOptions={globalOptions}
+    source={source}
+    settings={settings}
+  >
     {element}
   </JamCms>
 );
