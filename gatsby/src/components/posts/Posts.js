@@ -120,11 +120,11 @@ const HeadlineContainer = styled.div`
 
 const usePostsQuery = () => {
   const {
-    allWpNews: { nodes },
+    allWpPost: { nodes },
   } = useStaticQuery(
     graphql`
       query {
-        allWpNews {
+        allWpPost {
           nodes {
             id
             title
