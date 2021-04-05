@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { GatsbyImage } from 'jam-cms';
 
 // import app components
 import Edges from '../Edges';
@@ -15,13 +15,7 @@ const TextImage = (props) => {
       <Edges size="md">
         <Inner>
           <ImageContainer alignment={alignment}>
-            {getImage(image?.localFile) && (
-              <GatsbyImage
-                image={getImage(image.localFile)}
-                alt={image.altText}
-                objectFit="contain"
-              />
-            )}
+            {image && <GatsbyImage image={image} alt={image.altText} objectFit="contain" />}
           </ImageContainer>
           <TextContainer alignment={alignment}>
             <div>
