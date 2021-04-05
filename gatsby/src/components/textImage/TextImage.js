@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage } from 'jam-cms';
 
 // import app components
 import Edges from '../Edges';
 import Wysiwyg from '../Wysiwyg';
-import Button from '../Button';
+import Button from '../button/Button';
 
 const TextImage = (props) => {
   const { image, alignment, text, buttons } = props;
@@ -15,21 +15,7 @@ const TextImage = (props) => {
       <Edges size="md">
         <Inner>
           <ImageContainer alignment={alignment}>
-            {image?.childImageSharp?.fluid && (
-              <Img
-                fluid={image.childImageSharp.fluid}
-                imgStyle={{
-                  objectFit: 'contain',
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-                alt={image.alt}
-                style={{ width: '100%', height: '100%' }}
-              />
-            )}
+            {image && <GatsbyImage image={image} alt={image.altText} objectFit="contain" />}
           </ImageContainer>
           <TextContainer alignment={alignment}>
             <div>

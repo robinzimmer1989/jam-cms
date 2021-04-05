@@ -158,7 +158,7 @@ const MediaLibrary = (props) => {
                         <MediaItemInner onClick={() => setActiveFile(o)}>
                           {o.type === 'image' && (
                             <Img
-                              fluid={o.childImageSharp.fluid}
+                              fluid={o.localFile.childImageSharp.fluid}
                               objectFit="cover"
                               objectPosition="50% 50%"
                               alt={o.alt}

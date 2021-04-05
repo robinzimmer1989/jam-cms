@@ -8,6 +8,7 @@ import {
   SettingOutlined,
   FolderOpenOutlined,
   ControlOutlined,
+  UsergroupAddOutlined,
 } from '@ant-design/icons';
 
 // import app components
@@ -88,7 +89,7 @@ const CmsLayout = (props) => {
                           return (
                             <Menu.Item key={p.title}>
                               <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
-                                {p.title}
+                                - {p.title}
                               </Link>
                             </Menu.Item>
                           );
@@ -103,6 +104,12 @@ const CmsLayout = (props) => {
             {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
               <Menu.Item key="Options" icon={<ControlOutlined />}>
                 <Link to={getRoute(`options`, { siteID })}>Theme Options</Link>
+              </Menu.Item>
+            )}
+
+            {authUser?.capabilities?.list_users && (
+              <Menu.Item key="Users" icon={<UsergroupAddOutlined />}>
+                <Link to={getRoute(`users`, { siteID })}>Users</Link>
               </Menu.Item>
             )}
 
@@ -128,12 +135,6 @@ const CmsLayout = (props) => {
                 {authUser?.capabilities?.manage_options && (
                   <Menu.Item key="Taxonomies">
                     <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
-                  </Menu.Item>
-                )}
-
-                {authUser?.capabilities?.list_users && (
-                  <Menu.Item key="Editors">
-                    <Link to={getRoute(`editors`, { siteID })}>Editors</Link>
                   </Menu.Item>
                 )}
               </Menu.SubMenu>

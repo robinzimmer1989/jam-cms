@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
 
 // import app components
-import { colors } from '../theme';
+import { colors } from '../../theme';
 
 const Button = (props) => {
   const { url, title, variant, color } = props;
@@ -58,27 +58,3 @@ const ExternalLink = styled.a`
 `;
 
 export default Button;
-
-export const fields = [
-  {
-    id: 'button',
-    type: 'link',
-    label: 'Button',
-  },
-  {
-    id: 'variant',
-    type: 'select',
-    label: 'Variant',
-    defaultValue: 'filled',
-    options: [
-      {
-        name: 'Filled',
-        value: 'filled',
-      },
-      {
-        name: 'Outlined',
-        value: 'outlined',
-      },
-    ],
-  },
-];

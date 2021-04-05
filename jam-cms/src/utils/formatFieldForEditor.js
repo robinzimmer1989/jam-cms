@@ -1,30 +1,9 @@
 import { set } from 'lodash';
 import produce from 'immer';
 
-import generateSlug from './generateSlug';
-
 // This function formats the value for the editor.
-// Especially for collections this ie necessary, because the value is stored as a string
-// and the post elements are added on the fly
 
 export default function formatFieldForEditor(field, site) {
-  // Post relationship fields
-  if (field.type === 'collection' && field?.value) {
-    const posts = Object.values(site?.postTypes?.[field.value]?.posts || {})
-      .filter((post) => post.status === 'publish')
-      .sort((a, b) => (a.order > b.order ? 1 : -1));
-
-    return {
-      ...field,
-      value: posts.map((o) => {
-        return {
-          ...o,
-          slug: generateSlug(site?.postTypes?.[field.value], o.id, site.frontPage, true),
-        };
-      }),
-    };
-  }
-
   if (field.type === 'group') {
     const nextGroupField = produce(field, (draft) => {
       Object.keys(draft.value).map((key) => {

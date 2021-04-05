@@ -9,7 +9,6 @@ import LinkSelector from './LinkSelector';
 import Caption from './Caption';
 
 // Admin fields
-import CollectionSelector from './editorFields/CollectionSelector';
 import FormSelector from './editorFields/FormSelector';
 import Text from './editorFields/Text';
 import Wysiwyg from './editorFields/Wysiwyg';
@@ -106,16 +105,6 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
 
     case 'radio':
       component = <Radio {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
-      break;
-
-    case 'collection':
-      component = (
-        <CollectionSelector
-          {...field}
-          site={site}
-          onSelect={(value) => onChangeElement({ ...field, value })}
-        />
-      );
       break;
 
     case 'form':

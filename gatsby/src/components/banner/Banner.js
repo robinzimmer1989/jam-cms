@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 // import app components
 import Edges from '../Edges';
-import Button from '../Button';
+import Button from '../button/Button';
 import { colors } from '../../theme';
 
 const Banner = (props) => {
@@ -13,12 +13,10 @@ const Banner = (props) => {
   return (
     <Container height={height}>
       <ImageContainer>
-        {image?.childImageSharp?.fluid && (
-          <Img
-            fluid={image.childImageSharp.fluid}
-            objectFit="cover"
-            objectPosition="50% 50%"
-            alt={image.alt}
+        {getImage(image?.localFile) && (
+          <GatsbyImage
+            image={getImage(image.localFile)}
+            alt={image.altText}
             style={{ width: '100%', height: '100%' }}
           />
         )}

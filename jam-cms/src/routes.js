@@ -9,7 +9,7 @@ export const ROUTE_TAXONOMY = '/taxonomy';
 export const ROUTE_PROFILE = '/profile';
 export const ROUTE_FORMS = '/forms';
 export const ROUTE_FORM = '/form';
-export const ROUTE_EDITORS = '/editors';
+export const ROUTE_USERS = '/users';
 export const ROUTE_OPTIONS = '/options';
 
 const getRoute = (route, args) => {
@@ -26,8 +26,8 @@ const getRoute = (route, args) => {
     case 'profile':
       return `${ROUTE_APP}${ROUTE_PROFILE}`;
 
-    case 'editors':
-      return `${ROUTE_APP}${base}${ROUTE_EDITORS}`;
+    case 'users':
+      return `${ROUTE_APP}${base}${ROUTE_USERS}`;
 
     case 'media':
       return `${ROUTE_APP}${base}${ROUTE_MEDIA}`;

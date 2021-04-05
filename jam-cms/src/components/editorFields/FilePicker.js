@@ -12,9 +12,9 @@ const FilePicker = (props) => {
   return (
     <Container>
       <ImageContainer type={value?.icon}>
-        {value?.type === 'image' && value?.childImageSharp?.fluid && (
+        {value?.type === 'image' && value?.localFile?.childImageSharp?.fluid && (
           <Img
-            fluid={value.childImageSharp.fluid}
+            fluid={value.localFile.childImageSharp.fluid}
             objectFit="cover"
             objectPosition="50% 50%"
             alt={value.alt}

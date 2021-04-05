@@ -9,8 +9,8 @@ import { cmsState, sitesReducer } from './cmsState';
 
 export const StateContext = createContext({});
 
-export const StoreProvider = ({ children, source, globalOptions }) => {
-  const config = { source };
+export const StoreProvider = ({ children, source, globalOptions, settings }) => {
+  const config = { source, settings };
 
   const initialState = {
     config,

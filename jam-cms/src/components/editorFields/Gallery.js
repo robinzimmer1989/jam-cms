@@ -63,9 +63,9 @@ const Gallery = (props) => {
           return (
             <GalleryItem key={i}>
               <ImageContainer>
-                {o?.childImageSharp?.fluid && (
+                {o?.localFile?.childImageSharp?.fluid && (
                   <Img
-                    fluid={o.childImageSharp.fluid}
+                    fluid={o.localFile.childImageSharp.fluid}
                     objectFit="cover"
                     objectPosition="50% 50%"
                     alt={o.alt}

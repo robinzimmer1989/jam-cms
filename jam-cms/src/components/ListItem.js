@@ -41,9 +41,9 @@ const ListItem = (props) => {
             avatar={
               showImage && (
                 <>
-                  {image?.childImageSharp?.fluid ? (
+                  {image?.localFile?.childImageSharp?.fluid ? (
                     <Img
-                      fluid={image.childImageSharp.fluid}
+                      fluid={image.localFile.childImageSharp.fluid}
                       objectFit="cover"
                       objectPosition="50% 50%"
                       alt={image.alt}

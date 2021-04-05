@@ -54,9 +54,9 @@ const MediaImage = (props) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12} style={{ background: `${colors.secondaryContrast}`, padding: 0 }}>
-          {file.type === 'image' && file?.childImageSharp?.fluid && (
+          {file.type === 'image' && file?.localFile?.childImageSharp?.fluid && (
             <Img
-              fluid={file.childImageSharp.fluid}
+              fluid={file.localFile.childImageSharp.fluid}
               imgStyle={{
                 objectFit: 'contain',
                 maxWidth: file.width,

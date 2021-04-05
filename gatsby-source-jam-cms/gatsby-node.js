@@ -1,6 +1,7 @@
-const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+
+const getThemeSettings = require('./src/gatsby-node/getThemeSettings');
 
 let templatesPath, globalOptionsPath;
 
@@ -32,68 +33,212 @@ exports.onCreateWebpackConfig = ({ actions, plugins }) => {
   });
 };
 
-exports.createPages = async ({ actions, reporter }, pluginOptions) => {
-  const { createPage } = actions;
-  const { source, apiKey } = pluginOptions;
+exports.createPages = async ({ actions, reporter, graphql }, pluginOptions) => {
+  const globalOptions = await getThemeSettings({ reporter }, pluginOptions);
 
-  if (!source) {
-    reporter.error('jamCMS: Source url is required');
-    return;
-  }
-
-  if (!apiKey) {
-    reporter.error('jamCMS: Api key is required');
-    return;
-  }
-
-  let activity;
+  const allNodes = {};
 
   try {
-    activity = reporter.activityTimer('jamCMS: Fetching data...');
-    activity.start();
-
-    const url = `${source.replace(/\/+$/, '')}/wp-json/jamcms/v1/getBuildSite?apiKey=${apiKey}`;
-    const response = await axios.get(url);
-
-    activity.end();
-
+    // Get all post types
     const {
-      data: { globalOptions, posts },
-    } = await response;
+      data: { allWpContentType },
+    } = await graphql(/* GraphQL */ `
+      query ALL_CONTENT_TYPES {
+        allWpContentType {
+          nodes {
+            graphqlSingleName
+          }
+        }
+      }
+    `);
 
-    const missingTemplates = {};
+    for (const contentType of allWpContentType.nodes) {
+      const { graphqlSingleName: postType } = contentType;
 
-    await Promise.all(
-      posts &&
-        posts.map(async (o) => {
-          const templatePath = path.resolve(
-            `./src/templates/postTypes/${o.postTypeID}/${o.template}.js`
-          );
+      // Don't create single pages for media items
+      if (postType === 'mediaItem') {
+        continue;
+      }
+
+      // Capitalize post type name
+      const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
+      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
+
+      const { data } = await graphql(/* GraphQL */ `
+        query ALL_CONTENT_NODES {
+            ${gatsbyNodeListFieldName}{
+            nodes {
+              databaseId
+              id
+              uri
+              template {
+                templateName
+              }
+            }
+          }
+        }
+      `);
+
+      allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
+    }
+  } catch (err) {
+    if (err.response && err.response.data.message) {
+      reporter.error(err.response.data.message);
+    }
+  }
+
+  // Initialize missing templates object
+  const missingTemplates = {};
+
+  await Promise.all(
+    Object.keys(allNodes).map(async (postType) => {
+      await Promise.all(
+        allNodes[postType].map(async (node, i) => {
+          let {
+            id,
+            uri,
+            template: { templateName },
+          } = node;
+
+          const isArchive = templateName.includes('Archive ');
+          const archivePostType = templateName.replace('Archive ', '').toLowerCase();
+
+          let templatePath;
+
+          if (isArchive) {
+            templatePath = path.resolve(
+              `./src/templates/postTypes/${archivePostType}/archive/archive.js`
+            );
+          } else {
+            templatePath = path.resolve(
+              `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}.js`
+            );
+          }
 
           if (fs.existsSync(templatePath)) {
-            await createPage({
-              path: o.slug,
-              component: templatePath,
-              context: {
-                id: o.id,
-                seo: o.seo,
-                title: o.title,
-                createdAt: o.createdAt,
-                featuredImage: o.featuredImage,
-                postTypeID: o.postTypeID,
-                content: o.content,
-                globalOptions,
-              },
-            });
+            if (isArchive) {
+              const numberOfPosts = allNodes[archivePostType].length;
+
+              let postsPerPageUsed = 10;
+
+              if (pluginOptions.settings && pluginOptions.settings.postsPerPage) {
+                postsPerPageUsed = pluginOptions.settings.postsPerPage;
+              }
+
+              const numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
+
+              for (let page = 1; page <= numberOfPages; page++) {
+                let pathname = uri;
+
+                if (page > 1) {
+                  pathname = `${uri}page/${page}`;
+                }
+
+                actions.createPage({
+                  component: templatePath,
+                  path: pathname,
+                  context: {
+                    id,
+                    globalOptions,
+                    pagination: {
+                      basePath: uri,
+                      numberOfPosts,
+                      postsPerPage: postsPerPageUsed,
+                      numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
+                      page,
+                    },
+                  },
+                });
+              }
+            } else {
+              actions.createPage({
+                component: templatePath,
+                path: uri,
+                context: { id, globalOptions, pagination: {} },
+              });
+            }
           } else {
-            // Only show error message about missing template once
-            if (!missingTemplates[`postTypes/${o.postTypeID}/${o.template}`]) {
-              reporter.error(`Template /postTypes/${o.postTypeID}/${o.template}.js not found`);
-              missingTemplates[`postTypes/${o.postTypeID}/${o.template}`] = true;
+            // Check if error was already shown
+            if (!missingTemplates[templatePath]) {
+              reporter.warn(
+                `Template file not found. Gatsby won't create any pages for ${postType}/${templateName.toLowerCase()}`
+              );
+
+              // Only show error message about missing template once
+              missingTemplates[templatePath] = true;
             }
           }
         })
-    );
+      );
+    })
+  );
+
+  try {
+    // Get all taxonomies
+    const {
+      data: { allWpTaxonomy },
+    } = await graphql(/* GraphQL */ `
+      query ALL_TAXONOMIES {
+        allWpTaxonomy {
+          nodes {
+            graphqlSingleName
+          }
+        }
+      }
+    `);
+
+    for (const taxonomy of allWpTaxonomy.nodes) {
+      const { graphqlSingleName } = taxonomy;
+
+      // Don't create single pages for media items
+      if (graphqlSingleName === 'postFormat') {
+        continue;
+      }
+
+      // Capitalize post type name
+      const nodesTypeName = graphqlSingleName.charAt(0).toUpperCase() + graphqlSingleName.slice(1);
+      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
+
+      const { data } = await graphql(/* GraphQL */ `
+        query ALL_TERM_NODES {
+            ${gatsbyNodeListFieldName}{
+            nodes {
+              id
+              slug
+              uri
+            }
+          }
+        }
+      `);
+
+      await Promise.all(
+        data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
+          const templatePath = path.resolve(
+            `./src/templates/taxonomies/${graphqlSingleName}/single.js`
+          );
+
+          if (fs.existsSync(templatePath)) {
+            const { uri, slug, id } = node;
+
+            actions.createPage({
+              component: templatePath,
+              path: uri,
+              context: { id, slug, globalOptions },
+            });
+          } else {
+            // Check if error was already shown
+            if (!missingTemplates[templatePath]) {
+              reporter.warn(
+                `Template file not found. Gatsby won't create any pages for taxonomy ${graphqlSingleName}`
+              );
+
+              // Only show error message about missing template once
+              missingTemplates[templatePath] = true;
+            }
+          }
+        })
+      );
+    }
   } catch (err) {
     if (err.response && err.response.data.message) {
       reporter.error(err.response.data.message);

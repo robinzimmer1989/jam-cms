@@ -1,17 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'gatsby';
+import { Link, graphql } from 'gatsby';
 
 // import app components
-import Layout from '../../../components/Layout';
-import Edges from '../../../components/Edges';
-import Wysiwyg from '../../../components/Wysiwyg';
+import Layout from '../../../../components/Layout';
+import Edges from '../../../../components/Edges';
+import Wysiwyg from '../../../../components/Wysiwyg';
 
-import { colors } from '../../../theme';
+import { colors } from '../../../../theme';
 
 const Template = (props) => {
   const {
-    pageContext: { content, globalOptions },
+    pageContext: { globalOptions },
+    data: {
+      wpPage: { acf },
+    },
   } = props;
 
   return (
@@ -32,10 +35,10 @@ const Template = (props) => {
             )}
           </Sidebar>
           <Content>
-            {content?.content?.title && <Headline>{content.content.title}</Headline>}
-            {content?.content?.text && (
+            {acf?.content?.title && <Headline>{acf.content.title}</Headline>}
+            {acf?.content?.text && (
               <WysiwygContainer>
-                <Wysiwyg>{content.content.text}</Wysiwyg>
+                <Wysiwyg>{acf.content.text}</Wysiwyg>
               </WysiwygContainer>
             )}
           </Content>
@@ -124,6 +127,22 @@ const WysiwygContainer = styled.div`
 
   @media (min-width: 768px) {
     padding: 40px 40px 100px;
+  }
+`;
+
+export const Query = graphql`
+  query PageDocumentation($id: String!) {
+    wpPage(id: { eq: $id }) {
+      id
+      databaseId
+      title
+      acf {
+        content {
+          title
+          text
+        }
+      }
+    }
   }
 `;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 const Images = (props) => {
   const { columns, gallery } = props;
@@ -11,12 +11,10 @@ const Images = (props) => {
         gallery.map((o, i) => {
           return (
             <Item key={i} columns={columns}>
-              {o?.childImageSharp?.fluid && (
-                <Img
-                  fluid={o.childImageSharp.fluid}
-                  objectFit="cover"
-                  objectPosition="50% 50%"
-                  alt={o.alt}
+              {getImage(o?.localFile) && (
+                <GatsbyImage
+                  image={getImage(o.localFile)}
+                  alt={o.altText}
                   style={{ width: '100%', height: '100%' }}
                 />
               )}

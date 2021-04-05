@@ -13,12 +13,12 @@ import { StoreProvider } from './store';
 const Master = React.lazy(() => import('./components/Master'));
 
 const JamCMS = (props) => {
-  const { templates, source, globalOptions } = props;
+  const { templates, source, globalOptions, settings, children: defaultComponent } = props;
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <StoreProvider source={source} globalOptions={globalOptions}>
-        <Master templates={templates} />
+      <StoreProvider source={source} globalOptions={globalOptions} settings={settings}>
+        <Master templates={templates} defaultComponent={defaultComponent} />
       </StoreProvider>
     </React.Suspense>
   );

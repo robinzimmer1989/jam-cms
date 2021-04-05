@@ -33,11 +33,11 @@ import FilePicker from './editorFields/FilePicker';
 import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
-import { generateSlug } from '../utils';
+import { generateSlug, getTemplateByPost } from '../utils';
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { templates, ...rest } = props;
+  const { templates, hasTemplate, editable, ...rest } = props;
 
   const [
     {
@@ -52,13 +52,18 @@ const EditorSidebar = (props) => {
   const [loading, setLoading] = useState('');
 
   const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
-  const posts = postType?.posts;
   const postTypeTemplates = templates?.postTypes?.[post?.postTypeID];
-  const template = postTypeTemplates?.[post?.template];
+  const postTypeTemplatesArray = postTypeTemplates
+    ? Object.values(postTypeTemplates).filter((o) => o.id !== 'archive')
+    : [];
 
-  // Remove own post for display in the page parent drop down
-  const otherPosts = { ...posts };
-  post && delete otherPosts[post.id];
+  // Get all templates with id 'archive'
+  const archiveTemplatesArray = [];
+  if (post?.postTypeID === 'page') {
+    Object.values(templates?.postTypes).map((o) =>
+      Object.values(o).map((p) => p.id === 'archive' && archiveTemplatesArray.push(p))
+    );
+  }
 
   const handleChangePost = (name, value) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
@@ -210,21 +215,25 @@ const EditorSidebar = (props) => {
   };
 
   const prepareContentFields = () => {
-    const fields = template?.fields.map((o) => {
-      if (o.global) {
-        const globalField = globalOptions && globalOptions.find((p) => p.id === o.id);
+    const template = getTemplateByPost(post, templates);
 
-        if (globalField) {
-          return {
-            global: true,
-            ...globalField,
-            value: site?.globalOptions?.[o.id]?.value || null,
-          };
-        }
-      } else {
-        return { ...o, value: post?.content?.[o.id]?.value || null };
-      }
-    });
+    const fields = template?.fields
+      ? template.fields.map((o) => {
+          if (o.global) {
+            const globalField = globalOptions && globalOptions.find((p) => p.id === o.id);
+
+            if (globalField) {
+              return {
+                global: true,
+                ...globalField,
+                value: site?.globalOptions?.[o.id]?.value || null,
+              };
+            }
+          } else {
+            return { ...o, value: post?.content?.[o.id]?.value || null };
+          }
+        })
+      : [];
 
     return fields;
   };
@@ -248,270 +257,297 @@ const EditorSidebar = (props) => {
     }
   };
 
-  return sidebar ? (
-    <Container {...rest}>
-      <TabsContainer>
-        <Tabs
-          activeKey={sidebar}
-          onChange={(value) =>
-            dispatch({
-              type: 'SET_EDITOR_SIDEBAR',
-              payload: value,
-            })
-          }
-        >
-          <Tabs.TabPane key={'content'} tab={'Content'} />
-          <Tabs.TabPane key={'settings'} tab={'Settings'} />
-          <Tabs.TabPane key={'seo'} tab={'SEO'} />{' '}
-        </Tabs>
-      </TabsContainer>
+  return (
+    <>
+      {sidebar && (
+        <Container {...rest}>
+          <TabsContainer>
+            <Tabs
+              activeKey={sidebar}
+              onChange={(value) =>
+                dispatch({
+                  type: 'SET_EDITOR_SIDEBAR',
+                  payload: value,
+                })
+              }
+            >
+              <Tabs.TabPane key={'content'} tab={'Content'} />
+              <Tabs.TabPane key={'settings'} tab={'Settings'} />
+              <Tabs.TabPane key={'seo'} tab={'SEO'} />{' '}
+            </Tabs>
+          </TabsContainer>
 
-      <CloseButton
-        icon={<CloseIcon />}
-        onClick={() =>
-          dispatch({
-            type: 'SET_EDITOR_SIDEBAR',
-            payload: null,
-          })
-        }
-      />
-
-      <TabContainer>
-        {sidebar === 'content' && (
-          <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
-        )}
-
-        {sidebar === 'settings' && (
-          <TabContent>
-            <Space direction="vertical" size={20}>
-              <Input
-                value={post?.title || ''}
-                onChange={(e) => handleChangePost('title', e.target.value)}
-                label={'Title'}
-              />
-
-              <Input
-                value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
-                onChange={(e) => handleChangePost('slug', e.target.value)}
-                label={'Slug'}
-                disabled={post?.id === site?.frontPage}
-              />
-
-              {postTypeTemplates && Object.values(postTypeTemplates).length > 1 && (
-                <Select
-                  value={post?.template}
-                  onChange={(value) => handleChangePost('template', value)}
-                  label={'Template'}
-                >
-                  {Object.values(postTypeTemplates).map((o) => (
-                    <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
-                  ))}
-                </Select>
-              )}
-
-              <Select
-                value={post?.status || ''}
-                onChange={(value) => handleChangePost('status', value)}
-                label={'Status'}
-              >
-                <AntSelect.Option value={'publish'} children={'Publish'} />
-                <AntSelect.Option value={'draft'} children={'Draft'} />
-                <AntSelect.Option value={'trash'} children={'Trash'} />
-              </Select>
-
-              {post?.postTypeID === 'page' && (
-                <PostTreeSelect
-                  label="Parent"
-                  items={Object.values(otherPosts)}
-                  value={post?.parentID}
-                  onChange={(value) => handleChangePost('parentID', value)}
-                />
-              )}
-
-              {post?.taxonomies &&
-                Object.keys(post.taxonomies).map((k) => {
-                  const o = sites[siteID].taxonomies[k];
-
-                  return (
-                    <Select
-                      key={k}
-                      onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
-                      allowClear
-                      placeholder="Select category"
-                      mode="multiple"
-                      label={o.title}
-                      defaultValue={post.taxonomies[k]}
-                    >
-                      {o.terms &&
-                        o.terms.map((p) => {
-                          return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
-                        })}
-                    </Select>
-                  );
-                })}
-
-              {post?.postTypeID !== 'page' && (
-                <Space direction="vertical" size={2}>
-                  <Caption children="Featured Image" />
-                  <FilePicker
-                    value={post?.featuredImage}
-                    onRemove={() => handleSelectImage('featuredImage', null)}
-                    onClick={() =>
-                      dispatch({
-                        type: `SET_DIALOG`,
-                        payload: {
-                          open: true,
-                          component: (
-                            <MediaLibrary
-                              onSelect={(v) => handleSelectImage('featuredImage', v)}
-                              allow={['image']}
-                            />
-                          ),
-                          width: 1024,
-                        },
-                      })
-                    }
-                  />
-                </Space>
-              )}
-
-              {post?.postTypeID === 'page' && (
-                <Checkbox
-                  value={post?.id}
-                  checked={post?.id === site?.frontPage}
-                  onChange={(e) =>
-                    handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
-                  }
-                  children="Set as Homepage"
-                />
-              )}
-            </Space>
-          </TabContent>
-        )}
-
-        {sidebar === 'seo' && (
-          <TabContent>
-            <Space direction="vertical" size={25}>
-              <Input
-                value={post?.seo?.title || ''}
-                onChange={(e) => handleChangePost('seo.title', e.target.value)}
-                label={'SEO Title'}
-                placeholder={post?.title}
-              />
-
-              <Input
-                value={post?.seo?.description || ''}
-                onChange={(e) => handleChangePost('seo.description', e.target.value)}
-                label={'SEO Description'}
-                rows={4}
-              />
-
-              <Space direction="vertical" size={6}>
-                <Caption children="Open Graph Image" />
-                <FilePicker
-                  value={post?.seo?.ogImage}
-                  onRemove={() => handleSelectImage('seo.ogImage', null)}
-                  onClick={() =>
-                    dispatch({
-                      type: `SET_DIALOG`,
-                      payload: {
-                        open: true,
-                        component: (
-                          <MediaLibrary
-                            onSelect={(v) => handleSelectImage('seo.ogImage', v)}
-                            allow={['image']}
-                          />
-                        ),
-                        width: 1024,
-                      },
-                    })
-                  }
-                />
-              </Space>
-            </Space>
-          </TabContent>
-        )}
-      </TabContainer>
-
-      <Actions>
-        <Space>
-          <Button
-            disabled={!postHasChanged && !siteHasChanged}
-            children="Reset"
-            onClick={handleDiscardRequest}
-            block
+          <CloseButton
+            icon={<CloseIcon />}
+            onClick={() =>
+              dispatch({
+                type: 'SET_EDITOR_SIDEBAR',
+                payload: null,
+              })
+            }
           />
 
-          {post?.status === 'draft' && (
-            <>
+          <TabContainer>
+            {sidebar === 'content' && (
+              <EditorFields fields={prepareContentFields()} onChangeElement={handleChangeContent} />
+            )}
+
+            {sidebar === 'settings' && (
+              <TabContent>
+                <Space direction="vertical" size={20}>
+                  <Input
+                    value={post?.title || ''}
+                    onChange={(e) => handleChangePost('title', e.target.value)}
+                    label={'Title'}
+                  />
+
+                  <Input
+                    value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+                    onChange={(e) => handleChangePost('slug', e.target.value)}
+                    label={'Slug'}
+                    disabled={post?.id === site?.frontPage}
+                  />
+
+                  {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
+                    <Select
+                      value={post?.template}
+                      onChange={(value) => handleChangePost('template', value)}
+                      label={'Template'}
+                    >
+                      {postTypeTemplatesArray.length > 1 && (
+                        <AntSelect.OptGroup label={'Single'}>
+                          {postTypeTemplatesArray.map((o) => (
+                            <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
+                          ))}
+                        </AntSelect.OptGroup>
+                      )}
+
+                      {archiveTemplatesArray.length > 0 && (
+                        <AntSelect.OptGroup label={'Archive'}>
+                          {archiveTemplatesArray.map((o) => {
+                            const id = `archive-${o.postTypeID}`;
+
+                            return <AntSelect.Option key={id} value={id} children={o.label} />;
+                          })}
+                        </AntSelect.OptGroup>
+                      )}
+                    </Select>
+                  )}
+
+                  <Select
+                    value={post?.status || ''}
+                    onChange={(value) => handleChangePost('status', value)}
+                    label={'Status'}
+                  >
+                    <AntSelect.Option value={'publish'} children={'Publish'} />
+                    <AntSelect.Option value={'draft'} children={'Draft'} />
+                    <AntSelect.Option value={'trash'} children={'Trash'} />
+                  </Select>
+
+                  {post?.postTypeID === 'page' && (
+                    <PostTreeSelect
+                      label="Parent"
+                      items={Object.values(postType.posts).filter((o) => o.id !== post.id)}
+                      value={post?.parentID}
+                      onChange={(value) => handleChangePost('parentID', value)}
+                    />
+                  )}
+
+                  {post?.taxonomies &&
+                    Object.keys(post.taxonomies).map((k) => {
+                      const o = sites[siteID].taxonomies[k];
+
+                      return (
+                        o && (
+                          <Select
+                            key={k}
+                            onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
+                            allowClear
+                            placeholder="Select category"
+                            mode="multiple"
+                            label={o.title}
+                            defaultValue={post.taxonomies[k]}
+                          >
+                            {o.terms &&
+                              o.terms.map((p) => {
+                                return (
+                                  <AntSelect.Option key={p.id} value={p.id} children={p.title} />
+                                );
+                              })}
+                          </Select>
+                        )
+                      );
+                    })}
+
+                  {post?.postTypeID !== 'page' && (
+                    <Space direction="vertical" size={2}>
+                      <Caption children="Featured Image" />
+                      <FilePicker
+                        value={post?.featuredImage}
+                        onRemove={() => handleSelectImage('featuredImage', null)}
+                        onClick={() =>
+                          dispatch({
+                            type: `SET_DIALOG`,
+                            payload: {
+                              open: true,
+                              component: (
+                                <MediaLibrary
+                                  onSelect={(v) => handleSelectImage('featuredImage', v)}
+                                  allow={['image']}
+                                />
+                              ),
+                              width: 1024,
+                            },
+                          })
+                        }
+                      />
+                    </Space>
+                  )}
+
+                  {post?.postTypeID === 'page' && (
+                    <Checkbox
+                      value={post?.id}
+                      checked={post?.id === site?.frontPage}
+                      onChange={(e) =>
+                        handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
+                      }
+                      children="Set as Homepage"
+                    />
+                  )}
+                </Space>
+              </TabContent>
+            )}
+
+            {sidebar === 'seo' && (
+              <TabContent>
+                <Space direction="vertical" size={25}>
+                  <Input
+                    value={post?.seo?.title || ''}
+                    onChange={(e) => handleChangePost('seo.title', e.target.value)}
+                    label={'SEO Title'}
+                    placeholder={post?.title}
+                  />
+
+                  <Input
+                    value={post?.seo?.description || ''}
+                    onChange={(e) => handleChangePost('seo.description', e.target.value)}
+                    label={'SEO Description'}
+                    rows={4}
+                  />
+
+                  <Space direction="vertical" size={6}>
+                    <Caption children="Open Graph Image" />
+                    <FilePicker
+                      value={post?.seo?.ogImage}
+                      onRemove={() => handleSelectImage('seo.ogImage', null)}
+                      onClick={() =>
+                        dispatch({
+                          type: `SET_DIALOG`,
+                          payload: {
+                            open: true,
+                            component: (
+                              <MediaLibrary
+                                onSelect={(v) => handleSelectImage('seo.ogImage', v)}
+                                allow={['image']}
+                              />
+                            ),
+                            width: 1024,
+                          },
+                        })
+                      }
+                    />
+                  </Space>
+                </Space>
+              </TabContent>
+            )}
+          </TabContainer>
+
+          <Actions>
+            <Space>
               <Button
-                children="Save Draft"
-                onClick={handleSaveDraft}
-                loading={loading === 'draft'}
                 disabled={!postHasChanged && !siteHasChanged}
+                children="Reset"
+                onClick={handleDiscardRequest}
                 block
               />
-              <Button
-                children="Publish"
-                type="primary"
-                onClick={handlePublish}
-                loading={loading === 'publish'}
-                disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
-                block
-              />
-            </>
-          )}
 
-          {(post?.status === 'publish' || post?.status === 'trash') && (
-            <Button
-              children="Update"
-              type="primary"
-              onClick={() => handleUpdate(post.status)}
-              loading={loading === 'update'}
-              disabled={!postHasChanged && !siteHasChanged}
-              block
-            />
-          )}
-        </Space>
-      </Actions>
-    </Container>
-  ) : (
-    <Buttons>
-      <Tooltip title="Back to jamCMS" placement="right">
-        <Button
-          icon={<DashboardIcon />}
-          type="primary"
-          disabled={postHasChanged || siteHasChanged}
-          onClick={() => navigate(getRoute(`collection`, { siteID, postTypeID: post.postTypeID }))}
-        />
-      </Tooltip>
+              {post?.status === 'draft' && (
+                <>
+                  <Button
+                    children="Save Draft"
+                    onClick={handleSaveDraft}
+                    loading={loading === 'draft'}
+                    disabled={!postHasChanged && !siteHasChanged}
+                    block
+                  />
+                  <Button
+                    children="Publish"
+                    type="primary"
+                    onClick={handlePublish}
+                    loading={loading === 'publish'}
+                    disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
+                    block
+                  />
+                </>
+              )}
 
-      <Tooltip title="Add" placement="right">
-        <Button
-          icon={<AddIcon />}
-          type="primary"
-          disabled={postHasChanged || siteHasChanged}
-          onClick={() =>
-            dispatch({
-              type: 'SET_DIALOG',
-              payload: {
-                open: true,
-                title: `Add`,
-                component: <PostForm onSubmit={handleAddPost} />,
-              },
-            })
-          }
-        />
-      </Tooltip>
+              {(post?.status === 'publish' || post?.status === 'trash') && (
+                <Button
+                  children="Update"
+                  type="primary"
+                  onClick={() => handleUpdate(post.status)}
+                  loading={loading === 'update'}
+                  disabled={!postHasChanged && !siteHasChanged}
+                  block
+                />
+              )}
+            </Space>
+          </Actions>
+        </Container>
+      )}
 
-      <Tooltip title="Edit" placement="right">
-        <Button
-          icon={<EditIcon />}
-          type={'primary'}
-          onClick={() => dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' })}
-        />
-      </Tooltip>
-    </Buttons>
+      <Buttons>
+        <Tooltip title="Dashboard" placement="right">
+          <Button
+            icon={<DashboardIcon />}
+            type="primary"
+            disabled={postHasChanged || siteHasChanged}
+            onClick={() =>
+              navigate(getRoute(`collection`, { siteID, postTypeID: post.postTypeID }))
+            }
+          />
+        </Tooltip>
+
+        <Tooltip title="Add" placement="right">
+          <Button
+            icon={<AddIcon />}
+            type="primary"
+            disabled={postHasChanged || siteHasChanged}
+            onClick={() =>
+              dispatch({
+                type: 'SET_DIALOG',
+                payload: {
+                  open: true,
+                  title: `Add`,
+                  component: <PostForm onSubmit={handleAddPost} />,
+                },
+              })
+            }
+          />
+        </Tooltip>
+
+        <Tooltip title="Edit" placement="right">
+          <Button
+            icon={<EditIcon />}
+            type={'primary'}
+            disabled={!editable}
+            onClick={() =>
+              dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: !!sidebar ? null : 'content' })
+            }
+          />
+        </Tooltip>
+      </Buttons>
+    </>
   );
 };
 
@@ -599,7 +635,7 @@ const Buttons = styled.div`
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  left: 0;
+  right: 0;
   z-index: 1000;
   display: flex;
   flex-direction: column;

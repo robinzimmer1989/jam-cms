@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { Link, useStaticQuery, graphql } from 'gatsby';
 
 // import app components
 import Edges from '../Edges';
-import Button from '../Button';
+import Button from '../button/Button';
 
 const Posts = (props) => {
-  let { posts, buttonTitle, numberofposts, columns } = props;
+  let { buttontitle, numberofposts, columns } = props;
+
+  let posts = usePostsQuery();
 
   if (posts && numberofposts && numberofposts > 0) {
     posts = posts.slice(0, numberofposts);
@@ -21,20 +24,20 @@ const Posts = (props) => {
             posts.map((post, index) => {
               return (
                 <Box key={index} columns={columns}>
-                  <ImageContainer>
-                    {post?.featuredImage?.childImageSharp?.fluid && (
-                      <Img
-                        fluid={post.featuredImage.childImageSharp.fluid}
+                  <ImageContainer to={post.uri}>
+                    {getImage(post?.featuredImage?.node?.localFile) && (
+                      <GatsbyImage
+                        image={getImage(post.featuredImage.node.localFile)}
+                        alt={post.featuredImage.node.altText}
+                        objectFit="contain"
+                        style={{ width: '100%', height: '100%' }}
                         imgStyle={{
-                          objectFit: 'contain',
                           maxWidth: post.featuredImage.width,
                           maxHeight: post.featuredImage.height,
                           top: '50%',
                           left: '50%',
                           transform: 'translate(-50%, -50%)',
                         }}
-                        alt={post.featuredImage.alt}
-                        style={{ width: '100%', height: '100%' }}
                       />
                     )}
                   </ImageContainer>
@@ -45,7 +48,7 @@ const Posts = (props) => {
                     </HeadlineContainer>
                   )}
 
-                  <Button url={post.slug} title={buttonTitle} />
+                  <Button url={post.uri} title={buttontitle} />
                 </Box>
               );
             })}
@@ -72,8 +75,9 @@ const BoxesContainer = styled.div`
   justify-content: space-between;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled(Link)`
   position: relative;
+  display: block;
   width: 100%;
   height: 120px;
   margin-bottom: 12px;
@@ -113,5 +117,34 @@ const Box = styled.div`
 const HeadlineContainer = styled.div`
   margin-bottom: 20px;
 `;
+
+const usePostsQuery = () => {
+  const {
+    allWpPost: { nodes },
+  } = useStaticQuery(
+    graphql`
+      query {
+        allWpPost {
+          nodes {
+            id
+            title
+            uri
+            featuredImage {
+              node {
+                altText
+                localFile {
+                  childImageSharp {
+                    gatsbyImageData(width: 300, placeholder: BLURRED)
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `
+  );
+  return nodes;
+};
 
 export default Posts;
