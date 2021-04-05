@@ -23,6 +23,9 @@ module.exports = {
         apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
         templates: path.join(__dirname, 'src/templates'), // optional
         globalOptions: path.join(__dirname, 'src/globalOptions'), // optional
+        settings: {
+          postsPerPage: 2,
+        },
       },
     },
     {
