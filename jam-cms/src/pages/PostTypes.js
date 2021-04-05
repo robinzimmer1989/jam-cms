@@ -53,7 +53,7 @@ const PostTypes = () => {
   };
 
   return (
-    <CmsLayout pageTitle={`PostTypes`}>
+    <CmsLayout pageTitle={`Post Types`}>
       <PageHeader>
         <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
       </PageHeader>
@@ -62,7 +62,7 @@ const PostTypes = () => {
         Object.values(postTypes).map((o) => {
           const actions = [];
 
-          if (o.id !== 'page' && o.id !== 'post') {
+          if (o.editable) {
             actions.push(
               <Popconfirm
                 title="Are you sure?"
