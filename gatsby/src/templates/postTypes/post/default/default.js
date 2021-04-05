@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 
 // import app components
 import Layout from '../../../../components/Layout';
@@ -8,10 +8,12 @@ import Edges from '../../../../components/Edges';
 import Banner from '../../../../components/banner/Banner';
 import TextEditor from '../../../../components/textEditor/TextEditor';
 
+import { colors } from '../../../../theme';
+
 const Template = (props) => {
   const {
     data: {
-      wpNews: { title, acf },
+      wpPost: { title, acf, categories },
     },
   } = props;
 
@@ -20,6 +22,11 @@ const Template = (props) => {
       <Banner headline={title} height="small" />
       <Edges size="sm">
         <Content>
+          <Tags>
+            {categories?.nodes.map((o) => (
+              <Tag key={o.databaseId} to={o.uri} children={o.name} />
+            ))}
+          </Tags>
           <TextEditor {...acf.text} />
         </Content>
       </Edges>
@@ -28,21 +35,48 @@ const Template = (props) => {
 };
 
 const Content = styled.div`
+  padding-top: 40px;
   padding-bottom: 60px;
 `;
 
+const Tags = styled.div`
+  display: flex;
+`;
+
+const Tag = styled(Link)`
+  margin-right: 20px;
+  display: flex;
+  padding: 5px 12px;
+  border-radius: 4px;
+  background: ${colors.primary};
+  font-size: 12px;
+  color: #fff;
+
+  &:hover {
+    color: #fff;
+    opacity: 0.8;
+  }
+`;
+
 export const Query = graphql`
-  query NewsDefault($id: String!) {
-    wpNews(id: { eq: $id }) {
+  query PostDefault($id: String!) {
+    wpPost(id: { eq: $id }) {
       title
+      categories {
+        nodes {
+          databaseId
+          name
+          uri
+        }
+      }
       acf {
         text {
           flex {
-            ... on WpNews_Acf_Text_Flex_Layout1 {
+            ... on WpPost_Acf_Text_Flex_Layout1 {
               fieldGroupName
               text
             }
-            ... on WpNews_Acf_Text_Flex_Layout2 {
+            ... on WpPost_Acf_Text_Flex_Layout2 {
               alignment
               fieldGroupName
               text
@@ -56,7 +90,7 @@ export const Query = graphql`
                 }
               }
             }
-            ... on WpNews_Acf_Text_Flex_Images {
+            ... on WpPost_Acf_Text_Flex_Images {
               columns
               fieldGroupName
               gallery {

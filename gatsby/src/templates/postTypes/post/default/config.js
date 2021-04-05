@@ -3,8 +3,8 @@ import texteditor from '../../../../components/textEditor/config';
 
 const config = {
   id: 'default',
-  postTypeID: 'news',
-  label: 'News',
+  postTypeID: 'post',
+  label: 'Post',
   component: Template,
   fields: [
     {

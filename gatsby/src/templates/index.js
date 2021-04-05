@@ -1,6 +1,7 @@
 import PageDefault from './postTypes/page/default/config';
 import PageDocumentation from './postTypes/page/documentation/config';
-import NewsDefault from './postTypes/news/default/config';
+import PostDefault from './postTypes/post/default/config';
+import PostArchive from './postTypes/post/archive/config';
 
 const templates = {
   postTypes: {
@@ -8,11 +9,11 @@ const templates = {
       default: PageDefault,
       documentation: PageDocumentation,
     },
-    news: {
-      default: NewsDefault,
+    post: {
+      default: PostDefault,
+      archive: PostArchive,
     },
   },
-  taxonomies: {},
 };
 
 export default templates;

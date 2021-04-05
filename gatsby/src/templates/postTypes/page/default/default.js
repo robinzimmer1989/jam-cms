@@ -18,6 +18,7 @@ const blocks = {
 };
 
 const Template = (props) => {
+  console.log(props);
   const {
     pageContext: { globalOptions },
     data: {
