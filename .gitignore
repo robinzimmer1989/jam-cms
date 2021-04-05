@@ -19,6 +19,7 @@ gatsby/public
 .env.production
 .env.production.local
 .cache
+.wordpress-cache
 
 npm-debug.log*
 yarn-debug.log*
