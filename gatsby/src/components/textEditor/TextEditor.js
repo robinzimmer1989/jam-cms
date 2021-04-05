@@ -36,14 +36,17 @@ const TextEditor = (props) => {
   return (
     <Container>
       <Content>
-        {flex && flex.map((block) => <div key={block.id}>{getFlexElement(block)}</div>)}
+        {flex &&
+          flex.map((block, i) => (
+            <div key={block.id || block.fieldGroupName}>{getFlexElement(block)}</div>
+          ))}
       </Content>
     </Container>
   );
 };
 
 const Container = styled.div`
-  padding: 40px 0;
+  margin: 40px 0;
   min-height: 40px;
 `;
 
