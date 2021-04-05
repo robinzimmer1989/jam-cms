@@ -1,6 +1,7 @@
 const path = require('path');
-const axios = require('axios');
 const fs = require('fs');
+
+const getThemeSettings = require('./src/gatsby-node/getThemeSettings');
 
 let templatesPath, globalOptionsPath;
 
@@ -33,28 +34,11 @@ exports.onCreateWebpackConfig = ({ actions, plugins }) => {
 };
 
 exports.createPages = async ({ actions, reporter, graphql }, pluginOptions) => {
-  const { source, apiKey } = pluginOptions;
+  const globalOptions = await getThemeSettings({ reporter }, pluginOptions);
 
-  if (!source) {
-    reporter.error('jamCMS: Source url is required');
-    return;
-  }
-
-  if (!apiKey) {
-    reporter.error('jamCMS: Api key is required');
-    return;
-  }
-
-  // Remove trailing slash
-  const url = source.replace(/\/+$/, '');
+  const allNodes = {};
 
   try {
-    const response = await axios.get(`${url}/wp-json/jamcms/v1/getBuildSite?apiKey=${apiKey}`);
-
-    const {
-      data: { globalOptions },
-    } = await response;
-
     // Get all post types
     const {
       data: { allWpContentType },
@@ -94,35 +78,161 @@ exports.createPages = async ({ actions, reporter, graphql }, pluginOptions) => {
           }
         }
       `);
-      const { nodes } = data[gatsbyNodeListFieldName];
 
-      // Initialize missing templates object
-      const missingTemplates = {};
+      allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
+    }
+  } catch (err) {
+    if (err.response && err.response.data.message) {
+      reporter.error(err.response.data.message);
+    }
+  }
 
+  // Initialize missing templates object
+  const missingTemplates = {};
+
+  await Promise.all(
+    Object.keys(allNodes).map(async (postType) => {
       await Promise.all(
-        nodes.map(async (node, i) => {
-          const {
+        allNodes[postType].map(async (node, i) => {
+          let {
             id,
             uri,
             template: { templateName },
           } = node;
 
-          const templatePath = path.resolve(
-            `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}.js`
-          );
+          const isArchive = templateName.includes('Archive ');
+          const archivePostType = templateName.replace('Archive ', '').toLowerCase();
+
+          let templatePath;
+
+          if (isArchive) {
+            templatePath = path.resolve(
+              `./src/templates/postTypes/${archivePostType}/archive/archive.js`
+            );
+          } else {
+            templatePath = path.resolve(
+              `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}.js`
+            );
+          }
 
           if (fs.existsSync(templatePath)) {
-            await actions.createPage({
-              component: templatePath,
-              path: uri,
-              context: { id, globalOptions },
-            });
+            if (isArchive) {
+              const numberOfPosts = allNodes[archivePostType].length;
+
+              let postsPerPageUsed = 10;
+
+              if (pluginOptions.settings && pluginOptions.settings.postsPerPage) {
+                postsPerPageUsed = pluginOptions.settings.postsPerPage;
+              }
+
+              const numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
+
+              for (let page = 1; page <= numberOfPages; page++) {
+                let pathname = uri;
+
+                if (page > 1) {
+                  pathname = `${uri}page/${page}`;
+                }
+
+                actions.createPage({
+                  component: templatePath,
+                  path: pathname,
+                  context: {
+                    id,
+                    globalOptions,
+                    pagination: {
+                      basePath: uri,
+                      numberOfPosts,
+                      postsPerPage: postsPerPageUsed,
+                      numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
+                      page,
+                    },
+                  },
+                });
+              }
+            } else {
+              actions.createPage({
+                component: templatePath,
+                path: uri,
+                context: { id, globalOptions, pagination: {} },
+              });
+            }
           } else {
-            // Only show error message about missing template once
+            // Check if error was already shown
             if (!missingTemplates[templatePath]) {
               reporter.warn(
                 `Template file not found. Gatsby won't create any pages for ${postType}/${templateName.toLowerCase()}`
               );
+
+              // Only show error message about missing template once
+              missingTemplates[templatePath] = true;
+            }
+          }
+        })
+      );
+    })
+  );
+
+  try {
+    // Get all taxonomies
+    const {
+      data: { allWpTaxonomy },
+    } = await graphql(/* GraphQL */ `
+      query ALL_TAXONOMIES {
+        allWpTaxonomy {
+          nodes {
+            graphqlSingleName
+          }
+        }
+      }
+    `);
+
+    for (const taxonomy of allWpTaxonomy.nodes) {
+      const { graphqlSingleName } = taxonomy;
+
+      // Don't create single pages for media items
+      if (graphqlSingleName === 'postFormat') {
+        continue;
+      }
+
+      // Capitalize post type name
+      const nodesTypeName = graphqlSingleName.charAt(0).toUpperCase() + graphqlSingleName.slice(1);
+      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
+
+      const { data } = await graphql(/* GraphQL */ `
+        query ALL_TERM_NODES {
+            ${gatsbyNodeListFieldName}{
+            nodes {
+              id
+              slug
+              uri
+            }
+          }
+        }
+      `);
+
+      await Promise.all(
+        data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
+          const templatePath = path.resolve(
+            `./src/templates/taxonomies/${graphqlSingleName}/single.js`
+          );
+
+          if (fs.existsSync(templatePath)) {
+            const { uri, slug, id } = node;
+
+            actions.createPage({
+              component: templatePath,
+              path: uri,
+              context: { id, slug, globalOptions },
+            });
+          } else {
+            // Check if error was already shown
+            if (!missingTemplates[templatePath]) {
+              reporter.warn(
+                `Template file not found. Gatsby won't create any pages for taxonomy ${graphqlSingleName}`
+              );
+
+              // Only show error message about missing template once
               missingTemplates[templatePath] = true;
             }
           }
