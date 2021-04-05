@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, PageHeader, Popconfirm, Space } from 'antd';
+import { Button, PageHeader, Popconfirm } from 'antd';
 import styled from 'styled-components';
 
 // import app components
@@ -67,24 +67,26 @@ const Taxonomies = () => {
         Object.values(taxonomies).map((o) => {
           const actions = [];
 
-          actions.push(
-            <Popconfirm
-              title="Are you sure?"
-              onConfirm={() => handleDelete({ taxonomyID: o.id })}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button size="small" children={`Delete`} danger />
-            </Popconfirm>
-          );
+          if (o.editable) {
+            actions.push(
+              <Popconfirm
+                title="Are you sure?"
+                onConfirm={() => handleDelete({ taxonomyID: o.id })}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size="small" children={`Delete`} danger />
+              </Popconfirm>
+            );
 
-          actions.push(
-            <Button
-              size="small"
-              children={`Edit`}
-              onClick={() => handleOpenDialog(o.id, o.title, o.slug, o.postTypes)}
-            />
-          );
+            actions.push(
+              <Button
+                size="small"
+                children={`Edit`}
+                onClick={() => handleOpenDialog(o.id, o.title, o.slug, o.postTypes)}
+              />
+            );
+          }
 
           return (
             <StyledListItem key={o.id} actions={actions} title={o.title} subtitle={o.slug || '/'} />
