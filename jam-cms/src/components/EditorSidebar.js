@@ -429,8 +429,8 @@ const EditorSidebar = (props) => {
                   />
 
                   <Input
-                    value={post?.seo?.description || ''}
-                    onChange={(e) => handleChangePost('seo.description', e.target.value)}
+                    value={post?.seo?.metaDesc || ''}
+                    onChange={(e) => handleChangePost('seo.metaDesc', e.target.value)}
                     label={'SEO Description'}
                     rows={4}
                   />
@@ -438,8 +438,8 @@ const EditorSidebar = (props) => {
                   <Space direction="vertical" size={6}>
                     <Caption children="Open Graph Image" />
                     <FilePicker
-                      value={post?.seo?.ogImage}
-                      onRemove={() => handleSelectImage('seo.ogImage', null)}
+                      value={post?.seo?.opengraphImage}
+                      onRemove={() => handleSelectImage('seo.opengraphImage', null)}
                       onClick={() =>
                         dispatch({
                           type: `SET_DIALOG`,
@@ -447,7 +447,7 @@ const EditorSidebar = (props) => {
                             open: true,
                             component: (
                               <MediaLibrary
-                                onSelect={(v) => handleSelectImage('seo.ogImage', v)}
+                                onSelect={(v) => handleSelectImage('seo.opengraphImage', v)}
                                 allow={['image']}
                               />
                             ),
