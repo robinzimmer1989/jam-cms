@@ -12,6 +12,7 @@ import { colors } from '../../../../theme';
 const Template = (props) => {
   const {
     data: {
+      wpPage: { title, seo },
       allWpPost: { nodes: posts },
     },
     pageContext: {
@@ -43,8 +44,8 @@ const Template = (props) => {
   };
 
   return (
-    <Layout {...props}>
-      <Banner headline={'Archive'} height="small" />
+    <Layout {...props} seo={seo}>
+      <Banner headline={title} height="small" />
       <Edges size="sm">
         <Content>
           <Posts>
@@ -129,7 +130,18 @@ const PaginationItem = styled(Link)`
 `;
 
 export const Query = graphql`
-  query PostArchive {
+  query PostArchive($id: String!) {
+    wpPage(id: { eq: $id }) {
+      id
+      title
+      seo {
+        title
+        metaDesc
+        opengraphImage {
+          sourceUrl
+        }
+      }
+    }
     allWpPost {
       nodes {
         id

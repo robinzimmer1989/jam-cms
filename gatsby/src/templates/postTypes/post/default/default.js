@@ -13,12 +13,12 @@ import { colors } from '../../../../theme';
 const Template = (props) => {
   const {
     data: {
-      wpPost: { title, acf, categories },
+      wpPost: { title, acf, categories, seo },
     },
   } = props;
 
   return (
-    <Layout {...props}>
+    <Layout {...props} seo={seo}>
       <Banner headline={title} height="small" />
       <Edges size="sm">
         <Content>
@@ -67,6 +67,13 @@ export const Query = graphql`
           databaseId
           name
           uri
+        }
+      }
+      seo {
+        title
+        metaDesc
+        opengraphImage {
+          sourceUrl
         }
       }
       acf {

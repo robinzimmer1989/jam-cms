@@ -13,12 +13,12 @@ const Template = (props) => {
   const {
     pageContext: { globalOptions },
     data: {
-      wpPage: { acf },
+      wpPage: { acf, seo },
     },
   } = props;
 
   return (
-    <Layout {...props}>
+    <Layout {...props} seo={seo}>
       <Edges size="lg">
         <SidebarContent>
           <Sidebar>
@@ -136,6 +136,13 @@ export const Query = graphql`
       id
       databaseId
       title
+      seo {
+        title
+        metaDesc
+        opengraphImage {
+          sourceUrl
+        }
+      }
       acf {
         content {
           title

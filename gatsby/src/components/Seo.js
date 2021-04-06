@@ -3,38 +3,21 @@ import Helmet from 'react-helmet';
 import Parser from 'html-react-parser';
 
 const Seo = (props) => {
-  const { siteTitle, href, seo } = props;
-  const { title, description, opengraphTitle, opengraphDescription, opengraphImage } = seo || {};
+  const { siteTitle, seo } = props;
+  const { title, metaDesc, opengraphImage } = seo || {};
 
   return (
     <Helmet>
-      {title && <title>{Parser(title)}</title>}
-
-      {description && <meta name="description" content={Parser(description)} />}
-
+      <title>{Parser(title || '')}</title>
+      <meta name="description" content={Parser(metaDesc || '')} />
+      <meta property="og:description" content={Parser(metaDesc || '')} />
       <meta property="og:type" content="website" />
-
-      {(!!opengraphDescription || !!description) && (
-        <meta property="og:description" content={Parser(opengraphDescription || description)} />
-      )}
-
-      {opengraphImage && <meta property="og:image" content={opengraphImage.sourceUrl} />}
-
-      {siteTitle && <meta property="og:site_name" content={Parser(siteTitle)} />}
-
-      {href && <meta property="og:url" content={href} />}
-
-      {(opengraphTitle || title) && (
-        <meta property="og:title" content={Parser(opengraphTitle || title)} />
-      )}
-
-      <meta name="twitter:card" content="summary" />
-
-      {opengraphImage && <meta property="twitter:image" content={opengraphImage.sourceUrl} />}
-
-      {(opengraphTitle || title) && (
-        <meta property="twitter:title" content={Parser(opengraphTitle || title)} />
-      )}
+      <meta property="og:image" content={opengraphImage?.sourceUrl || ''} />
+      <meta property="og:site_name" content={Parser(siteTitle || '')} />
+      <meta property="og:title" content={Parser(title || '')} />
+      <meta property="twitter:card" content="summary" />
+      <meta property="twitter:image" content={opengraphImage?.sourceUrl || ''} />
+      <meta property="twitter:title" content={Parser(title || '')} />
     </Helmet>
   );
 };

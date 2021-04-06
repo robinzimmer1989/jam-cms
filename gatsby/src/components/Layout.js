@@ -8,11 +8,11 @@ import Seo from './Seo';
 import { theme } from '../theme';
 
 const Layout = (props) => {
-  const { jamCMS, pageContext, children } = props;
+  const { jamCMS, pageContext, seo, children } = props;
 
   return (
     <>
-      <Seo {...pageContext?.post} />
+      <Seo seo={seo} />
       <ThemeCss theme={theme} />
 
       {pageContext?.globalOptions?.header && (
