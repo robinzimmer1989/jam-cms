@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-jam-cms",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependencies": {
     "axios": "^0.21.1",
     "babel-preset-gatsby": "^1.0.0",
@@ -9,7 +9,7 @@
     "gatsby": "3.0.0",
     "gatsby-plugin-sharp": "^3.0.0",
     "gatsby-transformer-sharp": "^3.0.0",
-    "jam-cms": "1.0.1",
+    "jam-cms": "1.0.2",
     "styled-components": "^5.2.1"
   },
   "main": "index.js",
