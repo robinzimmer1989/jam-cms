@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Link, graphql } from 'gatsby';
 
@@ -26,9 +26,22 @@ const Template = (props) => {
               <Nav>
                 {globalOptions.sidebar.sidebarmenu.map((o, i) => {
                   return (
-                    <NavItem key={i} to={o.url} activeClassName="active">
-                      <span>{o.title}</span>
-                    </NavItem>
+                    <Fragment key={i}>
+                      <NavItem key={i} to={o.url} activeClassName="active">
+                        <span>{o.title}</span>
+                      </NavItem>
+
+                      {typeof window !== 'undefined' &&
+                        window.location.pathname.includes('field-types') &&
+                        o.children &&
+                        o.children.map((p, j) => {
+                          return (
+                            <NavSubItem key={j} to={p.url} activeClassName="active">
+                              <span>{p.title}</span>
+                            </NavSubItem>
+                          );
+                        })}
+                    </Fragment>
                   );
                 })}
               </Nav>
@@ -92,6 +105,30 @@ const NavItem = styled(Link)`
     display: inline-block;
     border-radius: 5px;
     padding: 8px 16px;
+    transform: translateX(-16px);
+    transition: ease all 0.2s;
+  }
+
+  &.active,
+  &:hover {
+    span {
+      background: ${colors.primary};
+      color: ${colors.primaryContrast};
+    }
+  }
+`;
+
+const NavSubItem = styled(Link)`
+  display: block;
+  text-decoration: none;
+  color: ${colors.primary};
+  margin-bottom: 5px;
+  margin-left: 20px;
+
+  span {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 2px 12px;
     transform: translateX(-16px);
     transition: ease all 0.2s;
   }
