@@ -102,11 +102,9 @@ export const Query = graphql`
               columns
               introduction
             }
-            ... on WpPage_Acf_Blocks_Flex_Posts {
+            ... on WpPage_Acf_Blocks_Flex_Form {
               fieldGroupName
-              buttontitle
-              columns
-              numberofposts
+              formid
             }
             ... on WpPage_Acf_Blocks_Flex_Textimage {
               fieldGroupName
