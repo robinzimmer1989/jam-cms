@@ -2,9 +2,9 @@ import Template from './default';
 
 import banner from '../../../../components/banner/config';
 import boxes from '../../../../components/boxes/config';
-import posts from '../../../../components/posts/config';
 import textimage from '../../../../components/textImage/config';
 import texteditor from '../../../../components/textEditor/config';
+import form from '../../../../components/form/config';
 
 const config = {
   id: 'default',
@@ -28,9 +28,9 @@ const config = {
           items: Object.values({
             banner,
             boxes,
-            posts,
             textimage,
             texteditor,
+            form,
           }),
         },
       ],

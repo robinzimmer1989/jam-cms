@@ -5,16 +5,16 @@ import { graphql } from 'gatsby';
 import Layout from '../../../../components/Layout';
 import banner from '../../../../components/banner/Banner';
 import boxes from '../../../../components/boxes/Boxes';
-import posts from '../../../../components/posts/Posts';
 import textimage from '../../../../components/textImage/TextImage';
 import texteditor from '../../../../components/textEditor/TextEditor';
+import form from '../../../../components/form/Form';
 
 const blocks = {
   banner,
   boxes,
-  posts,
   textimage,
   texteditor,
+  form,
 };
 
 const Template = (props) => {
