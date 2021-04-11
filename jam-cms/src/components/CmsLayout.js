@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
+import Helmet from 'react-helmet';
 import { PageHeader, Layout, Menu } from 'antd';
 import {
   PieChartOutlined,
@@ -31,130 +32,138 @@ const CmsLayout = (props) => {
   ] = useStore();
 
   return (
-    <Layout className="jam-cms">
-      <Layout.Sider
-        className="sider"
-        theme="dark"
-        width={250}
-        style={{
-          overflow: 'auto',
-          height: '100vh',
-          position: 'fixed',
-          left: 0,
-        }}
-      >
-        <div>
-          <SidebarHeader
-            title={
-              <LogoContainer to="/">
-                <Logo />
-              </LogoContainer>
-            }
-          />
+    <>
+      <Helmet>
+        <title>{pageTitle} - jamCMS</title>
+      </Helmet>
 
-          <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
-            <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
-              <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
-            </Menu.Item>
+      <Layout className="jam-cms">
+        <Layout.Sider
+          className="sider"
+          theme="dark"
+          width={250}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+          }}
+        >
+          <div>
+            <SidebarHeader
+              title={
+                <LogoContainer to="/">
+                  <Logo />
+                </LogoContainer>
+              }
+            />
 
-            <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
-              <Link to={getRoute(`media`, { siteID })}>Media</Link>
-            </Menu.Item>
-
-            <Menu.SubMenu
-              key={'Collections'}
-              icon={<BlockOutlined />}
-              title="Collections"
-              popupOffset={[1, 0]}
-            >
-              {sites?.[siteID]?.postTypes &&
-                sites?.[siteID]?.taxonomies &&
-                Object.values(sites[siteID].postTypes).map((o, i) => {
-                  const postTypeTaxonomies = [];
-
-                  Object.values(sites[siteID].taxonomies).map(
-                    (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
-                  );
-
-                  return (
-                    <Fragment key={o.title}>
-                      <Menu.Item>
-                        <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                          {o.title}
-                        </Link>
-                      </Menu.Item>
-
-                      {postTypeTaxonomies &&
-                        postTypeTaxonomies.map((p) => {
-                          return (
-                            <Menu.Item key={p.title}>
-                              <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
-                                - {p.title}
-                              </Link>
-                            </Menu.Item>
-                          );
-                        })}
-
-                      {Object.values(sites[siteID].postTypes).length - 1 !== i && <Menu.Divider />}
-                    </Fragment>
-                  );
-                })}
-            </Menu.SubMenu>
-
-            {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
-              <Menu.Item key="Options" icon={<ControlOutlined />}>
-                <Link to={getRoute(`options`, { siteID })}>Theme Options</Link>
+            <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
+              <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
+                <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
               </Menu.Item>
-            )}
 
-            {authUser?.capabilities?.list_users && (
-              <Menu.Item key="Users" icon={<UsergroupAddOutlined />}>
-                <Link to={getRoute(`users`, { siteID })}>Users</Link>
+              <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
+                <Link to={getRoute(`media`, { siteID })}>Media</Link>
               </Menu.Item>
-            )}
 
-            {(authUser?.capabilities?.manage_options || authUser?.capabilities?.list_users) && (
               <Menu.SubMenu
-                key={'settings-sub'}
-                icon={<SettingOutlined />}
-                title="Settings"
+                key={'Collections'}
+                icon={<BlockOutlined />}
+                title="Collections"
                 popupOffset={[1, 0]}
               >
-                {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="General">
-                    <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
-                  </Menu.Item>
-                )}
+                {sites?.[siteID]?.postTypes &&
+                  sites?.[siteID]?.taxonomies &&
+                  Object.values(sites[siteID].postTypes).map((o, i) => {
+                    const postTypeTaxonomies = [];
 
-                {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="Post Types">
-                    <Link to={getRoute(`settings-post-types`, { siteID })}>Post Types</Link>
-                  </Menu.Item>
-                )}
+                    Object.values(sites[siteID].taxonomies).map(
+                      (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
+                    );
 
-                {authUser?.capabilities?.manage_options && (
-                  <Menu.Item key="Taxonomies">
-                    <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
-                  </Menu.Item>
-                )}
+                    return (
+                      <Fragment key={o.title}>
+                        <Menu.Item>
+                          <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
+                            {o.title}
+                          </Link>
+                        </Menu.Item>
+
+                        {postTypeTaxonomies &&
+                          postTypeTaxonomies.map((p) => {
+                            return (
+                              <Menu.Item key={p.title}>
+                                <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
+                                  - {p.title}
+                                </Link>
+                              </Menu.Item>
+                            );
+                          })}
+
+                        {Object.values(sites[siteID].postTypes).length - 1 !== i && (
+                          <Menu.Divider />
+                        )}
+                      </Fragment>
+                    );
+                  })}
               </Menu.SubMenu>
-            )}
-          </Menu>
-        </div>
-      </Layout.Sider>
 
-      <Layout
-        style={{
-          marginLeft: 250,
-        }}
-      >
-        <CmsHeader title={pageTitle} />
+              {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
+                <Menu.Item key="Options" icon={<ControlOutlined />}>
+                  <Link to={getRoute(`options`, { siteID })}>Theme Options</Link>
+                </Menu.Item>
+              )}
 
-        <Layout.Content>
-          <Content>{children}</Content>
-        </Layout.Content>
+              {authUser?.capabilities?.list_users && (
+                <Menu.Item key="Users" icon={<UsergroupAddOutlined />}>
+                  <Link to={getRoute(`users`, { siteID })}>Users</Link>
+                </Menu.Item>
+              )}
+
+              {(authUser?.capabilities?.manage_options || authUser?.capabilities?.list_users) && (
+                <Menu.SubMenu
+                  key={'settings-sub'}
+                  icon={<SettingOutlined />}
+                  title="Settings"
+                  popupOffset={[1, 0]}
+                >
+                  {authUser?.capabilities?.manage_options && (
+                    <Menu.Item key="General">
+                      <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
+                    </Menu.Item>
+                  )}
+
+                  {authUser?.capabilities?.manage_options && (
+                    <Menu.Item key="Post Types">
+                      <Link to={getRoute(`settings-post-types`, { siteID })}>Post Types</Link>
+                    </Menu.Item>
+                  )}
+
+                  {authUser?.capabilities?.manage_options && (
+                    <Menu.Item key="Taxonomies">
+                      <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
+                    </Menu.Item>
+                  )}
+                </Menu.SubMenu>
+              )}
+            </Menu>
+          </div>
+        </Layout.Sider>
+
+        <Layout
+          style={{
+            marginLeft: 250,
+          }}
+        >
+          <CmsHeader title={pageTitle} />
+
+          <Layout.Content>
+            <Content>{children}</Content>
+          </Layout.Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
   );
 };
 
