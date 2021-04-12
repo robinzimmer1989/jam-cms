@@ -44,6 +44,23 @@ const globalOptions = [
       },
     ],
   },
+  {
+    id: 'colors',
+    label: 'Colors',
+    type: 'group',
+    fields: [
+      {
+        id: 'primary',
+        type: 'color',
+        label: 'Primary Color',
+      },
+      {
+        id: 'secondary',
+        type: 'color',
+        label: 'Secondary Color',
+      },
+    ],
+  },
 ];
 
 export default globalOptions;

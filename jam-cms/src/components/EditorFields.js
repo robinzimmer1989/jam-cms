@@ -25,6 +25,7 @@ import DatePicker from './editorFields/DatePicker';
 import Group from './editorFields/Group';
 import Gallery from './editorFields/Gallery';
 import GoogleMap from './editorFields/GoogleMap';
+import ColorPicker from './editorFields/ColorPicker';
 
 import { useStore } from '../store';
 
@@ -45,6 +46,12 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
     case 'text':
       component = (
         <Text {...field} onChange={(e) => onChangeElement({ ...field, value: e.target.value })} />
+      );
+      break;
+
+    case 'color':
+      component = (
+        <ColorPicker {...field} onChange={(value) => onChangeElement({ ...field, value })} />
       );
       break;
 
