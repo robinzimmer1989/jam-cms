@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PageHeader, Button, Badge, Popover, Alert } from 'antd';
+import { PageHeader, Button, Badge, Popover, Alert, Divider } from 'antd';
 import { QuestionOutlined } from '@ant-design/icons';
 
 // import app components
 import DeploymentBadge from './DeploymentBadge';
 import AvatarMenu from './AvatarMenu';
 import { useStore } from '../store';
+import { version } from '../../package.json';
 
 const CmsHeader = (props) => {
   const { title } = props;
@@ -43,6 +44,10 @@ const CmsHeader = (props) => {
           jamstack.org/what-is-jamstack
         </a>
       </p>
+
+      <Divider />
+
+      <p>Version: {version}</p>
     </div>
   );
 
