@@ -2,6 +2,7 @@ import { message } from 'antd';
 import axios from 'axios';
 import { navigate } from '@reach/router';
 
+// import app components
 import { auth } from '../utils';
 import { authActions } from '../actions';
 
@@ -18,6 +19,7 @@ const db = async (endpoint, params, dispatch, config) => {
       (key) => typeof params[key] !== 'undefined' && formData.append(key, params[key])
     );
 
+    // TODO: Move to utils function
     const cleanedUrl = config?.source.replace(/\/+$/, '');
 
     const result = await axios.post(`${cleanedUrl}/wp-json/jamcms/v1/${endpoint}`, formData, {
