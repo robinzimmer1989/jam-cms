@@ -14,7 +14,7 @@
     "gatsby-plugin-webfonts": "^2.1.0",
     "gatsby-source-filesystem": "^3.2.0",
     "gatsby-source-jam-cms": "1.0.2",
-    "gatsby-source-wordpress": "5.2.1",
+    "gatsby-source-wordpress": "^5.2.3",
     "gatsby-transformer-sharp": "^3.2.0",
     "html-react-parser": "^1.2.4",
     "immer": "^9.0.1",
