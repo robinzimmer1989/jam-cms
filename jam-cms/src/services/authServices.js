@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// TODO: add trailing slash function to utils and pass in endpoint via settings (doesn't need to be /graphql)
 const getEndpoint = (url) => `${url.replace(/\/+$/, '')}/graphql`;
 
 export const signIn = async ({ email, password }, url) => {
