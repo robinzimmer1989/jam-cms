@@ -7,6 +7,7 @@ import * as postServices from './postServices';
 import * as siteServices from './siteServices';
 import * as taxonomyServices from './taxonomyServices';
 import * as termServices from './termServices';
+import * as actionMonitorServices from './actionMonitorServices';
 
 import db from './request';
 
@@ -21,4 +22,5 @@ export {
   siteServices,
   taxonomyServices,
   termServices,
+  actionMonitorServices,
 };
