@@ -15,8 +15,6 @@ const Template = (props) => {
     },
   } = props;
 
-  console.log(props);
-
   return (
     <Layout {...props}>
       <Banner headline={name} height="small" />
