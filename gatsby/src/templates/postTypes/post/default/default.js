@@ -8,8 +8,6 @@ import Edges from '../../../../components/Edges';
 import Banner from '../../../../components/banner/Banner';
 import TextEditor from '../../../../components/textEditor/TextEditor';
 
-import { colors } from '../../../../theme';
-
 const Template = (props) => {
   const {
     data: {
@@ -48,7 +46,7 @@ const Tag = styled(Link)`
   display: flex;
   padding: 5px 12px;
   border-radius: 4px;
-  background: ${colors.primary};
+  background: ${({ theme }) => theme.colors.primary};
   font-size: 12px;
   color: #fff;
 

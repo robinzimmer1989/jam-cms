@@ -2,9 +2,6 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'gatsby';
 
-// import app components
-import { colors } from '../../theme';
-
 const Button = (props) => {
   const { url, title, variant, color } = props;
 
@@ -32,13 +29,15 @@ const buttonStyles = css`
 const InternalLink = styled(Link)`
   && {
     ${buttonStyles}
-    background: ${({ variant }) => (variant === 'filled' ? colors.primary : 'transparent')};
-    color: ${({ variant }) => (variant === 'filled' ? colors.primaryContrast : colors.primary)};
-    border: 2px solid ${colors.primary};
+    background: ${({ theme, variant }) =>
+      variant === 'filled' ? theme.colors.primary : 'transparent'};
+    color: ${({ theme, variant }) =>
+      variant === 'filled' ? theme.colors.primarycontrast : theme.colors.primary};
+    border: 2px solid ${({ theme }) => theme.colors.primary};
 
     &:hover {
       background: rgb(2 14 53 / 0.8);
-      color: ${colors.primaryContrast};
+      color: ${({ theme }) => theme.colors.primarycontrast};
     }
   }
 `;
@@ -46,13 +45,15 @@ const InternalLink = styled(Link)`
 const ExternalLink = styled.a`
   && {
     ${buttonStyles}
-    background: ${({ variant }) => (variant === 'filled' ? colors.primary : 'transparent')};
-    color: ${({ variant }) => (variant === 'filled' ? colors.primaryContrast : colors.primary)};
-    border: 2px solid ${colors.primary};
+    background: ${({ theme, variant }) =>
+      variant === 'filled' ? theme.colors.primary : 'transparent'};
+    color: ${({ theme, variant }) =>
+      variant === 'filled' ? theme.colors.primarycontrast : theme.colors.primary};
+    border: 2px solid ${({ theme }) => theme.colors.primary};
 
     &:hover {
       background: rgb(2 14 53 / 0.5);
-      color: ${colors.primaryContrast};
+      color: ${({ theme }) => theme.colors.primarycontrast};
     }
   }
 `;

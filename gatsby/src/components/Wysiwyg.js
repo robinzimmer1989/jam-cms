@@ -2,9 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { RichText } from 'jam-cms';
 
-// import app components
-import { colors } from '../theme';
-
 const Wysiwyg = (props) => {
   const { children } = props;
 
@@ -61,7 +58,7 @@ const Container = styled.div`
 
   a {
     text-decoration: underline;
-    color: ${colors.secondary};
+    color: ${({ theme }) => theme.colors.secondary};
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -79,7 +76,7 @@ const Container = styled.div`
 
   pre {
     padding: 0 5px;
-    background: ${colors.background};
+    background: ${({ theme }) => theme.colors.background};
     white-space: pre-wrap;
     word-wrap: break-word;
     margin: 0;

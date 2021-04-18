@@ -5,7 +5,6 @@ import { Link } from 'gatsby';
 // import app components
 import Edges from './Edges';
 import Github from '../icons/github.svg';
-import { colors } from '../theme';
 
 const Footer = (props) => {
   const { footermenu } = props;
@@ -37,8 +36,8 @@ const Footer = (props) => {
 
 const Container = styled.div`
   padding: 40px 0 60px;
-  background: ${colors.primary};
-  color: ${colors.primaryContrast};
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primarycontrast};
 `;
 
 const Grid = styled.div`
@@ -64,8 +63,8 @@ const ExternalNavItem = styled.a`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: ${colors.primary};
-  background: ${colors.background};
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.background};
   padding: 8px 16px;
   border-radius: 5px;
   font-size: 14px;

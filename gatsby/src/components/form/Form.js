@@ -5,7 +5,6 @@ import axios from 'axios';
 
 // import app components
 import Edges from '../Edges';
-import { colors } from '../../theme';
 
 const Form = (props) => {
   const { formid } = props;
@@ -73,7 +72,7 @@ const textfield = css`
   margin-bottom: 20px;
   padding: 8px 12px;
   border-radius: 4px;
-  border: 1px solid ${colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   background: #fff;
 `;
 
@@ -93,24 +92,24 @@ const Button = styled.button`
   min-width: 160px;
   text-align: center;
   transition: ease-in-out 0.2s all;
-  background: ${colors.primary};
-  color: ${colors.primaryContrast};
-  border: 2px solid ${colors.primary};
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primarycontrast};
+  border: 2px solid ${({ theme }) => theme.colors.primary};
   cursor: pointer;
 
   &:hover {
     background: rgb(2 14 53 / 0.8);
-    color: ${colors.primaryContrast};
+    color: ${({ theme }) => theme.colors.primarycontrast};
   }
 `;
 
 const Success = styled.div`
   z-index: 1;
   width: 100%;
-  background: ${colors.primary};
+  background: ${({ theme }) => theme.colors.primary};
   padding: 25px;
   border-radius: 20px;
-  color: ${colors.primaryContrast};
+  color: ${({ theme }) => theme.colors.primarycontrast};
   text-align: center;
 `;
 

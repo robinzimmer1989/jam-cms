@@ -5,7 +5,6 @@ import { Link } from 'gatsby';
 // import app components
 import Logo from '../icons/jamCMS.svg';
 import Github from '../icons/github.svg';
-import { colors } from '../theme';
 
 const Header = (props) => {
   const { jamCMS, menu, breakpoint } = props;
@@ -63,7 +62,7 @@ const Container = styled.div`
   z-index: 10;
   padding: 15px 20px;
   background: #fff;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 2px 2px rgba(0, 0, 0, 0.02),
     0 4px 4px rgba(0, 0, 0, 0.02), 0 6px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.02);
 
@@ -102,7 +101,7 @@ const LogoContainer = styled(Link)`
     width: auto;
 
     path {
-      fill: ${colors.primary};
+      fill: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
@@ -116,7 +115,7 @@ const Nav = styled.nav`
     height: 100%;
     width: 360px;
     padding: 80px 30px;
-    background: ${colors.primary};
+    background: ${({ theme }) => theme.colors.primary};
     transform: ${({ open }) => (open ? 'translateX(-100%)' : 'translateX(0)')};
     transition: ease-in-out 0.2s all;
   }
@@ -132,8 +131,8 @@ const link = css`
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: ${colors.primary};
-  background: ${colors.background};
+  color: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.background};
   padding: 8px 16px;
   border-radius: 5px;
   font-size: 14px;
@@ -192,7 +191,8 @@ const Hamburger = styled.button`
   div {
     width: 2rem;
     height: 0.25rem;
-    background: ${({ open }) => (open ? colors.primaryContrast : colors.primary)};
+    background: ${({ theme, open }) =>
+      open ? theme.colors.primarycontrast : theme.colors.primary};
     border-radius: 10px;
     transition: all 0.3s linear;
     position: relative;

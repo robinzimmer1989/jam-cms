@@ -7,8 +7,6 @@ import Layout from '../../../../components/Layout';
 import Edges from '../../../../components/Edges';
 import Wysiwyg from '../../../../components/Wysiwyg';
 
-import { colors } from '../../../../theme';
-
 const Template = (props) => {
   const {
     pageContext: { globalOptions },
@@ -71,7 +69,7 @@ const Sidebar = styled.div`
   position: relative;
   width: 100%;
   padding: 30px;
-  background: ${colors.secondary};
+  background: ${({ theme }) => theme.colors.secondary};
 
   @media (min-width: 768px) {
     width: 250px;
@@ -86,7 +84,7 @@ const Sidebar = styled.div`
       top: 0;
       width: 50vw;
       height: 100%;
-      background: ${colors.secondary};
+      background: ${({ theme }) => theme.colors.secondary};
     }
   }
 `;
@@ -98,7 +96,7 @@ const Nav = styled.nav`
 const NavItem = styled(Link)`
   display: block;
   text-decoration: none;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 12px;
 
   span {
@@ -112,8 +110,8 @@ const NavItem = styled(Link)`
   &.active,
   &:hover {
     span {
-      background: ${colors.primary};
-      color: ${colors.primaryContrast};
+      background: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.primarycontrast};
     }
   }
 `;
@@ -121,7 +119,7 @@ const NavItem = styled(Link)`
 const NavSubItem = styled(Link)`
   display: block;
   text-decoration: none;
-  color: ${colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 5px;
   margin-left: 20px;
 
@@ -136,8 +134,8 @@ const NavSubItem = styled(Link)`
   &.active,
   &:hover {
     span {
-      background: ${colors.primary};
-      color: ${colors.primaryContrast};
+      background: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.primarycontrast};
     }
   }
 `;

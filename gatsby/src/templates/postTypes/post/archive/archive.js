@@ -7,7 +7,6 @@ import { GatsbyImage } from 'jam-cms';
 import Layout from '../../../../components/Layout';
 import Edges from '../../../../components/Edges';
 import Banner from '../../../../components/banner/Banner';
-import { colors } from '../../../../theme';
 
 const Template = (props) => {
   const {
@@ -16,7 +15,13 @@ const Template = (props) => {
       allWpPost: { nodes: posts },
     },
     pageContext: {
-      pagination: { basePath, page, numberOfPosts, numberOfPages, postsPerPage },
+      pagination: {
+        basePath,
+        page,
+        // numberOfPosts,
+        numberOfPages,
+        postsPerPage,
+      },
     },
   } = props;
 
@@ -117,15 +122,15 @@ const PaginationItem = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${colors.primary};
-  color: ${colors.primaryContrast};
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primarycontrast};
   border-radius: 4px;
   margin: 0 10px;
 
   &:hover,
   &.active {
-    background: ${colors.secondary};
-    color: ${colors.primary};
+    background: ${({ theme }) => theme.colors.secondary};
+    color: ${({ theme }) => theme.colors.primary};
   }
 `;
 

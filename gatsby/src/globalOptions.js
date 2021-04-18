@@ -51,13 +51,28 @@ const globalOptions = [
     fields: [
       {
         id: 'primary',
-        type: 'color',
+        type: 'color_picker',
         label: 'Primary Color',
       },
       {
+        id: 'primarycontrast',
+        type: 'color_picker',
+        label: 'Primary Contrast Color',
+      },
+      {
         id: 'secondary',
-        type: 'color',
+        type: 'color_picker',
         label: 'Secondary Color',
+      },
+      {
+        id: 'secondarycontrast',
+        type: 'color_picker',
+        label: 'Secondary Contrast Color',
+      },
+      {
+        id: 'background',
+        type: 'color_picker',
+        label: 'Background Color',
       },
     ],
   },
