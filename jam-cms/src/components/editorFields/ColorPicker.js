@@ -9,7 +9,10 @@ const ColorPicker = (props) => {
 
   return (
     <Container>
-      <Swatch style={{ backgroundColor: value }} onClick={() => setOpen(!open)} />
+      <Content onClick={() => setOpen(!open)}>
+        <Color style={{ backgroundColor: value }} />
+        <Code children={value} />
+      </Content>
 
       <ClickAwayListener open={open} onClick={() => setOpen(false)} />
 
@@ -26,13 +29,29 @@ const ColorPicker = (props) => {
 
 const Container = styled.div`
   position: relative;
+  cursor: pointer;
 `;
 
-const Swatch = styled.div`
-  width: 100%;
-  height: 25px;
-  border-radius: 5px;
+const Content = styled.div`
+  display: flex;
+  width: 140px;
   border: 1px solid #001529;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+
+const Color = styled.div`
+  width: 40px;
+  height: 25px;
+  border-right: 1px solid #001529;
+`;
+
+const Code = styled.div`
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
 `;
 
 const StyledChromePicker = styled(ChromePicker)`
