@@ -49,7 +49,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
       );
       break;
 
-    case 'color':
+    case 'color_picker':
       component = (
         <ColorPicker {...field} onChange={(value) => onChangeElement({ ...field, value })} />
       );
