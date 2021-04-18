@@ -8,7 +8,6 @@ import {
   BlockOutlined,
   SettingOutlined,
   FolderOpenOutlined,
-  ControlOutlined,
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 
@@ -25,7 +24,6 @@ const CmsLayout = (props) => {
 
   const [
     {
-      globalOptions,
       authState: { authUser },
       cmsState: { siteID, sites },
     },
@@ -52,7 +50,7 @@ const CmsLayout = (props) => {
           <div>
             <SidebarHeader
               title={
-                <LogoContainer to="/">
+                <LogoContainer to="/" title="Visit Website">
                   <Logo />
                 </LogoContainer>
               }
@@ -108,12 +106,6 @@ const CmsLayout = (props) => {
                     );
                   })}
               </Menu.SubMenu>
-
-              {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
-                <Menu.Item key="Options" icon={<ControlOutlined />}>
-                  <Link to={getRoute(`options`, { siteID })}>Theme Options</Link>
-                </Menu.Item>
-              )}
 
               {authUser?.capabilities?.list_users && (
                 <Menu.Item key="Users" icon={<UsergroupAddOutlined />}>
