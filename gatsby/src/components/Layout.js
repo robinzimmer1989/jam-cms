@@ -35,7 +35,7 @@ const ThemeCss = createGlobalStyle`
     line-height: 1.5;
     text-transform: none;
     background-color: #fafcfd;
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme?.colors?.primary};
   }
 
   a {
