@@ -13,7 +13,7 @@ import {
   message,
 } from 'antd';
 import {
-  ArrowLeftOutlined as CloseIcon,
+  CloseOutlined as CloseIcon,
   EditOutlined as EditIcon,
   PlusOutlined as AddIcon,
   DashboardOutlined as DashboardIcon,
@@ -238,6 +238,14 @@ const EditorSidebar = (props) => {
     return fields;
   };
 
+  const prepareThemeFields = () => {
+    return globalOptions
+      .filter((o) => !o.hide)
+      .map((o) => {
+        return { ...o, value: site?.globalOptions?.[o.id]?.value || null, global: true };
+      });
+  };
+
   const handleAddPost = async ({ postTypeID, title, parentID }) => {
     const result = await postActions.addPost(
       { siteID, postTypeID, status: 'draft', title, parentID },
@@ -273,12 +281,17 @@ const EditorSidebar = (props) => {
             >
               <Tabs.TabPane key={'content'} tab={'Content'} />
               <Tabs.TabPane key={'settings'} tab={'Settings'} />
-              <Tabs.TabPane key={'seo'} tab={'SEO'} />{' '}
+              <Tabs.TabPane key={'seo'} tab={'SEO'} />
+              {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
+                <Tabs.TabPane key={'theme'} tab={'Theme'} />
+              )}
             </Tabs>
           </TabsContainer>
 
           <CloseButton
-            icon={<CloseIcon />}
+            icon={<CloseIcon style={{ fontSize: '11px' }} />}
+            shape="circle"
+            size="small"
             onClick={() =>
               dispatch({
                 type: 'SET_EDITOR_SIDEBAR',
@@ -460,6 +473,10 @@ const EditorSidebar = (props) => {
                 </Space>
               </TabContent>
             )}
+
+            {sidebar === 'theme' && (
+              <EditorFields fields={prepareThemeFields()} onChangeElement={handleChangeContent} />
+            )}
           </TabContainer>
 
           <Actions>
@@ -606,8 +623,8 @@ const TabContent = styled.div`
 
 const CloseButton = styled(Button)`
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 14px;
+  right: 10px;
 `;
 
 const Actions = styled.div`
