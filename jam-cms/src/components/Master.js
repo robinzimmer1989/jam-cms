@@ -14,7 +14,6 @@ import GeneralSettings from '../pages/GeneralSettings';
 import Taxonomies from '../pages/Taxonomies';
 import Taxonomy from '../pages/Taxonomy';
 import Users from '../pages/Users';
-import Options from '../pages/Options';
 
 import Loader from './Loader';
 import PrivateRoute from './PrivateRoute';
@@ -114,13 +113,6 @@ const Master = (props) => {
           path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`}
           component={Taxonomy}
         />
-
-        {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
-          <PrivateRoute
-            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_OPTIONS}`}
-            component={Options}
-          />
-        )}
 
         {authUser?.capabilities?.manage_options && (
           <PrivateRoute

@@ -10,7 +10,6 @@ export const ROUTE_PROFILE = '/profile';
 export const ROUTE_FORMS = '/forms';
 export const ROUTE_FORM = '/form';
 export const ROUTE_USERS = '/users';
-export const ROUTE_OPTIONS = '/options';
 
 const getRoute = (route, args) => {
   const siteID = args?.siteID || 'default';
@@ -37,9 +36,6 @@ const getRoute = (route, args) => {
 
     case 'taxonomy':
       return `${ROUTE_APP}${base}${ROUTE_TAXONOMY}/${args?.taxonomyID}`;
-
-    case 'options':
-      return `${ROUTE_APP}${base}${ROUTE_OPTIONS}`;
 
     case 'settings-general':
       return `${ROUTE_APP}${base}${ROUTE_SETTINGS_GENERAL}`;
