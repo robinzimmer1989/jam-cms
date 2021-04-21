@@ -19,6 +19,9 @@ export const signIn = async ({ email, password }, url) => {
           ) {
             authToken
             refreshToken
+            user{
+              capabilities
+            }
           }
         }
       `,

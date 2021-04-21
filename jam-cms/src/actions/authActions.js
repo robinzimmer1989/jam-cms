@@ -4,7 +4,10 @@ import { auth } from '../utils';
 export const signIn = async ({ email, password }, url) => {
   const result = await authServices.signIn({ email, password }, url);
 
-  if (result?.data?.login?.authToken) {
+  if (
+    result?.data?.login?.authToken &&
+    result?.data?.login?.user?.capabilities.includes('edit_posts')
+  ) {
     auth.setUser(result.data.login);
   }
 

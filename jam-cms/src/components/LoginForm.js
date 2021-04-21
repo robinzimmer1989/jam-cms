@@ -62,10 +62,13 @@ const LoginForm = (props) => {
     try {
       const result = await authActions.signIn({ email, password }, url);
 
-      if (result?.data?.login?.authToken) {
-        navigate(ROUTE_APP);
-      } else if (result?.errors?.[0]?.message) {
+      if (
+        !result?.data?.login?.user?.capabilities.includes('edit_posts') ||
+        result?.errors?.[0]?.message
+      ) {
         setData({ ...data, error: 'Email or password wrong.' });
+      } else {
+        navigate(ROUTE_APP);
       }
     } catch (err) {
       console.log('error...: ', err);
@@ -237,8 +240,6 @@ const LoginForm = (props) => {
   );
 };
 
-export default LoginForm;
-
 const Container = styled.div`
   .ant-space {
     width: 100%;
@@ -264,3 +265,5 @@ const FooterLink = styled.p`
     text-decoration: underline;
   }
 `;
+
+export default LoginForm;
