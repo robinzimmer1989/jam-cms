@@ -228,7 +228,7 @@ const Menu = (props) => {
                         size="small"
                         disabled={status === 'draft'}
                         onClick={() =>
-                          setItems([
+                          onChange([
                             ...items,
                             {
                               key: generateRandomString(),
