@@ -32,7 +32,6 @@ import {
   ROUTE_SETTINGS_POST_TYPES,
   ROUTE_SETTINGS_TAXONOMIES,
   ROUTE_USERS,
-  ROUTE_OPTIONS,
   ROUTE_TAXONOMY,
 } from '../routes';
 
@@ -42,7 +41,6 @@ const Master = (props) => {
   const [
     {
       config,
-      globalOptions,
       authState: { authUser },
       appState: { dialog },
       cmsState: { sites, siteID },
