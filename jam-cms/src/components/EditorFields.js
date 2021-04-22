@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Space } from 'antd';
 
 // import app components
-import MenuBuilder from './MenuBuilder';
 import MediaLibrary from './MediaLibrary';
 import LinkSelector from './LinkSelector';
 import Caption from './Caption';
@@ -202,27 +201,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
       break;
 
     case 'menu':
-      component = (
-        <Menu
-          {...field}
-          onClick={() =>
-            dispatch({
-              type: `SET_DIALOG`,
-              payload: {
-                open: true,
-                title: 'Menu',
-                component: (
-                  <MenuBuilder
-                    {...field}
-                    onChange={(value) => onChangeElement({ ...field, value })}
-                  />
-                ),
-                width: 1024,
-              },
-            })
-          }
-        />
-      );
+      component = <Menu {...field} onChange={(value) => onChangeElement({ ...field, value })} />;
       break;
 
     case 'google_map':
