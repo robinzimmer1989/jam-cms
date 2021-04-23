@@ -25,7 +25,7 @@ const Dashboard = () => {
     const loadChangesSinceLastBuild = async () => {
       // Applies for a brand new WordPress setup
       if (!lastBuild) {
-        setChanges([]);
+        return setChanges([]);
       }
 
       // Format date to timestamp (in miliseconds)
