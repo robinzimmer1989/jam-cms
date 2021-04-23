@@ -15,7 +15,7 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, globalOptions, deployment, title, siteUrl, googleMapsApi },
+  { id, globalOptions, frontPage, deployment, title, siteUrl, googleMapsApi },
   dispatch,
   config
 ) => {
@@ -23,6 +23,7 @@ export const updateSite = async (
     {
       id,
       globalOptions,
+      frontPage,
       deployment,
       title,
       siteUrl,
