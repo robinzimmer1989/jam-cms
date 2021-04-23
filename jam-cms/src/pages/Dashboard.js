@@ -23,6 +23,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const loadChangesSinceLastBuild = async () => {
+      // Applies for a brand new WordPress setup
+      if (!lastBuild) {
+        setChanges([]);
+      }
+
       // Format date to timestamp (in miliseconds)
       const timestamp = moment.utc(lastBuild, 'MM/DD/YYYY HH:mm:ss a').format('x');
 
