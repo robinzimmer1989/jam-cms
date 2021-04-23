@@ -59,7 +59,7 @@ const EditorSidebar = (props) => {
 
   // Get all templates with id 'archive'
   const archiveTemplatesArray = [];
-  if (post?.postTypeID === 'page') {
+  if (post?.postTypeID === 'page' && templates?.postTypes) {
     Object.values(templates?.postTypes).map((o) =>
       Object.values(o).map((p) => p.id === 'archive' && archiveTemplatesArray.push(p))
     );
