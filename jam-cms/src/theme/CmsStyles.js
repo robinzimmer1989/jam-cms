@@ -144,6 +144,10 @@ export default createGlobalStyle`
       margin-bottom: 10px;
     }
   }
+
+  .ant-btn > span {
+    display: inline-flex;
+  }
   
   .jam-cms {
     ${styles}
