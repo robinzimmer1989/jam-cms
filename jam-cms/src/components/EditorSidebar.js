@@ -530,7 +530,7 @@ const EditorSidebar = (props) => {
             type="primary"
             disabled={postHasChanged || siteHasChanged}
             onClick={() =>
-              navigate(getRoute(`collection`, { siteID, postTypeID: post.postTypeID }))
+              navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))
             }
           />
         </Tooltip>
