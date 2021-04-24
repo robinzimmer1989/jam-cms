@@ -327,7 +327,7 @@ const EditorSidebar = (props) => {
                       onChange={(value) => handleChangePost('template', value)}
                       label={'Template'}
                     >
-                      {postTypeTemplatesArray.length > 1 && (
+                      {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
                         <AntSelect.OptGroup label={'Single'}>
                           {postTypeTemplatesArray.map((o) => (
                             <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
