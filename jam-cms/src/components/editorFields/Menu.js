@@ -35,7 +35,9 @@ const Menu = (props) => {
   });
 
   useEffect(() => {
-    setItems(deepCopyTree(value));
+    if (value && value.length > 0) {
+      setItems(deepCopyTree(value));
+    }
   }, [value]);
 
   // Get posts by filter
