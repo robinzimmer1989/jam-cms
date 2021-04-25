@@ -233,8 +233,8 @@ const EditorSidebar = (props) => {
 
           return {
             global: o.global,
-            ...o,
             ...field,
+            ...o,
             value: formattedField?.value,
           };
         })
