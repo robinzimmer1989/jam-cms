@@ -143,8 +143,12 @@ const icon = css`
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  padding: 4px;
   transition: ease all 0.2s;
+  background: #fff;
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+
   ${({ disabled }) =>
     disabled &&
     css`
@@ -152,24 +156,28 @@ const icon = css`
         opacity: 0.2;
       }
     `}
+
+  .anticon {
+    display: block;
+  }
 `;
 
 const RemoveIcon = styled.div`
   ${icon}
-  right: 2px;
-  top: 2px;
+  right: 4px;
+  top: 4px;
 `;
 
 const LeftIcon = styled.div`
   ${icon}
-  left: calc(50% - 25px);
-  bottom: 2px;
+  left: calc(50% - 20px);
+  bottom: 4px;
 `;
 
 const RightIcon = styled.div`
   ${icon}
   right: calc(50% - 25px);
-  bottom: 2px;
+  bottom: 4px;
 `;
 
 const ImageContainer = styled.div`
