@@ -33,7 +33,7 @@ import FilePicker from './editorFields/FilePicker';
 import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
-import { generateSlug, getTemplateByPost } from '../utils';
+import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils';
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
@@ -217,21 +217,26 @@ const EditorSidebar = (props) => {
   const prepareContentFields = () => {
     const template = getTemplateByPost(post, templates);
 
+    // TODO: Very similar setup to utils function 'formatFieldsToProps'.
+    // There might be a chance to unify the function.
     const fields = template?.fields
       ? template.fields.map((o) => {
-          if (o.global) {
-            const globalField = globalOptions && globalOptions.find((p) => p.id === o.id);
+          let field;
 
-            if (globalField) {
-              return {
-                global: true,
-                ...globalField,
-                value: site?.globalOptions?.[o.id]?.value || null,
-              };
-            }
+          if (o.global) {
+            field = site?.globalOptions?.[o.id] || globalOptions.find((p) => p.id === o.id);
           } else {
-            return { ...o, value: post?.content?.[o.id]?.value || null };
+            field = post?.content?.[o.id] || o;
           }
+
+          const formattedField = formatFieldForEditor({ field, site });
+
+          return {
+            global: o.global,
+            ...o,
+            ...field,
+            value: formattedField?.value,
+          };
         })
       : [];
 
@@ -239,11 +244,14 @@ const EditorSidebar = (props) => {
   };
 
   const prepareThemeFields = () => {
-    return globalOptions
+    const test = globalOptions
       .filter((o) => !o.hide)
       .map((o) => {
-        return { ...o, value: site?.globalOptions?.[o.id]?.value || null, global: true };
+        const formattedField = formatFieldForEditor({ field: o, site });
+        return { global: true, ...o, value: formattedField?.value };
       });
+
+    return test;
   };
 
   const handleAddPost = async ({ postTypeID, title, parentID }) => {

@@ -24,6 +24,7 @@ const PostEditor = (props) => {
   const [
     {
       config,
+      globalOptions,
       cmsState: { sites, siteID },
       editorState: { site, post, sidebar },
     },
@@ -33,10 +34,9 @@ const PostEditor = (props) => {
   const [query, setQuery] = useState(null);
 
   const template = getTemplateByPost(post, templates);
+  const Component = template?.component;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
-
-  const Component = template?.component;
 
   const isNumber = (n) => {
     return !isNaN(parseFloat(n)) && !isNaN(n - 0);
@@ -178,12 +178,23 @@ const PostEditor = (props) => {
                       createdAt: post.createdAt,
                       featuredImage: post.featuredImage,
                       postTypeID: post.postTypeID,
-                      acf: formatFieldsToProps(post.content, site),
+                      acf: formatFieldsToProps({
+                        global: false,
+                        content: post.content,
+                        site,
+                        template,
+                      }),
                       ...formatTaxonomiesForEditor(post, site),
                     },
                   }}
                   pageContext={{
-                    globalOptions: formatFieldsToProps(site?.globalOptions, site),
+                    globalOptions: formatFieldsToProps({
+                      global: true,
+                      globalOptions,
+                      content: site?.globalOptions,
+                      site,
+                      template,
+                    }),
                     pagination,
                   }}
                 />
