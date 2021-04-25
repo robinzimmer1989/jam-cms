@@ -223,7 +223,15 @@ const PostEditor = (props) => {
         </>
       ) : (
         <>
-          {defaultComponent}
+          {React.cloneElement(defaultComponent, {
+            pageContext: {
+              globalOptions: formatFieldsToProps({
+                globalOptions,
+                content: site?.globalOptions,
+                site,
+              }),
+            },
+          })}
           <EditorSidebar className="jam-cms" hasTemplate={false} editable={false} />
         </>
       )}
