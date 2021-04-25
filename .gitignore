@@ -9,8 +9,8 @@ dist
 
 # misc
 jam-cms/README.md
-gatsby/public
-gatsby/.wordpress-cache
+public
+.wordpress-cache
 .DS_Store
 .env
 .env.local
@@ -20,7 +20,6 @@ gatsby/.wordpress-cache
 .env.production
 .env.production.local
 .cache
-.wordpress-cache
 
 npm-debug.log*
 yarn-debug.log*
