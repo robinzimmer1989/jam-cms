@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import produce from 'immer';
@@ -64,6 +64,15 @@ const EditorSidebar = (props) => {
       Object.values(o).map((p) => p.id === 'archive' && archiveTemplatesArray.push(p))
     );
   }
+
+  useEffect(() => {
+    // Close sidebar in case editable status changes to false
+    !editable &&
+      dispatch({
+        type: 'SET_EDITOR_SIDEBAR',
+        payload: false,
+      });
+  }, [editable]);
 
   const handleChangePost = (name, value) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
