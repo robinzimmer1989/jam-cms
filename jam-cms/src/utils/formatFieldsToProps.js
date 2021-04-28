@@ -27,7 +27,7 @@ export default function formatFieldsToProps({ global, globalOptions, content, si
         })
     : globalOptions &&
       globalOptions.map((o) => {
-        const formattedField = formatFieldForEditor({ field: content[o.id] || o, site });
+        const formattedField = formatFieldForEditor({ field: content?.[o.id] || o, site });
 
         return (obj[o.id] = formattedField?.value);
       });
