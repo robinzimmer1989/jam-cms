@@ -26,11 +26,11 @@ const Template = (props) => {
   return (
     <Layout {...props} seo={seo}>
       {acf?.blocks?.flex &&
-        acf.blocks.flex.map(({ id: fieldId, fieldGroupName, ...fields }, index) => {
-          const id = fieldId || fieldGroupName.split('_').pop().toLowerCase();
+        acf.blocks.flex.map(({ id: fieldId, fieldGroupName, ...rest }, index) => {
+          const id = fieldId || fieldGroupName?.split('_').pop().toLowerCase();
 
           const Component = blocks?.[id];
-          return Component && <Component key={index} {...fields} globalOptions={globalOptions} />;
+          return Component && <Component key={index} {...rest} globalOptions={globalOptions} />;
         })}
     </Layout>
   );
@@ -77,6 +77,9 @@ export const Query = graphql`
       #         }
       #         subline
       #       }
+      #     }
+      #   }
+      # }
     }
   }
 `;
