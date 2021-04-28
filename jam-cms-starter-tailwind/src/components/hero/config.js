@@ -29,22 +29,6 @@ const config = {
       type: 'repeater',
       label: 'Button',
       items: buttonFields,
-      defaultValue: [
-        {
-          button: {
-            title: 'Craft beer',
-            url: '/',
-          },
-          variant: 'filled',
-        },
-        {
-          button: {
-            title: 'Glossier health',
-            url: '/',
-          },
-          variant: 'text',
-        },
-      ],
     },
   ],
 };

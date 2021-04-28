@@ -43,17 +43,6 @@ const config = {
           label: 'Link',
         },
       ],
-      defaultValue: [
-        {
-          headline: 'Truffaut listicle umami',
-          text:
-            'Sustainable authentic polaroid godard quinoa iceland. Taxidermy fam whatever, hell of bespoke mustache try-hard',
-          link: {
-            title: 'Literally austin',
-            url: '/',
-          },
-        },
-      ],
     },
   ],
 };
