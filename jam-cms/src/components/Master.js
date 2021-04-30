@@ -59,7 +59,7 @@ const Master = (props) => {
     };
 
     const loadSite = async () => {
-      await siteActions.getSite({ siteID: 'default' }, dispatch, config);
+      await siteActions.getSite({ siteID: config.siteID || 'default' }, dispatch, config);
     };
 
     if (loggedIn) {
