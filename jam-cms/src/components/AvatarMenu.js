@@ -1,5 +1,5 @@
 import React from 'react';
-import { navigate, Link } from '@reach/router';
+import { navigate, Link } from 'gatsby';
 import styled from 'styled-components';
 import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -14,7 +14,7 @@ const AvatarMenu = (props) => {
 
   const [{ config }, dispatch] = useStore();
 
-  const handleSignOut = async () =>
+  const handleSignOut = () =>
     authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
 
   const dropDownMenu = (
