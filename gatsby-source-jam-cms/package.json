@@ -3,12 +3,12 @@
   "version": "1.0.3",
   "dependencies": {
     "axios": "^0.21.1",
-    "babel-preset-gatsby": "^1.2.0",
+    "babel-preset-gatsby": "^1.4.0",
     "cross-env": "7.0.3",
     "esm": "^3.2.25",
-    "gatsby": "3.0.0",
-    "gatsby-plugin-sharp": "^3.2.0",
-    "gatsby-transformer-sharp": "^3.2.0",
+    "gatsby": "3.4.0",
+    "gatsby-plugin-sharp": "^3.4.0",
+    "gatsby-transformer-sharp": "^3.4.0",
     "jam-cms": "1.1.0",
     "styled-components": "^5.2.3"
   },
