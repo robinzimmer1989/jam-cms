@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Card, List, Typography } from 'antd';
 import { Link } from '@reach/router';
-import Img from 'gatsby-image';
 
+// import app components
+import Img from './GatsbyImage';
 import { colors } from '../theme';
 
 const ListItem = (props) => {
@@ -41,9 +42,9 @@ const ListItem = (props) => {
             avatar={
               showImage && (
                 <>
-                  {image?.localFile?.childImageSharp?.fluid ? (
+                  {image ? (
                     <Img
-                      fluid={image.localFile.childImageSharp.fluid}
+                      image={image}
                       objectFit="cover"
                       objectPosition="50% 50%"
                       alt={image.alt}

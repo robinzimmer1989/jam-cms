@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import produce from 'immer';
-import Img from 'gatsby-image';
 import {
   CloseCircleOutlined,
   PlusOutlined,
@@ -10,6 +9,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
+import Img from '../GatsbyImage';
 import MediaLibrary from '../MediaLibrary';
 import { colors } from '../../theme';
 
@@ -63,9 +63,9 @@ const Gallery = (props) => {
           return (
             <GalleryItem key={i}>
               <ImageContainer>
-                {o?.localFile?.childImageSharp?.fluid && (
+                {o && (
                   <Img
-                    fluid={o.localFile.childImageSharp.fluid}
+                    image={o}
                     objectFit="cover"
                     objectPosition="50% 50%"
                     alt={o.alt}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, Space } from 'antd';
 import styled from 'styled-components';
-import Img from 'gatsby-image';
 
 // import app components
+import Img from '../GatsbyImage';
 import { colors } from '../../theme';
 
 const FilePicker = (props) => {
@@ -12,9 +12,9 @@ const FilePicker = (props) => {
   return (
     <Container>
       <ImageContainer type={value?.icon}>
-        {value?.type === 'image' && value?.localFile?.childImageSharp?.fluid && (
+        {value?.type === 'image' && (
           <Img
-            fluid={value.localFile.childImageSharp.fluid}
+            image={value}
             objectFit="cover"
             objectPosition="50% 50%"
             alt={value.alt}

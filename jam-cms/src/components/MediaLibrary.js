@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import produce from 'immer';
 import InfiniteScroll from 'react-infinite-scroller';
-import Img from 'gatsby-image';
 import { Modal, Upload, Button, Space, message, Spin, Checkbox } from 'antd';
 import {
   UploadOutlined,
@@ -12,6 +11,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
+import Img from './GatsbyImage';
 import MediaImage from './MediaImage';
 
 import { mediaActions } from '../actions';
@@ -158,7 +158,7 @@ const MediaLibrary = (props) => {
                         <MediaItemInner onClick={() => setActiveFile(o)}>
                           {o.type === 'image' && (
                             <Img
-                              fluid={o.localFile.childImageSharp.fluid}
+                              image={o}
                               objectFit="cover"
                               objectPosition="50% 50%"
                               alt={o.alt}

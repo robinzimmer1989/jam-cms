@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Space, Row, Col, Popconfirm, message, Typography } from 'antd';
-import Img from 'gatsby-image';
 
 // import app components
 import Caption from './Caption';
 import Input from './Input';
+import Img from './GatsbyImage';
 
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
@@ -53,10 +53,10 @@ const MediaImage = (props) => {
   return (
     <>
       <Row gutter={[16, 16]}>
-        <Col span={12} style={{ background: `${colors.secondaryContrast}`, padding: 0 }}>
-          {file.type === 'image' && file?.localFile?.childImageSharp?.fluid && (
+        <Col span={12} style={{ background: `${colors.secondaryContrast}` }}>
+          {file.type === 'image' && (
             <Img
-              fluid={file.localFile.childImageSharp.fluid}
+              image={file}
               imgStyle={{
                 objectFit: 'contain',
                 maxWidth: file.width,
@@ -79,7 +79,7 @@ const MediaImage = (props) => {
             </File>
           )}
         </Col>
-        <Col span={12} style={{ padding: '0 0 0 20px' }}>
+        <Col span={12}>
           <Space direction="vertical" size={20}>
             <Content span={12}>
               <Space direction="vertical">
