@@ -21,6 +21,7 @@ module.exports = {
       options: {
         source: process.env.GATSBY_JAM_CMS_URL,
         apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
+        // siteID: process.env.GATSBY_JAM_CMS_SITE_ID, // Multisite only
         templates: path.join(__dirname, 'src/templates'), // optional
         globalOptions: path.join(__dirname, 'src/globalOptions'), // optional
         settings: {
