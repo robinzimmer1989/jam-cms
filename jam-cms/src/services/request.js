@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import axios from 'axios';
 import { navigate } from '@reach/router';
+import Parser from 'html-react-parser';
 
 // import app components
 import { auth } from '../utils';
@@ -35,7 +36,7 @@ const db = async (endpoint, params, dispatch, config) => {
       if (endpoint === 'getAuthUser' || endpoint === 'getSite') {
         authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
       } else {
-        message.error(err.response.data.message);
+        message.error(Parser(err.response.data.message));
       }
     }
   }
