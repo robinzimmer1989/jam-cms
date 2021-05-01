@@ -64,6 +64,10 @@ const styles = css`
     padding: 10px 0;
   }
 
+  .ant-list-item-meta-avatar {
+    display: flex;
+  }
+
   .ant-space-vertical {
     width: 100%;
   }
