@@ -91,9 +91,12 @@ const CmsLayout = (props) => {
                         {postTypeTaxonomies &&
                           postTypeTaxonomies.map((p) => {
                             return (
-                              <Menu.Item key={p.title}>
+                              <Menu.Item
+                                key={p.title}
+                                style={{ textTransform: 'uppercase', fontSize: 11, marginLeft: 10 }}
+                              >
                                 <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
-                                  - {p.title}
+                                  {p.title}
                                 </Link>
                               </Menu.Item>
                             );
