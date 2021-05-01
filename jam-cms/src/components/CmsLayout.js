@@ -88,12 +88,14 @@ const CmsLayout = (props) => {
                           </Link>
                         </Menu.Item>
 
+                        <Menu.Divider />
+
                         {postTypeTaxonomies &&
                           postTypeTaxonomies.map((p) => {
                             return (
                               <Menu.Item
                                 key={p.title}
-                                style={{ textTransform: 'uppercase', fontSize: 11, marginLeft: 10 }}
+                                style={{ textTransform: 'uppercase', fontSize: 11 }}
                               >
                                 <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
                                   {p.title}

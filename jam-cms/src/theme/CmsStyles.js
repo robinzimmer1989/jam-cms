@@ -149,6 +149,10 @@ export default createGlobalStyle`
     }
   }
 
+  .ant-menu-item-divider {
+    background-color: rgba(240, 240, 240, 0.2) !important;
+  }
+
   .ant-btn > span {
     display: inline-flex;
   }
