@@ -157,13 +157,7 @@ const MediaLibrary = (props) => {
                       <MediaItem key={o.id}>
                         <MediaItemInner onClick={() => setActiveFile(o)}>
                           {o.type === 'image' && (
-                            <Img
-                              image={o}
-                              objectFit="cover"
-                              objectPosition="50% 50%"
-                              alt={o.alt}
-                              style={{ width: '100%', height: '100%' }}
-                            />
+                            <Img image={o} objectFit="cover" objectPosition="50% 50%" alt={o.alt} />
                           )}
 
                           {o.type === 'application' && (
@@ -277,6 +271,11 @@ const MediaItemInner = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .gatsby-image-wrapper {
+    max-width: 100%;
+    max-height: 100%;
+  }
 `;
 
 const CheckboxContainer = styled.div`
