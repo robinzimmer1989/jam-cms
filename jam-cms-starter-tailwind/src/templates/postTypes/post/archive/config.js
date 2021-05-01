@@ -3,7 +3,7 @@ import Template from './archive';
 const config = {
   id: 'archive',
   postTypeID: 'post',
-  label: 'Post',
+  label: 'Post Archive',
   component: Template,
   query: `{
     allWpPost: posts {

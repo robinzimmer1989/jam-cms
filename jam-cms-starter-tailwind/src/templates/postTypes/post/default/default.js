@@ -57,43 +57,52 @@ export const Query = graphql`
           sourceUrl
         }
       }
-      # acf {
-      #   text {
-      #     flex {
-      #       ... on WpPost_Acf_Text_Flex_Text {
-      #         fieldGroupName
-      #         text
-      #       }
-      #       ... on WpPost_Acf_Text_Flex_Textimage {
-      #         alignment
-      #         fieldGroupName
-      #         text
-      #         image {
-      #           id
-      #           altText
-      #           localFile {
-      #             childImageSharp {
-      #               gatsbyImageData(width: 400, placeholder: BLURRED)
-      #             }
-      #           }
-      #         }
-      #       }
-      #       ... on WpPost_Acf_Text_Flex_Gallery {
-      #         columns
-      #         fieldGroupName
-      #         gallery {
-      #           id
-      #           altText
-      #           localFile {
-      #             childImageSharp {
-      #               gatsbyImageData(width: 400, placeholder: BLURRED)
-      #             }
-      #           }
-      #         }
-      #       }
-      #     }
-      #   }
-      # }
+      acf {
+        text {
+          fieldGroupName
+          flex {
+            ... on WpPost_Acf_Text_Flex_Text {
+              fieldGroupName
+              text
+            }
+            ... on WpPost_Acf_Text_Flex_Textimage {
+              alignment
+              fieldGroupName
+              image {
+                altText
+                localFile {
+                  childImageSharp {
+                    gatsbyImageData(width: 600, placeholder: BLURRED)
+                  }
+                }
+              }
+              text
+            }
+            ... on WpPost_Acf_Text_Flex_Gallery {
+              columns
+              fieldGroupName
+              gallery {
+                altText
+                localFile {
+                  childImageSharp {
+                    gatsbyImageData(width: 600, placeholder: BLURRED)
+                  }
+                }
+              }
+            }
+            ... on WpPost_Acf_Text_Flex_Embed {
+              fieldGroupName
+              url
+            }
+            ... on WpPost_Acf_Text_Flex_Quote {
+              author
+              fieldGroupName
+              position
+              text
+            }
+          }
+        }
+      }
     }
   }
 `;

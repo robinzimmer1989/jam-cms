@@ -4,7 +4,7 @@ import texteditor from '../../../../components/textEditor/config';
 const config = {
   id: 'default',
   postTypeID: 'post',
-  label: 'Post',
+  label: 'Post Default',
   component: Template,
   fields: [
     {
