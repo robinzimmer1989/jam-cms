@@ -137,8 +137,7 @@ const EditorSidebar = (props) => {
 
     // Add template object to request, but only in development mode
     const templateObject =
-      process.env.NODE_ENV === 'development' &&
-      templates?.postTypes?.[post?.postTypeID]?.[post?.template];
+      process.env.NODE_ENV === 'development' && getTemplateByPost(post, templates);
 
     setLoading(action);
 
