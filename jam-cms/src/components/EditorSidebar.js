@@ -43,6 +43,7 @@ const EditorSidebar = (props) => {
     {
       config,
       globalOptions,
+      authState: { authUser },
       cmsState: { sites, siteID },
       editorState: { site, post, sidebar, siteHasChanged, postHasChanged },
     },
@@ -298,9 +299,10 @@ const EditorSidebar = (props) => {
               <Tabs.TabPane key={'content'} tab={'Content'} />
               <Tabs.TabPane key={'settings'} tab={'Settings'} />
               <Tabs.TabPane key={'seo'} tab={'SEO'} />
-              {globalOptions && globalOptions.filter((o) => !o.hide).length > 0 && (
-                <Tabs.TabPane key={'theme'} tab={'Theme'} />
-              )}
+              {authUser?.capabilities?.edit_theme_options &&
+                globalOptions?.filter((o) => !o.hide)?.length > 0 && (
+                  <Tabs.TabPane key={'theme'} tab={'Theme'} />
+                )}
             </Tabs>
           </TabsContainer>
 
