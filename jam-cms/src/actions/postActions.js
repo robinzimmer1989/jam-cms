@@ -33,6 +33,7 @@ export const updatePost = async (
   {
     siteID,
     id,
+    postTypeID,
     slug,
     status,
     title,
@@ -51,6 +52,7 @@ export const updatePost = async (
     {
       siteID,
       id,
+      postTypeID,
       slug,
       status,
       title,
