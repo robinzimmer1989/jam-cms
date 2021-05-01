@@ -9,7 +9,7 @@ import texteditor from '../../../../components/textEditor/config';
 const config = {
   id: 'default',
   postTypeID: 'page',
-  label: 'Default',
+  label: 'Default Page',
   component: Template,
   fields: [
     {
