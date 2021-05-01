@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Empty } from 'antd';
 import axios from 'axios';
+import { set } from 'lodash';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
@@ -159,6 +160,44 @@ const PostEditor = (props) => {
     };
   }, [postID]);
 
+  const getPostData = () => {
+    // Generate query variable i.e. 'wpPage'
+    const nodeType = `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
+
+    // Destructure query data in case user requested more information about post (i.e. wpPost comments)
+    const { [nodeType]: nodeTypeQueryData, ...otherQueryData } = query?.data || {};
+
+    // Generate default page data
+    const data = { ...otherQueryData };
+
+    const nodeTypeData = {
+      id: post.id,
+      seo: post.seo,
+      title: post.title,
+      date: post.createdAt,
+      featuredImage: post.featuredImage,
+      postTypeID: post.postTypeID,
+      ...formatTaxonomiesForEditor(post, site),
+    };
+
+    data[nodeType] = { ...nodeTypeQueryData, ...nodeTypeData };
+
+    const acfData = formatFieldsToProps({
+      global: false,
+      content: post.content,
+      site,
+      template,
+    });
+
+    if (post.postTypeID === 'page') {
+      set(data, `${nodeType}.template.acf`, acfData);
+    } else {
+      set(data, `${nodeType}.acf`, acfData);
+    }
+
+    return data;
+  };
+
   return (
     <>
       {postID ? (
@@ -168,25 +207,7 @@ const PostEditor = (props) => {
               {!!Component && post?.content ? (
                 <Component
                   jamCMS={{ sidebar: !!sidebar }}
-                  data={{
-                    ...query?.data,
-                    // Generate query variable i.e. 'wpPage'
-                    [`wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`]: {
-                      id: post.id,
-                      seo: post.seo,
-                      title: post.title,
-                      createdAt: post.createdAt,
-                      featuredImage: post.featuredImage,
-                      postTypeID: post.postTypeID,
-                      acf: formatFieldsToProps({
-                        global: false,
-                        content: post.content,
-                        site,
-                        template,
-                      }),
-                      ...formatTaxonomiesForEditor(post, site),
-                    },
-                  }}
+                  data={getPostData()}
                   pageContext={{
                     globalOptions: formatFieldsToProps({
                       global: true,
