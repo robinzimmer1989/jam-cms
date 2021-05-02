@@ -253,14 +253,19 @@ const EditorSidebar = (props) => {
   };
 
   const prepareThemeFields = () => {
-    const test = globalOptions
+    // Loop over global options (only source of truth)
+    const fields = globalOptions
       .filter((o) => !o.hide)
       .map((o) => {
-        const formattedField = formatFieldForEditor({ field: o, site });
+        const formattedField = formatFieldForEditor({
+          // Pass in fields from editor site state or global option itself
+          field: site?.globalOptions?.[o.id] || o,
+          site,
+        });
         return { global: true, ...o, value: formattedField?.value };
       });
 
-    return test;
+    return fields;
   };
 
   const handleAddPost = async ({ postTypeID, title, parentID }) => {
