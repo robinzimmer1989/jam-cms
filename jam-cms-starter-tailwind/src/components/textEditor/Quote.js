@@ -18,7 +18,7 @@ const Quote = (props) => {
         <div className="prose">
           <RichText>{text}</RichText>
         </div>
-        <span className="inline-block h-1 w-10 rounded bg-indigo-500 mt-8 mb-6"></span>
+        <span className="inline-block h-1 w-10 rounded bg-secondary mt-8 mb-6"></span>
         {author && (
           <h2 className="text-gray-900 font-medium title-font tracking-wider text-sm">{author}</h2>
         )}

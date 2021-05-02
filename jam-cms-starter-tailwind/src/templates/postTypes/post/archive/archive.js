@@ -43,7 +43,7 @@ const Template = (props) => {
           <Link
             to={pathname}
             className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative text-indigo-50 bg-${
-              i === page ? 'indigo-900' : 'white'
+              i === page ? 'secondary' : 'white'
             }`}
           >
             {i}
@@ -67,7 +67,7 @@ const Template = (props) => {
         <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
           <div>
             {acf?.content?.tag && (
-              <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+              <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-secondary-contrast uppercase rounded-full bg-secondary">
                 {acf.content.tag}
               </p>
             )}
@@ -115,7 +115,7 @@ const Template = (props) => {
                   </p>
                   <Link
                     to={o.uri}
-                    className="block max-w-xs mx-auto mb-3 text-2xl font-extrabold leading-7 transition-colors duration-200 hover:text-deep-purple-accent-400"
+                    className="block max-w-xs mx-auto mb-3 text-2xl font-extrabold leading-7 transition-colors duration-200 hover:underline"
                     aria-label="Read article"
                     title={o.title}
                   >
@@ -124,7 +124,7 @@ const Template = (props) => {
                   <Link
                     to={o.uri}
                     aria-label=""
-                    className="inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                    className="inline-flex items-center font-semibold transition-colors duration-200 text-primary hover:underline"
                   >
                     Read more
                   </Link>

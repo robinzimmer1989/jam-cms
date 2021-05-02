@@ -11,7 +11,7 @@ const Header = (props) => {
       <div className="relative flex items-center justify-between">
         <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
           <svg
-            className="w-8 text-deep-purple-accent-400"
+            className="w-8 text-primary"
             viewBox="0 0 24 24"
             strokeLinejoin="round"
             strokeWidth="2"
@@ -38,7 +38,7 @@ const Header = (props) => {
                     to={o.url}
                     aria-label={o.title}
                     title={o.title}
-                    className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+                    className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:opacity-90"
                   >
                     {o.title}
                   </Link>
@@ -50,7 +50,7 @@ const Header = (props) => {
           <button
             aria-label="Open Menu"
             title="Open Menu"
-            className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline hover:bg-deep-purple-50 focus:bg-deep-purple-50"
+            className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
             onClick={() => setIsMenuOpen(true)}
           >
             <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ const Header = (props) => {
                       className="inline-flex items-center"
                     >
                       <svg
-                        className="w-8 text-deep-purple-accent-400"
+                        className="w-8 text-primary"
                         viewBox="0 0 24 24"
                         strokeLinejoin="round"
                         strokeWidth="2"
@@ -125,7 +125,7 @@ const Header = (props) => {
                               to={o.url}
                               aria-label={o.title}
                               title={o.title}
-                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
+                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:underline"
                             >
                               {o.title}
                             </Link>

@@ -14,7 +14,7 @@ const Footer = (props) => {
         <div className="sm:col-span-2">
           <a href="/" aria-label="Go home" title="Company" className="inline-flex items-center">
             <svg
-              className="w-8 text-deep-purple-accent-400"
+              className="w-8 text-primary"
               viewBox="0 0 24 24"
               strokeLinejoin="round"
               strokeWidth="2"
@@ -49,7 +49,7 @@ const Footer = (props) => {
                 href={`tel:${phone}`}
                 aria-label="Our phone"
                 title="Our phone"
-                className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                className="transition-colors duration-300 text-secondary hover:underline"
               >
                 {phone}
               </a>
@@ -62,7 +62,7 @@ const Footer = (props) => {
                 href={`mailto:${email}`}
                 aria-label="Our email"
                 title="Our email"
-                className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                className="transition-colors duration-300 text-secondary hover:underline"
               >
                 {email}
               </a>
@@ -77,7 +77,7 @@ const Footer = (props) => {
                 rel="noopener noreferrer"
                 aria-label="Our address"
                 title="Our address"
-                className="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800"
+                className="transition-colors duration-300 text-secondary hover:underline"
               >
                 {address}
               </a>
@@ -92,7 +92,7 @@ const Footer = (props) => {
                 href={github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400"
+                className="text-gray-500 transition-colors duration-300 hover:text-secondary"
               >
                 <Github />
               </a>
@@ -111,7 +111,7 @@ const Footer = (props) => {
                 <li key={i}>
                   <Link
                     to={o.url}
-                    className="text-sm text-gray-600 transition-colors duration-300 hover:text-deep-purple-accent-400"
+                    className="text-sm text-gray-600 transition-colors duration-300 hover:text-secondary"
                   >
                     {o.title}
                   </Link>

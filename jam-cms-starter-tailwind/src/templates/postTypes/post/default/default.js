@@ -20,7 +20,7 @@ const Template = (props) => {
             <Link
               to={o.uri}
               key={o.databaseId}
-              className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400"
+              className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-secondary-contrast uppercase rounded-full bg-secondary"
             >
               {o.name}
             </Link>

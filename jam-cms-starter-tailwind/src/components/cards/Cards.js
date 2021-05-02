@@ -8,7 +8,7 @@ const Cards = (props) => {
   const { introduction, columns, items } = props;
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-background">
       <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         {introduction && (
           <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
@@ -30,9 +30,9 @@ const Cards = (props) => {
                   className="flex flex-col justify-between p-5 border rounded shadow-sm bg-white"
                 >
                   <div className="mr-4">
-                    <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-indigo-50">
+                    <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-primary">
                       <svg
-                        className="w-10 h-10 text-deep-purple-accent-400"
+                        className="w-10 h-10 text-primaryContrast"
                         stroke="currentColor"
                         viewBox="0 0 52 52"
                       >
