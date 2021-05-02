@@ -6,9 +6,9 @@ export default function formatFieldsToProps({ global, globalOptions, content, si
   // We'll loop through the template fields because this is the source of truth.
   // The content could be empty(initially) or the field schema has changed in the meantime.
   // However, in case there is no template (i.e. taxonomy single page), we need to loop through the globalOptions instead.
-  template?.fields
+  template?.fields && !global
     ? template.fields
-        .filter((o) => !!o.global === global)
+        .filter((o) => !!o.global === false)
         .map((o) => {
           let field;
 
