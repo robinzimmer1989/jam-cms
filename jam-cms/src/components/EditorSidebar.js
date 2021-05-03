@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import produce from 'immer';
@@ -58,12 +58,17 @@ const EditorSidebar = (props) => {
     : [];
 
   // Get all templates with id 'archive'
-  const archiveTemplatesArray = [];
-  if (post?.postTypeID === 'page' && templates?.postTypes) {
-    Object.values(templates?.postTypes).map((o) =>
-      Object.values(o).map((p) => p.id === 'archive' && archiveTemplatesArray.push(p))
-    );
-  }
+  const archiveTemplatesArray = useMemo(() => {
+    const array = [];
+
+    if (post?.postTypeID === 'page' && templates?.postTypes) {
+      Object.values(templates?.postTypes).map((o) =>
+        Object.values(o).map((p) => p.id === 'archive' && array.push(p))
+      );
+    }
+
+    return array;
+  }, [post?.postTypeID]);
 
   useEffect(() => {
     // Close sidebar in case editable status changes to false

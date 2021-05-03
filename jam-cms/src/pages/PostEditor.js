@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Empty } from 'antd';
 import axios from 'axios';
@@ -43,7 +43,8 @@ const PostEditor = (props) => {
     return !isNaN(parseFloat(n)) && !isNaN(n - 0);
   };
 
-  const getPostID = () => {
+  // The post id is only available during initial load so we need to look it up ourselves by searching through all pages
+  const postID = useMemo(() => {
     let postID = '';
 
     if (sites[siteID]) {
@@ -66,9 +67,10 @@ const PostEditor = (props) => {
     }
 
     return postID;
-  };
+  }, [pathname]);
 
-  const getPagination = () => {
+  // The pagination object will be available once we have the post id and therefore template id
+  const pagination = useMemo(() => {
     let pagination = {};
 
     if (template?.id === 'archive') {
@@ -93,13 +95,7 @@ const PostEditor = (props) => {
     }
 
     return pagination;
-  };
-
-  // The post id is only available during initial load so we need to look it up ourselves by searching through all pages
-  const postID = getPostID();
-
-  // The pagination object will be available once we have the post id and therefore template id
-  const pagination = getPagination();
+  }, [template?.id]);
 
   // The 'true' template id is a combination of id and post type
   const templateID = `${template?.id}-${template?.postTypeID}`;
