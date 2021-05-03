@@ -20,12 +20,6 @@ export const addPost = async (
 
 export const getPost = async ({ siteID, postID }, dispatch, config) => {
   const result = await postServices.getPost({ siteID, postID }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
-    dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
-  }
-
   return result;
 };
 

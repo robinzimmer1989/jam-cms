@@ -141,7 +141,12 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     const loadPost = async (postID) => {
-      await postActions.getPost({ siteID, postID }, dispatch, config);
+      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+
+      if (result) {
+        dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+        dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
+      }
     };
 
     postID && loadPost(postID);
