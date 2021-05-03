@@ -12,7 +12,7 @@ const Button = (props) => {
 
   if (variant === 'filled') {
     className =
-      'inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-primaryContrast transition duration-200 rounded shadow-md bg-primary hover:opacity-50 focus:shadow-outline focus:outline-none';
+      'inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-primaryContrast transition duration-200 rounded shadow-md bg-primary text-primary-contrast hover:opacity-50 focus:shadow-outline focus:outline-none';
   } else if (variant === 'text') {
     className =
       'inline-flex items-center font-semibold transition-colors duration-200 text-primary hover:underline';

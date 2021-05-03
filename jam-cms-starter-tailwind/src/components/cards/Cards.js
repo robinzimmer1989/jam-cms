@@ -32,7 +32,7 @@ const Cards = (props) => {
                   <div className="mr-4">
                     <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-primary">
                       <svg
-                        className="w-10 h-10 text-primaryContrast"
+                        className="w-10 h-10 text-primary-contrast"
                         stroke="currentColor"
                         viewBox="0 0 52 52"
                       >
