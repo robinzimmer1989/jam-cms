@@ -81,6 +81,10 @@ const styles = css`
     align-items: center;
   }
 
+  .ant-tabs-tab + .ant-tabs-tab {
+    margin: 0 0 0 20px;
+  }
+
   .ant-tabs-tab-btn {
     font-size: 11px;
     font-weight: 500;

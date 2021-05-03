@@ -13,7 +13,6 @@ import {
   message,
 } from 'antd';
 import {
-  CloseOutlined as CloseIcon,
   EditOutlined as EditIcon,
   PlusOutlined as AddIcon,
   DashboardOutlined as DashboardIcon,
@@ -82,6 +81,20 @@ const EditorSidebar = (props) => {
       type: 'UPDATE_EDITOR_POST',
       payload: nextPost,
     });
+  };
+
+  const handleSelectRevision = async (postID) => {
+    const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+
+    if (result) {
+      // Update existing post with title, content, post date and revisionID.
+      const { content, title, revisionID } = result;
+
+      dispatch({
+        type: 'UPDATE_EDITOR_POST',
+        payload: { ...post, content, title, revisionID, siteID },
+      });
+    }
   };
 
   const handleChangeSite = (name, value) => {
@@ -294,6 +307,7 @@ const EditorSidebar = (props) => {
           <TabsContainer>
             <Tabs
               activeKey={sidebar}
+              tabBarGutter={0}
               onChange={(value) =>
                 dispatch({
                   type: 'SET_EDITOR_SIDEBAR',
@@ -304,24 +318,13 @@ const EditorSidebar = (props) => {
               <Tabs.TabPane key={'content'} tab={'Content'} />
               <Tabs.TabPane key={'settings'} tab={'Settings'} />
               <Tabs.TabPane key={'seo'} tab={'SEO'} />
+              <Tabs.TabPane key={'revisions'} tab={'Revisions'} />
               {authUser?.capabilities?.edit_theme_options &&
                 globalOptions?.filter((o) => !o.hide)?.length > 0 && (
                   <Tabs.TabPane key={'theme'} tab={'Theme'} />
                 )}
             </Tabs>
           </TabsContainer>
-
-          <CloseButton
-            icon={<CloseIcon style={{ fontSize: '11px' }} />}
-            shape="circle"
-            size="small"
-            onClick={() =>
-              dispatch({
-                type: 'SET_EDITOR_SIDEBAR',
-                payload: null,
-              })
-            }
-          />
 
           <TabContainer>
             {sidebar === 'content' && (
@@ -497,6 +500,33 @@ const EditorSidebar = (props) => {
               </TabContent>
             )}
 
+            {sidebar === 'revisions' && (
+              <TabContent>
+                <Space direction="vertical">
+                  {post?.revisions?.length > 0 && (
+                    <>
+                      <Button
+                        type={!post.revisionID ? 'primary' : 'default'}
+                        onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
+                        children={'Current version'}
+                        block
+                      />
+
+                      {post.revisions.map((o) => (
+                        <Button
+                          key={o.id}
+                          type={o.id === post.revisionID ? 'primary' : 'default'}
+                          onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
+                          children={o.title}
+                          block
+                        />
+                      ))}
+                    </>
+                  )}
+                </Space>
+              </TabContent>
+            )}
+
             {sidebar === 'theme' && (
               <EditorFields fields={prepareThemeFields()} onChangeElement={handleChangeContent} />
             )}
@@ -642,12 +672,6 @@ const TabContainer = styled.div`
 
 const TabContent = styled.div`
   padding: 20px 15px;
-`;
-
-const CloseButton = styled(Button)`
-  position: absolute;
-  top: 14px;
-  right: 10px;
 `;
 
 const Actions = styled.div`
