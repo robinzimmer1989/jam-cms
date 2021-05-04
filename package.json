@@ -1,7 +1,6 @@
 {
   "private": true,
   "workspaces": [
-    "jam-cms-website",
     "gatsby-source-jam-cms",
     "jam-cms-starter-tailwind",
     "jam-cms"
