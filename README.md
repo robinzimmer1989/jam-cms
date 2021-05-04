@@ -4,17 +4,17 @@
 
 A CMS for the JAMStack world. Made for developers.
 
-## What is jamCMS?
+### What is jamCMS?
 
 jamCMS is not a CMS but a layer on top of other other CMS’s like WordPress. In this regard it’s similiar to TinaCMS. However, the main goal of this library is to melt frontend and backend back together in the same way you and your clients are used to it from non-headless websites.
 
-### WordPress + Gatsby
+#### WordPress + Gatsby
 
 Technically, jamCMS can connect to any data source as long as there is an API which returns the data in the correct format. To begin with I have developed a WordPress plugin for a seamless integration. On the frontend side of things, it can be used with any React framework (in theory) but I started out to develop certain components specifically for Gatsby (i.e. gatsby-plugin-image).
 
 jamCMS is fully integrated with the new gatsby-source-wordpress plugin!
 
-## Why jamCMS?
+### Why jamCMS?
 
 **Client**
 There are a lot of reasons why you should use jamCMS. Here are the most important one’s from a client’s perspective.
@@ -34,29 +34,31 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 
 ## Get Started
 
-### Backend
+### A. Backend
 
 Currently, only WordPress is supported as the CMS.
 
 #### WordPress:
 
 **Must use plugin**
-Advanced Custom Fields PRO (5.9.5)
-Custom Post Type UI (1.9.1)
-WP Gatsby (1.0.9)
-WPGraphQL (1.3.5)
-WPGraphQL for Advanced Custom Fields (0.5.2)
-WPGraphQL JWT Authentication (0.4.1)
-Yoast SEO (16.2)
-Add WPGraphQL SEO (4.14.0)
-jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
+
+- Advanced Custom Fields PRO (5.9.5)
+- Custom Post Type UI (1.9.1)
+- WP Gatsby (1.0.9)
+- WPGraphQL (1.3.5)
+- WPGraphQL for Advanced Custom Fields (0.5.2)
+- WPGraphQL JWT Authentication (0.4.1)
+- Yoast SEO (16.2)
+- Add WPGraphQL SEO (4.14.0)
+- jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
 
 **Optional plugin:**
-Classic Editor (1.6)
-JAMstack Deployments (1.1.1)
-Post Types Order (1.9.5.6)
 
-### Frontend
+- Classic Editor (1.6)
+- JAMstack Deployments (1.1.1)
+- Post Types Order (1.9.5.6)
+
+### B. Frontend
 
 #### Gatsby:
 
@@ -71,6 +73,7 @@ GATSBY_JAM_CMS_URL=https://jam.local/starter-tailwind
 
 ## Templates
 
+Check out the starter-theme to learn more about the template structure. I'm gonna add detailed instructions later on.
 ...
 
 ### Archive Pages
@@ -372,6 +375,12 @@ The component will convert all internal links to Gatsby links and make sure that
 
 **ID restrictions (lowercase only)**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
+
+**Chicken/Egg problem with themes**
+One of the biggest advantages of jamCMS is automated syncing of ACF fields between React code and the WordPress backend. This way you can easily reuse components throughout projects.
+That's why it makes a lot of sense to create a reusable theme where everything is already set up. But here we encounter a chicken-egg problem with WPGraphQL/gatsby-source-wordpress:
+When connecting a new WordPress instance to an existing theme, Gatsby will complain about missing field types in the GraphQL schema because no ACF fields are set up in the backend yet.
+To avoid this problem you need to comment out the GraphQL queries for ACF fields, save a post to sync the template with WordPress and reactive the GraphQL query again. This only needs to happen once and only during the initial set up.
 
 **Global styles overwrites**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
