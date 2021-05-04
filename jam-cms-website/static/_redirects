@@ -1,2 +1,0 @@
-# Redirect default Netlify subdomain to primary domain
-https://jam-cms.netlify.app/* https://jam-cms.com/:splat 301!
