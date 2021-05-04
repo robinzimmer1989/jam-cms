@@ -58,115 +58,115 @@ export const Query = graphql`
       template {
         ... on WpDefaultTemplate {
           templateName
-          acf {
-            blocks {
-              flex {
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Hero {
-                  fieldGroupName
-                  buttons {
-                    button {
-                      target
-                      title
-                      url
-                    }
-                    variant
-                  }
-                  headline
-                  image {
-                    id
-                    altText
-                    localFile {
-                      childImageSharp {
-                        gatsbyImageData(width: 1920, placeholder: BLURRED)
-                      }
-                    }
-                  }
-                  subline
-                }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Cards {
-                  columns
-                  introduction
-                  fieldGroupName
-                  items {
-                    headline
-                    fieldGroupName
-                    text
-                    link {
-                      target
-                      title
-                      url
-                    }
-                  }
-                }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Textimage {
-                  fieldGroupName
-                  alignment
-                  buttons {
-                    button {
-                      target
-                      title
-                      url
-                    }
-                    variant
-                    fieldGroupName
-                  }
-                  image {
-                    altText
-                    localFile {
-                      childImageSharp {
-                        gatsbyImageData(width: 800, placeholder: BLURRED)
-                      }
-                    }
-                  }
-                  text
-                }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor {
-                  fieldGroupName
-                  flex {
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Text {
-                      fieldGroupName
-                      text
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Textimage {
-                      alignment
-                      fieldGroupName
-                      image {
-                        altText
-                        localFile {
-                          childImageSharp {
-                            gatsbyImageData(width: 600, placeholder: BLURRED)
-                          }
-                        }
-                      }
-                      text
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Gallery {
-                      columns
-                      fieldGroupName
-                      gallery {
-                        altText
-                        localFile {
-                          childImageSharp {
-                            gatsbyImageData(width: 600, placeholder: BLURRED)
-                          }
-                        }
-                      }
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Embed {
-                      fieldGroupName
-                      url
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Quote {
-                      author
-                      fieldGroupName
-                      position
-                      text
-                    }
-                  }
-                }
-              }
-            }
-          }
+          # acf {
+          #   blocks {
+          #     flex {
+          #       ... on WpDefaultTemplate_Acf_Blocks_Flex_Hero {
+          #         fieldGroupName
+          #         buttons {
+          #           button {
+          #             target
+          #             title
+          #             url
+          #           }
+          #           variant
+          #         }
+          #         headline
+          #         image {
+          #           id
+          #           altText
+          #           localFile {
+          #             childImageSharp {
+          #               gatsbyImageData(width: 1920, placeholder: BLURRED)
+          #             }
+          #           }
+          #         }
+          #         subline
+          #       }
+          #       ... on WpDefaultTemplate_Acf_Blocks_Flex_Cards {
+          #         columns
+          #         introduction
+          #         fieldGroupName
+          #         items {
+          #           headline
+          #           fieldGroupName
+          #           text
+          #           link {
+          #             target
+          #             title
+          #             url
+          #           }
+          #         }
+          #       }
+          #       ... on WpDefaultTemplate_Acf_Blocks_Flex_Textimage {
+          #         fieldGroupName
+          #         alignment
+          #         buttons {
+          #           button {
+          #             target
+          #             title
+          #             url
+          #           }
+          #           variant
+          #           fieldGroupName
+          #         }
+          #         image {
+          #           altText
+          #           localFile {
+          #             childImageSharp {
+          #               gatsbyImageData(width: 800, placeholder: BLURRED)
+          #             }
+          #           }
+          #         }
+          #         text
+          #       }
+          #       ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor {
+          #         fieldGroupName
+          #         flex {
+          #           ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Text {
+          #             fieldGroupName
+          #             text
+          #           }
+          #           ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Textimage {
+          #             alignment
+          #             fieldGroupName
+          #             image {
+          #               altText
+          #               localFile {
+          #                 childImageSharp {
+          #                   gatsbyImageData(width: 600, placeholder: BLURRED)
+          #                 }
+          #               }
+          #             }
+          #             text
+          #           }
+          #           ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Gallery {
+          #             columns
+          #             fieldGroupName
+          #             gallery {
+          #               altText
+          #               localFile {
+          #                 childImageSharp {
+          #                   gatsbyImageData(width: 600, placeholder: BLURRED)
+          #                 }
+          #               }
+          #             }
+          #           }
+          #           ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Embed {
+          #             fieldGroupName
+          #             url
+          #           }
+          #           ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Quote {
+          #             author
+          #             fieldGroupName
+          #             position
+          #             text
+          #           }
+          #         }
+          #       }
+          #     }
+          #   }
+          # }
         }
       }
     }
