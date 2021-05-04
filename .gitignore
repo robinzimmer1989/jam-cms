@@ -8,6 +8,7 @@ dist
 .rpt2_cache
 
 # misc
+jam-cms-website
 jam-cms/README.md
 public
 .wordpress-cache
