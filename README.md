@@ -40,7 +40,7 @@ Currently, only WordPress is supported as the CMS.
 
 #### WordPress:
 
-**Must use plugin**
+**Must use plugins:**
 
 - Advanced Custom Fields PRO (5.9.5)
 - Custom Post Type UI (1.9.1)
@@ -52,7 +52,7 @@ Currently, only WordPress is supported as the CMS.
 - Add WPGraphQL SEO (4.14.0)
 - jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
 
-**Optional plugin:**
+**Optional plugins:**
 
 - Classic Editor (1.6)
 - JAMstack Deployments (1.1.1)
@@ -73,8 +73,8 @@ GATSBY_JAM_CMS_URL=https://jam.local/starter-tailwind
 
 ## Templates
 
-Check out the starter-theme to learn more about the template structure. I'm gonna add detailed instructions later on.
-...
+Check out the starter-theme to learn more about the template structure.
+I'm gonna add detailed instructions later on.
 
 ### Archive Pages
 
@@ -234,7 +234,10 @@ Groups will render their fields inside an accordion. That makes them the perfect
 ```
 
 The jamCMS WordPress plugin will return the image in the `gatsby-plugin-image` format. To work locally and in build mode, you need to import GatsbyImage from jam-cms.
-`import { GatsbyImage } from 'jam-cms';`
+
+```
+import { GatsbyImage } from 'jam-cms';
+```
 
 Then you can pass in the image like this:
 
@@ -363,7 +366,10 @@ The menu id must be unique throughout the entire site.
 ```
 
 To avoid certain issues when dealing with WYSIWYG fields, it’s recommended to use the RichText component from jamCMS.
-`import { RichText } from 'jam-cms';`
+
+```
+import { RichText } from 'jam-cms';
+```
 
 The component will convert all internal links to Gatsby links and make sure that external links are opened in a new tab.
 
@@ -373,24 +379,24 @@ The component will convert all internal links to Gatsby links and make sure that
 
 ## Know issues:
 
-**ID restrictions (lowercase only)**
+**ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
-**Chicken/Egg problem with themes**
+**Chicken/Egg problem with themes:**
 One of the biggest advantages of jamCMS is automated syncing of ACF fields between React code and the WordPress backend. This way you can easily reuse components throughout projects.
 That's why it makes a lot of sense to create a reusable theme where everything is already set up. But here we encounter a chicken-egg problem with WPGraphQL/gatsby-source-wordpress:
 When connecting a new WordPress instance to an existing theme, Gatsby will complain about missing field types in the GraphQL schema because no ACF fields are set up in the backend yet.
 To avoid this problem you need to comment out the GraphQL queries for ACF fields, save a post to sync the template with WordPress and reactive the GraphQL query again. This only needs to happen once and only during the initial set up.
 
-**Global styles overwrites**
+**Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
 You can overcome this issue by simply overwriting the CSS properties in case they screw something up. It’s important to note that the behavior is different in development and build mode (SSR), so make sure you pay attention to style changes in both environments.
 
-**Static pages can’t be fetched**
+**Static pages can’t be fetched:**
 All pages created by Gatsby won’t be editable within jamCMS because it simply doesn’t know about their existence.
 
-**WYSIWYG editor doesn't support images**
+**WYSIWYG editor doesn't support images:**
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
