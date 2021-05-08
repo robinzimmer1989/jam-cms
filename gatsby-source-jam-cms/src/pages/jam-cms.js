@@ -1,34 +1,32 @@
-import React from 'react';
-import styled from 'styled-components';
+"use strict";
 
-import { LoginForm } from 'jam-cms';
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-const Login = (props) => {
-  const { source } = props;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
 
-  return (
-    <Container>
-      <CardWrapper>
-        <LoginForm url={source} />
-      </CardWrapper>
-    </Container>
-  );
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _jamCms = require("jam-cms");
+
+var _templateObject, _templateObject2;
+
+var Login = function Login(props) {
+  var source = props.source;
+  return /*#__PURE__*/_react["default"].createElement(Container, null, /*#__PURE__*/_react["default"].createElement(CardWrapper, null, /*#__PURE__*/_react["default"].createElement(_jamCms.LoginForm, {
+    url: source
+  })));
 };
 
-const Container = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 0;
-  background: #f0f2f5;
-`;
+var Container = _styledComponents["default"].div(_templateObject || (_templateObject = (0, _taggedTemplateLiteral2["default"])(["\n  width: 100%;\n  height: 100vh;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 40px 0;\n  background: #f0f2f5;\n"])));
 
-const CardWrapper = styled.div`
-  max-width: 400px;
-  width: 100%;
-  padding: 40px 0;
-`;
+var CardWrapper = _styledComponents["default"].div(_templateObject2 || (_templateObject2 = (0, _taggedTemplateLiteral2["default"])(["\n  max-width: 400px;\n  width: 100%;\n  padding: 40px 0;\n"])));
 
-export default Login;
+var _default = Login;
+exports["default"] = _default;

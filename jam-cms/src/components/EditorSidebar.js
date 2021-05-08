@@ -36,12 +36,11 @@ import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils'
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { templates, hasTemplate, editable, ...rest } = props;
+  const { fields, hasTemplate, editable, ...rest } = props;
 
   const [
     {
       config,
-      globalOptions,
       authState: { authUser },
       cmsState: { sites, siteID },
       editorState: { site, post, sidebar, siteHasChanged, postHasChanged },
@@ -52,7 +51,7 @@ const EditorSidebar = (props) => {
   const [loading, setLoading] = useState('');
 
   const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
-  const postTypeTemplates = templates?.postTypes?.[post?.postTypeID];
+  const postTypeTemplates = fields?.postTypes?.[post?.postTypeID];
   const postTypeTemplatesArray = postTypeTemplates
     ? Object.values(postTypeTemplates).filter((o) => o.id !== 'archive')
     : [];
@@ -61,8 +60,8 @@ const EditorSidebar = (props) => {
   const archiveTemplatesArray = useMemo(() => {
     const array = [];
 
-    if (post?.postTypeID === 'page' && templates?.postTypes) {
-      Object.values(templates?.postTypes).map((o) =>
+    if (post?.postTypeID === 'page' && fields?.postTypes) {
+      Object.values(fields?.postTypes).map((o) =>
         Object.values(o).map((p) => p.id === 'archive' && array.push(p))
       );
     }
@@ -120,7 +119,7 @@ const EditorSidebar = (props) => {
   const handleChangeContent = (field) => {
     if (field.global) {
       const nextSite = produce(site, (draft) => {
-        return set(draft, `globalOptions.${field.id}`, field);
+        return set(draft, `themeOptions.${field.id}`, field);
       });
 
       dispatch({
@@ -152,18 +151,18 @@ const EditorSidebar = (props) => {
   };
 
   const handleSave = async (action, status) => {
-    const { id, globalOptions, frontPage } = site;
+    const { id, themeOptions, frontPage } = site;
 
     // Add template object to request, but only in development mode
     const templateObject =
-      process.env.NODE_ENV === 'development' && getTemplateByPost(post, templates);
+      process.env.NODE_ENV === 'development' && getTemplateByPost(post, fields);
 
     setLoading(action);
 
     let postResult, siteResult;
 
     if (siteHasChanged) {
-      siteResult = await siteActions.updateSite({ id, globalOptions, frontPage }, dispatch, config);
+      siteResult = await siteActions.updateSite({ id, themeOptions, frontPage }, dispatch, config);
     }
 
     if (postHasChanged || action === 'publish') {
@@ -242,16 +241,16 @@ const EditorSidebar = (props) => {
   };
 
   const prepareContentFields = () => {
-    const template = getTemplateByPost(post, templates);
+    const template = getTemplateByPost(post, fields);
 
     // TODO: Very similar setup to utils function 'formatFieldsToProps'.
     // There might be a chance to unify the function.
-    const fields = template?.fields
+    const postFields = template?.fields
       ? template.fields.map((o) => {
           let field;
 
           if (o.global) {
-            field = site?.globalOptions?.[o.id] || globalOptions.find((p) => p.id === o.id);
+            field = site?.themeOptions?.[o.id] || fields.themeOptions.find((p) => p.id === o.id);
           } else {
             field = post?.content?.[o.id] || o;
           }
@@ -267,23 +266,23 @@ const EditorSidebar = (props) => {
         })
       : [];
 
-    return fields;
+    return postFields;
   };
 
   const prepareThemeFields = () => {
     // Loop over global options (only source of truth)
-    const fields = globalOptions
+    const themeFields = fields.themeOptions
       .filter((o) => !o.hide)
       .map((o) => {
         const formattedField = formatFieldForEditor({
           // Pass in fields from editor site state or global option itself
-          field: site?.globalOptions?.[o.id] || o,
+          field: site?.themeOptions?.[o.id] || o,
           site,
         });
         return { global: true, ...o, value: formattedField?.value };
       });
 
-    return fields;
+    return themeFields;
   };
 
   const handleAddPost = async ({ postTypeID, title, parentID }) => {
@@ -325,7 +324,7 @@ const EditorSidebar = (props) => {
               <Tabs.TabPane key={'seo'} tab={'SEO'} />
               <Tabs.TabPane key={'revisions'} tab={'Revisions'} />
               {authUser?.capabilities?.edit_theme_options &&
-                globalOptions?.filter((o) => !o.hide)?.length > 0 && (
+                fields.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
                   <Tabs.TabPane key={'theme'} tab={'Theme'} />
                 )}
             </Tabs>

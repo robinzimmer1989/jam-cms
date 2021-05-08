@@ -6,8 +6,8 @@ module.exports = {
   },
   extends: ['airbnb'],
   globals: {
+    GATSBY_FIELDS_PATH: false,
     GATSBY_TEMPLATES_PATH: false,
-    GATSBY_GLOBAL_OPTIONS_PATH: false,
   },
   parser: '@babel/eslint-parser',
   parserOptions: {

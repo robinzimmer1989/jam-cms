@@ -149,18 +149,18 @@ export const Query = graphql`
           sourceUrl
         }
       }
-      # template {
-      #  ... on WpTemplate_ArchivePost {
-      #    templateName
-      #    acf {
-      #      content {
-      #        tag
-      #        headline
-      #        text
-      #      }
-      #    }
-      #  }
-      #}
+      template {
+        ... on WpTemplate_ArchivePost {
+          templateName
+          acf {
+            content {
+              tag
+              headline
+              text
+            }
+          }
+        }
+      }
     }
     allWpPost {
       nodes {

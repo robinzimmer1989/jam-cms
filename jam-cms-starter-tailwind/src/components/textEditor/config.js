@@ -1,9 +1,6 @@
-import TextEditor from './TextEditor';
-
 const config = {
   id: 'texteditor',
   label: 'Text Editor',
-  component: TextEditor,
   fields: [
     {
       id: 'flex',

@@ -1,10 +1,8 @@
-import Hero from './Hero';
 import buttonFields from '../button/config';
 
 const config = {
   id: 'hero',
   label: 'Hero',
-  component: Hero,
   fields: [
     {
       id: 'image',

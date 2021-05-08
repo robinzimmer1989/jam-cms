@@ -1,22 +1,22 @@
 import formatFieldForEditor from './formatFieldForEditor';
 
-export default function formatFieldsToProps({ global, globalOptions, content, site, template }) {
+export default function formatFieldsToProps({ global, themeOptions, content, site, template }) {
   const obj = {};
 
   // We'll loop through the template fields because this is the source of truth.
   // The content could be empty(initially) or the field schema has changed in the meantime.
-  // However, in case there is no template (i.e. taxonomy single page), we need to loop through the globalOptions instead.
+  // However, in case there is no template (i.e. taxonomy single page), we need to loop through the themeOptions instead.
   template?.fields && !global
     ? template.fields
         .filter((o) => !!o.global === false)
         .map((o) => {
           let field;
 
-          // Then we'll grab the field information from the content and alternativly from the globalOptions array or the template itself.
+          // Then we'll grab the field information from the content and alternativly from the themeOptions array or the template itself.
           // This is necessary for initial content loading.
 
           if (o.global) {
-            field = content[o.id] || globalOptions.find((p) => p.id === o.id);
+            field = content[o.id] || themeOptions.find((p) => p.id === o.id);
           } else {
             field = content[o.id] || o;
           }
@@ -25,8 +25,8 @@ export default function formatFieldsToProps({ global, globalOptions, content, si
 
           return (obj[o.id] = formattedField?.value);
         })
-    : globalOptions &&
-      globalOptions.map((o) => {
+    : themeOptions &&
+      themeOptions.map((o) => {
         const formattedField = formatFieldForEditor({ field: content?.[o.id] || o, site });
 
         return (obj[o.id] = formattedField?.value);

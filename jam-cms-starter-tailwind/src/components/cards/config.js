@@ -1,9 +1,6 @@
-import Cards from './Cards';
-
 const config = {
   id: 'cards',
   label: 'Cards',
-  component: Cards,
   fields: [
     {
       id: 'introduction',

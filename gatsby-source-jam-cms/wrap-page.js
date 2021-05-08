@@ -1,43 +1,52 @@
-const React = require('react');
-const JamCms = require('jam-cms').default;
+"use strict";
 
-const preferDefault = (m) => (m && m.default) || m;
-let templates, globalOptions;
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var React = require('react');
+
+var JamCms = require('jam-cms')["default"];
+
+var preferDefault = function preferDefault(m) {
+  return m && m["default"] || m;
+};
+
+var fields;
 
 try {
   // eslint-disable-next-line
-  templates = preferDefault(require(GATSBY_TEMPLATES_PATH));
+  fields = preferDefault(require(GATSBY_FIELDS_PATH)); // loop through post types and templates and add React component to fields object
+
+  if (fields && fields.postTypes) {
+    for (var postType in fields.postTypes) {
+      for (var template in fields.postTypes[postType]) {
+        // eslint-disable-next-line
+        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType, "/").concat(template, "/").concat(template, ".js")));
+        fields.postTypes[postType][template].component = component;
+      }
+    }
+  }
 } catch (e) {
-  if (e.toString().indexOf(`Error: Cannot find module`) !== -1) {
-    throw new Error(`Couldn't find templates`);
+  if (e.toString().indexOf("Error: Cannot find module") !== -1) {
+    throw new Error("Couldn't find templates");
   } else {
     console.error(e);
     throw e;
   }
-}
+} // eslint-disable-next-line react/prop-types,react/display-name
 
-try {
-  // eslint-disable-next-line
-  globalOptions = preferDefault(require(GATSBY_GLOBAL_OPTIONS_PATH));
-} catch (e) {
-  if (e.toString().indexOf(`Error: Cannot find module`) !== -1) {
-    globalOptions = [];
-  } else {
-    console.error(e);
-    throw e;
-  }
-}
 
-// eslint-disable-next-line react/prop-types,react/display-name
-module.exports = ({ element, props }, { source, settings, siteID }) => (
-  <JamCms
-    {...props}
-    templates={templates}
-    globalOptions={globalOptions}
-    source={source}
-    settings={settings}
-    siteID={siteID}
-  >
-    {element}
-  </JamCms>
-);
+module.exports = function (_ref, _ref2) {
+  var element = _ref.element,
+      props = _ref.props;
+  var source = _ref2.source,
+      settings = _ref2.settings,
+      siteID = _ref2.siteID;
+  return /*#__PURE__*/React.createElement(JamCms, (0, _extends2["default"])({}, props, {
+    fields: fields,
+    source: source,
+    settings: settings,
+    siteID: siteID
+  }), element);
+};

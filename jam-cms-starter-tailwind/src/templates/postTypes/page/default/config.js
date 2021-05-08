@@ -1,5 +1,3 @@
-import Template from './default';
-
 // import fleixble content blocks
 import hero from '../../../../components/hero/config';
 import cards from '../../../../components/cards/config';
@@ -10,7 +8,6 @@ const config = {
   id: 'default',
   postTypeID: 'page',
   label: 'Default Page',
-  component: Template,
   fields: [
     {
       id: 'header',

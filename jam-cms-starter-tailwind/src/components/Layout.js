@@ -9,7 +9,7 @@ import Seo from './Seo';
 const Layout = (props) => {
   const { jamCMS, pageContext, seo, children } = props;
 
-  const colors = pageContext?.globalOptions?.colors;
+  const colors = pageContext?.themeOptions?.colors;
 
   return (
     <>
@@ -57,11 +57,11 @@ const Layout = (props) => {
         </style>
       </Helmet>
 
-      <Header jamCMS={jamCMS} {...pageContext?.globalOptions?.header} />
+      <Header jamCMS={jamCMS} {...pageContext?.themeOptions?.header} />
 
       {children}
 
-      <Footer {...pageContext?.globalOptions?.footer} />
+      <Footer {...pageContext?.themeOptions?.footer} />
     </>
   );
 };

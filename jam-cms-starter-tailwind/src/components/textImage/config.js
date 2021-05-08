@@ -1,10 +1,8 @@
-import TextImage from './TextImage';
 import buttonFields from '../button/config';
 
 const config = {
   id: 'textimage',
   label: 'Text & Image',
-  component: TextImage,
   fields: [
     {
       id: 'image',

@@ -36,7 +36,7 @@ import {
 } from '../routes';
 
 const Master = (props) => {
-  const { templates, defaultComponent } = props;
+  const { fields, defaultComponent } = props;
 
   const [
     {
@@ -143,7 +143,7 @@ const Master = (props) => {
         <PrivateRoute
           path={'*'}
           component={PostEditor}
-          templates={templates}
+          fields={fields}
           defaultComponent={defaultComponent}
         />
       </Router>

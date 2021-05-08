@@ -38,7 +38,7 @@ export const addSite = async ({ title }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, globalOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey },
+  { id, themeOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey },
   dispatch,
   config
 ) => {
@@ -51,7 +51,7 @@ export const updateSite = async (
       siteUrl,
       googleMapsApi,
       apiKey,
-      globalOptions: JSON.stringify(globalOptions),
+      themeOptions: JSON.stringify(themeOptions),
       deployment: JSON.stringify(deployment),
     },
     dispatch,

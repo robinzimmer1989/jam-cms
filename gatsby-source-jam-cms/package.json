@@ -3,18 +3,22 @@
   "version": "1.1.0",
   "dependencies": {
     "axios": "^0.21.1",
-    "babel-preset-gatsby": "^1.4.0",
+    "babel-polyfill": "^6.26.0",
     "cross-env": "7.0.3",
     "esm": "^3.2.25",
     "gatsby": "3.4.0",
-    "gatsby-plugin-sharp": "^3.4.0",
-    "gatsby-transformer-sharp": "^3.4.0",
     "jam-cms": "1.2.0",
     "styled-components": "^5.2.3"
   },
-  "main": "index.js",
-  "devDependencies": {},
+  "main": "./index.js",
+  "devDependencies": {
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/register": "^7.13.16"
+  },
   "scripts": {
+    "build": "babel raw --out-dir . --ignore **/__tests__ --extensions \".ts,.js\"",
+    "watch": "babel -w raw --out-dir . --ignore **/__tests__ --verbose --extensions \".ts,.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

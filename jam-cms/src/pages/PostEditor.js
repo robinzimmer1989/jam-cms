@@ -20,12 +20,11 @@ import { useStore } from '../store';
 import { postActions } from '../actions';
 
 const PostEditor = (props) => {
-  const { templates, defaultComponent } = props;
+  const { fields, defaultComponent } = props;
 
   const [
     {
       config,
-      globalOptions,
       cmsState: { sites, siteID },
       editorState: { site, post, sidebar },
     },
@@ -34,7 +33,7 @@ const PostEditor = (props) => {
 
   const [query, setQuery] = useState(null);
 
-  const template = getTemplateByPost(post, templates);
+  const template = getTemplateByPost(post, fields);
   const Component = template?.component;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
@@ -210,10 +209,10 @@ const PostEditor = (props) => {
                   jamCMS={{ sidebar: !!sidebar }}
                   data={getPostData()}
                   pageContext={{
-                    globalOptions: formatFieldsToProps({
+                    themeOptions: formatFieldsToProps({
                       global: true,
-                      globalOptions,
-                      content: site?.globalOptions,
+                      themeOptions: fields?.themeOptions,
+                      content: site?.themeOptions,
                       site,
                       template,
                     }),
@@ -234,7 +233,7 @@ const PostEditor = (props) => {
 
               <EditorSidebar
                 className="jam-cms"
-                templates={templates}
+                fields={fields}
                 hasTemplate={!!Component}
                 editable={true}
               />
@@ -247,9 +246,9 @@ const PostEditor = (props) => {
         <>
           {React.cloneElement(defaultComponent, {
             pageContext: {
-              globalOptions: formatFieldsToProps({
-                globalOptions,
-                content: site?.globalOptions,
+              themeOptions: formatFieldsToProps({
+                themeOptions: fields?.themeOptions,
+                content: site?.themeOptions,
                 site,
               }),
             },
