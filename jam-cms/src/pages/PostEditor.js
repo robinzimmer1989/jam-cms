@@ -206,62 +206,58 @@ const PostEditor = (props) => {
 
   return (
     <>
-      {postID ? (
-        <>
-          {isReady ? (
-            <PageWrapper template={!!Component && post?.content} sidebarActive={sidebarActive}>
-              {!!Component && post?.content ? (
-                <Component
-                  jamCMS={{ sidebar: sidebarActive }}
-                  data={getPostData()}
-                  pageContext={{
-                    themeOptions: formatFieldsToProps({
-                      global: true,
-                      themeOptions: fields?.themeOptions,
-                      content: site?.themeOptions,
-                      site,
-                      template,
-                    }),
-                    pagination,
-                  }}
-                />
-              ) : (
-                <EmptyContainer className="jam-cms">
-                  <Empty
-                    imageStyle={{
-                      height: 120,
+      <PageWrapper template={!!Component && post?.content} sidebarActive={sidebarActive}>
+        {postID ? (
+          <>
+            {isReady ? (
+              <>
+                {!!Component && post?.content ? (
+                  <Component
+                    jamCMS={{ sidebar: sidebarActive }}
+                    data={getPostData()}
+                    pageContext={{
+                      themeOptions: formatFieldsToProps({
+                        global: true,
+                        themeOptions: fields?.themeOptions,
+                        content: site?.themeOptions,
+                        site,
+                        template,
+                      }),
+                      pagination,
                     }}
-                    description={'No Template'}
                   />
-                </EmptyContainer>
-              )}
+                ) : (
+                  <EmptyContainer className="jam-cms">
+                    <Empty
+                      imageStyle={{
+                        height: 120,
+                      }}
+                      description={'No Template'}
+                    />
+                  </EmptyContainer>
+                )}
+              </>
+            ) : (
+              <Loader />
+            )}
+          </>
+        ) : (
+          <>
+            {React.cloneElement(defaultComponent, {
+              pageContext: {
+                themeOptions: formatFieldsToProps({
+                  themeOptions: fields?.themeOptions,
+                  content: site?.themeOptions,
+                  site,
+                }),
+              },
+            })}
+          </>
+        )}
+      </PageWrapper>
 
-              {sidebarActive && (
-                <EditorSidebar
-                  className="jam-cms"
-                  fields={fields}
-                  hasTemplate={!!Component}
-                  editable={true}
-                />
-              )}
-            </PageWrapper>
-          ) : (
-            <Loader />
-          )}
-        </>
-      ) : (
-        <>
-          {React.cloneElement(defaultComponent, {
-            pageContext: {
-              themeOptions: formatFieldsToProps({
-                themeOptions: fields?.themeOptions,
-                content: site?.themeOptions,
-                site,
-              }),
-            },
-          })}
-          <EditorSidebar className="jam-cms" hasTemplate={false} editable={false} />
-        </>
+      {sidebarActive && (
+        <EditorSidebar className="jam-cms" fields={fields} editable={!!Component} />
       )}
     </>
   );
