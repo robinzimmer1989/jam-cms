@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Tree, Collapse, Space, Tabs, Modal } from 'antd';
+import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { isEmpty } from 'lodash';
 
 // import app components
 import Input from '../Input';
@@ -209,48 +210,60 @@ const Menu = (props) => {
         </Tabs>
 
         <div>
-          {posts &&
-            Object.values(posts)
-              .filter(({ status }) => status !== 'trash')
-              .map(({ id, title, status, postTypeID }) => {
-                const badges = [];
-
-                if (status === 'draft') {
-                  badges.push(<Tag key="status" children={status} />);
-                }
-
-                return (
-                  <StyledListItem
-                    key={id}
-                    title={title}
-                    status={badges}
-                    actions={[
-                      <Button
-                        key="add"
-                        size="small"
-                        disabled={status === 'draft'}
-                        onClick={() =>
-                          onChange([
-                            ...items,
-                            {
-                              key: generateRandomString(),
-                              title,
-                              postTypeID,
-                              postID: id,
-                              children: [],
-                              url: generateSlug(postType, id, sites?.[siteID]?.frontPage, true),
-                            },
-                          ])
-                        }
-                        shape="circle"
-                      >
-                        <PlusOutlined />
-                      </Button>,
-                    ]}
+          {filter !== 'custom-link' && (
+            <>
+              {isEmpty(posts) ? (
+                <EmptyContainer>
+                  <Empty
+                    imageStyle={{
+                      height: 120,
+                    }}
                   />
-                );
-              })}
+                </EmptyContainer>
+              ) : (
+                Object.values(posts)
+                  .filter(({ status }) => status !== 'trash')
+                  .map(({ id, title, status, postTypeID }) => {
+                    const badges = [];
 
+                    if (status === 'draft') {
+                      badges.push(<Tag key="status" children={status} />);
+                    }
+
+                    return (
+                      <StyledListItem
+                        key={id}
+                        title={title}
+                        status={badges}
+                        actions={[
+                          <Button
+                            key="add"
+                            size="small"
+                            disabled={status === 'draft'}
+                            onClick={() =>
+                              onChange([
+                                ...items,
+                                {
+                                  key: generateRandomString(),
+                                  title,
+                                  postTypeID,
+                                  postID: id,
+                                  children: [],
+                                  url: generateSlug(postType, id, sites?.[siteID]?.frontPage, true),
+                                },
+                              ])
+                            }
+                            shape="circle"
+                          >
+                            <PlusOutlined />
+                          </Button>,
+                        ]}
+                      />
+                    );
+                  })
+              )}
+            </>
+          )}
           {filter === 'custom-link' && (
             <Space direction="vertical" size={20}>
               <Input
@@ -347,6 +360,14 @@ const StyledListItem = styled(ListItem)`
   .ant-typography strong {
     font-weight: 400;
   }
+`;
+
+const EmptyContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
 `;
 
 export default Menu;
