@@ -22,7 +22,7 @@ import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils'
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { fields, hasTemplate, editable, ...rest } = props;
+  const { fields, editable, ...rest } = props;
 
   const [
     {
@@ -251,7 +251,7 @@ const EditorSidebar = (props) => {
   // TODO: Test if useMemo is too expensive here
   const themeFields = useMemo(() => {
     // Loop over global options (only source of truth)
-    const formattedFields = fields.themeOptions
+    const formattedFields = fields?.themeOptions
       .filter((o) => !o.hide)
       .map((o) => {
         const formattedField = formatFieldForEditor({
@@ -350,13 +350,13 @@ const EditorSidebar = (props) => {
 
       <TabsContainer>
         <Tabs activeKey={sidebar} tabBarGutter={0} onChange={(value) => setSidebar(value)}>
-          <Tabs.TabPane key={'content'} tab={'Content'} />
-          <Tabs.TabPane key={'settings'} tab={'Settings'} />
-          <Tabs.TabPane key={'seo'} tab={'SEO'} />
-          <Tabs.TabPane key={'revisions'} tab={'Revisions'} />
+          <Tabs.TabPane key={'content'} tab={'Content'} disabled={!editable} />
+          <Tabs.TabPane key={'settings'} tab={'Settings'} disabled={!editable} />
+          <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable} />
+          <Tabs.TabPane key={'revisions'} tab={'Revisions'} disabled={!editable} />
           {authUser?.capabilities?.edit_theme_options &&
             fields?.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
-              <Tabs.TabPane key={'theme'} tab={'Theme'} />
+              <Tabs.TabPane key={'theme'} tab={'Theme'} disabled={!editable} />
             )}
         </Tabs>
       </TabsContainer>
