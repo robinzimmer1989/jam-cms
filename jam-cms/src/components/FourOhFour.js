@@ -16,7 +16,6 @@ const FourOhFour = () => {
   return (
     <EmptyContainer>
       <Empty
-        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
         imageStyle={{
           height: 120,
         }}
