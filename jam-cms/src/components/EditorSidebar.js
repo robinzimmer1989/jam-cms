@@ -324,7 +324,7 @@ const EditorSidebar = (props) => {
               <Tabs.TabPane key={'seo'} tab={'SEO'} />
               <Tabs.TabPane key={'revisions'} tab={'Revisions'} />
               {authUser?.capabilities?.edit_theme_options &&
-                fields.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
+                fields?.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
                   <Tabs.TabPane key={'theme'} tab={'Theme'} />
                 )}
             </Tabs>
