@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [
     {
       config,
+      authState: { authUser },
       cmsState: { sites, siteID },
     },
   ] = useStore();
@@ -23,20 +24,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     const loadChangesSinceLastBuild = async () => {
-      // Applies for a brand new WordPress setup
-      if (!lastBuild) {
-        return setChanges([]);
-      }
+      const date = lastBuild || sites?.[siteID]?.createdAt;
 
       // Format date to timestamp (in miliseconds)
-      const timestamp = moment.utc(lastBuild, 'MM/DD/YYYY HH:mm:ss a').format('x');
+      const timestamp = moment.utc(date, 'YYYY/MM/DD HH:mm:ss').format('x');
 
       const result = await actionMonitorServices.getChangesSinceLastBuild({ timestamp }, config);
 
       if (result?.data?.actionMonitorActions?.nodes) {
         // Remove internal entries from list
-        const fileredResults = result.data.actionMonitorActions.nodes.filter(
-          (o) => o.actionType !== 'DIFF_SCHEMAS'
+        const fileredResults = result.data.actionMonitorActions.nodes.filter((o) =>
+          authUser?.capabilities?.edit_themes ? o : o.actionType !== 'DIFF_SCHEMAS'
         );
 
         setChanges(fileredResults);
@@ -73,7 +71,12 @@ const Dashboard = () => {
               dataSource={changes}
               renderItem={(o) => (
                 <List.Item actions={[<span key="type">{o.actionType}</span>]}>
-                  <List.Item.Meta title={o.title} description={o.referencedNodeSingularName} />
+                  <List.Item.Meta
+                    title={o.title}
+                    description={
+                      o.referencedNodeSingularName !== 'none' ? o.referencedNodeSingularName : ''
+                    }
+                  />
                 </List.Item>
               )}
             />
