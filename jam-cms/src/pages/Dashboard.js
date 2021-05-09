@@ -63,7 +63,7 @@ const Dashboard = () => {
           </Space>
         )}
 
-        <Card title="Unpublished changes" style={{ maxHeight: 400, overflow: 'auto' }}>
+        <Card title="Unpublished changes">
           {changes === null ? (
             <Skeleton paragraph={{ rows: 4 }} active />
           ) : changes?.length ? (
@@ -74,7 +74,9 @@ const Dashboard = () => {
                   <List.Item.Meta
                     title={o.title}
                     description={
-                      o.referencedNodeSingularName !== 'none' ? o.referencedNodeSingularName : ''
+                      o.referencedNodeSingularName !== 'none'
+                        ? o.referencedNodeSingularName.toUpperCase()
+                        : ''
                     }
                   />
                 </List.Item>
