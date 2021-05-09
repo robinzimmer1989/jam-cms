@@ -11,7 +11,7 @@ const TextEditor = (props) => {
   const { flex } = props;
 
   const getFlexElement = (block) => {
-    const id = block.id || block.fieldGroupName.split('_').pop().toLowerCase();
+    const id = block?.id || block?.fieldGroupName?.split('_').pop().toLowerCase();
 
     const layouts = {
       text: <Text {...block} />,
