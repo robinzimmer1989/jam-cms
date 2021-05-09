@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Empty } from 'antd';
 import axios from 'axios';
 import { set } from 'lodash';
+import useKeypress from 'react-use-keypress';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
@@ -26,12 +27,13 @@ const PostEditor = (props) => {
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post, sidebar },
+      editorState: { site, post },
     },
     dispatch,
   ] = useStore();
 
   const [query, setQuery] = useState(null);
+  const [sidebarActive, setSidebarActive] = useState(true);
 
   const template = getTemplateByPost(post, fields);
   const Component = template?.component;
@@ -160,6 +162,10 @@ const PostEditor = (props) => {
     };
   }, [postID]);
 
+  useKeypress('Escape', () => {
+    setSidebarActive(!sidebarActive);
+  });
+
   const getPostData = () => {
     // Generate query variable i.e. 'wpPage'
     const nodeType = `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
@@ -203,10 +209,10 @@ const PostEditor = (props) => {
       {postID ? (
         <>
           {isReady ? (
-            <PageWrapper template={!!Component && post?.content}>
+            <PageWrapper template={!!Component && post?.content} sidebarActive={sidebarActive}>
               {!!Component && post?.content ? (
                 <Component
-                  jamCMS={{ sidebar: !!sidebar }}
+                  jamCMS={{ sidebar: sidebarActive }}
                   data={getPostData()}
                   pageContext={{
                     themeOptions: formatFieldsToProps({
@@ -230,12 +236,14 @@ const PostEditor = (props) => {
                 </EmptyContainer>
               )}
 
-              <EditorSidebar
-                className="jam-cms"
-                fields={fields}
-                hasTemplate={!!Component}
-                editable={true}
-              />
+              {sidebarActive && (
+                <EditorSidebar
+                  className="jam-cms"
+                  fields={fields}
+                  hasTemplate={!!Component}
+                  editable={true}
+                />
+              )}
             </PageWrapper>
           ) : (
             <Loader />

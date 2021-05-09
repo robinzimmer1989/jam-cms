@@ -6,16 +6,16 @@ import styled, { css } from 'styled-components';
 import { useStore } from '../store';
 
 const PageWrapper = (props) => {
-  const { template, children } = props;
+  const { sidebarActive, template, children } = props;
 
   const [
     {
-      editorState: { siteHasChanged, postHasChanged, sidebar },
+      editorState: { siteHasChanged, postHasChanged },
     },
   ] = useStore();
 
   return (
-    <Container sidebar={!!sidebar}>
+    <Container sidebar={sidebarActive}>
       {template ? (
         <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
       ) : (

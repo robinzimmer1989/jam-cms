@@ -70,8 +70,6 @@ const PostType = (props) => {
     );
 
     if (result?.id) {
-      dispatch({ type: 'SET_EDITOR_SIDEBAR', payload: 'content' });
-
       // Add post to post type so we can then generate the slug and the route the newly created post
       const nextPostType = produce(postType, (draft) => {
         return set(draft, `posts.${result.id}`, result);

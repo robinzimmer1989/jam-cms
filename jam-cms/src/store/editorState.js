@@ -5,7 +5,6 @@ export const editorState = {
   post: null,
   siteHasChanged: false,
   postHasChanged: false,
-  sidebar: 'content',
 };
 
 export const editorReducer = (state, action) => {
@@ -49,10 +48,6 @@ export const editorReducer = (state, action) => {
       /******************************
        * General Settings
        ******************************/
-      case `SET_EDITOR_SIDEBAR`:
-        draft.sidebar = payload;
-        break;
-
       case `CLEAR_EDITOR`:
         draft.site = null;
         draft.siteHasChanged = false;
