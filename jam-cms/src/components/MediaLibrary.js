@@ -9,6 +9,7 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
+import useKeypress from 'react-use-keypress';
 
 // import app components
 import Img from './GatsbyImage';
@@ -46,6 +47,14 @@ const MediaLibrary = (props) => {
       loadMediaItems(page || 0);
     }
   }, [page]);
+
+  useKeypress('ArrowLeft', () => {
+    activeFileIndex !== 0 && setActiveFile(items[activeFileIndex - 1]);
+  });
+
+  useKeypress('ArrowRight', () => {
+    activeFileIndex !== items.length - 1 && setActiveFile(items[activeFileIndex + 1]);
+  });
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
