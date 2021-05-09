@@ -16,7 +16,8 @@ jamCMS is fully integrated with the new gatsby-source-wordpress plugin!
 
 ### Why jamCMS?
 
-**Client**
+#### Client
+
 There are a lot of reasons why you should use jamCMS. Here are the most important one’s from a client’s perspective.
 
 - Easy to use: Your clients already know how to use it because of the WordPress familiar user interface.
@@ -25,7 +26,7 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - Unbreakable: Clients can’t add plugins or unsupported features to the site and potentially breaking it.
 - Lightning Speed: Content editing is fast and page changes don’t require a reload, thanks to the use of React.
 
-**Developers**
+#### Developers
 
 - Optimized workflow: Define fields, templates and post types in the code and the plugin automatically syncs those with WordPress.
 - Fast Development: Everything is already set up and the developer can focus on what’s really important, the frontend.
@@ -34,22 +35,18 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 
 ## Get Started
 
-### A. Backend
-
-Currently, only WordPress is supported as the CMS.
-
-#### WordPress:
+### WordPress:
 
 **Must use plugins:**
 
 - Advanced Custom Fields PRO (5.9.5)
 - Custom Post Type UI (1.9.1)
-- WP Gatsby (1.0.9)
-- WPGraphQL (1.3.5)
+- WP Gatsby (1.0.10)
+- WPGraphQL (1.3.8)
 - WPGraphQL for Advanced Custom Fields (0.5.2)
 - WPGraphQL JWT Authentication (0.4.1)
 - Yoast SEO (16.2)
-- Add WPGraphQL SEO (4.14.0)
+- WPGraphQL Yoast SEO Addon (4.14.0)
 - jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
 
 **Optional plugins:**
@@ -58,18 +55,21 @@ Currently, only WordPress is supported as the CMS.
 - JAMstack Deployments (1.1.1)
 - Post Types Order (1.9.5.6)
 
-### B. Frontend
+### Gatsby:
 
-#### Gatsby:
-
-The easiest way to get started it using the starter theme (more to come):
+The easiest way to get started it using the tailwindCSS starter theme (more to come):
 https://github.com/robinzimmer1989/jam-cms/tree/master/jam-cms-starter-tailwind
 
-Then create a `.env.development` file in the root directory with the following value (replace the URL with the actual WordPress URL):
+Then create a `.env.development` file in the root directory with the following variables.
 
 ```
 GATSBY_JAM_CMS_URL=https://jam.local/starter-tailwind
+GATSBY_JAM_CMS_API_KEY=test123
 ```
+
+Replace the URL with your actual WordPress URL. You can retrieve the API key by going to the jamCMS settings page in WordPress (/wp-admin/options-general.php?page=jam-cms).
+
+If everything is set up you can run `yarn && gatsby develop`. When you navigate to '/jam-cms' you can login with your WordPress credentials.
 
 ## Templates
 
@@ -382,26 +382,23 @@ The component will convert all internal links to Gatsby links and make sure that
 **ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
-**Chicken/Egg problem with themes:**
-One of the biggest advantages of jamCMS is automated syncing of ACF fields between React code and the WordPress backend. This way you can easily reuse components throughout projects.
-That's why it makes a lot of sense to create a reusable theme where everything is already set up. But here we encounter a chicken-egg problem with WPGraphQL/gatsby-source-wordpress:
-When connecting a new WordPress instance to an existing theme, Gatsby will complain about missing field types in the GraphQL schema because no ACF fields are set up in the backend yet.
-To avoid this problem you need to comment out the GraphQL queries for ACF fields, save a post to sync the template with WordPress and reactive the GraphQL query again. This only needs to happen once and only during the initial set up.
-
 **Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
 You can overcome this issue by simply overwriting the CSS properties in case they screw something up. It’s important to note that the behavior is different in development and build mode (SSR), so make sure you pay attention to style changes in both environments.
-
-**Static pages can’t be fetched:**
-All pages created by Gatsby won’t be editable within jamCMS because it simply doesn’t know about their existence.
 
 **WYSIWYG editor doesn't support images:**
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
 
-1.2.0
+### 1.3.0
+
+- Simplify API (templates and globalOptions to fields)
+- Sync all ACF fields on `gatsby develop`
+- UX improvements for sidebar
+
+### 1.2.0
 
 - Inline menu editor
 - Revisions support
@@ -409,31 +406,31 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - Performance optimization
 - Disallow subscribers in backend
 
-  1.1.0
+### 1.1.0
 
 - Add theme options to sidebar so user can view changes live
 - Add color picker field support
 - Add “Unpublished changes” panel to dashboard
 - Fix Gatsby image issue
 
-  1.0.2
+### 1.0.2
 
 - Fix Yoast SEO integration
 
-  1.0.1
+### 1.0.1
 
 - Remove source maps from build
 
-  1.0.0
+### 1.0.0
 
 - Full integration with gatsby-source-wordpress plugin
 - Taxonomy and archive support
 
-  0.6.0
+### 0.6.0
 
 - Fix logo
 
-  0.5.0
+### 0.5.0
 
 - add WPGraphQL query support
 - switch to WPGraphQL auth plugin
@@ -448,13 +445,13 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - add next and prev arrows to media gallery
 - style tweaks
 
-  0.4.1
+### 0.4.1
 
 - fix pre formatting
 - fix update post function ignore post status
 - add default overrides to starter
 
-  0.4.0
+### 0.4.0
 
 - brand new editor navigation
 - category support
@@ -467,24 +464,24 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - simple profile page
 - dozens of style tweaks
 
-  0.3.6
+### 0.3.6
 
 - fix redirect on slug change
 - add version to footer
 - remove react and react-dom dependencies to avoid mismatch
 - tweak menu builder style
 
-  0.3.5
+### 0.3.5
 
 - fix dependency issues
 
-  0.3.4
+### 0.3.4
 
 - fix font issue in editor
 - Margin fix for pre element in WYSIWYG editor
 - fix slug check when loading page in editor
 
-  0.3.3
+### 0.3.3
 
 - fix collection not updating when saving post
 - fix image modal close behaviour. Now it won’t close the media library module anymore.
@@ -494,15 +491,15 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - rename settings to globalOptions
 - show disabled update button on post load
 
-  0.3.2
+### 0.3.2
 
 - fix compress npm build
 
-  0.3.1
+### 0.3.1
 
 - Fix bug where store didn’t update on media item deletion
 
-  0.3.0
+### 0.3.0
 
 - Replace flexible content and repeater section with drag and drop feature
 - Update all packages to the latest version
@@ -513,11 +510,11 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - Change save/publish/update logic for better UX
 - Fix spacing issues in WYSIWYG editor
 
-  0.2.11
+### 0.2.11
 
 - Fix import bug
 
-  0.2.10
+### 0.2.10
 
 - Add help icon to editor.
 - Disable editor links on content change to avoid accidently navigating away and loss of content. Add notification about it to help icon.
@@ -527,15 +524,15 @@ Because all the content editing happens in a relatively small sidebar, adding im
 - Design tweaks
 - Fix font size in wysiwyg editor
 
-  0.2.9
+### 0.2.9
 
 - Fix issue where page reloaded when changing a site option (i.e. front page)
 
-  0.2.8
+### 0.2.8
 
 - Editor style tweaks (more contrast, wider sidebar)
 - Automatically open accordion when adding repeater or flexible content item
 
-  0.0.1 – 0.2.7
+### 0.0.1 – 0.2.7
 
 - A lot!
