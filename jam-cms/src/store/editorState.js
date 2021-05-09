@@ -5,7 +5,7 @@ export const editorState = {
   post: null,
   siteHasChanged: false,
   postHasChanged: false,
-  sidebar: false,
+  sidebar: 'content',
 };
 
 export const editorReducer = (state, action) => {
