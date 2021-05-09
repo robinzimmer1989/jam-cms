@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
-import { Button, Card, Space } from 'antd';
+import { Button, Card, Space, Form } from 'antd';
 
 // import app components
 import Input from './Input';
@@ -183,38 +183,37 @@ const LoginForm = (props) => {
                 <Success children={data.success} />
               ) : (
                 <Space direction="vertical" size={20}>
-                  <Space direction="vertical">
-                    {(data.form === 'login' || data.form === 'forget') && (
-                      <Input
-                        label={`Email`}
-                        value={data.email}
-                        onChange={handleChange}
-                        onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
-                        name="email"
+                  <Form onFinish={formData?.handleSubmit}>
+                    <Space direction="vertical" size={20}>
+                      {(data.form === 'login' || data.form === 'forget') && (
+                        <Input
+                          label={`Email`}
+                          value={data.email}
+                          onChange={handleChange}
+                          onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
+                          name="email"
+                        />
+                      )}
+                      {(data.form === 'login' || data.form === 'reset') && (
+                        <Input
+                          label={`Password`}
+                          value={data.password}
+                          type="password"
+                          onChange={handleChange}
+                          onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
+                          name="password"
+                        />
+                      )}
+                      {data?.error && <Error children={data.error} />}
+                      <Button
+                        loading={data.loading}
+                        children={`Submit`}
+                        type="primary"
+                        htmlType="submit"
+                        block
                       />
-                    )}
-
-                    {(data.form === 'login' || data.form === 'reset') && (
-                      <Input
-                        label={`Password`}
-                        value={data.password}
-                        type="password"
-                        onChange={handleChange}
-                        onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
-                        name="password"
-                      />
-                    )}
-
-                    {data?.error && <Error children={data.error} />}
-                  </Space>
-
-                  <Button
-                    loading={data.loading}
-                    children={`Submit`}
-                    onClick={formData?.handleSubmit}
-                    type="primary"
-                    block
-                  />
+                    </Space>
+                  </Form>
 
                   <FooterLink
                     onClick={() =>
