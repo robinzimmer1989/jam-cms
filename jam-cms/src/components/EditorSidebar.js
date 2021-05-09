@@ -543,7 +543,6 @@ const EditorSidebar = (props) => {
                     onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
                     children={'Current version'}
                     block
-                    disabled={siteHasChanged || postHasChanged}
                   />
 
                   {post.revisions.map((o) => (
@@ -553,7 +552,6 @@ const EditorSidebar = (props) => {
                       onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
                       children={o.title}
                       block
-                      disabled={siteHasChanged || postHasChanged}
                     />
                   ))}
                 </>
