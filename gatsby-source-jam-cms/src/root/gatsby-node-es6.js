@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
 
-import getThemeSettings from './src/gatsby-node/getThemeSettings';
+import getThemeSettings from './getThemeSettings';
 
 let fieldsPath, templatesPath;
 
