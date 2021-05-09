@@ -222,7 +222,6 @@ const PostEditor = (props) => {
               ) : (
                 <EmptyContainer className="jam-cms">
                   <Empty
-                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                     imageStyle={{
                       height: 120,
                     }}
