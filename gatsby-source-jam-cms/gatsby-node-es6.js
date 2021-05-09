@@ -31,7 +31,7 @@ var fieldsPath, templatesPath;
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref, _ref2) {
-    var store, reporter, fields, source, apiKey, _ref2$sync, sync, fieldsObject, url;
+    var store, reporter, fields, source, apiKey, _ref2$sync, sync, fieldsObject, url, result;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -52,16 +52,25 @@ var onPreInit = /*#__PURE__*/function () {
             fieldsObject = _context.sent;
             // Remove potential trailing slash
             url = source.replace(/\/+$/, ''); // Sync fields with backend
-            // if(sync){
-            // const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-            //   fields: fieldsObject,
-            // });
-            // if (result) {
-            //   reporter.success('Synced ACF fields successfully to the jamCMS WordPress plugin');
-            // }
-            // }
 
-          case 8:
+            if (!(sync && fieldsObject)) {
+              _context.next = 13;
+              break;
+            }
+
+            _context.next = 11;
+            return _axios["default"].post("".concat(url, "/wp-json/jamcms/v1/syncFields?apiKey=").concat(apiKey), {
+              fields: JSON.stringify(fieldsObject["default"])
+            });
+
+          case 11:
+            result = _context.sent;
+
+            if (result.data) {
+              reporter.success(result.data);
+            }
+
+          case 13:
           case "end":
             return _context.stop();
         }

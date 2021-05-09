@@ -19,15 +19,15 @@ export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, s
   const url = source.replace(/\/+$/, '');
 
   // Sync fields with backend
-  // if(sync){
-  // const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-  //   fields: fieldsObject,
-  // });
+  if (sync && fieldsObject) {
+    const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
+      fields: JSON.stringify(fieldsObject.default),
+    });
 
-  // if (result) {
-  //   reporter.success('Synced ACF fields successfully to the jamCMS WordPress plugin');
-  // }
-  // }
+    if (result.data) {
+      reporter.success(result.data);
+    }
+  }
 };
 
 export const onCreateWebpackConfig = ({ actions, plugins }) => {
