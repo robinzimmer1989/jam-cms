@@ -21,7 +21,7 @@ import { useStore } from '../store';
 import { postActions } from '../actions';
 
 const PostEditor = (props) => {
-  const { fields, defaultComponent } = props;
+  const { defaultComponent } = props;
 
   const [
     {
@@ -31,6 +31,8 @@ const PostEditor = (props) => {
     },
     dispatch,
   ] = useStore();
+
+  const { fields } = config;
 
   const [query, setQuery] = useState(null);
   const [sidebarActive, setSidebarActive] = useState(true);
@@ -256,9 +258,7 @@ const PostEditor = (props) => {
         )}
       </PageWrapper>
 
-      {sidebarActive && (
-        <EditorSidebar className="jam-cms" fields={fields} editable={!!Component} />
-      )}
+      {sidebarActive && <EditorSidebar className="jam-cms" editable={!!Component} />}
     </>
   );
 };
