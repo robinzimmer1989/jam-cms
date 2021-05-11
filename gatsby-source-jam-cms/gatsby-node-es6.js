@@ -39,38 +39,57 @@ var onPreInit = /*#__PURE__*/function () {
           case 0:
             store = _ref.store, reporter = _ref.reporter;
             fields = _ref2.fields, source = _ref2.source, apiKey = _ref2.apiKey, _ref2$sync = _ref2.sync, sync = _ref2$sync === void 0 ? true : _ref2$sync;
+
+            if (apiKey) {
+              _context.next = 5;
+              break;
+            }
+
+            reporter.error('jamCMS: Api key is required');
+            return _context.abrupt("return");
+
+          case 5:
+            if (source) {
+              _context.next = 8;
+              break;
+            }
+
+            reporter.error('jamCMS: Source URL is required');
+            return _context.abrupt("return");
+
+          case 8:
             // Use default path if no fields variable is provided
             fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields");
             templatesPath = _path["default"].join(store.getState().program.directory, "src/templates"); // Import field object
 
-            _context.next = 6;
+            _context.next = 12;
             return Promise.resolve("".concat(fieldsPath)).then(function (s) {
               return (0, _interopRequireWildcard2["default"])(require(s));
             });
 
-          case 6:
+          case 12:
             fieldsObject = _context.sent;
             // Remove potential trailing slash
             url = source.replace(/\/+$/, ''); // Sync fields with backend
 
             if (!(sync && fieldsObject)) {
-              _context.next = 13;
+              _context.next = 19;
               break;
             }
 
-            _context.next = 11;
+            _context.next = 17;
             return _axios["default"].post("".concat(url, "/wp-json/jamcms/v1/syncFields?apiKey=").concat(apiKey), {
               fields: JSON.stringify(fieldsObject["default"])
             });
 
-          case 11:
+          case 17:
             result = _context.sent;
 
             if (result.data) {
               reporter.success(result.data);
             }
 
-          case 13:
+          case 19:
           case "end":
             return _context.stop();
         }

@@ -7,6 +7,16 @@ import getThemeSettings from './getThemeSettings';
 let fieldsPath, templatesPath;
 
 export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, sync = true }) => {
+  if (!apiKey) {
+    reporter.error('jamCMS: Api key is required');
+    return;
+  }
+
+  if (!source) {
+    reporter.error('jamCMS: Source URL is required');
+    return;
+  }
+
   // Use default path if no fields variable is provided
   fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
 

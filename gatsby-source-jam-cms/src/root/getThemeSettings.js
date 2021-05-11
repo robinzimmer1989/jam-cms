@@ -3,13 +3,7 @@ const axios = require('axios');
 module.exports = async ({ reporter }, pluginOptions) => {
   const { source, apiKey } = pluginOptions;
 
-  if (!source) {
-    reporter.error('jamCMS: Source url is required');
-    return;
-  }
-
-  if (!apiKey) {
-    reporter.error('jamCMS: Api key is required');
+  if (!source || !apiKey) {
     return;
   }
 

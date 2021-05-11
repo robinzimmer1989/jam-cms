@@ -19,54 +19,44 @@ module.exports = /*#__PURE__*/function () {
             reporter = _ref.reporter;
             source = pluginOptions.source, apiKey = pluginOptions.apiKey;
 
-            if (source) {
-              _context.next = 5;
+            if (!(!source || !apiKey)) {
+              _context.next = 4;
               break;
             }
 
-            reporter.error('jamCMS: Source url is required');
             return _context.abrupt("return");
 
-          case 5:
-            if (apiKey) {
-              _context.next = 8;
-              break;
-            }
-
-            reporter.error('jamCMS: Api key is required');
-            return _context.abrupt("return");
-
-          case 8:
+          case 4:
             // Remove trailing slash
             url = source.replace(/\/+$/, '');
-            _context.prev = 9;
-            _context.next = 12;
+            _context.prev = 5;
+            _context.next = 8;
             return axios.get("".concat(url, "/wp-json/jamcms/v1/getBuildSite?apiKey=").concat(apiKey));
 
-          case 12:
+          case 8:
             response = _context.sent;
-            _context.next = 15;
+            _context.next = 11;
             return response;
 
-          case 15:
+          case 11:
             _yield$response = _context.sent;
             themeOptions = _yield$response.data.themeOptions;
             return _context.abrupt("return", themeOptions);
 
-          case 20:
-            _context.prev = 20;
-            _context.t0 = _context["catch"](9);
+          case 16:
+            _context.prev = 16;
+            _context.t0 = _context["catch"](5);
 
             if (_context.t0.response && _context.t0.response.data.message) {
               reporter.error(_context.t0.response.data.message);
             }
 
-          case 23:
+          case 19:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[9, 20]]);
+    }, _callee, null, [[5, 16]]);
   }));
 
   return function (_x, _x2) {
