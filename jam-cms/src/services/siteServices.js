@@ -85,6 +85,16 @@ export const deploySite = async ({ id }, dispatch, config) => {
   return result;
 };
 
+export const syncFields = async ({ fields }, dispatch, config) => {
+  let result = await db('syncFields', { fields: JSON.stringify(fields) }, dispatch, config);
+
+  if (result) {
+    result = transformSite(result);
+  }
+
+  return result;
+};
+
 const transformSite = (site) => {
   const nextSite = produce(site, (draft) => {
     // Convert posts and then post types to object structure
