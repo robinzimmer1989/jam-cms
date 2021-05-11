@@ -8,7 +8,7 @@ const Template = (props) => {
   const {
     pageContext: { themeOptions },
     data: {
-      wpPage: { seo },
+      wpTeam: { seo },
     },
   } = props;
 
@@ -17,7 +17,7 @@ const Template = (props) => {
 
 export const Query = graphql`
   query TeamDefault($id: String!) {
-    wpPage(id: { eq: $id }) {
+    wpTeam(id: { eq: $id }) {
       id
       databaseId
       title
