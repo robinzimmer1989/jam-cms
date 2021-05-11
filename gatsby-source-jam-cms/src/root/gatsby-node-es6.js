@@ -30,12 +30,16 @@ export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, s
 
   // Sync fields with backend
   if (sync && fieldsObject) {
-    const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-      fields: JSON.stringify(fieldsObject.default),
-    });
+    try {
+      const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
+        fields: JSON.stringify(fieldsObject.default),
+      });
 
-    if (result.data) {
-      reporter.success(result.data);
+      if (result.data) {
+        reporter.success(result.data);
+      }
+    } catch (err) {
+      reporter.error(err?.response?.data?.message);
     }
   }
 };

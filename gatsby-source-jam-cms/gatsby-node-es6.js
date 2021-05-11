@@ -31,7 +31,7 @@ var fieldsPath, templatesPath;
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref, _ref2) {
-    var store, reporter, fields, source, apiKey, _ref2$sync, sync, fieldsObject, url, result;
+    var store, reporter, fields, source, apiKey, _ref2$sync, sync, fieldsObject, url, result, _err$response, _err$response$data;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -73,28 +73,37 @@ var onPreInit = /*#__PURE__*/function () {
             url = source.replace(/\/+$/, ''); // Sync fields with backend
 
             if (!(sync && fieldsObject)) {
-              _context.next = 19;
+              _context.next = 25;
               break;
             }
 
-            _context.next = 17;
+            _context.prev = 15;
+            _context.next = 18;
             return _axios["default"].post("".concat(url, "/wp-json/jamcms/v1/syncFields?apiKey=").concat(apiKey), {
               fields: JSON.stringify(fieldsObject["default"])
             });
 
-          case 17:
+          case 18:
             result = _context.sent;
 
             if (result.data) {
               reporter.success(result.data);
             }
 
-          case 19:
+            _context.next = 25;
+            break;
+
+          case 22:
+            _context.prev = 22;
+            _context.t0 = _context["catch"](15);
+            reporter.error(_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : (_err$response$data = _err$response.data) === null || _err$response$data === void 0 ? void 0 : _err$response$data.message);
+
+          case 25:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee);
+    }, _callee, null, [[15, 22]]);
   }));
 
   return function onPreInit(_x, _x2) {
