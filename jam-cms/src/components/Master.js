@@ -8,10 +8,8 @@ import Profile from '../pages/Profile';
 import PostEditor from '../pages/PostEditor';
 import Dashboard from '../pages/Dashboard';
 import Media from '../pages/Media';
-import PostTypes from '../pages/PostTypes';
 import PostType from '../pages/PostType';
 import GeneralSettings from '../pages/GeneralSettings';
-import Taxonomies from '../pages/Taxonomies';
 import Taxonomy from '../pages/Taxonomy';
 import Users from '../pages/Users';
 
@@ -29,14 +27,12 @@ import {
   ROUTE_MEDIA,
   ROUTE_POST_TYPE,
   ROUTE_SETTINGS_GENERAL,
-  ROUTE_SETTINGS_POST_TYPES,
-  ROUTE_SETTINGS_TAXONOMIES,
   ROUTE_USERS,
   ROUTE_TAXONOMY,
 } from '../routes';
 
 const Master = (props) => {
-  const { fields, defaultComponent } = props;
+  const { defaultComponent } = props;
 
   const [
     {
@@ -119,20 +115,6 @@ const Master = (props) => {
           />
         )}
 
-        {authUser?.capabilities?.manage_options && (
-          <PrivateRoute
-            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_POST_TYPES}`}
-            component={PostTypes}
-          />
-        )}
-
-        {authUser?.capabilities?.manage_options && (
-          <PrivateRoute
-            path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_TAXONOMIES}`}
-            component={Taxonomies}
-          />
-        )}
-
         {authUser?.capabilities?.list_users && (
           <PrivateRoute
             path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`}
@@ -140,12 +122,7 @@ const Master = (props) => {
           />
         )}
 
-        <PrivateRoute
-          path={'*'}
-          component={PostEditor}
-          fields={fields}
-          defaultComponent={defaultComponent}
-        />
+        <PrivateRoute path={'*'} component={PostEditor} defaultComponent={defaultComponent} />
       </Router>
 
       {dialog.open && (

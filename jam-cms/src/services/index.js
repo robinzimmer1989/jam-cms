@@ -5,7 +5,6 @@ import * as formServices from './formServices';
 import * as mediaServices from './mediaServices';
 import * as postServices from './postServices';
 import * as siteServices from './siteServices';
-import * as taxonomyServices from './taxonomyServices';
 import * as termServices from './termServices';
 import * as actionMonitorServices from './actionMonitorServices';
 
@@ -20,7 +19,6 @@ export {
   mediaServices,
   postServices,
   siteServices,
-  taxonomyServices,
   termServices,
   actionMonitorServices,
 };
