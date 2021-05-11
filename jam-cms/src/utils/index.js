@@ -17,6 +17,7 @@ import getStorageKey from './getStorageKey';
 import validateEmail from './validateEmail';
 import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
+import formatFields from './formatFields';
 
 export {
   createDataTree,
@@ -38,4 +39,5 @@ export {
   validateEmail,
   getParameter,
   getTemplateByPost,
+  formatFields,
 };
