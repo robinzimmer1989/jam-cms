@@ -382,6 +382,8 @@ The component will convert all internal links to Gatsby links and make sure that
 **ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
+**Permalink settings (/wp-admin/options-permalink.php) must be set to 'Post name'**
+
 **Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
@@ -391,6 +393,11 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
+
+### 1.4.0
+
+- Simplify API (remove duplicated id field)
+- Sync templates and taxonomies on `gatsby develop`
 
 ### 1.3.0
 
