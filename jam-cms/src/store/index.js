@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+import { formatFields } from '../utils';
+
 import { configReducer } from './configState';
-import { globalReducer } from './globalState';
 import { authState, authReducer } from './authState';
 import { appState, appReducer } from './appState';
 import { editorState, editorReducer } from './editorState';
@@ -9,8 +10,8 @@ import { cmsState, sitesReducer } from './cmsState';
 
 export const StateContext = createContext({});
 
-export const StoreProvider = ({ children, source, settings, siteID }) => {
-  const config = { source, settings, siteID };
+export const StoreProvider = ({ children, source, settings, siteID, fields }) => {
+  const config = { source, settings, siteID, fields: formatFields(fields) };
 
   const initialState = {
     config,
