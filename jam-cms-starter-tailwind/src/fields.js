@@ -2,26 +2,43 @@
 import pageDefault from './templates/postTypes/page/default/config';
 import postDefault from './templates/postTypes/post/default/config';
 import postArchive from './templates/postTypes/post/archive/config';
+import teamDefault from './templates/postTypes/team/default/config';
 
 // import theme options
 import header from './components/header/config';
 import footer from './components/footer/config';
 
 const fields = {
-  postTypes: {
-    page: {
-      default: pageDefault,
+  postTypes: [
+    {
+      id: 'page',
+      title: 'Page',
+      templates: [pageDefault],
     },
-    post: {
-      default: postDefault,
-      archive: postArchive,
+    {
+      id: 'post',
+      title: 'News',
+      templates: [postDefault, postArchive],
     },
-  },
-  taxonomies: {
-    category: {
-      single: true,
+    {
+      id: 'team',
+      title: 'Team',
+      options: {
+        rewrite_slug: 'team-member', // CPT only
+      },
+      templates: [teamDefault],
     },
-  },
+  ],
+  taxonomies: [
+    {
+      id: 'testing',
+      title: 'Category 2',
+      postTypes: ['post'],
+      options: {
+        rewrite_slug: 'this-is-a-test', // CPT only
+      },
+    },
+  ],
   themeOptions: [
     header,
     footer,
