@@ -24,6 +24,7 @@ const CmsLayout = (props) => {
 
   const [
     {
+      config: { fields },
       authState: { authUser },
       cmsState: { siteID, sites },
     },
@@ -32,7 +33,7 @@ const CmsLayout = (props) => {
   return (
     <>
       <Helmet>
-        <title>{pageTitle} - jamCMS</title>
+        <title>{pageTitle || 'NA'} - jamCMS</title>
       </Helmet>
 
       <Layout className="jam-cms">
@@ -71,14 +72,15 @@ const CmsLayout = (props) => {
                 title="Collections"
                 popupOffset={[1, 0]}
               >
-                {sites?.[siteID]?.postTypes &&
-                  sites?.[siteID]?.taxonomies &&
-                  Object.values(sites[siteID].postTypes).map((o, i) => {
+                {fields?.postTypes &&
+                  Object.values(fields.postTypes).map((o, i) => {
+                    // Render taxonomies per post type (they can be assigned to multiple post types)
+                    // We grab them from the fields object
                     const postTypeTaxonomies = [];
-
-                    Object.values(sites[siteID].taxonomies).map(
-                      (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
-                    );
+                    fields?.taxonomies &&
+                      Object.values(fields.taxonomies).map(
+                        (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
+                      );
 
                     return (
                       <Fragment key={o.title}>
@@ -87,8 +89,6 @@ const CmsLayout = (props) => {
                             {o.title}
                           </Link>
                         </Menu.Item>
-
-                        <Menu.Divider />
 
                         {postTypeTaxonomies &&
                           postTypeTaxonomies.map((p) => {
@@ -118,31 +118,10 @@ const CmsLayout = (props) => {
                 </Menu.Item>
               )}
 
-              {(authUser?.capabilities?.manage_options || authUser?.capabilities?.list_users) && (
-                <Menu.SubMenu
-                  key={'settings-sub'}
-                  icon={<SettingOutlined />}
-                  title="Settings"
-                  popupOffset={[1, 0]}
-                >
-                  {authUser?.capabilities?.manage_options && (
-                    <Menu.Item key="General">
-                      <Link to={getRoute(`settings-general`, { siteID })}>General</Link>
-                    </Menu.Item>
-                  )}
-
-                  {authUser?.capabilities?.manage_options && (
-                    <Menu.Item key="Post Types">
-                      <Link to={getRoute(`settings-post-types`, { siteID })}>Post Types</Link>
-                    </Menu.Item>
-                  )}
-
-                  {authUser?.capabilities?.manage_options && (
-                    <Menu.Item key="Taxonomies">
-                      <Link to={getRoute(`settings-taxonomies`, { siteID })}>Taxonomies</Link>
-                    </Menu.Item>
-                  )}
-                </Menu.SubMenu>
+              {authUser?.capabilities?.manage_options && (
+                <Menu.Item key="Settings" icon={<SettingOutlined />}>
+                  <Link to={getRoute(`settings-general`, { siteID })}>Settings</Link>
+                </Menu.Item>
               )}
             </Menu>
           </div>
