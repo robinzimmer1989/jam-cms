@@ -19,11 +19,14 @@ try {
   fields = preferDefault(require(GATSBY_FIELDS_PATH)); // loop through post types and templates and add React component to fields object
 
   if (fields && fields.postTypes) {
-    for (var postType in fields.postTypes) {
-      for (var template in fields.postTypes[postType]) {
-        // eslint-disable-next-line
-        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType, "/").concat(template, "/").concat(template, ".js")));
-        fields.postTypes[postType][template].component = component;
+    for (var postTypeIndex in fields.postTypes) {
+      var postType = fields.postTypes[postTypeIndex];
+
+      for (var templateIndex in fields.postTypes[postTypeIndex].templates) {
+        var template = fields.postTypes[postTypeIndex].templates[templateIndex]; // eslint-disable-next-line
+
+        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType.id, "/").concat(template.id, "/").concat(template.id, ".js")));
+        fields.postTypes[postTypeIndex].templates[templateIndex].component = component;
       }
     }
   }

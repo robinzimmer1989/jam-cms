@@ -22,7 +22,7 @@ import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils'
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { fields, editable, ...rest } = props;
+  const { editable, ...rest } = props;
 
   const [
     {
@@ -34,11 +34,15 @@ const EditorSidebar = (props) => {
     dispatch,
   ] = useStore();
 
+  const { fields } = config;
+
   const [loading, setLoading] = useState('');
   const [sidebar, setSidebar] = useState('content');
 
   const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
-  const postTypeTemplates = fields?.postTypes?.[post?.postTypeID];
+
+  const postTypeTemplates = fields?.postTypes?.[post?.postTypeID]?.templates;
+
   const postTypeTemplatesArray = postTypeTemplates
     ? Object.values(postTypeTemplates).filter((o) => o.id !== 'archive')
     : [];
@@ -428,28 +432,32 @@ const EditorSidebar = (props) => {
               )}
 
               {post?.taxonomies &&
-                Object.keys(post.taxonomies).map((k) => {
-                  const o = sites[siteID].taxonomies[k];
+                Object.keys(post.taxonomies)
+                  .filter((k) => !!config?.fields?.taxonomies?.[k])
+                  .map((k) => {
+                    const o = sites[siteID].taxonomies[k];
 
-                  return (
-                    o && (
-                      <Select
-                        key={k}
-                        onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
-                        allowClear
-                        placeholder="Select category"
-                        mode="multiple"
-                        label={o.title}
-                        defaultValue={post.taxonomies[k]}
-                      >
-                        {o.terms &&
-                          o.terms.map((p) => {
-                            return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
-                          })}
-                      </Select>
-                    )
-                  );
-                })}
+                    return (
+                      o && (
+                        <Select
+                          key={k}
+                          onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
+                          allowClear
+                          placeholder="Select category"
+                          mode="multiple"
+                          label={o.title}
+                          defaultValue={post.taxonomies[k]}
+                        >
+                          {o.terms &&
+                            o.terms.map((p) => {
+                              return (
+                                <AntSelect.Option key={p.id} value={p.id} children={p.title} />
+                              );
+                            })}
+                        </Select>
+                      )
+                    );
+                  })}
 
               {post?.postTypeID !== 'page' && (
                 <Space direction="vertical" size={2}>
@@ -567,8 +575,8 @@ const EditorSidebar = (props) => {
         {(postHasChanged || siteHasChanged) && (
           <InfoMessage>
             <Typography.Text type="secondary">
-              All links have been deactivated to make sure nothing gets lost. Save the post or{' '}
-              <span onClick={handleDiscardRequest}>reset</span> your changes.
+              All links have been temporarily disabled to make sure nothing gets lost. Save the post
+              or <span onClick={handleDiscardRequest}>discard</span> your changes.
             </Typography.Text>
           </InfoMessage>
         )}

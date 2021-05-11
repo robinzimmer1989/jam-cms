@@ -11,14 +11,18 @@ try {
 
   // loop through post types and templates and add React component to fields object
   if (fields && fields.postTypes) {
-    for (const postType in fields.postTypes) {
-      for (const template in fields.postTypes[postType]) {
+    for (const postTypeIndex in fields.postTypes) {
+      const postType = fields.postTypes[postTypeIndex];
+
+      for (const templateIndex in fields.postTypes[postTypeIndex].templates) {
+        const template = fields.postTypes[postTypeIndex].templates[templateIndex];
+
         // eslint-disable-next-line
         const component = preferDefault(
-          require(`${GATSBY_TEMPLATES_PATH}/postTypes/${postType}/${template}/${template}.js`)
+          require(`${GATSBY_TEMPLATES_PATH}/postTypes/${postType.id}/${template.id}/${template.id}.js`)
         );
 
-        fields.postTypes[postType][template].component = component;
+        fields.postTypes[postTypeIndex].templates[templateIndex].component = component;
       }
     }
   }
