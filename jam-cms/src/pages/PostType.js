@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { Button, PageHeader, Tabs, Space, Select, Input, Menu, Dropdown, message } from 'antd';
+import {
+  Button,
+  PageHeader,
+  Tabs,
+  Space,
+  Select,
+  Input,
+  Menu,
+  Dropdown,
+  message,
+  Alert,
+} from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -11,7 +22,7 @@ import PostForm from '../components/PostForm';
 import ListItem from '../components/ListItem';
 import Tag from '../components/Tag';
 
-import { postActions } from '../actions';
+import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
 import { createDataTree, generateSlug } from '../utils';
 import { colors } from '../theme';
@@ -30,6 +41,7 @@ const PostType = (props) => {
   const [filter, setFilter] = useState('all');
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
@@ -61,6 +73,12 @@ const PostType = (props) => {
   const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
     o?.postTypes.includes(postTypeID)
   );
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await siteActions.syncFields({ fields: config.fields }, dispatch, config);
+    setIsSyncing(false);
+  };
 
   const handleAddPost = async ({ title, parentID }) => {
     const result = await postActions.addPost(
@@ -150,6 +168,7 @@ const PostType = (props) => {
     <Button
       key="add"
       children={`Add`}
+      disabled={!postType}
       onClick={() =>
         dispatch({
           type: 'SET_DIALOG',
@@ -261,8 +280,22 @@ const PostType = (props) => {
   };
 
   return (
-    <CmsLayout pageTitle={postType?.title}>
+    <CmsLayout pageTitle={config?.fields?.postTypes?.[postTypeID]?.title || postType?.title}>
       <PageHeader title={filterItems} extra={extra} />
+
+      {!postType && (
+        <Alert
+          message="Unknown post type"
+          description="Restart the development process or sync new data now"
+          type="info"
+          showIcon
+          action={
+            <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+              Sync to WordPress
+            </Button>
+          }
+        />
+      )}
 
       {visiblePosts && (
         <Space direction="vertical" size={8}>

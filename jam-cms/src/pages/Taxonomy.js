@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, PageHeader, Popconfirm, Space } from 'antd';
+import React, { useState } from 'react';
+import { Button, PageHeader, Popconfirm, Space, Alert } from 'antd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -7,7 +7,7 @@ import TermForm from '../components/TermForm';
 import ListItem from '../components/ListItem';
 
 import { createDataTree } from '../utils';
-import { termActions } from '../actions';
+import { termActions, siteActions } from '../actions';
 import { useStore } from '../store';
 
 const Taxonomy = (props) => {
@@ -21,9 +21,17 @@ const Taxonomy = (props) => {
     dispatch,
   ] = useStore();
 
+  const [isSyncing, setIsSyncing] = useState(false);
+
   const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
 
   const terms = taxonomy?.terms ? createDataTree(taxonomy.terms) : [];
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await siteActions.syncFields({ fields: config.fields }, dispatch, config);
+    setIsSyncing(false);
+  };
 
   const handleUpsert = async ({ id, title, slug, parentID, description }) => {
     if (id) {
@@ -82,10 +90,29 @@ const Taxonomy = (props) => {
   };
 
   return (
-    <CmsLayout pageTitle={taxonomy?.title}>
+    <CmsLayout pageTitle={config?.fields?.taxonomies?.[taxonomyID]?.title || taxonomy?.title}>
       <PageHeader>
-        <Button children={`Add`} onClick={() => handleOpenDialog()} type="primary" />
+        <Button
+          children={`Add`}
+          onClick={() => handleOpenDialog()}
+          type="primary"
+          disabled={!taxonomy}
+        />
       </PageHeader>
+
+      {!taxonomy && (
+        <Alert
+          message="Unknown taxonomy"
+          description="Restart the development process or sync new data now"
+          type="info"
+          showIcon
+          action={
+            <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+              Sync to WordPress
+            </Button>
+          }
+        />
+      )}
 
       <Space direction="vertical" size={8}>
         {terms && terms.map((item) => renderTerm(item, 0))}
