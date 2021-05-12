@@ -130,11 +130,11 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
 
           if (isArchive) {
             templatePath = path.resolve(
-              `./src/templates/postTypes/${archivePostType}/archive/archive.js`
+              `./src/templates/postTypes/${archivePostType}/archive/archive`
             );
           } else {
             templatePath = path.resolve(
-              `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}.js`
+              `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}`
             );
           }
 
@@ -237,7 +237,7 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
       await Promise.all(
         data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
           const templatePath = path.resolve(
-            `./src/templates/taxonomies/${graphqlSingleName}/single.js`
+            `./src/templates/taxonomies/${graphqlSingleName}/single`
           );
 
           if (fs.existsSync(templatePath)) {

@@ -25,7 +25,7 @@ try {
       for (var templateIndex in fields.postTypes[postTypeIndex].templates) {
         var template = fields.postTypes[postTypeIndex].templates[templateIndex]; // eslint-disable-next-line
 
-        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType.id, "/").concat(template.id, "/").concat(template.id, ".js")));
+        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType.id, "/").concat(template.id, "/").concat(template.id)));
         fields.postTypes[postTypeIndex].templates[templateIndex].component = component;
       }
     }

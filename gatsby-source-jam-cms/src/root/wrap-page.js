@@ -19,7 +19,7 @@ try {
 
         // eslint-disable-next-line
         const component = preferDefault(
-          require(`${GATSBY_TEMPLATES_PATH}/postTypes/${postType.id}/${template.id}/${template.id}.js`)
+          require(`${GATSBY_TEMPLATES_PATH}/postTypes/${postType.id}/${template.id}/${template.id}`)
         );
 
         fields.postTypes[postTypeIndex].templates[templateIndex].component = component;

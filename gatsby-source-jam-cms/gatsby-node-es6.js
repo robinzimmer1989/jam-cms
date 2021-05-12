@@ -244,9 +244,9 @@ var createPages = /*#__PURE__*/function () {
                                     archivePostType = templateName.replace('Archive ', '').toLowerCase();
 
                                     if (isArchive) {
-                                      templatePath = _path["default"].resolve("./src/templates/postTypes/".concat(archivePostType, "/archive/archive.js"));
+                                      templatePath = _path["default"].resolve("./src/templates/postTypes/".concat(archivePostType, "/archive/archive"));
                                     } else {
-                                      templatePath = _path["default"].resolve("./src/templates/postTypes/".concat(postType, "/").concat(templateName.toLowerCase(), "/").concat(templateName.toLowerCase(), ".js"));
+                                      templatePath = _path["default"].resolve("./src/templates/postTypes/".concat(postType, "/").concat(templateName.toLowerCase(), "/").concat(templateName.toLowerCase()));
                                     }
 
                                     if (_fs["default"].existsSync(templatePath)) {
@@ -379,7 +379,7 @@ var createPages = /*#__PURE__*/function () {
                             while (1) {
                               switch (_context4.prev = _context4.next) {
                                 case 0:
-                                  templatePath = _path["default"].resolve("./src/templates/taxonomies/".concat(graphqlSingleName, "/single.js"));
+                                  templatePath = _path["default"].resolve("./src/templates/taxonomies/".concat(graphqlSingleName, "/single"));
 
                                   if (_fs["default"].existsSync(templatePath)) {
                                     uri = node.uri, slug = node.slug, id = node.id;
