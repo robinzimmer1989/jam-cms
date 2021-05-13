@@ -357,7 +357,9 @@ const EditorSidebar = (props) => {
           <Tabs.TabPane key={'content'} tab={'Content'} disabled={!editable} />
           <Tabs.TabPane key={'settings'} tab={'Settings'} disabled={!editable} />
           <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable} />
-          <Tabs.TabPane key={'revisions'} tab={'Revisions'} disabled={!editable} />
+          {post?.revisionsEnabled && (
+            <Tabs.TabPane key={'revisions'} tab={'Revisions'} disabled={!editable} />
+          )}
           {authUser?.capabilities?.edit_theme_options &&
             fields?.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
               <Tabs.TabPane key={'theme'} tab={'Theme'} disabled={!editable} />
@@ -541,7 +543,7 @@ const EditorSidebar = (props) => {
           </Content>
         )}
 
-        {sidebar === 'revisions' && (
+        {sidebar === 'revisions' && post?.revisionsEnabled && (
           <Content>
             <Space direction="vertical">
               {post?.revisions?.length > 0 && (
