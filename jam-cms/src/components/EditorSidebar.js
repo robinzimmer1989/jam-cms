@@ -292,7 +292,7 @@ const EditorSidebar = (props) => {
         <Row justify="space-between">
           <Space>
             <Button
-              icon={<BackIcon />}
+              children="Back"
               size="small"
               disabled={postHasChanged || siteHasChanged}
               onClick={() =>
