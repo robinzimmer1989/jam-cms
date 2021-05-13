@@ -232,6 +232,7 @@ const PostType = (props) => {
           status={badges}
           image={o.featuredImage}
           showImage={postTypeID !== 'page'}
+          link={slug}
         />
 
         {o.childNodes.map((p) => renderPost(p, level + 1))}
