@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import produce from 'immer';
 import { Space, Select as AntSelect, Checkbox, Tabs, Button, Typography, message, Row } from 'antd';
-import { PlusOutlined as AddIcon, ArrowLeftOutlined as BackIcon } from '@ant-design/icons';
+import { PlusOutlined as AddIcon } from '@ant-design/icons';
 import { set } from 'lodash';
 
 // import app components
@@ -38,27 +38,6 @@ const EditorSidebar = (props) => {
 
   const [loading, setLoading] = useState('');
   const [sidebar, setSidebar] = useState('content');
-
-  const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
-
-  const postTypeTemplates = fields?.postTypes?.[post?.postTypeID]?.templates;
-
-  const postTypeTemplatesArray = postTypeTemplates
-    ? Object.values(postTypeTemplates).filter((o) => o.id !== 'archive')
-    : [];
-
-  // Get all templates with id 'archive'
-  const archiveTemplatesArray = useMemo(() => {
-    const array = [];
-
-    if (post?.postTypeID === 'page' && fields?.postTypes) {
-      Object.values(fields?.postTypes).map((o) =>
-        Object.values(o).map((p) => p.id === 'archive' && array.push(p))
-      );
-    }
-
-    return array;
-  }, [post?.postTypeID]);
 
   const handleChangePost = (name, value) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
@@ -222,7 +201,24 @@ const EditorSidebar = (props) => {
     });
   };
 
-  const getContentFields = () => {
+  const handleAddPost = async ({ postTypeID, title, parentID }) => {
+    const result = await postActions.addPost(
+      { siteID, postTypeID, status: 'draft', title, parentID },
+      dispatch,
+      config
+    );
+
+    if (result?.id) {
+      // Add post to post type so we can then generate the slug and the route the newly created post
+      const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
+        return set(draft, `posts.${result.id}`, result);
+      });
+      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
+      navigate(`/${slug}`);
+    }
+  };
+
+  const renderContent = () => {
     const template = getTemplateByPost(post, fields);
 
     // TODO: Very similar setup to utils function 'formatFieldsToProps'.
@@ -248,10 +244,231 @@ const EditorSidebar = (props) => {
         })
       : [];
 
-    return formattedFields;
+    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
   };
 
-  const getThemeFields = () => {
+  const renderSettings = () => {
+    const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
+
+    const postTypeTemplates = fields?.postTypes?.[post?.postTypeID]?.templates;
+
+    const postTypeTemplatesArray = postTypeTemplates
+      ? Object.values(postTypeTemplates).filter((o) => o.id !== 'archive')
+      : [];
+
+    // Get all templates with id 'archive'
+    const archiveTemplatesArray = [];
+
+    if (post?.postTypeID === 'page' && fields?.postTypes) {
+      Object.values(fields?.postTypes).map(
+        (o) =>
+          o?.templates &&
+          Object.values(o.templates).map((p) => p.id === 'archive' && archiveTemplatesArray.push(p))
+      );
+    }
+
+    return (
+      <Content>
+        <Space direction="vertical" size={20}>
+          <Input
+            value={post?.title || ''}
+            onChange={(e) => handleChangePost('title', e.target.value)}
+            label={'Title'}
+          />
+
+          <Input
+            value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+            onChange={(e) => handleChangePost('slug', e.target.value)}
+            label={'Slug'}
+            disabled={post?.id === site?.frontPage}
+          />
+
+          {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
+            <Select
+              value={post?.template}
+              onChange={(value) => handleChangePost('template', value)}
+              label={'Template'}
+            >
+              {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
+                <AntSelect.OptGroup label={'Single'}>
+                  {postTypeTemplatesArray.map((o) => (
+                    <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
+                  ))}
+                </AntSelect.OptGroup>
+              )}
+
+              {archiveTemplatesArray.length > 0 && (
+                <AntSelect.OptGroup label={'Archive'}>
+                  {archiveTemplatesArray.map((o) => {
+                    const id = `archive-${o.postTypeID}`;
+
+                    return <AntSelect.Option key={id} value={id} children={o.label} />;
+                  })}
+                </AntSelect.OptGroup>
+              )}
+            </Select>
+          )}
+
+          <Select
+            value={post?.status || ''}
+            onChange={(value) => handleChangePost('status', value)}
+            label={'Status'}
+          >
+            <AntSelect.Option value={'publish'} children={'Publish'} />
+            <AntSelect.Option value={'draft'} children={'Draft'} />
+            <AntSelect.Option value={'trash'} children={'Trash'} />
+          </Select>
+
+          {post?.postTypeID === 'page' && (
+            <PostTreeSelect
+              label="Parent"
+              items={Object.values(postType.posts).filter((o) => o.id !== post.id)}
+              value={post?.parentID}
+              onChange={(value) => handleChangePost('parentID', value)}
+            />
+          )}
+
+          {post?.taxonomies &&
+            Object.keys(post.taxonomies)
+              .filter((k) => !!config?.fields?.taxonomies?.[k])
+              .map((k) => {
+                const o = sites[siteID].taxonomies[k];
+
+                return (
+                  o && (
+                    <Select
+                      key={k}
+                      onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
+                      allowClear
+                      placeholder="Select category"
+                      mode="multiple"
+                      label={o.title}
+                      defaultValue={post.taxonomies[k]}
+                    >
+                      {o.terms &&
+                        o.terms.map((p) => {
+                          return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
+                        })}
+                    </Select>
+                  )
+                );
+              })}
+
+          {post?.postTypeID !== 'page' && (
+            <Space direction="vertical" size={2}>
+              <Caption children="Featured Image" />
+              <FilePicker
+                value={post?.featuredImage}
+                onRemove={() => handleSelectImage('featuredImage', null)}
+                onClick={() =>
+                  dispatch({
+                    type: `SET_DIALOG`,
+                    payload: {
+                      open: true,
+                      component: (
+                        <MediaLibrary
+                          onSelect={(v) => handleSelectImage('featuredImage', v)}
+                          allow={['image']}
+                        />
+                      ),
+                      width: 1024,
+                    },
+                  })
+                }
+              />
+            </Space>
+          )}
+
+          {post?.postTypeID === 'page' && (
+            <Checkbox
+              value={post?.id}
+              checked={post?.id === site?.frontPage}
+              onChange={(e) =>
+                handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
+              }
+              children="Set as Homepage"
+            />
+          )}
+        </Space>
+      </Content>
+    );
+  };
+
+  const renderSeo = () => {
+    return (
+      <Content>
+        <Space direction="vertical" size={25}>
+          <Input
+            value={post?.seo?.title || ''}
+            onChange={(e) => handleChangePost('seo.title', e.target.value)}
+            label={'SEO Title'}
+            placeholder={post?.title}
+          />
+
+          <Input
+            value={post?.seo?.metaDesc || ''}
+            onChange={(e) => handleChangePost('seo.metaDesc', e.target.value)}
+            label={'SEO Description'}
+            rows={4}
+          />
+
+          <Space direction="vertical" size={6}>
+            <Caption children="Open Graph Image" />
+            <FilePicker
+              value={post?.seo?.opengraphImage}
+              onRemove={() => handleSelectImage('seo.opengraphImage', null)}
+              onClick={() =>
+                dispatch({
+                  type: `SET_DIALOG`,
+                  payload: {
+                    open: true,
+                    component: (
+                      <MediaLibrary
+                        onSelect={(v) => handleSelectImage('seo.opengraphImage', v)}
+                        allow={['image']}
+                      />
+                    ),
+                    width: 1024,
+                  },
+                })
+              }
+            />
+          </Space>
+        </Space>
+      </Content>
+    );
+  };
+
+  const renderRevisions = () => {
+    return (
+      <Content>
+        <Space direction="vertical">
+          {post?.revisions?.length > 0 && (
+            <>
+              <Button
+                type={!post.revisionID ? 'primary' : 'default'}
+                onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
+                children={'Current version'}
+                block
+              />
+
+              {post.revisions.map((o) => (
+                <Button
+                  key={o.id}
+                  type={o.id === post.revisionID ? 'primary' : 'default'}
+                  onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
+                  children={o.title}
+                  block
+                />
+              ))}
+            </>
+          )}
+        </Space>
+      </Content>
+    );
+  };
+
+  const renderThemeSettings = () => {
     // Loop over global options (only source of truth)
     const formattedFields = fields?.themeOptions
       .filter((o) => !o.hide)
@@ -264,24 +481,7 @@ const EditorSidebar = (props) => {
         return { global: true, ...o, value: formattedField?.value };
       });
 
-    return formattedFields;
-  };
-
-  const handleAddPost = async ({ postTypeID, title, parentID }) => {
-    const result = await postActions.addPost(
-      { siteID, postTypeID, status: 'draft', title, parentID },
-      dispatch,
-      config
-    );
-
-    if (result?.id) {
-      // Add post to post type so we can then generate the slug and the route the newly created post
-      const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
-        return set(draft, `posts.${result.id}`, result);
-      });
-      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
-      navigate(`/${slug}`);
-    }
+    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
   };
 
   return (
@@ -366,211 +566,15 @@ const EditorSidebar = (props) => {
       </TabsContainer>
 
       <TabContainer>
-        {sidebar === 'content' && (
-          <EditorFields fields={getContentFields()} onChangeElement={handleChangeContent} />
-        )}
+        {sidebar === 'content' && renderContent()}
 
-        {sidebar === 'settings' && (
-          <Content>
-            <Space direction="vertical" size={20}>
-              <Input
-                value={post?.title || ''}
-                onChange={(e) => handleChangePost('title', e.target.value)}
-                label={'Title'}
-              />
+        {sidebar === 'settings' && renderSettings()}
 
-              <Input
-                value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
-                onChange={(e) => handleChangePost('slug', e.target.value)}
-                label={'Slug'}
-                disabled={post?.id === site?.frontPage}
-              />
+        {sidebar === 'seo' && renderSeo()}
 
-              {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
-                <Select
-                  value={post?.template}
-                  onChange={(value) => handleChangePost('template', value)}
-                  label={'Template'}
-                >
-                  {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
-                    <AntSelect.OptGroup label={'Single'}>
-                      {postTypeTemplatesArray.map((o) => (
-                        <AntSelect.Option key={o.id} value={o.id} children={o.label || o.id} />
-                      ))}
-                    </AntSelect.OptGroup>
-                  )}
+        {sidebar === 'revisions' && post?.revisionsEnabled && renderRevisions()}
 
-                  {archiveTemplatesArray.length > 0 && (
-                    <AntSelect.OptGroup label={'Archive'}>
-                      {archiveTemplatesArray.map((o) => {
-                        const id = `archive-${o.postTypeID}`;
-
-                        return <AntSelect.Option key={id} value={id} children={o.label} />;
-                      })}
-                    </AntSelect.OptGroup>
-                  )}
-                </Select>
-              )}
-
-              <Select
-                value={post?.status || ''}
-                onChange={(value) => handleChangePost('status', value)}
-                label={'Status'}
-              >
-                <AntSelect.Option value={'publish'} children={'Publish'} />
-                <AntSelect.Option value={'draft'} children={'Draft'} />
-                <AntSelect.Option value={'trash'} children={'Trash'} />
-              </Select>
-
-              {post?.postTypeID === 'page' && (
-                <PostTreeSelect
-                  label="Parent"
-                  items={Object.values(postType.posts).filter((o) => o.id !== post.id)}
-                  value={post?.parentID}
-                  onChange={(value) => handleChangePost('parentID', value)}
-                />
-              )}
-
-              {post?.taxonomies &&
-                Object.keys(post.taxonomies)
-                  .filter((k) => !!config?.fields?.taxonomies?.[k])
-                  .map((k) => {
-                    const o = sites[siteID].taxonomies[k];
-
-                    return (
-                      o && (
-                        <Select
-                          key={k}
-                          onChange={(v) => handleChangePost(`taxonomies.${k}`, v)}
-                          allowClear
-                          placeholder="Select category"
-                          mode="multiple"
-                          label={o.title}
-                          defaultValue={post.taxonomies[k]}
-                        >
-                          {o.terms &&
-                            o.terms.map((p) => {
-                              return (
-                                <AntSelect.Option key={p.id} value={p.id} children={p.title} />
-                              );
-                            })}
-                        </Select>
-                      )
-                    );
-                  })}
-
-              {post?.postTypeID !== 'page' && (
-                <Space direction="vertical" size={2}>
-                  <Caption children="Featured Image" />
-                  <FilePicker
-                    value={post?.featuredImage}
-                    onRemove={() => handleSelectImage('featuredImage', null)}
-                    onClick={() =>
-                      dispatch({
-                        type: `SET_DIALOG`,
-                        payload: {
-                          open: true,
-                          component: (
-                            <MediaLibrary
-                              onSelect={(v) => handleSelectImage('featuredImage', v)}
-                              allow={['image']}
-                            />
-                          ),
-                          width: 1024,
-                        },
-                      })
-                    }
-                  />
-                </Space>
-              )}
-
-              {post?.postTypeID === 'page' && (
-                <Checkbox
-                  value={post?.id}
-                  checked={post?.id === site?.frontPage}
-                  onChange={(e) =>
-                    handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
-                  }
-                  children="Set as Homepage"
-                />
-              )}
-            </Space>
-          </Content>
-        )}
-
-        {sidebar === 'seo' && (
-          <Content>
-            <Space direction="vertical" size={25}>
-              <Input
-                value={post?.seo?.title || ''}
-                onChange={(e) => handleChangePost('seo.title', e.target.value)}
-                label={'SEO Title'}
-                placeholder={post?.title}
-              />
-
-              <Input
-                value={post?.seo?.metaDesc || ''}
-                onChange={(e) => handleChangePost('seo.metaDesc', e.target.value)}
-                label={'SEO Description'}
-                rows={4}
-              />
-
-              <Space direction="vertical" size={6}>
-                <Caption children="Open Graph Image" />
-                <FilePicker
-                  value={post?.seo?.opengraphImage}
-                  onRemove={() => handleSelectImage('seo.opengraphImage', null)}
-                  onClick={() =>
-                    dispatch({
-                      type: `SET_DIALOG`,
-                      payload: {
-                        open: true,
-                        component: (
-                          <MediaLibrary
-                            onSelect={(v) => handleSelectImage('seo.opengraphImage', v)}
-                            allow={['image']}
-                          />
-                        ),
-                        width: 1024,
-                      },
-                    })
-                  }
-                />
-              </Space>
-            </Space>
-          </Content>
-        )}
-
-        {sidebar === 'revisions' && post?.revisionsEnabled && (
-          <Content>
-            <Space direction="vertical">
-              {post?.revisions?.length > 0 && (
-                <>
-                  <Button
-                    type={!post.revisionID ? 'primary' : 'default'}
-                    onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
-                    children={'Current version'}
-                    block
-                  />
-
-                  {post.revisions.map((o) => (
-                    <Button
-                      key={o.id}
-                      type={o.id === post.revisionID ? 'primary' : 'default'}
-                      onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
-                      children={o.title}
-                      block
-                    />
-                  ))}
-                </>
-              )}
-            </Space>
-          </Content>
-        )}
-
-        {sidebar === 'theme' && (
-          <EditorFields fields={getThemeFields()} onChangeElement={handleChangeContent} />
-        )}
+        {sidebar === 'theme' && renderThemeSettings()}
 
         {(postHasChanged || siteHasChanged) && (
           <InfoMessage>
