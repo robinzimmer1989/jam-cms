@@ -222,8 +222,7 @@ const EditorSidebar = (props) => {
     });
   };
 
-  // TODO: Test if useMemo is too expensive here
-  const contentFields = useMemo(() => {
+  const getContentFields = () => {
     const template = getTemplateByPost(post, fields);
 
     // TODO: Very similar setup to utils function 'formatFieldsToProps'.
@@ -250,10 +249,9 @@ const EditorSidebar = (props) => {
       : [];
 
     return formattedFields;
-  }, [site?.themeOptions, post?.content]);
+  };
 
-  // TODO: Test if useMemo is too expensive here
-  const themeFields = useMemo(() => {
+  const getThemeFields = () => {
     // Loop over global options (only source of truth)
     const formattedFields = fields?.themeOptions
       .filter((o) => !o.hide)
@@ -267,7 +265,7 @@ const EditorSidebar = (props) => {
       });
 
     return formattedFields;
-  }, [site?.themeOptions]);
+  };
 
   const handleAddPost = async ({ postTypeID, title, parentID }) => {
     const result = await postActions.addPost(
@@ -369,7 +367,7 @@ const EditorSidebar = (props) => {
 
       <TabContainer>
         {sidebar === 'content' && (
-          <EditorFields fields={contentFields} onChangeElement={handleChangeContent} />
+          <EditorFields fields={getContentFields()} onChangeElement={handleChangeContent} />
         )}
 
         {sidebar === 'settings' && (
@@ -571,7 +569,7 @@ const EditorSidebar = (props) => {
         )}
 
         {sidebar === 'theme' && (
-          <EditorFields fields={themeFields} onChangeElement={handleChangeContent} />
+          <EditorFields fields={getThemeFields()} onChangeElement={handleChangeContent} />
         )}
 
         {(postHasChanged || siteHasChanged) && (
