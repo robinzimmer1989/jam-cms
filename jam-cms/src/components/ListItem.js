@@ -20,18 +20,19 @@ const ListItem = (props) => {
     ...rest
   } = props;
 
-  const metaTitle = link ? (
-    <Link to={link} style={{ flex: 1 }}>
-      <Typography.Text strong>
-        {title}
-        {status}
-      </Typography.Text>
-    </Link>
-  ) : (
+  const listItemTitle = (
     <Typography.Text strong>
       {title}
       {status}
     </Typography.Text>
+  );
+
+  const metaTitle = link ? (
+    <Link to={link} style={{ flex: 1 }}>
+      {listItemTitle}
+    </Link>
+  ) : (
+    listItemTitle
   );
 
   return (
