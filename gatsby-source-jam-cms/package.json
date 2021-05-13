@@ -1,7 +1,8 @@
 {
   "name": "gatsby-source-jam-cms",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "dependencies": {
+    "@babel/register": "^7.13.16",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "cross-env": "7.0.3",
@@ -13,8 +14,7 @@
   "main": "./index.js",
   "devDependencies": {
     "@babel/preset-env": "^7.14.1",
-    "@babel/preset-react": "^7.13.13",
-    "@babel/register": "^7.13.16"
+    "@babel/preset-react": "^7.13.13"
   },
   "scripts": {
     "build": "babel src/root --out-dir . --ignore **/__tests__ --extensions \".ts,.js\"",
