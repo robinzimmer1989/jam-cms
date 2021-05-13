@@ -45,6 +45,7 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - WPGraphQL (1.3.8)
 - WPGraphQL for Advanced Custom Fields (0.5.2)
 - WPGraphQL JWT Authentication (0.4.1)
+  Follow the plugin instructions and add a secret key to your wp-config.php file.
 - Yoast SEO (16.2)
 - WPGraphQL Yoast SEO Addon (4.14.0)
 - jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
@@ -54,6 +55,11 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - Classic Editor (1.6)
 - JAMstack Deployments (1.1.1)
 - Post Types Order (1.9.5.6)
+
+Things to know:
+
+- Pretty permalinks must be enabled ('Post name').
+- Revisions aren't working out of the box, you need to enable them via wp-config.php: `define( 'WP_POST_REVISIONS', true );`
 
 ### Gatsby:
 
@@ -382,8 +388,6 @@ The component will convert all internal links to Gatsby links and make sure that
 **ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
-**Permalink settings (/wp-admin/options-permalink.php) must be set to 'Post name'**
-
 **Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
@@ -393,6 +397,11 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
+
+### 1.4.1
+
+- Check if revisions are enabled in the
+- Make page title clickable in post list
 
 ### 1.4.0
 
