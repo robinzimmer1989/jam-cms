@@ -94,17 +94,6 @@ export const sitesReducer = (state, action) => {
         break;
 
       /******************************
-       * Forms
-       ******************************/
-      case `ADD_FORM`:
-        set(draft, `sites.${payload.siteID}.forms.${payload.id}`, payload);
-        break;
-
-      case `DELETE_FORM`:
-        delete draft.sites[payload.siteID].forms[payload.id];
-        break;
-
-      /******************************
        * Posts
        ******************************/
       case `ADD_POST`:

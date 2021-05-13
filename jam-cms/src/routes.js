@@ -5,8 +5,6 @@ export const ROUTE_POST_TYPE = '/collections';
 export const ROUTE_SETTINGS_GENERAL = '/settings';
 export const ROUTE_TAXONOMY = '/taxonomy';
 export const ROUTE_PROFILE = '/profile';
-export const ROUTE_FORMS = '/forms';
-export const ROUTE_FORM = '/form';
 export const ROUTE_USERS = '/users';
 
 const getRoute = (route, args) => {
