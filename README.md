@@ -398,6 +398,12 @@ Because all the content editing happens in a relatively small sidebar, adding im
 
 ## Changelog
 
+### 1.4.2
+
+- Fix template selector bug
+- Improve editor sidebar performance
+- New menu field design
+
 ### 1.4.1
 
 - Check if revisions are enabled in the
