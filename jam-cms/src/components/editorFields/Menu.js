@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
+import produce from 'immer';
 
 // import app components
 import Input from '../Input';
@@ -27,6 +28,7 @@ const Menu = (props) => {
     },
   ] = useStore();
 
+  const [editing, setEditing] = useState([]);
   const [dialog, setDialog] = useState({ active: false, node: null });
   const [filter, setFilter] = useState('Pages');
   const [items, setItems] = useState([]);
@@ -143,6 +145,20 @@ const Menu = (props) => {
     setCustomLink({ title: '', url: '' });
   };
 
+  const handleToggleCollapse = (key) => {
+    const nextValue = produce(editing, (draft) => {
+      if (draft.includes(key)) {
+        draft = draft.filter((k) => k !== key);
+      } else {
+        draft.push(key);
+      }
+
+      return draft;
+    });
+
+    setEditing(nextValue);
+  };
+
   return (
     <>
       <Container>
@@ -150,14 +166,15 @@ const Menu = (props) => {
           <div>
             <Tree
               className="draggable-tree"
-              draggable
+              draggable={editing.length === 0}
+              showLine
               blockNode
               onDrop={onDrop}
               treeData={items}
               titleRender={(node) => {
                 return (
-                  <Collapse expandIconPosition="right">
-                    <Collapse.Panel header={node.title}>
+                  <Collapse ghost onChange={() => handleToggleCollapse(node.key)}>
+                    <Collapse.Panel header={node.title} showArrow={false}>
                       <Space direction="vertical">
                         <Input
                           label="title"
@@ -292,52 +309,49 @@ const Menu = (props) => {
 };
 
 const Container = styled.div`
-  overflow: auto;
+  && {
+    overflow: auto;
 
-  .ant-tree {
-    background-color: transparent;
-  }
-
-  .ant-tree-list-holder-inner {
-    padding: 6px 0;
-  }
-
-  .ant-tree-switcher {
-    background: #fff;
-    left: 0;
-    border: 1px solid #d9d9d9;
-  }
-
-  .ant-tree-switcher .ant-tree-switcher-icon {
-    transform: translateY(10px);
-  }
-
-  .ant-collapse-header {
-    padding: 12px 16px 12px 32px !important;
-  }
-
-  .ant-tree-node-content-wrapper {
-    padding: 0;
-
-    &:hover {
+    .ant-tree {
       background-color: transparent;
     }
-  }
-  .ant-tree-node-content-wrapper.ant-tree-node-selected {
-    background-color: transparent;
-  }
 
-  .ant-collapse-content {
-    padding: 8px;
-  }
+    .ant-tree-list-holder {
+      padding-top: 6px;
+    }
 
-  .ant-collapse-content > .ant-collapse-content-box {
-    border-bottom: none;
-    background: transparent;
-  }
+    .ant-collapse {
+      background-color: transparent;
+      border: none;
+    }
 
-  .rst__rowContents {
-    min-width: 150px;
+    .ant-collapse-header {
+      padding: 5px !important;
+    }
+
+    .ant-tree-node-content-wrapper {
+      padding: 0;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+    .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: transparent;
+    }
+
+    .ant-collapse-content-box {
+      padding-top: 0 !important;
+    }
+
+    .ant-collapse-content > .ant-collapse-content-box {
+      border-bottom: none;
+      background: transparent;
+    }
+
+    .rst__rowContents {
+      min-width: 150px;
+    }
   }
 `;
 
