@@ -228,7 +228,11 @@ const EditorSidebar = (props) => {
           let field;
 
           if (o.global) {
-            field = site?.themeOptions?.[o.id] || fields.themeOptions.find((p) => p.id === o.id);
+            // Use field from themeOptions (single source of truth) and add value from site state
+            field = {
+              ...fields?.themeOptions.find((p) => p.id === o.id),
+              value: site?.themeOptions?.[o.id]?.value,
+            };
           } else {
             field = post?.content?.[o.id] || o;
           }
@@ -243,6 +247,22 @@ const EditorSidebar = (props) => {
           };
         })
       : [];
+
+    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
+  };
+
+  const renderThemeSettings = () => {
+    // Loop over global options (only source of truth)
+    const formattedFields = fields?.themeOptions
+      .filter((o) => !o.hide)
+      .map((o) => {
+        const formattedField = formatFieldForEditor({
+          // Pass in fields from editor site state or global option itself
+          field: site?.themeOptions?.[o.id] || o,
+          site,
+        });
+        return { global: true, ...o, value: formattedField?.value };
+      });
 
     return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
   };
@@ -466,22 +486,6 @@ const EditorSidebar = (props) => {
         </Space>
       </Content>
     );
-  };
-
-  const renderThemeSettings = () => {
-    // Loop over global options (only source of truth)
-    const formattedFields = fields?.themeOptions
-      .filter((o) => !o.hide)
-      .map((o) => {
-        const formattedField = formatFieldForEditor({
-          // Pass in fields from editor site state or global option itself
-          field: site?.themeOptions?.[o.id] || o,
-          site,
-        });
-        return { global: true, ...o, value: formattedField?.value };
-      });
-
-    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
   };
 
   return (
