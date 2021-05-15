@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import produce from 'immer';
 
@@ -215,7 +214,7 @@ const Menu = (props) => {
         title="Add item"
         visible={dialog.active}
         onCancel={() => setDialog({ active: false, node: null })}
-        width={500}
+        width={400}
         footer={null}
       >
         <Tabs defaultActiveKey={filter} onChange={(v) => setFilter(v)}>
@@ -252,29 +251,21 @@ const Menu = (props) => {
                         key={id}
                         title={title}
                         status={badges}
-                        actions={[
-                          <Button
-                            key="add"
-                            size="small"
-                            disabled={status === 'draft'}
-                            onClick={() =>
-                              onChange([
-                                ...items,
-                                {
-                                  key: generateRandomString(),
-                                  title,
-                                  postTypeID,
-                                  postID: id,
-                                  children: [],
-                                  url: generateSlug(postType, id, sites?.[siteID]?.frontPage, true),
-                                },
-                              ])
-                            }
-                            shape="circle"
-                          >
-                            <PlusOutlined />
-                          </Button>,
-                        ]}
+                        disabled={status === 'draft'}
+                        onClick={() =>
+                          status === 'publish' &&
+                          onChange([
+                            ...items,
+                            {
+                              key: generateRandomString(),
+                              title,
+                              postTypeID,
+                              postID: id,
+                              children: [],
+                              url: generateSlug(postType, id, sites?.[siteID]?.frontPage, true),
+                            },
+                          ])
+                        }
                       />
                     );
                   })
@@ -322,7 +313,7 @@ const Container = styled.div`
 
     .ant-collapse {
       background-color: transparent;
-      border: none;
+      border: none !important;
     }
 
     .ant-collapse-header {
@@ -358,17 +349,33 @@ const Container = styled.div`
 const StyledListItem = styled(ListItem)`
   .ant-card {
     box-shadow: none !important;
-    background: ${colors.secondaryContrast};
+    background: #fff;
     border: 1px solid #d9d9d9;
     margin-bottom: 4px;
+
+    ${({ disabled }) =>
+      disabled
+        ? css`
+            cursor: not-allowed;
+            opacity: 0.4;
+          `
+        : css`
+            cursor: pointer;
+            opacity: 1;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          `}
   }
 
   .ant-card-body {
     padding: 0 16px;
   }
 
-  .ant-list-item-action li {
-    padding: 0;
+  .ant-list-item-meta-title {
+    margin: 0;
+    line-height: 1;
   }
 
   .ant-typography strong {
