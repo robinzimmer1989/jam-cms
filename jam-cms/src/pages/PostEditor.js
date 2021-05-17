@@ -215,7 +215,7 @@ const PostEditor = (props) => {
               <>
                 {!!Component && post?.content ? (
                   <Component
-                    jamCMS={{ sidebar: sidebarActive }}
+                    jamCMS={{ sidebar: sidebarActive, sidebarWidth: 320 }}
                     data={getPostData()}
                     pageContext={{
                       themeOptions: formatFieldsToProps({
