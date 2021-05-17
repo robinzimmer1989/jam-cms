@@ -1,4 +1,4 @@
-raw
+src/root
 demo
 .babelrc
 webpack.config.js
