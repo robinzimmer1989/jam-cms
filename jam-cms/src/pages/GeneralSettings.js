@@ -51,7 +51,7 @@ const GeneralSettings = () => {
   };
 
   return (
-    <CmsLayout pageTitle={`General`}>
+    <CmsLayout pageTitle={`Settings`}>
       <Space direction="vertical" size={40}>
         <Card title={`General`}>
           <Space direction="vertical" size={20}>
