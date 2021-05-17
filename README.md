@@ -59,7 +59,19 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 Things to know:
 
 - Pretty permalinks must be enabled ('Post name').
-- Revisions aren't working out of the box, you need to enable them via wp-config.php: `define( 'WP_POST_REVISIONS', true );`
+- Revisions aren't working out of the box (at least not for Local / WPEngine), you need to enable them via wp-config.php:
+
+```
+define( 'WP_POST_REVISIONS', true );
+```
+
+- To add custom templates, you need to manually upload a php file to your WordPress theme. For example:
+
+```
+<?php
+
+// Template Name: Archive Post
+```
 
 ### Gatsby:
 
@@ -76,6 +88,10 @@ GATSBY_JAM_CMS_API_KEY=test123
 Replace the URL with your actual WordPress URL. You can retrieve the API key by going to the jamCMS settings page in WordPress (/wp-admin/options-general.php?page=jam-cms).
 
 If everything is set up you can run `yarn && gatsby develop`. When you navigate to '/jam-cms' you can login with your WordPress credentials.
+
+Things to know:
+
+- The editor sidebar is part of the actual page template (wrapper around it). That means the CSS media queries aren't accurate anymore. To solve this issue you can listen to the jamCMS prop, passed into the template file, and check if the sidebar is open or not and tweak your media queries accordingly. This is especially necessary when dealing with `position: fixed;` content elements.
 
 ## Templates
 
