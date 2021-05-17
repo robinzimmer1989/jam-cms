@@ -414,6 +414,13 @@ Because all the content editing happens in a relatively small sidebar, adding im
 
 ## Changelog
 
+### 1.4.3
+
+- Fix theme fields not showing until restrt
+- Tweak menu post picker design
+- Add sidebar width to jamCMS prop
+- Fix file extentions issue for templates
+
 ### 1.4.2
 
 - Fix template selector bug
