@@ -6,13 +6,16 @@ import Layout from '../../../../components/Layout';
 
 const Template = (props) => {
   const {
-    pageContext: { themeOptions },
     data: {
       wpTeam: { seo },
     },
   } = props;
 
-  return <Layout {...props} seo={seo}></Layout>;
+  return (
+    <Layout {...props} seo={seo}>
+      Test
+    </Layout>
+  );
 };
 
 export const Query = graphql`
