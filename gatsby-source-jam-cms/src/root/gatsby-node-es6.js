@@ -56,7 +56,15 @@ export const onCreateWebpackConfig = ({ actions, plugins }) => {
   });
 };
 
-export const createPages = async ({ actions, reporter, graphql }, pluginOptions) => {
+export const createPages = async ({ store, actions, reporter, graphql }, pluginOptions) => {
+  const { settings, fields } = pluginOptions;
+
+  // Use default path if no fields variable is provided
+  fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
+
+  // Import field object
+  const fieldsObject = await import(fieldsPath);
+
   const themeOptions = await getThemeSettings({ reporter }, pluginOptions);
 
   const allNodes = {};
@@ -113,6 +121,24 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
   // Initialize missing templates object
   const missingTemplates = {};
 
+  const allowedExtensions = ['.js', '.jsx', '.tsx'];
+
+  const getPath = (type, postType, templateName) => {
+    let thePath;
+
+    for (const extension of allowedExtensions) {
+      const templatePath = path.resolve(
+        `./src/templates/${type}/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}${extension}`
+      );
+
+      if (fs.existsSync(templatePath)) {
+        thePath = templatePath;
+      }
+    }
+
+    return thePath;
+  };
+
   await Promise.all(
     Object.keys(allNodes).map(async (postType) => {
       await Promise.all(
@@ -129,13 +155,9 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
           let templatePath;
 
           if (isArchive) {
-            templatePath = path.resolve(
-              `./src/templates/postTypes/${archivePostType}/archive/archive`
-            );
+            templatePath = getPath('postTypes', archivePostType, 'archive');
           } else {
-            templatePath = path.resolve(
-              `./src/templates/postTypes/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}`
-            );
+            templatePath = getPath('postTypes', postType, templateName);
           }
 
           if (fs.existsSync(templatePath)) {
@@ -144,8 +166,8 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
 
               let postsPerPageUsed = 10;
 
-              if (pluginOptions.settings && pluginOptions.settings.postsPerPage) {
-                postsPerPageUsed = pluginOptions.settings.postsPerPage;
+              if (settings && settings.postsPerPage) {
+                postsPerPageUsed = settings.postsPerPage;
               }
 
               const numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
@@ -184,7 +206,7 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
             // Check if error was already shown
             if (!missingTemplates[templatePath]) {
               reporter.warn(
-                `Template file not found. Gatsby won't create any pages for ${postType}/${templateName.toLowerCase()}`
+                `Template file not found. Gatsby won't create any pages for template '${templateName.toLowerCase()}' of post type '${postType}'. Add a template file to ${templatePath}`
               );
 
               // Only show error message about missing template once
@@ -236,9 +258,7 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
 
       await Promise.all(
         data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
-          const templatePath = path.resolve(
-            `./src/templates/taxonomies/${graphqlSingleName}/single`
-          );
+          const templatePath = getPath('taxonomies', graphqlSingleName, 'single');
 
           if (fs.existsSync(templatePath)) {
             const { uri, slug, id } = node;
@@ -252,7 +272,7 @@ export const createPages = async ({ actions, reporter, graphql }, pluginOptions)
             // Check if error was already shown
             if (!missingTemplates[templatePath]) {
               reporter.warn(
-                `Template file not found. Gatsby won't create any pages for taxonomy ${graphqlSingleName}`
+                `Template file not found. Gatsby won't create any pages for taxonomy '${graphqlSingleName}'. Add a template file to ${templatePath}`
               );
 
               // Only show error message about missing template once
