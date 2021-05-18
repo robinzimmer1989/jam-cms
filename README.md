@@ -414,9 +414,14 @@ Because all the content editing happens in a relatively small sidebar, adding im
 
 ## Changelog
 
+### 1.4.4
+
+- Fix missing api key when syncing manually
+- Fix missing taxonomies
+
 ### 1.4.3
 
-- Fix theme fields not showing until restrt
+- Fix theme fields not showing until restart
 - Tweak menu post picker design
 - Add sidebar width to jamCMS prop
 - Fix file extentions issue for templates
