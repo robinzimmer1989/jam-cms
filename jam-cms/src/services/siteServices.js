@@ -85,8 +85,8 @@ export const deploySite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const syncFields = async ({ fields }, dispatch, config) => {
-  let result = await db('syncFields', { fields: JSON.stringify(fields) }, dispatch, config);
+export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
+  let result = await db('syncFields', { fields: JSON.stringify(fields), apiKey }, dispatch, config);
 
   if (result) {
     result = transformSite(result);

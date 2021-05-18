@@ -82,8 +82,8 @@ export const deploySite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const syncFields = async ({ fields }, dispatch, config) => {
-  const result = await siteServices.syncFields({ fields }, dispatch, config);
+export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
+  const result = await siteServices.syncFields({ fields, apiKey }, dispatch, config);
 
   if (result) {
     dispatch({ type: 'ADD_SITE', payload: result });

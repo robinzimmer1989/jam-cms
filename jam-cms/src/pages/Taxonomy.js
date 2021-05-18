@@ -29,7 +29,11 @@ const Taxonomy = (props) => {
 
   const handleSync = async () => {
     setIsSyncing(true);
-    await siteActions.syncFields({ fields: config.fields }, dispatch, config);
+    await siteActions.syncFields(
+      { fields: config.fields, apiKey: sites[siteID]?.apiKey },
+      dispatch,
+      config
+    );
     setIsSyncing(false);
   };
 
