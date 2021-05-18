@@ -350,7 +350,7 @@ const EditorSidebar = (props) => {
 
           {post?.taxonomies &&
             Object.keys(post.taxonomies)
-              .filter((k) => !!config?.fields?.taxonomies?.[k])
+              .filter((k) => !!config?.fields?.taxonomies?.find((o) => o.id === k))
               .map((k) => {
                 const o = sites[siteID].taxonomies[k];
 
@@ -375,7 +375,7 @@ const EditorSidebar = (props) => {
               })}
 
           {post?.postTypeID !== 'page' && (
-            <Space direction="vertical" size={2}>
+            <Space direction="vertical" size={6}>
               <Caption children="Featured Image" />
               <FilePicker
                 value={post?.featuredImage}
