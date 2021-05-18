@@ -141,7 +141,7 @@ const FlexibleContent = (props) => {
                           >
                             <Collapse.Panel
                               key={index}
-                              header={layout?.label || 'NA'}
+                              header={layout?.label || 'Not Found'}
                               extra={
                                 <DeleteIcon className={`icon`} onClick={(e) => e.stopPropagation()}>
                                   <DeleteIconContainer>

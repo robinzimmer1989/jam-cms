@@ -33,7 +33,7 @@ const CmsLayout = (props) => {
   return (
     <>
       <Helmet>
-        <title>{pageTitle || 'NA'} - jamCMS</title>
+        <title>{pageTitle || 'Not Found'} - jamCMS</title>
       </Helmet>
 
       <Layout className="jam-cms">
