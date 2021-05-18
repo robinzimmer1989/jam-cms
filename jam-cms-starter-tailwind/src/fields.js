@@ -17,7 +17,7 @@ const fields = {
     },
     {
       id: 'post',
-      title: 'News',
+      title: 'Post',
       templates: [postDefault, postArchive],
     },
     {
@@ -31,30 +31,14 @@ const fields = {
   ],
   taxonomies: [
     {
-      id: 'testing',
-      title: 'Category 2',
+      id: 'category',
+      title: 'Category',
       postTypes: ['post'],
-      options: {
-        rewrite_slug: 'this-is-a-test', // CPT only
-      },
     },
   ],
   themeOptions: [
     header,
     footer,
-    {
-      id: 'sidebar',
-      label: 'Sidebar',
-      type: 'group',
-      hide: true,
-      fields: [
-        {
-          id: 'sidebarmenu',
-          label: 'Sidebar Menu',
-          type: 'menu',
-        },
-      ],
-    },
     {
       id: 'colors',
       label: 'Colors',
