@@ -15,7 +15,6 @@ import {
   generateRandomString,
   generateSlug,
 } from '../../utils';
-import { colors } from '../../theme';
 import { useStore } from '../../store';
 
 const Menu = (props) => {
@@ -37,7 +36,7 @@ const Menu = (props) => {
   });
 
   useEffect(() => {
-    if (value && value.length > 0) {
+    if (value && Array.isArray(value)) {
       setItems(deepCopyTree(value));
     }
   }, [value]);
