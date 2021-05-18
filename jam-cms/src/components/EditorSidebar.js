@@ -422,7 +422,6 @@ const EditorSidebar = (props) => {
             value={post?.seo?.title || ''}
             onChange={(e) => handleChangePost('seo.title', e.target.value)}
             label={'SEO Title'}
-            placeholder={post?.title}
           />
 
           <Input
