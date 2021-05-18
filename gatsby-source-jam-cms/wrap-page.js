@@ -32,10 +32,9 @@ try {
   }
 } catch (e) {
   if (e.toString().indexOf("Error: Cannot find module") !== -1) {
-    throw new Error("Couldn't find templates");
+    console.warn("Couldn't find template");
   } else {
-    console.error(e);
-    throw e;
+    console.warn(e);
   }
 } // eslint-disable-next-line react/prop-types,react/display-name
 
