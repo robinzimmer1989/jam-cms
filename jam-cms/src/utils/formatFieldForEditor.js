@@ -62,7 +62,12 @@ export default function formatFieldForEditor({ field, site }) {
           if (key !== 'id') {
             const subField = draft.items
               .find((p) => p.id === o.id)
-              .fields.find((q) => q.id === key);
+              ?.fields?.find((q) => q.id === key);
+
+            if (!subField) {
+              return;
+            }
+
             const formattedSubField = formatFieldForEditor({
               field: { ...subField, value: draft.value[i][key] },
               site,
