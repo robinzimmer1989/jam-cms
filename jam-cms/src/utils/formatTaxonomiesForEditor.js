@@ -6,7 +6,13 @@ export default function formatTaxonomiesForEditor(post, site) {
   const taxonomies = {};
 
   Object.keys(post.taxonomies).map((k) => {
-    const { graphqlPluralName } = site.taxonomies[k];
+    const taxonomy = site?.taxonomies?.[k];
+
+    if (!taxonomy) {
+      return;
+    }
+
+    const { graphqlPluralName } = taxonomy;
 
     site.taxonomies[k].terms.map(({ id, title, uri, description, count, parentID }) => {
       if (post.taxonomies[k].includes(id)) {
