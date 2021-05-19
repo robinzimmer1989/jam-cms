@@ -112,6 +112,7 @@ export const Query = graphql`
                   }
                   image {
                     altText
+                    sourceUrl
                     localFile {
                       childImageSharp {
                         gatsbyImageData(width: 800, placeholder: BLURRED)
