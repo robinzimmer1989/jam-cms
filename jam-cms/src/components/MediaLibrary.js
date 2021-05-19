@@ -12,9 +12,8 @@ import {
 import useKeypress from 'react-use-keypress';
 
 // import app components
-import Img from './GatsbyImage';
 import MediaImage from './MediaImage';
-
+import { renderImage } from '../utils';
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
@@ -165,16 +164,7 @@ const MediaLibrary = (props) => {
                     return (
                       <MediaItem key={o.id}>
                         <MediaItemInner onClick={() => setActiveFile(o)}>
-                          {o.type === 'image' && (
-                            <Img image={o} objectFit="cover" objectPosition="50% 50%" alt={o.alt} />
-                          )}
-
-                          {o.type === 'application' && (
-                            <File>
-                              <img src={o.icon} />
-                              <span>{o.title}</span>
-                            </File>
-                          )}
+                          {renderImage(o)}
                         </MediaItemInner>
 
                         {multiple && (
@@ -298,23 +288,6 @@ const CheckboxContainer = styled.div`
 const DummyItem = styled.div`
   height: 0;
   width: 140px;
-`;
-
-const File = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  img {
-    height: 40px;
-    margin-bottom: 10px;
-  }
-
-  span {
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
 `;
 
 const LoadingContainer = styled.div`

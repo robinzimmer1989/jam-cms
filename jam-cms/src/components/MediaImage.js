@@ -5,11 +5,10 @@ import { Button, Space, Row, Col, Popconfirm, message, Typography } from 'antd';
 // import app components
 import Caption from './Caption';
 import Input from './Input';
-import Img from './GatsbyImage';
 
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
-import { convertFileSize } from '../utils';
+import { convertFileSize, renderImage } from '../utils';
 import { colors } from '../theme';
 
 const MediaImage = (props) => {
@@ -54,30 +53,7 @@ const MediaImage = (props) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12} style={{ background: `${colors.secondaryContrast}` }}>
-          {file.type === 'image' && (
-            <Img
-              image={file}
-              imgStyle={{
-                objectFit: 'contain',
-                maxWidth: file.width,
-                maxHeight: file.height,
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-              }}
-              alt={file.alt}
-              style={{ width: '100%', height: '50vh' }}
-            />
-          )}
-
-          {file.type === 'application' && (
-            <File>
-              <div>
-                <img src={file.icon} />
-                <span>{file.title}</span>
-              </div>
-            </File>
-          )}
+          {renderImage(file)}
         </Col>
         <Col span={12}>
           <Space direction="vertical" size={20}>
@@ -117,16 +93,16 @@ const MediaImage = (props) => {
                     </>
                   )}
 
-                  {data?.width && data?.height && (
-                    <>
-                      <Col span={6}>
-                        <Caption children="Dimensions" />
-                      </Col>
-                      <Col span={18}>
-                        <Typography children={`${data.width} by ${data.height} pixels`} />
-                      </Col>
-                    </>
-                  )}
+                  <Col span={6}>
+                    <Caption children="Dimensions" />
+                  </Col>
+                  <Col span={18}>
+                    <Typography>
+                      {data?.width > 0 && data?.height > 0
+                        ? `${data.width} by ${data.height} pixels`
+                        : 'Not available'}
+                    </Typography>
+                  </Col>
                 </Row>
 
                 <Input
@@ -137,7 +113,7 @@ const MediaImage = (props) => {
                 />
 
                 <Input label="Url" value={data.url} onChange={() => {}} name={`url`} disabled />
-                <Typography.Paragraph copyable={{ text: data.url }} children={'Copy Link'} />
+                <Typography.Paragraph copyable={{ text: data.sourceUrl }} children={'Copy Link'} />
               </Space>
             </Content>
 
@@ -179,27 +155,6 @@ const Content = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   min-height: 300px;
-`;
-
-const File = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-
-  div {
-  }
-
-  img {
-    margin-bottom: 10px;
-  }
-
-  span {
-    display: block;
-    width: 100%;
-    text-align: center;
-  }
 `;
 
 export default MediaImage;
