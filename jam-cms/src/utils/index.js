@@ -18,6 +18,7 @@ import validateEmail from './validateEmail';
 import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
 import formatFields from './formatFields';
+import renderImage from './renderImage';
 
 export {
   createDataTree,
@@ -40,4 +41,5 @@ export {
   getParameter,
   getTemplateByPost,
   formatFields,
+  renderImage,
 };
