@@ -32,7 +32,7 @@ const GatsbyImage = (props) => {
       };
     }
     return imageObject ? <Image {...rest} image={imageObject} alt={alt} /> : null;
-  }, [props]);
+  }, [image]);
 
   return component;
 };
