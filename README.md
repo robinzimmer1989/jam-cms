@@ -414,6 +414,14 @@ Because all the content editing happens in a relatively small sidebar, adding im
 
 ## Changelog
 
+### 1.4.5
+
+- Fix various menu issues
+- Fix flexible content issue when removed component is rendered
+- Fix unpublished changes
+- Fix sidebar height
+- SVG support
+
 ### 1.4.4
 
 - Fix missing api key when syncing manually
