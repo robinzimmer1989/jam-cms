@@ -172,21 +172,21 @@ const Menu = (props) => {
               titleRender={(node) => {
                 return (
                   <Collapse ghost onChange={() => handleToggleCollapse(node.key)}>
-                    <Collapse.Panel header={node.title} showArrow={false}>
+                    <Collapse.Panel header={node.title || ' '} showArrow={false}>
                       <Space direction="vertical">
                         <Input
                           label="title"
                           value={node.title}
                           onChange={(e) => handleUpdate(e, 'title', node.key)}
                         />
-                        {node.url && (
-                          <Input
-                            label="Url"
-                            value={node.url}
-                            onChange={(e) => handleUpdate(e, 'url', node.key)}
-                            disabled={node.postTypeID}
-                          />
-                        )}
+
+                        <Input
+                          label="Url"
+                          value={node.url}
+                          onChange={(e) => handleUpdate(e, 'url', node.key)}
+                          disabled={node.postTypeID}
+                        />
+
                         <Button
                           size="small"
                           danger
