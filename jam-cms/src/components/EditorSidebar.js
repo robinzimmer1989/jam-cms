@@ -599,7 +599,6 @@ const Container = styled.div`
   top: 0;
   width: 320px;
   height: 100vh;
-  padding-bottom: 62px;
   background: ${colors.secondaryContrast};
   border-right: 1px solid ${colors.tertiary};
   box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048),
@@ -622,7 +621,7 @@ const TabsContainer = styled.div`
 const TabContainer = styled.div`
   overflow: auto;
   white-space: pre-wrap;
-  height: calc(100vh - 50px - 62px);
+  height: calc(100vh - 85px);
   scrollbar-width: thin;
 
   &&::-webkit-scrollbar {
