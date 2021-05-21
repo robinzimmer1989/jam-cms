@@ -5,7 +5,6 @@ import * as mediaServices from './mediaServices';
 import * as postServices from './postServices';
 import * as siteServices from './siteServices';
 import * as termServices from './termServices';
-import * as actionMonitorServices from './actionMonitorServices';
 
 import db from './request';
 
@@ -18,5 +17,4 @@ export {
   postServices,
   siteServices,
   termServices,
-  actionMonitorServices,
 };

@@ -95,6 +95,11 @@ export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
   return result;
 };
 
+export const getUnpublishedChanges = async ({ siteID }, dispatch, config) => {
+  const result = await db('getUnpublishedChanges', { siteID }, dispatch, config);
+  return result;
+};
+
 const transformSite = (site) => {
   const nextSite = produce(site, (draft) => {
     // Convert posts and then post types to object structure

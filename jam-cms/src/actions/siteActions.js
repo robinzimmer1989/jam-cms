@@ -91,3 +91,8 @@ export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
 
   return result;
 };
+
+export const getUnpublishedChanges = async ({ siteID }, dispatch, config) => {
+  const result = await siteServices.getUnpublishedChanges({ siteID }, dispatch, config);
+  return result;
+};
