@@ -129,6 +129,16 @@ const Menu = (props) => {
     const newItems = removeFromTree({ children: [...items] }, key);
 
     onChange(newItems.children);
+
+    // Remove key from array
+    const nextValue = produce(editing, (draft) => {
+      if (draft.includes(key)) {
+        draft = draft.filter((k) => k !== key);
+      }
+      return draft;
+    });
+
+    setEditing(nextValue);
   };
 
   const handleAddCustomLink = () => {
@@ -172,7 +182,14 @@ const Menu = (props) => {
               titleRender={(node) => {
                 return (
                   <Collapse ghost onChange={() => handleToggleCollapse(node.key)}>
-                    <Collapse.Panel header={node.title || ' '} showArrow={false}>
+                    <Collapse.Panel
+                      header={
+                        <span style={{ cursor: editing.length === 0 ? 'grab' : 'not-allowed' }}>
+                          {node.title || ' '}
+                        </span>
+                      }
+                      showArrow={false}
+                    >
                       <Space direction="vertical">
                         <Input
                           label="title"
@@ -192,6 +209,7 @@ const Menu = (props) => {
                           danger
                           children={`Remove`}
                           onClick={() => handleRemove(node.key)}
+                          disabled={node.children.length > 0}
                         />
                       </Space>
                     </Collapse.Panel>
