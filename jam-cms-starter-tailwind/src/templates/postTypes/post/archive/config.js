@@ -1,7 +1,7 @@
 const config = {
   id: 'archive',
   postTypeID: 'post',
-  label: 'Post Archive',
+  label: 'Posts',
   query: `{
     allWpPost: posts {
       nodes {
