@@ -1,6 +1,6 @@
 {
   "name": "jam-cms",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@babel/polyfill": "^7.12.1",
