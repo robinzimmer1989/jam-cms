@@ -114,9 +114,12 @@ const EditorSidebar = (props) => {
   const handleSave = async (action, status) => {
     const { id, themeOptions, frontPage } = site;
 
-    // Add template object to request, but only in development mode
-    const templateObject =
-      process.env.NODE_ENV === 'development' && getTemplateByPost(post, fields);
+    let templateObject = getTemplateByPost(post, fields);
+
+    // Nullify template object if syncing is disabled or not in development mode
+    if (config?.settings?.sync === false || process.env.NODE_ENV !== 'development') {
+      templateObject = null;
+    }
 
     setLoading(action);
 

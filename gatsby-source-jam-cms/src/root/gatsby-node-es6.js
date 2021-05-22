@@ -6,7 +6,7 @@ import getThemeSettings from './getThemeSettings';
 
 let fieldsPath, templatesPath;
 
-export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, sync = true }) => {
+export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, settings }) => {
   if (!apiKey) {
     reporter.error('jamCMS: Api key is required');
     return;
@@ -17,30 +17,38 @@ export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, s
     return;
   }
 
+  // import templates
+  templatesPath = path.join(store.getState().program.directory, `src/templates`);
+
   // Use default path if no fields variable is provided
   fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
 
-  templatesPath = path.join(store.getState().program.directory, `src/templates`);
+  // Don't sync if setting is explicitly set to false
+  if (settings && settings.sync === false) {
+    return reporter.info('jamCMS: Syncing disabled');
+  }
 
   // Import field object
   const fieldsObject = await import(fieldsPath);
+
+  if (!fieldsObject) {
+    return reporter.error('jamCMS: No fields object found');
+  }
 
   // Remove potential trailing slash
   const url = source.replace(/\/+$/, '');
 
   // Sync fields with backend
-  if (sync && fieldsObject) {
-    try {
-      const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-        fields: JSON.stringify(fieldsObject.default),
-      });
+  try {
+    const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
+      fields: JSON.stringify(fieldsObject.default),
+    });
 
-      if (result.data) {
-        reporter.success(result.data);
-      }
-    } catch (err) {
-      reporter.error(err?.response?.data?.message);
+    if (result.data) {
+      reporter.success(result.data);
     }
+  } catch (err) {
+    reporter.error(err?.response?.data?.message);
   }
 };
 

@@ -31,14 +31,14 @@ var fieldsPath, templatesPath;
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref, _ref2) {
-    var store, reporter, fields, source, apiKey, _ref2$sync, sync, fieldsObject, url, result, _err$response, _err$response$data;
+    var store, reporter, fields, source, apiKey, settings, fieldsObject, url, result, _err$response, _err$response$data;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             store = _ref.store, reporter = _ref.reporter;
-            fields = _ref2.fields, source = _ref2.source, apiKey = _ref2.apiKey, _ref2$sync = _ref2.sync, sync = _ref2$sync === void 0 ? true : _ref2$sync;
+            fields = _ref2.fields, source = _ref2.source, apiKey = _ref2.apiKey, settings = _ref2.settings;
 
             if (apiKey) {
               _context.next = 5;
@@ -58,52 +58,65 @@ var onPreInit = /*#__PURE__*/function () {
             return _context.abrupt("return");
 
           case 8:
-            // Use default path if no fields variable is provided
-            fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields");
-            templatesPath = _path["default"].join(store.getState().program.directory, "src/templates"); // Import field object
+            // import templates
+            templatesPath = _path["default"].join(store.getState().program.directory, "src/templates"); // Use default path if no fields variable is provided
 
-            _context.next = 12;
+            fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields"); // Don't sync if setting is explicitly set to false
+
+            if (!(settings && settings.sync === false)) {
+              _context.next = 12;
+              break;
+            }
+
+            return _context.abrupt("return", reporter.info('jamCMS: Syncing disabled'));
+
+          case 12:
+            _context.next = 14;
             return Promise.resolve("".concat(fieldsPath)).then(function (s) {
               return (0, _interopRequireWildcard2["default"])(require(s));
             });
 
-          case 12:
+          case 14:
             fieldsObject = _context.sent;
-            // Remove potential trailing slash
-            url = source.replace(/\/+$/, ''); // Sync fields with backend
 
-            if (!(sync && fieldsObject)) {
-              _context.next = 25;
+            if (fieldsObject) {
+              _context.next = 17;
               break;
             }
 
-            _context.prev = 15;
-            _context.next = 18;
+            return _context.abrupt("return", reporter.error('jamCMS: No fields object found'));
+
+          case 17:
+            // Remove potential trailing slash
+            url = source.replace(/\/+$/, ''); // Sync fields with backend
+
+            _context.prev = 18;
+            _context.next = 21;
             return _axios["default"].post("".concat(url, "/wp-json/jamcms/v1/syncFields?apiKey=").concat(apiKey), {
               fields: JSON.stringify(fieldsObject["default"])
             });
 
-          case 18:
+          case 21:
             result = _context.sent;
 
             if (result.data) {
               reporter.success(result.data);
             }
 
-            _context.next = 25;
+            _context.next = 28;
             break;
 
-          case 22:
-            _context.prev = 22;
-            _context.t0 = _context["catch"](15);
+          case 25:
+            _context.prev = 25;
+            _context.t0 = _context["catch"](18);
             reporter.error(_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : (_err$response$data = _err$response.data) === null || _err$response$data === void 0 ? void 0 : _err$response$data.message);
 
-          case 25:
+          case 28:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[15, 22]]);
+    }, _callee, null, [[18, 25]]);
   }));
 
   return function onPreInit(_x, _x2) {
