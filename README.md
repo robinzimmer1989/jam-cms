@@ -272,6 +272,20 @@ Then you can pass in the image like this:
 )}
 ```
 
+jamCMS supports SVG upload out of the box. But since no file is downloaded/transformed by the sharp plugin, we need to query for the sourceUrl as well.
+
+```
+image {
+  altText
+  sourceUrl
+  localFile {
+    childImageSharp {
+      gatsbyImageData(width: 800, placeholder: BLURRED)
+    }
+  }
+}
+```
+
 #### Link
 
 ```
@@ -413,6 +427,11 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
+
+### 1.5.0
+
+- Add preview support (WordPress + Share preview)
+- Add option to disable syncing
 
 ### 1.4.5
 
