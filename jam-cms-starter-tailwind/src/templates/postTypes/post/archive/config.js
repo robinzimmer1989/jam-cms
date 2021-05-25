@@ -8,6 +8,7 @@ const config = {
         id
         title
         uri
+        date
         featuredImage {
           node {
             altText
