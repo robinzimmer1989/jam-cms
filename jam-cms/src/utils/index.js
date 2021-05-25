@@ -1,5 +1,6 @@
 import createDataTree from './createDataTree';
 import formatSlug from './formatSlug';
+import formatSite from './formatSite';
 import getParentSlug from './getParentSlug';
 import generateSlug from './generateSlug';
 import getCleanedFileName from './getCleanedFileName';
@@ -23,6 +24,7 @@ import renderImage from './renderImage';
 export {
   createDataTree,
   formatSlug,
+  formatSite,
   getParentSlug,
   generateSlug,
   getCleanedFileName,
