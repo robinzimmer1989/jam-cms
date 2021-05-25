@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
 import produce from 'immer';
-import { Space, Select as AntSelect, Checkbox, Tabs, Button, Typography, message, Row } from 'antd';
-import { PlusOutlined as AddIcon } from '@ant-design/icons';
+import {
+  Space,
+  Select as AntSelect,
+  Checkbox,
+  Tabs,
+  Button,
+  Typography,
+  message,
+  Row,
+  Dropdown,
+  Empty,
+  Menu,
+} from 'antd';
 import { set } from 'lodash';
+import { ArrowLeftOutlined, UndoOutlined } from '@ant-design/icons';
 
 // import app components
 import EditorFields from './EditorFields';
@@ -15,14 +27,14 @@ import PostTreeSelect from './PostTreeSelect';
 import PostForm from './PostForm';
 import MediaLibrary from './MediaLibrary';
 import FilePicker from './editorFields/FilePicker';
-import { postActions, siteActions } from '../actions';
+import { postActions, siteActions, previewActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
 import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils';
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { editable, ...rest } = props;
+  const { editable, onToggleSidebar, ...rest } = props;
 
   const [
     {
@@ -36,8 +48,10 @@ const EditorSidebar = (props) => {
 
   const { fields } = config;
 
-  const [loading, setLoading] = useState('');
+  const [loading, setLoading] = useState(null);
   const [sidebar, setSidebar] = useState('content');
+  const [expiryDate, setExpiryDate] = useState(48);
+  const [previewLink, setPreviewLink] = useState(null);
 
   const handleChangePost = (name, value) => {
     const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
@@ -49,6 +63,8 @@ const EditorSidebar = (props) => {
   };
 
   const handleSelectRevision = async (postID) => {
+    setLoading(postID);
+
     const result = await postActions.getPost({ siteID, postID }, dispatch, config);
 
     if (result) {
@@ -60,6 +76,8 @@ const EditorSidebar = (props) => {
         payload: { ...post, content, title, revisionID, siteID },
       });
     }
+
+    setLoading(null);
   };
 
   const handleChangeSite = (name, value) => {
@@ -123,6 +141,9 @@ const EditorSidebar = (props) => {
 
     setLoading(action);
 
+    // Reset preview link so it can be regenerated.
+    setPreviewLink(null);
+
     let postResult, siteResult;
 
     if (siteHasChanged) {
@@ -178,13 +199,15 @@ const EditorSidebar = (props) => {
       type: 'SET_DIALOG',
       payload: {
         open: true,
-        title: 'Unsaved changes',
+        title: 'Undo changes',
         component: (
           <Space direction="vertical" size={20}>
-            <Typography children={'There are unsaved changes. Are you sure?'} />
+            <Typography
+              children={'There are unsaved changes. Are you sure you want to undo them?'}
+            />
             <Space>
               <Button
-                children="Discard changes"
+                children="Undo changes"
                 onClick={() => {
                   handleDiscard();
                   dispatch({ type: 'CLOSE_DIALOG' });
@@ -199,7 +222,7 @@ const EditorSidebar = (props) => {
             </Space>
           </Space>
         ),
-        width: 400,
+        width: 320,
       },
     });
   };
@@ -218,6 +241,18 @@ const EditorSidebar = (props) => {
       });
       const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
       navigate(`/${slug}`);
+    }
+  };
+
+  const handleGeneratePreviewLink = async () => {
+    const result = await previewActions.generatePreviewLink(
+      { siteID, postID: post.id, expiryDate },
+      dispatch,
+      config
+    );
+
+    if (result) {
+      setPreviewLink(result);
     }
   };
 
@@ -251,7 +286,11 @@ const EditorSidebar = (props) => {
         })
       : [];
 
-    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
+    return (
+      <EditorFieldsContainer>
+        <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />
+      </EditorFieldsContainer>
+    );
   };
 
   const renderThemeSettings = () => {
@@ -267,7 +306,11 @@ const EditorSidebar = (props) => {
         return { global: true, ...o, value: formattedField?.value };
       });
 
-    return <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />;
+    return (
+      <EditorFieldsContainer>
+        <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />
+      </EditorFieldsContainer>
+    );
   };
 
   const renderSettings = () => {
@@ -465,12 +508,13 @@ const EditorSidebar = (props) => {
     return (
       <Content>
         <Space direction="vertical">
-          {post?.revisions?.length > 0 && (
+          {post?.revisions?.length > 0 ? (
             <>
               <Button
                 type={!post.revisionID ? 'primary' : 'default'}
                 onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
                 children={'Current version'}
+                loading={loading === post.id}
                 block
               />
 
@@ -480,10 +524,70 @@ const EditorSidebar = (props) => {
                   type={o.id === post.revisionID ? 'primary' : 'default'}
                   onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
                   children={o.title}
+                  loading={loading === o.id}
                   block
                 />
               ))}
             </>
+          ) : (
+            <Empty
+              style={{ padding: 20 }}
+              imageStyle={{
+                height: 120,
+              }}
+              description={'No Revisions'}
+            />
+          )}
+        </Space>
+      </Content>
+    );
+  };
+
+  const renderPreview = () => {
+    return (
+      <Content>
+        <Space direction="vertical">
+          {(siteHasChanged || postHasChanged) && (
+            <Typography.Text type="secondary">
+              Save the latest changes to include them in the preview.
+            </Typography.Text>
+          )}
+          <Select
+            value={expiryDate}
+            onChange={(value) => setExpiryDate(value)}
+            label={'Expiry date'}
+          >
+            <AntSelect.Option value={24} children={'1 Day'} />
+            <AntSelect.Option value={48} children={'2 Days'} />
+            <AntSelect.Option value={168} children={'1 Week'} />
+            <AntSelect.Option value={720} children={'1 Month'} />
+          </Select>
+
+          {previewLink ? (
+            <>
+              <Button
+                children="Copy to Clipboard"
+                type="primary"
+                onClick={() => {
+                  navigator.clipboard.writeText(previewLink);
+                  message.success('Copied to Clipboard');
+                }}
+                block
+              />
+              <Button
+                children="Open in new tab"
+                onClick={() => window.open(previewLink, '_blank')}
+                type="primary"
+                block
+              />
+            </>
+          ) : (
+            <Button
+              children="Generate Link"
+              onClick={handleGeneratePreviewLink}
+              type="primary"
+              block
+            />
           )}
         </Space>
       </Content>
@@ -492,83 +596,116 @@ const EditorSidebar = (props) => {
 
   return (
     <Container {...rest}>
-      <Content>
+      <Header>
         <Row justify="space-between">
-          <Space>
-            <Button
-              children="Back"
-              size="small"
-              disabled={postHasChanged || siteHasChanged}
-              onClick={() =>
-                navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))
-              }
-            />
+          {postHasChanged || siteHasChanged ? (
+            <>
+              <Button icon={<UndoOutlined />} onClick={handleDiscardRequest} size="small" ghost />
 
-            <Button
-              icon={<AddIcon />}
-              size="small"
-              disabled={postHasChanged || siteHasChanged}
-              onClick={() =>
-                dispatch({
-                  type: 'SET_DIALOG',
-                  payload: {
-                    open: true,
-                    title: `Add`,
-                    component: <PostForm onSubmit={handleAddPost} />,
-                  },
-                })
-              }
-            />
-          </Space>
+              <Space>
+                {post?.status === 'draft' && (
+                  <>
+                    <Button
+                      children="Save Draft"
+                      onClick={handleSaveDraft}
+                      loading={loading === 'draft'}
+                      disabled={!postHasChanged && !siteHasChanged}
+                      size="small"
+                      ghost
+                    />
+                    <Button
+                      children="Publish"
+                      type="primary"
+                      onClick={handlePublish}
+                      loading={loading === 'publish'}
+                      disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
+                      size="small"
+                      ghost
+                    />
+                  </>
+                )}
 
-          <Space>
-            {post?.status === 'draft' && (
-              <>
-                <Button
-                  children="Save Draft"
-                  onClick={handleSaveDraft}
-                  loading={loading === 'draft'}
-                  disabled={!postHasChanged && !siteHasChanged}
-                  size="small"
-                />
-                <Button
-                  children="Publish"
-                  type="primary"
-                  onClick={handlePublish}
-                  loading={loading === 'publish'}
-                  disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
-                  size="small"
-                />
-              </>
-            )}
-
-            {(post?.status === 'publish' || post?.status === 'trash') && (
+                {(post?.status === 'publish' || post?.status === 'trash') && (
+                  <Button
+                    children="Update"
+                    onClick={() => handleUpdate(post.status)}
+                    loading={loading === 'update'}
+                    disabled={!postHasChanged && !siteHasChanged}
+                    size="small"
+                    ghost
+                  />
+                )}
+              </Space>
+            </>
+          ) : (
+            <>
               <Button
-                children="Update"
-                type="primary"
-                onClick={() => handleUpdate(post.status)}
-                loading={loading === 'update'}
-                disabled={!postHasChanged && !siteHasChanged}
+                icon={<ArrowLeftOutlined />}
                 size="small"
+                disabled={postHasChanged || siteHasChanged}
+                ghost
+                onClick={() =>
+                  navigate(
+                    getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
+                  )
+                }
               />
-            )}
-          </Space>
+
+              <Button
+                children="Add New"
+                size="small"
+                disabled={postHasChanged || siteHasChanged}
+                ghost
+                onClick={() =>
+                  dispatch({
+                    type: 'SET_DIALOG',
+                    payload: {
+                      open: true,
+                      title: 'Add New',
+                      component: <PostForm onSubmit={handleAddPost} />,
+                    },
+                  })
+                }
+              />
+            </>
+          )}
         </Row>
-      </Content>
+      </Header>
 
       <TabsContainer>
         <Tabs activeKey={sidebar} tabBarGutter={0} onChange={(value) => setSidebar(value)}>
           <Tabs.TabPane key={'content'} tab={'Content'} disabled={!editable} />
           <Tabs.TabPane key={'settings'} tab={'Settings'} disabled={!editable} />
           <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable} />
-          {post?.revisionsEnabled && (
-            <Tabs.TabPane key={'revisions'} tab={'Revisions'} disabled={!editable} />
-          )}
-          {authUser?.capabilities?.edit_theme_options &&
-            fields?.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
-              <Tabs.TabPane key={'theme'} tab={'Theme'} disabled={!editable} />
-            )}
         </Tabs>
+
+        <Dropdown.Button
+          disabled={!editable}
+          type="text"
+          overlay={
+            <Menu>
+              {post?.revisionsEnabled && (
+                <Menu.Item key="preview" onClick={() => setSidebar('preview')}>
+                  Share Preview
+                </Menu.Item>
+              )}
+              {authUser?.capabilities?.edit_theme_options &&
+                fields?.themeOptions?.filter((o) => !o.hide)?.length > 0 && (
+                  <Menu.Item key={'theme'} onClick={() => setSidebar('theme')}>
+                    Theme
+                  </Menu.Item>
+                )}
+              {post?.revisionsEnabled && (
+                <Menu.Item key="revisions" onClick={() => setSidebar('revisions')}>
+                  Revisions
+                </Menu.Item>
+              )}
+              <Menu.Item key="sidebar" onClick={onToggleSidebar}>
+                Toggle Sidebar <Typography.Text keyboard>ESC</Typography.Text>
+              </Menu.Item>
+            </Menu>
+          }
+        />
       </TabsContainer>
 
       <TabContainer>
@@ -582,11 +719,13 @@ const EditorSidebar = (props) => {
 
         {sidebar === 'theme' && renderThemeSettings()}
 
+        {sidebar === 'preview' && renderPreview()}
+
         {(postHasChanged || siteHasChanged) && (
           <InfoMessage>
             <Typography.Text type="secondary">
               All links have been temporarily disabled to make sure nothing gets lost. Save the post
-              or <span onClick={handleDiscardRequest}>discard</span> your changes.
+              or <span onClick={handleDiscardRequest}>undo</span> your changes.
             </Typography.Text>
           </InfoMessage>
         )}
@@ -613,7 +752,23 @@ const Container = styled.div`
   }
 `;
 
+const Header = styled.div`
+  padding: 15px;
+  background: #001529;
+
+  button {
+    &:hover {
+      border-color: #fff;
+      background-color: #fff !important;
+    }
+  }
+`;
+
 const TabsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 10px;
   background: #fff;
 
   .ant-tabs-nav-wrap {
@@ -624,7 +779,7 @@ const TabsContainer = styled.div`
 const TabContainer = styled.div`
   overflow: auto;
   white-space: pre-wrap;
-  height: calc(100vh - 85px);
+  height: calc(100vh - 95px);
   scrollbar-width: thin;
 
   &&::-webkit-scrollbar {
@@ -642,13 +797,17 @@ const TabContainer = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 10px 15px;
+  padding: 15px;
+  min-height: calc(100% - 95px);
+`;
+
+const EditorFieldsContainer = styled.div`
+  min-height: calc(100% - 95px);
 `;
 
 const InfoMessage = styled.div`
   width: 100%;
   padding: 15px;
-  font-style: italic;
 
   span > span {
     text-decoration: underline;
