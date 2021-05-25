@@ -1,4 +1,5 @@
 import getStorageKey from './getStorageKey';
+import getParameter from './getParameter';
 
 const storageKey = getStorageKey();
 const isBrowser = typeof window !== `undefined`;
@@ -29,6 +30,20 @@ export const isLoggedIn = () => {
   }
 
   return false;
+};
+
+export const isPreview = () => {
+  if (!isBrowser) {
+    return false;
+  }
+
+  const preview = getParameter('preview');
+
+  if (!preview) {
+    return false;
+  }
+
+  return preview;
 };
 
 export const getCurrentUser = () => isBrowser && getUser();

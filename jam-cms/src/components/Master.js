@@ -18,8 +18,8 @@ import PrivateRoute from './PrivateRoute';
 
 import { CmsStyles } from '../theme';
 import { useStore } from '../store';
-import { authActions, userActions, siteActions } from '../actions';
-import { isLoggedIn } from '../utils/auth';
+import { authActions, userActions, siteActions, postActions, previewActions } from '../actions';
+import { isLoggedIn, isPreview } from '../utils/auth';
 import {
   ROUTE_APP,
   ROUTE_PROFILE,
@@ -46,6 +46,8 @@ const Master = (props) => {
 
   const loggedIn = isLoggedIn(config);
 
+  const previewID = isPreview();
+
   // timer for refresh token
   const [timer, setTimer] = useState(0);
 
@@ -54,15 +56,24 @@ const Master = (props) => {
       await userActions.getAuthUser({}, dispatch, config);
     };
 
-    const loadSite = async () => {
-      await siteActions.getSite({ siteID: config.siteID || 'default' }, dispatch, config);
-    };
-
-    if (loggedIn) {
-      !authUser && loadUser();
-      !sites[siteID] && loadSite();
+    if (!authUser && loggedIn) {
+      loadUser();
     }
   }, [loggedIn]);
+
+  useEffect(() => {
+    const loadSite = async () => {
+      if (previewID) {
+        await previewActions.getSitePreview({ siteID: config.siteID, previewID }, dispatch, config);
+      } else {
+        await siteActions.getSite({ siteID: config.siteID }, dispatch, config);
+      }
+    };
+
+    if (!sites[siteID] && (loggedIn || previewID)) {
+      loadSite();
+    }
+  }, [loggedIn, previewID]);
 
   useEffect(() => {
     // activate timer for refresh token

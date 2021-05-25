@@ -4,6 +4,7 @@ import { Empty } from 'antd';
 import axios from 'axios';
 import { set } from 'lodash';
 import useKeypress from 'react-use-keypress';
+import { Button } from 'antd';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
@@ -18,7 +19,7 @@ import {
   getTemplateByPost,
 } from '../utils';
 import { useStore } from '../store';
-import { postActions } from '../actions';
+import { postActions, previewActions } from '../actions';
 
 const PostEditor = (props) => {
   const { defaultComponent } = props;
@@ -34,8 +35,10 @@ const PostEditor = (props) => {
 
   const { fields } = config;
 
+  const previewID = auth.isPreview();
+
   const [query, setQuery] = useState(null);
-  const [sidebarActive, setSidebarActive] = useState(true);
+  const [sidebarActive, setSidebarActive] = useState(!previewID);
 
   const template = getTemplateByPost(post, fields);
   const Component = template?.component;
@@ -117,18 +120,10 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     const loadQuery = async () => {
+      // TODO: Move to utils function
       const cleanedUrl = config?.source.replace(/\/+$/, '');
-      const user = auth.getUser(config);
 
-      const result = await axios.post(
-        `${cleanedUrl}/graphql`,
-        { query: template.query },
-        {
-          headers: {
-            Authorization: `Bearer ${user.authToken}`,
-          },
-        }
-      );
+      const result = await axios.post(`${cleanedUrl}/graphql`, { query: template.query });
 
       if (result?.data) {
         setQuery(result.data);
@@ -140,7 +135,13 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     const loadPost = async (postID) => {
-      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+      let result;
+
+      if (previewID) {
+        result = await previewActions.getPostPreview({ siteID, previewID }, dispatch, config);
+      } else {
+        result = await postActions.getPost({ siteID, postID }, dispatch, config);
+      }
 
       if (result) {
         dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
@@ -165,7 +166,7 @@ const PostEditor = (props) => {
   }, [postID]);
 
   useKeypress('Escape', () => {
-    setSidebarActive(!sidebarActive);
+    !previewID && setSidebarActive(!sidebarActive);
   });
 
   const getPostData = () => {
@@ -247,6 +248,7 @@ const PostEditor = (props) => {
           <>
             {React.cloneElement(defaultComponent, {
               pageContext: {
+                pagination,
                 themeOptions: formatFieldsToProps({
                   themeOptions: fields?.themeOptions,
                   content: site?.themeOptions,
@@ -258,7 +260,15 @@ const PostEditor = (props) => {
         )}
       </PageWrapper>
 
-      {sidebarActive && <EditorSidebar className="jam-cms" editable={!!Component} />}
+      {previewID && <PreviewBanner children={`Preview`} type="primary" />}
+
+      {sidebarActive && (
+        <EditorSidebar
+          className="jam-cms"
+          editable={!!Component}
+          onToggleSidebar={() => setSidebarActive(!sidebarActive)}
+        />
+      )}
     </>
   );
 };
@@ -269,6 +279,15 @@ const EmptyContainer = styled.div`
   align-items: center;
   height: 100vh;
   text-align: center;
+`;
+
+const PreviewBanner = styled(Button)`
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 9999;
+  transform: rotate(270deg) translate(-50%, 50%);
+  transform-origin: left;
 `;
 
 export default PostEditor;

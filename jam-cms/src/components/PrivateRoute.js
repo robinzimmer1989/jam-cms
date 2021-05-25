@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { navigate } from '@reach/router';
 
 // import app components
-import { isLoggedIn } from '../utils/auth';
+import { isLoggedIn, isPreview } from '../utils/auth';
 import { useStore } from '../store';
 
 const PrivateRoute = (props) => {
@@ -10,15 +10,18 @@ const PrivateRoute = (props) => {
 
   const [{ config }] = useStore();
 
+  const loggedIn = isLoggedIn(config);
+  const previewID = isPreview();
+
   useEffect(() => {
     const { location } = props;
 
-    if (!isLoggedIn(config) && location.pathname !== `/`) {
+    if (!loggedIn && !previewID && location.pathname !== `/`) {
       navigate('/');
     }
-  });
+  }, [loggedIn, previewID]);
 
-  return isLoggedIn(config) ? <Component {...rest} /> : null;
+  return loggedIn || previewID ? <Component {...rest} /> : null;
 };
 
 export default PrivateRoute;
