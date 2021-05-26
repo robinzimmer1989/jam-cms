@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Empty } from 'antd';
+import { Empty, Typography, message } from 'antd';
 import axios from 'axios';
 import { set } from 'lodash';
 import useKeypress from 'react-use-keypress';
@@ -169,6 +169,20 @@ const PostEditor = (props) => {
     !previewID && setSidebarActive(!sidebarActive);
   });
 
+  const handleToggleSidebar = () => {
+    if (sidebarActive) {
+      message.open({
+        content: (
+          <>
+            Press <Typography.Text keyboard>ESC</Typography.Text> to reopen sidebar
+          </>
+        ),
+      });
+    }
+
+    setSidebarActive(!sidebarActive);
+  };
+
   const getPostData = () => {
     // Generate query variable i.e. 'wpPage'
     const nodeType = `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
@@ -266,7 +280,7 @@ const PostEditor = (props) => {
         <EditorSidebar
           className="jam-cms"
           editable={!!Component}
-          onToggleSidebar={() => setSidebarActive(!sidebarActive)}
+          onToggleSidebar={handleToggleSidebar}
         />
       )}
     </>
