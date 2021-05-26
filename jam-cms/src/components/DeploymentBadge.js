@@ -64,7 +64,7 @@ const DeploymentBadge = (props) => {
       )}
       {buildHook && (
         <Tooltip title="Deploy Website" placement="bottom">
-          <Button icon={<DeploymentUnitOutlined />} shape="circle" onClick={handleDeploy} />
+          <Button icon={<DeploymentUnitOutlined />} onClick={handleDeploy} />
         </Tooltip>
       )}
     </Space>
