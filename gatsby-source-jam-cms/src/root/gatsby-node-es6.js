@@ -4,7 +4,9 @@ import axios from 'axios';
 
 import getThemeSettings from './getThemeSettings';
 
-let fieldsPath, templatesPath;
+let fieldsPath,
+  templatesPath,
+  hasError = false;
 
 export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, settings }) => {
   if (!apiKey) {
@@ -48,7 +50,13 @@ export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, s
       reporter.success(result.data);
     }
   } catch (err) {
-    reporter.error(err?.response?.data?.message);
+    hasError = true;
+
+    if (err?.response?.data?.code === 'rest_no_route') {
+      reporter.error('jamCMS: Plugin not found');
+    } else {
+      reporter.error(err?.response?.data?.message);
+    }
   }
 };
 
@@ -65,6 +73,10 @@ export const onCreateWebpackConfig = ({ actions, plugins }) => {
 };
 
 export const createPages = async ({ store, actions, reporter, graphql }, pluginOptions) => {
+  if (hasError) {
+    return;
+  }
+
   const { settings, fields } = pluginOptions;
 
   // Use default path if no fields variable is provided
@@ -73,7 +85,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   // Import field object
   const fieldsObject = await import(fieldsPath);
 
-  const themeOptions = await getThemeSettings({ reporter }, pluginOptions);
+  const themeOptions = getThemeSettings({ reporter }, pluginOptions);
 
   const allNodes = {};
 

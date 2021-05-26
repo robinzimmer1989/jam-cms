@@ -27,11 +27,13 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var fieldsPath, templatesPath;
+var fieldsPath,
+    templatesPath,
+    hasError = false;
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref, _ref2) {
-    var store, reporter, fields, source, apiKey, settings, fieldsObject, url, result, _err$response, _err$response$data;
+    var store, reporter, fields, source, apiKey, settings, fieldsObject, url, result, _err$response, _err$response$data, _err$response2, _err$response2$data;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -103,15 +105,21 @@ var onPreInit = /*#__PURE__*/function () {
               reporter.success(result.data);
             }
 
-            _context.next = 28;
+            _context.next = 29;
             break;
 
           case 25:
             _context.prev = 25;
             _context.t0 = _context["catch"](18);
-            reporter.error(_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : (_err$response$data = _err$response.data) === null || _err$response$data === void 0 ? void 0 : _err$response$data.message);
+            hasError = true;
 
-          case 28:
+            if ((_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : (_err$response$data = _err$response.data) === null || _err$response$data === void 0 ? void 0 : _err$response$data.code) === 'rest_no_route') {
+              reporter.error('jamCMS: Plugin not found');
+            } else {
+              reporter.error(_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response2 = _context.t0.response) === null || _err$response2 === void 0 ? void 0 : (_err$response2$data = _err$response2.data) === null || _err$response2$data === void 0 ? void 0 : _err$response2$data.message);
+            }
+
+          case 29:
           case "end":
             return _context.stop();
         }
@@ -149,24 +157,29 @@ var createPages = /*#__PURE__*/function () {
         switch (_context6.prev = _context6.next) {
           case 0:
             store = _ref5.store, actions = _ref5.actions, reporter = _ref5.reporter, graphql = _ref5.graphql;
+
+            if (!hasError) {
+              _context6.next = 3;
+              break;
+            }
+
+            return _context6.abrupt("return");
+
+          case 3:
             settings = pluginOptions.settings, fields = pluginOptions.fields; // Use default path if no fields variable is provided
 
             fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields"); // Import field object
 
-            _context6.next = 5;
+            _context6.next = 7;
             return Promise.resolve("".concat(fieldsPath)).then(function (s) {
               return (0, _interopRequireWildcard2["default"])(require(s));
             });
 
-          case 5:
+          case 7:
             fieldsObject = _context6.sent;
-            _context6.next = 8;
-            return (0, _getThemeSettings["default"])({
+            themeOptions = (0, _getThemeSettings["default"])({
               reporter: reporter
             }, pluginOptions);
-
-          case 8:
-            themeOptions = _context6.sent;
             allNodes = {};
             _context6.prev = 10;
             _context6.next = 13;
