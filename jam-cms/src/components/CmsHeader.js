@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { PageHeader, Button, Badge, Popover, Alert, Divider } from 'antd';
 import { QuestionOutlined } from '@ant-design/icons';
+import { Link } from '@reach/router';
 
 // import app components
 import DeploymentBadge from './DeploymentBadge';
@@ -61,12 +62,18 @@ const CmsHeader = (props) => {
       placement="bottomRight"
     >
       <Badge dot={site?.deployment?.undeployedChanges}>
-        <Button icon={<QuestionOutlined />} shape="circle" type="default" />
+        <Button icon={<QuestionOutlined />} type="default" />
       </Badge>
     </Popover>
   );
 
   buttons.push(<AvatarMenu key="avatar-menu" />);
+
+  buttons.push(
+    <Link to="/">
+      <Button key="view-website" children="View Website" />
+    </Link>
+  );
 
   return (
     <Container>
