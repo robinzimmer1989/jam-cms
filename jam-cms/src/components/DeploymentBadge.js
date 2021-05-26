@@ -25,14 +25,16 @@ const DeploymentBadge = (props) => {
   useEffect(() => {
     let interval = null;
 
-    interval = setInterval(() => {
-      // We use a central deployment badge image instead of the one in the site object to avoid a flickering
-      // when deploy is triggered and user navigates between pages
-      dispatch({
-        type: 'SET_DEPLOYMENT_IMAGE',
-        payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
-      });
-    }, 10000);
+    if (badgeImage) {
+      interval = setInterval(() => {
+        // We use a central deployment badge image instead of the one in the site object to avoid a flickering
+        // when deploy is triggered and user navigates between pages
+        dispatch({
+          type: 'SET_DEPLOYMENT_IMAGE',
+          payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
+        });
+      }, 10000);
+    }
 
     return () => clearInterval(interval);
   }, []);
