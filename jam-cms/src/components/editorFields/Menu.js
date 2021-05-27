@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
 import { isEmpty } from 'lodash';
+import Parser from 'html-react-parser';
 import produce from 'immer';
 
 // import app components
@@ -23,6 +24,7 @@ const Menu = (props) => {
   const [
     {
       cmsState: { sites, siteID },
+      editorState: { siteHasChanged },
     },
   ] = useStore();
 
@@ -34,6 +36,11 @@ const Menu = (props) => {
     title: '',
     url: '',
   });
+
+  // When a post is saved while a menu item is open, we need to manually reset the editing array to allow dragging
+  useEffect(() => {
+    setEditing([]);
+  }, [siteHasChanged]);
 
   useEffect(() => {
     if (value && Array.isArray(value)) {
@@ -185,7 +192,7 @@ const Menu = (props) => {
                     <Collapse.Panel
                       header={
                         <span style={{ cursor: editing.length === 0 ? 'grab' : 'not-allowed' }}>
-                          {node.title || ' '}
+                          {Parser(node.title || ' ')}
                         </span>
                       }
                       showArrow={false}
