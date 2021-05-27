@@ -9,12 +9,13 @@ import { siteActions } from '../actions';
 
 const DeploymentBadge = (props) => {
   const {
-    deployment: { badgeImage, buildHook, lastBuild },
+    deployment: { badgeImage, badgeLink, buildHook, lastBuild },
   } = props;
 
   const [
     {
       config,
+      authState: { authUser },
       cmsState: { siteID, sites, deploymentImage },
     },
     dispatch,
@@ -60,7 +61,17 @@ const DeploymentBadge = (props) => {
   return (
     <Space size={20}>
       {(deploymentImage || badgeImage) && lastBuild && (
-        <DeploymentStatus src={deploymentImage || badgeImage} />
+        <>
+          {badgeLink && authUser?.capabilities?.manage_options ? (
+            <Tooltip title="Open Deploy" placement="bottom">
+              <DeploymentLink href={badgeLink} target="_blank" rel="noopener noreferrer">
+                <DeploymentStatus src={deploymentImage || badgeImage} />
+              </DeploymentLink>
+            </Tooltip>
+          ) : (
+            <DeploymentStatus src={deploymentImage || badgeImage} />
+          )}
+        </>
       )}
       {buildHook && (
         <Tooltip title="Deploy Website" placement="bottom">
@@ -70,6 +81,12 @@ const DeploymentBadge = (props) => {
     </Space>
   );
 };
+
+const DeploymentLink = styled.a`
+  height: 32px;
+  display: flex;
+  align-items: center;
+`;
 
 const DeploymentStatus = styled.img`
   height: 16px;
