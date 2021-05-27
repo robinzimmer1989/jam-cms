@@ -24,7 +24,6 @@ import Input from './Input';
 import Select from './Select';
 import Caption from './Caption';
 import PostTreeSelect from './PostTreeSelect';
-import PostForm from './PostForm';
 import MediaLibrary from './MediaLibrary';
 import FilePicker from './editorFields/FilePicker';
 import { postActions, siteActions, previewActions } from '../actions';
@@ -598,51 +597,14 @@ const EditorSidebar = (props) => {
     <Container {...rest}>
       <Header>
         <Row justify="space-between">
-          {postHasChanged || siteHasChanged ? (
-            <>
+          <Space>
+            {postHasChanged || siteHasChanged ? (
               <Button icon={<UndoOutlined />} onClick={handleDiscardRequest} size="small" ghost />
-
-              <Space>
-                {post?.status === 'draft' && (
-                  <>
-                    <Button
-                      children="Save Draft"
-                      onClick={handleSaveDraft}
-                      loading={loading === 'draft'}
-                      disabled={!postHasChanged && !siteHasChanged}
-                      size="small"
-                      ghost
-                    />
-                    <Button
-                      children="Publish"
-                      type="primary"
-                      onClick={handlePublish}
-                      loading={loading === 'publish'}
-                      disabled={post.status === 'publish' && !postHasChanged && !siteHasChanged}
-                      size="small"
-                      ghost
-                    />
-                  </>
-                )}
-
-                {(post?.status === 'publish' || post?.status === 'trash') && (
-                  <Button
-                    children="Update"
-                    onClick={() => handleUpdate(post.status)}
-                    loading={loading === 'update'}
-                    disabled={!postHasChanged && !siteHasChanged}
-                    size="small"
-                    ghost
-                  />
-                )}
-              </Space>
-            </>
-          ) : (
-            <>
+            ) : (
               <Button
                 icon={<ArrowLeftOutlined />}
+                type="ghost"
                 size="small"
-                disabled={postHasChanged || siteHasChanged}
                 ghost
                 onClick={() =>
                   navigate(
@@ -650,25 +612,39 @@ const EditorSidebar = (props) => {
                   )
                 }
               />
+            )}
+          </Space>
 
+          <Space>
+            {post?.status === 'draft' && (
+              <>
+                <Button
+                  children="Save Draft"
+                  onClick={handleSaveDraft}
+                  loading={loading === 'draft'}
+                  size="small"
+                  ghost
+                />
+                <Button
+                  children="Publish"
+                  onClick={handlePublish}
+                  loading={loading === 'publish'}
+                  size="small"
+                  ghost
+                />
+              </>
+            )}
+
+            {(post?.status === 'publish' || post?.status === 'trash') && (
               <Button
-                children="Add New"
+                children="Update"
+                onClick={() => handleUpdate(post.status)}
+                loading={loading === 'update'}
                 size="small"
-                disabled={postHasChanged || siteHasChanged}
                 ghost
-                onClick={() =>
-                  dispatch({
-                    type: 'SET_DIALOG',
-                    payload: {
-                      open: true,
-                      title: 'Add New',
-                      component: <PostForm onSubmit={handleAddPost} />,
-                    },
-                  })
-                }
               />
-            </>
-          )}
+            )}
+          </Space>
         </Row>
       </Header>
 
