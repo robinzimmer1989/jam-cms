@@ -157,6 +157,10 @@ export default createGlobalStyle`
     background-color: rgba(240, 240, 240, 0.2) !important;
   }
 
+  .anticon svg {
+    display: flex;
+  }
+
   .ant-btn > span {
     display: inline-flex;
   }
