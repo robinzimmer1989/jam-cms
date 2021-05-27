@@ -53,7 +53,7 @@ const MediaImage = (props) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12} style={{ background: `${colors.secondaryContrast}` }}>
-          {renderImage(file)}
+          <ImageContainer>{renderImage(file)}</ImageContainer>
         </Col>
         <Col span={12}>
           <Space direction="vertical" size={20}>
@@ -148,6 +148,12 @@ const MediaImage = (props) => {
     </>
   );
 };
+
+const ImageContainer = styled.div`
+  height: 400px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+`;
 
 const Content = styled.div`
   display: flex;

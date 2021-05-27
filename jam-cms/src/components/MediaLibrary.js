@@ -254,14 +254,8 @@ const MediaItem = styled.div`
   justify-content: center;
   margin-bottom: 20px;
   cursor: pointer;
-  background-color: #fff;
-  box-shadow: 0 8px 15px rgba(29, 46, 83, 0.07);
-
-  img {
-    max-height: 150px;
-    max-width: 150px;
-    width: auto;
-  }
+  background: #fff;
+  border: 1px solid #d9d9d9;
 `;
 
 const MediaItemInner = styled.div`

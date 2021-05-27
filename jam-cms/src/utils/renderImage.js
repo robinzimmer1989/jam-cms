@@ -31,10 +31,13 @@ const File = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  max-height: 350px;
-  max-width: 100%;
 
   .jam-cms-svg {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  .gatsby-image-wrapper {
     max-height: 100%;
     max-width: 100%;
   }
