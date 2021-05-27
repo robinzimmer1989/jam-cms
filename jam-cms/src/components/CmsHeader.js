@@ -70,8 +70,8 @@ const CmsHeader = (props) => {
   buttons.push(<AvatarMenu key="avatar-menu" />);
 
   buttons.push(
-    <Link to="/">
-      <Button key="view-website" children="View Website" />
+    <Link key="view-website" to="/">
+      <Button children="View Website" />
     </Link>
   );
 
