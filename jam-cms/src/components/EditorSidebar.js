@@ -14,9 +14,10 @@ import {
   Dropdown,
   Empty,
   Menu,
+  Alert,
 } from 'antd';
 import { set } from 'lodash';
-import { ArrowLeftOutlined, UndoOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, UndoOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 // import app components
 import EditorFields from './EditorFields';
@@ -224,23 +225,6 @@ const EditorSidebar = (props) => {
         width: 320,
       },
     });
-  };
-
-  const handleAddPost = async ({ postTypeID, title, parentID }) => {
-    const result = await postActions.addPost(
-      { siteID, postTypeID, status: 'draft', title, parentID },
-      dispatch,
-      config
-    );
-
-    if (result?.id) {
-      // Add post to post type so we can then generate the slug and the route the newly created post
-      const nextPostType = produce(site.postTypes[postTypeID], (draft) => {
-        return set(draft, `posts.${result.id}`, result);
-      });
-      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
-      navigate(`/${slug}`);
-    }
   };
 
   const handleGeneratePreviewLink = async () => {
@@ -597,25 +581,29 @@ const EditorSidebar = (props) => {
     <Container {...rest}>
       <Header>
         <Row justify="space-between">
-          <Space>
-            {postHasChanged || siteHasChanged ? (
-              <Button icon={<UndoOutlined />} onClick={handleDiscardRequest} size="small" ghost />
-            ) : (
-              <Button
-                icon={<ArrowLeftOutlined />}
-                type="ghost"
-                size="small"
-                ghost
-                onClick={() =>
+          <Space size={15}>
+            <Button
+              icon={<ArrowLeftOutlined />}
+              type="ghost"
+              size="small"
+              ghost
+              onClick={() => {
+                if (postHasChanged || siteHasChanged) {
+                  handleDiscardRequest();
+                } else {
                   navigate(
                     getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
-                  )
+                  );
                 }
-              />
+              }}
+            />
+
+            {(postHasChanged || siteHasChanged) && (
+              <Button icon={<UndoOutlined />} onClick={handleDiscardRequest} size="small" ghost />
             )}
           </Space>
 
-          <Space>
+          <Space size={15}>
             {post?.status === 'draft' && (
               <>
                 <Button
@@ -698,12 +686,38 @@ const EditorSidebar = (props) => {
         {sidebar === 'preview' && renderPreview()}
 
         {(postHasChanged || siteHasChanged) && (
-          <InfoMessage>
-            <Typography.Text type="secondary">
-              All links have been temporarily disabled to make sure nothing gets lost. Save the post
-              or <span onClick={handleDiscardRequest}>undo</span> your changes.
-            </Typography.Text>
-          </InfoMessage>
+          <AlertContainer>
+            <Alert
+              message="Links are disabled"
+              showIcon={false}
+              banner
+              style={{ background: 'transparent' }}
+              action={
+                <Button
+                  icon={<QuestionCircleOutlined />}
+                  type="link"
+                  size="small"
+                  onClick={() =>
+                    dispatch({
+                      type: `SET_DIALOG`,
+                      payload: {
+                        open: true,
+                        title: 'Information',
+                        component: (
+                          <Typography
+                            children={
+                              'All links on the website have been temporarily disabled to avoid content loss. Save the post or undo your changes.'
+                            }
+                          />
+                        ),
+                        width: 320,
+                      },
+                    })
+                  }
+                />
+              }
+            />
+          </AlertContainer>
         )}
       </TabContainer>
     </Container>
@@ -730,7 +744,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   padding: 15px;
-  background: #001529;
+  background: ${colors.primary};
 
   button {
     &:hover {
@@ -774,21 +788,16 @@ const TabContainer = styled.div`
 
 const Content = styled.div`
   padding: 15px;
-  min-height: calc(100% - 95px);
+  min-height: calc(100% - 46px);
 `;
 
 const EditorFieldsContainer = styled.div`
-  min-height: calc(100% - 95px);
+  min-height: calc(100% - 46px);
 `;
 
-const InfoMessage = styled.div`
-  width: 100%;
-  padding: 15px;
-
-  span > span {
-    text-decoration: underline;
-    cursor: pointer;
-  }
+const AlertContainer = styled.div`
+  height: 45px;
+  border-top: 1px solid #d9d9d9;
 `;
 
 export default EditorSidebar;
