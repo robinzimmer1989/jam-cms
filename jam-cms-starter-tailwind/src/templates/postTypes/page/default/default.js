@@ -113,6 +113,7 @@ export const Query = graphql`
                   image {
                     altText
                     sourceUrl
+                    svg
                     localFile {
                       childImageSharp {
                         gatsbyImageData(width: 800, placeholder: BLURRED)

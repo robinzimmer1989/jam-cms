@@ -1,5 +1,6 @@
 import React from 'react';
 import { GatsbyImage, RichText } from 'jam-cms';
+import Parser from 'html-react-parser';
 
 // import app components
 import Button from '../button/Button';
@@ -30,11 +31,18 @@ const TextImage = (props) => {
         </div>
         <div className={`order-${alignment === 'left' ? 1 : 2}`}>
           {image ? (
-            <GatsbyImage
-              image={image}
-              alt={image.altText}
-              className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
-            />
+            <>
+              {image?.svg ? (
+                Parser(image.svg)
+              ) : (
+                <GatsbyImage
+                  objectFit="contain"
+                  image={image}
+                  alt={image.altText}
+                  className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
+                />
+              )}
+            </>
           ) : (
             <img
               src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
