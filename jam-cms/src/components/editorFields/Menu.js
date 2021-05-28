@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { isEmpty } from 'lodash';
 import Parser from 'html-react-parser';
 import produce from 'immer';
@@ -17,6 +18,7 @@ import {
   generateSlug,
 } from '../../utils';
 import { useStore } from '../../store';
+import { colors } from '../../theme';
 
 const Menu = (props) => {
   const { value = [], onChange } = props;
@@ -226,11 +228,9 @@ const Menu = (props) => {
             />
           </div>
 
-          <Button
-            children={`Add item`}
-            onClick={() => setDialog({ active: true, node: null })}
-            block
-          />
+          <AddButton onClick={() => setDialog({ active: true, node: null })}>
+            <PlusOutlined />
+          </AddButton>
         </div>
       </Container>
 
@@ -413,6 +413,21 @@ const EmptyContainer = styled.div`
   align-items: center;
   width: 100%;
   text-align: center;
+`;
+
+const AddButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 46px;
+  width: 100%;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: ease-in all 0.2s;
+
+  &:hover {
+    border-color: ${colors.tertiary};
+  }
 `;
 
 export default Menu;
