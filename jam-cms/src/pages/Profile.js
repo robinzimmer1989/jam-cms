@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card, Space, Typography } from 'antd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -16,10 +16,20 @@ const Home = () => {
 
   return (
     <CmsLayout pageTitle={`Profile`}>
-      <Card title={`Personal Information`}>
-        <Caption children="Email" />
-        <p>{authUser?.email}</p>
-      </Card>
+      <Space direction="vertical" size={40}>
+        <Card title={`Personal Information`}>
+          <Space direction="vertical" size={20}>
+            <Space direction="vertical" size={2}>
+              <Caption children="Email" />
+              <Typography>{authUser?.email}</Typography>
+            </Space>
+            <Space direction="vertical" size={2}>
+              <Caption children="Role" />
+              <Typography>{authUser?.role}</Typography>
+            </Space>
+          </Space>
+        </Card>
+      </Space>
     </CmsLayout>
   );
 };
