@@ -30,7 +30,7 @@ const EditorForm = (props) => {
   };
 
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" size={20}>
       <Input
         label="Email"
         value={email}
