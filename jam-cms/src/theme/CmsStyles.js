@@ -125,6 +125,10 @@ const styles = css`
     top: 50% !important;
     transform: translateY(-50%);
   }
+
+  .ant-scroll-number-only-unit {
+    font-size: 10px;
+  }
 `;
 
 export default createGlobalStyle`

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import moment from 'moment';
-import { Alert, Space, List, Skeleton, Card, Typography } from 'antd';
+import { Empty, Space, List, Skeleton, Card, Typography, Button } from 'antd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import { siteActions } from '../actions';
 import { useStore } from '../store';
+import { version } from '../../package.json';
 
 const Dashboard = () => {
   const [
@@ -20,8 +20,6 @@ const Dashboard = () => {
 
   const lastBuild = sites?.[siteID]?.deployment?.lastBuild;
 
-  const errors = sites?.[siteID]?.errors;
-
   useEffect(() => {
     const getUnpublishedChanges = async () => {
       const result = await siteActions.getUnpublishedChanges({ siteID }, dispatch, config);
@@ -34,26 +32,27 @@ const Dashboard = () => {
     getUnpublishedChanges();
   }, [lastBuild]);
 
+  const handleDeploy = async () => {
+    await siteActions.deploySite({ id: siteID }, dispatch, config);
+
+    if (sites?.[siteID]?.deployment?.badgeImage) {
+      dispatch({
+        type: 'SET_DEPLOYMENT_IMAGE',
+        payload: `${sites[siteID].deployment.badgeImage}?v=${Math.floor(
+          Math.random() * Math.floor(100)
+        )}`,
+      });
+    }
+  };
+
+  const deploymentButton = sites?.[siteID]?.deployment?.buildHook
+    ? [<Button key="deploy" type="primary" onClick={handleDeploy} children="Deploy Website" />]
+    : null;
+
   return (
     <CmsLayout pageTitle={`Dashboard`}>
       <Space direction="vertical" size={40}>
-        {errors && (
-          <Space direction="vertical">
-            {errors.map((o, i) => {
-              return (
-                <Alert
-                  key={i}
-                  message={o.title}
-                  description={o.description}
-                  type="error"
-                  showIcon
-                />
-              );
-            })}
-          </Space>
-        )}
-
-        <Card title="Unpublished changes">
+        <Card title="Unpublished changes" extra={deploymentButton}>
           {changes === null ? (
             <Skeleton paragraph={{ rows: 4 }} active />
           ) : changes?.length ? (
@@ -66,9 +65,10 @@ const Dashboard = () => {
               )}
             />
           ) : (
-            <Typography children={`No Changes`} />
+            <Empty description={'No changes'} />
           )}
         </Card>
+        <Typography.Text type="secondary">Version: {version}</Typography.Text>
       </Space>
     </CmsLayout>
   );

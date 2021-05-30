@@ -21,8 +21,6 @@ const DeploymentBadge = (props) => {
     dispatch,
   ] = useStore();
 
-  const site = sites[siteID];
-
   useEffect(() => {
     let interval = null;
 
@@ -41,21 +39,14 @@ const DeploymentBadge = (props) => {
   }, []);
 
   const handleDeploy = async () => {
-    // Test site before deploying
-    if (!site?.frontPage) {
-      return notification.error({
-        message: 'Error',
-        description: 'Please add a homepage',
-        placement: 'bottomRight',
-      });
-    }
-
     await siteActions.deploySite({ id: siteID }, dispatch, config);
 
-    dispatch({
-      type: 'SET_DEPLOYMENT_IMAGE',
-      payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
-    });
+    if (badgeImage) {
+      dispatch({
+        type: 'SET_DEPLOYMENT_IMAGE',
+        payload: `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`,
+      });
+    }
   };
 
   return (

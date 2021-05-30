@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { PageHeader, Button, Badge, Popover, Alert, Divider } from 'antd';
-import { QuestionOutlined } from '@ant-design/icons';
+import { PageHeader, Button, Badge, Popover, Alert, List } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
 import { Link } from '@reach/router';
+import { navigate } from '@reach/router';
 
 // import app components
 import DeploymentBadge from './DeploymentBadge';
 import AvatarMenu from './AvatarMenu';
 import { useStore } from '../store';
-import { version } from '../../package.json';
+import getRoute from '../routes';
+
+const messages = {
+  'undeployed-changes': {
+    onClick: () => navigate(getRoute('dashboard')),
+    title: 'Unpublished changes',
+    description: 'Click the deployment button to publish the latest updates.',
+  },
+  'missing-front-page': {
+    onClick: () => navigate(getRoute('collection', { postTypeID: 'page' })),
+    title: 'Homepage missing',
+    description: 'Assign the home page attribute to one of your pages.',
+  },
+};
 
 const CmsHeader = (props) => {
   const { title } = props;
@@ -19,71 +33,77 @@ const CmsHeader = (props) => {
     },
   ] = useStore();
 
-  const site = sites[siteID] || null;
+  const deployment = sites?.[siteID]?.deployment;
 
-  const buttons = [];
+  const notifications = [];
 
-  buttons.push(<DeploymentBadge key="deployment-badge" deployment={site.deployment} />);
+  // We're only pushing keys to the notifications array to improve useMemo performance
+  if (deployment?.undeployedChanges) {
+    notifications.push('undeployed-changes');
+  }
 
-  const helpContent = (
-    <div>
-      {site?.deployment?.undeployedChanges && (
-        <p>
-          <Alert
-            message="There are unpublished changes. Click the deployment button to publish the latest updates."
-            type="info"
-            showIcon
-          />
-        </p>
-      )}
+  if (!sites?.[siteID]?.frontPage) {
+    notifications.push('missing-front-page');
+  }
 
-      <p>Welcome to the jamCMS backend.</p>
+  if (sites?.[siteID]?.errors?.length) {
+    sites[siteID].errors.map((o) => notifications.push(o.id));
+  }
 
-      <p>
-        If you want to learn more about the JamStack, visit:{' '}
-        <a href="https://jamstack.org/what-is-jamstack/" target="_blank">
-          jamstack.org/what-is-jamstack
-        </a>
-      </p>
+  return useMemo(() => {
+    const buttons = [];
 
-      <Divider />
+    buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
 
-      <p>Version: {version}</p>
-    </div>
-  );
+    const notificationsContent = (
+      <Notifications>
+        <List
+          itemLayout="horizontal"
+          dataSource={notifications}
+          renderItem={(key) => {
+            const item = messages[key] || sites?.[siteID]?.errors.find((o) => o.id === key);
 
-  buttons.push(
-    <Popover
-      key={'help'}
-      title="Help"
-      content={helpContent}
-      arrow
-      trigger={['click']}
-      placement="bottomRight"
-    >
-      <Badge dot={site?.deployment?.undeployedChanges}>
-        <Button icon={<QuestionOutlined />} type="default" />
-      </Badge>
-    </Popover>
-  );
+            return (
+              <List.Item key={key} onClick={item.onClick}>
+                <List.Item.Meta title={item.title} description={item.description} />
+              </List.Item>
+            );
+          }}
+        />
+      </Notifications>
+    );
 
-  buttons.push(<AvatarMenu key="avatar-menu" />);
+    buttons.push(
+      <Popover
+        key={'notifications'}
+        title="Notifications"
+        content={notificationsContent}
+        arrow
+        trigger={['click']}
+        placement="bottomRight"
+      >
+        <Badge size="small" count={notifications.length}>
+          <Button icon={<BellOutlined />} type="default" />
+        </Badge>
+      </Popover>
+    );
 
-  buttons.push(
-    <Link key="view-website" to="/">
-      <Button children="View Website" />
-    </Link>
-  );
+    buttons.push(<AvatarMenu key="avatar-menu" />);
 
-  return (
-    <Container>
-      <PageHeader
-        title={title}
-        extra={buttons}
-        style={{ paddingLeft: 40, paddingRight: 40, borderBottom: '1px solid #d9e1ef' }}
-      />
-    </Container>
-  );
+    buttons.push(
+      <Link key="view-website" to="/">
+        <Button children="View Website" />
+      </Link>
+    );
+
+    return (
+      <Container>
+        <Content>
+          <PageHeader title={title} extra={buttons} />
+        </Content>
+      </Container>
+    );
+  }, [deployment, notifications]);
 };
 
 const Container = styled.div`
@@ -94,6 +114,17 @@ const Container = styled.div`
   width: calc(100% - 250px);
   height: 50px;
   background: #fff;
+  border-bottom: 1px solid #d9e1ef;
+`;
+
+const Content = styled.div`
+  max-width: 1024px;
+  padding: 0 40px;
+  margin: 0 auto;
+`;
+
+const Notifications = styled.div`
+  width: 320px;
 `;
 
 export default CmsHeader;
