@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, navigate } from '@reach/router';
+import { Link } from '@reach/router';
 import {
   Button,
   PageHeader,
@@ -13,7 +13,6 @@ import {
   Alert,
 } from 'antd';
 import produce from 'immer';
-import { set } from 'lodash';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 // import app components
@@ -24,16 +23,16 @@ import Tag from '../components/Tag';
 
 import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
-import { createDataTree, generateSlug } from '../utils';
+import { createDataTree, generateSlug, addPost } from '../utils';
 import { colors } from '../theme';
 
 const PostType = (props) => {
-  const { siteID, postTypeID } = props;
+  const { postTypeID } = props;
 
   const [
     {
       config,
-      cmsState: { sites },
+      cmsState: { sites, siteID },
     },
     dispatch,
   ] = useStore();
@@ -84,31 +83,16 @@ const PostType = (props) => {
     setIsSyncing(false);
   };
 
-  const handleAddPost = async ({ title, parentID }) => {
-    const result = await postActions.addPost(
-      { siteID, postTypeID, status: 'draft', title, parentID },
-      dispatch,
-      config
-    );
-
-    if (result?.id) {
-      // Add post to post type so we can then generate the slug and the route the newly created post
-      const nextPostType = produce(postType, (draft) => {
-        return set(draft, `posts.${result.id}`, result);
-      });
-
-      const slug = generateSlug(nextPostType, result.id, sites?.[siteID]?.frontPage);
-
-      navigate(`/${slug}`);
-    }
-  };
-
   const handleDuplicatePost = async ({ postID }) => {
     await postActions.duplicatePost({ siteID, id: postID }, dispatch, config);
   };
 
   const handleDeletePost = async ({ postID }) => {
     await postActions.deletePost({ siteID, id: postID }, dispatch, config);
+  };
+
+  const handleAddPost = async ({ postTypeID, title, parentID }) => {
+    await addPost({ site: sites[siteID], postTypeID, title, parentID }, dispatch, config);
   };
 
   const handleTrashPost = async ({ postID }) => {
@@ -182,7 +166,7 @@ const PostType = (props) => {
           type: 'SET_DIALOG',
           payload: {
             open: true,
-            title: `Add`,
+            title: `Add ${postType.title}`,
             component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
           },
         })
