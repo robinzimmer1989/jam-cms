@@ -51,7 +51,7 @@ const CmsLayout = (props) => {
           <div>
             <SidebarHeader
               title={
-                <LogoContainer to="/" title="Visit Website">
+                <LogoContainer>
                   <Logo />
                 </LogoContainer>
               }
@@ -156,7 +156,7 @@ const SidebarHeader = styled(PageHeader)`
   }
 `;
 
-const LogoContainer = styled(Link)`
+const LogoContainer = styled.div`
   display: block;
   padding: 20px;
 
