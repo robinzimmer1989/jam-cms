@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from '@reach/router';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
@@ -13,8 +13,10 @@ import {
 
 // import app components
 import CmsHeader from './CmsHeader';
+import PostForm from './PostForm';
 import Logo from '../icons/jamCMS.svg';
 
+import { addPost } from '../utils';
 import { colors } from '../theme';
 import { useStore } from '../store';
 import getRoute from '../routes';
@@ -24,11 +26,16 @@ const CmsLayout = (props) => {
 
   const [
     {
-      config: { fields },
+      config,
       authState: { authUser },
       cmsState: { siteID, sites },
     },
+    dispatch,
   ] = useStore();
+
+  const handleAddPost = async ({ postTypeID, title, parentID }) => {
+    await addPost({ site: sites[siteID], postTypeID, title, parentID }, dispatch, config);
+  };
 
   return (
     <>
@@ -70,33 +77,45 @@ const CmsLayout = (props) => {
                 key={'Collections'}
                 icon={<BlockOutlined />}
                 title="Collections"
-                popupOffset={[1, 0]}
+                popupOffset={[1, -4]}
+                subMenuOpenDelay={0}
+                subMenuCloseDelay={0}
               >
-                {fields?.postTypes &&
-                  Object.values(fields.postTypes).map((o, i) => {
+                {config?.fields?.postTypes &&
+                  Object.values(config.fields.postTypes).map((o, i) => {
                     // Render taxonomies per post type (they can be assigned to multiple post types)
                     // We grab them from the fields object
                     const postTypeTaxonomies = [];
-                    fields?.taxonomies &&
-                      Object.values(fields.taxonomies).map(
+                    config?.fields?.taxonomies &&
+                      Object.values(config.fields.taxonomies).map(
                         (p) => p.postTypes.includes(o.id) && postTypeTaxonomies.push(p)
                       );
 
                     return (
-                      <Fragment key={o.title}>
-                        <Menu.Item>
-                          <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>
-                            {o.title}
-                          </Link>
+                      <Menu.SubMenu key={o.title} title={o.title} popupOffset={[1, -4]}>
+                        <Menu.Item key={o.title}>
+                          <Link to={getRoute(`collection`, { siteID, postTypeID: o.id })}>All</Link>
+                        </Menu.Item>
+                        <Menu.Item
+                          key={`add-${o.id}`}
+                          onClick={() =>
+                            dispatch({
+                              type: 'SET_DIALOG',
+                              payload: {
+                                open: true,
+                                title: `Add ${o.title}`,
+                                component: <PostForm onSubmit={handleAddPost} postTypeID={o.id} />,
+                              },
+                            })
+                          }
+                        >
+                          Add new
                         </Menu.Item>
 
                         {postTypeTaxonomies &&
                           postTypeTaxonomies.map((p) => {
                             return (
-                              <Menu.Item
-                                key={p.title}
-                                style={{ textTransform: 'uppercase', fontSize: 11 }}
-                              >
+                              <Menu.Item key={p.title}>
                                 <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
                                   {p.title}
                                 </Link>
@@ -107,7 +126,7 @@ const CmsLayout = (props) => {
                         {Object.values(sites[siteID].postTypes).length - 1 !== i && (
                           <Menu.Divider />
                         )}
-                      </Fragment>
+                      </Menu.SubMenu>
                     );
                   })}
               </Menu.SubMenu>
