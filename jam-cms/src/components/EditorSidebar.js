@@ -17,7 +17,7 @@ import {
   Alert,
 } from 'antd';
 import { set } from 'lodash';
-import { ArrowLeftOutlined, UndoOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { HomeOutlined, UndoOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 // import app components
 import EditorFields from './EditorFields';
@@ -592,7 +592,7 @@ const EditorSidebar = (props) => {
               />
             ) : (
               <Button
-                icon={<ArrowLeftOutlined />}
+                icon={<HomeOutlined />}
                 type="ghost"
                 size="small"
                 ghost
