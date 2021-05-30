@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { PageHeader, Button, Badge, Popover, Alert, List } from 'antd';
+import { PageHeader, Button, Badge, Popover, List } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 import { Link } from '@reach/router';
 import { navigate } from '@reach/router';
@@ -20,7 +20,13 @@ const messages = {
   'missing-front-page': {
     onClick: () => navigate(getRoute('collection', { postTypeID: 'page' })),
     title: 'Homepage missing',
-    description: 'Assign the home page attribute to one of your pages.',
+    description: 'Assign the homepage attribute within the page settings to any page.',
+  },
+  'unpublished-front-page': {
+    onClick: () => navigate(getRoute('collection', { postTypeID: 'page' })),
+    title: 'Homepage unpublished',
+    description:
+      "The homepage status is set to draft or trash and therefore won't get included in the build.",
   },
 };
 
@@ -46,6 +52,15 @@ const CmsHeader = (props) => {
     notifications.push('missing-front-page');
   }
 
+  if (
+    sites?.[siteID]?.frontPage &&
+    sites?.[siteID]?.postType?.['page']?.posts.find((o) => o.id === sites[siteID].frontPage)
+      ?.status !== 'publish'
+  ) {
+    notifications.push('unpublished-front-page');
+  }
+
+  // Add CMS errors
   if (sites?.[siteID]?.errors?.length) {
     sites[siteID].errors.map((o) => notifications.push(o.id));
   }
