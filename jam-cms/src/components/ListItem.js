@@ -27,13 +27,7 @@ const ListItem = (props) => {
     </Typography.Text>
   );
 
-  const metaTitle = link ? (
-    <Link to={link} style={{ flex: 1 }}>
-      {listItemTitle}
-    </Link>
-  ) : (
-    listItemTitle
-  );
+  const metaTitle = link ? <StyledLink to={link}>{listItemTitle}</StyledLink> : listItemTitle;
 
   return (
     <Container level={level} {...rest}>
@@ -78,6 +72,18 @@ const ImagePlaceholder = styled.div`
   width: 50px;
   height: 50px;
   background: ${colors.tertiary};
+`;
+
+const StyledLink = styled(Link)`
+  && {
+    flex: 1;
+
+    &:hover {
+      .ant-typography {
+        color: ${colors.primary};
+      }
+    }
+  }
 `;
 
 export default ListItem;
