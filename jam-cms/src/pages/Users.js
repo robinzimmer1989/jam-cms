@@ -16,6 +16,7 @@ const Users = () => {
     {
       config,
       cmsState: { siteID, sites },
+      authState: { authUser },
     },
     dispatch,
   ] = useStore();
@@ -63,6 +64,8 @@ const Users = () => {
       <PageHeader>
         <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
       </PageHeader>
+
+      <StyledListItem title={authUser?.email} subtitle={authUser?.role} />
 
       <InfiniteScroll
         pageStart={0}
