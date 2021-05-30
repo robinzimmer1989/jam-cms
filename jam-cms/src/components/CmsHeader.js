@@ -24,7 +24,7 @@ const messages = {
   },
   'unpublished-front-page': {
     onClick: () => navigate(getRoute('collection', { postTypeID: 'page' })),
-    title: 'Homepage unpublished',
+    title: 'Homepage not published',
     description:
       "The homepage status is set to draft or trash and therefore won't get included in the build.",
   },
@@ -53,9 +53,7 @@ const CmsHeader = (props) => {
   }
 
   if (
-    sites?.[siteID]?.frontPage &&
-    sites?.[siteID]?.postType?.['page']?.posts.find((o) => o.id === sites[siteID].frontPage)
-      ?.status !== 'publish'
+    sites?.[siteID]?.postTypes?.['page']?.posts?.[sites?.[siteID]?.frontPage]?.status !== 'publish'
   ) {
     notifications.push('unpublished-front-page');
   }
