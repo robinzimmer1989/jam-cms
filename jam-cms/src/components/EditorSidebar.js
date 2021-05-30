@@ -203,7 +203,7 @@ const EditorSidebar = (props) => {
         component: (
           <Space direction="vertical" size={20}>
             <Typography
-              children={'There are unsaved changes. Are you sure you want to undo them?'}
+              children={'There are unsaved changes. Are you sure you want to discard them?'}
             />
             <Space>
               <Button
@@ -582,24 +582,30 @@ const EditorSidebar = (props) => {
       <Header>
         <Row justify="space-between">
           <Space size={15}>
-            <Button
-              icon={<ArrowLeftOutlined />}
-              type="ghost"
-              size="small"
-              ghost
-              onClick={() => {
-                if (postHasChanged || siteHasChanged) {
-                  handleDiscardRequest();
-                } else {
-                  navigate(
-                    getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
-                  );
-                }
-              }}
-            />
-
-            {(postHasChanged || siteHasChanged) && (
-              <Button icon={<UndoOutlined />} onClick={handleDiscardRequest} size="small" ghost />
+            {postHasChanged || siteHasChanged ? (
+              <Button
+                icon={<UndoOutlined />}
+                children="Undo"
+                onClick={handleDiscardRequest}
+                size="small"
+                ghost
+              />
+            ) : (
+              <Button
+                icon={<ArrowLeftOutlined />}
+                type="ghost"
+                size="small"
+                ghost
+                onClick={() => {
+                  if (postHasChanged || siteHasChanged) {
+                    handleDiscardRequest();
+                  } else {
+                    navigate(
+                      getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
+                    );
+                  }
+                }}
+              />
             )}
           </Space>
 
@@ -688,7 +694,7 @@ const EditorSidebar = (props) => {
         {(postHasChanged || siteHasChanged) && (
           <AlertContainer>
             <Alert
-              message="Links are disabled"
+              message="Links have been disabled"
               showIcon={false}
               banner
               style={{ background: 'transparent' }}
@@ -699,18 +705,33 @@ const EditorSidebar = (props) => {
                   size="small"
                   onClick={() =>
                     dispatch({
-                      type: `SET_DIALOG`,
+                      type: 'SET_DIALOG',
                       payload: {
                         open: true,
                         title: 'Information',
                         component: (
-                          <Typography
-                            children={
-                              'All links on the website have been temporarily disabled to avoid content loss. Save the post or undo your changes.'
-                            }
-                          />
+                          <Space direction="vertical" size={20}>
+                            <Typography>
+                              All links on the website have been temporarily disabled to avoid
+                              content loss.
+                            </Typography>
+                            <Typography>
+                              Update the post or undo your changes by clicking on the circle arrow
+                              icon in the top left corner.
+                            </Typography>
+
+                            <Button
+                              onClick={() =>
+                                dispatch({
+                                  type: 'CLOSE_DIALOG',
+                                })
+                              }
+                            >
+                              Got it
+                            </Button>
+                          </Space>
                         ),
-                        width: 320,
+                        width: 500,
                       },
                     })
                   }
