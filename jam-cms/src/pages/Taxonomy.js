@@ -94,7 +94,11 @@ const Taxonomy = (props) => {
   };
 
   return (
-    <CmsLayout pageTitle={config?.fields?.taxonomies?.[taxonomyID]?.title || taxonomy?.title}>
+    <CmsLayout
+      pageTitle={
+        config?.fields?.taxonomies?.find((o) => o.id === taxonomyID)?.title || taxonomy?.title
+      }
+    >
       <PageHeader>
         <Button
           children={`Add`}
