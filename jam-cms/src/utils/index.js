@@ -20,6 +20,7 @@ import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
 import formatFields from './formatFields';
 import renderImage from './renderImage';
+import addPost from './addPost';
 
 export {
   createDataTree,
@@ -44,4 +45,5 @@ export {
   getTemplateByPost,
   formatFields,
   renderImage,
+  addPost,
 };
