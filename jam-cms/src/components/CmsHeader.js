@@ -37,7 +37,7 @@ const CmsHeader = (props) => {
         </p>
       )}
 
-      <p>Welcome to the JamCMS backend.</p>
+      <p>Welcome to the jamCMS backend.</p>
 
       <p>
         If you want to learn more about the JamStack, visit:{' '}
