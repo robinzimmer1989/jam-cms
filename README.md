@@ -10,7 +10,7 @@ jamCMS is not a CMS but a layer on top of other other CMS’s like WordPress. In
 
 #### WordPress + Gatsby
 
-Technically, jamCMS can connect to any data source as long as there is an API which returns the data in the correct format. To begin with I have developed a WordPress plugin for a seamless integration. On the frontend side of things, it can be used with any React framework (in theory) but I started out to develop certain components specifically for Gatsby (i.e. gatsby-plugin-image).
+Technically, jamCMS can connect to any data source as long as there is an API which returns the data in the correct format. To begin with I've developed a WordPress plugin for a seamless integration. On the frontend side of things, it can be used with any React framework (in theory) but I started out to develop certain components specifically for Gatsby (i.e. gatsby-plugin-image).
 
 jamCMS is fully integrated with the new gatsby-source-wordpress plugin!
 
@@ -55,27 +55,21 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - Classic Editor (1.6)
 - JAMstack Deployments (1.1.1)
 - Post Types Order (1.9.5.6)
+- Safe SVG (1.9.9)
 
 Things to know:
 
 - Pretty permalinks must be enabled ('Post name').
-- Revisions aren't working out of the box (at least not for Local / WPEngine), you need to enable them via wp-config.php:
+- Revisions aren't working out of the box (at least not for Local by Flywheel / WPEngine), you need to enable them via wp-config.php like this:
 
 ```
 define( 'WP_POST_REVISIONS', true );
 ```
 
-- To add custom templates, you need to manually upload a php file to your WordPress theme. For example:
-
-```
-<?php
-
-// Template Name: Archive Post
-```
-
 ### Gatsby:
 
-The easiest way to get started it using the tailwindCSS starter theme (more to come):
+**Quick start using starter theme**
+The easiest way to get started it using the TailwindCSS starter theme (more to come):
 https://github.com/robinzimmer1989/jam-cms/tree/master/jam-cms-starter-tailwind
 
 Then create a `.env.development` file in the root directory with the following variables.
@@ -85,32 +79,111 @@ GATSBY_JAM_CMS_URL=https://jam.local/starter-tailwind
 GATSBY_JAM_CMS_API_KEY=test123
 ```
 
-Replace the URL with your actual WordPress URL. You can retrieve the API key by going to the jamCMS settings page in WordPress (/wp-admin/options-general.php?page=jam-cms).
+Replace the URL with your actual WordPress URL. You can retrieve the API key by going to the jamCMS settings page in WordPress: `/wp-admin/options-general.php?page=jam-cms`
 
 If everything is set up you can run `yarn && gatsby develop`. When you navigate to '/jam-cms' you can login with your WordPress credentials.
 
-Things to know:
+## Guide
 
-- The editor sidebar is part of the actual page template (wrapper around it). That means the CSS media queries aren't accurate anymore. To solve this issue you can listen to the jamCMS prop, passed into the template file, and check if the sidebar is open or not and tweak your media queries accordingly. This is especially necessary when dealing with `position: fixed;` content elements.
+When using Gatsby, you need to install the following core plugins:
 
-## Templates
+```
+yarn add gatsby-source-jam-cms jam-cms
+```
 
-Check out the starter-theme to learn more about the template structure.
-I'm gonna add detailed instructions later on.
+Afterward, you can add the source plugin to your gatsby-config.js file. Follow the instructions above for setting up the environmental variables and retreiving the API key from the WordPress settings.
 
-### Archive Pages
+```
+{
+  resolve: `gatsby-source-jam-cms`,
+  options: {
+    source: process.env.GATSBY_JAM_CMS_URL,
+    apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
+    fields: path.join(__dirname, 'src/fields'), // default: 'src/fields
+    settings: {
+      postsPerPage: 5, // default: 10
+      sync: true, // default: true
+    },
+  },
+},
+```
 
-...
+The source plugin is expecting a fields settings object to define post types, templates, taxonomies and theme options. Those will automatically get synced to WordPress once you run `gatsby develop` or save a post in development (unless you turn off syncing via plugin option). The fields.js file in the root of the src folder looks something like this.
 
-### Taxonomy Pages
+I like to keep component and field config together. That's why for example the 'header' fields setting is being imported from the components folder. That's not a requirement though, you could also have one huge object here.
 
-...
+```
+// import templates
+import pageDefault from './templates/postTypes/page/default/config';
+import postDefault from './templates/postTypes/post/default/config';
+import postArchive from './templates/postTypes/post/archive/config';
 
-## Theme Options
+// import theme options
+import header from './components/header/config';
+import footer from './components/footer/config';
 
-...
+const fields = {
+  postTypes: [
+    {
+      id: 'page',
+      title: 'Page',
+      templates: [pageDefault],
+    },
+    {
+      id: 'post',
+      title: 'Post',
+      templates: [postDefault, postArchive],
+    },
+  ],
+  taxonomies: [
+    {
+      id: 'category',
+      title: 'Category',
+      postTypes: ['post'],
+    },
+  ],
+  themeOptions: [
+    header,
+    footer,
+  ],
+};
 
-## Fields Types:
+export default fields;
+```
+
+The template config file (i.e. postDefault) looks something like this whereas the fields array can be populated with any kind of field you need (see 'Field Types' section).
+
+```
+const config = {
+  id: 'default',
+  postTypeID: 'post',
+  label: 'Post Default',
+  fields: [],
+};
+
+export default config;
+```
+
+As of now, the template components must be stored in a specific spot and named in certain way so the frontend knows about their existence.
+
+Post type templates must be saved here:
+
+```
+'src/templates/postTypes/[POST_TYPE_ID]/[TEMPLATE_ID]/[TEMPLATE_ID].[js|jsx|tsx]'
+```
+
+POST_TYPE_ID: page | post | custom_post_type
+TEMPLATE_ID: default | archive | other_page_template
+
+Taxonomy templates must be saved here:
+
+```
+'src/templates/taxonomies/[TAXONOMY_ID]/single/single.[js|jsx|tsx]'
+```
+
+TAXONOMY_ID: caegory | post_tag | custom_taxonomy
+
+## Field Types:
 
 **Important:** All field ID's must be lowercase and can't have special characters.
 
@@ -418,6 +491,9 @@ The component will convert all internal links to Gatsby links and make sure that
 **ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
+**Editor Sidebar**
+The editor sidebar is part of the actual page template (wrapper around it). That means that CSS media queries aren't accurate anymore. To solve this issue you can listen to the jamCMS prop, passed into each template file, and check if the sidebar is open or not and tweak your media queries accordingly. This is especially necessary when dealing with `position: fixed;` content elements.
+
 **Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
@@ -427,6 +503,19 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
+
+### 1.6.0
+
+- Tweak sidebar menu design
+- Fix: Missing date value on load
+- Fix: Parse menu titles
+- Make deploy clickable (admin only)
+- Fix image overflowing issue
+- Transform help dropdown to notifications panel
+- Add visit website button to header
+- Fix: only update deployment image if image exists
+- Show info that pressing esc will reopen sidebar
+- Better error handling when plugin is disabled
 
 ### 1.5.0
 
