@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-jam-cms",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "dependencies": {
     "@babel/register": "^7.13.16",
     "axios": "^0.21.1",
