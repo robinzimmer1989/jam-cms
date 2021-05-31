@@ -304,8 +304,8 @@ var createPages = /*#__PURE__*/function () {
                                 switch (_context2.prev = _context2.next) {
                                   case 0:
                                     id = node.id, uri = node.uri, templateName = node.template.templateName;
-                                    isArchive = templateName.includes('Archive ');
-                                    archivePostType = templateName.replace('Archive ', '').toLowerCase();
+                                    isArchive = templateName.startsWith('Archive');
+                                    archivePostType = templateName.replace('Archive', '').toLowerCase();
 
                                     if (isArchive) {
                                       templatePath = getPath('postTypes', archivePostType, 'archive');
@@ -338,7 +338,7 @@ var createPages = /*#__PURE__*/function () {
                                               id: id,
                                               themeOptions: themeOptions,
                                               pagination: {
-                                                basePath: uri,
+                                                basePath: (themeOptions === null || themeOptions === void 0 ? void 0 : themeOptions.frontPage) === id ? '/' : uri,
                                                 numberOfPosts: numberOfPosts,
                                                 postsPerPage: postsPerPageUsed,
                                                 numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),

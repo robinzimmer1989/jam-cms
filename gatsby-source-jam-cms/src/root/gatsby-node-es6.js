@@ -169,8 +169,8 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             template: { templateName },
           } = node;
 
-          const isArchive = templateName.includes('Archive ');
-          const archivePostType = templateName.replace('Archive ', '').toLowerCase();
+          const isArchive = templateName.startsWith('Archive');
+          const archivePostType = templateName.replace('Archive', '').toLowerCase();
 
           let templatePath;
 
@@ -206,7 +206,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
                     id,
                     themeOptions,
                     pagination: {
-                      basePath: uri,
+                      basePath: themeOptions?.frontPage === id ? '/' : uri,
                       numberOfPosts,
                       postsPerPage: postsPerPageUsed,
                       numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
