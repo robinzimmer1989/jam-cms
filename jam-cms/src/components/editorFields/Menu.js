@@ -41,7 +41,7 @@ const Menu = (props) => {
 
   // When a post is saved while a menu item is open, we need to manually reset the editing array to allow dragging
   useEffect(() => {
-    setEditing([]);
+    !siteHasChanged && setEditing([]);
   }, [siteHasChanged]);
 
   useEffect(() => {
