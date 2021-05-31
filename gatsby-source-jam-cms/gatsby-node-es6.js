@@ -177,27 +177,31 @@ var createPages = /*#__PURE__*/function () {
 
           case 7:
             fieldsObject = _context6.sent;
-            themeOptions = (0, _getThemeSettings["default"])({
+            _context6.next = 10;
+            return (0, _getThemeSettings["default"])({
               reporter: reporter
             }, pluginOptions);
+
+          case 10:
+            themeOptions = _context6.sent;
             allNodes = {};
-            _context6.prev = 10;
-            _context6.next = 13;
+            _context6.prev = 12;
+            _context6.next = 15;
             return graphql(
             /* GraphQL */
             "\n      query ALL_CONTENT_TYPES {\n        allWpContentType {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 13:
+          case 15:
             _yield$graphql = _context6.sent;
             allWpContentType = _yield$graphql.data.allWpContentType;
             _iterator = _createForOfIteratorHelper(allWpContentType.nodes);
-            _context6.prev = 16;
+            _context6.prev = 18;
 
             _iterator.s();
 
-          case 18:
+          case 20:
             if ((_step = _iterator.n()).done) {
-              _context6.next = 32;
+              _context6.next = 34;
               break;
             }
 
@@ -205,60 +209,60 @@ var createPages = /*#__PURE__*/function () {
             postType = contentType.graphqlSingleName; // Don't create single pages for media items
 
             if (!(postType === 'mediaItem')) {
-              _context6.next = 23;
+              _context6.next = 25;
               break;
             }
 
-            return _context6.abrupt("continue", 30);
+            return _context6.abrupt("continue", 32);
 
-          case 23:
+          case 25:
             // Capitalize post type name
             nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
             gatsbyNodeListFieldName = "allWp".concat(nodesTypeName);
-            _context6.next = 27;
+            _context6.next = 29;
             return graphql(
             /* GraphQL */
             "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              databaseId\n              id\n              uri\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
 
-          case 27:
+          case 29:
             _yield$graphql2 = _context6.sent;
             data = _yield$graphql2.data;
             allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
 
-          case 30:
-            _context6.next = 18;
-            break;
-
           case 32:
-            _context6.next = 37;
+            _context6.next = 20;
             break;
 
           case 34:
-            _context6.prev = 34;
-            _context6.t0 = _context6["catch"](16);
+            _context6.next = 39;
+            break;
+
+          case 36:
+            _context6.prev = 36;
+            _context6.t0 = _context6["catch"](18);
 
             _iterator.e(_context6.t0);
 
-          case 37:
-            _context6.prev = 37;
+          case 39:
+            _context6.prev = 39;
 
             _iterator.f();
 
-            return _context6.finish(37);
-
-          case 40:
-            _context6.next = 45;
-            break;
+            return _context6.finish(39);
 
           case 42:
-            _context6.prev = 42;
-            _context6.t1 = _context6["catch"](10);
+            _context6.next = 47;
+            break;
+
+          case 44:
+            _context6.prev = 44;
+            _context6.t1 = _context6["catch"](12);
 
             if (_context6.t1.response && _context6.t1.response.data.message) {
               reporter.error(_context6.t1.response.data.message);
             }
 
-          case 45:
+          case 47:
             // Initialize missing templates object
             missingTemplates = {};
             allowedExtensions = ['.js', '.jsx', '.tsx'];
@@ -288,7 +292,7 @@ var createPages = /*#__PURE__*/function () {
               return thePath;
             };
 
-            _context6.next = 50;
+            _context6.next = 52;
             return Promise.all(Object.keys(allNodes).map( /*#__PURE__*/function () {
               var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(postType) {
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -394,18 +398,18 @@ var createPages = /*#__PURE__*/function () {
               };
             }()));
 
-          case 50:
-            _context6.prev = 50;
-            _context6.next = 53;
+          case 52:
+            _context6.prev = 52;
+            _context6.next = 55;
             return graphql(
             /* GraphQL */
             "\n      query ALL_TAXONOMIES {\n        allWpTaxonomy {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 53:
+          case 55:
             _yield$graphql3 = _context6.sent;
             allWpTaxonomy = _yield$graphql3.data.allWpTaxonomy;
             _iterator3 = _createForOfIteratorHelper(allWpTaxonomy.nodes);
-            _context6.prev = 56;
+            _context6.prev = 58;
             _loop = /*#__PURE__*/_regenerator["default"].mark(function _loop() {
               var taxonomy, graphqlSingleName, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql4, data;
 
@@ -489,63 +493,63 @@ var createPages = /*#__PURE__*/function () {
 
             _iterator3.s();
 
-          case 59:
+          case 61:
             if ((_step3 = _iterator3.n()).done) {
+              _context6.next = 68;
+              break;
+            }
+
+            return _context6.delegateYield(_loop(), "t2", 63);
+
+          case 63:
+            _ret = _context6.t2;
+
+            if (!(_ret === "continue")) {
               _context6.next = 66;
               break;
             }
 
-            return _context6.delegateYield(_loop(), "t2", 61);
-
-          case 61:
-            _ret = _context6.t2;
-
-            if (!(_ret === "continue")) {
-              _context6.next = 64;
-              break;
-            }
-
-            return _context6.abrupt("continue", 64);
-
-          case 64:
-            _context6.next = 59;
-            break;
+            return _context6.abrupt("continue", 66);
 
           case 66:
-            _context6.next = 71;
+            _context6.next = 61;
             break;
 
           case 68:
-            _context6.prev = 68;
-            _context6.t3 = _context6["catch"](56);
+            _context6.next = 73;
+            break;
+
+          case 70:
+            _context6.prev = 70;
+            _context6.t3 = _context6["catch"](58);
 
             _iterator3.e(_context6.t3);
 
-          case 71:
-            _context6.prev = 71;
+          case 73:
+            _context6.prev = 73;
 
             _iterator3.f();
 
-            return _context6.finish(71);
-
-          case 74:
-            _context6.next = 79;
-            break;
+            return _context6.finish(73);
 
           case 76:
-            _context6.prev = 76;
-            _context6.t4 = _context6["catch"](50);
+            _context6.next = 81;
+            break;
+
+          case 78:
+            _context6.prev = 78;
+            _context6.t4 = _context6["catch"](52);
 
             if (_context6.t4.response && _context6.t4.response.data.message) {
               reporter.error(_context6.t4.response.data.message);
             }
 
-          case 79:
+          case 81:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee5, null, [[10, 42], [16, 34, 37, 40], [50, 76], [56, 68, 71, 74]]);
+    }, _callee5, null, [[12, 44], [18, 36, 39, 42], [52, 78], [58, 70, 73, 76]]);
   }));
 
   return function createPages(_x3, _x4) {

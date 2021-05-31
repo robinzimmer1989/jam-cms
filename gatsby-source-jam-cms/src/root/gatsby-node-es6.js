@@ -85,7 +85,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   // Import field object
   const fieldsObject = await import(fieldsPath);
 
-  const themeOptions = getThemeSettings({ reporter }, pluginOptions);
+  const themeOptions = await getThemeSettings({ reporter }, pluginOptions);
 
   const allNodes = {};
 
