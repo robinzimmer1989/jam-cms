@@ -22,7 +22,7 @@ const AvatarMenu = (props) => {
       <Menu.Item>
         <Link to={getRoute('profile')}>Profile</Link>
       </Menu.Item>
-      <Menu.Item onClick={handleSignOut}>Sign Out</Menu.Item>
+      <Menu.Item onClick={handleSignOut}>Logout</Menu.Item>
     </StyledMenu>
   );
 
