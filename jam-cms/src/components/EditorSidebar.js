@@ -578,7 +578,7 @@ const EditorSidebar = (props) => {
   };
 
   return (
-    <Container {...rest}>
+    <Container sidebar={...sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>
@@ -748,9 +748,10 @@ const EditorSidebar = (props) => {
 const Container = styled.div`
   position: fixed;
   z-index: 1000;
-  left: 0;
+  left: ${({ sidebar: { position } }) => (position === 'left' ? 0 : 'unset')};
+  right: ${({ sidebar: {position} }) => (position === 'left' ? 'unset' : 0)};
   top: 0;
-  width: 320px;
+  width: ${({ sidebar: { width } }) => `${width}px`};
   height: 100vh;
   background: ${colors.secondaryContrast};
   border-right: 1px solid ${colors.tertiary};

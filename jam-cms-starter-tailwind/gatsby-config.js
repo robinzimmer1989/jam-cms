@@ -24,7 +24,7 @@ module.exports = {
         fields: path.join(__dirname, 'src/fields'), // default: 'src/fields
         settings: {
           postsPerPage: 2, // default: 10
-          sync: true, // default: true
+          sync: true, // true (default) || false
         },
       },
     },

@@ -21,15 +21,8 @@ export const editorReducer = (state, action) => {
         break;
 
       case `UPDATE_EDITOR_SITE`:
-        draft.site = payload;
+        draft.site = { ...draft.site, ...payload };
         draft.siteHasChanged = true;
-        break;
-
-      /******************************
-       * Collections
-       ******************************/
-      case `UPDATE_EDITOR_COLLECTION`:
-        draft.site.postTypes[payload.id] = payload;
         break;
 
       /******************************
@@ -41,7 +34,7 @@ export const editorReducer = (state, action) => {
         break;
 
       case `UPDATE_EDITOR_POST`:
-        draft.post = payload;
+        draft.post = { ...draft.post, ...payload };
         draft.postHasChanged = true;
         break;
 

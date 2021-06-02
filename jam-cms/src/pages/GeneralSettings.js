@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Space, message } from 'antd';
+import { Button, Card, Space, message, Select as AntSelect } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 
 // import app components
 import Input from '../components/Input';
+import Select from '../components/Select';
 import CmsLayout from '../components/CmsLayout';
 
 import { useStore } from '../store';
@@ -32,6 +33,17 @@ const GeneralSettings = () => {
   const handleChange = (e) => {
     const nextSite = produce(site, (draft) => {
       return set(draft, `${e.target.name}`, e.target.value);
+    });
+
+    dispatch({
+      type: `UPDATE_EDITOR_SITE`,
+      payload: nextSite,
+    });
+  };
+
+  const handleChangeSelect = (value, name) => {
+    const nextSite = produce(site, (draft) => {
+      return set(draft, `${name}`, value);
     });
 
     dispatch({
@@ -137,6 +149,52 @@ const GeneralSettings = () => {
             <Button
               loading={loading === 'general'}
               onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'general')}
+              children={`Update`}
+              type="primary"
+            />
+          </Space>
+        </Card>
+
+        <Card title={'Editor Sidebar'}>
+          <Space direction="vertical" size={20}>
+            <Select
+              label="Position"
+              value={site?.editorOptions?.sidebar?.position}
+              onChange={(v) => handleChangeSelect(v, 'editorOptions.sidebar.position')}
+            >
+              <AntSelect.Option value="left" children="Left" />
+              <AntSelect.Option value="right" children="Right" />
+            </Select>
+
+            <Select
+              label="Style"
+              value={site?.editorOptions?.sidebar?.style}
+              onChange={(v) => handleChangeSelect(v, 'editorOptions.sidebar.style')}
+            >
+              <AntSelect.Option value="inline" children="Inline" />
+              <AntSelect.Option value="overflow" children="Overflow" />
+              <AntSelect.Option value="scale" children="Scale" />
+            </Select>
+
+            <Select
+              label="Default Status"
+              value={site?.editorOptions?.sidebar?.defaultOpen}
+              onChange={(v) => handleChangeSelect(v, 'editorOptions.sidebar.defaultOpen')}
+            >
+              <AntSelect.Option value={true} children="Open" />
+              <AntSelect.Option value={false} children="Closed" />
+            </Select>
+
+            <Button
+              loading={loading === 'editorOptions'}
+              onClick={() =>
+                handleUpdate(
+                  {
+                    editorOptions: site?.editorOptions,
+                  },
+                  'editorOptions'
+                )
+              }
               children={`Update`}
               type="primary"
             />

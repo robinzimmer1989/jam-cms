@@ -1,6 +1,9 @@
 import produce from 'immer';
 import { get } from 'lodash';
 
+// import app components
+import defaults from '../defaults';
+
 export default function formatSite(site) {
   const nextSite = produce(site, (draft) => {
     // Convert posts and then post types to object structure
@@ -26,6 +29,12 @@ export default function formatSite(site) {
     if (get(draft, `taxonomies.items`)) {
       draft.taxonomies = draft.taxonomies.items.reduce((ac, a) => ({ ...ac, [a.id]: a }), {});
     }
+
+    // Merge options stored in CMS with editor options to allow for future compatibility
+    // TODO: Use deep merge function
+    draft.editorOptions = {
+      sidebar: { ...defaults.editorOptions.sidebar, ...draft?.editorOptions?.sidebar },
+    };
   });
 
   return nextSite;

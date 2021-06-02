@@ -14,29 +14,12 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
   return result;
 };
 
-export const updateSite = async (
-  { id, themeOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey },
-  dispatch,
-  config
-) => {
-  const result = await siteServices.updateSite(
-    {
-      id,
-      themeOptions,
-      frontPage,
-      deployment,
-      title,
-      siteUrl,
-      googleMapsApi,
-      apiKey,
-    },
-    dispatch,
-    config
-  );
+export const updateSite = async (args, dispatch, config) => {
+  const result = await siteServices.updateSite(args, dispatch, config);
 
   if (result) {
     dispatch({ type: `ADD_SITE`, payload: result });
-    dispatch({ type: `ADD_EDITOR_SITE`, payload: result });
+    dispatch({ type: `UPDATE_EDITOR_SITE`, payload: args });
   }
 
   return result;

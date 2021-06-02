@@ -1,33 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { debounce } from 'lodash';
 
 // import app components
-
 import { useStore } from '../store';
 
 const PageWrapper = (props) => {
-  const { sidebarActive, template, children } = props;
+  const { sidebarActive, loaded, template, children } = props;
 
   const [
     {
+      cmsState: { sites, siteID },
       editorState: { siteHasChanged, postHasChanged },
     },
   ] = useStore();
 
+  // We need the window width to calculate scaling
+  const [windowWidth, setWindowWidth] = useState(null);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+  }, []);
+
+  useEffect(() => {
+    const debouncedHandleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 100);
+
+    window.addEventListener('resize', debouncedHandleResize);
+
+    return () => {
+      window.removeEventListener('resize', debouncedHandleResize);
+    };
+  }, []);
+
   return (
-    <Container sidebar={sidebarActive}>
-      {template ? (
-        <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
-      ) : (
-        <div id="jam-cms">{children}</div>
-      )}
+    <Container
+      loaded={loaded}
+      sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
+    >
+      <Inner
+        loaded={loaded}
+        sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
+        windowWidth={windowWidth}
+      >
+        {template ? (
+          <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
+        ) : (
+          <div id="jam-cms">{children}</div>
+        )}
+      </Inner>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: ${({ sidebar }) => (sidebar ? 'calc(100% - 320px)' : '100%')};
-  margin-left: ${({ sidebar }) => (sidebar ? '320px' : 0)};
+  ${({ loaded, sidebar: { style, active } }) =>
+    loaded &&
+    style === 'scale' &&
+    active &&
+    css`
+      height: 100vh;
+    `}
+`;
+
+const Inner = styled.div`
+  ${({ loaded, sidebar: { style, active, position, width }, windowWidth }) =>
+    loaded &&
+    css`
+      ${style === 'scale'
+        ? active &&
+          css`
+            transform: ${windowWidth && `scale(${1 - width / windowWidth})`};
+            transform-origin: ${position === 'left' ? 'right' : 'left'} top;
+          `
+        : style === 'inline'
+        ? css`
+            width: ${active ? `calc(100% - ${width}px)` : '100%'};
+            margin-left: ${position === 'left' && active ? `${width}px` : 0};
+            margin-right: ${position === 'right' && active ? `${width}px` : 0};
+          `
+        : style === 'overflow' && css``}
+    `}
 `;
 
 const Content = styled.div`

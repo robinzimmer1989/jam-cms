@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Empty, Typography, message } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { set } from 'lodash';
 import useKeypress from 'react-use-keypress';
@@ -38,7 +39,15 @@ const PostEditor = (props) => {
   const previewID = auth.isPreview();
 
   const [query, setQuery] = useState(null);
-  const [sidebarActive, setSidebarActive] = useState(!previewID);
+
+  // Determine if sidebar should be open on default when visiting the editor
+  let sidebarActiveDefault = false;
+
+  if (sites?.[siteID]?.editorOptions?.sidebar?.defaultOpen && !previewID) {
+    sidebarActiveDefault = true;
+  }
+
+  const [sidebarActive, setSidebarActive] = useState(sidebarActiveDefault);
 
   const template = getTemplateByPost(post, fields);
   const Component = template?.component;
@@ -110,15 +119,15 @@ const PostEditor = (props) => {
   const templateID = `${template?.id}-${template?.postTypeID}`;
 
   // Check if post editor is ready
-  let isReady = false;
+  let loaded = false;
 
   if (site && post) {
-    isReady = true;
+    loaded = true;
   }
 
   // If there is a query, we need to wait for it
   if (template?.query && !query) {
-    isReady = false;
+    loaded = false;
   }
 
   useEffect(() => {
@@ -226,14 +235,23 @@ const PostEditor = (props) => {
 
   return (
     <>
-      <PageWrapper template={!!Component && post?.content} sidebarActive={sidebarActive}>
+      <PageWrapper
+        template={!!Component && post?.content}
+        sidebarActive={sidebarActive}
+        loaded={loaded}
+      >
         {postID ? (
           <>
-            {isReady ? (
+            {loaded ? (
               <>
                 {!!Component && post?.content ? (
                   <Component
-                    jamCMS={{ sidebar: sidebarActive, sidebarWidth: 320 }}
+                    jamCMS={{
+                      sidebar: {
+                        active: sidebarActive,
+                        ...sites?.[siteID]?.editorOptions?.sidebar,
+                      },
+                    }}
                     data={getPostData()}
                     pageContext={{
                       themeOptions: formatFieldsToProps({
@@ -279,12 +297,25 @@ const PostEditor = (props) => {
 
       {previewID && <PreviewBanner children={`Preview`} type="primary" />}
 
-      {sidebarActive && (
-        <EditorSidebar
-          className="jam-cms"
-          editable={!!Component}
-          onToggleSidebar={handleToggleSidebar}
-        />
+      {loaded && (
+        <>
+          {sidebarActive ? (
+            <EditorSidebar
+              className="jam-cms"
+              editable={!!Component}
+              onToggleSidebar={handleToggleSidebar}
+            />
+          ) : (
+            <EditContainer sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
+              <Button
+                icon={<EditOutlined />}
+                onClick={handleToggleSidebar}
+                size="large"
+                type="primary"
+              />
+            </EditContainer>
+          )}
+        </>
       )}
     </>
   );
@@ -305,6 +336,14 @@ const PreviewBanner = styled(Button)`
   z-index: 9999;
   transform: rotate(270deg) translate(-50%, 50%);
   transform-origin: left;
+`;
+
+const EditContainer = styled.div`
+  position: fixed;
+  left: ${({ sidebarPosition }) => (sidebarPosition === 'left' ? 0 : 'unset')};
+  right: ${({ sidebarPosition }) => (sidebarPosition === 'left' ? 'unset' : 0)};
+  bottom: 200px;
+  z-index: 99999;
 `;
 
 export default PostEditor;

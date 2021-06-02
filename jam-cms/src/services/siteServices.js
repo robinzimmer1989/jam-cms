@@ -21,7 +21,6 @@ export const getSite = async ({ siteID }, dispatch, config) => {
   if (result) {
     result = formatSite(result);
   }
-
   return result;
 };
 
@@ -36,7 +35,7 @@ export const addSite = async ({ title }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, themeOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey },
+  { id, themeOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey, editorOptions },
   dispatch,
   config
 ) => {
@@ -51,6 +50,7 @@ export const updateSite = async (
       apiKey,
       themeOptions: JSON.stringify(themeOptions),
       deployment: JSON.stringify(deployment),
+      editorOptions: JSON.stringify(editorOptions),
     },
     dispatch,
     config
