@@ -7,8 +7,8 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
   const result = await siteServices.addSite({ title, ownerID }, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_SITE`, payload: result });
-    navigate(getRoute(`dashboard`, { siteID: result.id }));
+    dispatch({ type: 'ADD_SITE', payload: result });
+    navigate(getRoute('dashboard', { siteID: result.id }));
   }
 
   return result;
@@ -18,8 +18,8 @@ export const updateSite = async (args, dispatch, config) => {
   const result = await siteServices.updateSite(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_SITE`, payload: result });
-    dispatch({ type: `UPDATE_EDITOR_SITE`, payload: args });
+    dispatch({ type: 'ADD_SITE', payload: result });
+    dispatch({ type: 'UPDATE_EDITOR_SITE', payload: args });
   }
 
   return result;
@@ -39,7 +39,7 @@ export const getSites = async (args, dispatch, config) => {
   const result = await siteServices.getSites(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_SITES`, payload: result });
+    dispatch({ type: 'ADD_SITES', payload: result });
   }
 
   return result;
@@ -49,7 +49,7 @@ export const getSite = async ({ siteID }, dispatch, config) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_SITE`, payload: result });
+    dispatch({ type: 'ADD_SITE', payload: result });
   }
 
   return result;
