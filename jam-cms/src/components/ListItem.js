@@ -17,6 +17,7 @@ const ListItem = (props) => {
     status,
     image,
     showImage = false,
+    info = '',
     ...rest
   } = props;
 
@@ -27,7 +28,15 @@ const ListItem = (props) => {
     </Typography.Text>
   );
 
-  const metaTitle = link ? <StyledLink to={link}>{listItemTitle}</StyledLink> : listItemTitle;
+  let metaTitle = link ? <StyledLink to={link}>{listItemTitle}</StyledLink> : listItemTitle;
+
+  if (info) {
+    metaTitle = (
+      <>
+        {metaTitle} - {info}
+      </>
+    );
+  }
 
   return (
     <Container level={level} {...rest}>
