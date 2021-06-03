@@ -180,6 +180,8 @@ const PostType = (props) => {
 
     const actions = [];
 
+    const isLocked = !!o.locked;
+
     const menu = (
       <Menu>
         <Menu.Item key="duplicate" onClick={() => handleDuplicatePost({ postID: o.id })}>
@@ -187,11 +189,21 @@ const PostType = (props) => {
         </Menu.Item>
 
         {o.status === 'trash' ? (
-          <Menu.Item key="delete" danger onClick={() => handleDeletePost({ postID: o.id })}>
+          <Menu.Item
+            key="delete"
+            danger
+            onClick={() => handleDeletePost({ postID: o.id })}
+            disabled={isLocked}
+          >
             Delete
           </Menu.Item>
         ) : (
-          <Menu.Item key="trash" danger onClick={() => handleTrashPost({ postID: o.id })}>
+          <Menu.Item
+            key="trash"
+            danger
+            onClick={() => handleTrashPost({ postID: o.id })}
+            disabled={isLocked}
+          >
             Trash
           </Menu.Item>
         )}
@@ -200,7 +212,7 @@ const PostType = (props) => {
 
     actions.unshift(
       <Dropdown.Button overlay={menu} trigger={['click']}>
-        <Link to={slug}>Edit</Link>
+        <Link to={slug}>{isLocked ? 'View' : 'Edit'}</Link>
       </Dropdown.Button>
     );
 
@@ -225,6 +237,7 @@ const PostType = (props) => {
           image={o.featuredImage}
           showImage={postTypeID !== 'page'}
           link={slug}
+          info={isLocked && `${o.locked?.email} is currently editing`}
         />
 
         {o.childNodes.map((p) => renderPost(p, level + 1))}

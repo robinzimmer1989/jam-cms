@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { useStore } from '../store';
 
 const PageWrapper = (props) => {
-  const { sidebarActive, loaded, template, children } = props;
+  const { sidebarActive, loaded, locked, template, children } = props;
 
   const [
     {
@@ -37,10 +37,12 @@ const PageWrapper = (props) => {
   return (
     <Container
       loaded={loaded}
+      locked={locked}
       sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
     >
       <Inner
         loaded={loaded}
+        locked={locked}
         sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
         windowWidth={windowWidth}
       >
@@ -55,8 +57,9 @@ const PageWrapper = (props) => {
 };
 
 const Container = styled.div`
-  ${({ loaded, sidebar: { style, active } }) =>
+  ${({ loaded, locked, sidebar: { style, active } }) =>
     loaded &&
+    !locked &&
     style === 'scale' &&
     active &&
     css`
@@ -65,8 +68,9 @@ const Container = styled.div`
 `;
 
 const Inner = styled.div`
-  ${({ loaded, sidebar: { style, active, position, width }, windowWidth }) =>
+  ${({ loaded, locked, sidebar: { style, active, position, width }, windowWidth }) =>
     loaded &&
+    !locked &&
     css`
       ${style === 'scale'
         ? active &&

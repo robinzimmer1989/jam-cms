@@ -18,8 +18,8 @@ import PrivateRoute from './PrivateRoute';
 
 import { CmsStyles } from '../theme';
 import { useStore } from '../store';
-import { authActions, userActions, siteActions, postActions, previewActions } from '../actions';
-import { isLoggedIn, isPreview } from '../utils/auth';
+import { authActions, userActions, siteActions, previewActions } from '../actions';
+import { isPreview } from '../utils/auth';
 import {
   ROUTE_APP,
   ROUTE_PROFILE,
@@ -40,57 +40,71 @@ const Master = (props) => {
       authState: { authUser },
       appState: { dialog },
       cmsState: { sites, siteID },
+      editorState: { siteHasChanged },
     },
     dispatch,
   ] = useStore();
 
-  const loggedIn = isLoggedIn(config);
-
   const previewID = isPreview();
 
-  // timer for refresh token
-  const [timer, setTimer] = useState(0);
+  // timers for refresh token and site updates
+  const [refreshTimer, setRefreshTimer] = useState(0);
+  const [updatesTimer, setUpdatesTimer] = useState(0);
+
+  useEffect(() => {
+    // activate timer for refresh token
+    const refreshID = setInterval(() => {
+      setRefreshTimer((time) => time + 1);
+    }, 120000); // 2 minutes
+
+    // activate timer for site updates
+    const updatesID = setInterval(() => {
+      setUpdatesTimer((time) => time + 1);
+    }, 10000); // 10 seconds
+
+    // Clear both timers
+    return () => {
+      clearInterval(refreshID);
+      clearInterval(updatesID);
+    };
+  }, []);
 
   useEffect(() => {
     const loadUser = async () => {
       await userActions.getAuthUser({}, dispatch, config);
     };
 
-    if (!authUser && loggedIn) {
-      loadUser();
-    }
-  }, [loggedIn]);
+    loadUser();
+  }, []);
 
   useEffect(() => {
     const loadSite = async () => {
       if (previewID) {
         await previewActions.getSitePreview({ siteID: config.siteID, previewID }, dispatch, config);
       } else {
-        await siteActions.getSite({ siteID: config.siteID }, dispatch, config);
+        const result = await siteActions.getSite({ siteID: config.siteID }, dispatch, config);
+
+        if (result) {
+          if (!siteHasChanged) {
+            // Silently update site in editor if there are no changes
+            dispatch({ type: 'ADD_EDITOR_SITE', payload: result });
+          }
+        }
       }
     };
 
-    if (!sites[siteID] && (loggedIn || previewID)) {
-      loadSite();
-    }
-  }, [loggedIn, previewID]);
-
-  useEffect(() => {
-    // activate timer for refresh token
-    setInterval(() => {
-      setTimer((timer) => timer + 1);
-    }, 60000);
-  }, [loggedIn]);
+    loadSite();
+  }, [updatesTimer, previewID]);
 
   useEffect(() => {
     const refreshToken = async () => {
       await authActions.refreshToken({}, config);
     };
 
-    if (loggedIn && timer > 0) {
+    if (refreshTimer > 0) {
       refreshToken();
     }
-  }, [timer]);
+  }, [refreshTimer]);
 
   if (!sites[siteID]) {
     return <Loader />;

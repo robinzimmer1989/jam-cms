@@ -72,3 +72,13 @@ export const reorderPosts = async ({ siteID, postIDs }, dispatch, config) => {
   );
   return result;
 };
+
+export const refreshPostLock = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('refreshPostLock', { siteID, id }, dispatch, config);
+  return result;
+};
+
+export const removePostLock = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('removePostLock', { siteID, id }, dispatch, config);
+  return result;
+};

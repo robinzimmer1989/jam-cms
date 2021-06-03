@@ -1,70 +1,26 @@
 import { postServices } from '../services';
 
-export const addPost = async (
-  { siteID, postTypeID, status, title, content, parentID },
-  dispatch,
-  config
-) => {
-  const result = await postServices.addPost(
-    { siteID, postTypeID, status, title, content, parentID },
-    dispatch,
-    config
-  );
+export const addPost = async (args, dispatch, config) => {
+  const result = await postServices.addPost(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID: args.siteID } });
   }
 
   return result;
 };
 
-export const getPost = async ({ siteID, postID }, dispatch, config) => {
-  const result = await postServices.getPost({ siteID, postID }, dispatch, config);
+export const getPost = async (args, dispatch, config) => {
+  const result = await postServices.getPost(args, dispatch, config);
   return result;
 };
 
-export const updatePost = async (
-  {
-    siteID,
-    id,
-    postTypeID,
-    slug,
-    status,
-    title,
-    content,
-    seo,
-    parentID,
-    taxonomies,
-    featuredImage,
-    template,
-    templateObject,
-  },
-  dispatch,
-  config
-) => {
-  const result = await postServices.updatePost(
-    {
-      siteID,
-      id,
-      postTypeID,
-      slug,
-      status,
-      title,
-      content,
-      seo,
-      parentID,
-      taxonomies,
-      featuredImage,
-      template,
-      templateObject,
-    },
-    dispatch,
-    config
-  );
+export const updatePost = async (args, dispatch, config) => {
+  const result = await postServices.updatePost(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
-    dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `ADD_POST`, payload: { ...result, siteID: args.siteID } });
+    dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID: args.siteID } });
   }
 
   return result;
@@ -116,4 +72,14 @@ export const reorderPosts = async ({ siteID, postType, posts }, dispatch, config
       ),
     },
   });
+};
+
+export const refreshPostLock = async (args, dispatch, config) => {
+  const result = await postServices.refreshPostLock(args, dispatch, config);
+  return result;
+};
+
+export const removePostLock = async (args, dispatch, config) => {
+  const result = await postServices.removePostLock(args, dispatch, config);
+  return result;
 };

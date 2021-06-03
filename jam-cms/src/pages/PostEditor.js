@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Empty, Typography, message } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { set } from 'lodash';
 import useKeypress from 'react-use-keypress';
@@ -38,6 +38,12 @@ const PostEditor = (props) => {
 
   const previewID = auth.isPreview();
 
+  // Timer for lock check
+  const [postLockTimer, setPostLockTimer] = useState(0);
+  // We need to store the post ID so we can remove the lock when navigating to a different page (old ID won't be available anymore)
+  const [postLockID, setPostLockID] = useState(null);
+
+  // GraphQL query result
   const [query, setQuery] = useState(null);
 
   // Determine if sidebar should be open on default when visiting the editor
@@ -118,10 +124,10 @@ const PostEditor = (props) => {
   // The 'true' template id is a combination of id and post type
   const templateID = `${template?.id}-${template?.postTypeID}`;
 
-  // Check if post editor is ready
   let loaded = false;
 
-  if (site && post) {
+  // Check if post editor is ready
+  if (site && post?.id === postID) {
     loaded = true;
   }
 
@@ -130,6 +136,59 @@ const PostEditor = (props) => {
     loaded = false;
   }
 
+  // For the post lock functionality we need 4 useEffect functions to cover the whole process
+  // 1. Set up interval function on initial load and remove post lock in case user leaves the editor
+  // 2. Refresh the lock status every couple of seconds or check if post is still locked
+  // 3. Inform user who is currently editing the post
+  // 4. Remove lock status from old post in case user navigates away via editor link
+
+  useEffect(() => {
+    // Activate postLockTimer for post locking
+    const intervalID = setInterval(() => {
+      setPostLockTimer((time) => time + 1);
+    }, 10000); // 10 seconds
+
+    return async () => {
+      clearInterval(intervalID);
+
+      if (post && post.id === postID && !post.locked) {
+        // Remove post lock once we leave the post editor
+        await removePostLock(postID);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Skip initial fetch (postLockTimer = 0) because we're already setting the status on initial getPost fetch in WP
+    if (postID && post && post.id === postID && postLockTimer) {
+      if (post?.locked) {
+        // Fetch post again in case it's locked to determine if other user is still editing
+        loadPost(postID);
+      } else {
+        // Refresh the post lock status to inform WordPress that we are still editing
+        refreshPostLock();
+      }
+    }
+  }, [postLockTimer]);
+
+  useEffect(() => {
+    // Inform users who is editing the content right now
+    if (postID && post && post.id === postID && post.locked) {
+      message.info({ content: `${post.locked?.email} is currently editing` });
+    }
+  }, [pathname, postID, post?.id]);
+
+  useEffect(() => {
+    // Remove previous post ID in case user navigates to a different page
+    if (postLockID) {
+      removePostLock(postLockID);
+    }
+
+    // Set new post id
+    setPostLockID(postID);
+  }, [postID]);
+
+  // Load query in case post has one assigned
   useEffect(() => {
     const loadQuery = async () => {
       // TODO: Move to utils function
@@ -146,22 +205,7 @@ const PostEditor = (props) => {
   }, [templateID]);
 
   useEffect(() => {
-    const loadPost = async (postID) => {
-      let result;
-
-      if (previewID) {
-        result = await previewActions.getPostPreview({ siteID, previewID }, dispatch, config);
-      } else {
-        result = await postActions.getPost({ siteID, postID }, dispatch, config);
-      }
-
-      if (result) {
-        dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
-        dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
-      }
-    };
-
-    postID && loadPost(postID);
+    loadPost(postID);
 
     // Add fresh copy of editor to state
     dispatch({
@@ -172,14 +216,39 @@ const PostEditor = (props) => {
     // Reset query
     setQuery(null);
 
-    return function cleanup() {
-      dispatch({ type: `CLEAR_EDITOR` });
-    };
+    return () => dispatch({ type: `CLEAR_EDITOR` });
   }, [postID]);
 
   useKeypress('Escape', () => {
     !previewID && setSidebarActive(!sidebarActive);
   });
+
+  const loadPost = async (postID) => {
+    if (!postID) {
+      return;
+    }
+
+    let result;
+
+    if (previewID) {
+      result = await previewActions.getPostPreview({ siteID, previewID }, dispatch, config);
+    } else {
+      result = await postActions.getPost({ siteID, postID }, dispatch, config);
+    }
+
+    if (result) {
+      dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
+      dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
+    }
+  };
+
+  const refreshPostLock = async () => {
+    await postActions.refreshPostLock({ siteID, id: postID }, dispatch, config);
+  };
+
+  const removePostLock = async (id) => {
+    await postActions.removePostLock({ siteID, id }, dispatch, config);
+  };
 
   const handleToggleSidebar = () => {
     if (sidebarActive) {
@@ -239,6 +308,7 @@ const PostEditor = (props) => {
         template={!!Component && post?.content}
         sidebarActive={sidebarActive}
         loaded={loaded}
+        locked={!!post?.locked}
       >
         {postID ? (
           <>
@@ -299,21 +369,29 @@ const PostEditor = (props) => {
 
       {loaded && (
         <>
-          {sidebarActive ? (
-            <EditorSidebar
-              className="jam-cms"
-              editable={!!Component}
-              onToggleSidebar={handleToggleSidebar}
-            />
+          {post?.locked ? (
+            <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
+              <Button icon={<LockOutlined />} size="large" type="primary" />
+            </FloatingButton>
           ) : (
-            <EditContainer sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-              <Button
-                icon={<EditOutlined />}
-                onClick={handleToggleSidebar}
-                size="large"
-                type="primary"
-              />
-            </EditContainer>
+            <>
+              {sidebarActive ? (
+                <EditorSidebar
+                  className="jam-cms"
+                  editable={!!Component}
+                  onToggleSidebar={handleToggleSidebar}
+                />
+              ) : (
+                <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={handleToggleSidebar}
+                    size="large"
+                    type="primary"
+                  />
+                </FloatingButton>
+              )}
+            </>
           )}
         </>
       )}
@@ -338,12 +416,17 @@ const PreviewBanner = styled(Button)`
   transform-origin: left;
 `;
 
-const EditContainer = styled.div`
+const FloatingButton = styled.div`
   position: fixed;
   left: ${({ sidebarPosition }) => (sidebarPosition === 'left' ? 0 : 'unset')};
   right: ${({ sidebarPosition }) => (sidebarPosition === 'left' ? 'unset' : 0)};
   bottom: 200px;
   z-index: 99999;
+
+  .ant-btn-icon-only.ant-btn-lg {
+    border-radius: ${({ sidebarPosition }) =>
+      sidebarPosition === 'left' ? '0 2px 2px 0' : '2px 0 0 2px'};
+  }
 `;
 
 export default PostEditor;
