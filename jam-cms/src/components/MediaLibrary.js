@@ -24,15 +24,13 @@ const MediaLibrary = (props) => {
   const [
     {
       config,
-      cmsState: { siteID, sites },
+      cmsState: { siteID },
     },
     dispatch,
   ] = useStore();
 
-  const {
-    mediaItems: { items, page },
-  } = sites[siteID];
-
+  const [page, setPage] = useState(null);
+  const [items, setItems] = useState([]);
   const [activeFile, setActiveFile] = useState(null);
   const [uploader, setUploader] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,21 +45,53 @@ const MediaLibrary = (props) => {
     }
   }, [page]);
 
+  // Navigate to previous item
   useKeypress('ArrowLeft', () => {
     activeFileIndex !== 0 && setActiveFile(items[activeFileIndex - 1]);
   });
 
+  // Navigate to next item
   useKeypress('ArrowRight', () => {
     activeFileIndex !== items.length - 1 && setActiveFile(items[activeFileIndex + 1]);
   });
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
-      await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch, config);
+      const result = await mediaActions.getMediaItems(
+        { siteID, page, limit: 24 },
+        dispatch,
+        config
+      );
+
+      if (result) {
+        setItems((items) => items.concat(result.items));
+        setPage(result.page);
+      }
     }
   };
 
   const handleLoadMore = () => page && loadMediaItems(page);
+
+  const handleUpdateMediaItem = async (mediaItem) => {
+    const { id, altText, siteID } = mediaItem;
+
+    const result = await mediaActions.updateMediaItem({ id, altText, siteID }, dispatch, config);
+
+    if (result) {
+      setItems((items) => items.map((o) => (o.id === result.id ? result : o)));
+      message.success(`Saved successfully.`);
+    }
+  };
+
+  const handlDeleteMediaItem = async () => {
+    const result = await mediaActions.deleteMediaItem({ ...activeFile, siteID }, dispatch, config);
+
+    if (result) {
+      setItems((items) => items.filter((o) => o.id !== parseInt(result)));
+      handleCloseDialog();
+      message.success(`Deleted successfully.`);
+    }
+  };
 
   const handleFileUpload = async (info) => {
     const {
@@ -70,7 +100,16 @@ const MediaLibrary = (props) => {
 
     if (status !== 'uploading') {
       setLoading(true);
-      await mediaActions.uploadMediaItem({ siteID, file: originFileObj }, dispatch, config);
+
+      const result = await mediaActions.uploadMediaItem(
+        { siteID, file: originFileObj },
+        dispatch,
+        config
+      );
+
+      if (result) {
+        setItems((items) => [result, ...items]);
+      }
     }
     if (status === 'done') {
       message.success(`${name} file uploaded successfully.`);
@@ -215,7 +254,8 @@ const MediaLibrary = (props) => {
           <MediaImage
             file={activeFile}
             onSelect={onSelect && handleSelect}
-            onClose={handleCloseDialog}
+            onDelete={handlDeleteMediaItem}
+            onUpdate={handleUpdateMediaItem}
           />
           <NextButton>
             <Button

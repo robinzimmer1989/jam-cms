@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, PageHeader, Spin, Popconfirm } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -21,9 +21,8 @@ const Users = () => {
     dispatch,
   ] = useStore();
 
-  const {
-    users: { items, page },
-  } = sites[siteID];
+  const [page, setPage] = useState(null);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     loadUsers(page || 0);
@@ -31,7 +30,12 @@ const Users = () => {
 
   const loadUsers = async (page) => {
     if (page > -1) {
-      await userActions.getUsers({ siteID, page, limit: 10 }, dispatch, config);
+      const result = await userActions.getUsers({ siteID, page, limit: 10 }, dispatch, config);
+
+      if (result) {
+        setItems((items) => items.concat(result.items));
+        setPage(result.page);
+      }
     }
   };
 
@@ -48,15 +52,30 @@ const Users = () => {
     });
 
   const handleAdd = async ({ email, role }) => {
-    await userActions.addUser({ siteID, email, role }, dispatch, config);
+    const result = await userActions.addUser({ siteID, email, role }, dispatch, config);
+
+    if (result) {
+      setItems((items) => [result, ...items]);
+      message.success(`Added successfully.`);
+    }
   };
 
   const handleUpdate = async ({ id, role }) => {
-    await userActions.updateUser({ siteID, id, role }, dispatch, config);
+    const result = await userActions.updateUser({ siteID, id, role }, dispatch, config);
+
+    if (result) {
+      setItems((items) => items.map((o) => (o.id === result.id ? result : o)));
+      message.success(`Saved successfully.`);
+    }
   };
 
   const handleDelete = async ({ id }) => {
-    await userActions.deleteUser({ siteID, id }, dispatch, config);
+    const result = await userActions.deleteUser({ siteID, id }, dispatch, config);
+
+    if (result) {
+      setItems((items) => items.filter((o) => o.id !== parseInt(result)));
+      message.success(`Deleted successfully.`);
+    }
   };
 
   return (

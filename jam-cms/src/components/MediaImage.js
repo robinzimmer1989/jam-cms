@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Space, Row, Col, Popconfirm, message, Typography } from 'antd';
+import { Button, Space, Row, Col, Popconfirm, Typography } from 'antd';
 
 // import app components
 import Caption from './Caption';
 import Input from './Input';
 
-import { mediaActions } from '../actions';
-import { useStore } from '../store';
 import { convertFileSize, renderImage } from '../utils';
 import { colors } from '../theme';
 
 const MediaImage = (props) => {
-  const { file, onSelect, onClose } = props;
-
-  const [{ config }, dispatch] = useStore();
+  const { file, onSelect, onDelete, onUpdate } = props;
 
   const [data, setData] = useState({ ...file });
   const [loading, setLoading] = useState(false);
@@ -26,27 +22,19 @@ const MediaImage = (props) => {
   const handleChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   const handleUpdateMediaItem = async () => {
-    const { id, altText, siteID } = data;
-
     setLoading('update');
-    const result = await mediaActions.updateMediaItem({ siteID, id, altText }, dispatch, config);
-    setLoading(false);
 
-    if (result) {
-      message.success(`Saved successfully.`);
-    }
+    onUpdate(data);
+
+    setLoading(false);
   };
 
   const handlDeleteMediaItem = async () => {
-    const { siteID } = data;
-
     setLoading('delete');
-    const result = await mediaActions.deleteMediaItem({ ...file, siteID }, dispatch, config);
-    setLoading(false);
 
-    if (result) {
-      onClose();
-    }
+    await onDelete();
+
+    setLoading(false);
   };
 
   return (
