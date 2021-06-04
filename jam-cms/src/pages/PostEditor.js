@@ -365,31 +365,37 @@ const PostEditor = (props) => {
         )}
       </PageWrapper>
 
-      {previewID && <PreviewBanner children={`Preview`} type="primary" />}
-
-      {loaded && (
+      {previewID ? (
+        <PreviewBanner children={`Preview`} type="primary" />
+      ) : (
         <>
-          {post?.locked ? (
-            <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-              <Button icon={<LockOutlined />} size="large" type="primary" />
-            </FloatingButton>
-          ) : (
+          {loaded && (
             <>
-              {sidebarActive ? (
-                <EditorSidebar
-                  className="jam-cms"
-                  editable={!!Component}
-                  onToggleSidebar={handleToggleSidebar}
-                />
-              ) : (
+              {post?.locked ? (
                 <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-                  <Button
-                    icon={<EditOutlined />}
-                    onClick={handleToggleSidebar}
-                    size="large"
-                    type="primary"
-                  />
+                  <Button icon={<LockOutlined />} size="large" type="primary" />
                 </FloatingButton>
+              ) : (
+                <>
+                  {sidebarActive ? (
+                    <EditorSidebar
+                      className="jam-cms"
+                      editable={!!Component}
+                      onToggleSidebar={handleToggleSidebar}
+                    />
+                  ) : (
+                    <FloatingButton
+                      sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}
+                    >
+                      <Button
+                        icon={<EditOutlined />}
+                        onClick={handleToggleSidebar}
+                        size="large"
+                        type="primary"
+                      />
+                    </FloatingButton>
+                  )}
+                </>
               )}
             </>
           )}
