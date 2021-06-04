@@ -18,19 +18,21 @@ const FlexibleContent = (props) => {
   const [childActive, setChildActive] = useState([]);
 
   const handleAdd = (id) => {
-    const layout = items.find((o) => o.id === id);
-    const newValues = produce(values, (draft) => {
-      draft.push({
-        id,
-        ...layout.fields.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}),
+    if (items) {
+      const layout = items.find((o) => o.id === id);
+      const newValues = produce(values, (draft) => {
+        draft.push({
+          id,
+          ...layout.fields.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}),
+        });
+
+        return draft;
       });
 
-      return draft;
-    });
+      onChange(newValues);
 
-    onChange(newValues);
-
-    handleToggleChild(values.length);
+      handleToggleChild(values.length);
+    }
   };
 
   const handleRemove = (index) => {

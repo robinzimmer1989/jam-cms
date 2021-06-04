@@ -19,7 +19,9 @@ const Repeater = (props) => {
 
   const handleAdd = () => {
     const newValues = produce(values, (draft) => {
-      draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}));
+      if (items) {
+        draft.push(items.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}));
+      }
       return draft;
     });
 
