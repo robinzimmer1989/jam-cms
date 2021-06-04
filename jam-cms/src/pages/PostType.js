@@ -96,13 +96,15 @@ const PostType = (props) => {
   };
 
   const handleTrashPost = async ({ postID }) => {
-    await postActions.updatePost(
+    const result = await postActions.updatePost(
       { siteID, postTypeID, id: postID, status: 'trash' },
       dispatch,
       config
     );
 
-    message.info('Post has been trashed');
+    if (result) {
+      message.info('Post has been trashed');
+    }
   };
 
   const filterItems = (
