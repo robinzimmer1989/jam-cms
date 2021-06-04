@@ -228,7 +228,10 @@ const Menu = (props) => {
             />
           </div>
 
-          <AddButton onClick={() => setDialog({ active: true, node: null })}>
+          <AddButton
+            onClick={() => setDialog({ active: true, node: null })}
+            items={items && items.length > 0}
+          >
             <PlusOutlined />
           </AddButton>
         </div>
@@ -428,6 +431,16 @@ const AddButton = styled.div`
   &:hover {
     border-color: ${colors.tertiary};
   }
+
+  ${({ items }) =>
+    !items &&
+    css`
+      border-color: ${colors.tertiary};
+
+      &:hover {
+        border-color: #c9cfdb;
+      }
+    `}
 `;
 
 export default Menu;
