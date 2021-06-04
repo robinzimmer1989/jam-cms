@@ -163,7 +163,7 @@ const PostEditor = (props) => {
     if (postID && post && post.id === postID && postLockTimer) {
       if (post?.locked) {
         // Fetch post again in case it's locked to determine if other user is still editing
-        loadPost(postID);
+        loadPost();
       } else {
         // Refresh the post lock status to inform WordPress that we are still editing
         refreshPostLock();
@@ -205,7 +205,7 @@ const PostEditor = (props) => {
   }, [templateID]);
 
   useEffect(() => {
-    loadPost(postID);
+    loadPost();
 
     // Add fresh copy of editor to state
     dispatch({
@@ -223,7 +223,7 @@ const PostEditor = (props) => {
     !previewID && setSidebarActive(!sidebarActive);
   });
 
-  const loadPost = async (postID) => {
+  const loadPost = async () => {
     if (!postID) {
       return;
     }
@@ -382,6 +382,7 @@ const PostEditor = (props) => {
                       className="jam-cms"
                       editable={!!Component}
                       onToggleSidebar={handleToggleSidebar}
+                      onUndoChanges={loadPost}
                     />
                   ) : (
                     <FloatingButton

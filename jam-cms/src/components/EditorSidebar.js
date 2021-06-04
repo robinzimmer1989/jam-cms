@@ -34,7 +34,7 @@ import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils'
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { editable, onToggleSidebar, ...rest } = props;
+  const { editable, onToggleSidebar, onUndoChanges, ...rest } = props;
 
   const [
     {
@@ -192,11 +192,7 @@ const EditorSidebar = (props) => {
 
   const handleDiscard = () => {
     siteHasChanged && dispatch({ type: 'ADD_EDITOR_SITE', payload: sites[siteID] });
-    postHasChanged &&
-      dispatch({
-        type: 'ADD_EDITOR_POST',
-        payload: sites[siteID]?.postTypes?.[post?.postTypeID]?.posts?.[post.id],
-      });
+    postHasChanged && onUndoChanges();
   };
 
   const handleDiscardRequest = () => {
