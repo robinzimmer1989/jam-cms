@@ -7,13 +7,15 @@ import Caption from './Caption';
 
 import { useStore } from '../store';
 
-const EditorForm = (props) => {
+const UserForm = (props) => {
   const { id, email: defaultEmail = '', role: defaultRole = 'editor', onAdd, onUpdate } = props;
 
   const [, dispatch] = useStore();
 
   const [email, setEmail] = useState(defaultEmail);
   const [role, setRole] = useState(defaultRole);
+
+  const userExists = !!id;
 
   const handleSubmit = async () => {
     if (!email || !role) {
@@ -49,9 +51,9 @@ const EditorForm = (props) => {
         </Select>
       </Space>
 
-      <Button children={`Add`} onClick={handleSubmit} type="primary" />
+      <Button children={userExists ? 'Update' : 'Add'} onClick={handleSubmit} type="primary" />
     </Space>
   );
 };
 
-export default EditorForm;
+export default UserForm;
