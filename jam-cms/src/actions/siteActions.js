@@ -47,11 +47,6 @@ export const getSites = async (args, dispatch, config) => {
 
 export const getSite = async ({ siteID }, dispatch, config) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: 'ADD_SITE', payload: result });
-  }
-
   return result;
 };
 

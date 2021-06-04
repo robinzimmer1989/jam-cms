@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
+import { set } from 'lodash';
+import produce from 'immer';
 
 // import components
 import Home from '../pages/Home';
@@ -85,6 +87,8 @@ const Master = (props) => {
         const result = await siteActions.getSite({ siteID: config.siteID }, dispatch, config);
 
         if (result) {
+          dispatch({ type: 'ADD_SITE', payload: result });
+
           if (!siteHasChanged) {
             // Silently update site in editor if there are no changes
             dispatch({ type: 'ADD_EDITOR_SITE', payload: result });
