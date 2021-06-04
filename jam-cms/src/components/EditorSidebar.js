@@ -132,6 +132,11 @@ const EditorSidebar = (props) => {
   const handleSave = async (action, status) => {
     const { id, themeOptions, frontPage } = site;
 
+    // Trigger dummy message to give user feedback
+    if (!siteHasChanged && !postHasChanged) {
+      return message.success('Updated successfully');
+    }
+
     let templateObject = getTemplateByPost(post, fields);
 
     // Nullify template object if syncing is disabled or not in development mode
@@ -578,7 +583,7 @@ const EditorSidebar = (props) => {
   };
 
   return (
-    <Container sidebar={...sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
+    <Container sidebar={sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>
@@ -749,7 +754,7 @@ const Container = styled.div`
   position: fixed;
   z-index: 1000;
   left: ${({ sidebar: { position } }) => (position === 'left' ? 0 : 'unset')};
-  right: ${({ sidebar: {position} }) => (position === 'left' ? 'unset' : 0)};
+  right: ${({ sidebar: { position } }) => (position === 'left' ? 'unset' : 0)};
   top: 0;
   width: ${({ sidebar: { width } }) => `${width}px`};
   height: 100vh;
