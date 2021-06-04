@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
-import { Space } from 'antd';
+import { Space, Typography } from 'antd';
 
 // import app components
 import MediaLibrary from './MediaLibrary';
@@ -214,6 +214,9 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
         <FieldContainer level={level + 1}>
           <Space direction="vertical" size={6}>
             <Caption children={field.label || field.id} />
+            {field.instructions && (
+              <Typography.Text type="secondary" children={field.instructions} />
+            )}
             {component}
           </Space>
         </FieldContainer>

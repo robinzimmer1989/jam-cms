@@ -1,12 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
 import produce from 'immer';
 import { set } from 'lodash';
-import { Collapse } from 'antd';
+import { Collapse, Typography } from 'antd';
 
 import { getField } from '../EditorFields';
 
 const Group = (props) => {
-  const { id, label, site, fields, value, onChange, dispatch } = props;
+  const { id, label, instructions, site, fields, value, onChange, dispatch } = props;
 
   let values = value || {};
 
@@ -22,6 +23,11 @@ const Group = (props) => {
   return (
     <Collapse expandIconPosition="right">
       <Collapse.Panel header={`${label || id}`}>
+        {instructions && (
+          <LabelContainer>
+            <Typography.Text type="secondary" children={instructions} />
+          </LabelContainer>
+        )}
         {fields &&
           fields.map((field, index) => {
             return (
@@ -40,5 +46,9 @@ const Group = (props) => {
     </Collapse>
   );
 };
+
+const LabelContainer = styled.div`
+  padding: 12px 4px 0;
+`;
 
 export default Group;

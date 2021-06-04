@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Collapse, Popconfirm, Menu, Dropdown } from 'antd';
+import { Collapse, Popconfirm, Menu, Dropdown, Space, Typography } from 'antd';
 import produce from 'immer';
 import { DeleteTwoTone, QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -11,7 +11,7 @@ import { getField } from '../EditorFields';
 import { colors } from '../../theme';
 
 const FlexibleContent = (props) => {
-  const { id, label, site, items, value, onChange, dispatch } = props;
+  const { id, label, instructions, site, items, value, onChange, dispatch } = props;
 
   const values = value || [];
 
@@ -108,7 +108,10 @@ const FlexibleContent = (props) => {
   return (
     <Container>
       <LabelContainer>
-        <Caption children={label || id} />
+        <Space direction="vertical" size={6}>
+          <Caption children={label || id} />
+          {instructions && <Typography.Text type="secondary" children={instructions} />}
+        </Space>
       </LabelContainer>
       {values && (
         <DragDropContext onDragEnd={handleDragEnd}>
