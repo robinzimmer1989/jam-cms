@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
-import defaultSettings from 'jam-cms/defaults';
 
 import getThemeSettings from './getThemeSettings';
 
@@ -84,7 +83,10 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   const jamCMS = {
     sidebar: {
       active: false,
-      ...defaultSettings.editorOptions.sidebar,
+      width: 320,
+      position: 'left',
+      defaultOpen: false,
+      style: 'inline',
     },
   };
 
