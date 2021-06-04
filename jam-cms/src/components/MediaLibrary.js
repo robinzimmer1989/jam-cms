@@ -9,7 +9,6 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
-import useKeypress from 'react-use-keypress';
 
 // import app components
 import MediaImage from './MediaImage';
@@ -44,16 +43,6 @@ const MediaLibrary = (props) => {
       loadMediaItems(page || 0);
     }
   }, [page]);
-
-  // Navigate to previous item
-  useKeypress('ArrowLeft', () => {
-    activeFileIndex !== 0 && setActiveFile(items[activeFileIndex - 1]);
-  });
-
-  // Navigate to next item
-  useKeypress('ArrowRight', () => {
-    activeFileIndex !== items.length - 1 && setActiveFile(items[activeFileIndex + 1]);
-  });
 
   const loadMediaItems = async (page) => {
     if (page > -1) {
@@ -244,9 +233,7 @@ const MediaLibrary = (props) => {
         >
           <PrevButton>
             <Button
-              shape="circle"
               icon={<ArrowLeftOutlined />}
-              size={'large'}
               onClick={() => setActiveFile(items[activeFileIndex - 1])}
               disabled={activeFileIndex === 0}
             />
@@ -259,9 +246,7 @@ const MediaLibrary = (props) => {
           />
           <NextButton>
             <Button
-              shape="circle"
               icon={<ArrowRightOutlined />}
-              size={'large'}
               onClick={() => setActiveFile(items[activeFileIndex + 1])}
               disabled={activeFileIndex === items.length - 1}
             />
@@ -347,17 +332,15 @@ const ActionBar = styled.div`
 const PrevButton = styled.div`
   position: absolute;
   z-index: 1;
-  top: 50%;
-  transform: translateY(-50%);
-  left: -50px;
+  top: 12px;
+  right: 100px;
 `;
 
 const NextButton = styled.div`
   position: absolute;
   z-index: 1;
-  top: 50%;
-  transform: translateY(-50%);
-  right: -50px;
+  top: 12px;
+  right: 60px;
 `;
 
 export default MediaLibrary;
