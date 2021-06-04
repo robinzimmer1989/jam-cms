@@ -347,6 +347,10 @@ const Container = styled.div`
       padding: 5px !important;
     }
 
+    .ant-tree-switcher-line-icon {
+      transform: translateY(3px);
+    }
+
     .ant-tree-node-content-wrapper {
       padding: 0;
 
