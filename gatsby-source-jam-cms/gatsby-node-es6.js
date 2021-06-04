@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createPages = exports.onCreateWebpackConfig = exports.onPreInit = void 0;
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _interopRequireWildcard2 = _interopRequireDefault(require("@babel/runtime/helpers/interopRequireWildcard"));
@@ -19,6 +21,8 @@ var _fs = _interopRequireDefault(require("fs"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _defaults = _interopRequireDefault(require("jam-cms/defaults"));
+
 var _getThemeSettings = _interopRequireDefault(require("./getThemeSettings"));
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -26,6 +30,10 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var fieldsPath,
     templatesPath,
@@ -150,7 +158,7 @@ exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
 var createPages = /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref5, pluginOptions) {
-    var store, actions, reporter, graphql, settings, fields, fieldsObject, themeOptions, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
+    var store, actions, reporter, graphql, settings, fields, jamCMS, fieldsObject, themeOptions, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
 
     return _regenerator["default"].wrap(function _callee5$(_context6) {
       while (1) {
@@ -166,42 +174,48 @@ var createPages = /*#__PURE__*/function () {
             return _context6.abrupt("return");
 
           case 3:
-            settings = pluginOptions.settings, fields = pluginOptions.fields; // Use default path if no fields variable is provided
+            settings = pluginOptions.settings, fields = pluginOptions.fields; // Prepare jamCMS object with default values for page context
+
+            jamCMS = {
+              sidebar: _objectSpread({
+                active: false
+              }, _defaults["default"].editorOptions.sidebar)
+            }; // Use default path if no fields variable is provided
 
             fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields"); // Import field object
 
-            _context6.next = 7;
+            _context6.next = 8;
             return Promise.resolve("".concat(fieldsPath)).then(function (s) {
               return (0, _interopRequireWildcard2["default"])(require(s));
             });
 
-          case 7:
+          case 8:
             fieldsObject = _context6.sent;
-            _context6.next = 10;
+            _context6.next = 11;
             return (0, _getThemeSettings["default"])({
               reporter: reporter
             }, pluginOptions);
 
-          case 10:
+          case 11:
             themeOptions = _context6.sent;
             allNodes = {};
-            _context6.prev = 12;
-            _context6.next = 15;
+            _context6.prev = 13;
+            _context6.next = 16;
             return graphql(
             /* GraphQL */
             "\n      query ALL_CONTENT_TYPES {\n        allWpContentType {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 15:
+          case 16:
             _yield$graphql = _context6.sent;
             allWpContentType = _yield$graphql.data.allWpContentType;
             _iterator = _createForOfIteratorHelper(allWpContentType.nodes);
-            _context6.prev = 18;
+            _context6.prev = 19;
 
             _iterator.s();
 
-          case 20:
+          case 21:
             if ((_step = _iterator.n()).done) {
-              _context6.next = 34;
+              _context6.next = 35;
               break;
             }
 
@@ -209,60 +223,60 @@ var createPages = /*#__PURE__*/function () {
             postType = contentType.graphqlSingleName; // Don't create single pages for media items
 
             if (!(postType === 'mediaItem')) {
-              _context6.next = 25;
+              _context6.next = 26;
               break;
             }
 
-            return _context6.abrupt("continue", 32);
+            return _context6.abrupt("continue", 33);
 
-          case 25:
+          case 26:
             // Capitalize post type name
             nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
             gatsbyNodeListFieldName = "allWp".concat(nodesTypeName);
-            _context6.next = 29;
+            _context6.next = 30;
             return graphql(
             /* GraphQL */
             "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              databaseId\n              id\n              uri\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
 
-          case 29:
+          case 30:
             _yield$graphql2 = _context6.sent;
             data = _yield$graphql2.data;
             allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
 
-          case 32:
-            _context6.next = 20;
+          case 33:
+            _context6.next = 21;
             break;
 
-          case 34:
-            _context6.next = 39;
+          case 35:
+            _context6.next = 40;
             break;
 
-          case 36:
-            _context6.prev = 36;
-            _context6.t0 = _context6["catch"](18);
+          case 37:
+            _context6.prev = 37;
+            _context6.t0 = _context6["catch"](19);
 
             _iterator.e(_context6.t0);
 
-          case 39:
-            _context6.prev = 39;
+          case 40:
+            _context6.prev = 40;
 
             _iterator.f();
 
-            return _context6.finish(39);
+            return _context6.finish(40);
 
-          case 42:
-            _context6.next = 47;
+          case 43:
+            _context6.next = 48;
             break;
 
-          case 44:
-            _context6.prev = 44;
-            _context6.t1 = _context6["catch"](12);
+          case 45:
+            _context6.prev = 45;
+            _context6.t1 = _context6["catch"](13);
 
             if (_context6.t1.response && _context6.t1.response.data.message) {
               reporter.error(_context6.t1.response.data.message);
             }
 
-          case 47:
+          case 48:
             // Initialize missing templates object
             missingTemplates = {};
             allowedExtensions = ['.js', '.jsx', '.tsx'];
@@ -292,7 +306,7 @@ var createPages = /*#__PURE__*/function () {
               return thePath;
             };
 
-            _context6.next = 52;
+            _context6.next = 53;
             return Promise.all(Object.keys(allNodes).map( /*#__PURE__*/function () {
               var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(postType) {
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -347,7 +361,8 @@ var createPages = /*#__PURE__*/function () {
                                                 postsPerPage: postsPerPageUsed,
                                                 numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
                                                 page: page
-                                              }
+                                              },
+                                              jamCMS: jamCMS
                                             }
                                           });
                                         }
@@ -358,7 +373,8 @@ var createPages = /*#__PURE__*/function () {
                                           context: {
                                             id: id,
                                             themeOptions: themeOptions,
-                                            pagination: {}
+                                            pagination: {},
+                                            jamCMS: jamCMS
                                           }
                                         });
                                       }
@@ -398,18 +414,18 @@ var createPages = /*#__PURE__*/function () {
               };
             }()));
 
-          case 52:
-            _context6.prev = 52;
-            _context6.next = 55;
+          case 53:
+            _context6.prev = 53;
+            _context6.next = 56;
             return graphql(
             /* GraphQL */
             "\n      query ALL_TAXONOMIES {\n        allWpTaxonomy {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 55:
+          case 56:
             _yield$graphql3 = _context6.sent;
             allWpTaxonomy = _yield$graphql3.data.allWpTaxonomy;
             _iterator3 = _createForOfIteratorHelper(allWpTaxonomy.nodes);
-            _context6.prev = 58;
+            _context6.prev = 59;
             _loop = /*#__PURE__*/_regenerator["default"].mark(function _loop() {
               var taxonomy, graphqlSingleName, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql4, data;
 
@@ -457,7 +473,8 @@ var createPages = /*#__PURE__*/function () {
                                       context: {
                                         id: id,
                                         slug: slug,
-                                        themeOptions: themeOptions
+                                        themeOptions: themeOptions,
+                                        jamCMS: jamCMS
                                       }
                                     });
                                   } else {
@@ -493,63 +510,63 @@ var createPages = /*#__PURE__*/function () {
 
             _iterator3.s();
 
-          case 61:
+          case 62:
             if ((_step3 = _iterator3.n()).done) {
-              _context6.next = 68;
+              _context6.next = 69;
               break;
             }
 
-            return _context6.delegateYield(_loop(), "t2", 63);
+            return _context6.delegateYield(_loop(), "t2", 64);
 
-          case 63:
+          case 64:
             _ret = _context6.t2;
 
             if (!(_ret === "continue")) {
-              _context6.next = 66;
+              _context6.next = 67;
               break;
             }
 
-            return _context6.abrupt("continue", 66);
+            return _context6.abrupt("continue", 67);
 
-          case 66:
-            _context6.next = 61;
+          case 67:
+            _context6.next = 62;
             break;
 
-          case 68:
-            _context6.next = 73;
+          case 69:
+            _context6.next = 74;
             break;
 
-          case 70:
-            _context6.prev = 70;
-            _context6.t3 = _context6["catch"](58);
+          case 71:
+            _context6.prev = 71;
+            _context6.t3 = _context6["catch"](59);
 
             _iterator3.e(_context6.t3);
 
-          case 73:
-            _context6.prev = 73;
+          case 74:
+            _context6.prev = 74;
 
             _iterator3.f();
 
-            return _context6.finish(73);
+            return _context6.finish(74);
 
-          case 76:
-            _context6.next = 81;
+          case 77:
+            _context6.next = 82;
             break;
 
-          case 78:
-            _context6.prev = 78;
-            _context6.t4 = _context6["catch"](52);
+          case 79:
+            _context6.prev = 79;
+            _context6.t4 = _context6["catch"](53);
 
             if (_context6.t4.response && _context6.t4.response.data.message) {
               reporter.error(_context6.t4.response.data.message);
             }
 
-          case 81:
+          case 82:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee5, null, [[12, 44], [18, 36, 39, 42], [52, 78], [58, 70, 73, 76]]);
+    }, _callee5, null, [[13, 45], [19, 37, 40, 43], [53, 79], [59, 71, 74, 77]]);
   }));
 
   return function createPages(_x3, _x4) {

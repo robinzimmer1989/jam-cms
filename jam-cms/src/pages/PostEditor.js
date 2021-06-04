@@ -316,14 +316,14 @@ const PostEditor = (props) => {
               <>
                 {!!Component && post?.content ? (
                   <Component
-                    jamCMS={{
-                      sidebar: {
-                        active: sidebarActive,
-                        ...sites?.[siteID]?.editorOptions?.sidebar,
-                      },
-                    }}
                     data={getPostData()}
                     pageContext={{
+                      jamCMS: {
+                        sidebar: {
+                          active: sidebarActive,
+                          ...sites?.[siteID]?.editorOptions?.sidebar,
+                        },
+                      },
                       themeOptions: formatFieldsToProps({
                         global: true,
                         themeOptions: fields?.themeOptions,

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import axios from 'axios';
+import defaultSettings from 'jam-cms/defaults';
 
 import getThemeSettings from './getThemeSettings';
 
@@ -78,6 +79,14 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   }
 
   const { settings, fields } = pluginOptions;
+
+  // Prepare jamCMS object with default values for page context
+  const jamCMS = {
+    sidebar: {
+      active: false,
+      ...defaultSettings.editorOptions.sidebar,
+    },
+  };
 
   // Use default path if no fields variable is provided
   fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
@@ -212,6 +221,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
                       numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
                       page,
                     },
+                    jamCMS,
                   },
                 });
               }
@@ -219,7 +229,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
               actions.createPage({
                 component: templatePath,
                 path: uri,
-                context: { id, themeOptions, pagination: {} },
+                context: { id, themeOptions, pagination: {}, jamCMS },
               });
             }
           } else {
@@ -286,7 +296,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             actions.createPage({
               component: templatePath,
               path: uri,
-              context: { id, slug, themeOptions },
+              context: { id, slug, themeOptions, jamCMS },
             });
           } else {
             // Check if error was already shown

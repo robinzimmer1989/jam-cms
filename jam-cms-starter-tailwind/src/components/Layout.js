@@ -7,7 +7,7 @@ import Footer from './footer/Footer';
 import Seo from './Seo';
 
 const Layout = (props) => {
-  const { jamCMS, pageContext, seo, children } = props;
+  const { pageContext, seo, children } = props;
 
   const colors = pageContext?.themeOptions?.colors;
 
@@ -57,7 +57,7 @@ const Layout = (props) => {
         </style>
       </Helmet>
 
-      <Header jamCMS={jamCMS} {...pageContext?.themeOptions?.header} />
+      <Header {...pageContext?.themeOptions?.header} />
 
       {children}
 
