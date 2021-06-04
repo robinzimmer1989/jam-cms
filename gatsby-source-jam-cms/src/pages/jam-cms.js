@@ -1,17 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import Helmet from 'react-helmet';
 import { LoginForm } from 'jam-cms';
 
 const Login = (props) => {
   const { source } = props;
 
   return (
-    <Container>
-      <CardWrapper>
-        <LoginForm url={source} />
-      </CardWrapper>
-    </Container>
+    <>
+      <Helmet>
+        <title>Login</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
+
+      <Container>
+        <CardWrapper>
+          <LoginForm url={source} />
+        </CardWrapper>
+      </Container>
+    </>
   );
 };
 

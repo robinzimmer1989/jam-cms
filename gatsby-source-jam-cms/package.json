@@ -8,6 +8,7 @@
     "cross-env": "7.0.3",
     "gatsby": "3.4.0",
     "jam-cms": "1.6.0",
+    "react-helmet": "^6.1.0",
     "styled-components": "^5.2.3"
   },
   "main": "./index.js",
