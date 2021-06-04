@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 export default function (array, param, direction = 'DESC') {
   let x;
   let y;
@@ -10,13 +12,17 @@ export default function (array, param, direction = 'DESC') {
     y = 1;
   }
 
-  array.sort((a, b) => {
-    if (a[param] < b[param]) {
-      return x;
-    } else if (b[param] < a[param]) {
-      return y;
-    } else {
-      return 0;
-    }
+  const nextArray = produce(array, (draft) => {
+    return draft.sort((a, b) => {
+      if (a[param] < b[param]) {
+        return x;
+      } else if (b[param] < a[param]) {
+        return y;
+      } else {
+        return 0;
+      }
+    });
   });
+
+  return nextArray;
 }
