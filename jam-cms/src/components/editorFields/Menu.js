@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Button, Tree, Collapse, Space, Modal } from 'antd';
+import { Button, Tree, Collapse, Space, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Parser from 'html-react-parser';
 import produce from 'immer';
@@ -14,7 +14,7 @@ import { useStore } from '../../store';
 import { colors } from '../../theme';
 
 const Menu = (props) => {
-  const { value = [], onChange } = props;
+  const { value = [], maxLevel = 3, onChange } = props;
 
   const [
     {
@@ -43,6 +43,33 @@ const Menu = (props) => {
     const dragKey = info.dragNode.props.eventKey;
     const dropPos = info.node.props.pos.split('-');
     const dropPosition = info.dropPosition - Number(dropPos[dropPos.length - 1]);
+
+    const getLevel = () => {
+      const dropPos = info.node.props.pos.split('-');
+
+      // if item is dragged NOT to the top of a node the array will have an additional parameter
+      let level = info.dropToGap ? dropPos.length - 1 : dropPos.length;
+
+      const countChildren = (node, index) => {
+        let newIndex = index;
+
+        if (node?.children?.length) {
+          newIndex = countChildren(node.children, newIndex + 1);
+        }
+
+        return newIndex;
+      };
+
+      // We have to check if the node has children because they could potentially exceed the max level restriction
+      if (info.dragNode.children.length) {
+        level = level + countChildren(info.dragNode, 0);
+      }
+      return level;
+    };
+
+    if (getLevel() > Number(maxLevel)) {
+      return message.error({ content: `Exceeded max depth of ${maxLevel}` });
+    }
 
     const loop = (data, key, callback) => {
       for (let i = 0; i < data.length; i++) {

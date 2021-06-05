@@ -8,6 +8,7 @@ const config = {
       id: 'menu',
       type: 'menu',
       label: 'Menu',
+      maxLevel: 2,
     },
   ],
 };
