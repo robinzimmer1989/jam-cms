@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Button, Tree, Collapse, Space, Tabs, Modal, Empty } from 'antd';
+import { Button, Tree, Collapse, Space, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { isEmpty } from 'lodash';
 import Parser from 'html-react-parser';
 import produce from 'immer';
 
 // import app components
 import Input from '../Input';
-import ListItem from '../ListItem';
-import Tag from '../Tag';
-import {
-  recursivelyUpdateTree,
-  removeFromTree,
-  deepCopyTree,
-  generateRandomString,
-  generateSlug,
-} from '../../utils';
+import MenuPicker from '../MenuPicker';
+
+import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../../utils';
 import { useStore } from '../../store';
 import { colors } from '../../theme';
 
@@ -25,19 +18,13 @@ const Menu = (props) => {
 
   const [
     {
-      cmsState: { sites, siteID },
       editorState: { siteHasChanged },
     },
   ] = useStore();
 
   const [editing, setEditing] = useState([]);
-  const [dialog, setDialog] = useState({ active: false, node: null });
-  const [filter, setFilter] = useState('Pages');
   const [items, setItems] = useState([]);
-  const [customLink, setCustomLink] = useState({
-    title: '',
-    url: '',
-  });
+  const [modal, setModal] = useState(false);
 
   // When a post is saved while a menu item is open, we need to manually reset the editing array to allow dragging
   useEffect(() => {
@@ -49,10 +36,6 @@ const Menu = (props) => {
       setItems(deepCopyTree(value));
     }
   }, [value]);
-
-  // Get posts by filter
-  const postType = Object.values(sites[siteID]?.postTypes).find((o) => o.title === filter);
-  const posts = postType?.posts;
 
   // Function provided by Ant Design
   const onDrop = (info) => {
@@ -150,16 +133,13 @@ const Menu = (props) => {
     setEditing(nextValue);
   };
 
-  const handleAddCustomLink = () => {
-    if (!customLink.title || !customLink.url) {
-      return;
-    }
+  const handleAdd = (item) => {
+    const nextValue = produce(items, (draft) => {
+      draft.push(item);
+      return draft;
+    });
 
-    onChange([
-      ...items,
-      { key: generateRandomString(), ...customLink, postTypeID: null, postID: null, children: [] },
-    ]);
-    setCustomLink({ title: '', url: '' });
+    onChange(nextValue);
   };
 
   const handleToggleCollapse = (key) => {
@@ -228,99 +208,20 @@ const Menu = (props) => {
             />
           </div>
 
-          <AddButton
-            onClick={() => setDialog({ active: true, node: null })}
-            items={items && items.length > 0}
-          >
+          <AddButton items={items && items.length > 0} onClick={() => setModal(true)}>
             <PlusOutlined />
           </AddButton>
         </div>
       </Container>
 
       <Modal
-        title="Add item"
-        visible={dialog.active}
-        onCancel={() => setDialog({ active: false, node: null })}
-        width={400}
+        title={'Menu Items'}
+        visible={modal}
+        onCancel={() => setModal(false)}
+        width={600}
         footer={null}
       >
-        <Tabs defaultActiveKey={filter} onChange={(v) => setFilter(v)}>
-          {Object.values(sites[siteID]?.postTypes).map((o) => {
-            return <Tabs.TabPane key={o.title} tab={o.title.toUpperCase()} />;
-          })}
-
-          <Tabs.TabPane key={'custom-link'} tab={'CUSTOM LINK'} />
-        </Tabs>
-
-        <div>
-          {filter !== 'custom-link' && (
-            <>
-              {isEmpty(posts) ? (
-                <EmptyContainer>
-                  <Empty
-                    imageStyle={{
-                      height: 120,
-                    }}
-                  />
-                </EmptyContainer>
-              ) : (
-                Object.values(posts)
-                  .filter(({ status }) => status !== 'trash')
-                  .map(({ id, title, status, postTypeID }) => {
-                    const badges = [];
-
-                    if (status === 'draft') {
-                      badges.push(<Tag key="status" children={status} />);
-                    }
-
-                    return (
-                      <StyledListItem
-                        key={id}
-                        title={title}
-                        status={badges}
-                        disabled={status === 'draft'}
-                        onClick={() =>
-                          status === 'publish' &&
-                          onChange([
-                            ...items,
-                            {
-                              key: generateRandomString(),
-                              title,
-                              postTypeID,
-                              postID: id,
-                              children: [],
-                              url: generateSlug(postType, id, sites?.[siteID]?.frontPage, true),
-                            },
-                          ])
-                        }
-                      />
-                    );
-                  })
-              )}
-            </>
-          )}
-          {filter === 'custom-link' && (
-            <Space direction="vertical" size={20}>
-              <Input
-                label="Title"
-                value={customLink.title}
-                onChange={(e) => setCustomLink({ ...customLink, title: e.target.value })}
-              />
-              <Input
-                label="Url"
-                value={customLink.url}
-                onChange={(e) => setCustomLink({ ...customLink, url: e.target.value })}
-                placeholder="https://"
-              />
-              <Button
-                style={{ marginBottom: 20 }}
-                children={`Add`}
-                type="primary"
-                onClick={handleAddCustomLink}
-              />
-            </Space>
-          )}
-        </div>
+        <MenuPicker onAdd={handleAdd} />
       </Modal>
     </>
   );
@@ -375,51 +276,6 @@ const Container = styled.div`
       min-width: 150px;
     }
   }
-`;
-
-const StyledListItem = styled(ListItem)`
-  .ant-card {
-    box-shadow: none !important;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    margin-bottom: 4px;
-
-    ${({ disabled }) =>
-      disabled
-        ? css`
-            cursor: not-allowed;
-            opacity: 0.4;
-          `
-        : css`
-            cursor: pointer;
-            opacity: 1;
-
-            &:hover {
-              opacity: 0.8;
-            }
-          `}
-  }
-
-  .ant-card-body {
-    padding: 0 16px;
-  }
-
-  .ant-list-item-meta-title {
-    margin: 0;
-    line-height: 1;
-  }
-
-  .ant-typography strong {
-    font-weight: 400;
-  }
-`;
-
-const EmptyContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  text-align: center;
 `;
 
 const AddButton = styled.div`
