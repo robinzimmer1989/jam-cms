@@ -85,6 +85,12 @@ export const sitesReducer = (state, action) => {
         delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id];
         break;
 
+      case `DELETE_POSTS`:
+        payload.posts.map((o) => {
+          delete draft.sites[payload.siteID].postTypes[o.postTypeID].posts[o.id];
+        });
+        break;
+
       /******************************
        * Clear
        ******************************/

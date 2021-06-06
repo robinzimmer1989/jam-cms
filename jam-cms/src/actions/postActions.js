@@ -36,6 +36,16 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
   return result;
 };
 
+export const emptyTrash = async (args, dispatch, config) => {
+  const result = await postServices.emptyTrash(args, dispatch, config);
+
+  if (result) {
+    dispatch({ type: `DELETE_POSTS`, payload: { posts: result, siteID: args.siteID } });
+  }
+
+  return result;
+};
+
 export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
   const result = await postServices.duplicatePost({ siteID, id }, dispatch, config);
 

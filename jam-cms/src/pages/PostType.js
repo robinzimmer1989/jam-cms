@@ -11,6 +11,7 @@ import {
   Dropdown,
   message,
   Alert,
+  Popconfirm,
 } from 'antd';
 import produce from 'immer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -107,6 +108,14 @@ const PostType = (props) => {
     }
   };
 
+  const handleEmptyTrash = async () => {
+    const result = await postActions.emptyTrash({ siteID, postTypeID }, dispatch, config);
+
+    if (result) {
+      message.info({ content: 'Trashed emptied successfully' });
+    }
+  };
+
   const filterItems = (
     <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
       {['all', 'publish', 'draft', 'trash'].map((name) => {
@@ -158,24 +167,44 @@ const PostType = (props) => {
     />
   );
 
-  extra.push(
-    <Button
-      key="add"
-      children={`Add`}
-      disabled={!postType}
-      onClick={() =>
-        dispatch({
-          type: 'SET_DIALOG',
-          payload: {
-            open: true,
-            title: `Add ${postType.title}`,
-            component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
-          },
-        })
-      }
-      type="primary"
-    />
-  );
+  if (filter === 'trash') {
+    extra.push(
+      <Popconfirm
+        title="Are you sure you want to empty the trash?"
+        onConfirm={handleEmptyTrash}
+        okText="Yes"
+        cancelText="No"
+        placement="bottomRight"
+        disabled={visiblePosts.length === 0}
+      >
+        <Button
+          key="empty-trash"
+          children={'Empty trash'}
+          disabled={visiblePosts.length === 0}
+          type="danger"
+        />
+      </Popconfirm>
+    );
+  } else {
+    extra.push(
+      <Button
+        key="add"
+        children={`Add`}
+        disabled={!postType}
+        onClick={() =>
+          dispatch({
+            type: 'SET_DIALOG',
+            payload: {
+              open: true,
+              title: `Add ${postType.title}`,
+              component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
+            },
+          })
+        }
+        type="primary"
+      />
+    );
+  }
 
   const renderPost = (o, level) => {
     const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;

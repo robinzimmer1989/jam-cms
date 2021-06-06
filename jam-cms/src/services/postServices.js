@@ -58,6 +58,11 @@ export const deletePost = async ({ siteID, id }, dispatch, config) => {
   return result;
 };
 
+export const emptyTrash = async ({ siteID, postTypeID }, dispatch, config) => {
+  let result = await db('emptyTrash', { siteID, postTypeID }, dispatch, config);
+  return result;
+};
+
 export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
   let result = await db('duplicatePost', { siteID, id }, dispatch, config);
   return result;
