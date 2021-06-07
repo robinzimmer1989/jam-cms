@@ -99,7 +99,7 @@ Afterward, you can add the source plugin to your gatsby-config.js file. Follow t
   options: {
     source: process.env.GATSBY_JAM_CMS_URL,
     apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
-    fields: path.join(__dirname, 'src/fields'), // default: 'src/fields
+    fields: path.join(__dirname, 'src/fields'), // default: 'src/fields'
     settings: {
       postsPerPage: 5, // default: 10
       sync: true, // default: true
@@ -191,31 +191,33 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
 
 ```
 {
-      id: 'foo',
-      type: 'checkbox',
-      label: 'Bar',
-      defaultValue: 'checkbox-1', // optional
-      options: [
-        {
-          name: 'Checkbox 1',
-          value: 'checkbox-1',
-        },
-        {
-          name: 'Checkbox 2',
-          value: 'checkbox-2',
-        },
-      ],
+  id: 'foo',
+  type: 'checkbox',
+  label: 'Bar',
+  defaultValue: 'checkbox-1', // optional
+  instructions: 'Some instructions...', // optional
+  options: [
+    {
+      name: 'Checkbox 1',
+      value: 'checkbox-1',
     },
+    {
+      name: 'Checkbox 2',
+      value: 'checkbox-2',
+    },
+  ],
+},
 ```
 
 #### Color Picker
 
 ```
 {
-   id: 'primary',
-   type: 'color_picker',
-   label: 'Primary Color',
-   defaultValue: '#000000' // optional
+  id: 'primary',
+  type: 'color_picker',
+  label: 'Primary Color',
+  defaultValue: '#000000', // optional
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -223,9 +225,11 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
 
 ```
 {
-      id: 'date',
-      type: 'date_picker',
-      label: 'Date'
+  id: 'date',
+  type: 'date_picker',
+  label: 'Date',
+  defaultValue: new Date(), // optional
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -233,9 +237,10 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
 
 ```
 {
-      id: 'file',
-      type: 'file',
-      label: 'File'
+  id: 'file',
+  type: 'file',
+  label: 'File',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -246,6 +251,7 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
   id: 'foo',
   type: 'flexible_content',
   label: 'Bar',
+  instructions: 'Some instructions...', // optional
   items: [
     {
       id: 'layout1',
@@ -255,6 +261,7 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
           id: 'text',
           type: 'wysiwyg',
           label: 'Text',
+          instructions: 'Some instructions...', // optional
         },
       ],
     },
@@ -266,11 +273,13 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
           id: 'text',
           type: 'wysiwyg',
           label: 'Text',
+          instructions: 'Some instructions...', // optional
         },
         {
           id: 'image',
           type: 'image',
           label: 'Image',
+          instructions: 'Some instructions...', // optional
         },
       ],
     },
@@ -282,9 +291,10 @@ TAXONOMY_ID: caegory | post_tag | custom_taxonomy
 
 ```
 {
-     id: 'foo',
-     label: 'Bar',
-     type: 'gallery'
+  id: 'foo',
+  label: 'Bar',
+  type: 'gallery',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -293,9 +303,10 @@ You have add a Google Maps API key to the site settings and enable the JavaScrip
 
 ```
 {
-      id: 'foo',
-      label: 'Bar',
-      type: 'google_map'
+  id: 'foo',
+  label: 'Bar',
+  type: 'google_map',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -305,16 +316,18 @@ Groups will render their fields inside an accordion. That makes them the perfect
 
 ```
 {
-    id: 'foo',
-    label: 'Bar',
-    type: 'group',
-    fields: [
-      {
-        id: 'foo',
-        type: 'text',
-        label: 'Bar',
-      },
-    ],
+  id: 'foo',
+  label: 'Bar',
+  type: 'group',
+  instructions: 'Some instructions...', // optional
+  fields: [
+    {
+      id: 'foo',
+      type: 'text',
+      label: 'Bar',
+      instructions: 'Some instructions...', // optional
+    },
+  ],
 }
 ```
 
@@ -325,6 +338,7 @@ Groups will render their fields inside an accordion. That makes them the perfect
   id: 'foo',
   type: 'image',
   label: 'Bar',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -365,7 +379,8 @@ image {
 {
   id: 'foo',
   type: 'link',
-  label: 'Bar'
+  label: 'Bar',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -377,9 +392,13 @@ The menu id must be unique throughout the entire site.
 {
   id: 'foo',
   type: 'menu',
-  label: 'Bar'
+  label: 'Bar',
+  instructions: 'Some instructions...', // optional
+  maxLevel: 1 // default: 3
 }
 ```
+
+You can assign a max depth level to the menu so users won't be able to nest menu items infinitely.
 
 #### Number
 
@@ -389,6 +408,7 @@ The menu id must be unique throughout the entire site.
   type: 'number',
   label: 'Bar',
   defaultValue: 3, // optional
+  instructions: 'Some instructions...', // optional
   min: 1, // optional
   max: 4, // optional
   step: 1 // optional
@@ -399,20 +419,21 @@ The menu id must be unique throughout the entire site.
 
 ```
 {
-      id: 'radio',
-      type: 'radio',
-      label: 'Radio',
-      defaultValue: 'radio-1',
-      options: [
-        {
-          name: 'Radio 1',
-          value: 'radio-1',
-        },
-        {
-          name: 'Radio 2',
-          value: 'radio-2',
-        },
-      ],
+  id: 'radio',
+  type: 'radio',
+  label: 'Radio',
+  defaultValue: 'radio-1',
+  instructions: 'Some instructions...', // optional
+  options: [
+    {
+      name: 'Radio 1',
+      value: 'radio-1',
+    },
+    {
+      name: 'Radio 2',
+      value: 'radio-2',
+    },
+  ],
 }
 ```
 
@@ -423,11 +444,13 @@ The menu id must be unique throughout the entire site.
   id: 'foo',
   type: 'repeater',
   label: 'Bar',
+  instructions: 'Some instructions...', // optional
   items: [
     {
       id: 'image',
       type: 'image',
       label: 'Add Image',
+      instructions: 'Some instructions...', // optional
     },
   ]
 }
@@ -441,6 +464,7 @@ The menu id must be unique throughout the entire site.
   type: 'select',
   label: 'Bar',
   defaultValue: 'option1',
+  instructions: 'Some instructions...', // optional
   options: [
     {
       name: 'Option 1',
@@ -461,6 +485,8 @@ The menu id must be unique throughout the entire site.
   id: 'foo',
   type: 'text',
   label: 'Bar',
+  instructions: 'Some instructions...', // optional
+  rows: 5 // default: 1
 }
 ```
 
@@ -471,6 +497,7 @@ The menu id must be unique throughout the entire site.
   id: 'foo',
   type: 'wysiwyg',
   label: 'Bar',
+  instructions: 'Some instructions...', // optional
 }
 ```
 
@@ -503,6 +530,15 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
 
 ## Changelog
+
+### 1.7.0
+
+- Add sidebar options (position, style, open status) to settings page
+- Add support for multiple editors with detection if someones is editing the post already
+- Empty trash functionality
+- Add max depth property to menu (maxLevel)
+- Add field instructions support
+- Move jamCMS prop into pageContext
 
 ### 1.6.0
 
