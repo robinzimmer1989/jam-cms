@@ -531,6 +531,10 @@ Because all the content editing happens in a relatively small sidebar, adding im
 
 ## Changelog
 
+### 1.7.1
+
+- Fix update/delete user
+
 ### 1.7.0
 
 - Add sidebar options (position, style, open status) to settings page
