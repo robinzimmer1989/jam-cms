@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, PageHeader, Spin, Popconfirm } from 'antd';
+import { Button, PageHeader, Spin, Popconfirm, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
 
 // import app components
@@ -73,7 +73,7 @@ const Users = () => {
     const result = await userActions.deleteUser({ siteID, id }, dispatch, config);
 
     if (result) {
-      setItems((items) => items.filter((o) => o.id !== parseInt(result)));
+      setItems((items) => items.filter((o) => o.id !== result.id));
       message.success(`Deleted successfully.`);
     }
   };

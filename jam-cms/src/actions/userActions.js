@@ -5,11 +5,6 @@ import { authActions } from '../actions';
 
 export const addUser = async ({ siteID, email, role }, dispatch, config) => {
   const result = await userServices.addUser({ siteID, email, role }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `ADD_USER`, payload: { siteID, ...result } });
-  }
-
   return result;
 };
 
@@ -28,37 +23,21 @@ export const getAuthUser = async ({}, dispatch, config) => {
 };
 
 export const getUser = async ({ siteID, id }, dispatch, config) => {
-  const result = await userServices.getUser({ id }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `ADD_USER`, payload: { siteID, ...result } });
-  }
-
+  const result = await userServices.getUser({ siteID, id }, dispatch, config);
   return result;
 };
 
 export const getUsers = async ({ siteID, page, limit }, dispatch, config) => {
   const result = await userServices.getUsers({ siteID, page, limit }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `ADD_USERS`, payload: { siteID, ...result } });
-  }
-
   return result;
 };
 
 export const updateUser = async ({ siteID, id, role }, dispatch, config) => {
   const result = await userServices.updateUser({ siteID, id, role }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `ADD_USER`, payload: { siteID, ...result } });
-  }
+  return result;
 };
 
 export const deleteUser = async ({ siteID, id }, dispatch, config) => {
   const result = await userServices.deleteUser({ siteID, id }, dispatch, config);
-
-  if (result) {
-    dispatch({ type: `DELETE_USER`, payload: { siteID, ...result } });
-  }
+  return result;
 };

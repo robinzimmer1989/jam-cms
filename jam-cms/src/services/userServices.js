@@ -10,8 +10,8 @@ export const getAuthUser = async ({}, dispatch, config) => {
   return result;
 };
 
-export const getUser = async ({ id }, dispatch, config) => {
-  let result = await db('getUser', { id }, dispatch, config);
+export const getUser = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('getUser', { siteID, id }, dispatch, config);
   return result;
 };
 
