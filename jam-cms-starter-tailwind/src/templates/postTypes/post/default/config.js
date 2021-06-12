@@ -1,5 +1,3 @@
-import texteditor from '../../../../components/textEditor/config';
-
 const config = {
   id: 'default',
   postTypeID: 'post',
@@ -12,8 +10,7 @@ const config = {
     {
       id: 'text',
       label: 'Content',
-      type: 'group',
-      fields: texteditor.fields,
+      type: 'wysiwyg',
     },
     {
       id: 'footer',

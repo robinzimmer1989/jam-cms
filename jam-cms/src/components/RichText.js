@@ -6,26 +6,37 @@ const RichText = (props) => {
   const { children } = props;
 
   const parse = (string) => {
-    return Parser(string, {
-      replace: (domNode) => {
-        if (domNode.type === 'tag' && domNode.name === 'a') {
-          if (domNode.attribs.href.includes('http')) {
-            return (
-              <a href={domNode.attribs.href} target="_blank">
-                {domNode.children.map((o) => parse(o.data))}
-              </a>
-            );
-          } else {
-            return (
-              <Link to={domNode.attribs.href}>{domNode.children.map((o) => parse(o.data))}</Link>
-            );
-          }
-        }
-      },
-    });
+    return typeof string === 'string'
+      ? Parser(string, {
+          replace: (domNode) => {
+            if (domNode.type === 'tag' && domNode.name === 'a') {
+              if (domNode.attribs.href.includes('http')) {
+                return (
+                  <a href={domNode.attribs.href} target="_blank">
+                    {domNode.children.map((o) => parse(o.data))}
+                  </a>
+                );
+              } else if (
+                domNode.attribs.href.includes('tel:') ||
+                domNode.attribs.href.includes('mailto:')
+              ) {
+                return (
+                  <a href={domNode.attribs.href}>{domNode.children.map((o) => parse(o.data))}</a>
+                );
+              } else {
+                return (
+                  <Link to={domNode.attribs.href}>
+                    {domNode.children.map((o) => parse(o.data))}
+                  </Link>
+                );
+              }
+            }
+          },
+        })
+      : '';
   };
 
-  return typeof children === 'string' ? parse(children) : '';
+  return parse(children);
 };
 
 export default RichText;

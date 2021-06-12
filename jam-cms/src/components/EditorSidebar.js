@@ -15,9 +15,10 @@ import {
   Empty,
   Menu,
   Alert,
+  Popconfirm,
 } from 'antd';
 import { set } from 'lodash';
-import { HomeOutlined, UndoOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { HomeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 // import app components
 import EditorFields from './EditorFields';
@@ -34,7 +35,7 @@ import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils'
 import getRoute from '../routes';
 
 const EditorSidebar = (props) => {
-  const { editable, onToggleSidebar, onUndoChanges, ...rest } = props;
+  const { editable, onToggleSidebar, ...rest } = props;
 
   const [
     {
@@ -109,7 +110,6 @@ const EditorSidebar = (props) => {
       const nextPost = produce(post, (draft) => {
         return set(draft, `content.${field.id}`, field);
       });
-
       dispatch({
         type: 'UPDATE_EDITOR_POST',
         payload: nextPost,
@@ -188,44 +188,6 @@ const EditorSidebar = (props) => {
       const slug = generateSlug(nextPostType, post.id, site.frontPage, true);
       navigate(slug);
     }
-  };
-
-  const handleDiscard = () => {
-    siteHasChanged && dispatch({ type: 'ADD_EDITOR_SITE', payload: sites[siteID] });
-    postHasChanged && onUndoChanges();
-  };
-
-  const handleDiscardRequest = () => {
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
-        open: true,
-        title: 'Undo changes',
-        component: (
-          <Space direction="vertical" size={20}>
-            <Typography
-              children={'There are unsaved changes. Are you sure you want to discard them?'}
-            />
-            <Space>
-              <Button
-                children="Undo changes"
-                onClick={() => {
-                  handleDiscard();
-                  dispatch({ type: 'CLOSE_DIALOG' });
-                }}
-              />
-
-              <Button
-                children="Back to Editor"
-                type="primary"
-                onClick={() => dispatch({ type: 'CLOSE_DIALOG' })}
-              />
-            </Space>
-          </Space>
-        ),
-        width: 320,
-      },
-    });
   };
 
   const handleGeneratePreviewLink = async () => {
@@ -583,31 +545,28 @@ const EditorSidebar = (props) => {
       <Header>
         <Row justify="space-between">
           <Space size={15}>
-            {postHasChanged || siteHasChanged ? (
-              <Button
-                icon={<UndoOutlined />}
-                children="Undo"
-                onClick={handleDiscardRequest}
-                size="small"
-                ghost
-              />
-            ) : (
+            <Popconfirm
+              placement="rightTop"
+              title="Are you sure to discard unsaved changes?"
+              onConfirm={() =>
+                navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))
+              }
+              disabled={!postHasChanged && !siteHasChanged}
+            >
               <Button
                 icon={<HomeOutlined />}
                 type="ghost"
                 size="small"
                 ghost
                 onClick={() => {
-                  if (postHasChanged || siteHasChanged) {
-                    handleDiscardRequest();
-                  } else {
+                  if (!postHasChanged && !siteHasChanged) {
                     navigate(
                       getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
                     );
                   }
                 }}
               />
-            )}
+            </Popconfirm>
           </Space>
 
           <Space size={15}>
@@ -714,11 +673,7 @@ const EditorSidebar = (props) => {
                           <Space direction="vertical" size={20}>
                             <Typography>
                               All links on the website have been temporarily disabled to avoid
-                              content loss.
-                            </Typography>
-                            <Typography>
-                              Update the post or undo your changes by clicking on the circle arrow
-                              icon in the top left corner.
+                              content loss. Update the post to reactivate them.
                             </Typography>
 
                             <Button

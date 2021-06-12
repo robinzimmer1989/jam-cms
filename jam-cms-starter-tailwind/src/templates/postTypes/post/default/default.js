@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql, Link } from 'gatsby';
+import { RichText } from 'jam-cms';
 
 // import app components
 import Layout from '../../../../components/Layout';
-import TextEditor from '../../../../components/textEditor/TextEditor';
 
 const Template = (props) => {
   const {
@@ -33,7 +33,13 @@ const Template = (props) => {
           <hr className="w-full my-8 border-gray-300" />
         </div>
 
-        {acf?.text && <TextEditor {...acf.text} />}
+        {acf?.text && (
+          <div className="px-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-sm">
+            <div className="prose">
+              <RichText>{acf.text}</RichText>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
@@ -58,50 +64,7 @@ export const Query = graphql`
         }
       }
       acf {
-        text {
-          fieldGroupName
-          flex {
-            ... on WpPost_Acf_Text_Flex_Text {
-              fieldGroupName
-              text
-            }
-            ... on WpPost_Acf_Text_Flex_Textimage {
-              alignment
-              fieldGroupName
-              image {
-                altText
-                localFile {
-                  childImageSharp {
-                    gatsbyImageData(width: 600, placeholder: BLURRED)
-                  }
-                }
-              }
-              text
-            }
-            ... on WpPost_Acf_Text_Flex_Gallery {
-              columns
-              fieldGroupName
-              gallery {
-                altText
-                localFile {
-                  childImageSharp {
-                    gatsbyImageData(width: 600, placeholder: BLURRED)
-                  }
-                }
-              }
-            }
-            ... on WpPost_Acf_Text_Flex_Embed {
-              fieldGroupName
-              url
-            }
-            ... on WpPost_Acf_Text_Flex_Quote {
-              author
-              fieldGroupName
-              position
-              text
-            }
-          }
-        }
+        text
       }
     }
   }

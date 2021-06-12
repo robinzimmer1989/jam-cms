@@ -139,12 +139,15 @@ const MediaLibrary = (props) => {
   };
 
   const handleSelect = (item) => {
-    if (multiple) {
-      handleClickCheckbox(item);
+    if (onSelect) {
+      if (multiple) {
+        handleClickCheckbox(item);
+      } else {
+        dispatch({ type: 'CLOSE_DIALOG' });
+        onSelect(item);
+      }
+
       setActiveFile(null);
-    } else {
-      dispatch({ type: 'CLOSE_DIALOG' });
-      onSelect && onSelect(item);
     }
   };
 
@@ -240,7 +243,7 @@ const MediaLibrary = (props) => {
           </PrevButton>
           <MediaImage
             file={activeFile}
-            onSelect={onSelect && handleSelect}
+            onSelect={handleSelect}
             onDelete={handlDeleteMediaItem}
             onUpdate={handleUpdateMediaItem}
           />

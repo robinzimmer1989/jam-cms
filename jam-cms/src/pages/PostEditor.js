@@ -29,7 +29,7 @@ const PostEditor = (props) => {
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post },
+      editorState: { site, post, editorSettings },
     },
     dispatch,
   ] = useStore();
@@ -220,7 +220,7 @@ const PostEditor = (props) => {
   }, [postID]);
 
   useKeypress('Escape', () => {
-    !previewID && setSidebarActive(!sidebarActive);
+    !previewID && !editorSettings.fullscreen && setSidebarActive(!sidebarActive);
   });
 
   const loadPost = async () => {
@@ -382,7 +382,6 @@ const PostEditor = (props) => {
                       className="jam-cms"
                       editable={!!Component}
                       onToggleSidebar={handleToggleSidebar}
-                      onUndoChanges={loadPost}
                     />
                   ) : (
                     <FloatingButton

@@ -246,6 +246,8 @@ const EditorFields = (props) => {
 };
 
 const Container = styled.div`
+  background: #fff;
+
   > .ant-collapse {
     border: none;
     border-bottom: 1px solid #d9d9d9;
