@@ -57,7 +57,7 @@ const Master = (props) => {
     // activate timer for refresh token
     const refreshID = setInterval(() => {
       setRefreshTimer((time) => time + 1);
-    }, 120000); // 2 minutes
+    }, 45000); // 45 seconds
 
     // activate timer for site updates
     const updatesID = setInterval(() => {
