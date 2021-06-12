@@ -5,6 +5,9 @@ export const editorState = {
   post: null,
   siteHasChanged: false,
   postHasChanged: false,
+  editorSettings: {
+    fullscreen: false,
+  },
 };
 
 export const editorReducer = (state, action) => {
@@ -40,6 +43,13 @@ export const editorReducer = (state, action) => {
 
       /******************************
        * General Settings
+       ******************************/
+      case `UPDATE_EDITOR_SETTINGS`:
+        draft.editorSettings = { ...draft.editorSettings, ...payload };
+        break;
+
+      /******************************
+       * Clear
        ******************************/
       case `CLEAR_EDITOR`:
         draft.site = null;

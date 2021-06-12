@@ -3,8 +3,7 @@ import React from 'react';
 // import external css files
 import 'minireset.css';
 import 'antd/dist/antd.css';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js/dist/Draft.css';
+import 'jodit/build/jodit.min.css';
 
 // import app components
 import Loader from './components/Loader';
