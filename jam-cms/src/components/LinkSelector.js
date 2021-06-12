@@ -20,9 +20,16 @@ const LinkSelector = (props) => {
   const [post, setPost] = useState('');
   const [link, setLink] = useState(value);
 
+  useEffect(() => {
+    // Clear post on load
+    setPost('');
+  }, []);
+
   const allPosts = [];
   Object.values(sites[siteID]?.postTypes).map((o) => {
-    Object.values(o.posts).map((p) => allPosts.push({ ...p, caption: o.title }));
+    Object.values(o.posts).map(
+      (p) => p.status === 'publish' && allPosts.push({ ...p, caption: o.title })
+    );
   });
 
   const handleChange = (name, newValue) => {
@@ -50,9 +57,11 @@ const LinkSelector = (props) => {
         (o) => o.id === post.postTypeID
       );
 
+      const url = sites[siteID]?.siteUrl || '';
+
       setLink({
         title: link.title || post.title,
-        url: generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
+        url: url + generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
         target: false,
       });
     }
