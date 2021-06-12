@@ -182,9 +182,7 @@ export default createGlobalStyle`
       background: #fff;
     }
 
-    .jodit-wysiwyg {
-      padding: 20px !important;
-    }
+   
   
   }
 

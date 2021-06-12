@@ -148,6 +148,10 @@ const Container = styled.div`
         width: 100% !important;
         height: 100% !important;
         z-index: 1000;
+
+        .jodit-wysiwyg {
+          padding: 20px !important;
+        }
       `}
   }
 
