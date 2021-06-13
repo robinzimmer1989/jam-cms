@@ -133,7 +133,7 @@ const EditorSidebar = (props) => {
     const { id, themeOptions, frontPage } = site;
 
     // Trigger dummy message to give user feedback
-    if (!siteHasChanged && !postHasChanged) {
+    if (!siteHasChanged && !postHasChanged && post.status === status) {
       return message.success('Updated successfully');
     }
 
