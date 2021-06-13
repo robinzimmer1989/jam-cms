@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import { Modal } from 'antd';
 
 // import app components
@@ -51,6 +51,7 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
       showCharsCounter: false,
       showXPathInStatusbar: false,
       toolbarButtonSize: 'small',
+      fillEmptyParagraph: false,
       // Controls: https://xdsoft.net/jodit/doc/options/controls/
       controls: {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
@@ -69,11 +70,12 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
         },
       },
       disablePlugins:
-        'print,preview,table-keyboard-navigation,image-processor,xpath,symbols,stat,search,placeholder,limit,font,color,paste-storage,about',
+        'print,preview,table-keyboard-navigation,image-processor,xpath,stat,search,placeholder,limit,font,color,paste-storage,about,video,image,error-messages,copy-format,class-span',
       buttonsXS: ['align', 'bold', 'paragraph', 'fullsize', 'dots'],
       extraButtons: [
         {
           name: 'jamImage',
+          tooltip: 'Image',
           iconURL:
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIGNsYXNzPSJqb2RpdC1pY29uX2ltYWdlIGpvZGl0LWljb24iPiA8cGF0aCBkPSJNNTc2IDU3NnEwIDgwLTU2IDEzNnQtMTM2IDU2LTEzNi01Ni01Ni0xMzYgNTYtMTM2IDEzNi01NiAxMzYgNTYgNTYgMTM2em0xMDI0IDM4NHY0NDhoLTE0MDh2LTE5MmwzMjAtMzIwIDE2MCAxNjAgNTEyLTUxMnptOTYtNzA0aC0xNjAwcS0xMyAwLTIyLjUgOS41dC05LjUgMjIuNXYxMjE2cTAgMTMgOS41IDIyLjV0MjIuNSA5LjVoMTYwMHExMyAwIDIyLjUtOS41dDkuNS0yMi41di0xMjE2cTAtMTMtOS41LTIyLjV0LTIyLjUtOS41em0xNjAgMzJ2MTIxNnEwIDY2LTQ3IDExM3QtMTEzIDQ3aC0xNjAwcS02NiAwLTExMy00N3QtNDctMTEzdi0xMjE2cTAtNjYgNDctMTEzdDExMy00N2gxNjAwcTY2IDAgMTEzIDQ3dDQ3IDExM3oiPjwvcGF0aD4gPC9zdmc+',
           exec: function (e) {
@@ -83,6 +85,7 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
         },
         {
           name: 'jamLink',
+          tooltip: 'Link',
           iconURL:
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIGNsYXNzPSJqb2RpdC1pY29uX2xpbmsgam9kaXQtaWNvbiI+IDxwYXRoIGQ9Ik0xNTIwIDEyMTZxMC00MC0yOC02OGwtMjA4LTIwOHEtMjgtMjgtNjgtMjgtNDIgMC03MiAzMiAzIDMgMTkgMTguNXQyMS41IDIxLjUgMTUgMTkgMTMgMjUuNSAzLjUgMjcuNXEwIDQwLTI4IDY4dC02OCAyOHEtMTUgMC0yNy41LTMuNXQtMjUuNS0xMy0xOS0xNS0yMS41LTIxLjUtMTguNS0xOXEtMzMgMzEtMzMgNzMgMCA0MCAyOCA2OGwyMDYgMjA3cTI3IDI3IDY4IDI3IDQwIDAgNjgtMjZsMTQ3LTE0NnEyOC0yOCAyOC02N3ptLTcwMy03MDVxMC00MC0yOC02OGwtMjA2LTIwN3EtMjgtMjgtNjgtMjgtMzkgMC02OCAyN2wtMTQ3IDE0NnEtMjggMjgtMjggNjcgMCA0MCAyOCA2OGwyMDggMjA4cTI3IDI3IDY4IDI3IDQyIDAgNzItMzEtMy0zLTE5LTE4LjV0LTIxLjUtMjEuNS0xNS0xOS0xMy0yNS41LTMuNS0yNy41cTAtNDAgMjgtNjh0NjgtMjhxMTUgMCAyNy41IDMuNXQyNS41IDEzIDE5IDE1IDIxLjUgMjEuNSAxOC41IDE5cTMzLTMxIDMzLTczem04OTUgNzA1cTAgMTIwLTg1IDIwM2wtMTQ3IDE0NnEtODMgODMtMjAzIDgzLTEyMSAwLTIwNC04NWwtMjA2LTIwN3EtODMtODMtODMtMjAzIDAtMTIzIDg4LTIwOWwtODgtODhxLTg2IDg4LTIwOCA4OC0xMjAgMC0yMDQtODRsLTIwOC0yMDhxLTg0LTg0LTg0LTIwNHQ4NS0yMDNsMTQ3LTE0NnE4My04MyAyMDMtODMgMTIxIDAgMjA0IDg1bDIwNiAyMDdxODMgODMgODMgMjAzIDAgMTIzLTg4IDIwOWw4OCA4OHE4Ni04OCAyMDgtODggMTIwIDAgMjA0IDg0bDIwOCAyMDhxODQgODQgODQgMjA0eiI+PC9wYXRoPiA8L3N2Zz4=',
           exec: function (e) {
@@ -116,6 +119,8 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
 
   return (
     <Container fullscreen={fullscreen}>
+      <Global />
+
       {jodit}
 
       <Modal
@@ -152,12 +157,12 @@ const Container = styled.div`
         .jodit-wysiwyg {
           padding: 20px !important;
         }
-      `}
-  }
 
-  .jodit-workplace {
-    max-width: 600px;
-    margin: 0 auto;
+        .jodit-workplace {
+          max-width: 600px;
+          margin: 0 auto;
+        }
+      `}
   }
 
   .jodit-container:not(.jodit_inline) {
@@ -220,6 +225,104 @@ const Container = styled.div`
 
   .jodit-ui-group__jamLink {
     order: -1;
+  }
+`;
+
+const Global = createGlobalStyle`
+  // Fullsize styles
+  .jodit-container:not(.jodit_inline){
+    background: ${colors.secondaryContrast} !important;
+    .jodit-workplace {
+      background: #fff;
+    }
+  }
+
+  .jodit_fullsize-box_true.jodit_fullsize-box_true {
+    z-index: 1000!important;
+  }
+
+  .jodit-popup-container, .jodit-dialog__panel {
+
+    // Style popup
+    .jodit-popup{
+      border: 1px solid #dadada;
+      border-radius: 4px;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .jodit-toolbar-editor-collection_mode_horizontal:after {
+      background: ${colors.secondaryContrast};
+    }
+    
+    // Remove icons in link menu
+    .jodit-toolbar-button_brush,
+    .jodit-toolbar-button_file {
+      display: none;
+    }
+
+    // Remove unlink button from link popup (doesn't work)
+    .jodit-ui-button_unlink{
+      display: none;
+    }
+
+    .jodit-popup__content{
+      padding: 0;
+      max-height: 400px;
+      background: ${colors.secondaryContrast};
+    }
+
+    .jodit-ui-input__label, label {
+      margin-bottom: 2px !important;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      color: ${colors.secondary};
+    }
+
+    .jodit-ui-block {
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .jodit-ui-button_status_primary, .jodit-ui-button_ok {
+      background-color: #2a88fb;
+      color: #fff;
+
+      &:hover {
+        background-color: #0069d9 !important;
+        color: #fff;
+      }
+
+      .jodit-ui-button__icon {
+        svg {
+          path {
+            fill: #fff;
+          }
+        }
+      }
+    }
+
+    .jodit-input_group{
+      margin-top: 0 !important;
+    }
+
+    .jodit-ui-form {
+      padding: 10px;
+    }
+
+    .jodit-toolbar-button, .jodit-toolbar-button__button {
+      min-height: auto !important;
+    }
+
+    .jodit-toolbar-button__button {
+      padding: 2px 6px;
+    }
   }
 `;
 
