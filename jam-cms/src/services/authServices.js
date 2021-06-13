@@ -1,4 +1,8 @@
 import axios from 'axios';
+import { navigate } from '@reach/router';
+
+// import app components
+import { authActions } from '../actions';
 
 // TODO: add trailing slash function to utils and pass in endpoint via settings (doesn't need to be /graphql)
 const getEndpoint = (url) => `${url.replace(/\/+$/, '')}/graphql`;
@@ -81,8 +85,8 @@ export const resetPassword = async ({ key, login, password }, url) => {
   return result?.data;
 };
 
-export const refreshToken = async ({ refreshToken }, url) => {
-  const endpoint = getEndpoint(url);
+export const refreshToken = async ({ refreshToken }, dispatch, config) => {
+  const endpoint = getEndpoint(config.source);
 
   const result = await axios.post(endpoint, {
     query: `
@@ -98,6 +102,10 @@ export const refreshToken = async ({ refreshToken }, url) => {
       }
     `,
   });
+
+  if (result?.errors?.length > 0) {
+    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+  }
 
   return result?.data;
 };

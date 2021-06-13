@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
-import { set } from 'lodash';
-import produce from 'immer';
 
 // import components
 import Home from '../pages/Home';
@@ -102,7 +100,7 @@ const Master = (props) => {
 
   useEffect(() => {
     const refreshToken = async () => {
-      await authActions.refreshToken({}, config);
+      await authActions.refreshToken({}, dispatch, config);
     };
 
     if (refreshTimer > 0) {

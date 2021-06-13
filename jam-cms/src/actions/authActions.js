@@ -29,11 +29,11 @@ export const resetPassword = async ({ key, login, password }, url) => {
   return result;
 };
 
-export const refreshToken = async ({}, config) => {
+export const refreshToken = async ({}, dispatch, config) => {
   const { refreshToken } = auth.getUser();
 
   if (refreshToken) {
-    const result = await authServices.refreshToken({ refreshToken }, config.source);
+    const result = await authServices.refreshToken({ refreshToken }, dispatch, config);
 
     if (result?.data?.refreshJwtAuthToken) {
       auth.setUser({ refreshToken, ...result.data.refreshJwtAuthToken });
