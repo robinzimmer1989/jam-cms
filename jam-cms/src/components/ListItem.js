@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Card, List, Typography } from 'antd';
 import { Link } from '@reach/router';
+import Parser from 'html-react-parser';
 
 // import app components
 import Img from './GatsbyImage';
@@ -23,7 +24,7 @@ const ListItem = (props) => {
 
   const listItemTitle = (
     <Typography.Text strong>
-      {title}
+      {Parser(title || '')}
       {status}
     </Typography.Text>
   );
