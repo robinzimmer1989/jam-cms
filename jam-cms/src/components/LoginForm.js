@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { navigate } from '@reach/router';
-import { Button, Card, Space, Form } from 'antd';
+import { Button, Card, Space, Form, message } from 'antd';
 
 // import app components
 import Input from './Input';
@@ -72,6 +72,8 @@ const LoginForm = (props) => {
       }
     } catch (err) {
       console.log('error...: ', err);
+      message.error({ content: 'Oops, something went wrong' });
+      setData({ ...data, loading: false });
     }
   };
 

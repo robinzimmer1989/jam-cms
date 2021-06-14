@@ -6,7 +6,7 @@ export const signIn = async ({ email, password }, url) => {
 
   if (
     result?.data?.login?.authToken &&
-    result?.data?.login?.user?.capabilities.includes('edit_posts')
+    result?.data?.login?.user?.capabilities?.includes('edit_posts')
   ) {
     auth.setUser(result.data.login);
   }
