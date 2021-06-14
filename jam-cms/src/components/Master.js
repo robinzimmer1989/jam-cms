@@ -54,12 +54,12 @@ const Master = (props) => {
   useEffect(() => {
     // activate timer for refresh token
     const refreshID = setInterval(() => {
-      setRefreshTimer((time) => time + 1);
+      !previewID && setRefreshTimer((time) => time + 1);
     }, 45000); // 45 seconds
 
     // activate timer for site updates
     const updatesID = setInterval(() => {
-      setUpdatesTimer((time) => time + 1);
+      !previewID && setUpdatesTimer((time) => time + 1);
     }, 10000); // 10 seconds
 
     // Clear both timers
@@ -74,7 +74,7 @@ const Master = (props) => {
       await userActions.getAuthUser({}, dispatch, config);
     };
 
-    loadUser();
+    !previewID && loadUser();
   }, []);
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const Master = (props) => {
       await authActions.refreshToken({}, dispatch, config);
     };
 
-    if (refreshTimer > 0) {
+    if (authUser && refreshTimer > 0) {
       refreshToken();
     }
   }, [refreshTimer]);

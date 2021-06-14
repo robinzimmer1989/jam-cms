@@ -146,13 +146,13 @@ const PostEditor = (props) => {
   useEffect(() => {
     // Activate postLockTimer for post locking
     const intervalID = setInterval(() => {
-      setPostLockTimer((time) => time + 1);
+      !previewID && setPostLockTimer((time) => time + 1);
     }, 15000); // 15 seconds
 
     return async () => {
       clearInterval(intervalID);
 
-      if (post && post.id === postID && !post.locked) {
+      if (post && post.id === postID && !post.locked && !previewID) {
         // Remove post lock once we leave the post editor
         await removePostLock(postID);
       }
@@ -161,7 +161,7 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     // Skip initial fetch (postLockTimer = 0) because we're already setting the status on initial getPost fetch in WP
-    if (postID && post && post.id === postID && postLockTimer) {
+    if (postID && post && post.id === postID && postLockTimer && !previewID) {
       if (post?.locked) {
         // Fetch post again in case it's locked to determine if other user is still editing
         loadPost();
@@ -183,7 +183,7 @@ const PostEditor = (props) => {
   }, [postID]);
 
   useEffect(() => {
-    if (post?.locked?.id) {
+    if (post?.locked?.id && !previewID) {
       handleOpenTakeOverDialog();
     }
   }, [post?.locked?.id]);
