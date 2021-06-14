@@ -1,13 +1,13 @@
 {
   "name": "gatsby-source-jam-cms",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "dependencies": {
     "@babel/register": "^7.13.16",
     "axios": "^0.21.1",
     "babel-preset-gatsby": "^1.5.0",
     "cross-env": "7.0.3",
     "gatsby": "3.4.0",
-    "jam-cms": "1.7.1",
+    "jam-cms": "1.8.0",
     "react-helmet": "^6.1.0",
     "styled-components": "^5.2.3"
   },

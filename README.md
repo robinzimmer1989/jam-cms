@@ -518,18 +518,19 @@ The component will convert all internal links to Gatsby links and make sure that
 **ID restrictions (lowercase only):**
 Field ID's must be lowercase and can't have special characters. This is caused by the way ACF field group keys are stored in WordPress (as post_name).
 
-**Editor Sidebar**
-The editor sidebar is part of the actual page template (wrapper around it). That means that CSS media queries aren't accurate anymore. To solve this issue you can listen to the jamCMS prop, passed into each template file, and check if the sidebar is open or not and tweak your media queries accordingly. This is especially necessary when dealing with `position: fixed;` content elements.
-
 **Global styles overwrites:**
 We’re using Ant Design under the hood and it’s adding global CSS to the site. There is no way of preventing this behavior currently. There are some open issues for this though and hopefully this will be resolved soon.
 
 You can overcome this issue by simply overwriting the CSS properties in case they screw something up. It’s important to note that the behavior is different in development and build mode (SSR), so make sure you pay attention to style changes in both environments.
 
-**WYSIWYG editor doesn't support images:**
-Because all the content editing happens in a relatively small sidebar, adding images is not supported. However, instead you can use flexible content for rich media textfields. This gives you better control about responsive behavior and leads to a better look and feel overall.
-
 ## Changelog
+
+### 1.8.0
+
+- New wysiwyg editor (switch from Draftjs to Jodit)
+- Fix WP previews
+- Take over post functionality
+- Remove undo functionality
 
 ### 1.7.1
 
