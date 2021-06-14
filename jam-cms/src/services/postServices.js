@@ -87,3 +87,8 @@ export const removePostLock = async ({ siteID, id }, dispatch, config) => {
   let result = await db('removePostLock', { siteID, id }, dispatch, config);
   return result;
 };
+
+export const takeOverPost = async ({ siteID, id }, dispatch, config) => {
+  let result = await db('takeOverPost', { siteID, id }, dispatch, config);
+  return result;
+};

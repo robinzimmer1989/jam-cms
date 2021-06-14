@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Empty, Typography, message } from 'antd';
+import { Empty, Typography, Button, Space, message } from 'antd';
 import { EditOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { set } from 'lodash';
 import useKeypress from 'react-use-keypress';
-import { Button } from 'antd';
+import { navigate } from '@reach/router';
 
 // import app components
 import PageWrapper from '../components/PageWrapper';
@@ -21,6 +21,7 @@ import {
 } from '../utils';
 import { useStore } from '../store';
 import { postActions, previewActions } from '../actions';
+import getRoute from '../routes';
 
 const PostEditor = (props) => {
   const { defaultComponent } = props;
@@ -139,14 +140,14 @@ const PostEditor = (props) => {
   // For the post lock functionality we need 4 useEffect functions to cover the whole process
   // 1. Set up interval function on initial load and remove post lock in case user leaves the editor
   // 2. Refresh the lock status every couple of seconds or check if post is still locked
-  // 3. Inform user who is currently editing the post
+  // 3. Inform user who is currently editing the post by displaying the take over dialog
   // 4. Remove lock status from old post in case user navigates away via editor link
 
   useEffect(() => {
     // Activate postLockTimer for post locking
     const intervalID = setInterval(() => {
       setPostLockTimer((time) => time + 1);
-    }, 30000); // 30 seconds
+    }, 15000); // 15 seconds
 
     return async () => {
       clearInterval(intervalID);
@@ -172,13 +173,6 @@ const PostEditor = (props) => {
   }, [postLockTimer]);
 
   useEffect(() => {
-    // Inform users who is editing the content right now
-    if (postID && post && post.id === postID && post.locked) {
-      message.info({ content: `${post.locked?.email} is currently editing` });
-    }
-  }, [pathname, postID, post?.id]);
-
-  useEffect(() => {
     // Remove previous post ID in case user navigates to a different page
     if (postLockID) {
       removePostLock(postLockID);
@@ -187,6 +181,12 @@ const PostEditor = (props) => {
     // Set new post id
     setPostLockID(postID);
   }, [postID]);
+
+  useEffect(() => {
+    if (post?.locked?.id) {
+      handleOpenTakeOverDialog();
+    }
+  }, [post?.locked?.id]);
 
   // Load query in case post has one assigned
   useEffect(() => {
@@ -208,10 +208,7 @@ const PostEditor = (props) => {
     loadPost();
 
     // Add fresh copy of editor to state
-    dispatch({
-      type: `ADD_EDITOR_SITE`,
-      payload: sites[siteID],
-    });
+    dispatch({ type: `ADD_EDITOR_SITE`, payload: sites[siteID] });
 
     // Reset query
     setQuery(null);
@@ -237,9 +234,45 @@ const PostEditor = (props) => {
     }
 
     if (result) {
-      dispatch({ type: `ADD_POST`, payload: { ...result, siteID } });
-      dispatch({ type: `ADD_EDITOR_POST`, payload: { ...result, siteID } });
+      dispatch({ type: 'ADD_POST', payload: { ...result, siteID } });
+      dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID } });
     }
+  };
+
+  const handleTakeOver = async () => {
+    await postActions.takeOverPost({ siteID, id: postID }, dispatch, config);
+  };
+
+  const handleOpenTakeOverDialog = () => {
+    dispatch({
+      type: 'SET_DIALOG',
+      payload: {
+        open: true,
+        title: 'Locked',
+        component: (
+          <Space direction="vertical" size={20}>
+            <Typography.Text>
+              This content is currently locked. If you take over, {post.locked.email} will be
+              blocked from continuing to edit.
+            </Typography.Text>
+
+            <Space>
+              <Button
+                onClick={() => {
+                  dispatch({ type: 'CLOSE_DIALOG' });
+                  navigate(
+                    getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
+                  );
+                }}
+                children="Dashboard"
+              />
+              <Button onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} children="Preview" />
+              <Button onClick={handleTakeOver} type="primary" children="Take Over" />
+            </Space>
+          </Space>
+        ),
+      },
+    });
   };
 
   const refreshPostLock = async () => {
@@ -373,7 +406,12 @@ const PostEditor = (props) => {
             <>
               {post?.locked ? (
                 <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-                  <Button icon={<LockOutlined />} size="large" type="primary" />
+                  <Button
+                    icon={<LockOutlined />}
+                    onClick={handleOpenTakeOverDialog}
+                    size="large"
+                    type="primary"
+                  />
                 </FloatingButton>
               ) : (
                 <>

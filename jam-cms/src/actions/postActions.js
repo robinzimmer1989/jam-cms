@@ -86,10 +86,29 @@ export const reorderPosts = async ({ siteID, postType, posts }, dispatch, config
 
 export const refreshPostLock = async (args, dispatch, config) => {
   const result = await postServices.refreshPostLock(args, dispatch, config);
+
+  // If the property locked is set in the result, it means someone took over the post and we need to disable editing for the current user
+  if (result?.locked?.id) {
+    dispatch({ type: 'ADD_POST', payload: { ...result, siteID: args.siteID } });
+    dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID: args.siteID } });
+  }
+
   return result;
 };
 
 export const removePostLock = async (args, dispatch, config) => {
   const result = await postServices.removePostLock(args, dispatch, config);
+  return result;
+};
+
+export const takeOverPost = async (args, dispatch, config) => {
+  const result = await postServices.takeOverPost(args, dispatch, config);
+
+  if (result) {
+    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch({ type: 'ADD_POST', payload: { ...result, siteID: args.siteID } });
+    dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID: args.siteID } });
+  }
+
   return result;
 };
