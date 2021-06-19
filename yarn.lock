@@ -10226,17 +10226,17 @@ jimp@^0.14.0:
     "@jimp/types" "^0.14.0"
     regenerator-runtime "^0.13.3"
 
-jodit-react@^1.0.88:
-  version "1.0.88"
-  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-1.0.88.tgz#570e39a0d77f9a3830e95a235cdc48785b809c0b"
-  integrity sha512-MUuQJ9a8NcmtTeNMz0Rf4aqvwW9XoVc/PNRSvf1GQA/ik9waxaGvQvNR6P6/BQglGamOg+pNm1+dfaW2ohZIpw==
+jodit-react@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-1.1.1.tgz#62cf86641cc1ddd9c0e3eedb06d436d2ef8954bd"
+  integrity sha512-Lr4THBOL/07oTJVXglMHY1xfiVys7PBGQl9eeVAcr6Ivaq2mGRfVPT1CaBsTBJUPJ2cTjXjzqU2B40d1VzSIlA==
   dependencies:
-    jodit "^3.6.1"
+    jodit "^3.7.1"
 
-jodit@^3.6.1:
-  version "3.6.18"
-  resolved "https://registry.yarnpkg.com/jodit/-/jodit-3.6.18.tgz#17fc573c849578456e20974cfe032cca2fbf99c4"
-  integrity sha512-DGjH9bcQyFtfQz724C0jC/R+5AOd5kiRvO9K9io5a8bUWE8dERGLmdJAgQ41Gj1dUB0Umtbno7G2Yg4uEKFaqg==
+jodit@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/jodit/-/jodit-3.7.1.tgz#a1a069fdcc306d8223d983d79ff00484dd88d0ae"
+  integrity sha512-C1DMa+ar47GJhubukhs6Q1VD6nvDK3JpSNszDnE3iVrkDk7mtu8N4bosos1Brhu4qaYMySlAOun8zz4KTePB1A==
   dependencies:
     autobind-decorator "^2.4.0"
 

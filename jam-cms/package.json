@@ -14,7 +14,7 @@
     "html-react-parser": "^1.2.6",
     "html-to-draftjs": "^1.5.0",
     "immer": "^9.0.2",
-    "jodit-react": "^1.0.88",
+    "jodit-react": "^1.1.1",
     "lodash": "^4.17.21",
     "minireset.css": "^0.0.7",
     "prop-types": "^15.7.2",
