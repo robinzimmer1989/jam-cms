@@ -15,6 +15,12 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
   const [modal, setModal] = useState(null);
   const [editor, setEditor] = useState(null);
   const [loaded, setLoaded] = useState(false);
+  const [content, setContent] = useState(defaultValue);
+
+  // We can't trigger the onChange callback within the useMemo function because this resets other fields
+  useEffect(() => {
+    onChange(content);
+  }, [content]);
 
   // Jodit module loader on component mount (SSR fix)
   useEffect(() => {
@@ -109,7 +115,7 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
             if (init) {
               init = false;
             } else {
-              onChange(newContent);
+              setContent(newContent);
             }
           }}
         />
