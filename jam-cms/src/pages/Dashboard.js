@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Empty, Space, List, Skeleton, Card, Typography, Button } from 'antd';
+import Parser from 'html-react-parser';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -60,7 +61,10 @@ const Dashboard = () => {
               dataSource={changes}
               renderItem={(o) => (
                 <List.Item actions={[<span key="type">{o.actionType}</span>]}>
-                  <List.Item.Meta title={o.title} description={o.description} />
+                  <List.Item.Meta
+                    title={Parser(o.title || '')}
+                    description={Parser(o.description || '')}
+                  />
                 </List.Item>
               )}
             />
