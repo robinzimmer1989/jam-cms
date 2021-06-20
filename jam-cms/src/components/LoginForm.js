@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { navigate } from '@reach/router';
-import { Button, Card, Space, Form, message } from 'antd';
+import { Link, navigate } from '@reach/router';
+import { Button, Card, Space, Form, message, Row } from 'antd';
 
 // import app components
 import Input from './Input';
@@ -12,7 +12,7 @@ import { auth, validateEmail, getParameter } from '../utils';
 import { colors } from '../theme';
 
 const LoginForm = (props) => {
-  const { url } = props;
+  const { url, backLink = true } = props;
 
   const [data, setData] = useState({
     email: '',
@@ -176,72 +176,83 @@ const LoginForm = (props) => {
   const formData = getFormData();
 
   return (
-    <Container>
-      {data?.form && (
-        <Card title={formData?.title}>
-          {url ? (
-            <>
-              {data?.success ? (
-                <Success children={data.success} />
-              ) : (
-                <Space direction="vertical" size={20}>
-                  <Form onFinish={formData?.handleSubmit}>
-                    <Space direction="vertical" size={20}>
-                      {(data.form === 'login' || data.form === 'forget') && (
-                        <Input
-                          label={`Email`}
-                          value={data.email}
-                          onChange={handleChange}
-                          onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
-                          name="email"
+    <>
+      <Container>
+        {data?.form && (
+          <Card title={formData?.title}>
+            {url ? (
+              <>
+                {data?.success ? (
+                  <Success children={data.success} />
+                ) : (
+                  <Space direction="vertical" size={20}>
+                    <Form onFinish={formData?.handleSubmit}>
+                      <Space direction="vertical" size={20}>
+                        {(data.form === 'login' || data.form === 'forget') && (
+                          <Input
+                            label={`Email`}
+                            value={data.email}
+                            onChange={handleChange}
+                            onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
+                            name="email"
+                          />
+                        )}
+                        {(data.form === 'login' || data.form === 'reset') && (
+                          <Input
+                            label={`Password`}
+                            value={data.password}
+                            type="password"
+                            onChange={handleChange}
+                            onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
+                            name="password"
+                          />
+                        )}
+                        {data?.error && <Error children={data.error} />}
+                        <Button
+                          loading={data.loading}
+                          children={`Submit`}
+                          type="primary"
+                          htmlType="submit"
+                          block
                         />
-                      )}
-                      {(data.form === 'login' || data.form === 'reset') && (
-                        <Input
-                          label={`Password`}
-                          value={data.password}
-                          type="password"
-                          onChange={handleChange}
-                          onKeyDown={(e) => e.key === 'Enter' && formData?.handleSubmit}
-                          name="password"
-                        />
-                      )}
-                      {data?.error && <Error children={data.error} />}
-                      <Button
-                        loading={data.loading}
-                        children={`Submit`}
-                        type="primary"
-                        htmlType="submit"
-                        block
-                      />
-                    </Space>
-                  </Form>
+                      </Space>
+                    </Form>
 
-                  <FooterLink
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: 'form',
-                          value: data.form === 'login' ? 'forget' : 'login',
-                        },
-                      })
-                    }
-                  >
-                    {data.form === 'login' ? 'Forgot password?' : 'Back to Login'}
-                  </FooterLink>
-                </Space>
-              )}
-            </>
-          ) : (
-            <p>Please provide a URL.</p>
-          )}
-        </Card>
+                    <FooterLink
+                      onClick={() =>
+                        handleChange({
+                          target: {
+                            name: 'form',
+                            value: data.form === 'login' ? 'forget' : 'login',
+                          },
+                        })
+                      }
+                    >
+                      {data.form === 'login' ? 'Forgot password?' : 'Back to Login'}
+                    </FooterLink>
+                  </Space>
+                )}
+              </>
+            ) : (
+              <p>Please provide a URL.</p>
+            )}
+          </Card>
+        )}
+      </Container>
+
+      {backLink && (
+        <Row justify="center">
+          <Link to={'/'}>
+            <Button type="text" children="Back to Homepage" size="small" />
+          </Link>
+        </Row>
       )}
-    </Container>
+    </>
   );
 };
 
 const Container = styled.div`
+  margin-bottom: 20px;
   .ant-space {
     width: 100%;
   }
