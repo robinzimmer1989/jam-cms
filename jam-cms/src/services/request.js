@@ -1,6 +1,5 @@
 import { message } from 'antd';
 import axios from 'axios';
-import { navigate } from '@reach/router';
 import Parser from 'html-react-parser';
 
 // import app components
@@ -11,7 +10,7 @@ const db = async (endpoint, params, dispatch, config) => {
   const user = getUser(config);
 
   if (!user?.authToken && !isPreview()) {
-    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+    authActions.signOut({}, dispatch, config);
   }
 
   try {
@@ -35,7 +34,7 @@ const db = async (endpoint, params, dispatch, config) => {
   } catch (err) {
     if (err?.response?.data?.message) {
       if (endpoint === 'getAuthUser' || endpoint === 'getSite') {
-        authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+        authActions.signOut({}, dispatch, config);
       } else {
         message.error(Parser(err.response.data.message));
       }

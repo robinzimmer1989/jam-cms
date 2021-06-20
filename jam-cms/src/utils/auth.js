@@ -1,3 +1,5 @@
+import { navigate } from 'gatsby';
+
 import getStorageKey from './getStorageKey';
 import getParameter from './getParameter';
 
@@ -48,11 +50,14 @@ export const isPreview = () => {
 
 export const getCurrentUser = () => isBrowser && getUser();
 
-export const logout = (callback) => {
+export const logout = (config) => {
   if (!isBrowser) {
     return;
   }
+
+  console.log(config?.onLogout);
+
   setUser({});
 
-  callback();
+  typeof config.onLogout === 'function' ? config.onLogout() : navigate('/');
 };

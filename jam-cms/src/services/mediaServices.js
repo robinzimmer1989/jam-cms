@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import axios from 'axios';
-import { navigate } from '@reach/router';
 
+// import app components
 import { db } from '.';
 import { auth } from '../utils';
 import { authActions } from '../actions';
@@ -10,7 +10,7 @@ export const addMediaItem = async ({ siteID, file }, dispatch, config) => {
   const user = auth.getUser(config);
 
   if (!user?.authToken) {
-    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+    authActions.signOut({}, dispatch, config);
   }
 
   try {

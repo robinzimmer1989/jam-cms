@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { navigate } from '@reach/router';
 
 // import app components
 import { authActions } from '../actions';
@@ -104,7 +103,7 @@ export const refreshToken = async ({ refreshToken }, dispatch, config) => {
   });
 
   if (result?.errors?.length > 0) {
-    authActions.signOut({ callback: () => navigate('/') }, dispatch, config);
+    authActions.signOut({}, dispatch, config);
   }
 
   return result?.data;

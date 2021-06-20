@@ -14,8 +14,8 @@ export const signIn = async ({ email, password }, url) => {
   return result;
 };
 
-export const signOut = async ({ callback }, dispatch) => {
-  auth.logout(callback);
+export const signOut = async ({}, dispatch, config) => {
+  auth.logout(config);
   dispatch({ type: `REMOVE_AUTH_USER` });
 };
 

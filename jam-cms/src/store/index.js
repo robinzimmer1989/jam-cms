@@ -10,8 +10,15 @@ import { cmsState, sitesReducer } from './cmsState';
 
 export const StateContext = createContext({});
 
-export const StoreProvider = ({ children, source, settings, siteID = 'default', fields }) => {
-  const config = { source, settings, siteID, fields: formatFields(fields) };
+export const StoreProvider = ({
+  children,
+  source,
+  settings,
+  siteID = 'default',
+  fields,
+  onLogout,
+}) => {
+  const config = { source, settings, siteID, fields: formatFields(fields), onLogout };
 
   const initialState = {
     config,
