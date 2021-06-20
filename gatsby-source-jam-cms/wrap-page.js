@@ -6,6 +6,9 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends")
 
 var React = require('react');
 
+var _require = require('gatsby'),
+    navigate = _require.navigate;
+
 var JamCms = require('jam-cms')["default"];
 
 var preferDefault = function preferDefault(m) {
@@ -49,6 +52,9 @@ module.exports = function (_ref, _ref2) {
     fields: fields,
     source: source,
     settings: settings,
-    siteID: siteID
+    siteID: siteID,
+    onLogout: function onLogout() {
+      return navigate('/jam-cms');
+    }
   }), element);
 };
