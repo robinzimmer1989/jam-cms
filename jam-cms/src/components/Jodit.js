@@ -16,11 +16,14 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
   const [editor, setEditor] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [content, setContent] = useState(defaultValue);
+  const [index, setIndex] = useState(0);
 
   // We can't trigger the onChange callback within the useMemo function because this resets other fields
+  // We're using an index instead of the content which should make the comparison more efficient
   useEffect(() => {
-    onChange(content);
-  }, [content]);
+    // The editor fires an onChange event on load which causes the postHasChanged / siteHasChanged values to be off
+    index > 0 && onChange(content);
+  }, [index]);
 
   // Jodit module loader on component mount (SSR fix)
   useEffect(() => {
@@ -57,6 +60,7 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
       showCharsCounter: false,
       showXPathInStatusbar: false,
       toolbarButtonSize: 'small',
+      placeholder: 'Write something...',
       fillEmptyParagraph: false,
       // Controls: https://xdsoft.net/jodit/doc/options/controls/
       controls: {
@@ -76,8 +80,8 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
         },
       },
       disablePlugins:
-        'print,preview,table-keyboard-navigation,image-processor,xpath,stat,search,placeholder,limit,font,color,paste-storage,about,video,image,error-messages,copy-format,class-span',
-      buttonsXS: ['align', 'bold', 'paragraph', 'fullsize', 'dots'],
+        'print,preview,table-keyboard-navigation,image-processor,xpath,stat,search,limit,font,color,paste-storage,about,video,image,error-messages,copy-format,class-span',
+      buttonsXS: ['align', 'bold', 'italic', 'paragraph', 'fullsize', 'dots'],
       extraButtons: [
         {
           name: 'jamImage',
@@ -102,8 +106,6 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
       ],
     };
 
-    let init = true;
-
     return (
       loaded && (
         <JoditEditor
@@ -111,12 +113,8 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
           value={defaultValue}
           config={config}
           onChange={(newContent) => {
-            // The editor fires an onChange event on load which causes the postHasChanged / siteHasChanged values to be off
-            if (init) {
-              init = false;
-            } else {
-              setContent(newContent);
-            }
+            setContent(newContent);
+            setIndex((index) => index + 1);
           }}
         />
       )
@@ -149,6 +147,10 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
 };
 
 const Container = styled.div`
+  .jodit-placeholder {
+    padding: 8px 0;
+  }
+
   .jodit-container.jodit.jodit-wysiwyg_mode {
     ${({ fullscreen }) =>
       fullscreen &&
@@ -162,6 +164,10 @@ const Container = styled.div`
 
         .jodit-wysiwyg {
           padding: 20px !important;
+        }
+
+        .jodit-placeholder {
+          padding: 20px;
         }
 
         .jodit-workplace {
