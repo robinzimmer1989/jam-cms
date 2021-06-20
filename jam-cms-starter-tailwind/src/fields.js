@@ -1,5 +1,6 @@
 // import templates
 import pageDefault from './templates/postTypes/page/default/config';
+import pageContact from './templates/postTypes/page/contact/config';
 import postDefault from './templates/postTypes/post/default/config';
 import postArchive from './templates/postTypes/post/archive/config';
 import teamDefault from './templates/postTypes/team/default/config';
@@ -13,7 +14,7 @@ const fields = {
     {
       id: 'page',
       title: 'Page',
-      templates: [pageDefault],
+      templates: [pageDefault, pageContact],
     },
     {
       id: 'post',
