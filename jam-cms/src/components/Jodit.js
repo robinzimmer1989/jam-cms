@@ -61,7 +61,10 @@ const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChang
       showXPathInStatusbar: false,
       toolbarButtonSize: 'small',
       placeholder: 'Write something...',
-      fillEmptyParagraph: false,
+      // Clean: https://xdsoft.net/jodit/doc/options/cleanHTML/
+      cleanHTML: {
+        fillEmptyParagraph: false,
+      },
       // Controls: https://xdsoft.net/jodit/doc/options/controls/
       controls: {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
