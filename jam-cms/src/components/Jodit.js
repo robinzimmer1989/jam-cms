@@ -9,7 +9,9 @@ import { colors } from '../theme';
 
 let JoditEditor = () => <></>;
 
-const HTMLEditor = ({ defaultValue = '', fullscreen, onToggleFullscreen, onChange }) => {
+const HTMLEditor = (props) => {
+  const { defaultValue = '', fullscreen, onToggleFullscreen, onChange } = props;
+
   const editorRef = useRef(null);
 
   const [modal, setModal] = useState(null);
