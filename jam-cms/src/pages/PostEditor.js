@@ -78,8 +78,7 @@ const PostEditor = (props) => {
             postID = p.id;
           } else if (
             // We're assuming here that there is not conflicting page which has the format '/[blog]/page/2'
-            pathname.includes(slug) &&
-            pathname.includes('page') &&
+            pathname.startsWith(`${slug}page/`) &&
             isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
           ) {
             postID = p.id;
