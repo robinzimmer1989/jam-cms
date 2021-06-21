@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import produce from 'immer';
-import InfiniteScroll from 'react-infinite-scroller';
 import { Modal, Upload, Button, Space, message, Spin, Checkbox } from 'antd';
 import {
   UploadOutlined,
@@ -12,13 +11,16 @@ import {
 
 // import app components
 import MediaImage from './MediaImage';
-import { renderImage } from '../utils';
+import { renderImage, useOnScreen } from '../utils';
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
 
 const MediaLibrary = (props) => {
   const { onSelect, allow, multiple, selected: defaultSelected = [] } = props;
+
+  const ref = useRef();
+  const isVisible = useOnScreen(ref);
 
   const [
     {
@@ -28,38 +30,25 @@ const MediaLibrary = (props) => {
     dispatch,
   ] = useStore();
 
-  const [page, setPage] = useState(null);
-  const [items, setItems] = useState([]);
+  const [media, setMedia] = useState({ items: [], page: 0 });
   const [activeFile, setActiveFile] = useState(null);
   const [uploader, setUploader] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(defaultSelected);
 
-  const activeFileIndex = activeFile && items.findIndex((o) => o.id === activeFile.id);
+  const activeFileIndex = activeFile && media.items.findIndex((o) => o.id === activeFile.id);
 
   useEffect(() => {
-    // We need to add this check, because deployment causes a new site fetch
-    if (page === null) {
-      loadMediaItems(page || 0);
-    }
-  }, [page]);
+    isVisible && media.page > -1 && loadMediaItems(media.page);
+  }, [isVisible]);
 
   const loadMediaItems = async (page) => {
-    if (page > -1) {
-      const result = await mediaActions.getMediaItems(
-        { siteID, page, limit: 24 },
-        dispatch,
-        config
-      );
+    const result = await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch, config);
 
-      if (result) {
-        setItems((items) => items.concat(result.items));
-        setPage(result.page);
-      }
+    if (result) {
+      setMedia({ items: media.items.concat(result.items), page: result.page });
     }
   };
-
-  const handleLoadMore = () => page && loadMediaItems(page);
 
   const handleUpdateMediaItem = async (mediaItem) => {
     const { id, altText, siteID } = mediaItem;
@@ -67,7 +56,10 @@ const MediaLibrary = (props) => {
     const result = await mediaActions.updateMediaItem({ id, altText, siteID }, dispatch, config);
 
     if (result) {
-      setItems((items) => items.map((o) => (o.id === result.id ? result : o)));
+      setMedia({
+        items: media.items.map((o) => (o.id === result.id ? result : o)),
+        page: media.page,
+      });
       message.success(`Saved successfully.`);
     }
   };
@@ -76,7 +68,7 @@ const MediaLibrary = (props) => {
     const result = await mediaActions.deleteMediaItem({ ...activeFile, siteID }, dispatch, config);
 
     if (result) {
-      setItems((items) => items.filter((o) => o.id !== parseInt(result)));
+      setMedia({ items: items.filter((o) => o.id !== parseInt(result)), page: media.page });
       handleCloseDialog();
       message.success(`Deleted successfully.`);
     }
@@ -97,7 +89,7 @@ const MediaLibrary = (props) => {
       );
 
       if (result) {
-        setItems((items) => [result, ...items]);
+        setMedia({ items: [result, ...media.items], page: media.page });
       }
     }
     if (status === 'done') {
@@ -178,41 +170,36 @@ const MediaLibrary = (props) => {
           )}
 
           <MediaItems>
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={handleLoadMore}
-              hasMore={page > -1}
-              loader={
-                <LoadingContainer key={0}>
-                  <Spin size="large" />
-                </LoadingContainer>
-              }
-            >
-              {items &&
-                items
-                  .filter((o) => (allow ? allow.includes(o.type) : o))
-                  .map((o) => {
-                    return (
-                      <MediaItem key={o.id}>
-                        <MediaItemInner onClick={() => setActiveFile(o)}>
-                          {renderImage(o)}
-                        </MediaItemInner>
+            {media.items &&
+              media.items
+                .filter((o) => (allow ? allow.includes(o.type) : o))
+                .map((o) => {
+                  return (
+                    <MediaItem key={o.id}>
+                      <MediaItemInner onClick={() => setActiveFile(o)}>
+                        {renderImage(o)}
+                      </MediaItemInner>
 
-                        {multiple && (
-                          <CheckboxContainer onClick={() => handleClickCheckbox(o)}>
-                            <Checkbox checked={!!selected.find((p) => p.id === o.id)} />
-                          </CheckboxContainer>
-                        )}
-                      </MediaItem>
-                    );
-                  })}
+                      {multiple && (
+                        <CheckboxContainer onClick={() => handleClickCheckbox(o)}>
+                          <Checkbox checked={!!selected.find((p) => p.id === o.id)} />
+                        </CheckboxContainer>
+                      )}
+                    </MediaItem>
+                  );
+                })}
 
-              <DummyItem />
-              <DummyItem />
-              <DummyItem />
-              <DummyItem />
-              <DummyItem />
-            </InfiniteScroll>
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+            <DummyItem />
+
+            {media.page > -1 && (
+              <LoadingContainer ref={ref} key={0}>
+                <Spin size="large" />
+              </LoadingContainer>
+            )}
           </MediaItems>
 
           {multiple && selected.length > 0 && (
@@ -228,7 +215,7 @@ const MediaLibrary = (props) => {
         <Modal
           transitionName="none"
           maskTransitionName="none"
-          title={`Media Image`}
+          title={'Media Image'}
           visible={true}
           onCancel={handleCloseDialog}
           footer={null}
@@ -237,7 +224,7 @@ const MediaLibrary = (props) => {
           <PrevButton>
             <Button
               icon={<ArrowLeftOutlined />}
-              onClick={() => setActiveFile(items[activeFileIndex - 1])}
+              onClick={() => setActiveFile(media.items[activeFileIndex - 1])}
               disabled={activeFileIndex === 0}
             />
           </PrevButton>
@@ -250,8 +237,8 @@ const MediaLibrary = (props) => {
           <NextButton>
             <Button
               icon={<ArrowRightOutlined />}
-              onClick={() => setActiveFile(items[activeFileIndex + 1])}
-              disabled={activeFileIndex === items.length - 1}
+              onClick={() => setActiveFile(media.items[activeFileIndex + 1])}
+              disabled={activeFileIndex === media.items.length - 1}
             />
           </NextButton>
         </Modal>
@@ -265,11 +252,9 @@ const Container = styled.div`
 `;
 
 const MediaItems = styled.div`
-  > div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const MediaItem = styled.div`
