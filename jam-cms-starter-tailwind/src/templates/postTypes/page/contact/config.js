@@ -8,9 +8,16 @@ const config = {
       global: true,
     },
     {
-      id: 'text',
-      type: 'text',
-      label: 'Text',
+      id: 'content',
+      label: 'Content',
+      type: 'group',
+      fields: [
+        {
+          id: 'wysiwyg',
+          type: 'wysiwyg',
+          label: 'Text',
+        },
+      ],
     },
     {
       id: 'footer',
