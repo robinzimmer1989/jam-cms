@@ -523,7 +523,21 @@ We’re using Ant Design under the hood and it’s adding global CSS to the site
 
 You can overcome this issue by simply overwriting the CSS properties in case they screw something up. It’s important to note that the behavior is different in development and build mode (SSR), so make sure you pay attention to style changes in both environments.
 
+**Gatsby Image only supports fluid**
+
 ## Changelog
+
+### 1.8.1
+
+- Jodit: Update to latest version
+- Jodit: Add placeholder
+- Jodit fix: Jodit update causes other fields to reset
+- Jodit: Fix automatic br tag
+- Jodit: Fix parsing issue when users add code block
+- Fix infinite scrolling issue in modal for media library
+- Redirect to login form on logout
+- Add back to home page link to login form
+- Fix pagination issue in development mode
 
 ### 1.8.0
 
