@@ -9,7 +9,6 @@ const RichText = (props) => {
     return typeof string === 'string'
       ? Parser(string, {
           replace: (domNode) => {
-            console.log(domNode);
             if (domNode.type === 'tag') {
               if (domNode.name === 'a') {
                 if (domNode.attribs.href.includes('http')) {
