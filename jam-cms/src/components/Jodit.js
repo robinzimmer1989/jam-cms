@@ -23,8 +23,12 @@ const HTMLEditor = (props) => {
   // We can't trigger the onChange callback within the useMemo function because this resets other fields
   // We're using an index instead of the content which should make the comparison more efficient
   useEffect(() => {
-    // The editor fires an onChange event on load which causes the postHasChanged / siteHasChanged values to be off
-    index > 0 && onChange(content);
+    // The editor fires one onChange event on load if no content is given and two events if the textfield already has a default value.
+    // As a result the postHasChanged / siteHasChanged flags will be true so the user won't be able to navigate away, even though has didn't change anything.
+    // That's why we add a check for the index and default value here.
+    if ((defaultValue && index > 1) || (!defaultValue && index > 0)) {
+      onChange(content);
+    }
   }, [index]);
 
   // Jodit module loader on component mount (SSR fix)
