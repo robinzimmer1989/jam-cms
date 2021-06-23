@@ -159,6 +159,7 @@ const Master = (props) => {
           title={dialog.title}
           visible={true}
           onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
+          destroyOnClose
           children={dialog.component}
           width={dialog.width}
           footer={null}
