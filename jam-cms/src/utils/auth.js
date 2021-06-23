@@ -55,8 +55,6 @@ export const logout = (config) => {
     return;
   }
 
-  console.log(config?.onLogout);
-
   setUser({});
 
   typeof config.onLogout === 'function' ? config.onLogout() : navigate('/');
