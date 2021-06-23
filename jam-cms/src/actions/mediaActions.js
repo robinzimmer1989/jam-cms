@@ -5,8 +5,12 @@ export const uploadMediaItem = async ({ siteID, file }, dispatch, config) => {
   return result;
 };
 
-export const getMediaItems = async ({ siteID, page, limit }, dispatch, config) => {
-  const result = await mediaServices.getMediaItems({ siteID, page, limit }, dispatch, config);
+export const getMediaItems = async ({ siteID, page, limit, search }, dispatch, config) => {
+  const result = await mediaServices.getMediaItems(
+    { siteID, page, limit, search },
+    dispatch,
+    config
+  );
   return result;
 };
 

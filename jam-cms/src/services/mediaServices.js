@@ -50,7 +50,7 @@ export const deleteMediaItem = async ({ siteID, id }, dispatch, config) => {
   return result;
 };
 
-export const getMediaItems = async ({ siteID, page = null, limit = 20 }, dispatch, config) => {
-  let result = await db('getMediaItems', { siteID, page, limit }, dispatch, config);
+export const getMediaItems = async ({ siteID, page, limit, search }, dispatch, config) => {
+  let result = await db('getMediaItems', { siteID, page, limit, search }, dispatch, config);
   return result;
 };

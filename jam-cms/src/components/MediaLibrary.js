@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import produce from 'immer';
-import { Modal, Upload, Button, Space, message, Spin, Checkbox } from 'antd';
+import { Modal, Upload, Button, Space, message, Spin, Checkbox, Input, PageHeader } from 'antd';
 import {
   UploadOutlined,
   InboxOutlined,
@@ -35,6 +35,7 @@ const MediaLibrary = (props) => {
   const [uploader, setUploader] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(defaultSelected);
+  const [search, setSearch] = useState('');
 
   const activeFileIndex = activeFile && media.items.findIndex((o) => o.id === activeFile.id);
 
@@ -42,11 +43,30 @@ const MediaLibrary = (props) => {
     isVisible && media.page > -1 && loadMediaItems(media.page);
   }, [isVisible]);
 
-  const loadMediaItems = async (page) => {
+  const handleSearch = async (value) => {
+    if (value) {
+      const result = await mediaActions.getMediaItems(
+        { siteID, page: 0, search: value, limit: 24 },
+        dispatch,
+        config
+      );
+
+      if (result) {
+        setMedia({ items: result.items, page: result.page });
+      }
+    } else {
+      loadMediaItems(0, true);
+    }
+  };
+
+  const loadMediaItems = async (page, clear = false) => {
     const result = await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch, config);
 
     if (result) {
-      setMedia({ items: media.items.concat(result.items), page: result.page });
+      setMedia({
+        items: clear ? result.items : media.items.concat(result.items),
+        page: result.page,
+      });
     }
   };
 
@@ -152,12 +172,25 @@ const MediaLibrary = (props) => {
     <>
       <Container actionBar={multiple && selected.length > 0}>
         <Space direction="vertical" size={20}>
-          <Button
-            icon={<UploadOutlined />}
-            children="Upload"
-            type="primary"
-            onClick={() => setUploader(!uploader)}
-            loading={loading}
+          <PageHeader
+            title={
+              <Button
+                icon={<UploadOutlined />}
+                children="Upload"
+                type="primary"
+                onClick={() => setUploader(!uploader)}
+                loading={loading}
+              />
+            }
+            extra={[
+              <Input.Search
+                key="search"
+                allowClear
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onSearch={handleSearch}
+              />,
+            ]}
           />
 
           {uploader && (
@@ -195,11 +228,9 @@ const MediaLibrary = (props) => {
             <DummyItem />
             <DummyItem />
 
-            {media.page > -1 && (
-              <LoadingContainer ref={ref} key={0}>
-                <Spin size="large" />
-              </LoadingContainer>
-            )}
+            <LoadingContainer ref={ref} key={0} visible={media.page > -1}>
+              <Spin size="large" />
+            </LoadingContainer>
           </MediaItems>
 
           {multiple && selected.length > 0 && (
@@ -302,6 +333,13 @@ const LoadingContainer = styled.div`
   padding: 20px;
   display: flex;
   justify-content: center;
+  ${({ visible }) =>
+    !visible &&
+    css`
+      opacity: 0;
+      height: 0;
+      padding: 0;
+    `};
 `;
 
 const ActionBar = styled.div`
