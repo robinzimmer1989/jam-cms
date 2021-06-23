@@ -17,7 +17,7 @@ import { useStore } from '../store';
 import { colors } from '../theme';
 
 const MediaLibrary = (props) => {
-  const { onSelect, allow, multiple, selected: defaultSelected = [] } = props;
+  const { onSelect, allow = [], multiple, selected: defaultSelected = [] } = props;
 
   const ref = useRef();
   const isVisible = useOnScreen(ref);
@@ -46,7 +46,7 @@ const MediaLibrary = (props) => {
   const handleSearch = async (value) => {
     if (value) {
       const result = await mediaActions.getMediaItems(
-        { siteID, page: 0, search: value, limit: 24 },
+        { siteID, page: 0, search: value, limit: 24, allow },
         dispatch,
         config
       );
@@ -60,7 +60,11 @@ const MediaLibrary = (props) => {
   };
 
   const loadMediaItems = async (page, clear = false) => {
-    const result = await mediaActions.getMediaItems({ siteID, page, limit: 24 }, dispatch, config);
+    const result = await mediaActions.getMediaItems(
+      { siteID, page, limit: 24, allow },
+      dispatch,
+      config
+    );
 
     if (result) {
       setMedia({
@@ -204,23 +208,21 @@ const MediaLibrary = (props) => {
 
           <MediaItems>
             {media.items &&
-              media.items
-                .filter((o) => (allow ? allow.includes(o.type) : o))
-                .map((o) => {
-                  return (
-                    <MediaItem key={o.id}>
-                      <MediaItemInner onClick={() => setActiveFile(o)}>
-                        {renderImage(o)}
-                      </MediaItemInner>
+              media.items.map((o) => {
+                return (
+                  <MediaItem key={o.id}>
+                    <MediaItemInner onClick={() => setActiveFile(o)}>
+                      {renderImage(o)}
+                    </MediaItemInner>
 
-                      {multiple && (
-                        <CheckboxContainer onClick={() => handleClickCheckbox(o)}>
-                          <Checkbox checked={!!selected.find((p) => p.id === o.id)} />
-                        </CheckboxContainer>
-                      )}
-                    </MediaItem>
-                  );
-                })}
+                    {multiple && (
+                      <CheckboxContainer onClick={() => handleClickCheckbox(o)}>
+                        <Checkbox checked={!!selected.find((p) => p.id === o.id)} />
+                      </CheckboxContainer>
+                    )}
+                  </MediaItem>
+                );
+              })}
 
             <DummyItem />
             <DummyItem />
