@@ -53,6 +53,7 @@ const CmsHeader = (props) => {
   }
 
   if (
+    sites?.[siteID]?.frontPage &&
     sites?.[siteID]?.postTypes?.['page']?.posts?.[sites?.[siteID]?.frontPage]?.status !== 'publish'
   ) {
     notifications.push('unpublished-front-page');
