@@ -86,7 +86,7 @@ const HTMLEditor = (props) => {
       },
       disablePlugins:
         'print,preview,table-keyboard-navigation,image-processor,xpath,stat,search,limit,font,color,paste-storage,about,video,image,error-messages,copy-format,class-span',
-      buttonsXS: ['align', 'bold', 'italic', 'paragraph', 'fullsize', 'dots'],
+      buttonsXS: ['align', 'bold', 'paragraph', 'fullsize', 'dots'],
       extraButtons: [
         {
           name: 'jamImage',
@@ -133,7 +133,7 @@ const HTMLEditor = (props) => {
       {jodit}
 
       <Modal
-        title={'Link'}
+        title={modal === 'image' ? 'Media' : 'Link'}
         visible={!!modal}
         onCancel={() => setModal(null)}
         width={modal === 'image' || modal === 'editor' ? 1024 : 500}

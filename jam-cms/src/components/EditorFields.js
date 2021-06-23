@@ -144,6 +144,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
               type: `SET_DIALOG`,
               payload: {
                 open: true,
+                title: 'Media',
                 component: (
                   <MediaLibrary
                     onSelect={(value) => onChangeElement({ ...field, value })}
@@ -178,6 +179,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
               type: `SET_DIALOG`,
               payload: {
                 open: true,
+                title: 'Media',
                 component: (
                   <MediaLibrary onSelect={(value) => onChangeElement({ ...field, value })} />
                 ),

@@ -377,6 +377,7 @@ const EditorSidebar = (props) => {
                     type: `SET_DIALOG`,
                     payload: {
                       open: true,
+                      title: 'Media',
                       component: (
                         <MediaLibrary
                           onSelect={(v) => handleSelectImage('featuredImage', v)}
@@ -433,6 +434,7 @@ const EditorSidebar = (props) => {
                   type: `SET_DIALOG`,
                   payload: {
                     open: true,
+                    title: 'Media',
                     component: (
                       <MediaLibrary
                         onSelect={(v) => handleSelectImage('seo.opengraphImage', v)}

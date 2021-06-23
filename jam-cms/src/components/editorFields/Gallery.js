@@ -48,6 +48,7 @@ const Gallery = (props) => {
       type: `SET_DIALOG`,
       payload: {
         open: true,
+        title: 'Media',
         component: (
           <MediaLibrary onSelect={handleSelect} allow={['image']} selected={values} multiple />
         ),
