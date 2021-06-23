@@ -119,7 +119,7 @@ const MediaImage = (props) => {
 
                   <Button
                     onClick={handleUpdateMediaItem}
-                    children={`Update Image`}
+                    children={'Update'}
                     loading={loading === 'update'}
                   />
                 </Space>
