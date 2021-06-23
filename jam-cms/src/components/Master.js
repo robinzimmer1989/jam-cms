@@ -47,25 +47,17 @@ const Master = (props) => {
 
   const previewID = isPreview();
 
-  // timers for refresh token and site updates
-  const [refreshTimer, setRefreshTimer] = useState(0);
-  const [updatesTimer, setUpdatesTimer] = useState(0);
+  // timer for refresh token and site updates
+  const [timer, setTimer] = useState(0);
 
   useEffect(() => {
-    // activate timer for refresh token
-    const refreshID = setInterval(() => {
-      !previewID && setRefreshTimer((time) => time + 1);
-    }, 45000); // 45 seconds
-
-    // activate timer for site updates
-    const updatesID = setInterval(() => {
-      !previewID && setUpdatesTimer((time) => time + 1);
+    const intervalID = setInterval(() => {
+      !previewID && setTimer((time) => time + 1);
     }, 10000); // 10 seconds
 
     // Clear both timers
     return () => {
-      clearInterval(refreshID);
-      clearInterval(updatesID);
+      clearInterval(intervalID);
     };
   }, []);
 
@@ -78,7 +70,12 @@ const Master = (props) => {
   }, []);
 
   useEffect(() => {
-    const loadSite = async () => {
+    const refreshContent = async () => {
+      // Refresh token after 2 minutes (12 * 10 seconds)
+      if (timer > 0 && timer % 12 === 0) {
+        await authActions.refreshToken({}, dispatch, config);
+      }
+
       if (previewID) {
         await previewActions.getSitePreview({ siteID: config.siteID, previewID }, dispatch, config);
       } else {
@@ -95,18 +92,8 @@ const Master = (props) => {
       }
     };
 
-    loadSite();
-  }, [updatesTimer, previewID]);
-
-  useEffect(() => {
-    const refreshToken = async () => {
-      await authActions.refreshToken({}, dispatch, config);
-    };
-
-    if (authUser && refreshTimer > 0) {
-      refreshToken();
-    }
-  }, [refreshTimer]);
+    refreshContent();
+  }, [timer]);
 
   if (!sites[siteID]) {
     return <Loader />;
