@@ -527,6 +527,15 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 
 ## Changelog
 
+### 1.8.2
+
+- Add media search functionality
+- Fix: Query media items by mime type instead of filtering client-side
+- Fix: Notification when no front page is selected
+- Fix: Combine refresh token and getSite fetches to prevent logout issue
+- Fix: Jodit onChange trigger on load
+- Fix: Remove select button on media page
+
 ### 1.8.1
 
 - Jodit: Update to latest version
