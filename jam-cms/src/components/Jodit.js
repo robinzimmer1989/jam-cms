@@ -143,7 +143,7 @@ const HTMLEditor = (props) => {
         width={modal === 'image' || modal === 'editor' ? 1024 : 500}
         footer={null}
       >
-        {modal === 'image' && <MediaLibrary onSelect={handleSelectImage} />}
+        {modal === 'image' && <MediaLibrary onSelect={handleSelectImage} allow={['image']} />}
         {modal === 'link' && (
           <LinkSelector
             onChange={handleSelectLink}
@@ -162,28 +162,33 @@ const Container = styled.div`
 
   .jodit-container.jodit.jodit-wysiwyg_mode {
     ${({ fullscreen }) =>
-      fullscreen &&
-      css`
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 1000;
+      fullscreen
+        ? css`
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 1000;
 
-        .jodit-wysiwyg {
-          padding: 20px !important;
-        }
+            .jodit-wysiwyg {
+              padding: 20px !important;
+            }
 
-        .jodit-placeholder {
-          padding: 20px;
-        }
+            .jodit-placeholder {
+              padding: 20px;
+            }
 
-        .jodit-workplace {
-          max-width: 600px;
-          margin: 0 auto;
-        }
-      `}
+            .jodit-workplace {
+              max-width: 600px;
+              margin: 0 auto;
+            }
+          `
+        : css`
+            .jodit-resizer {
+              display: none;
+            }
+          `}
   }
 
   .jodit-container:not(.jodit_inline) {
