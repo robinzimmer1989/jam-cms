@@ -146,7 +146,7 @@ const PostEditor = (props) => {
     // Activate postLockTimer for post locking
     const intervalID = setInterval(() => {
       !previewID && setPostLockTimer((time) => time + 1);
-    }, 15000); // 15 seconds
+    }, 60000); // 60 seconds
 
     return async () => {
       clearInterval(intervalID);
