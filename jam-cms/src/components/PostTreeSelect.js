@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TreeSelect, Space } from 'antd';
 
 // import app components
@@ -8,31 +8,37 @@ import { createDataTree } from '../utils';
 const PostTreeSelect = (props) => {
   const { items = [], value, label, onChange } = props;
 
-  const treePosts = createDataTree(items);
+  const tree = useMemo(() => {
+    const treePosts = createDataTree(items);
 
-  const renderTreeNode = (item) => {
+    const renderTreeNode = (item) => {
+      return (
+        <TreeSelect.TreeNode key={item.id} value={item.id} title={item.title}>
+          {item.childNodes.map((o) => renderTreeNode(o))}
+        </TreeSelect.TreeNode>
+      );
+    };
+
     return (
-      <TreeSelect.TreeNode key={item.id} value={item.id} title={item.title}>
-        {item.childNodes.map((o) => renderTreeNode(o))}
-      </TreeSelect.TreeNode>
-    );
-  };
-
-  return (
-    <Space direction="vertical" size={6}>
-      <Caption children={label} />
       <TreeSelect
         showSearch
         treeNodeFilterProp="title"
         value={value}
-        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         allowClear
         treeDefaultExpandAll
         onChange={onChange}
+        getPopupContainer={(triggerNode) => triggerNode.parentNode}
       >
         <TreeSelect.TreeNode value={0} title={`None`} />
         {treePosts.map((o) => renderTreeNode(o))}
       </TreeSelect>
+    );
+  }, [value]);
+
+  return (
+    <Space direction="vertical" size={6}>
+      <Caption children={label} />
+      {tree}
     </Space>
   );
 };
