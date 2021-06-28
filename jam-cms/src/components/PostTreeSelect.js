@@ -24,7 +24,6 @@ const PostTreeSelect = (props) => {
         showSearch
         treeNodeFilterProp="title"
         value={value}
-        allowClear
         treeDefaultExpandAll
         onChange={onChange}
         getPopupContainer={(triggerNode) => triggerNode.parentNode}
