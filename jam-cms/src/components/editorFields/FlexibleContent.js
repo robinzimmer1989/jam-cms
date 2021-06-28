@@ -196,7 +196,11 @@ const FlexibleContent = (props) => {
       )}
 
       <AddContainer>
-        <Dropdown overlay={menu} trigger={['click']}>
+        <Dropdown
+          overlay={menu}
+          trigger={['click']}
+          getPopupContainer={(triggerNode) => triggerNode.parentNode}
+        >
           <AddButton siblings={values && values.length > 0}>
             <PlusOutlined />
           </AddButton>
