@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { navigate } from '@reach/router';
 import styled, { css } from 'styled-components';
 import { debounce } from 'lodash';
+import { Space, Button, Typography } from 'antd';
 
 // import app components
 import { useStore } from '../store';
@@ -13,6 +15,7 @@ const PageWrapper = (props) => {
       cmsState: { sites, siteID },
       editorState: { siteHasChanged, postHasChanged },
     },
+    dispatch,
   ] = useStore();
 
   // We need the window width to calculate scaling
@@ -34,6 +37,53 @@ const PageWrapper = (props) => {
     };
   }, []);
 
+  useEffect(() => {
+    var anchors = document.getElementsByTagName('a');
+    for (var i = 0; i < anchors.length; i++) {
+      anchors[i].onclick = (e) => {
+        if (e.target.target === '_blank') {
+          return true;
+        }
+
+        if (siteHasChanged || postHasChanged) {
+          e.preventDefault();
+
+          dispatch({
+            type: 'SET_DIALOG',
+            payload: {
+              open: true,
+              title: 'Warning',
+              component: (
+                <Space direction="vertical" size={20}>
+                  <Typography
+                    children={'There are unsaved changes. Are you sure you want to discard them?'}
+                  />
+                  <Space>
+                    <Button children="Cancel" onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} />
+                    <Button
+                      children="Discard changes"
+                      type="danger"
+                      onClick={() => {
+                        if (e?.target?.href) {
+                          navigate(e.target.href);
+                        }
+
+                        dispatch({ type: 'CLOSE_DIALOG' });
+                      }}
+                    />
+                  </Space>
+                </Space>
+              ),
+              width: 320,
+            },
+          });
+        } else {
+          return true;
+        }
+      };
+    }
+  }, [siteHasChanged, postHasChanged]);
+
   return (
     <Container
       loaded={loaded}
@@ -46,11 +96,7 @@ const PageWrapper = (props) => {
         sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
         windowWidth={windowWidth}
       >
-        {template ? (
-          <Content disableLinks={siteHasChanged || postHasChanged}>{children}</Content>
-        ) : (
-          <div id="jam-cms">{children}</div>
-        )}
+        {template ? children : <div id="jam-cms">{children}</div>}
       </Inner>
     </Container>
   );
@@ -85,16 +131,6 @@ const Inner = styled.div`
             margin-right: ${position === 'right' && active ? `${width}px` : 0};
           `
         : style === 'overflow' && css``}
-    `}
-`;
-
-const Content = styled.div`
-  ${({ disableLinks }) =>
-    disableLinks &&
-    css`
-      a {
-        pointer-events: none !important;
-      }
     `}
 `;
 

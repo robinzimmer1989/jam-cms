@@ -14,11 +14,10 @@ import {
   Dropdown,
   Empty,
   Menu,
-  Alert,
   Popconfirm,
 } from 'antd';
 import { set } from 'lodash';
-import { HomeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { HomeOutlined } from '@ant-design/icons';
 
 // import app components
 import EditorFields from './EditorFields';
@@ -652,52 +651,6 @@ const EditorSidebar = (props) => {
         {sidebar === 'theme' && renderThemeSettings()}
 
         {sidebar === 'preview' && renderPreview()}
-
-        {(postHasChanged || siteHasChanged) && (
-          <AlertContainer>
-            <Alert
-              message="Links have been disabled"
-              showIcon={false}
-              banner
-              style={{ background: 'transparent' }}
-              action={
-                <Button
-                  icon={<QuestionCircleOutlined />}
-                  type="link"
-                  size="small"
-                  onClick={() =>
-                    dispatch({
-                      type: 'SET_DIALOG',
-                      payload: {
-                        open: true,
-                        title: 'Information',
-                        component: (
-                          <Space direction="vertical" size={20}>
-                            <Typography>
-                              All links on the website have been temporarily disabled to avoid
-                              content loss. Update the post to reactivate them.
-                            </Typography>
-
-                            <Button
-                              onClick={() =>
-                                dispatch({
-                                  type: 'CLOSE_DIALOG',
-                                })
-                              }
-                            >
-                              Got it
-                            </Button>
-                          </Space>
-                        ),
-                        width: 500,
-                      },
-                    })
-                  }
-                />
-              }
-            />
-          </AlertContainer>
-        )}
       </TabContainer>
     </Container>
   );
@@ -773,11 +726,6 @@ const Content = styled.div`
 
 const EditorFieldsContainer = styled.div`
   min-height: calc(100% - 46px);
-`;
-
-const AlertContainer = styled.div`
-  height: 45px;
-  border-top: 1px solid #d9d9d9;
 `;
 
 export default EditorSidebar;
