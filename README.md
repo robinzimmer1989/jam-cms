@@ -151,14 +151,45 @@ const fields = {
 export default fields;
 ```
 
-The template config file (i.e. postDefault) looks something like this whereas the fields array can be populated with any kind of field you need (see 'Field Types' section).
+The template config file (i.e. post archive) looks something like this.
+
+Optional: You can pass in a GraphQL query to retrieve data that is not included by edit fields. A typical example would be the posts query for the archive page. It's important to know that WPGraphQL and the gatsby-source-wordpress plugin have a slightly different markup so we need to add translations here (allWpPost: posts). It's also important to know that we can't query images for the childImageSharp part since this piece is generated within Gatsby and WPGraphQL doesn't know about it.
 
 ```
 const config = {
-  id: 'default',
+  id: 'archive',
   postTypeID: 'post',
-  label: 'Post Default',
-  fields: [],
+  label: 'Posts',
+  fields: [
+    {
+      id: 'text',
+      type: 'wysiwyg',
+      label: 'Text'
+    }
+  ],
+  query: '
+    allWpPost: posts {
+      nodes {
+        id
+        title
+        uri
+        date
+        featuredImage {
+          node {
+            altText
+            srcSet
+            sourceUrl
+            mediaType
+            sizes
+            mediaDetails {
+              width
+              height
+            }
+          }
+        }
+      }
+    }
+  '
 };
 
 export default config;
