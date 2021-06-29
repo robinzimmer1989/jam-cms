@@ -15,6 +15,7 @@ const HTMLEditor = (props) => {
   const editorRef = useRef(null);
 
   const [modal, setModal] = useState(null);
+  const [link, setLink] = useState(null);
   const [editor, setEditor] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [content, setContent] = useState(defaultValue);
@@ -37,6 +38,17 @@ const HTMLEditor = (props) => {
     setLoaded(true);
   }, []);
 
+  // Disable links in sidebar to allow for relative links (not catched by Jodit)
+  useEffect(() => {
+    var anchors = document.querySelector('#jam-cms-sidebar').querySelectorAll('a');
+
+    for (var i = 0; i < anchors.length; i++) {
+      anchors[i].onclick = (e) => {
+        e.preventDefault();
+      };
+    }
+  }, [defaultValue, loaded]);
+
   const handleSelectImage = (image) => {
     const html = `<img src="${image.url}" alt="${image.altText}" />`;
     editor.s.insertHTML(html);
@@ -46,10 +58,18 @@ const HTMLEditor = (props) => {
   };
 
   const handleSelectLink = (link) => {
-    const html = `<a href="${link.url}" target="${link.target}">${link.title}</a>`;
+    let target = '';
+
+    if (link.target) {
+      target = `target="${link.target}"`;
+    }
+
+    const html = `<a href="${link.url}" ${target}>${link.title}</a>`;
+
     editor.s.insertHTML(html);
 
     setModal(null);
+    setLink(null);
     setEditor(null);
   };
 
@@ -87,10 +107,26 @@ const HTMLEditor = (props) => {
           tooltip: 'Open editor in fullsize',
           mode: 3,
         },
+        link: {
+          isActive:
+            'function(e){var t=e.s.current();return Boolean(t&&i.Dom.closest(t,"a",e.editor))}',
+          popup: function (e, t, n, r) {
+            setEditor(e);
+            setLink({
+              title: e.s?.range.cloneContents().textContent || e.s.current()?.textContent || '',
+              url: t && typeof t.getAttribute === 'function' ? t.getAttribute('href') : '',
+              target: t.target || '',
+            });
+            setModal('link');
+            return;
+          },
+          tags: ['a'],
+          tooltip: 'Insert link',
+        },
       },
       disablePlugins:
         'print,preview,table-keyboard-navigation,image-processor,xpath,stat,search,limit,font,color,paste-storage,about,video,image,error-messages,copy-format,class-span',
-      buttonsXS: ['align', 'bold', 'paragraph', 'fullsize', 'dots'],
+      buttonsXS: ['link', 'align', 'bold', 'paragraph', 'fullsize', 'dots'],
       extraButtons: [
         {
           name: 'jamImage',
@@ -100,16 +136,6 @@ const HTMLEditor = (props) => {
           exec: function (e) {
             setEditor(e);
             setModal('image');
-          },
-        },
-        {
-          name: 'jamLink',
-          tooltip: 'Link',
-          iconURL:
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIGNsYXNzPSJqb2RpdC1pY29uX2xpbmsgam9kaXQtaWNvbiI+IDxwYXRoIGQ9Ik0xNTIwIDEyMTZxMC00MC0yOC02OGwtMjA4LTIwOHEtMjgtMjgtNjgtMjgtNDIgMC03MiAzMiAzIDMgMTkgMTguNXQyMS41IDIxLjUgMTUgMTkgMTMgMjUuNSAzLjUgMjcuNXEwIDQwLTI4IDY4dC02OCAyOHEtMTUgMC0yNy41LTMuNXQtMjUuNS0xMy0xOS0xNS0yMS41LTIxLjUtMTguNS0xOXEtMzMgMzEtMzMgNzMgMCA0MCAyOCA2OGwyMDYgMjA3cTI3IDI3IDY4IDI3IDQwIDAgNjgtMjZsMTQ3LTE0NnEyOC0yOCAyOC02N3ptLTcwMy03MDVxMC00MC0yOC02OGwtMjA2LTIwN3EtMjgtMjgtNjgtMjgtMzkgMC02OCAyN2wtMTQ3IDE0NnEtMjggMjgtMjggNjcgMCA0MCAyOCA2OGwyMDggMjA4cTI3IDI3IDY4IDI3IDQyIDAgNzItMzEtMy0zLTE5LTE4LjV0LTIxLjUtMjEuNS0xNS0xOS0xMy0yNS41LTMuNS0yNy41cTAtNDAgMjgtNjh0NjgtMjhxMTUgMCAyNy41IDMuNXQyNS41IDEzIDE5IDE1IDIxLjUgMjEuNSAxOC41IDE5cTMzLTMxIDMzLTczem04OTUgNzA1cTAgMTIwLTg1IDIwM2wtMTQ3IDE0NnEtODMgODMtMjAzIDgzLTEyMSAwLTIwNC04NWwtMjA2LTIwN3EtODMtODMtODMtMjAzIDAtMTIzIDg4LTIwOWwtODgtODhxLTg2IDg4LTIwOCA4OC0xMjAgMC0yMDQtODRsLTIwOC0yMDhxLTg0LTg0LTg0LTIwNHQ4NS0yMDNsMTQ3LTE0NnE4My04MyAyMDMtODMgMTIxIDAgMjA0IDg1bDIwNiAyMDdxODMgODMgODMgMjAzIDAgMTIzLTg4IDIwOWw4OCA4OHE4Ni04OCAyMDgtODggMTIwIDAgMjA0IDg0bDIwOCAyMDhxODQgODQgODQgMjA0eiI+PC9wYXRoPiA8L3N2Zz4=',
-          exec: function (e) {
-            setEditor(e);
-            setModal('link');
           },
         },
       ],
@@ -139,17 +165,16 @@ const HTMLEditor = (props) => {
       <Modal
         title={modal === 'image' ? 'Media' : 'Link'}
         visible={!!modal}
-        onCancel={() => setModal(null)}
+        onCancel={() => {
+          setModal(null);
+          setLink(null);
+        }}
         width={modal === 'image' || modal === 'editor' ? 1024 : 500}
         footer={null}
+        destroyOnClose
       >
         {modal === 'image' && <MediaLibrary onSelect={handleSelectImage} allow={['image']} />}
-        {modal === 'link' && (
-          <LinkSelector
-            onChange={handleSelectLink}
-            value={{ title: editor.s.range.cloneContents().textContent, url: '', target: '' }}
-          />
-        )}
+        {modal === 'link' && <LinkSelector onChange={handleSelectLink} value={link} />}
       </Modal>
     </Container>
   );
@@ -296,6 +321,10 @@ const Global = createGlobalStyle`
       padding: 0;
       max-height: 400px;
       background: ${colors.secondaryContrast};
+
+      .jodit-toolbar-button_link{
+        display: none;
+      }
     }
 
     .jodit-ui-input__label, label {

@@ -8,12 +8,12 @@ import { Space, Button, Typography } from 'antd';
 import { useStore } from '../store';
 
 const PageWrapper = (props) => {
-  const { sidebarActive, loaded, locked, template, children } = props;
+  const { sidebarActive, loaded, locked, children } = props;
 
   const [
     {
       cmsState: { sites, siteID },
-      editorState: { siteHasChanged, postHasChanged },
+      editorState: { siteHasChanged, postHasChanged, changeIndex },
     },
     dispatch,
   ] = useStore();
@@ -38,16 +38,20 @@ const PageWrapper = (props) => {
   }, []);
 
   useEffect(() => {
-    var anchors = document.getElementsByTagName('a');
+    // Disable all links on the page as soon as the content has changed
+    var anchors = document.querySelector('#jam-cms').querySelectorAll('a');
+
     for (var i = 0; i < anchors.length; i++) {
       anchors[i].onclick = (e) => {
-        if (e.target.target === '_blank') {
+        // Always allow links which open in a new browser tab
+        if (e.target?.target === '_blank') {
           return true;
         }
 
         if (siteHasChanged || postHasChanged) {
           e.preventDefault();
 
+          // Display confirmation dialog
           dispatch({
             type: 'SET_DIALOG',
             payload: {
@@ -77,15 +81,14 @@ const PageWrapper = (props) => {
               width: 320,
             },
           });
-        } else {
-          return true;
         }
       };
     }
-  }, [siteHasChanged, postHasChanged]);
+  }, [changeIndex]);
 
   return (
     <Container
+      id="jam-cms"
       loaded={loaded}
       locked={locked}
       sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
@@ -96,7 +99,7 @@ const PageWrapper = (props) => {
         sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
         windowWidth={windowWidth}
       >
-        {template ? children : <div id="jam-cms">{children}</div>}
+        {children}
       </Inner>
     </Container>
   );

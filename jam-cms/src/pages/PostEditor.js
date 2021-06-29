@@ -336,12 +336,7 @@ const PostEditor = (props) => {
 
   return (
     <>
-      <PageWrapper
-        template={!!Component && post?.content}
-        sidebarActive={sidebarActive}
-        loaded={loaded}
-        locked={!!post?.locked}
-      >
+      <PageWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
         {postID ? (
           <>
             {loaded ? (

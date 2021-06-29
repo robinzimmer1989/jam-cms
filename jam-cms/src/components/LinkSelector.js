@@ -12,6 +12,7 @@ const LinkSelector = (props) => {
 
   const [
     {
+      config,
       cmsState: { sites, siteID },
     },
     dispatch,
@@ -49,19 +50,18 @@ const LinkSelector = (props) => {
   };
 
   const handleTreeSelect = (id) => {
+    setPost(id);
+
     if (id) {
-      setPost(id);
       const post = allPosts.find((o) => o.id === id);
 
       const postType = Object.values(sites[siteID]?.postTypes).find(
         (o) => o.id === post.postTypeID
       );
 
-      const url = sites[siteID]?.siteUrl || '';
-
       setLink({
         title: link.title || post.title,
-        url: url + generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
+        url: generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
         target: false,
       });
     }
@@ -93,14 +93,19 @@ const LinkSelector = (props) => {
 
         <Checkbox
           value={'_blank'}
-          checked={link?.target || false}
-          onChange={(e) => handleChange('target', e.target.checked ? e.target.value : '')}
+          checked={link?.target === '_blank'}
+          onChange={(e) => handleChange('target', e.target.checked ? '_blank' : '')}
           children="Open in new tab"
         />
 
         <Space>
           {removable && <Button children={'Remove'} onClick={handleRemove} danger />}
-          <Button children={'Update'} onClick={handleSubmit} type="primary" />
+          <Button
+            children={'Update'}
+            onClick={handleSubmit}
+            type="primary"
+            disabled={!link.url || !link.title}
+          />
         </Space>
       </Space>
     </>
