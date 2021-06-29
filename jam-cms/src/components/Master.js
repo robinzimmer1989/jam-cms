@@ -71,8 +71,8 @@ const Master = (props) => {
 
   useEffect(() => {
     const refreshContent = async () => {
-      // Refresh token after 2 minutes (12 * 10 seconds)
-      if (timer > 0 && timer % 12 === 0) {
+      // Refresh token after 1 minute (6 * 10 seconds)
+      if (timer > 0 && timer % 6 === 0) {
         await authActions.refreshToken({}, dispatch, config);
       }
 
