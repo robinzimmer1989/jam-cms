@@ -5,6 +5,7 @@ export const editorState = {
   post: null,
   siteHasChanged: false,
   postHasChanged: false,
+  changeIndex: 0,
   editorSettings: {
     fullscreen: false,
   },
@@ -21,11 +22,13 @@ export const editorReducer = (state, action) => {
       case `ADD_EDITOR_SITE`:
         draft.site = payload;
         draft.siteHasChanged = false;
+        draft.changeIndex = 0;
         break;
 
       case `UPDATE_EDITOR_SITE`:
         draft.site = { ...draft.site, ...payload };
         draft.siteHasChanged = true;
+        draft.changeIndex = draft.changeIndex + 1;
         break;
 
       /******************************
@@ -34,11 +37,13 @@ export const editorReducer = (state, action) => {
       case `ADD_EDITOR_POST`:
         draft.post = payload;
         draft.postHasChanged = false;
+        draft.changeIndex = 0;
         break;
 
       case `UPDATE_EDITOR_POST`:
         draft.post = { ...draft.post, ...payload };
         draft.postHasChanged = true;
+        draft.changeIndex = draft.changeIndex + 1;
         break;
 
       /******************************
@@ -57,6 +62,8 @@ export const editorReducer = (state, action) => {
 
         draft.post = null;
         draft.postHasChanged = false;
+
+        draft.changeIndex = 0;
 
         break;
 
