@@ -179,12 +179,12 @@ const EditorSidebar = (props) => {
     if (postResult || siteResult) {
       message.success('Updated successfully');
 
-      // We need to generate the slug and navigate to it in case the user has changed the post name
-      const nextPostType = produce(site.postTypes[post.postTypeID], (draft) => {
+      // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
+      const nextPostType = produce(sites[siteID].postTypes[post.postTypeID], (draft) => {
         return set(draft, `posts.${post.id}`, post);
       });
 
-      const slug = generateSlug(nextPostType, post.id, site.frontPage, true);
+      const slug = generateSlug(nextPostType, post.id, sites[siteID].frontPage, true);
       navigate(slug);
     }
   };
@@ -330,7 +330,7 @@ const EditorSidebar = (props) => {
             <AntSelect.Option value={'trash'} children={'Trash'} />
           </Select>
 
-          {post?.postTypeID === 'page' && (
+          {post?.postTypeID === 'page' && post.id !== site?.frontPage && (
             <PostTreeSelect
               label="Parent"
               items={Object.values(postType.posts).filter((o) => o.id !== post.id)}
