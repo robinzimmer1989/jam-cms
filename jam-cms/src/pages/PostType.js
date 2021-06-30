@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from '@reach/router';
+import React, { useEffect, useState } from 'react';
+import { Link, navigate } from '@reach/router';
 import {
   Button,
   PageHeader,
@@ -26,6 +26,7 @@ import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
 import { createDataTree, generateSlug, addPost } from '../utils';
 import { colors } from '../theme';
+import getRoute from '../routes';
 
 const PostType = (props) => {
   const { postTypeID } = props;
@@ -73,6 +74,13 @@ const PostType = (props) => {
   const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
     o?.postTypes.includes(postTypeID)
   );
+
+  useEffect(() => {
+    // Navigate to dashboard if template not found in fields object
+    if (!config?.fields?.postTypes?.[postTypeID]) {
+      navigate(getRoute('dashboard', { siteID }));
+    }
+  }, []);
 
   const handleSync = async () => {
     setIsSyncing(true);
