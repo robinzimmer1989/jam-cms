@@ -178,6 +178,7 @@ const PostType = (props) => {
   if (filter === 'trash') {
     extra.push(
       <Popconfirm
+        key="empty-trash"
         title="Are you sure you want to empty the trash?"
         onConfirm={handleEmptyTrash}
         okText="Yes"
@@ -185,12 +186,7 @@ const PostType = (props) => {
         placement="bottomRight"
         disabled={visiblePosts.length === 0}
       >
-        <Button
-          key="empty-trash"
-          children={'Empty trash'}
-          disabled={visiblePosts.length === 0}
-          type="danger"
-        />
+        <Button children={'Empty trash'} disabled={visiblePosts.length === 0} type="danger" />
       </Popconfirm>
     );
   } else {
