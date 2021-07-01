@@ -34,7 +34,7 @@ const RichText = (props) => {
               }
 
               // Remove all special characters from string. This is necessary when using the code editor and start adding html elements.
-              domNode.name = domNode.name.replace(/[^a-zA-Z ]/g, '');
+              domNode.name = domNode.name.replace(/[^a-zA-Z1-9 ]/g, '');
             }
           },
         })
