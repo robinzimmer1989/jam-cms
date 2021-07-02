@@ -54,7 +54,15 @@ const EditorSidebar = (props) => {
   const [previewLink, setPreviewLink] = useState(null);
 
   const handleChangePost = (name, value) => {
-    const nextPost = produce(post, (draft) => set(draft, `${name}`, value));
+    const nextPost = produce(post, (draft) => {
+      set(draft, `${name}`, value);
+
+      if (name === 'template') {
+        set(draft, 'content', {});
+      }
+
+      return draft;
+    });
 
     dispatch({
       type: 'UPDATE_EDITOR_POST',
