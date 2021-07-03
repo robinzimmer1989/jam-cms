@@ -40,14 +40,14 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 **Must use plugins:**
 
 - Advanced Custom Fields PRO (5.9.5)
-- Custom Post Type UI (1.9.1)
+- Custom Post Type UI (1.9.2)
 - WP Gatsby (1.0.10)
-- WPGraphQL (1.3.8)
+- WPGraphQL (1.4.3)
 - WPGraphQL for Advanced Custom Fields (0.5.2)
 - WPGraphQL JWT Authentication (0.4.1)
   Follow the plugin instructions and add a secret key to your wp-config.php file.
-- Yoast SEO (16.2)
-- WPGraphQL Yoast SEO Addon (4.14.0)
+- Yoast SEO (16.6)
+- WPGraphQL Yoast SEO Addon (4.14.2)
 - jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
 
 **Optional plugins:**
@@ -557,6 +557,25 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 **Gatsby Image only supports fluid**
 
 ## Changelog
+
+### 1.8.4
+
+- Fix: Build jam-cms
+
+### 1.8.3
+
+- New implementation for navigate away logic when content has changed
+- Fix: Jodit disable resizing of images in sidebar (caused bug)
+- Fix: Jodit focus status on empty textfield
+- Fix: Jodit link selector
+- Fix: Scrolling issue (multiple scrollbars) in post tree selector
+- Fix: Site update not removing siteHasChanged flag afterwards
+- Fix: Hide parent selector when front page
+- Fix: Richtext component strips out numbers (causes i.e. h1 tags to be h)
+- Fix: Update missing plugins list
+- Fix: Disallow no title for post (return "No Title" now)
+- Fix: New post without content doesn't show up in action monitor
+- Add disable sync function in WP for security reasons
 
 ### 1.8.2
 
