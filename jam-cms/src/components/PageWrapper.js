@@ -68,8 +68,10 @@ const PageWrapper = (props) => {
                       children="Discard changes"
                       type="danger"
                       onClick={() => {
-                        if (e?.target?.href) {
-                          navigate(e.target.href);
+                        // Clicking on a tags with nested elements (i.e. span) returns the wrong 'target'. That's why we need to find the correct node ourselves.
+                        const href = e?.path?.length && e.path.find((o) => o.href);
+                        if (href) {
+                          navigate(href);
                         }
 
                         dispatch({ type: 'CLOSE_DIALOG' });
