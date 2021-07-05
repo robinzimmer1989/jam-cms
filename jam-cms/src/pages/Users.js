@@ -46,7 +46,7 @@ const Users = () => {
       type: 'SET_DIALOG',
       payload: {
         open: true,
-        title: user?.id ? 'Update' : 'Add',
+        title: 'User',
         component: <UserForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
       },
     });
