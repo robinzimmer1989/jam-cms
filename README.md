@@ -42,11 +42,11 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - Advanced Custom Fields PRO (5.9.5)
 - Custom Post Type UI (1.9.2)
 - WP Gatsby (1.0.10)
-- WPGraphQL (1.4.3)
+- WPGraphQL (1.5.0)
 - WPGraphQL for Advanced Custom Fields (0.5.2)
 - WPGraphQL JWT Authentication (0.4.1)
   Follow the plugin instructions and add a secret key to your wp-config.php file.
-- Yoast SEO (16.6)
+- Yoast SEO (16.6.1)
 - WPGraphQL Yoast SEO Addon (4.14.2)
 - jamCMS (https://github.com/robinzimmer1989/jam-cms-wordpress)
 
@@ -58,9 +58,7 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 - Safe SVG (1.9.9)
 
 Things to know:
-
-- Pretty permalinks must be enabled ('Post name').
-- Revisions aren't working out of the box (at least not for Local by Flywheel / WPEngine), you need to enable them via wp-config.php like this:
+Revisions aren't working out of the box (at least not for Local by Flywheel / WPEngine), you need to enable them via wp-config.php like this:
 
 ```
 define( 'WP_POST_REVISIONS', true );
@@ -557,6 +555,12 @@ You can overcome this issue by simply overwriting the CSS properties in case the
 **Gatsby Image only supports fluid**
 
 ## Changelog
+
+### 1.8.5
+
+- Fix: discard changes not working when link target is nested
+- Fix: update site on settings page causes other field values to disappear temporarily
+- Add siteTitle to page context
 
 ### 1.8.4
 
