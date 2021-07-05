@@ -19,7 +19,7 @@ export const updateSite = async (args, dispatch, config) => {
 
   if (result) {
     dispatch({ type: 'ADD_SITE', payload: result });
-    dispatch({ type: 'ADD_EDITOR_SITE', payload: args });
+    dispatch({ type: 'ADD_EDITOR_SITE', payload: result });
   }
 
   return result;
