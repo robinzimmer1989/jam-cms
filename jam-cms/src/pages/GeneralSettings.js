@@ -124,7 +124,7 @@ const GeneralSettings = () => {
           </Space>
         </Card>
 
-        <Card title={`Build`}>
+        <Card title={'Sync'}>
           <Space direction="vertical" size={20}>
             <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
 
