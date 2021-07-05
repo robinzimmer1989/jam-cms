@@ -10,7 +10,7 @@ var axios = require('axios');
 
 module.exports = /*#__PURE__*/function () {
   var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref, pluginOptions) {
-    var reporter, source, apiKey, url, response, _yield$response, themeOptions;
+    var reporter, source, apiKey, url, response, _yield$response, _yield$response$data, siteTitle, themeOptions;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
@@ -40,23 +40,28 @@ module.exports = /*#__PURE__*/function () {
 
           case 11:
             _yield$response = _context.sent;
-            themeOptions = _yield$response.data.themeOptions;
-            return _context.abrupt("return", themeOptions);
+            _yield$response$data = _yield$response.data;
+            siteTitle = _yield$response$data.siteTitle;
+            themeOptions = _yield$response$data.themeOptions;
+            return _context.abrupt("return", {
+              siteTitle: siteTitle,
+              themeOptions: themeOptions
+            });
 
-          case 16:
-            _context.prev = 16;
+          case 18:
+            _context.prev = 18;
             _context.t0 = _context["catch"](5);
 
             if (_context.t0.response && _context.t0.response.data.message) {
               reporter.error(_context.t0.response.data.message);
             }
 
-          case 19:
+          case 21:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[5, 16]]);
+    }, _callee, null, [[5, 18]]);
   }));
 
   return function (_x, _x2) {

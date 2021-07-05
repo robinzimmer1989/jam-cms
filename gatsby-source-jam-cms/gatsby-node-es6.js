@@ -150,7 +150,7 @@ exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
 var createPages = /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref5, pluginOptions) {
-    var store, actions, reporter, graphql, settings, fields, jamCMS, fieldsObject, themeOptions, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
+    var store, actions, reporter, graphql, settings, fields, jamCMS, fieldsObject, _yield$getThemeSettin, siteTitle, themeOptions, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
 
     return _regenerator["default"].wrap(function _callee5$(_context6) {
       while (1) {
@@ -193,25 +193,27 @@ var createPages = /*#__PURE__*/function () {
             }, pluginOptions);
 
           case 11:
-            themeOptions = _context6.sent;
+            _yield$getThemeSettin = _context6.sent;
+            siteTitle = _yield$getThemeSettin.siteTitle;
+            themeOptions = _yield$getThemeSettin.themeOptions;
             allNodes = {};
-            _context6.prev = 13;
-            _context6.next = 16;
+            _context6.prev = 15;
+            _context6.next = 18;
             return graphql(
             /* GraphQL */
             "\n      query ALL_CONTENT_TYPES {\n        allWpContentType {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 16:
+          case 18:
             _yield$graphql = _context6.sent;
             allWpContentType = _yield$graphql.data.allWpContentType;
             _iterator = _createForOfIteratorHelper(allWpContentType.nodes);
-            _context6.prev = 19;
+            _context6.prev = 21;
 
             _iterator.s();
 
-          case 21:
+          case 23:
             if ((_step = _iterator.n()).done) {
-              _context6.next = 35;
+              _context6.next = 37;
               break;
             }
 
@@ -219,60 +221,60 @@ var createPages = /*#__PURE__*/function () {
             postType = contentType.graphqlSingleName; // Don't create single pages for media items
 
             if (!(postType === 'mediaItem')) {
-              _context6.next = 26;
+              _context6.next = 28;
               break;
             }
 
-            return _context6.abrupt("continue", 33);
+            return _context6.abrupt("continue", 35);
 
-          case 26:
+          case 28:
             // Capitalize post type name
             nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
             gatsbyNodeListFieldName = "allWp".concat(nodesTypeName);
-            _context6.next = 30;
+            _context6.next = 32;
             return graphql(
             /* GraphQL */
-            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              databaseId\n              id\n              uri\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
+            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId              \n              uri\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
 
-          case 30:
+          case 32:
             _yield$graphql2 = _context6.sent;
             data = _yield$graphql2.data;
             allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
 
-          case 33:
-            _context6.next = 21;
-            break;
-
           case 35:
-            _context6.next = 40;
+            _context6.next = 23;
             break;
 
           case 37:
-            _context6.prev = 37;
-            _context6.t0 = _context6["catch"](19);
+            _context6.next = 42;
+            break;
+
+          case 39:
+            _context6.prev = 39;
+            _context6.t0 = _context6["catch"](21);
 
             _iterator.e(_context6.t0);
 
-          case 40:
-            _context6.prev = 40;
+          case 42:
+            _context6.prev = 42;
 
             _iterator.f();
 
-            return _context6.finish(40);
-
-          case 43:
-            _context6.next = 48;
-            break;
+            return _context6.finish(42);
 
           case 45:
-            _context6.prev = 45;
-            _context6.t1 = _context6["catch"](13);
+            _context6.next = 50;
+            break;
+
+          case 47:
+            _context6.prev = 47;
+            _context6.t1 = _context6["catch"](15);
 
             if (_context6.t1.response && _context6.t1.response.data.message) {
               reporter.error(_context6.t1.response.data.message);
             }
 
-          case 48:
+          case 50:
             // Initialize missing templates object
             missingTemplates = {};
             allowedExtensions = ['.js', '.jsx', '.tsx'];
@@ -302,7 +304,7 @@ var createPages = /*#__PURE__*/function () {
               return thePath;
             };
 
-            _context6.next = 53;
+            _context6.next = 55;
             return Promise.all(Object.keys(allNodes).map( /*#__PURE__*/function () {
               var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(postType) {
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
@@ -312,12 +314,12 @@ var createPages = /*#__PURE__*/function () {
                         _context3.next = 2;
                         return Promise.all(allNodes[postType].map( /*#__PURE__*/function () {
                           var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(node, i) {
-                            var id, uri, templateName, isArchive, archivePostType, templatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
+                            var id, databaseId, uri, templateName, isArchive, archivePostType, templatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
                             return _regenerator["default"].wrap(function _callee2$(_context2) {
                               while (1) {
                                 switch (_context2.prev = _context2.next) {
                                   case 0:
-                                    id = node.id, uri = node.uri, templateName = node.template.templateName;
+                                    id = node.id, databaseId = node.databaseId, uri = node.uri, templateName = node.template.templateName;
                                     isArchive = templateName.startsWith('Archive');
                                     archivePostType = templateName.replace('Archive', '').toLowerCase();
 
@@ -350,9 +352,11 @@ var createPages = /*#__PURE__*/function () {
                                             path: pathname,
                                             context: {
                                               id: id,
+                                              databaseId: databaseId,
+                                              siteTitle: siteTitle,
                                               themeOptions: themeOptions,
                                               pagination: {
-                                                basePath: (themeOptions === null || themeOptions === void 0 ? void 0 : themeOptions.frontPage) === id ? '/' : uri,
+                                                basePath: uri,
                                                 numberOfPosts: numberOfPosts,
                                                 postsPerPage: postsPerPageUsed,
                                                 numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
@@ -368,6 +372,8 @@ var createPages = /*#__PURE__*/function () {
                                           path: uri,
                                           context: {
                                             id: id,
+                                            databaseId: databaseId,
+                                            siteTitle: siteTitle,
                                             themeOptions: themeOptions,
                                             pagination: {},
                                             jamCMS: jamCMS
@@ -410,18 +416,18 @@ var createPages = /*#__PURE__*/function () {
               };
             }()));
 
-          case 53:
-            _context6.prev = 53;
-            _context6.next = 56;
+          case 55:
+            _context6.prev = 55;
+            _context6.next = 58;
             return graphql(
             /* GraphQL */
             "\n      query ALL_TAXONOMIES {\n        allWpTaxonomy {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 56:
+          case 58:
             _yield$graphql3 = _context6.sent;
             allWpTaxonomy = _yield$graphql3.data.allWpTaxonomy;
             _iterator3 = _createForOfIteratorHelper(allWpTaxonomy.nodes);
-            _context6.prev = 59;
+            _context6.prev = 61;
             _loop = /*#__PURE__*/_regenerator["default"].mark(function _loop() {
               var taxonomy, graphqlSingleName, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql4, data;
 
@@ -446,7 +452,7 @@ var createPages = /*#__PURE__*/function () {
                       _context5.next = 8;
                       return graphql(
                       /* GraphQL */
-                      "\n        query ALL_TERM_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              slug\n              uri\n            }\n          }\n        }\n      "));
+                      "\n        query ALL_TERM_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId\n              slug\n              uri\n            }\n          }\n        }\n      "));
 
                     case 8:
                       _yield$graphql4 = _context5.sent;
@@ -454,7 +460,7 @@ var createPages = /*#__PURE__*/function () {
                       _context5.next = 12;
                       return Promise.all(data[gatsbyNodeListFieldName].nodes.map( /*#__PURE__*/function () {
                         var _ref9 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(node, i) {
-                          var templatePath, uri, slug, id;
+                          var templatePath, id, databaseId, uri, slug;
                           return _regenerator["default"].wrap(function _callee4$(_context4) {
                             while (1) {
                               switch (_context4.prev = _context4.next) {
@@ -462,12 +468,14 @@ var createPages = /*#__PURE__*/function () {
                                   templatePath = getPath('taxonomies', graphqlSingleName, 'single');
 
                                   if (_fs["default"].existsSync(templatePath)) {
-                                    uri = node.uri, slug = node.slug, id = node.id;
+                                    id = node.id, databaseId = node.databaseId, uri = node.uri, slug = node.slug;
                                     actions.createPage({
                                       component: templatePath,
                                       path: uri,
                                       context: {
                                         id: id,
+                                        databaseId: databaseId,
+                                        siteTitle: siteTitle,
                                         slug: slug,
                                         themeOptions: themeOptions,
                                         jamCMS: jamCMS
@@ -506,63 +514,63 @@ var createPages = /*#__PURE__*/function () {
 
             _iterator3.s();
 
-          case 62:
+          case 64:
             if ((_step3 = _iterator3.n()).done) {
+              _context6.next = 71;
+              break;
+            }
+
+            return _context6.delegateYield(_loop(), "t2", 66);
+
+          case 66:
+            _ret = _context6.t2;
+
+            if (!(_ret === "continue")) {
               _context6.next = 69;
               break;
             }
 
-            return _context6.delegateYield(_loop(), "t2", 64);
-
-          case 64:
-            _ret = _context6.t2;
-
-            if (!(_ret === "continue")) {
-              _context6.next = 67;
-              break;
-            }
-
-            return _context6.abrupt("continue", 67);
-
-          case 67:
-            _context6.next = 62;
-            break;
+            return _context6.abrupt("continue", 69);
 
           case 69:
-            _context6.next = 74;
+            _context6.next = 64;
             break;
 
           case 71:
-            _context6.prev = 71;
-            _context6.t3 = _context6["catch"](59);
+            _context6.next = 76;
+            break;
+
+          case 73:
+            _context6.prev = 73;
+            _context6.t3 = _context6["catch"](61);
 
             _iterator3.e(_context6.t3);
 
-          case 74:
-            _context6.prev = 74;
+          case 76:
+            _context6.prev = 76;
 
             _iterator3.f();
 
-            return _context6.finish(74);
-
-          case 77:
-            _context6.next = 82;
-            break;
+            return _context6.finish(76);
 
           case 79:
-            _context6.prev = 79;
-            _context6.t4 = _context6["catch"](53);
+            _context6.next = 84;
+            break;
+
+          case 81:
+            _context6.prev = 81;
+            _context6.t4 = _context6["catch"](55);
 
             if (_context6.t4.response && _context6.t4.response.data.message) {
               reporter.error(_context6.t4.response.data.message);
             }
 
-          case 82:
+          case 84:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee5, null, [[13, 45], [19, 37, 40, 43], [53, 79], [59, 71, 74, 77]]);
+    }, _callee5, null, [[15, 47], [21, 39, 42, 45], [55, 81], [61, 73, 76, 79]]);
   }));
 
   return function createPages(_x3, _x4) {

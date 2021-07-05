@@ -96,7 +96,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   // Import field object
   const fieldsObject = await import(fieldsPath);
 
-  const themeOptions = await getThemeSettings({ reporter }, pluginOptions);
+  const { siteTitle, themeOptions } = await getThemeSettings({ reporter }, pluginOptions);
 
   const allNodes = {};
 
@@ -130,8 +130,8 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
         query ALL_CONTENT_NODES {
             ${gatsbyNodeListFieldName}{
             nodes {
-              databaseId
               id
+              databaseId              
               uri
               template {
                 templateName
@@ -176,6 +176,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
         allNodes[postType].map(async (node, i) => {
           let {
             id,
+            databaseId,
             uri,
             template: { templateName },
           } = node;
@@ -215,9 +216,11 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
                   path: pathname,
                   context: {
                     id,
+                    databaseId,
+                    siteTitle,
                     themeOptions,
                     pagination: {
-                      basePath: themeOptions?.frontPage === id ? '/' : uri,
+                      basePath: uri,
                       numberOfPosts,
                       postsPerPage: postsPerPageUsed,
                       numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
@@ -231,7 +234,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
               actions.createPage({
                 component: templatePath,
                 path: uri,
-                context: { id, themeOptions, pagination: {}, jamCMS },
+                context: { id, databaseId, siteTitle, themeOptions, pagination: {}, jamCMS },
               });
             }
           } else {
@@ -281,6 +284,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             ${gatsbyNodeListFieldName}{
             nodes {
               id
+              databaseId
               slug
               uri
             }
@@ -293,12 +297,12 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
           const templatePath = getPath('taxonomies', graphqlSingleName, 'single');
 
           if (fs.existsSync(templatePath)) {
-            const { uri, slug, id } = node;
+            const { id, databaseId, uri, slug } = node;
 
             actions.createPage({
               component: templatePath,
               path: uri,
-              context: { id, slug, themeOptions, jamCMS },
+              context: { id, databaseId, siteTitle, slug, themeOptions, jamCMS },
             });
           } else {
             // Check if error was already shown

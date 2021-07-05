@@ -345,6 +345,7 @@ const PostEditor = (props) => {
                   <Component
                     data={getPostData()}
                     pageContext={{
+                      siteTitle: sites?.[siteID]?.title,
                       jamCMS: {
                         sidebar: {
                           active: sidebarActive,
