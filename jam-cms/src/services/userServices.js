@@ -1,7 +1,7 @@
 import { db } from '.';
 
-export const addUser = async ({ siteID, email, role }, dispatch, config) => {
-  let result = await db('createUser', { siteID, email, role }, dispatch, config);
+export const addUser = async ({ siteID, email, role, sendEmail }, dispatch, config) => {
+  let result = await db('createUser', { siteID, email, role, sendEmail }, dispatch, config);
   return result;
 };
 

@@ -1,8 +1,8 @@
 import { userServices } from '../services';
 import { authActions } from '../actions';
 
-export const addUser = async ({ siteID, email, role }, dispatch, config) => {
-  const result = await userServices.addUser({ siteID, email, role }, dispatch, config);
+export const addUser = async ({ siteID, email, role, sendEmail }, dispatch, config) => {
+  const result = await userServices.addUser({ siteID, email, role, sendEmail }, dispatch, config);
   return result;
 };
 

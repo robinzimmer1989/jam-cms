@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Button, Select } from 'antd';
+import { Space, Button, Select, Checkbox } from 'antd';
 
 // import app components
 import Input from './Input';
@@ -14,6 +14,7 @@ const UserForm = (props) => {
 
   const [email, setEmail] = useState(defaultEmail);
   const [role, setRole] = useState(defaultRole);
+  const [sendEmail, setSendEmail] = useState('checked');
 
   const userExists = !!id;
 
@@ -25,7 +26,7 @@ const UserForm = (props) => {
     if (id) {
       onUpdate({ id, role });
     } else {
-      onAdd({ email, role });
+      onAdd({ email, role, sendEmail: sendEmail === 'checked' });
     }
 
     dispatch({ type: 'CLOSE_DIALOG' });
@@ -50,6 +51,12 @@ const UserForm = (props) => {
           <Select.Option value={'administrator'} children={'Admin'} />
         </Select>
       </Space>
+
+      {!id && (
+        <Checkbox defaultValue={sendEmail} onChange={(e) => setSendEmail(e.target.checked)}>
+          Send new user email
+        </Checkbox>
+      )}
 
       <Button children={userExists ? 'Update' : 'Add'} onClick={handleSubmit} type="primary" />
     </Space>

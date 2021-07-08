@@ -51,8 +51,8 @@ const Users = () => {
       },
     });
 
-  const handleAdd = async ({ email, role }) => {
-    const result = await userActions.addUser({ siteID, email, role }, dispatch, config);
+  const handleAdd = async ({ email, role, sendEmail }) => {
+    const result = await userActions.addUser({ siteID, email, role, sendEmail }, dispatch, config);
 
     if (result) {
       setItems((items) => [result, ...items]);
