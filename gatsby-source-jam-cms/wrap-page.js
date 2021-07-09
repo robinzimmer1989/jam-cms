@@ -52,9 +52,6 @@ module.exports = function (_ref, _ref2) {
     fields: fields,
     source: source,
     settings: settings,
-    siteID: siteID,
-    onLogout: function onLogout() {
-      return navigate('/jam-cms');
-    }
+    siteID: siteID
   }), element);
 };
