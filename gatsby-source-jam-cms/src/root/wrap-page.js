@@ -37,14 +37,7 @@ try {
 
 // eslint-disable-next-line react/prop-types,react/display-name
 module.exports = ({ element, props }, { source, settings, siteID }) => (
-  <JamCms
-    {...props}
-    fields={fields}
-    source={source}
-    settings={settings}
-    siteID={siteID}
-    onLogout={() => navigate('/jam-cms')}
-  >
+  <JamCms {...props} fields={fields} source={source} settings={settings} siteID={siteID}>
     {element}
   </JamCms>
 );

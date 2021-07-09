@@ -13,11 +13,9 @@ module.exports = async ({ reporter }, pluginOptions) => {
   try {
     const response = await axios.get(`${url}/wp-json/jamcms/v1/getBuildSite?apiKey=${apiKey}`);
 
-    const {
-      data: { siteTitle, themeOptions },
-    } = await response;
-
-    return { siteTitle, themeOptions };
+    if (response && response.data) {
+      return response.data;
+    }
   } catch (err) {
     if (err.response && err.response.data.message) {
       reporter.error(err.response.data.message);
