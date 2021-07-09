@@ -92,7 +92,7 @@ const Gallery = (props) => {
               </RightIcon>
 
               <RemoveIcon className="icon" onClick={() => handleRemove(i)}>
-                <CloseCircleOutlined style={{ color: colors.warning }} />
+                <CloseCircleOutlined style={{ color: colors.danger }} />
               </RemoveIcon>
             </GalleryItem>
           );

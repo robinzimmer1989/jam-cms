@@ -142,11 +142,11 @@ const Repeater = (props) => {
                                       title="Are you sure？"
                                       onConfirm={() => handleRemove(index)}
                                       icon={
-                                        <QuestionCircleOutlined style={{ color: colors.warning }} />
+                                        <QuestionCircleOutlined style={{ color: colors.danger }} />
                                       }
                                       placement="left"
                                     >
-                                      <DeleteTwoTone twoToneColor={colors.warning} />
+                                      <DeleteTwoTone twoToneColor={colors.danger} />
                                     </Popconfirm>
                                   </DeleteIconContainer>
                                 </DeleteIcon>
