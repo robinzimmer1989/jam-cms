@@ -19,6 +19,7 @@ import validateEmail from './validateEmail';
 import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
 import formatFields from './formatFields';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './renderImage' was resolved to '/Users/rob... Remove this comment to see the full error message
 import renderImage from './renderImage';
 import addPost from './addPost';
 import useOnScreen from './useOnScreen';

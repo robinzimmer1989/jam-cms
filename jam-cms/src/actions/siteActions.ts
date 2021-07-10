@@ -3,7 +3,10 @@ import { navigate } from '@reach/router';
 import { siteServices } from '../services';
 import getRoute from '../routes';
 
-export const addSite = async ({ title, ownerID }, dispatch, config) => {
+export const addSite = async ({
+  title,
+  ownerID
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.addSite({ title, ownerID }, dispatch, config);
 
   if (result) {
@@ -14,7 +17,7 @@ export const addSite = async ({ title, ownerID }, dispatch, config) => {
   return result;
 };
 
-export const updateSite = async (args, dispatch, config) => {
+export const updateSite = async (args: any, dispatch: any, config: any) => {
   const result = await siteServices.updateSite(args, dispatch, config);
 
   if (result) {
@@ -25,7 +28,9 @@ export const updateSite = async (args, dispatch, config) => {
   return result;
 };
 
-export const deleteSite = async ({ id }, dispatch, config) => {
+export const deleteSite = async ({
+  id
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.deleteSite({ id }, dispatch, config);
 
   if (result) {
@@ -35,7 +40,7 @@ export const deleteSite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const getSites = async (args, dispatch, config) => {
+export const getSites = async (args: any, dispatch: any, config: any) => {
   const result = await siteServices.getSites(args, dispatch, config);
 
   if (result) {
@@ -45,7 +50,10 @@ export const getSites = async (args, dispatch, config) => {
   return result;
 };
 
-export const getSite = async ({ siteID, siteHasChanged }, dispatch, config) => {
+export const getSite = async ({
+  siteID,
+  siteHasChanged
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
@@ -60,7 +68,9 @@ export const getSite = async ({ siteID, siteHasChanged }, dispatch, config) => {
   return result;
 };
 
-export const deploySite = async ({ id }, dispatch, config) => {
+export const deploySite = async ({
+  id
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.deploySite({ id }, dispatch, config);
 
   if (result) {
@@ -70,7 +80,10 @@ export const deploySite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
+export const syncFields = async ({
+  fields,
+  apiKey
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.syncFields({ fields, apiKey }, dispatch, config);
 
   if (result) {
@@ -80,7 +93,9 @@ export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
   return result;
 };
 
-export const getUnpublishedChanges = async ({ siteID }, dispatch, config) => {
+export const getUnpublishedChanges = async ({
+  siteID
+}: any, dispatch: any, config: any) => {
   const result = await siteServices.getUnpublishedChanges({ siteID }, dispatch, config);
   return result;
 };

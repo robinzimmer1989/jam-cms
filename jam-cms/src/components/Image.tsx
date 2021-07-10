@@ -1,14 +1,16 @@
 import React from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Image as AntImage } from 'antd';
 
 import { colors } from '../theme';
 
-const Image = (props) => {
+const Image = (props: any) => {
   const { image, bg, width, height, preview = false, ...rest } = props;
 
   if (!image?.sourceUrl) {
     if (bg) {
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       return <Container width={width} height={height} />;
     }
 
@@ -16,7 +18,9 @@ const Image = (props) => {
   }
 
   return bg ? (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container width={width} height={height}>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AntImage
         preview={preview}
         src={image.sourceUrl}
@@ -25,6 +29,7 @@ const Image = (props) => {
       />
     </Container>
   ) : (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <AntImage
       preview={preview}
       src={image.sourceUrl}
@@ -35,8 +40,12 @@ const Image = (props) => {
 };
 
 const Container = styled.div`
-  height: ${({ height }) => (height ? `${height}px` : '100%')};
-  width: ${({ width }) => (width ? `${width}px` : '100%')};
+  height: ${({
+  height
+}: any) => (height ? `${height}px` : '100%')};
+  width: ${({
+  width
+}: any) => (width ? `${width}px` : '100%')};
   background: ${colors.secondaryContrast};
 
   .ant-image {

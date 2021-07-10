@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Space, Button, notification, Tooltip } from 'antd';
 import { DeploymentUnitOutlined } from '@ant-design/icons';
 
 // import app components
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { siteActions } from '../actions';
 
-const DeploymentBadge = (props) => {
+const DeploymentBadge = (props: any) => {
   const {
     deployment: { badgeImage, badgeLink, buildHook, lastBuild },
   } = props;
@@ -22,7 +24,7 @@ const DeploymentBadge = (props) => {
   ] = useStore();
 
   useEffect(() => {
-    let interval = null;
+    let interval: any = null;
 
     if (badgeImage) {
       interval = setInterval(() => {
@@ -50,22 +52,30 @@ const DeploymentBadge = (props) => {
   };
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Space size={20}>
       {(deploymentImage || badgeImage) && lastBuild && (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <>
           {badgeLink && authUser?.capabilities?.manage_options ? (
+            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Tooltip title="Open Deploy" placement="bottom">
+              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <DeploymentLink href={badgeLink} target="_blank" rel="noopener noreferrer">
+                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <DeploymentStatus src={deploymentImage || badgeImage} />
               </DeploymentLink>
             </Tooltip>
           ) : (
+            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <DeploymentStatus src={deploymentImage || badgeImage} />
           )}
         </>
       )}
       {buildHook && (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Tooltip title="Deploy Website" placement="bottom">
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button icon={<DeploymentUnitOutlined />} onClick={handleDeploy} />
         </Tooltip>
       )}

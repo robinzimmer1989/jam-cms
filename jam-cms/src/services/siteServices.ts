@@ -2,11 +2,11 @@
 import { db } from '.';
 import { formatSite } from '../utils';
 
-export const getSites = async ({}, dispatch, config) => {
+export const getSites = async ({}, dispatch: any, config: any) => {
   let result = await db('getSites', {}, dispatch, config);
 
   if (result) {
-    result = result.reduce((obj, item) => {
+    result = result.reduce((obj: any, item: any) => {
       obj[item.id] = item;
       return obj;
     }, {});
@@ -15,7 +15,9 @@ export const getSites = async ({}, dispatch, config) => {
   return result;
 };
 
-export const getSite = async ({ siteID }, dispatch, config) => {
+export const getSite = async ({
+  siteID
+}: any, dispatch: any, config: any) => {
   let result = await db('getSite', { siteID }, dispatch, config);
 
   if (result) {
@@ -24,7 +26,9 @@ export const getSite = async ({ siteID }, dispatch, config) => {
   return result;
 };
 
-export const addSite = async ({ title }, dispatch, config) => {
+export const addSite = async ({
+  title
+}: any, dispatch: any, config: any) => {
   let result = await db('createSite', { title }, dispatch, config);
 
   if (result) {
@@ -35,9 +39,19 @@ export const addSite = async ({ title }, dispatch, config) => {
 };
 
 export const updateSite = async (
-  { id, themeOptions, frontPage, deployment, title, siteUrl, googleMapsApi, apiKey, editorOptions },
-  dispatch,
-  config
+  {
+    id,
+    themeOptions,
+    frontPage,
+    deployment,
+    title,
+    siteUrl,
+    googleMapsApi,
+    apiKey,
+    editorOptions
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   let result = await db(
     'updateSite',
@@ -63,7 +77,9 @@ export const updateSite = async (
   return result;
 };
 
-export const deleteSite = async ({ id }, dispatch, config) => {
+export const deleteSite = async ({
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('deleteSite', { id }, dispatch, config);
 
   if (result) {
@@ -73,7 +89,9 @@ export const deleteSite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const deploySite = async ({ id }, dispatch, config) => {
+export const deploySite = async ({
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('deploySite', { id }, dispatch, config);
 
   if (result) {
@@ -83,7 +101,10 @@ export const deploySite = async ({ id }, dispatch, config) => {
   return result;
 };
 
-export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
+export const syncFields = async ({
+  fields,
+  apiKey
+}: any, dispatch: any, config: any) => {
   let result = await db('syncFields', { fields: JSON.stringify(fields), apiKey }, dispatch, config);
 
   if (result) {
@@ -93,7 +114,9 @@ export const syncFields = async ({ fields, apiKey }, dispatch, config) => {
   return result;
 };
 
-export const getUnpublishedChanges = async ({ siteID }, dispatch, config) => {
+export const getUnpublishedChanges = async ({
+  siteID
+}: any, dispatch: any, config: any) => {
   const result = await db('getUnpublishedChanges', { siteID }, dispatch, config);
   return result;
 };

@@ -1,7 +1,7 @@
 import formatSlug from './formatSlug';
 import getParentSlug from './getParentSlug';
 
-export default function generateSlug(postType, postID, frontPage, trailingSlash = false) {
+export default function generateSlug(postType: any, postID: any, frontPage: any, trailingSlash = false) {
   if (postID === frontPage) {
     return trailingSlash ? '/' : '';
   }

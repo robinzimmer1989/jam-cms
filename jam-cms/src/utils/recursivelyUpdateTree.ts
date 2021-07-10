@@ -1,9 +1,9 @@
-export default function recursivelyUpdateTree(node, func, param) {
+export default function recursivelyUpdateTree(node: any, func: any, param: any) {
   if (typeof func !== 'function' || !node.hasOwnProperty('children') || node.children.length < 1) {
     return;
   }
 
-  const newNodeChildren = node.children.map((child) => {
+  const newNodeChildren = node.children.map((child: any) => {
     const newChild = func(node, child, param);
 
     return {
@@ -13,12 +13,12 @@ export default function recursivelyUpdateTree(node, func, param) {
     };
   });
 
-  function recurseChildren(parent, children, func, param) {
+  function recurseChildren(parent: any, children: any, func: any, param: any) {
     if (!children) {
       return;
     }
 
-    const newChildren = children.map((child) => {
+    const newChildren = children.map((child: any) => {
       const newChild = func(parent, child, param);
 
       if (child.hasOwnProperty('children') && child.children.length > 0) {

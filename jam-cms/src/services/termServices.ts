@@ -2,9 +2,17 @@
 import { db } from '.';
 
 export const addTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description },
-  dispatch,
-  config
+  {
+    siteID,
+    taxonomyID,
+    id,
+    title,
+    slug,
+    parentID,
+    description
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   let result = await db(
     'createTerm',
@@ -16,9 +24,17 @@ export const addTerm = async (
 };
 
 export const updateTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description },
-  dispatch,
-  config
+  {
+    siteID,
+    taxonomyID,
+    id,
+    title,
+    slug,
+    parentID,
+    description
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   let result = await db(
     'updateTerm',
@@ -38,7 +54,11 @@ export const updateTerm = async (
   return result;
 };
 
-export const deleteTerm = async ({ siteID, taxonomyID, id }, dispatch, config) => {
+export const deleteTerm = async ({
+  siteID,
+  taxonomyID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('deleteTerm', { siteID, taxonomyID, id }, dispatch, config);
   return result;
 };

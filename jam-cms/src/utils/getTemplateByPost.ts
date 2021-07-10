@@ -1,4 +1,4 @@
-export default function getTemplateByPost(post, fields) {
+export default function getTemplateByPost(post: any, fields: any) {
   let template;
 
   if (post?.template.includes('archive-')) {

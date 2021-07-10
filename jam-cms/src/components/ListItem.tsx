@@ -1,14 +1,16 @@
 import React from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Card, List, Typography } from 'antd';
 import { Link } from '@reach/router';
 import Parser from 'html-react-parser';
 
 // import app components
+// @ts-expect-error ts-migrate(6142) FIXME: Module './GatsbyImage' was resolved to '/Users/rob... Remove this comment to see the full error message
 import Img from './GatsbyImage';
 import { colors } from '../theme';
 
-const ListItem = (props) => {
+const ListItem = (props: any) => {
   const {
     level = 0,
     link,
@@ -23,16 +25,19 @@ const ListItem = (props) => {
   } = props;
 
   const listItemTitle = (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Typography.Text strong>
       {Parser(title || '')}
       {status}
     </Typography.Text>
   );
 
+  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   let metaTitle = link ? <StyledLink to={link}>{listItemTitle}</StyledLink> : listItemTitle;
 
   if (info) {
     metaTitle = (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <>
         {metaTitle} - {info}
       </>
@@ -40,14 +45,20 @@ const ListItem = (props) => {
   }
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container level={level} {...rest}>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Card>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <List.Item actions={actions}>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <List.Item.Meta
             avatar={
               showImage && (
+                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <>
                   {image ? (
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <Img
                       image={image}
                       objectFit="cover"
@@ -56,6 +67,7 @@ const ListItem = (props) => {
                       style={{ width: '50px', height: '50px' }}
                     />
                   ) : (
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <ImagePlaceholder />
                   )}
                 </>
@@ -71,7 +83,9 @@ const ListItem = (props) => {
 };
 
 const Container = styled.div`
-  margin-left: ${({ level }) => `${level * 30}px`};
+  margin-left: ${({
+  level
+}: any) => `${level * 30}px`};
 
   .ant-card-body {
     padding: 0 20px;

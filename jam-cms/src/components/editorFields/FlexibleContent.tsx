@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled, { css } from 'styled-components';
 import { Collapse, Popconfirm, Menu, Dropdown, Space, Typography } from 'antd';
 import produce from 'immer';
 import { DeleteTwoTone, QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 // import app components
 import Caption from '../Caption';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../EditorFields' or its corres... Remove this comment to see the full error message
 import { getField } from '../EditorFields';
 import { colors } from '../../theme';
 
-const FlexibleContent = (props) => {
+const FlexibleContent = (props: any) => {
   const { id, label, instructions, site, items, value, onChange, dispatch } = props;
 
   const values = value || [];
 
   const [childActive, setChildActive] = useState([]);
 
-  const handleAdd = (id) => {
+  const handleAdd = (id: any) => {
     if (items) {
-      const layout = items.find((o) => o.id === id);
-      const newValues = produce(values, (draft) => {
+      const layout = items.find((o: any) => o.id === id);
+      const newValues = produce(values, (draft: any) => {
         draft.push({
           id,
-          ...layout.fields.reduce((ac, a) => ({ ...ac, [a.id]: a.defaultValue || '' }), {}),
+          // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
+          ...layout.fields.reduce((ac, a) => ({
+            ...ac,
+            [a.id]: a.defaultValue || ''
+          }), {}),
         });
 
         return draft;
@@ -35,8 +42,8 @@ const FlexibleContent = (props) => {
     }
   };
 
-  const handleRemove = (index) => {
-    const newValues = produce(values, (draft) => {
+  const handleRemove = (index: any) => {
+    const newValues = produce(values, (draft: any) => {
       draft.splice(index, 1);
       return draft;
     });
@@ -44,8 +51,8 @@ const FlexibleContent = (props) => {
     onChange(newValues);
   };
 
-  const handleChange = (item, index) => {
-    const newValues = produce(values, (draft) => {
+  const handleChange = (item: any, index: any) => {
+    const newValues = produce(values, (draft: any) => {
       draft[index][item.id] = item.value;
       return draft;
     });
@@ -53,11 +60,13 @@ const FlexibleContent = (props) => {
     onChange(newValues);
   };
 
-  const handleToggleChild = (key) => {
+  const handleToggleChild = (key: any) => {
     const newKeys = produce(childActive, (draft) => {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
       if (childActive.includes(key)) {
         draft = draft.filter((k) => k !== key);
       } else {
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
         draft.push(key);
       }
 
@@ -66,24 +75,25 @@ const FlexibleContent = (props) => {
     setChildActive(newKeys);
   };
 
-  const menuItems = items.map((o) => (
-    <Menu.Item key={o.id} children={o.label} onClick={() => handleAdd(o.id)} />
-  ));
+  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+  const menuItems = items.map((o: any) => <Menu.Item key={o.id} children={o.label} onClick={() => handleAdd(o.id)} />);
 
+  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   const menu = <Menu>{menuItems}</Menu>;
 
-  const getListStyle = (isDraggingOver) => ({
+  const getListStyle = (isDraggingOver: any) => ({
     background: isDraggingOver ? colors.tertiary : '#fff',
-    padding: 2,
+    padding: 2
   });
 
+  // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'isDragging' implicitly has an 'any' typ... Remove this comment to see the full error message
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: 'none',
     padding: 2,
-    ...draggableStyle,
+    ...draggableStyle
   });
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: any) => {
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -92,7 +102,7 @@ const FlexibleContent = (props) => {
     const index = result.source.index;
     const newIndex = result.destination.index;
 
-    const newValues = produce(values, (draft) => {
+    const newValues = produce(values, (draft: any) => {
       if (newIndex > -1 && newIndex < draft.length) {
         const temp = draft[index];
         draft[index] = draft[newIndex];
@@ -106,58 +116,76 @@ const FlexibleContent = (props) => {
   };
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <LabelContainer>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical" size={6}>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Caption children={label || id} />
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {instructions && <Typography.Text type="secondary" children={instructions} />}
         </Space>
       </LabelContainer>
       {values && (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <DragDropContext onDragEnd={handleDragEnd}>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
+            {(provided: any, snapshot: any) => (
+              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}
               >
-                {values.map((value, index) => {
-                  const layout = items.find((o) => o.id === value.id);
+                {values.map((value: any, index: any) => {
+                  const layout = items.find((o: any) => o.id === value.id);
 
                   return (
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <Draggable
                       key={index}
                       draggableId={`item-${index}`}
                       index={index}
+                      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
                       isDragDisabled={childActive.includes(index)}
                     >
-                      {(provided, snapshot) => (
+                      {(provided: any, snapshot: any) => (
+                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                         >
+                          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                           <Collapse
                             activeKey={childActive}
                             onChange={() => handleToggleChild(index)}
                             expandIconPosition="right"
                           >
+                            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                             <Collapse.Panel
                               key={index}
                               header={layout?.label || 'Not Found'}
                               extra={
-                                <DeleteIcon className={`icon`} onClick={(e) => e.stopPropagation()}>
+                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+                                <DeleteIcon className={`icon`} onClick={(e: any) => e.stopPropagation()}>
+                                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                   <DeleteIconContainer>
+                                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                     <Popconfirm
                                       title="Are you sure？"
                                       onConfirm={() => handleRemove(index)}
                                       icon={
+                                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                         <QuestionCircleOutlined style={{ color: colors.danger }} />
                                       }
                                       placement="left"
                                     >
+                                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                       <DeleteTwoTone twoToneColor={colors.danger} />
                                     </Popconfirm>
                                   </DeleteIconContainer>
@@ -165,8 +193,9 @@ const FlexibleContent = (props) => {
                               }
                             >
                               {layout?.fields &&
-                                layout.fields.map((field, fieldIndex) => {
+                                layout.fields.map((field: any, fieldIndex: any) => {
                                   return (
+                                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                     <div key={field.id}>
                                       {getField({
                                         field: {
@@ -175,7 +204,7 @@ const FlexibleContent = (props) => {
                                         },
                                         index,
                                         site,
-                                        onChangeElement: (value) => handleChange(value, index),
+                                        onChangeElement: (value: any) => handleChange(value, index),
                                         dispatch,
                                       })}
                                     </div>
@@ -195,13 +224,18 @@ const FlexibleContent = (props) => {
         </DragDropContext>
       )}
 
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AddContainer>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Dropdown
           overlay={menu}
           trigger={['click']}
+          // @ts-expect-error ts-migrate(2322) FIXME: Type '(triggerNode: HTMLElement) => (Node & Parent... Remove this comment to see the full error message
           getPopupContainer={(triggerNode) => triggerNode.parentNode}
         >
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <AddButton siblings={values && values.length > 0}>
+            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <PlusOutlined />
           </AddButton>
         </Dropdown>
@@ -232,7 +266,7 @@ const DeleteIconContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px;
-  opacity: ${(props) => (props.disabled ? 0.4 : 1)};
+  opacity: ${(props: any) => props.disabled ? 0.4 : 1};
 `;
 
 const DeleteIcon = styled.div`
@@ -262,7 +296,9 @@ const AddButton = styled.div`
     border-color: ${colors.tertiary};
   }
 
-  ${({ siblings }) =>
+  ${({
+  siblings
+}: any) =>
     !siblings &&
     css`
       border-color: ${colors.tertiary};

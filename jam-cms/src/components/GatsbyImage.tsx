@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { GatsbyImage as Image, getImage } from 'gatsby-plugin-image';
 
-const GatsbyImage = (props) => {
+const GatsbyImage = (props: any) => {
   const { image, alt = '', ...rest } = props;
 
   // useMemo prevents the element from re-rendering when dealing with SVG images
@@ -31,6 +31,7 @@ const GatsbyImage = (props) => {
         placeholder: { fallback: '' },
       };
     }
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return imageObject ? <Image {...rest} image={imageObject} alt={alt} /> : null;
   }, [image]);
 

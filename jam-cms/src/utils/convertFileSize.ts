@@ -9,7 +9,7 @@
  * @return Formatted string.
  */
 
-export default function convertFileSize(bytes, si = true, dp = 1) {
+export default function convertFileSize(bytes: any, si = true, dp = 1) {
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh) {

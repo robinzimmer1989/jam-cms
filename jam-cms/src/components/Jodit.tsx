@@ -1,16 +1,21 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled, { css, createGlobalStyle } from 'styled-components';
 import { Modal } from 'antd';
 
 // import app components
+// @ts-expect-error ts-migrate(6142) FIXME: Module './LinkSelector' was resolved to '/Users/ro... Remove this comment to see the full error message
 import LinkSelector from './LinkSelector';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './MediaLibrary' was resolved to '/Users/ro... Remove this comment to see the full error message
 import MediaLibrary from './MediaLibrary';
 import { colors } from '../theme';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 
+// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
 let JoditEditor = () => <></>;
 
-const HTMLEditor = (props) => {
+const HTMLEditor = (props: any) => {
   const { defaultValue = '', onChange } = props;
 
   const [
@@ -50,6 +55,7 @@ const HTMLEditor = (props) => {
 
   // Disable links in sidebar to allow for relative links (not catched by Jodit)
   useEffect(() => {
+    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     var anchors = document.querySelector('#jam-cms-sidebar').querySelectorAll('a');
 
     for (var i = 0; i < anchors.length; i++) {
@@ -62,15 +68,16 @@ const HTMLEditor = (props) => {
   const handleToggleFullscreen = () =>
     dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: !fullscreen } });
 
-  const handleSelectImage = (image) => {
+  const handleSelectImage = (image: any) => {
     const html = `<img src="${image.url}" alt="${image.altText}" />`;
+    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     editor.s.insertHTML(html);
 
     setModal(null);
     setEditor(null);
   };
 
-  const handleSelectLink = (link) => {
+  const handleSelectLink = (link: any) => {
     let target = '';
 
     if (link.target) {
@@ -79,6 +86,7 @@ const HTMLEditor = (props) => {
 
     const html = `<a href="${link.url}" ${target}>${link.title}</a>`;
 
+    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     editor.s.insertHTML(html);
 
     setModal(null);
@@ -108,10 +116,10 @@ const HTMLEditor = (props) => {
       controls: {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
         fullsize: {
-          exec: function (e) {
+          exec: function (e: any) {
             handleToggleFullscreen();
           },
-          update: function (e) {
+          update: function (e: any) {
             var t = e.j,
               n = fullscreen ? 'shrink' : 'fullsize';
             (e.state.activated = fullscreen),
@@ -123,13 +131,15 @@ const HTMLEditor = (props) => {
         link: {
           isActive:
             'function(e){var t=e.s.current();return Boolean(t&&i.Dom.closest(t,"a",e.editor))}',
-          popup: function (e, t, n, r) {
+          popup: function (e: any, t: any, n: any, r: any) {
             setEditor(e);
             setLink({
+              // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ title: any; url: any; target: ... Remove this comment to see the full error message
               title: e.s?.range.cloneContents().textContent || e.s.current()?.textContent || '',
               url: t && typeof t.getAttribute === 'function' ? t.getAttribute('href') : '',
               target: t.target || '',
             });
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"link"' is not assignable to par... Remove this comment to see the full error message
             setModal('link');
             return;
           },
@@ -146,35 +156,39 @@ const HTMLEditor = (props) => {
           tooltip: 'Image',
           iconURL:
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIGNsYXNzPSJqb2RpdC1pY29uX2ltYWdlIGpvZGl0LWljb24iPiA8cGF0aCBkPSJNNTc2IDU3NnEwIDgwLTU2IDEzNnQtMTM2IDU2LTEzNi01Ni01Ni0xMzYgNTYtMTM2IDEzNi01NiAxMzYgNTYgNTYgMTM2em0xMDI0IDM4NHY0NDhoLTE0MDh2LTE5MmwzMjAtMzIwIDE2MCAxNjAgNTEyLTUxMnptOTYtNzA0aC0xNjAwcS0xMyAwLTIyLjUgOS41dC05LjUgMjIuNXYxMjE2cTAgMTMgOS41IDIyLjV0MjIuNSA5LjVoMTYwMHExMyAwIDIyLjUtOS41dDkuNS0yMi41di0xMjE2cTAtMTMtOS41LTIyLjV0LTIyLjUtOS41em0xNjAgMzJ2MTIxNnEwIDY2LTQ3IDExM3QtMTEzIDQ3aC0xNjAwcS02NiAwLTExMy00N3QtNDctMTEzdi0xMjE2cTAtNjYgNDctMTEzdDExMy00N2gxNjAwcTY2IDAgMTEzIDQ3dDQ3IDExM3oiPjwvcGF0aD4gPC9zdmc+',
-          exec: function (e) {
+          exec: function (e: any) {
             setEditor(e);
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"image"' is not assignable to pa... Remove this comment to see the full error message
             setModal('image');
           },
         },
       ],
     };
 
-    return (
-      loaded && (
-        <JoditEditor
-          ref={editorRef}
-          value={defaultValue}
-          config={config}
-          onChange={(newContent) => {
-            setContent(newContent);
-            setIndex((index) => index + 1);
-          }}
-        />
-      )
+    return loaded && (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+      <JoditEditor
+        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ ref: MutableRefObject<null>; value: any; c... Remove this comment to see the full error message
+        ref={editorRef}
+        value={defaultValue}
+        config={config}
+        onChange={(newContent: any) => {
+          setContent(newContent);
+          setIndex((index) => index + 1);
+        }}
+      />
     );
   }, [loaded, fullscreen]);
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container fullscreen={fullscreen}>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Global />
 
       {jodit}
 
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Modal
         title={modal === 'image' ? 'Media' : 'Link'}
         visible={!!modal}
@@ -186,7 +200,9 @@ const HTMLEditor = (props) => {
         footer={null}
         destroyOnClose
       >
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {modal === 'image' && <MediaLibrary onSelect={handleSelectImage} allow={['image']} />}
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {modal === 'link' && <LinkSelector onChange={handleSelectLink} value={link} />}
       </Modal>
     </Container>
@@ -199,7 +215,9 @@ const Container = styled.div`
   }
 
   .jodit-container.jodit.jodit-wysiwyg_mode {
-    ${({ fullscreen }) =>
+    ${({
+  fullscreen
+}: any) =>
       fullscreen
         ? css`
             position: fixed;

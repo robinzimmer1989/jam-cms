@@ -6,7 +6,8 @@ import Parser from 'html-react-parser';
 import { getUser, getPreviewID } from '../utils/auth';
 import { authActions } from '../actions';
 
-const db = async (endpoint, params, dispatch, config) => {
+const db = async (endpoint: any, params: any, dispatch: any, config: any) => {
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
   const user = getUser(config);
 
   if (!user?.authToken && !getPreviewID()) {

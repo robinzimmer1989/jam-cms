@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 // import components
+// @ts-expect-error ts-migrate(6142) FIXME: Module './Loader' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Loader from './Loader';
 
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { authActions, userActions } from '../actions';
 import { getUser, getPreviewID } from '../utils/auth';
 
-const AuthProvider = (props) => {
+const AuthProvider = (props: any) => {
   const [
     {
       config,
@@ -18,11 +20,12 @@ const AuthProvider = (props) => {
 
   const [timer, setTimer] = useState(0);
 
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
   const user = getUser(config);
   const previewID = getPreviewID();
 
   useEffect(() => {
-    let intervalID = null;
+    let intervalID: any = null;
 
     if (user?.authToken) {
       intervalID = setInterval(() => {
@@ -56,6 +59,7 @@ const AuthProvider = (props) => {
     }
   }, []);
 
+  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return authUser || previewID ? props.children : <Loader />;
 };
 

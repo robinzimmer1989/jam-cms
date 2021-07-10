@@ -1,4 +1,4 @@
-export default function getCleanedFileName(fileName) {
+export default function getCleanedFileName(fileName: any) {
   const modifiedFileName = fileName.replace(/\s+/g, '-').toLowerCase();
 
   let fileNameArray = modifiedFileName.split('.');
@@ -7,7 +7,7 @@ export default function getCleanedFileName(fileName) {
 
   delete fileNameArray[fileNameArray.length - 1];
 
-  fileNameArray = fileNameArray.filter((r) => r);
+  fileNameArray = fileNameArray.filter((r: any) => r);
 
   const newFileName = `${fileNameArray.join('-')}.${extension}`;
 

@@ -5,7 +5,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 // import app components
 import Caption from './Caption';
 
-const Input = (props) => {
+const Input = (props: any) => {
   const {
     value,
     name,
@@ -20,10 +20,14 @@ const Input = (props) => {
   } = props;
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Space direction="vertical" size={6}>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {label && <Caption className={className} children={label} />}
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {instructions && <Typography type="secondary" children={instructions} />}
       {!!rows ? (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput.TextArea
           value={value}
           name={name}
@@ -34,6 +38,7 @@ const Input = (props) => {
           {...rest}
         />
       ) : type === 'password' ? (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput.Password
           value={value}
           name={name}
@@ -42,10 +47,12 @@ const Input = (props) => {
           className={className}
           type={type}
           autoComplete="off"
+          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           {...rest}
         />
       ) : (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput
           value={value}
           name={name}

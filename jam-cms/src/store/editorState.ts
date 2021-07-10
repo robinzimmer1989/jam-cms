@@ -11,10 +11,10 @@ export const editorState = {
   },
 };
 
-export const editorReducer = (state, action) => {
+export const editorReducer = (state: any, action: any) => {
   const { payload } = action;
 
-  return produce(state, (draft) => {
+  return produce(state, (draft: any) => {
     switch (action.type) {
       /******************************
        * Sites

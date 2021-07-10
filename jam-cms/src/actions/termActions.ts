@@ -1,9 +1,17 @@
 import { termServices } from '../services';
 
 export const addTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description },
-  dispatch,
-  config
+  {
+    siteID,
+    taxonomyID,
+    id,
+    title,
+    slug,
+    parentID,
+    description
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   const result = await termServices.addTerm(
     { siteID, taxonomyID, id, title, slug, parentID, description },
@@ -18,9 +26,17 @@ export const addTerm = async (
 };
 
 export const updateTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description },
-  dispatch,
-  config
+  {
+    siteID,
+    taxonomyID,
+    id,
+    title,
+    slug,
+    parentID,
+    description
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   const result = await termServices.updateTerm(
     { siteID, taxonomyID, id, title, slug, parentID, description },
@@ -35,7 +51,11 @@ export const updateTerm = async (
   return result;
 };
 
-export const deleteTerm = async ({ siteID, taxonomyID, id }, dispatch, config) => {
+export const deleteTerm = async ({
+  siteID,
+  taxonomyID,
+  id
+}: any, dispatch: any, config: any) => {
   const result = await termServices.deleteTerm({ siteID, taxonomyID, id }, dispatch, config);
 
   if (result) {

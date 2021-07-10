@@ -6,7 +6,7 @@ import getParameter from './getParameter';
 const storageKey = getStorageKey();
 const isBrowser = typeof window !== `undefined`;
 
-export const setUser = (user) => {
+export const setUser = (user: any) => {
   if (storageKey) {
     window.localStorage[storageKey] = JSON.stringify(user);
   }
@@ -50,7 +50,7 @@ export const getPreviewID = () => {
 
 export const getCurrentUser = () => isBrowser && getUser();
 
-export const logout = (onLogout) => {
+export const logout = (onLogout: any) => {
   if (!isBrowser) {
     return;
   }

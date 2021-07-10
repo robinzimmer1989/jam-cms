@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-export default function formatSlug(slug, trailingSlash = false) {
+export default function formatSlug(slug: any, trailingSlash = false) {
   let formattedSlug = slugify(slug, { lower: true, remove: /[*+~.()'"!:@]/g });
 
   formattedSlug = formattedSlug

@@ -1,17 +1,22 @@
 import React, { useMemo } from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { PageHeader, Button, Badge, Popover, List } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 import { Link, navigate } from '@reach/router';
 
 // import app components
+// @ts-expect-error ts-migrate(6142) FIXME: Module './DeploymentBadge' was resolved to '/Users... Remove this comment to see the full error message
 import DeploymentBadge from './DeploymentBadge';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './AvatarMenu' was resolved to '/Users/robi... Remove this comment to see the full error message
 import AvatarMenu from './AvatarMenu';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import getRoute from '../routes';
 
 const messages = {
   'undeployed-changes': {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     onClick: () => navigate(getRoute('dashboard')),
     title: 'Unpublished changes',
     description: 'Click the deployment button to publish the latest updates.',
@@ -29,7 +34,7 @@ const messages = {
   },
 };
 
-const CmsHeader = (props) => {
+const CmsHeader = (props: any) => {
   const { title } = props;
 
   const [
@@ -40,7 +45,7 @@ const CmsHeader = (props) => {
 
   const deployment = sites?.[siteID]?.deployment;
 
-  const notifications = [];
+  const notifications: any = [];
 
   // We're only pushing keys to the notifications array to improve useMemo performance
   if (deployment?.undeployedChanges) {
@@ -60,24 +65,30 @@ const CmsHeader = (props) => {
 
   // Add CMS errors
   if (sites?.[siteID]?.errors?.length) {
-    sites[siteID].errors.map((o) => notifications.push(o.id));
+    sites[siteID].errors.map((o: any) => notifications.push(o.id));
   }
 
   return useMemo(() => {
     const buttons = [];
 
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
 
     const notificationsContent = (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Notifications>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <List
           itemLayout="horizontal"
           dataSource={notifications}
           renderItem={(key) => {
-            const item = messages[key] || sites?.[siteID]?.errors.find((o) => o.id === key);
+            // @ts-expect-error ts-migrate(2538) FIXME: Type 'unknown' cannot be used as an index type.
+            const item = messages[key] || sites?.[siteID]?.errors.find((o: any) => o.id === key);
 
             return (
+              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <List.Item key={key} onClick={item.onClick}>
+                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <List.Item.Meta title={item.title} description={item.description} />
               </List.Item>
             );
@@ -87,31 +98,41 @@ const CmsHeader = (props) => {
     );
 
     buttons.push(
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Popover
         key={'notifications'}
         title="Notifications"
         content={notificationsContent}
+        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; title: str... Remove this comment to see the full error message
         arrow
         trigger={['click']}
         placement="bottomRight"
       >
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Badge size="small" count={notifications.length}>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button icon={<BellOutlined />} type="default" />
         </Badge>
       </Popover>
     );
 
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     buttons.push(<AvatarMenu key="avatar-menu" />);
 
     buttons.push(
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Link key="view-website" to="/">
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Button children="View Website" />
       </Link>
     );
 
     return (
+      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Container>
+        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Content>
+          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <PageHeader title={title} extra={buttons} />
         </Content>
       </Container>

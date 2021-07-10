@@ -9,10 +9,10 @@ const DEFAULT_STATE = {
 
 export const cmsState = { ...DEFAULT_STATE };
 
-export const sitesReducer = (state, action) => {
+export const sitesReducer = (state: any, action: any) => {
   const { payload } = action;
 
-  return produce(state, (draft) => {
+  return produce(state, (draft: any) => {
     switch (action.type) {
       case `SET_DEPLOYMENT_IMAGE`:
         draft.deploymentImage = payload;
@@ -56,7 +56,7 @@ export const sitesReducer = (state, action) => {
       case `UPDATE_TERM`:
         const termIndex = draft.sites[payload.siteID].taxonomies[
           payload.taxonomyID
-        ].terms.findIndex((o) => o.id === payload.id);
+        ].terms.findIndex((o: any) => o.id === payload.id);
         set(
           draft,
           `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${termIndex}`,
@@ -67,7 +67,7 @@ export const sitesReducer = (state, action) => {
       case `DELETE_TERM`:
         draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms = draft.sites[
           payload.siteID
-        ].taxonomies[payload.taxonomyID].terms.filter((o) => o.id !== parseInt(payload.id));
+        ].taxonomies[payload.taxonomyID].terms.filter((o: any) => o.id !== parseInt(payload.id));
         break;
 
       /******************************
@@ -86,7 +86,7 @@ export const sitesReducer = (state, action) => {
         break;
 
       case `DELETE_POSTS`:
-        payload.posts.map((o) => {
+        payload.posts.map((o: any) => {
           delete draft.sites[payload.siteID].postTypes[o.postTypeID].posts[o.id];
         });
         break;

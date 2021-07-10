@@ -1,4 +1,4 @@
-export default function getParentSlug(posts, parentID, slug = '') {
+export default function getParentSlug(posts: any, parentID: any, slug = '') {
   let newSlug = `/${slug}`;
 
   if (parentID && posts[parentID]) {

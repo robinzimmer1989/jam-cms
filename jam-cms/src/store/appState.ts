@@ -10,10 +10,10 @@ export const appState = {
   },
 };
 
-export const appReducer = (state, action) => {
+export const appReducer = (state: any, action: any) => {
   const { payload } = action;
 
-  return produce(state, (draft) => {
+  return produce(state, (draft: any) => {
     switch (action.type) {
       case `SET_MENU`:
         draft.menu = payload;

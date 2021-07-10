@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Button } from 'antd';
 
 // import app components
+// @ts-expect-error ts-migrate(6142) FIXME: Module './EditorWrapper' was resolved to '/Users/r... Remove this comment to see the full error message
 import EditorWrapper from './EditorWrapper';
+// @ts-expect-error ts-migrate(6142) FIXME: Module './Editor' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Editor from './Editor';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../Loader' was resolved to '/Users/robinzi... Remove this comment to see the full error message
 import Loader from '../Loader';
 
 import { auth } from '../../utils';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 import { previewActions } from '../../actions';
 
-const PreviewEditor = (props) => {
+const PreviewEditor = (props: any) => {
   const {
     pageContext: { databaseId: postID },
   } = props;
@@ -50,9 +55,12 @@ const PreviewEditor = (props) => {
   }, [postID]);
 
   return (
+    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <>
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <EditorWrapper loaded={loaded}>{loaded ? <Editor {...props} /> : <Loader />}</EditorWrapper>
 
+      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <PreviewBanner children={`Preview`} type="primary" />
     </>
   );

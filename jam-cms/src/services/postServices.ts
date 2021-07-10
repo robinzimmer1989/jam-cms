@@ -1,11 +1,19 @@
 import { db } from '.';
 
-export const addPost = async ({ siteID, postTypeID, title, parentID }, dispatch, config) => {
+export const addPost = async ({
+  siteID,
+  postTypeID,
+  title,
+  parentID
+}: any, dispatch: any, config: any) => {
   let result = await db('createPost', { siteID, title, postTypeID, parentID }, dispatch, config);
   return result;
 };
 
-export const getPost = async ({ siteID, postID }, dispatch, config) => {
+export const getPost = async ({
+  siteID,
+  postID
+}: any, dispatch: any, config: any) => {
   let result = await db('getPost', { siteID, postID }, dispatch, config);
   return result;
 };
@@ -24,10 +32,10 @@ export const updatePost = async (
     taxonomies,
     featuredImage,
     template,
-    templateObject,
-  },
-  dispatch,
-  config
+    templateObject
+  }: any,
+  dispatch: any,
+  config: any
 ) => {
   let result = await db(
     'updatePost',
@@ -53,22 +61,34 @@ export const updatePost = async (
   return result;
 };
 
-export const deletePost = async ({ siteID, id }, dispatch, config) => {
+export const deletePost = async ({
+  siteID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('deletePost', { siteID, id }, dispatch, config);
   return result;
 };
 
-export const emptyTrash = async ({ siteID, postTypeID }, dispatch, config) => {
+export const emptyTrash = async ({
+  siteID,
+  postTypeID
+}: any, dispatch: any, config: any) => {
   let result = await db('emptyTrash', { siteID, postTypeID }, dispatch, config);
   return result;
 };
 
-export const duplicatePost = async ({ siteID, id }, dispatch, config) => {
+export const duplicatePost = async ({
+  siteID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('duplicatePost', { siteID, id }, dispatch, config);
   return result;
 };
 
-export const reorderPosts = async ({ siteID, postIDs }, dispatch, config) => {
+export const reorderPosts = async ({
+  siteID,
+  postIDs
+}: any, dispatch: any, config: any) => {
   let result = await db(
     'reorderPosts',
     { siteID, postIDs: JSON.stringify(postIDs) },
@@ -78,17 +98,26 @@ export const reorderPosts = async ({ siteID, postIDs }, dispatch, config) => {
   return result;
 };
 
-export const refreshPostLock = async ({ siteID, id }, dispatch, config) => {
+export const refreshPostLock = async ({
+  siteID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('refreshPostLock', { siteID, id }, dispatch, config);
   return result;
 };
 
-export const removePostLock = async ({ siteID, id }, dispatch, config) => {
+export const removePostLock = async ({
+  siteID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('removePostLock', { siteID, id }, dispatch, config);
   return result;
 };
 
-export const takeOverPost = async ({ siteID, id }, dispatch, config) => {
+export const takeOverPost = async ({
+  siteID,
+  id
+}: any, dispatch: any, config: any) => {
   let result = await db('takeOverPost', { siteID, id }, dispatch, config);
   return result;
 };

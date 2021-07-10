@@ -6,7 +6,12 @@ import produce from 'immer';
 import { postActions } from '../actions';
 import generateSlug from './generateSlug';
 
-export default async function addPost({ site, postTypeID, title, parentID }, dispatch, config) {
+export default async function addPost({
+  site,
+  postTypeID,
+  title,
+  parentID
+}: any, dispatch: any, config: any) {
   const result = await postActions.addPost(
     { siteID: site.id, postTypeID, status: 'draft', title, parentID },
     dispatch,
@@ -17,7 +22,7 @@ export default async function addPost({ site, postTypeID, title, parentID }, dis
     const postType = site?.postTypes?.[postTypeID];
 
     // Add post to post type so we can then generate the slug and the route the newly created post
-    const nextPostType = produce(postType, (draft) => {
+    const nextPostType = produce(postType, (draft: any) => {
       return set(draft, `posts.${result.id}`, result);
     });
 
