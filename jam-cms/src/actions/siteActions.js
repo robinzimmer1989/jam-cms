@@ -45,8 +45,18 @@ export const getSites = async (args, dispatch, config) => {
   return result;
 };
 
-export const getSite = async ({ siteID }, dispatch, config) => {
+export const getSite = async ({ siteID, siteHasChanged }, dispatch, config) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
+
+  if (result) {
+    dispatch({ type: 'ADD_SITE', payload: result });
+
+    if (!siteHasChanged) {
+      // Silently update site in editor if there are no changes
+      dispatch({ type: 'ADD_EDITOR_SITE', payload: result });
+    }
+  }
+
   return result;
 };
 

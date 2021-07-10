@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { PageHeader, Button, Badge, Popover, List } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
-import { Link } from '@reach/router';
-import { navigate } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 
 // import app components
 import DeploymentBadge from './DeploymentBadge';

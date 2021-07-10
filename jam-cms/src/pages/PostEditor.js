@@ -16,19 +16,24 @@ import {
   auth,
   formatFieldsToProps,
   formatTaxonomiesForEditor,
-  generateSlug,
   getTemplateByPost,
+  generateSlug,
 } from '../utils';
 import { useStore } from '../store';
 import { postActions, previewActions } from '../actions';
 import getRoute from '../routes';
+import defaults from '../defaults';
 
 const PostEditor = (props) => {
-  const { defaultComponent } = props;
+  const {
+    pageContext: { databaseId, themeOptions, siteTitle },
+    defaultComponent,
+  } = props;
 
   const [
     {
       config,
+      authState: { authUser },
       cmsState: { sites, siteID },
       editorState: { site, post, editorSettings },
     },
@@ -37,7 +42,7 @@ const PostEditor = (props) => {
 
   const { fields } = config;
 
-  const previewID = auth.isPreview();
+  const previewID = auth.getPreviewID();
 
   // Timer for lock check
   const [postLockTimer, setPostLockTimer] = useState(0);
@@ -48,47 +53,42 @@ const PostEditor = (props) => {
   const [query, setQuery] = useState(null);
 
   // Determine if sidebar should be open on default when visiting the editor
-  let sidebarActiveDefault = false;
-
-  if (sites?.[siteID]?.editorOptions?.sidebar?.defaultOpen && !previewID) {
-    sidebarActiveDefault = true;
-  }
-
-  const [sidebarActive, setSidebarActive] = useState(sidebarActiveDefault);
+  const [sidebarActive, setSidebarActive] = useState(
+    !!authUser?.capabilities?.edit_posts && !!sites?.[siteID]?.editorOptions?.sidebar?.defaultOpen
+  );
 
   const template = getTemplateByPost(post, fields);
   const Component = template?.component;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
 
-  const isNumber = (n) => {
-    return !isNaN(parseFloat(n)) && !isNaN(n - 0);
-  };
+  const isNumber = (n) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
-  // The post id is only available during initial load so we need to look it up ourselves by searching through all pages
-  const postID = useMemo(() => {
-    let postID = '';
+  const postID =
+    databaseId ||
+    useMemo(() => {
+      let postID = '';
 
-    if (sites[siteID]) {
-      Object.values(sites[siteID].postTypes).map((o) =>
-        Object.values(o.posts).map((p) => {
-          const slug = generateSlug(o, p.id, sites?.[siteID]?.frontPage, true);
+      if (sites[siteID]) {
+        Object.values(sites[siteID].postTypes).map((o) =>
+          Object.values(o.posts).map((p) => {
+            const slug = generateSlug(o, p.id, sites?.[siteID]?.frontPage, true);
 
-          if (slug === `${pathname}/`) {
-            postID = p.id;
-          } else if (
-            // We're assuming here that there is not conflicting page which has the format '/[blog]/page/2'
-            pathname.startsWith(`${slug}page/`) &&
-            isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
-          ) {
-            postID = p.id;
-          }
-        })
-      );
-    }
+            if (slug === `${pathname}/`) {
+              postID = p.id;
+            } else if (
+              // We're assuming here that there is not conflicting page which has the format '/[blog]/page/2'
+              pathname.startsWith(`${slug}page/`) &&
+              isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
+            ) {
+              postID = p.id;
+            }
+          })
+        );
+      }
 
-    return postID;
-  }, [pathname]);
+      return postID;
+    }, [pathname]);
 
   // We need to check if post is front page to return the correct basePath for pagination
   const isFrontPage = postID === sites?.[siteID]?.frontPage;
@@ -97,7 +97,7 @@ const PostEditor = (props) => {
   const pagination = useMemo(() => {
     let pagination = {};
 
-    if (template?.id === 'archive') {
+    if (authUser?.capabilities?.edit_posts && template?.id === 'archive') {
       // Get the page number if exists
       const page = isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
@@ -127,8 +127,12 @@ const PostEditor = (props) => {
   let loaded = false;
 
   // Check if post editor is ready
-  if (site && post?.id === postID) {
+  if (post?.id === postID) {
     loaded = true;
+  }
+
+  if (authUser && authUser?.capabilities?.edit_posts && !site) {
+    loaded = false;
   }
 
   // If there is a query, we need to wait for it
@@ -151,7 +155,7 @@ const PostEditor = (props) => {
     return async () => {
       clearInterval(intervalID);
 
-      if (post && post.id === postID && !post.locked && !previewID) {
+      if (authUser?.capabilities?.edit_posts && post && post.id === postID && !post.locked) {
         // Remove post lock once we leave the post editor
         await removePostLock(postID);
       }
@@ -160,7 +164,13 @@ const PostEditor = (props) => {
 
   useEffect(() => {
     // Skip initial fetch (postLockTimer = 0) because we're already setting the status on initial getPost fetch in WP
-    if (postID && post && post.id === postID && postLockTimer && !previewID) {
+    if (
+      authUser?.capabilities?.edit_posts &&
+      postID &&
+      post &&
+      post.id === postID &&
+      postLockTimer
+    ) {
       if (post?.locked) {
         // Fetch post again in case it's locked to determine if other user is still editing
         loadPost();
@@ -172,17 +182,19 @@ const PostEditor = (props) => {
   }, [postLockTimer]);
 
   useEffect(() => {
-    // Remove previous post ID in case user navigates to a different page
-    if (postLockID) {
-      removePostLock(postLockID);
-    }
+    if (authUser?.capabilities?.edit_posts) {
+      // Remove previous post ID in case user navigates to a different page
+      if (postLockID) {
+        removePostLock(postLockID);
+      }
 
-    // Set new post id
-    setPostLockID(postID);
+      // Set new post id
+      setPostLockID(postID);
+    }
   }, [postID]);
 
   useEffect(() => {
-    if (post?.locked?.id && !previewID) {
+    if (authUser?.capabilities?.edit_posts && post?.locked?.id) {
       handleOpenTakeOverDialog();
     }
   }, [post?.locked?.id]);
@@ -207,7 +219,9 @@ const PostEditor = (props) => {
     loadPost();
 
     // Add fresh copy of editor to state
-    dispatch({ type: `ADD_EDITOR_SITE`, payload: sites[siteID] });
+    if (authUser?.capabilities?.edit_posts) {
+      dispatch({ type: `ADD_EDITOR_SITE`, payload: sites[siteID] });
+    }
 
     // Reset query
     setQuery(null);
@@ -216,7 +230,9 @@ const PostEditor = (props) => {
   }, [postID]);
 
   useKeypress('Escape', () => {
-    !previewID && !editorSettings.fullscreen && setSidebarActive(!sidebarActive);
+    authUser?.capabilities?.edit_posts &&
+      !editorSettings.fullscreen &&
+      setSidebarActive(!sidebarActive);
   });
 
   const loadPost = async () => {
@@ -279,7 +295,9 @@ const PostEditor = (props) => {
   };
 
   const removePostLock = async (id) => {
-    await postActions.removePostLock({ siteID, id }, dispatch, config);
+    if (authUser?.capabilities?.edit_posts) {
+      await postActions.removePostLock({ siteID, id }, dispatch, config);
+    }
   };
 
   const handleToggleSidebar = () => {
@@ -334,6 +352,13 @@ const PostEditor = (props) => {
     return data;
   };
 
+  const sidebarOptions = sites?.[siteID]?.editorOptions?.sidebar
+    ? { ...sites?.[siteID]?.editorOptions?.sidebar, active: sidebarActive }
+    : {
+        ...defaults.editorOptions.sidebar,
+        active: false,
+      };
+
   return (
     <>
       <PageWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
@@ -345,20 +370,21 @@ const PostEditor = (props) => {
                   <Component
                     data={getPostData()}
                     pageContext={{
-                      siteTitle: sites?.[siteID]?.title,
+                      siteTitle: sites?.[siteID]?.title || siteTitle,
                       jamCMS: {
                         sidebar: {
-                          active: sidebarActive,
-                          ...sites?.[siteID]?.editorOptions?.sidebar,
+                          ...sidebarOptions,
                         },
                       },
-                      themeOptions: formatFieldsToProps({
-                        global: true,
-                        themeOptions: fields?.themeOptions,
-                        content: site?.themeOptions,
-                        site,
-                        template,
-                      }),
+                      themeOptions: site?.themeOptions
+                        ? formatFieldsToProps({
+                            global: true,
+                            themeOptions: fields?.themeOptions,
+                            content: site?.themeOptions,
+                            site,
+                            template,
+                          })
+                        : themeOptions,
                       pagination,
                     }}
                   />
@@ -397,7 +423,7 @@ const PostEditor = (props) => {
         <PreviewBanner children={`Preview`} type="primary" />
       ) : (
         <>
-          {loaded && (
+          {authUser?.capabilities?.edit_posts && loaded && (
             <>
               {post?.locked ? (
                 <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>

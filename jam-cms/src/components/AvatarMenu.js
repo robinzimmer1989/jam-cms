@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link } from '@reach/router';
+import { navigate } from 'gatsby';
 import styled from 'styled-components';
 import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -14,7 +15,8 @@ const AvatarMenu = (props) => {
 
   const [{ config }, dispatch] = useStore();
 
-  const handleSignOut = () => authActions.signOut({}, dispatch, config);
+  const handleSignOut = () =>
+    authActions.signOut({ onLogout: () => navigate('/') }, dispatch, config);
 
   const dropDownMenu = (
     <StyledMenu>

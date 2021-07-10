@@ -15,7 +15,7 @@ const Login = (props) => {
 
       <Container>
         <CardWrapper>
-          <LoginForm url={source} backLink={true} />
+          <LoginForm url={source} backLink={true} isAdmin />
         </CardWrapper>
       </Container>
     </>

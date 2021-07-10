@@ -3,13 +3,13 @@ import axios from 'axios';
 import Parser from 'html-react-parser';
 
 // import app components
-import { getUser, isPreview } from '../utils/auth';
+import { getUser, getPreviewID } from '../utils/auth';
 import { authActions } from '../actions';
 
 const db = async (endpoint, params, dispatch, config) => {
   const user = getUser(config);
 
-  if (!user?.authToken && !isPreview()) {
+  if (!user?.authToken && !getPreviewID()) {
     authActions.signOut({}, dispatch, config);
   }
 

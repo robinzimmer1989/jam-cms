@@ -6,11 +6,21 @@ import { Modal } from 'antd';
 import LinkSelector from './LinkSelector';
 import MediaLibrary from './MediaLibrary';
 import { colors } from '../theme';
+import { useStore } from '../store';
 
 let JoditEditor = () => <></>;
 
 const HTMLEditor = (props) => {
-  const { defaultValue = '', fullscreen, onToggleFullscreen, onChange } = props;
+  const { defaultValue = '', onChange } = props;
+
+  const [
+    {
+      editorState: {
+        editorSettings: { fullscreen },
+      },
+    },
+    dispatch,
+  ] = useStore();
 
   const editorRef = useRef(null);
 
@@ -48,6 +58,9 @@ const HTMLEditor = (props) => {
       };
     }
   }, [defaultValue, loaded]);
+
+  const handleToggleFullscreen = () =>
+    dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: !fullscreen } });
 
   const handleSelectImage = (image) => {
     const html = `<img src="${image.url}" alt="${image.altText}" />`;
@@ -96,7 +109,7 @@ const HTMLEditor = (props) => {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
         fullsize: {
           exec: function (e) {
-            onToggleFullscreen();
+            handleToggleFullscreen();
           },
           update: function (e) {
             var t = e.j,

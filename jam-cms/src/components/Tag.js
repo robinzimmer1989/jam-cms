@@ -28,8 +28,15 @@ const Tag = styled.span`
   ${({ children }) =>
     children === 'trash' &&
     css`
-      background: ${colors.warning};
+      background: ${colors.danger};
       color: #fff;
+    `}
+
+    ${({ children }) =>
+    children === 'private' &&
+    css`
+      background: ${colors.warning};
+      color: #000;
     `}
 `;
 

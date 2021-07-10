@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, navigate } from '@reach/router';
+import { Link, navigate } from 'gatsby';
 import { Button, Card, Space, Form, message, Row } from 'antd';
 
 // import app components
@@ -12,7 +12,7 @@ import { auth, validateEmail, getParameter } from '../utils';
 import { colors } from '../theme';
 
 const LoginForm = (props) => {
-  const { url, backLink = true } = props;
+  const { url, backLink = false, isAdmin = false } = props;
 
   const [data, setData] = useState({
     email: '',
@@ -33,8 +33,15 @@ const LoginForm = (props) => {
     setData({ ...data, form: action && key && login ? action : 'login' });
   }, [action]);
 
+  // Navigate to jamCMS backend if this is admin form
   useEffect(() => {
-    isAuthed && navigate(ROUTE_APP);
+    if (isAuthed) {
+      if (isAdmin) {
+        navigate(ROUTE_APP);
+      } else {
+        navigate(window.location.pathname);
+      }
+    }
   }, [isAuthed]);
 
   const handleChange = (e) => setData({ ...data, error: null, [e.target.name]: e.target.value });
@@ -62,18 +69,16 @@ const LoginForm = (props) => {
     try {
       const result = await authActions.signIn({ email, password }, url);
 
-      if (
-        !result?.data?.login?.user?.capabilities.includes('edit_posts') ||
-        result?.errors?.[0]?.message
-      ) {
-        setData({ ...data, error: 'Email or password wrong.' });
+      if (!result?.data?.login?.authToken || result?.errors?.[0]?.message) {
+        setData({ ...data, error: 'Email or password wrong.', loading: false });
       } else {
-        navigate(ROUTE_APP);
+        auth.setUser(result.data.login);
+
+        setData({ ...data, loading: false });
       }
     } catch (err) {
       console.log('error...: ', err);
       message.error({ content: 'Oops, something went wrong' });
-      setData({ ...data, loading: false });
     }
   };
 
@@ -264,7 +269,7 @@ const Success = styled.div`
 
 const Error = styled.div`
   margin-top: 10px;
-  color: ${colors.warning};
+  color: ${colors.danger};
 `;
 
 const FooterLink = styled.p`

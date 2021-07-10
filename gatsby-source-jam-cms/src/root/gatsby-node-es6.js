@@ -93,10 +93,10 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
   // Use default path if no fields variable is provided
   fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
 
-  // Import field object
-  const fieldsObject = await import(fieldsPath);
-
-  const { siteTitle, themeOptions } = await getThemeSettings({ reporter }, pluginOptions);
+  const { siteTitle, themeOptions, protectedPosts } = await getThemeSettings(
+    { reporter },
+    pluginOptions
+  );
 
   const allNodes = {};
 
@@ -133,6 +133,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
               id
               databaseId              
               uri
+              status
               template {
                 templateName
               }
@@ -158,6 +159,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
     let thePath;
 
     for (const extension of allowedExtensions) {
+      // TODO: Path can be changed via gatsby-config option
       const templatePath = path.resolve(
         `./src/templates/${type}/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}${extension}`
       );
@@ -172,12 +174,18 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
 
   await Promise.all(
     Object.keys(allNodes).map(async (postType) => {
+      // Merge nodes of GraphQL query and protected posts from custom WP endpoint
+      const array = protectedPosts
+        ? allNodes[postType].concat(protectedPosts[postType])
+        : allNodes[postType];
+
       await Promise.all(
-        allNodes[postType].map(async (node, i) => {
+        array.map(async (node, i) => {
           let {
             id,
             databaseId,
             uri,
+            status,
             template: { templateName },
           } = node;
 
@@ -190,6 +198,15 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             templatePath = getPath('postTypes', archivePostType, 'archive');
           } else {
             templatePath = getPath('postTypes', postType, templateName);
+          }
+
+          // Check if component for private path exists
+          let renderPrivate = false;
+
+          const privatePath = path.resolve(`./src/templates/private.js`);
+
+          if (status === 'private' && fs.existsSync(privatePath)) {
+            renderPrivate = true;
           }
 
           if (fs.existsSync(templatePath)) {
@@ -212,11 +229,12 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
                 }
 
                 actions.createPage({
-                  component: templatePath,
+                  component: renderPrivate ? privatePath : templatePath,
                   path: pathname,
                   context: {
                     id,
                     databaseId,
+                    status,
                     siteTitle,
                     themeOptions,
                     pagination: {
@@ -232,9 +250,17 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
               }
             } else {
               actions.createPage({
-                component: templatePath,
+                component: renderPrivate ? privatePath : templatePath,
                 path: uri,
-                context: { id, databaseId, siteTitle, themeOptions, pagination: {}, jamCMS },
+                context: {
+                  id,
+                  databaseId,
+                  status,
+                  siteTitle,
+                  themeOptions,
+                  pagination: {},
+                  jamCMS,
+                },
               });
             }
           } else {
@@ -287,6 +313,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
               databaseId
               slug
               uri
+              status
             }
           }
         }

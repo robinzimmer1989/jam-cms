@@ -28,67 +28,64 @@ const Home = () => {
     const loadSites = async () => {
       if (!!config.multisite) {
         await siteActions.getSites({}, dispatch, config);
+        setLoaded(true);
       } else {
         navigate(getRoute(`dashboard`));
       }
-
-      setLoaded(true);
     };
     loadSites();
   }, []);
 
+  if (!loaded) {
+    return <Loader />;
+  }
+
   return (
-    <>
-      {loaded ? (
-        <BaseLayout>
-          <Edges size="md">
-            <PageHeader
-              title="My Websites"
-              extra={[
-                <Button
-                  key="1"
-                  onClick={() =>
-                    dispatch({
-                      type: 'SET_DIALOG',
-                      payload: {
-                        open: true,
-                        title: 'Add Website',
-                        component: <SiteForm />,
-                      },
-                    })
-                  }
-                  type="primary"
-                  children={`Add Site`}
-                />,
-              ]}
-            />
+    <BaseLayout>
+      <Edges size="md">
+        <PageHeader
+          title="My Websites"
+          extra={[
+            <Button
+              key="1"
+              onClick={() =>
+                dispatch({
+                  type: 'SET_DIALOG',
+                  payload: {
+                    open: true,
+                    title: 'Add Website',
+                    component: <SiteForm />,
+                  },
+                })
+              }
+              type="primary"
+              children={`Add Site`}
+            />,
+          ]}
+        />
 
-            <Space direction="vertical">
-              {Object.keys(sites).map((key) => {
-                const { id, title } = sites[key];
+        <Space direction="vertical">
+          {Object.keys(sites).map((key) => {
+            const { id, title } = sites[key];
 
-                return (
-                  <ListItem
-                    key={id}
-                    title={title}
-                    actions={[
-                      <Button
-                        key="1"
-                        onClick={() => navigate(getRoute(`dashboard`, { siteID: id }))}
-                        children={`Dashboard`}
-                      />,
-                    ]}
-                    link={getRoute(`dashboard`, { siteID: id })}
-                  />
-                );
-              })}
-            </Space>
-          </Edges>
-        </BaseLayout>
-      ) : (
-        <Loader />
-      )}
-    </>
+            return (
+              <ListItem
+                key={id}
+                title={title}
+                actions={[
+                  <Button
+                    key="1"
+                    onClick={() => navigate(getRoute(`dashboard`, { siteID: id }))}
+                    children={`Dashboard`}
+                  />,
+                ]}
+                link={getRoute(`dashboard`, { siteID: id })}
+              />
+            );
+          })}
+        </Space>
+      </Edges>
+    </BaseLayout>
   );
 };
 

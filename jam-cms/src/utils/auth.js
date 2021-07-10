@@ -34,7 +34,7 @@ export const isLoggedIn = () => {
   return false;
 };
 
-export const isPreview = () => {
+export const getPreviewID = () => {
   if (!isBrowser) {
     return false;
   }
@@ -50,12 +50,14 @@ export const isPreview = () => {
 
 export const getCurrentUser = () => isBrowser && getUser();
 
-export const logout = (config) => {
+export const logout = (onLogout) => {
   if (!isBrowser) {
     return;
   }
 
   setUser({});
-
-  typeof config.onLogout === 'function' ? config.onLogout() : navigate('/');
+  // Reload page
+  typeof onLogout === 'function'
+    ? onLogout()
+    : typeof window !== 'undefined' && navigate(window.location.pathname);
 };

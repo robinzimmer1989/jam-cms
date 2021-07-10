@@ -150,7 +150,7 @@ exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
 var createPages = /*#__PURE__*/function () {
   var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(_ref5, pluginOptions) {
-    var store, actions, reporter, graphql, settings, fields, jamCMS, fieldsObject, _yield$getThemeSettin, siteTitle, themeOptions, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
+    var store, actions, reporter, graphql, settings, fields, jamCMS, _yield$getThemeSettin, siteTitle, themeOptions, protectedPosts, allNodes, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates, allowedExtensions, getPath, _yield$graphql3, allWpTaxonomy, _iterator3, _step3, _loop, _ret;
 
     return _regenerator["default"].wrap(function _callee5$(_context6) {
       while (1) {
@@ -178,42 +178,35 @@ var createPages = /*#__PURE__*/function () {
               }
             }; // Use default path if no fields variable is provided
 
-            fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields"); // Import field object
-
+            fieldsPath = fields || _path["default"].join(store.getState().program.directory, "src/fields");
             _context6.next = 8;
-            return Promise.resolve("".concat(fieldsPath)).then(function (s) {
-              return (0, _interopRequireWildcard2["default"])(require(s));
-            });
-
-          case 8:
-            fieldsObject = _context6.sent;
-            _context6.next = 11;
             return (0, _getThemeSettings["default"])({
               reporter: reporter
             }, pluginOptions);
 
-          case 11:
+          case 8:
             _yield$getThemeSettin = _context6.sent;
             siteTitle = _yield$getThemeSettin.siteTitle;
             themeOptions = _yield$getThemeSettin.themeOptions;
+            protectedPosts = _yield$getThemeSettin.protectedPosts;
             allNodes = {};
-            _context6.prev = 15;
-            _context6.next = 18;
+            _context6.prev = 13;
+            _context6.next = 16;
             return graphql(
             /* GraphQL */
             "\n      query ALL_CONTENT_TYPES {\n        allWpContentType {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 18:
+          case 16:
             _yield$graphql = _context6.sent;
             allWpContentType = _yield$graphql.data.allWpContentType;
             _iterator = _createForOfIteratorHelper(allWpContentType.nodes);
-            _context6.prev = 21;
+            _context6.prev = 19;
 
             _iterator.s();
 
-          case 23:
+          case 21:
             if ((_step = _iterator.n()).done) {
-              _context6.next = 37;
+              _context6.next = 35;
               break;
             }
 
@@ -221,60 +214,60 @@ var createPages = /*#__PURE__*/function () {
             postType = contentType.graphqlSingleName; // Don't create single pages for media items
 
             if (!(postType === 'mediaItem')) {
-              _context6.next = 28;
+              _context6.next = 26;
               break;
             }
 
-            return _context6.abrupt("continue", 35);
+            return _context6.abrupt("continue", 33);
 
-          case 28:
+          case 26:
             // Capitalize post type name
             nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
             gatsbyNodeListFieldName = "allWp".concat(nodesTypeName);
-            _context6.next = 32;
+            _context6.next = 30;
             return graphql(
             /* GraphQL */
-            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId              \n              uri\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
+            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId              \n              uri\n              status\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
 
-          case 32:
+          case 30:
             _yield$graphql2 = _context6.sent;
             data = _yield$graphql2.data;
             allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
 
+          case 33:
+            _context6.next = 21;
+            break;
+
           case 35:
-            _context6.next = 23;
+            _context6.next = 40;
             break;
 
           case 37:
-            _context6.next = 42;
-            break;
-
-          case 39:
-            _context6.prev = 39;
-            _context6.t0 = _context6["catch"](21);
+            _context6.prev = 37;
+            _context6.t0 = _context6["catch"](19);
 
             _iterator.e(_context6.t0);
 
-          case 42:
-            _context6.prev = 42;
+          case 40:
+            _context6.prev = 40;
 
             _iterator.f();
 
-            return _context6.finish(42);
+            return _context6.finish(40);
 
-          case 45:
-            _context6.next = 50;
+          case 43:
+            _context6.next = 48;
             break;
 
-          case 47:
-            _context6.prev = 47;
-            _context6.t1 = _context6["catch"](15);
+          case 45:
+            _context6.prev = 45;
+            _context6.t1 = _context6["catch"](13);
 
             if (_context6.t1.response && _context6.t1.response.data.message) {
               reporter.error(_context6.t1.response.data.message);
             }
 
-          case 50:
+          case 48:
             // Initialize missing templates object
             missingTemplates = {};
             allowedExtensions = ['.js', '.jsx', '.tsx'];
@@ -289,6 +282,7 @@ var createPages = /*#__PURE__*/function () {
                 for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
                   var extension = _step2.value;
 
+                  // TODO: Path can be changed via gatsby-config option
                   var templatePath = _path["default"].resolve("./src/templates/".concat(type, "/").concat(postType, "/").concat(templateName.toLowerCase(), "/").concat(templateName.toLowerCase()).concat(extension));
 
                   if (_fs["default"].existsSync(templatePath)) {
@@ -304,22 +298,25 @@ var createPages = /*#__PURE__*/function () {
               return thePath;
             };
 
-            _context6.next = 55;
+            _context6.next = 53;
             return Promise.all(Object.keys(allNodes).map( /*#__PURE__*/function () {
               var _ref7 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(postType) {
+                var array;
                 return _regenerator["default"].wrap(function _callee3$(_context3) {
                   while (1) {
                     switch (_context3.prev = _context3.next) {
                       case 0:
-                        _context3.next = 2;
-                        return Promise.all(allNodes[postType].map( /*#__PURE__*/function () {
+                        // Merge nodes of GraphQL query and protected posts from custom WP endpoint
+                        array = protectedPosts ? allNodes[postType].concat(protectedPosts[postType]) : allNodes[postType];
+                        _context3.next = 3;
+                        return Promise.all(array.map( /*#__PURE__*/function () {
                           var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(node, i) {
-                            var id, databaseId, uri, templateName, isArchive, archivePostType, templatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
+                            var id, databaseId, uri, status, templateName, isArchive, archivePostType, templatePath, renderPrivate, privatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
                             return _regenerator["default"].wrap(function _callee2$(_context2) {
                               while (1) {
                                 switch (_context2.prev = _context2.next) {
                                   case 0:
-                                    id = node.id, databaseId = node.databaseId, uri = node.uri, templateName = node.template.templateName;
+                                    id = node.id, databaseId = node.databaseId, uri = node.uri, status = node.status, templateName = node.template.templateName;
                                     isArchive = templateName.startsWith('Archive');
                                     archivePostType = templateName.replace('Archive', '').toLowerCase();
 
@@ -327,6 +324,15 @@ var createPages = /*#__PURE__*/function () {
                                       templatePath = getPath('postTypes', archivePostType, 'archive');
                                     } else {
                                       templatePath = getPath('postTypes', postType, templateName);
+                                    } // Check if component for private path exists
+
+
+                                    // Check if component for private path exists
+                                    renderPrivate = false;
+                                    privatePath = _path["default"].resolve("./src/templates/private.js");
+
+                                    if (status === 'private' && _fs["default"].existsSync(privatePath)) {
+                                      renderPrivate = true;
                                     }
 
                                     if (_fs["default"].existsSync(templatePath)) {
@@ -348,11 +354,12 @@ var createPages = /*#__PURE__*/function () {
                                           }
 
                                           actions.createPage({
-                                            component: templatePath,
+                                            component: renderPrivate ? privatePath : templatePath,
                                             path: pathname,
                                             context: {
                                               id: id,
                                               databaseId: databaseId,
+                                              status: status,
                                               siteTitle: siteTitle,
                                               themeOptions: themeOptions,
                                               pagination: {
@@ -368,11 +375,12 @@ var createPages = /*#__PURE__*/function () {
                                         }
                                       } else {
                                         actions.createPage({
-                                          component: templatePath,
+                                          component: renderPrivate ? privatePath : templatePath,
                                           path: uri,
                                           context: {
                                             id: id,
                                             databaseId: databaseId,
+                                            status: status,
                                             siteTitle: siteTitle,
                                             themeOptions: themeOptions,
                                             pagination: {},
@@ -390,7 +398,7 @@ var createPages = /*#__PURE__*/function () {
                                       }
                                     }
 
-                                  case 5:
+                                  case 8:
                                   case "end":
                                     return _context2.stop();
                                 }
@@ -403,7 +411,7 @@ var createPages = /*#__PURE__*/function () {
                           };
                         }()));
 
-                      case 2:
+                      case 3:
                       case "end":
                         return _context3.stop();
                     }
@@ -416,18 +424,18 @@ var createPages = /*#__PURE__*/function () {
               };
             }()));
 
-          case 55:
-            _context6.prev = 55;
-            _context6.next = 58;
+          case 53:
+            _context6.prev = 53;
+            _context6.next = 56;
             return graphql(
             /* GraphQL */
             "\n      query ALL_TAXONOMIES {\n        allWpTaxonomy {\n          nodes {\n            graphqlSingleName\n          }\n        }\n      }\n    ");
 
-          case 58:
+          case 56:
             _yield$graphql3 = _context6.sent;
             allWpTaxonomy = _yield$graphql3.data.allWpTaxonomy;
             _iterator3 = _createForOfIteratorHelper(allWpTaxonomy.nodes);
-            _context6.prev = 61;
+            _context6.prev = 59;
             _loop = /*#__PURE__*/_regenerator["default"].mark(function _loop() {
               var taxonomy, graphqlSingleName, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql4, data;
 
@@ -452,7 +460,7 @@ var createPages = /*#__PURE__*/function () {
                       _context5.next = 8;
                       return graphql(
                       /* GraphQL */
-                      "\n        query ALL_TERM_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId\n              slug\n              uri\n            }\n          }\n        }\n      "));
+                      "\n        query ALL_TERM_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId\n              slug\n              uri\n              status\n            }\n          }\n        }\n      "));
 
                     case 8:
                       _yield$graphql4 = _context5.sent;
@@ -514,63 +522,63 @@ var createPages = /*#__PURE__*/function () {
 
             _iterator3.s();
 
-          case 64:
+          case 62:
             if ((_step3 = _iterator3.n()).done) {
-              _context6.next = 71;
-              break;
-            }
-
-            return _context6.delegateYield(_loop(), "t2", 66);
-
-          case 66:
-            _ret = _context6.t2;
-
-            if (!(_ret === "continue")) {
               _context6.next = 69;
               break;
             }
 
-            return _context6.abrupt("continue", 69);
+            return _context6.delegateYield(_loop(), "t2", 64);
+
+          case 64:
+            _ret = _context6.t2;
+
+            if (!(_ret === "continue")) {
+              _context6.next = 67;
+              break;
+            }
+
+            return _context6.abrupt("continue", 67);
+
+          case 67:
+            _context6.next = 62;
+            break;
 
           case 69:
-            _context6.next = 64;
+            _context6.next = 74;
             break;
 
           case 71:
-            _context6.next = 76;
-            break;
-
-          case 73:
-            _context6.prev = 73;
-            _context6.t3 = _context6["catch"](61);
+            _context6.prev = 71;
+            _context6.t3 = _context6["catch"](59);
 
             _iterator3.e(_context6.t3);
 
-          case 76:
-            _context6.prev = 76;
+          case 74:
+            _context6.prev = 74;
 
             _iterator3.f();
 
-            return _context6.finish(76);
+            return _context6.finish(74);
 
-          case 79:
-            _context6.next = 84;
+          case 77:
+            _context6.next = 82;
             break;
 
-          case 81:
-            _context6.prev = 81;
-            _context6.t4 = _context6["catch"](55);
+          case 79:
+            _context6.prev = 79;
+            _context6.t4 = _context6["catch"](53);
 
             if (_context6.t4.response && _context6.t4.response.data.message) {
               reporter.error(_context6.t4.response.data.message);
             }
 
-          case 84:
+          case 82:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee5, null, [[15, 47], [21, 39, 42, 45], [55, 81], [61, 73, 76, 79]]);
+    }, _callee5, null, [[13, 45], [19, 37, 40, 43], [53, 79], [59, 71, 74, 77]]);
   }));
 
   return function createPages(_x3, _x4) {

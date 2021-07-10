@@ -1,21 +1,19 @@
 import React from 'react';
 
-// import external css files
-import 'minireset.css';
-import 'antd/dist/antd.css';
-import 'jodit/build/jodit.min.css';
-
 // import app components
+import AuthProvider from './components/AuthProvider';
 import Loader from './components/Loader';
 import { StoreProvider } from './store';
 
-const Master = React.lazy(() => import('./components/Master'));
+const Router = React.lazy(() => import('./components/router/Router'));
 
 const JamCMS = (props) => {
   return (
     <React.Suspense fallback={<Loader />}>
       <StoreProvider {...props}>
-        <Master defaultComponent={props.children} />
+        <AuthProvider>
+          <Router pageContext={props?.pageContext} defaultComponent={props.children} />
+        </AuthProvider>
       </StoreProvider>
     </React.Suspense>
   );

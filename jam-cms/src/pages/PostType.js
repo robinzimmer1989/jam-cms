@@ -126,7 +126,7 @@ const PostType = (props) => {
 
   const filterItems = (
     <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
-      {['all', 'publish', 'draft', 'trash'].map((name) => {
+      {['all', 'publish', 'draft', 'private', 'trash'].map((name) => {
         const count =
           name === 'all'
             ? posts.filter((o) => o.status !== 'trash').length
@@ -257,7 +257,7 @@ const PostType = (props) => {
       badges.push(<Tag key="front" children={'front'} />);
     }
 
-    if (o.status === 'draft' || o.status === 'trash') {
+    if (o.status === 'draft' || o.status === 'trash' || o.status === 'private') {
       badges.push(<Tag key="status" children={o.status} />);
     }
 
