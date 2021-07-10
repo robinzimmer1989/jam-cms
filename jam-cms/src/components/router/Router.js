@@ -6,9 +6,9 @@ import 'antd/dist/antd.css';
 import 'jodit/build/jodit.min.css';
 
 // import components
-import Admin from './Admin';
-import Preview from './Preview';
-import Private from './Private';
+import AdminRouter from './AdminRouter';
+import PreviewRouter from './PreviewRouter';
+import PrivateRouter from './PrivateRouter';
 
 import { useStore } from '../../store';
 import { getPreviewID } from '../../utils/auth';
@@ -23,11 +23,11 @@ const Router = (props) => {
   const previewID = getPreviewID();
 
   if (previewID) {
-    return <Preview {...props} />;
+    return <PreviewRouter {...props} />;
   } else if (authUser?.capabilities?.edit_posts) {
-    return <Admin {...props} />;
+    return <AdminRouter {...props} />;
   } else if (authUser?.capabilities?.read) {
-    return <Private {...props} />;
+    return <PrivateRouter {...props} />;
   } else {
     return null;
   }

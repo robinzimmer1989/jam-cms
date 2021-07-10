@@ -5,9 +5,9 @@ import { debounce } from 'lodash';
 import { Space, Button, Typography } from 'antd';
 
 // import app components
-import { useStore } from '../store';
+import { useStore } from '../../store';
 
-const PageWrapper = (props) => {
+const EditorWrapper = (props) => {
   const { sidebarActive, loaded, locked, children } = props;
 
   const [
@@ -139,4 +139,4 @@ const Inner = styled.div`
     `}
 `;
 
-export default PageWrapper;
+export default EditorWrapper;

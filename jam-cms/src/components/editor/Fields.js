@@ -3,29 +3,29 @@ import styled from 'styled-components';
 import { Space, Typography } from 'antd';
 
 // import app components
-import MediaLibrary from './MediaLibrary';
-import LinkSelector from './LinkSelector';
-import Caption from './Caption';
+import MediaLibrary from '../MediaLibrary';
+import LinkSelector from '../LinkSelector';
+import Caption from '../Caption';
 
 // Admin fields
-import Text from './editorFields/Text';
-import Wysiwyg from './editorFields/Wysiwyg';
-import FilePicker from './editorFields/FilePicker';
-import Menu from './editorFields/Menu';
-import Repeater from './editorFields/Repeater';
-import Link from './editorFields/Link';
-import Select from './editorFields/Select';
-import Checkbox from './editorFields/Checkbox';
-import Radio from './editorFields/Radio';
-import Number from './editorFields/Number';
-import FlexibleContent from './editorFields/FlexibleContent';
-import DatePicker from './editorFields/DatePicker';
-import Group from './editorFields/Group';
-import Gallery from './editorFields/Gallery';
-import GoogleMap from './editorFields/GoogleMap';
-import ColorPicker from './editorFields/ColorPicker';
+import Text from '../editorFields/Text';
+import Wysiwyg from '../editorFields/Wysiwyg';
+import FilePicker from '../editorFields/FilePicker';
+import Menu from '../editorFields/Menu';
+import Repeater from '../editorFields/Repeater';
+import Link from '../editorFields/Link';
+import Select from '../editorFields/Select';
+import Checkbox from '../editorFields/Checkbox';
+import Radio from '../editorFields/Radio';
+import Number from '../editorFields/Number';
+import FlexibleContent from '../editorFields/FlexibleContent';
+import DatePicker from '../editorFields/DatePicker';
+import Group from '../editorFields/Group';
+import Gallery from '../editorFields/Gallery';
+import GoogleMap from '../editorFields/GoogleMap';
+import ColorPicker from '../editorFields/ColorPicker';
 
-import { useStore } from '../store';
+import { useStore } from '../../store';
 
 export const getField = ({ index, field, site, onChangeElement, dispatch, level = 1 }) => {
   let component;
@@ -227,7 +227,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
   );
 };
 
-const EditorFields = (props) => {
+const Fields = (props) => {
   const { fields, onChangeElement } = props;
 
   const [
@@ -264,4 +264,4 @@ const FieldContainer = styled.div`
   padding: 8px ${({ level }) => (level === 1 ? '16px' : '4px')};
 `;
 
-export default EditorFields;
+export default Fields;

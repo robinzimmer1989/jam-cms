@@ -5,13 +5,13 @@ import { Modal } from 'antd';
 // import components
 import Home from '../../pages/Home';
 import Profile from '../../pages/Profile';
-import PostEditor from '../../pages/PostEditor';
 import Dashboard from '../../pages/Dashboard';
 import Media from '../../pages/Media';
 import PostType from '../../pages/PostType';
 import GeneralSettings from '../../pages/GeneralSettings';
 import Taxonomy from '../../pages/Taxonomy';
 import Users from '../../pages/Users';
+import AdminEditor from '../editor/AdminEditor';
 import Loader from '../Loader';
 
 import { CmsStyles } from '../../theme';
@@ -28,7 +28,7 @@ import {
   ROUTE_TAXONOMY,
 } from '../../routes';
 
-const Master = (props) => {
+const AdminRouter = (props) => {
   const [
     {
       config,
@@ -87,7 +87,7 @@ const Master = (props) => {
           <Users path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`} />
         )}
 
-        <PostEditor path={'*'} {...props} />
+        <AdminEditor path={'*'} {...props} />
       </Router>
 
       {dialog.open && (
@@ -107,4 +107,4 @@ const Master = (props) => {
   );
 };
 
-export default Master;
+export default AdminRouter;

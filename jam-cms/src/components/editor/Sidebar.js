@@ -20,18 +20,18 @@ import { set } from 'lodash';
 import { HomeOutlined } from '@ant-design/icons';
 
 // import app components
-import EditorFields from './EditorFields';
-import Input from './Input';
-import Select from './Select';
-import Caption from './Caption';
-import PostTreeSelect from './PostTreeSelect';
-import MediaLibrary from './MediaLibrary';
-import FilePicker from './editorFields/FilePicker';
-import { postActions, siteActions, previewActions } from '../actions';
-import { useStore } from '../store';
-import { colors } from '../theme';
-import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../utils';
-import getRoute from '../routes';
+import Fields from './Fields';
+import Input from '../Input';
+import Select from '../Select';
+import Caption from '../Caption';
+import PostTreeSelect from '../PostTreeSelect';
+import MediaLibrary from '../MediaLibrary';
+import FilePicker from '../editorFields/FilePicker';
+import { postActions, siteActions, previewActions } from '../../actions';
+import { useStore } from '../../store';
+import { colors } from '../../theme';
+import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../../utils';
+import getRoute from '../../routes';
 
 const EditorSidebar = (props) => {
   const { editable, onToggleSidebar, ...rest } = props;
@@ -241,7 +241,7 @@ const EditorSidebar = (props) => {
 
     return (
       <EditorFieldsContainer>
-        <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />
+        <Fields fields={formattedFields} onChangeElement={handleChangeContent} />
       </EditorFieldsContainer>
     );
   };
@@ -261,7 +261,7 @@ const EditorSidebar = (props) => {
 
     return (
       <EditorFieldsContainer>
-        <EditorFields fields={formattedFields} onChangeElement={handleChangeContent} />
+        <Fields fields={formattedFields} onChangeElement={handleChangeContent} />
       </EditorFieldsContainer>
     );
   };
@@ -603,7 +603,9 @@ const EditorSidebar = (props) => {
               </>
             )}
 
-            {(post?.status === 'publish' || post?.status === 'trash') && (
+            {(post?.status === 'publish' ||
+              post?.status === 'trash' ||
+              post?.status === 'private') && (
               <Button
                 children="Update"
                 onClick={() => handleUpdate(post.status)}
