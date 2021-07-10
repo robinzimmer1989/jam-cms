@@ -11,9 +11,7 @@ import { EnvironmentTwoTone as MarkerIcon } from '@ant-design/icons';
 import { colors } from '../../theme';
 
 const Marker = () => (
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   <Icon>
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     <MarkerIcon />
   </Icon>
 );
@@ -69,21 +67,16 @@ const Map = (props: any) => {
     onChange({ ...defaultValue, address: e.target.value });
   };
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return <>
     {site?.googleMapsApi ? (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Space direction="vertical">
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Input.Search
           value={defaultValue.address}
           onChange={handleChange}
           onSearch={() => handleSearch(defaultValue.address)}
           placeholder={defaultValue?.address || 'Enter an address'}
         />
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <MapContainer>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <GoogleMapReact
             height
             bootstrapURLKeys={{ key: site.googleMapsApi }}
@@ -99,14 +92,13 @@ const Map = (props: any) => {
             }: any) => handleGeocode(lat, lng)}
           >
             {defaultValue?.lat && defaultValue?.lng && (
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ lat: any; lng: any; }' is not assignable t... Remove this comment to see the full error message
               <Marker lat={defaultValue.lat} lng={defaultValue.lng} />
             )}
           </GoogleMapReact>
         </MapContainer>
       </Space>
     ) : (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Typography>Please add GoogleMaps API key in settings.</Typography>
     )}
   </>;

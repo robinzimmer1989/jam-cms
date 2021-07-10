@@ -75,10 +75,8 @@ const FlexibleContent = (props: any) => {
     setChildActive(newKeys);
   };
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   const menuItems = items.map((o: any) => <Menu.Item key={o.id} children={o.label} onClick={() => handleAdd(o.id)} />);
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   const menu = <Menu>{menuItems}</Menu>;
 
   const getListStyle = (isDraggingOver: any) => ({
@@ -116,25 +114,17 @@ const FlexibleContent = (props: any) => {
   };
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <LabelContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical" size={6}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Caption children={label || id} />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {instructions && <Typography.Text type="secondary" children={instructions} />}
         </Space>
       </LabelContainer>
       {values && (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <DragDropContext onDragEnd={handleDragEnd}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Droppable droppableId="droppable">
             {(provided: any, snapshot: any) => (
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
@@ -144,7 +134,6 @@ const FlexibleContent = (props: any) => {
                   const layout = items.find((o: any) => o.id === value.id);
 
                   return (
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <Draggable
                       key={index}
                       draggableId={`item-${index}`}
@@ -153,39 +142,31 @@ const FlexibleContent = (props: any) => {
                       isDragDisabled={childActive.includes(index)}
                     >
                       {(provided: any, snapshot: any) => (
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                         >
-                          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                           <Collapse
                             activeKey={childActive}
                             onChange={() => handleToggleChild(index)}
                             expandIconPosition="right"
                           >
-                            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                             <Collapse.Panel
                               key={index}
                               header={layout?.label || 'Not Found'}
                               extra={
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                 <DeleteIcon className={`icon`} onClick={(e: any) => e.stopPropagation()}>
-                                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                   <DeleteIconContainer>
-                                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                     <Popconfirm
                                       title="Are you sure？"
                                       onConfirm={() => handleRemove(index)}
                                       icon={
-                                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                         <QuestionCircleOutlined style={{ color: colors.danger }} />
                                       }
                                       placement="left"
                                     >
-                                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                       <DeleteTwoTone twoToneColor={colors.danger} />
                                     </Popconfirm>
                                   </DeleteIconContainer>
@@ -195,7 +176,6 @@ const FlexibleContent = (props: any) => {
                               {layout?.fields &&
                                 layout.fields.map((field: any, fieldIndex: any) => {
                                   return (
-                                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                     <div key={field.id}>
                                       {getField({
                                         field: {
@@ -224,18 +204,14 @@ const FlexibleContent = (props: any) => {
         </DragDropContext>
       )}
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AddContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Dropdown
           overlay={menu}
           trigger={['click']}
           // @ts-expect-error ts-migrate(2322) FIXME: Type '(triggerNode: HTMLElement) => (Node & Parent... Remove this comment to see the full error message
           getPopupContainer={(triggerNode) => triggerNode.parentNode}
         >
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <AddButton siblings={values && values.length > 0}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <PlusOutlined />
           </AddButton>
         </Dropdown>

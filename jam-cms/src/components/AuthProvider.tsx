@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 // import components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Loader' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Loader from './Loader';
 
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { authActions, userActions } from '../actions';
 import { getUser, getPreviewID } from '../utils/auth';
 
 const AuthProvider = (props: any) => {
+  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
@@ -59,7 +58,6 @@ const AuthProvider = (props: any) => {
     }
   }, []);
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return authUser || previewID ? props.children : <Loader />;
 };
 

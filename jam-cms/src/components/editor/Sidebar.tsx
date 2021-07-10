@@ -7,27 +7,21 @@ import { Space, Select as AntSelect, Checkbox, Tabs, Button, Typography, message
 import { set } from 'lodash';
 import { HomeOutlined } from '@ant-design/icons';
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Fields' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Fields from './Fields';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Input' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Input from '../Input';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Select' was resolved to '/Users/robinzi... Remove this comment to see the full error message
 import Select from '../Select';
 import Caption from '../Caption';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../PostTreeSelect' was resolved to '/Users... Remove this comment to see the full error message
 import PostTreeSelect from '../PostTreeSelect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../MediaLibrary' was resolved to '/Users/r... Remove this comment to see the full error message
 import MediaLibrary from '../MediaLibrary';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../editorFields/FilePicker' was resolved t... Remove this comment to see the full error message
 import FilePicker from '../editorFields/FilePicker';
 import { postActions, siteActions, previewActions } from '../../actions';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 import { colors } from '../../theme';
 import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../../utils';
 import getRoute from '../../routes';
 const EditorSidebar = (props: any) => {
     const { editable, onToggleSidebar, ...rest } = props;
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ config, authState: { authUser }, cmsState: { sites, siteID }, editorState: { site, post, siteHasChanged, postHasChanged }, }, dispatch,] = useStore();
     const { fields } = config;
     const [loading, setLoading] = useState(null);
@@ -176,9 +170,7 @@ const EditorSidebar = (props: any) => {
                 };
             })
             : [];
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         return (<EditorFieldsContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Fields fields={formattedFields} onChangeElement={handleChangeContent}/>
       </EditorFieldsContainer>);
     };
@@ -194,9 +186,7 @@ const EditorSidebar = (props: any) => {
             });
             return { global: true, ...o, value: formattedField?.value };
         });
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         return (<EditorFieldsContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Fields fields={formattedFields} onChangeElement={handleChangeContent}/>
       </EditorFieldsContainer>);
     };
@@ -212,109 +202,80 @@ const EditorSidebar = (props: any) => {
             Object.values(fields?.postTypes).map((o) => (o as any)?.templates &&
                 Object.values((o as any).templates).map((p) => (p as any).id === 'archive' && archiveTemplatesArray.push(p)));
         }
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-        return (<Content>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-        <Space direction="vertical" size={20}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          <Input value={post?.title || ''} onChange={(e: any) => handleChangePost('title', e.target.value)} label={'Title'}/>
+        return (
+            <Content>
+            <Space direction="vertical" size={20}>
+              <Input value={post?.title || ''} onChange={(e: any) => handleChangePost('title', e.target.value)} label={'Title'}/>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          <Input value={post?.id === site?.frontPage ? '/' : post?.slug || ''} onChange={(e: any) => handleChangePost('slug', e.target.value)} label={'Slug'} disabled={post?.id === site?.frontPage}/>
+              <Input value={post?.id === site?.frontPage ? '/' : post?.slug || ''} onChange={(e: any) => handleChangePost('slug', e.target.value)} label={'Slug'} disabled={post?.id === site?.frontPage}/>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (<Select value={post?.template} onChange={(value: any) => handleChangePost('template', value)} label={'Template'}>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-              {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (<AntSelect.OptGroup label={'Single'}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-                  {postTypeTemplatesArray.map((o) => (<AntSelect.Option key={(o as any).id} value={(o as any).id} children={(o as any).label || (o as any).id}/>))}
-                </AntSelect.OptGroup>)}
+              {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (<Select value={post?.template} onChange={(value: any) => handleChangePost('template', value)} label={'Template'}>
+                  {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (<AntSelect.OptGroup label={'Single'}>
+                      {postTypeTemplatesArray.map((o) => (<AntSelect.Option key={(o as any).id} value={(o as any).id} children={(o as any).label || (o as any).id}/>))}
+                    </AntSelect.OptGroup>)}
 
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-              {archiveTemplatesArray.length > 0 && (<AntSelect.OptGroup label={'Archive'}>
-                  {/* @ts-expect-error ts-migrate(7006) FIXME: Parameter 'o' implicitly has an 'any' type. */}
-                  {archiveTemplatesArray.map((o) => {
-                        const id = `archive-${o.postTypeID}`;
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                        return <AntSelect.Option key={id} value={id} children={o.label}/>;
+                  {archiveTemplatesArray.length > 0 && (<AntSelect.OptGroup label={'Archive'}>
+                      {archiveTemplatesArray.map((o: any) => {
+                            const id = `archive-${o.postTypeID}`;
+                            return <AntSelect.Option key={id} value={id} children={o.label}/>;
+                        })}
+                    </AntSelect.OptGroup>)}
+                </Select>)}
+
+              <Select value={post?.status || ''} onChange={(value: any) => handleChangePost('status', value)} label={'Status'}>
+                <AntSelect.Option value={'publish'} children={'Publish'}/>
+                <AntSelect.Option value={'draft'} children={'Draft'}/>
+                <AntSelect.Option value={'trash'} children={'Trash'}/>
+                <AntSelect.Option value={'private'} children={'Private'} disabled={post?.template.startsWith('archive-')}/>
+              </Select>
+
+              {post?.postTypeID === 'page' && post.id !== site?.frontPage && (<PostTreeSelect label="Parent" items={Object.values(postType.posts).filter((o) => (o as any).id !== post.id)} value={post?.parentID} onChange={(value: any) => handleChangePost('parentID', value)}/>)}
+
+              {post?.taxonomies &&
+                    Object.keys(post.taxonomies)
+                        .filter((k) => !!config?.fields?.taxonomies?.find((o: any) => o.id === k))
+                        .map((k) => {
+                        const o = sites[siteID].taxonomies[k];
+                        return o && (<Select key={k} onChange={(v: any) => handleChangePost(`taxonomies.${k}`, v)} allowClear placeholder="Select category" mode="multiple" label={o.title} defaultValue={post.taxonomies[k]}>
+                        {o.terms &&
+                                o.terms.map((p: any) => {
+                                    return <AntSelect.Option key={p.id} value={p.id} children={p.title}/>;
+                                })}
+                      </Select>);
                     })}
-                </AntSelect.OptGroup>)}
-            </Select>)}
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          <Select value={post?.status || ''} onChange={(value: any) => handleChangePost('status', value)} label={'Status'}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-            <AntSelect.Option value={'publish'} children={'Publish'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-            <AntSelect.Option value={'draft'} children={'Draft'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-            <AntSelect.Option value={'trash'} children={'Trash'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-            <AntSelect.Option value={'private'} children={'Private'} disabled={post?.template.startsWith('archive-')}/>
-          </Select>
+              {post?.postTypeID !== 'page' && (<Space direction="vertical" size={6}>
+                  <Caption children="Featured Image"/>
+                  <FilePicker value={post?.featuredImage} onRemove={() => handleSelectImage('featuredImage', null)} onClick={() => dispatch({
+                        type: `SET_DIALOG`,
+                        payload: {
+                            open: true,
+                            title: 'Media',
+                            component: (<MediaLibrary onSelect={(v: any) => handleSelectImage('featuredImage', v)} allow={['image']}/>),
+                            width: 1024,
+                        },
+                    })}/>
+                </Space>)}
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          {post?.postTypeID === 'page' && post.id !== site?.frontPage && (<PostTreeSelect label="Parent" items={Object.values(postType.posts).filter((o) => (o as any).id !== post.id)} value={post?.parentID} onChange={(value: any) => handleChangePost('parentID', value)}/>)}
-
-          {post?.taxonomies &&
-                Object.keys(post.taxonomies)
-                    .filter((k) => !!config?.fields?.taxonomies?.find((o: any) => o.id === k))
-                    .map((k) => {
-                    const o = sites[siteID].taxonomies[k];
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                    return o && (<Select key={k} onChange={(v: any) => handleChangePost(`taxonomies.${k}`, v)} allowClear placeholder="Select category" mode="multiple" label={o.title} defaultValue={post.taxonomies[k]}>
-                    {o.terms &&
-                            o.terms.map((p: any) => {
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                                return <AntSelect.Option key={p.id} value={p.id} children={p.title}/>;
-                            })}
-                  </Select>);
-                })}
-
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          {post?.postTypeID !== 'page' && (<Space direction="vertical" size={6}>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-              <Caption children="Featured Image"/>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-              <FilePicker value={post?.featuredImage} onRemove={() => handleSelectImage('featuredImage', null)} onClick={() => dispatch({
-                    type: `SET_DIALOG`,
-                    payload: {
-                        open: true,
-                        title: 'Media',
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                        component: (<MediaLibrary onSelect={(v: any) => handleSelectImage('featuredImage', v)} allow={['image']}/>),
-                        width: 1024,
-                    },
-                })}/>
-            </Space>)}
-
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
-          {post?.postTypeID === 'page' && (<Checkbox value={post?.id} checked={post?.id === site?.frontPage} onChange={(e) => handleChangeSite('frontPage', e.target.checked ? e.target.value : '')} children="Set as Homepage"/>)}
-        </Space>
-      </Content>);
+              {post?.postTypeID === 'page' && (<Checkbox value={post?.id} checked={post?.id === site?.frontPage} onChange={(e) => handleChangeSite('frontPage', e.target.checked ? e.target.value : '')} children="Set as Homepage"/>)}
+            </Space>
+          </Content>
+        );
     };
     const renderSeo = () => {
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         return (<Content>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical" size={25}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Input value={post?.seo?.title || ''} onChange={(e: any) => handleChangePost('seo.title', e.target.value)} label={'SEO Title'}/>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Input value={post?.seo?.metaDesc || ''} onChange={(e: any) => handleChangePost('seo.metaDesc', e.target.value)} label={'SEO Description'} rows={4}/>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={6}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Caption children="Open Graph Image"/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <FilePicker value={post?.seo?.opengraphImage} onRemove={() => handleSelectImage('seo.opengraphImage', null)} onClick={() => dispatch({
                 type: `SET_DIALOG`,
                 payload: {
                     open: true,
                     title: 'Media',
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     component: (<MediaLibrary onSelect={(v: any) => handleSelectImage('seo.opengraphImage', v)} allow={['image']}/>),
                     width: 1024,
                 },
@@ -324,18 +285,12 @@ const EditorSidebar = (props: any) => {
       </Content>);
     };
     const renderRevisions = () => {
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         return (<Content>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical">
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {post?.revisions?.length > 0 ? (<>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button type={!post.revisionID ? 'primary' : 'default'} onClick={() => !!post.revisionID && handleSelectRevision(post.id)} children={'Current version'} loading={loading === post.id} block/>
 
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {post.revisions.map((o: any) => <Button key={o.id} type={o.id === post.revisionID ? 'primary' : 'default'} onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)} children={o.title} loading={loading === o.id} block/>)}
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </>) : (<Empty style={{ padding: 20 }} imageStyle={{
                     height: 120,
                 }} description={'No Revisions'}/>)}
@@ -343,52 +298,35 @@ const EditorSidebar = (props: any) => {
       </Content>);
     };
     const renderPreview = () => {
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         return (<Content>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical">
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {(siteHasChanged || postHasChanged) && (<Typography.Text type="secondary">
               Save the latest changes to include them in the preview.
             </Typography.Text>)}
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Select value={expiryDate} onChange={(value: any) => setExpiryDate(value)} label={'Expiry date'}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <AntSelect.Option value={24} children={'1 Day'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <AntSelect.Option value={48} children={'2 Days'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <AntSelect.Option value={168} children={'1 Week'}/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <AntSelect.Option value={720} children={'1 Month'}/>
           </Select>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {previewLink ? (<>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button children="Copy to Clipboard" type="primary" onClick={() => {
                     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'null' is not assignable to param... Remove this comment to see the full error message
                     navigator.clipboard.writeText(previewLink);
                     message.success('Copied to Clipboard');
                 }} block/>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+              {/* @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'null' is not assignable to param... Remove this comment to see the full error message */}
               <Button children="Open in new tab" onClick={() => window.open(previewLink, '_blank')} type="primary" block/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </>) : (<Button children="Generate Link" onClick={handleGeneratePreviewLink} type="primary" block/>)}
         </Space>
       </Content>);
     };
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return (<Container id="jam-cms-sidebar" sidebar={sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Header>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Row justify="space-between">
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space size={15}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Popconfirm placement="rightTop" title="Are you sure to discard unsaved changes?" onConfirm={() => navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))} disabled={!postHasChanged && !siteHasChanged}>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button icon={<HomeOutlined />} type="ghost" size="small" ghost onClick={() => {
             if (!postHasChanged && !siteHasChanged) {
                 navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }));
@@ -397,60 +335,44 @@ const EditorSidebar = (props: any) => {
             </Popconfirm>
           </Space>
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space size={15}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             {post?.status === 'draft' && (<>
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <Button children="Save Draft" onClick={handleSaveDraft} loading={loading === 'draft'} size="small" ghost/>
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <Button children="Publish" onClick={handlePublish} loading={loading === 'publish'} size="small" ghost/>
               </>)}
 
             {(post?.status === 'publish' ||
             post?.status === 'trash' ||
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             post?.status === 'private') && (<Button children="Update" onClick={() => handleUpdate(post.status)} loading={loading === 'update'} size="small" ghost/>)}
           </Space>
         </Row>
       </Header>
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <TabsContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Tabs activeKey={sidebar} tabBarGutter={0} onChange={(value) => setSidebar(value)}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Tabs.TabPane key={'content'} tab={'Content'} disabled={!editable}/>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Tabs.TabPane key={'settings'} tab={'Settings'} disabled={!editable}/>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable}/>
         </Tabs>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '"text"' is not assignable to type 'DropdownB... Remove this comment to see the full error message */}
         <Dropdown.Button disabled={!editable} type="text" overlay={<Menu>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {post?.revisionsEnabled && (<Menu.Item key="preview" onClick={() => setSidebar('preview')}>
                   Share Preview
                 </Menu.Item>)}
               {authUser?.capabilities?.edit_theme_options &&
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 fields?.themeOptions?.filter((o: any) => !o.hide)?.length > 0 && (<Menu.Item key={'theme'} onClick={() => setSidebar('theme')}>
                     Theme
                   </Menu.Item>)}
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {post?.revisionsEnabled && (<Menu.Item key="revisions" onClick={() => setSidebar('revisions')}>
                   Revisions
                 </Menu.Item>)}
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Menu.Item key="sidebar" onClick={onToggleSidebar}>
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 Toggle Sidebar <Typography.Text keyboard>ESC</Typography.Text>
               </Menu.Item>
             </Menu>}/>
       </TabsContainer>
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <TabContainer>
         {sidebar === 'content' && renderContent()}
 

@@ -5,7 +5,6 @@ import { Link, navigate } from 'gatsby';
 import { Button, Card, Space, Form, message, Row } from 'antd';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Input' was resolved to '/Users/robinzimm... Remove this comment to see the full error message
 import Input from './Input';
 
 import { authActions } from '../actions';
@@ -114,7 +113,6 @@ const LoginForm = (props: any) => {
           ...data,
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null'.
           success: (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <p>{`Success. An email has been sent to ${email} with further instructions.`}</p>
           ),
           loading: false,
@@ -147,11 +145,8 @@ const LoginForm = (props: any) => {
           password: '',
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null'.
           success: (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <p>{`Password set successfully.`}</p>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button
                 children={`Back to Login`}
                 // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
@@ -200,28 +195,19 @@ const LoginForm = (props: any) => {
 
   const formData = getFormData();
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return <>
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     <Container>
       {data?.form && (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <Card title={formData?.title}>
           {url ? (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <>
               {data?.success ? (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <Success children={data.success} />
               ) : (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <Space direction="vertical" size={20}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <Form onFinish={formData?.handleSubmit}>
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                     <Space direction="vertical" size={20}>
                       {(data.form === 'login' || data.form === 'forget') && (
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                         <Input
                           label={`Email`}
                           value={data.email}
@@ -231,7 +217,6 @@ const LoginForm = (props: any) => {
                         />
                       )}
                       {(data.form === 'login' || data.form === 'reset') && (
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                         <Input
                           label={`Password`}
                           value={data.password}
@@ -241,9 +226,7 @@ const LoginForm = (props: any) => {
                           name="password"
                         />
                       )}
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       {data?.error && <Error children={data.error} />}
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <Button
                         loading={data.loading}
                         children={`Submit`}
@@ -254,7 +237,6 @@ const LoginForm = (props: any) => {
                     </Space>
                   </Form>
 
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <FooterLink
                     onClick={() =>
                       handleChange({
@@ -271,7 +253,6 @@ const LoginForm = (props: any) => {
               )}
             </>
           ) : (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <p>Please provide a URL.</p>
           )}
         </Card>
@@ -279,11 +260,8 @@ const LoginForm = (props: any) => {
     </Container>
 
     {backLink && (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Row justify="center">
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Link to={'/'}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button type="text" children="Back to Homepage" size="small" />
         </Link>
       </Row>

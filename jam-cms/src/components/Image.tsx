@@ -10,7 +10,6 @@ const Image = (props: any) => {
 
   if (!image?.sourceUrl) {
     if (bg) {
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       return <Container width={width} height={height} />;
     }
 
@@ -18,9 +17,7 @@ const Image = (props: any) => {
   }
 
   return bg ? (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container width={width} height={height}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AntImage
         preview={preview}
         src={image.sourceUrl}
@@ -29,7 +26,6 @@ const Image = (props: any) => {
       />
     </Container>
   ) : (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <AntImage
       preview={preview}
       src={image.sourceUrl}

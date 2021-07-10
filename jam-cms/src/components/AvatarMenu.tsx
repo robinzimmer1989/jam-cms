@@ -7,7 +7,6 @@ import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { authActions } from '../actions';
 import getRoute from '../routes';
@@ -15,30 +14,26 @@ import getRoute from '../routes';
 const AvatarMenu = (props: any) => {
   const { ghost } = props;
 
+  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [{ config }, dispatch] = useStore();
 
   const handleSignOut = () =>
     authActions.signOut({ onLogout: () => navigate('/') }, dispatch, config);
 
   const dropDownMenu = (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <StyledMenu>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Menu.Item>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+        {/* @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1. */}
         <Link to={getRoute('profile')}>Profile</Link>
       </Menu.Item>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Menu.Item onClick={handleSignOut}>Logout</Menu.Item>
     </StyledMenu>
   );
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Dropdown overlay={dropDownMenu} arrow trigger={['click']}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <div>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+        {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'SizeType'... Remove this comment to see the full error message */}
         <Button size={32} icon={<UserOutlined />} ghost={ghost} />
       </div>
     </Dropdown>

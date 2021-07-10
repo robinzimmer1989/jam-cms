@@ -9,14 +9,10 @@ import { navigate } from '@reach/router';
 // import app components
 // @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../PageWrapper' or its corresp... Remove this comment to see the full error message
 import PageWrapper from '../PageWrapper';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Loader' was resolved to '/Users/robinzi... Remove this comment to see the full error message
 import Loader from '../Loader';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Sidebar' was resolved to '/Users/robinzi... Remove this comment to see the full error message
 import Sidebar from './Sidebar';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Editor' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Editor from './Editor';
 import { formatFieldsToProps, getTemplateByPost } from '../../utils';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 import { postActions } from '../../actions';
 import getRoute from '../../routes';
@@ -24,6 +20,7 @@ import getRoute from '../../routes';
 let postLockID: any = null;
 const AdminWrapper = (props: any) => {
     const { pageContext: { databaseId: postID }, defaultComponent, } = props;
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ config, cmsState: { sites, siteID }, editorState: { site, post, editorSettings }, }, dispatch,] = useStore();
     // Timer for lock check
     const [postLockTimer, setPostLockTimer] = useState(0);
@@ -129,24 +126,18 @@ const AdminWrapper = (props: any) => {
             payload: {
                 open: true,
                 title: 'Locked',
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 component: (<Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Typography.Text>
               This content is currently locked. If you take over, {post.locked.email} will be
               blocked from continuing to edit.
             </Typography.Text>
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Space>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button onClick={() => {
                         dispatch({ type: 'CLOSE_DIALOG' });
                         navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }));
                     }} children="Dashboard"/>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} children="Preview"/>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button onClick={handleTakeOver} type="primary" children="Take Over"/>
             </Space>
           </Space>),
@@ -163,9 +154,7 @@ const AdminWrapper = (props: any) => {
         if (sidebarActive) {
             // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ content: JSX.Element; }' is no... Remove this comment to see the full error message
             message.open({
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 content: (<>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             Press <Typography.Text keyboard>ESC</Typography.Text> to reopen sidebar
           </>),
             });
@@ -173,11 +162,8 @@ const AdminWrapper = (props: any) => {
         setSidebarActive(!sidebarActive);
     };
     const sidebarOptions = { ...sites?.[siteID]?.editorOptions?.sidebar, active: sidebarActive };
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return (<>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <PageWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {postID ? (<>{loaded ? <Editor {...props} sidebarOptions={sidebarOptions}/> : <Loader />}</>) : (<>
             {React.cloneElement(defaultComponent, {
                 pageContext: {
@@ -192,17 +178,11 @@ const AdminWrapper = (props: any) => {
           </>)}
       </PageWrapper>
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {loaded && (<>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {post?.locked ? (<FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <Button icon={<LockOutlined />} onClick={handleOpenTakeOverDialog} size="large" type="primary"/>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </FloatingButton>) : (<>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {sidebarActive ? (<Sidebar className="jam-cms" editable={!!Component} onToggleSidebar={handleToggleSidebar}/>) : (<FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <Button icon={<EditOutlined />} onClick={handleToggleSidebar} size="large" type="primary"/>
                 </FloatingButton>)}
             </>)}

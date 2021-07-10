@@ -105,26 +105,18 @@ const Repeater = (props: any) => {
   };
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <LabelContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Space direction="vertical" size={6}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Caption children={label || id} />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {instructions && <Typography.Text type="secondary" children={instructions} />}
         </Space>
       </LabelContainer>
 
       {values && (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <DragDropContext onDragEnd={handleDragEnd}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Droppable droppableId="droppable">
             {(provided: any, snapshot: any) => (
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
@@ -132,7 +124,6 @@ const Repeater = (props: any) => {
               >
                 {values.map((value: any, index: any) => {
                   return (
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <Draggable
                       key={index}
                       draggableId={`item-${index}`}
@@ -141,39 +132,31 @@ const Repeater = (props: any) => {
                       isDragDisabled={childActive.includes(index)}
                     >
                       {(provided: any, snapshot: any) => (
-                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                         >
-                          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                           <Collapse
                             activeKey={childActive}
                             onChange={() => handleToggleChild(index)}
                             expandIconPosition="right"
                           >
-                            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                             <Collapse.Panel
                               key={index}
                               header={`Item ${index + 1}`}
                               extra={
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                 <DeleteIcon className={`icon`} onClick={(e: any) => e.stopPropagation()}>
-                                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                   <DeleteIconContainer>
-                                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                     <Popconfirm
                                       title="Are you sure？"
                                       onConfirm={() => handleRemove(index)}
                                       icon={
-                                        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                         <QuestionCircleOutlined style={{ color: colors.danger }} />
                                       }
                                       placement="left"
                                     >
-                                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                                       <DeleteTwoTone twoToneColor={colors.danger} />
                                     </Popconfirm>
                                   </DeleteIconContainer>
@@ -183,7 +166,6 @@ const Repeater = (props: any) => {
                               {items &&
                                 items.map((field: any, subIndex: any) => {
                                   return (
-                                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                     <div key={subIndex}>
                                       {getField({
                                         field: { ...field, value: value[field.id] },
@@ -210,11 +192,8 @@ const Repeater = (props: any) => {
         </DragDropContext>
       )}
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AddContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <AddButton siblings={values && values.length > 0} onClick={handleAdd}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <PlusOutlined />
         </AddButton>
       </AddContainer>

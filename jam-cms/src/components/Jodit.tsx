@@ -4,20 +4,17 @@ import styled, { css, createGlobalStyle } from 'styled-components';
 import { Modal } from 'antd';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './LinkSelector' was resolved to '/Users/ro... Remove this comment to see the full error message
 import LinkSelector from './LinkSelector';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './MediaLibrary' was resolved to '/Users/ro... Remove this comment to see the full error message
 import MediaLibrary from './MediaLibrary';
 import { colors } from '../theme';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 
-// @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
 let JoditEditor = () => <></>;
 
 const HTMLEditor = (props: any) => {
   const { defaultValue = '', onChange } = props;
 
+  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       editorState: {
@@ -166,7 +163,6 @@ const HTMLEditor = (props: any) => {
     };
 
     return loaded && (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <JoditEditor
         // @ts-expect-error ts-migrate(2322) FIXME: Type '{ ref: MutableRefObject<null>; value: any; c... Remove this comment to see the full error message
         ref={editorRef}
@@ -181,14 +177,11 @@ const HTMLEditor = (props: any) => {
   }, [loaded, fullscreen]);
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container fullscreen={fullscreen}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Global />
 
       {jodit}
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Modal
         title={modal === 'image' ? 'Media' : 'Link'}
         visible={!!modal}
@@ -200,9 +193,7 @@ const HTMLEditor = (props: any) => {
         footer={null}
         destroyOnClose
       >
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {modal === 'image' && <MediaLibrary onSelect={handleSelectImage} allow={['image']} />}
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {modal === 'link' && <LinkSelector onChange={handleSelectLink} value={link} />}
       </Modal>
     </Container>

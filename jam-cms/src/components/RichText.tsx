@@ -10,18 +10,15 @@ const RichText = (props: any) => {
                     if (domNode.type === 'tag') {
                         if ((domNode as any).name === 'a') {
                             if ((domNode as any).attribs.href.includes('http')) {
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                 return (<a href={(domNode as any).attribs.href} target="_blank">
                       {(domNode as any).children.map((o: any) => parse(o.data))}
                     </a>);
                             }
                             else if ((domNode as any).attribs.href.includes('tel:') ||
                                 (domNode as any).attribs.href.includes('mailto:')) {
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                 return <a href={(domNode as any).attribs.href}>{(domNode as any).children.map((o: any) => parse(o.data))}</a>;
                             }
                             else {
-                                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                                 return (<Link to={(domNode as any).attribs.href}>
                       {(domNode as any).children.map((o: any) => parse(o.data))}
                     </Link>);

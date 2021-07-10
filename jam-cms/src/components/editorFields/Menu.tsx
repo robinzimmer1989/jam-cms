@@ -6,16 +6,14 @@ import { PlusOutlined } from '@ant-design/icons';
 import Parser from 'html-react-parser';
 import produce from 'immer';
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Input' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import Input from '../Input';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../MenuPicker' was resolved to '/Users/rob... Remove this comment to see the full error message
 import MenuPicker from '../MenuPicker';
 import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../../utils';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 import { colors } from '../../theme';
 const Menu = (props: any) => {
     const { value = [], maxLevel = 3, onChange } = props;
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ editorState: { siteHasChanged }, },] = useStore();
     const [editing, setEditing] = useState([]);
     const [items, setItems] = useState([]);
@@ -159,32 +157,23 @@ const Menu = (props: any) => {
         });
         setEditing(nextValue);
     };
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return <>
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     <Container>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <div>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <div>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Tree className="draggable-tree" draggable={editing.length === 0} showLine blockNode onDrop={onDrop} treeData={items} titleRender={(node) => {
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             return (<Collapse ghost onChange={() => handleToggleCollapse(node.key)}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                  {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'key' is missing in type '{ children: Ele... Remove this comment to see the full error message */}
                   <Collapse.Panel header={<span style={{ cursor: editing.length === 0 ? 'grab' : 'not-allowed' }}>
                         {/* @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message */}
                         {Parser(node.title || ' ')}
                       </span>} showArrow={false}>
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                     <Space direction="vertical">
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <Input label="title" value={node.title} onChange={(e: any) => handleUpdate(e, 'title', node.key)}/>
 
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <Input label="Url" value={(node as any).url} onChange={(e: any) => handleUpdate(e, 'url', node.key)} disabled={(node as any).postTypeID}/>
 
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                      {/* @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'. */}
                       <Button size="small" danger children={`Remove`} onClick={() => handleRemove(node.key)} disabled={node.children.length > 0}/>
                     </Space>
                   </Collapse.Panel>
@@ -192,17 +181,13 @@ const Menu = (props: any) => {
         }}/>
         </div>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <AddButton items={items && items.length > 0} onClick={() => setModal(true)}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <PlusOutlined />
         </AddButton>
       </div>
     </Container>
 
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     <Modal title={'Menu Items'} visible={modal} onCancel={() => setModal(false)} width={600} footer={null}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <MenuPicker onAdd={handleAdd}/>
     </Modal>
   </>;

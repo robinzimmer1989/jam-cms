@@ -5,10 +5,10 @@ import styled, { css } from 'styled-components';
 import { debounce } from 'lodash';
 import { Space, Button, Typography } from 'antd';
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 const EditorWrapper = (props: any) => {
     const { sidebarActive, loaded, locked, children } = props;
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ cmsState: { sites, siteID }, editorState: { siteHasChanged, postHasChanged, changeIndex }, }, dispatch,] = useStore();
     // We need the window width to calculate scaling
     const [windowWidth, setWindowWidth] = useState(null);
@@ -44,15 +44,11 @@ const EditorWrapper = (props: any) => {
                         payload: {
                             open: true,
                             title: 'Warning',
-                            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                             component: (<Space direction="vertical" size={20}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <Typography children={'There are unsaved changes. Are you sure you want to discard them?'}/>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <Space>
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                     <Button children="Cancel" onClick={() => dispatch({ type: 'CLOSE_DIALOG' })}/>
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+                    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '"danger"' is not assignable to type '"link" ... Remove this comment to see the full error message */}
                     <Button children="Discard changes" type="danger" onClick={() => {
                                     // Clicking on a tags with nested elements (i.e. span) returns the wrong 'target'. That's why we need to find the correct node ourselves.
                                     const href = (e as any)?.path?.length && (e as any).path.find((o: any) => o.href);
@@ -70,9 +66,7 @@ const EditorWrapper = (props: any) => {
             };
         }
     }, [changeIndex]);
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return (<Container id="jam-cms" loaded={loaded} locked={locked} sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Inner loaded={loaded} locked={locked} sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }} windowWidth={windowWidth}>
         {children}
       </Inner>

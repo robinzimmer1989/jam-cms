@@ -23,21 +23,17 @@ const Group = (props: any) => {
   };
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Collapse expandIconPosition="right">
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+      {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'key' is missing in type '{ children: any... Remove this comment to see the full error message */}
       <Collapse.Panel header={`${label || id}`}>
         {instructions && (
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <LabelContainer>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Typography.Text type="secondary" children={instructions} />
           </LabelContainer>
         )}
         {fields &&
           fields.map((field: any, index: any) => {
             return (
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
               <div key={index}>
                 {getField({
                   field: { ...field, value: values?.[field.id] },

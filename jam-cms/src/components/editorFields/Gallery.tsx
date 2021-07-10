@@ -10,9 +10,7 @@ import {
 } from '@ant-design/icons';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../GatsbyImage' was resolved to '/Users/ro... Remove this comment to see the full error message
 import Img from '../GatsbyImage';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../MediaLibrary' was resolved to '/Users/r... Remove this comment to see the full error message
 import MediaLibrary from '../MediaLibrary';
 import { colors } from '../../theme';
 
@@ -53,7 +51,6 @@ const Gallery = (props: any) => {
         open: true,
         title: 'Media',
         component: (
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           <MediaLibrary onSelect={handleSelect} allow={['image']} selected={values} multiple />
         ),
         width: 1024,
@@ -62,17 +59,13 @@ const Gallery = (props: any) => {
   };
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Container>
       {values &&
         values.map((o: any, i: any) => {
           return (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <GalleryItem key={i}>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <ImageContainer>
                 {o && (
-                  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                   <Img
                     image={o}
                     objectFit="cover"
@@ -83,40 +76,31 @@ const Gallery = (props: any) => {
                 )}
               </ImageContainer>
 
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <LeftIcon
                 disabled={i - 1 === -1}
                 className="icon"
                 onClick={() => i - 1 > -1 && handleMoveElement(i, i - 1)}
               >
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <LeftCircleOutlined style={{ color: colors.secondary }} />
               </LeftIcon>
 
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <RightIcon
                 disabled={i === values.length - 1}
                 className="icon"
                 onClick={() => i < values.length && handleMoveElement(i, i + 1)}
               >
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <RightCircleOutlined style={{ color: colors.secondary }} />
               </RightIcon>
 
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <RemoveIcon className="icon" onClick={() => handleRemove(i)}>
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <CloseCircleOutlined style={{ color: colors.danger }} />
               </RemoveIcon>
             </GalleryItem>
           );
         })}
 
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <AddContainer>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <AddButton onClick={handleClickAdd}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <PlusOutlined />
         </AddButton>
       </AddContainer>

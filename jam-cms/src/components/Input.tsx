@@ -20,14 +20,11 @@ const Input = (props: any) => {
   } = props;
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <Space direction="vertical" size={6}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {label && <Caption className={className} children={label} />}
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ type: string; children: any; }' is not ass... Remove this comment to see the full error message */}
       {instructions && <Typography type="secondary" children={instructions} />}
       {!!rows ? (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput.TextArea
           value={value}
           name={name}
@@ -38,7 +35,6 @@ const Input = (props: any) => {
           {...rest}
         />
       ) : type === 'password' ? (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput.Password
           value={value}
           name={name}
@@ -47,12 +43,10 @@ const Input = (props: any) => {
           className={className}
           type={type}
           autoComplete="off"
-          // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
           iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           {...rest}
         />
       ) : (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <AntInput
           value={value}
           name={name}

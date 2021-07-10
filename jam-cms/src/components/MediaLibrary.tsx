@@ -5,17 +5,16 @@ import produce from 'immer';
 import { Modal, Upload, Button, Space, message, Spin, Checkbox, Input, PageHeader } from 'antd';
 import { UploadOutlined, InboxOutlined, ArrowLeftOutlined, ArrowRightOutlined, } from '@ant-design/icons';
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './MediaImage' was resolved to '/Users/robi... Remove this comment to see the full error message
 import MediaImage from './MediaImage';
 import { renderImage, useOnScreen } from '../utils';
 import { mediaActions } from '../actions';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { colors } from '../theme';
 const MediaLibrary = (props: any) => {
     const { onSelect, allow = [], multiple, selected: defaultSelected = [] } = props;
     const ref = useRef();
     const isVisible = useOnScreen(ref);
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ config, cmsState: { siteID }, }, dispatch,] = useStore();
     const [media, setMedia] = useState({ items: [], page: 0 });
     const [activeFile, setActiveFile] = useState(null);
@@ -128,87 +127,60 @@ const MediaLibrary = (props: any) => {
         dispatch({ type: 'CLOSE_DIALOG' });
         onSelect && onSelect(selected);
     };
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return <>
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     <Container actionBar={multiple && selected.length > 0}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Space direction="vertical" size={20}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <PageHeader title={<Button icon={<UploadOutlined />} children="Upload" type="primary" onClick={() => setUploader(!uploader)} loading={loading}/>} extra={[
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <Input.Search key="search" allowClear value={search} onChange={(e) => setSearch(e.target.value)} onSearch={handleSearch}/>,
         ]}/>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {uploader && (<Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <p className="ant-upload-drag-icon">
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <InboxOutlined />
             </p>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <p className="ant-upload-text">Click or drag file to this area to upload</p>
           </Upload.Dragger>)}
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <MediaItems>
           {media.items &&
             media.items.map((o) => {
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 return (<MediaItem key={(o as any).id}>
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <MediaItemInner onClick={() => setActiveFile(o)}>
                     {renderImage(o)}
                   </MediaItemInner>
 
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   {multiple && (<CheckboxContainer onClick={() => handleClickCheckbox(o)}>
-                      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                       <Checkbox checked={!!selected.find((p: any) => p.id === (o as any).id)}/>
                     </CheckboxContainer>)}
                 </MediaItem>);
             })}
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <DummyItem />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <DummyItem />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <DummyItem />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <DummyItem />
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <DummyItem />
 
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <LoadingContainer ref={ref} key={0} visible={media.page > -1}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Spin size="large"/>
           </LoadingContainer>
         </MediaItems>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         {multiple && selected.length > 0 && (<ActionBar>
             {`${selected.length} selected`}
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button onClick={handleSelectMultiple} children="Select" type="primary"/>
           </ActionBar>)}
       </Space>
     </Container>
 
-    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
     {!!activeFile && (<Modal transitionName="none" maskTransitionName="none" title={'Media Image'} visible={true} onCancel={handleCloseDialog} footer={null} width={1024}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <PrevButton>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+          {/* @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'. */}
           <Button icon={<ArrowLeftOutlined />} onClick={() => setActiveFile(media.items[activeFileIndex - 1])} disabled={activeFileIndex === 0}/>
         </PrevButton>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <MediaImage file={activeFile} onSelect={onSelect && handleSelect} onDelete={handlDeleteMediaItem} onUpdate={handleUpdateMediaItem}/>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <NextButton>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+          {/* @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'. */}
           <Button icon={<ArrowRightOutlined />} onClick={() => setActiveFile(media.items[activeFileIndex + 1])} disabled={activeFileIndex === media.items.length - 1}/>
         </NextButton>
       </Modal>)}

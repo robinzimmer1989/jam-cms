@@ -5,13 +5,12 @@ import { Empty } from 'antd';
 import axios from 'axios';
 import { set } from 'lodash';
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../Loader' was resolved to '/Users/robinzi... Remove this comment to see the full error message
 import Loader from '../Loader';
 import { formatFieldsToProps, formatTaxonomiesForEditor, getTemplateByPost } from '../../utils';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../../store' was resolved to '/Users/robin... Remove this comment to see the full error message
 import { useStore } from '../../store';
 const Editor = (props: any) => {
     const { pageContext: { databaseId: postID, themeOptions, siteTitle }, defaultComponent, sidebarOptions, } = props;
+    // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
     const [{ config, authState: { authUser }, cmsState: { sites, siteID }, editorState: { site, post }, },] = useStore();
     // GraphQL query result
     const [query, setQuery] = useState(null);
@@ -88,13 +87,9 @@ const Editor = (props: any) => {
         }
         return data;
     };
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     return (<div>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       {postID ? (<>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           {loaded ? (<>
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               {!!Component && post?.content ? (<Component data={getPostData()} pageContext={{
                         siteTitle: sites?.[siteID]?.title || siteTitle,
                         jamCMS: {
@@ -112,16 +107,12 @@ const Editor = (props: any) => {
                             })
                             : themeOptions,
                         pagination,
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     }}/>) : (<EmptyContainer className="jam-cms">
-                  {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                   <Empty imageStyle={{
                         height: 120,
                     }} description={'No Template'}/>
                 </EmptyContainer>)}
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             </>) : (<Loader />)}
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         </>) : (<>
           {React.cloneElement(defaultComponent, {
                 pageContext: {

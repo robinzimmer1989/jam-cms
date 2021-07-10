@@ -4,18 +4,15 @@ import produce from 'immer';
 import { set } from 'lodash';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Input' was resolved to '/Use... Remove this comment to see the full error message
 import Input from '../components/Input';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Select' was resolved to '/Us... Remove this comment to see the full error message
 import Select from '../components/Select';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/CmsLayout' was resolved to '... Remove this comment to see the full error message
 import CmsLayout from '../components/CmsLayout';
 
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import { siteActions } from '../actions';
 
 const GeneralSettings = () => {
+  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
@@ -67,18 +64,12 @@ const GeneralSettings = () => {
   };
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     <CmsLayout pageTitle={`Settings`}>
-      {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
       <Space direction="vertical" size={40}>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Card title={`General`}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input label="Title" value={site?.title} name="title" onChange={handleChange} />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input
               label="Frontend URL"
               value={site?.siteUrl}
@@ -86,7 +77,6 @@ const GeneralSettings = () => {
               onChange={handleChange}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button
               loading={loading === 'general'}
               onClick={() => handleUpdate({ title: site.title, siteUrl: site.siteUrl }, 'general')}
@@ -96,11 +86,8 @@ const GeneralSettings = () => {
           </Space>
         </Card>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Card title={`Deployment`}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input
               label="Build Hook"
               value={site?.deployment?.buildHook}
@@ -108,7 +95,6 @@ const GeneralSettings = () => {
               onChange={handleChange}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input
               label="Badge Image"
               value={site?.deployment?.badgeImage}
@@ -116,7 +102,6 @@ const GeneralSettings = () => {
               onChange={handleChange}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input
               label="Badge Link"
               value={site?.deployment?.badgeLink}
@@ -124,7 +109,6 @@ const GeneralSettings = () => {
               onChange={handleChange}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button
               loading={loading === 'deployment'}
               onClick={() =>
@@ -141,14 +125,10 @@ const GeneralSettings = () => {
           </Space>
         </Card>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Card title={'Sync'}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button
               loading={loading === 'apikey'}
               onClick={() => handleUpdate({ apiKey: true }, 'apikey')}
@@ -158,11 +138,8 @@ const GeneralSettings = () => {
           </Space>
         </Card>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Card title={`API keys`}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Input
               label="Google Maps API Key"
               value={site?.googleMapsApi}
@@ -170,7 +147,6 @@ const GeneralSettings = () => {
               onChange={handleChange}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button
               loading={loading === 'general'}
               onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'general')}
@@ -180,49 +156,38 @@ const GeneralSettings = () => {
           </Space>
         </Card>
 
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Card title={'Editor Sidebar'}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Space direction="vertical" size={20}>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Select
               label="Position"
               value={site?.editorOptions?.sidebar?.position}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.position')}
             >
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <AntSelect.Option value="left" children="Left" />
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <AntSelect.Option value="right" children="Right" />
             </Select>
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Select
               label="Style"
               value={site?.editorOptions?.sidebar?.style}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.style')}
             >
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <AntSelect.Option value="inline" children="Inline" />
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <AntSelect.Option value="overflow" children="Overflow" />
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
               <AntSelect.Option value="scale" children="Scale" />
             </Select>
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Select
               label="Default Status"
               value={site?.editorOptions?.sidebar?.defaultOpen}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.defaultOpen')}
             >
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+              {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'boolean' is not assignable to type 'Key'. */}
               <AntSelect.Option value={true} children="Open" />
-              {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
+              {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'boolean' is not assignable to type 'Key'. */}
               <AntSelect.Option value={false} children="Closed" />
             </Select>
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <Button
               loading={loading === 'editorOptions'}
               onClick={() =>

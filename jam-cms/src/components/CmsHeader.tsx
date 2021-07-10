@@ -6,11 +6,8 @@ import { BellOutlined } from '@ant-design/icons';
 import { Link, navigate } from '@reach/router';
 
 // import app components
-// @ts-expect-error ts-migrate(6142) FIXME: Module './DeploymentBadge' was resolved to '/Users... Remove this comment to see the full error message
 import DeploymentBadge from './DeploymentBadge';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './AvatarMenu' was resolved to '/Users/robi... Remove this comment to see the full error message
 import AvatarMenu from './AvatarMenu';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../store' was resolved to '/Users/robinzim... Remove this comment to see the full error message
 import { useStore } from '../store';
 import getRoute from '../routes';
 
@@ -37,6 +34,7 @@ const messages = {
 const CmsHeader = (props: any) => {
   const { title } = props;
 
+  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       cmsState: { siteID, sites },
@@ -71,13 +69,10 @@ const CmsHeader = (props: any) => {
   return useMemo(() => {
     const buttons = [];
 
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
 
     const notificationsContent = (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Notifications>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <List
           itemLayout="horizontal"
           dataSource={notifications}
@@ -86,9 +81,8 @@ const CmsHeader = (props: any) => {
             const item = messages[key] || sites?.[siteID]?.errors.find((o: any) => o.id === key);
 
             return (
-              // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+              // @ts-expect-error ts-migrate(2322) FIXME: Type 'unknown' is not assignable to type 'Key | nu... Remove this comment to see the full error message
               <List.Item key={key} onClick={item.onClick}>
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <List.Item.Meta title={item.title} description={item.description} />
               </List.Item>
             );
@@ -98,7 +92,6 @@ const CmsHeader = (props: any) => {
     );
 
     buttons.push(
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Popover
         key={'notifications'}
         title="Notifications"
@@ -108,31 +101,23 @@ const CmsHeader = (props: any) => {
         trigger={['click']}
         placement="bottomRight"
       >
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Badge size="small" count={notifications.length}>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <Button icon={<BellOutlined />} type="default" />
         </Badge>
       </Popover>
     );
 
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
     buttons.push(<AvatarMenu key="avatar-menu" />);
 
     buttons.push(
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Link key="view-website" to="/">
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Button children="View Website" />
       </Link>
     );
 
     return (
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       <Container>
-        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
         <Content>
-          {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
           <PageHeader title={title} extra={buttons} />
         </Content>
       </Container>

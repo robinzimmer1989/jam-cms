@@ -24,10 +24,8 @@ const Checkbox = (props: any) => {
     onChange(newValues);
   };
 
-  // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
   return <>
     {options &&
-      // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
       options.map((o: any) => <AntCheckbox
         key={o.value}
         value={o.value}

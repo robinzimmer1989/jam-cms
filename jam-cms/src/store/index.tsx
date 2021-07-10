@@ -45,7 +45,7 @@ export const StoreProvider = ({
   });
 
   return (
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
     <StateContext.Provider value={useReducer(reducer, initialState)}>
       {children}
     </StateContext.Provider>
