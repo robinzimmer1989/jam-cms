@@ -46,7 +46,7 @@ const AdminRouter = (props: any) => {
   useEffect(() => {
     const intervalID = setInterval(() => {
       setTimer((time) => time + 1);
-    }, 10000); // 10 seconds
+    }, 60000); // 60 seconds
 
     // Clear timer
     return () => {
