@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, navigate, RouteComponentProps } from '@reach/router';
+import { Link, navigate } from 'gatsby';
 import {
   Button,
   PageHeader,
@@ -39,19 +39,18 @@ const PostType = (props: any) => {
   ] = useStore();
 
   const [filter, setFilter] = useState('all');
-  const [category, setCategory] = useState({} as any);
+  const [category, setCategory] = useState(null as any);
   const [search, setSearch] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
+
   let visiblePosts: any = [];
 
   // Filter by category
   visiblePosts = !!category
-    ? posts.filter((o) =>
-        (o as any)?.taxonomies?.[(category as any)?.taxonomy]?.includes((category as any).term)
-      )
+    ? posts.filter((o: any) => o?.taxonomies?.[category?.taxonomy]?.includes(category.term))
     : posts;
 
   // Filter by post status
@@ -59,6 +58,7 @@ const PostType = (props: any) => {
     filter === 'all'
       ? visiblePosts.filter((o: any) => o.status !== 'trash')
       : visiblePosts.filter((o: any) => o.status === filter);
+
   // Filter by search query
   visiblePosts = search
     ? visiblePosts.filter((o: any) => o.title.toLowerCase().includes(search))
