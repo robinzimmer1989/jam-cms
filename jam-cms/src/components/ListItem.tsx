@@ -1,5 +1,4 @@
 import React from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Card, List, Typography } from 'antd';
 import { Link } from '@reach/router';
@@ -72,9 +71,7 @@ const ListItem = (props: any) => {
 };
 
 const Container = styled.div`
-  margin-left: ${({
-  level
-}: any) => `${level * 30}px`};
+  margin-left: ${({ level }: any) => `${level * 30}px`};
 
   .ant-card-body {
     padding: 0 20px;

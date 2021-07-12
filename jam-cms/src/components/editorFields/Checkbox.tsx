@@ -24,16 +24,18 @@ const Checkbox = (props: any) => {
     onChange(newValues);
   };
 
-  return <>
-    {options &&
-      options.map((o: any) => <AntCheckbox
+  return (
+    options &&
+    options.map((o: any) => (
+      <AntCheckbox
         key={o.value}
         value={o.value}
         checked={values.includes(o.value)}
         children={o.name}
         onChange={handleChange}
-      />)}
-  </>;
+      />
+    ))
+  );
 };
 
 export default Checkbox;

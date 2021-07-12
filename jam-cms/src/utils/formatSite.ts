@@ -10,33 +10,36 @@ export default function formatSite(site: any) {
     if (get(draft, `postTypes.items`)) {
       draft.postTypes.items.map((o: any, i: any) => {
         if (get(o, `posts.items`)) {
-          return draft.postTypes.items[i].posts = draft.postTypes.items[i].posts.items.reduce(
-            // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-            (ac, a) => ({
+          return (draft.postTypes.items[i].posts = draft.postTypes.items[i].posts.items.reduce(
+            (ac: any, a: any) => ({
               ...ac,
-              [a.id]: a
+              [a.id]: a,
             }),
             {}
-          );
+          ));
         }
 
         return null;
       });
 
-      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-      draft.postTypes = draft.postTypes.items.reduce((ac, a) => ({
-        ...ac,
-        [a.id]: a
-      }), {});
+      draft.postTypes = draft.postTypes.items.reduce(
+        (ac: any, a: any) => ({
+          ...ac,
+          [a.id]: a,
+        }),
+        {}
+      );
     }
 
     // Convert taxonomies to object structure
     if (get(draft, `taxonomies.items`)) {
-      // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-      draft.taxonomies = draft.taxonomies.items.reduce((ac, a) => ({
-        ...ac,
-        [a.id]: a
-      }), {});
+      draft.taxonomies = draft.taxonomies.items.reduce(
+        (ac: any, a: any) => ({
+          ...ac,
+          [a.id]: a,
+        }),
+        {}
+      );
     }
 
     // Merge options stored in CMS with editor options to allow for future compatibility

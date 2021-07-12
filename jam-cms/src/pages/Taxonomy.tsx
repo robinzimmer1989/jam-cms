@@ -13,7 +13,6 @@ import { useStore } from '../store';
 const Taxonomy = (props: any) => {
   const { taxonomyID } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
@@ -38,13 +37,7 @@ const Taxonomy = (props: any) => {
     setIsSyncing(false);
   };
 
-  const handleUpsert = async ({
-    id,
-    title,
-    slug,
-    parentID,
-    description
-  }: any) => {
+  const handleUpsert = async ({ id, title, slug, parentID, description }: any) => {
     if (id) {
       await termActions.updateTerm(
         { siteID, taxonomyID, id, title, slug, parentID, description },
@@ -60,13 +53,11 @@ const Taxonomy = (props: any) => {
     }
   };
 
-  const handleDelete = async ({
-    termID
-  }: any) => {
+  const handleDelete = async ({ termID }: any) => {
     await termActions.deleteTerm({ siteID, taxonomyID, id: termID }, dispatch, config);
   };
 
-  const handleOpenDialog = (term: any) => {
+  const handleOpenDialog = (term: any = {}) => {
     dispatch({
       type: 'SET_DIALOG',
       payload: {
@@ -111,7 +102,6 @@ const Taxonomy = (props: any) => {
       <PageHeader>
         <Button
           children={`Add`}
-          // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
           onClick={() => handleOpenDialog()}
           type="primary"
           disabled={!taxonomy}

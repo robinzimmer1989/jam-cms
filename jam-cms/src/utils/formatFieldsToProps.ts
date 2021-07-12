@@ -5,9 +5,9 @@ export default function formatFieldsToProps({
   themeOptions,
   content,
   site,
-  template
+  template,
 }: any) {
-  const obj = {};
+  const obj = {} as any;
 
   // We'll loop through the template fields because this is the source of truth.
   // The content could be empty(initially) or the field schema has changed in the meantime.
@@ -29,14 +29,12 @@ export default function formatFieldsToProps({
 
           const formattedField = formatFieldForEditor({ field, site });
 
-          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           return (obj[o.id] = formattedField?.value);
         })
     : themeOptions &&
       themeOptions.map((o: any) => {
         const formattedField = formatFieldForEditor({ field: content?.[o.id] || o, site });
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         return (obj[o.id] = formattedField?.value);
       });
 

@@ -1,12 +1,11 @@
 import React from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import produce from 'immer';
 import { set } from 'lodash';
 import { Collapse, Typography } from 'antd';
 
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../EditorFields' or its corres... Remove this comment to see the full error message
-import { getField } from '../EditorFields';
+// import app components
+import { getField } from '../editor/Fields';
 
 const Group = (props: any) => {
   const { id, label, instructions, site, fields, value, onChange, dispatch } = props;
@@ -24,8 +23,7 @@ const Group = (props: any) => {
 
   return (
     <Collapse expandIconPosition="right">
-      {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'key' is missing in type '{ children: any... Remove this comment to see the full error message */}
-      <Collapse.Panel header={`${label || id}`}>
+      <Collapse.Panel key="group" header={`${label || id}`}>
         {instructions && (
           <LabelContainer>
             <Typography.Text type="secondary" children={instructions} />

@@ -6,7 +6,6 @@ import PrivateEditor from '../editor/PrivateEditor';
 import { useStore } from '../../store';
 
 const PrivateRouter = (props: any) => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [{ config }] = useStore();
 
   // We don't need to load the PrivateEditor if page is published

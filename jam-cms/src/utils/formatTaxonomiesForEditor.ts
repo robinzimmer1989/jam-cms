@@ -3,7 +3,7 @@ export default function formatTaxonomiesForEditor(post: any, site: any) {
     return null;
   }
 
-  const taxonomies = {};
+  const taxonomies = {} as any;
 
   Object.keys(post.taxonomies).map((k) => {
     const taxonomy = site?.taxonomies?.[k];
@@ -14,14 +14,7 @@ export default function formatTaxonomiesForEditor(post: any, site: any) {
 
     const { graphqlPluralName } = taxonomy;
 
-    site.taxonomies[k].terms.map(({
-      id,
-      title,
-      uri,
-      description,
-      count,
-      parentID
-    }: any) => {
+    site.taxonomies[k].terms.map(({ id, title, uri, description, count, parentID }: any) => {
       if (post.taxonomies[k].includes(id)) {
         const taxonomy = {
           id,
@@ -33,12 +26,9 @@ export default function formatTaxonomiesForEditor(post: any, site: any) {
           parentId: parentID,
         };
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (taxonomies[graphqlPluralName]) {
-          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           taxonomies[graphqlPluralName].nodes.push(taxonomy);
         } else {
-          // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
           taxonomies[graphqlPluralName] = { nodes: [taxonomy] };
         }
       }

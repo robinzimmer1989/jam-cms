@@ -10,7 +10,6 @@ import { previewActions } from '../../actions';
 import { getPreviewID } from '../../utils/auth';
 
 const PreviewRouter = (props: any) => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Button } from 'antd';
 
@@ -17,7 +16,6 @@ const PreviewEditor = (props: any) => {
     pageContext: { databaseId: postID },
   } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,

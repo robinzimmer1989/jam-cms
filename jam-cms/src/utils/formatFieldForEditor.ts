@@ -3,10 +3,7 @@ import produce from 'immer';
 
 // This function formats the value for the editor.
 
-export default function formatFieldForEditor({
-  field,
-  site
-}: any) {
+export default function formatFieldForEditor({ field, site }: any) {
   if (field?.type === 'group') {
     const nextGroupField = produce(field, (draft: any) => {
       // On initial load the field won't have a value (assigned in database)

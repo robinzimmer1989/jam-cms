@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled, { css, createGlobalStyle } from 'styled-components';
 import { Modal } from 'antd';
 
@@ -9,12 +8,11 @@ import MediaLibrary from './MediaLibrary';
 import { colors } from '../theme';
 import { useStore } from '../store';
 
-let JoditEditor = () => <></>;
+let JoditEditor = (props: any) => <></>;
 
 const HTMLEditor = (props: any) => {
   const { defaultValue = '', onChange } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       editorState: {
@@ -26,9 +24,9 @@ const HTMLEditor = (props: any) => {
 
   const editorRef = useRef(null);
 
-  const [modal, setModal] = useState(null);
-  const [link, setLink] = useState(null);
-  const [editor, setEditor] = useState(null);
+  const [modal, setModal] = useState('');
+  const [link, setLink] = useState({} as any);
+  const [editor, setEditor] = useState({} as any);
   const [loaded, setLoaded] = useState(false);
   const [content, setContent] = useState(defaultValue);
   const [index, setIndex] = useState(0);
@@ -52,10 +50,9 @@ const HTMLEditor = (props: any) => {
 
   // Disable links in sidebar to allow for relative links (not catched by Jodit)
   useEffect(() => {
-    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-    var anchors = document.querySelector('#jam-cms-sidebar').querySelectorAll('a');
+    const anchors = document.querySelector('#jam-cms-sidebar')?.querySelectorAll('a') || [];
 
-    for (var i = 0; i < anchors.length; i++) {
+    for (let i = 0; i < anchors.length; i++) {
       anchors[i].onclick = (e) => {
         e.preventDefault();
       };
@@ -67,11 +64,11 @@ const HTMLEditor = (props: any) => {
 
   const handleSelectImage = (image: any) => {
     const html = `<img src="${image.url}" alt="${image.altText}" />`;
-    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
+
     editor.s.insertHTML(html);
 
-    setModal(null);
-    setEditor(null);
+    setModal('');
+    setEditor({});
   };
 
   const handleSelectLink = (link: any) => {
@@ -83,10 +80,9 @@ const HTMLEditor = (props: any) => {
 
     const html = `<a href="${link.url}" ${target}>${link.title}</a>`;
 
-    // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     editor.s.insertHTML(html);
 
-    setModal(null);
+    setModal('');
     setLink(null);
     setEditor(null);
   };
@@ -131,12 +127,10 @@ const HTMLEditor = (props: any) => {
           popup: function (e: any, t: any, n: any, r: any) {
             setEditor(e);
             setLink({
-              // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ title: any; url: any; target: ... Remove this comment to see the full error message
               title: e.s?.range.cloneContents().textContent || e.s.current()?.textContent || '',
               url: t && typeof t.getAttribute === 'function' ? t.getAttribute('href') : '',
               target: t.target || '',
             });
-            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"link"' is not assignable to par... Remove this comment to see the full error message
             setModal('link');
             return;
           },
@@ -155,24 +149,24 @@ const HTMLEditor = (props: any) => {
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzkyIDE3OTIiIGNsYXNzPSJqb2RpdC1pY29uX2ltYWdlIGpvZGl0LWljb24iPiA8cGF0aCBkPSJNNTc2IDU3NnEwIDgwLTU2IDEzNnQtMTM2IDU2LTEzNi01Ni01Ni0xMzYgNTYtMTM2IDEzNi01NiAxMzYgNTYgNTYgMTM2em0xMDI0IDM4NHY0NDhoLTE0MDh2LTE5MmwzMjAtMzIwIDE2MCAxNjAgNTEyLTUxMnptOTYtNzA0aC0xNjAwcS0xMyAwLTIyLjUgOS41dC05LjUgMjIuNXYxMjE2cTAgMTMgOS41IDIyLjV0MjIuNSA5LjVoMTYwMHExMyAwIDIyLjUtOS41dDkuNS0yMi41di0xMjE2cTAtMTMtOS41LTIyLjV0LTIyLjUtOS41em0xNjAgMzJ2MTIxNnEwIDY2LTQ3IDExM3QtMTEzIDQ3aC0xNjAwcS02NiAwLTExMy00N3QtNDctMTEzdi0xMjE2cTAtNjYgNDctMTEzdDExMy00N2gxNjAwcTY2IDAgMTEzIDQ3dDQ3IDExM3oiPjwvcGF0aD4gPC9zdmc+',
           exec: function (e: any) {
             setEditor(e);
-            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"image"' is not assignable to pa... Remove this comment to see the full error message
             setModal('image');
           },
         },
       ],
     };
 
-    return loaded && (
-      <JoditEditor
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ ref: MutableRefObject<null>; value: any; c... Remove this comment to see the full error message
-        ref={editorRef}
-        value={defaultValue}
-        config={config}
-        onChange={(newContent: any) => {
-          setContent(newContent);
-          setIndex((index) => index + 1);
-        }}
-      />
+    return (
+      loaded && (
+        <JoditEditor
+          ref={editorRef}
+          value={defaultValue}
+          config={config}
+          onChange={(newContent: any) => {
+            setContent(newContent);
+            setIndex((index) => index + 1);
+          }}
+        />
+      )
     );
   }, [loaded, fullscreen]);
 
@@ -186,7 +180,7 @@ const HTMLEditor = (props: any) => {
         title={modal === 'image' ? 'Media' : 'Link'}
         visible={!!modal}
         onCancel={() => {
-          setModal(null);
+          setModal('');
           setLink(null);
         }}
         width={modal === 'image' || modal === 'editor' ? 1024 : 500}
@@ -200,15 +194,13 @@ const HTMLEditor = (props: any) => {
   );
 };
 
-const Container = styled.div`
+const Container = styled('div' as any)`
   .jodit-placeholder {
     padding: 8px 0;
   }
 
   .jodit-container.jodit.jodit-wysiwyg_mode {
-    ${({
-  fullscreen
-}: any) =>
+    ${({ fullscreen }: any) =>
       fullscreen
         ? css`
             position: fixed;

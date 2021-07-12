@@ -4,13 +4,11 @@ import { navigate } from '@reach/router';
 
 // import app components
 import Input from './Input';
-import { getCurrentUser } from '../utils/auth';
 import { siteActions } from '../actions';
 import { useStore } from '../store';
 import getRoute from '../routes';
 
 const SiteForm = () => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [{ config }, dispatch] = useStore();
 
   const [title, setTitle] = useState('');
@@ -23,12 +21,7 @@ const SiteForm = () => {
 
     setLoading(true);
 
-    const result = await siteActions.addSite(
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-      { ownerID: getCurrentUser(config).sub, title },
-      dispatch,
-      config
-    );
+    const result = await siteActions.addSite({ title }, dispatch, config);
 
     if (result) {
       navigate(getRoute(`dashboard`, { siteID: result.id }));

@@ -14,7 +14,6 @@ import { useStore } from '../../store';
 import { getPreviewID } from '../../utils/auth';
 
 const Router = (props: any) => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       authState: { authUser },

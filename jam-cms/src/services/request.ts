@@ -7,8 +7,7 @@ import { getUser, getPreviewID } from '../utils/auth';
 import { authActions } from '../actions';
 
 const db = async (endpoint: any, params: any, dispatch: any, config: any) => {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-  const user = getUser(config);
+  const user = getUser();
 
   if (!user?.authToken && !getPreviewID()) {
     authActions.signOut({}, dispatch, config);

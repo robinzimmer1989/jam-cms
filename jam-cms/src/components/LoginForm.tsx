@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Link, navigate } from 'gatsby';
 import { Button, Card, Space, Form, message, Row } from 'antd';
@@ -21,8 +20,8 @@ const LoginForm = (props: any) => {
     error: null,
     success: null,
     loading: false,
-    form: null,
-  });
+    form: '',
+  } as any);
 
   const action = getParameter('action');
   const key = getParameter('key');
@@ -31,7 +30,6 @@ const LoginForm = (props: any) => {
   const isAuthed = auth.isLoggedIn();
 
   useEffect(() => {
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'true | "login"' is not assignable to type 'n... Remove this comment to see the full error message
     setData({ ...data, form: action && key && login ? action : 'login' });
   }, [action]);
 
@@ -46,25 +44,23 @@ const LoginForm = (props: any) => {
     }
   }, [isAuthed]);
 
-  const handleChange = (e: any) => setData({ ...data, error: null, [e.target.name]: e.target.value });
+  const handleChange = (e: any) =>
+    setData({ ...data, error: null, [e.target.name]: e.target.value });
 
   const handleLogin = async () => {
     const { email, password } = data;
 
     if (!email) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Email address is required' });
       return;
     }
 
     if (!validateEmail(email)) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Email address is invalid' });
       return;
     }
 
     if (!password) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Password is required' });
       return;
     }
@@ -75,7 +71,6 @@ const LoginForm = (props: any) => {
       const result = await authActions.signIn({ email, password }, url);
 
       if (!result?.data?.login?.authToken || result?.errors?.[0]?.message) {
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
         setData({ ...data, error: 'Email or password wrong.', loading: false });
       } else {
         auth.setUser(result.data.login);
@@ -92,13 +87,11 @@ const LoginForm = (props: any) => {
     const { email } = data;
 
     if (!email) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Email address is required' });
       return;
     }
 
     if (!validateEmail(email)) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Email address is invalid' });
       return;
     }
@@ -111,7 +104,6 @@ const LoginForm = (props: any) => {
       if (result?.data?.sendPasswordResetEmail) {
         setData({
           ...data,
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null'.
           success: (
             <p>{`Success. An email has been sent to ${email} with further instructions.`}</p>
           ),
@@ -129,7 +121,6 @@ const LoginForm = (props: any) => {
     const { password } = data;
 
     if (!password) {
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
       setData({ ...data, error: 'Password is required' });
       return;
     }
@@ -143,13 +134,11 @@ const LoginForm = (props: any) => {
         setData({
           ...data,
           password: '',
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'null'.
           success: (
             <>
               <p>{`Password set successfully.`}</p>
               <Button
                 children={`Back to Login`}
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
                 onClick={() => setData({ ...data, form: 'login' })}
                 type="primary"
                 block
@@ -168,21 +157,18 @@ const LoginForm = (props: any) => {
 
   const getFormData = () => {
     switch (data.form) {
-      // @ts-expect-error ts-migrate(2678) FIXME: Type '"login"' is not comparable to type 'null'.
       case 'login':
         return {
           title: 'Login',
           handleSubmit: () => handleLogin(),
         };
 
-      // @ts-expect-error ts-migrate(2678) FIXME: Type '"forget"' is not comparable to type 'null'.
       case 'forget':
         return {
           title: 'Forgot Password',
           handleSubmit: () => handleForgetPassword(),
         };
 
-      // @ts-expect-error ts-migrate(2678) FIXME: Type '"reset"' is not comparable to type 'null'.
       case 'reset':
         return {
           title: 'Set Password',
@@ -195,78 +181,80 @@ const LoginForm = (props: any) => {
 
   const formData = getFormData();
 
-  return <>
-    <Container>
-      {data?.form && (
-        <Card title={formData?.title}>
-          {url ? (
-            <>
-              {data?.success ? (
-                <Success children={data.success} />
-              ) : (
-                <Space direction="vertical" size={20}>
-                  <Form onFinish={formData?.handleSubmit}>
-                    <Space direction="vertical" size={20}>
-                      {(data.form === 'login' || data.form === 'forget') && (
-                        <Input
-                          label={`Email`}
-                          value={data.email}
-                          onChange={handleChange}
-                          onKeyDown={(e: any) => e.key === 'Enter' && formData?.handleSubmit}
-                          name="email"
+  return (
+    <>
+      <Container>
+        {data?.form && (
+          <Card title={formData?.title}>
+            {url ? (
+              <>
+                {data?.success ? (
+                  <Success children={data.success} />
+                ) : (
+                  <Space direction="vertical" size={20}>
+                    <Form onFinish={formData?.handleSubmit}>
+                      <Space direction="vertical" size={20}>
+                        {(data.form === 'login' || data.form === 'forget') && (
+                          <Input
+                            label={`Email`}
+                            value={data.email}
+                            onChange={handleChange}
+                            onKeyDown={(e: any) => e.key === 'Enter' && formData?.handleSubmit}
+                            name="email"
+                          />
+                        )}
+                        {(data.form === 'login' || data.form === 'reset') && (
+                          <Input
+                            label={`Password`}
+                            value={data.password}
+                            type="password"
+                            onChange={handleChange}
+                            onKeyDown={(e: any) => e.key === 'Enter' && formData?.handleSubmit}
+                            name="password"
+                          />
+                        )}
+                        {data?.error && <Error children={data.error} />}
+                        <Button
+                          loading={data.loading}
+                          children={`Submit`}
+                          type="primary"
+                          htmlType="submit"
+                          block
                         />
-                      )}
-                      {(data.form === 'login' || data.form === 'reset') && (
-                        <Input
-                          label={`Password`}
-                          value={data.password}
-                          type="password"
-                          onChange={handleChange}
-                          onKeyDown={(e: any) => e.key === 'Enter' && formData?.handleSubmit}
-                          name="password"
-                        />
-                      )}
-                      {data?.error && <Error children={data.error} />}
-                      <Button
-                        loading={data.loading}
-                        children={`Submit`}
-                        type="primary"
-                        htmlType="submit"
-                        block
-                      />
-                    </Space>
-                  </Form>
+                      </Space>
+                    </Form>
 
-                  <FooterLink
-                    onClick={() =>
-                      handleChange({
-                        target: {
-                          name: 'form',
-                          value: data.form === 'login' ? 'forget' : 'login',
-                        },
-                      })
-                    }
-                  >
-                    {data.form === 'login' ? 'Forgot password?' : 'Back to Login'}
-                  </FooterLink>
-                </Space>
-              )}
-            </>
-          ) : (
-            <p>Please provide a URL.</p>
-          )}
-        </Card>
+                    <FooterLink
+                      onClick={() =>
+                        handleChange({
+                          target: {
+                            name: 'form',
+                            value: data.form === 'login' ? 'forget' : 'login',
+                          },
+                        })
+                      }
+                    >
+                      {data.form === 'login' ? 'Forgot password?' : 'Back to Login'}
+                    </FooterLink>
+                  </Space>
+                )}
+              </>
+            ) : (
+              <p>Please provide a URL.</p>
+            )}
+          </Card>
+        )}
+      </Container>
+
+      {backLink && (
+        <Row justify="center">
+          <Link to={'/'}>
+            <Button type="text" children="Back to Homepage" size="small" />
+          </Link>
+        </Row>
       )}
-    </Container>
-
-    {backLink && (
-      <Row justify="center">
-        <Link to={'/'}>
-          <Button type="text" children="Back to Homepage" size="small" />
-        </Link>
-      </Row>
-    )}
-  </>;
+    </>
+  );
 };
 
 const Container = styled.div`

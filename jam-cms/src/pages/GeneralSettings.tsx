@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Space, message, Select as AntSelect } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
+import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import Input from '../components/Input';
@@ -11,8 +12,7 @@ import CmsLayout from '../components/CmsLayout';
 import { useStore } from '../store';
 import { siteActions } from '../actions';
 
-const GeneralSettings = () => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
+const GeneralSettings = (props: RouteComponentProps) => {
   const [
     {
       config,
@@ -182,10 +182,8 @@ const GeneralSettings = () => {
               value={site?.editorOptions?.sidebar?.defaultOpen}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.defaultOpen')}
             >
-              {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'boolean' is not assignable to type 'Key'. */}
-              <AntSelect.Option value={true} children="Open" />
-              {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'boolean' is not assignable to type 'Key'. */}
-              <AntSelect.Option value={false} children="Closed" />
+              <AntSelect.Option value={'true'} children="Open" />
+              <AntSelect.Option value={'false'} children="Closed" />
             </Select>
 
             <Button

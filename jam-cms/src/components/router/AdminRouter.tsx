@@ -29,7 +29,6 @@ import {
 } from '../../routes';
 
 const AdminRouter = (props: any) => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
@@ -73,24 +72,18 @@ const AdminRouter = (props: any) => {
       <CmsStyles />
 
       <Router>
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message */}
         <Home path={`${ROUTE_APP}`} />
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message */}
         <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} />
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message */}
         <Dashboard path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} />
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message */}
         <Media path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} />
         <PostType path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_POST_TYPE}/:postTypeID`} />
         <Taxonomy path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`} />
 
         {authUser?.capabilities?.manage_options && (
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message
           <GeneralSettings path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_GENERAL}`} />
         )}
 
         {authUser?.capabilities?.list_users && (
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ path: string; }' is not assignable to type... Remove this comment to see the full error message
           <Users path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`} />
         )}
 

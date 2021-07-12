@@ -26,10 +26,7 @@ export const updatePost = async (args: any, dispatch: any, config: any) => {
   return result;
 };
 
-export const deletePost = async ({
-  siteID,
-  id
-}: any, dispatch: any, config: any) => {
+export const deletePost = async ({ siteID, id }: any, dispatch: any, config: any) => {
   const result = await postServices.deletePost({ siteID, id }, dispatch, config);
 
   if (result) {
@@ -49,10 +46,7 @@ export const emptyTrash = async (args: any, dispatch: any, config: any) => {
   return result;
 };
 
-export const duplicatePost = async ({
-  siteID,
-  id
-}: any, dispatch: any, config: any) => {
+export const duplicatePost = async ({ siteID, id }: any, dispatch: any, config: any) => {
   const result = await postServices.duplicatePost({ siteID, id }, dispatch, config);
 
   if (result) {
@@ -62,16 +56,15 @@ export const duplicatePost = async ({
   return result;
 };
 
-export const reorderPosts = async ({
-  siteID,
-  postType,
-  posts
-}: any, dispatch: any, config: any) => {
+export const reorderPosts = async (
+  { siteID, postType, posts }: any,
+  dispatch: any,
+  config: any
+) => {
   const postIDs = posts.reduce(
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-    (ac, a) => ({
+    (ac: any, a: any) => ({
       ...ac,
-      [a.id]: a.order
+      [a.id]: a.order,
     }),
     {}
   );
@@ -85,10 +78,9 @@ export const reorderPosts = async ({
       siteID,
       ...postType,
       posts: posts.reduce(
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-        (ac, a) => ({
+        (ac: any, a: any) => ({
           ...ac,
-          [a.id]: a
+          [a.id]: a,
         }),
         {}
       ),

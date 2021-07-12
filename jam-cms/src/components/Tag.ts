@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled, { css } from 'styled-components';
 
 import { colors } from '../theme';
@@ -12,36 +11,28 @@ const Tag = styled.span`
   text-transform: uppercase;
   border-radius: 4px;
 
-  ${({
-  children
-}: any) =>
+  ${({ children }: any) =>
     children === 'front' &&
     css`
       background: ${colors.success};
       color: #fff;
     `}
 
-  ${({
-  children
-}: any) =>
+  ${({ children }: any) =>
     children === 'draft' &&
     css`
       background: ${colors.primary};
       color: #fff;
     `}
 
-  ${({
-  children
-}: any) =>
+  ${({ children }: any) =>
     children === 'trash' &&
     css`
       background: ${colors.danger};
       color: #fff;
     `}
 
-    ${({
-  children
-}: any) =>
+    ${({ children }: any) =>
     children === 'private' &&
     css`
       background: ${colors.warning};

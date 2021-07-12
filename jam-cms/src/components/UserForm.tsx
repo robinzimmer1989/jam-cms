@@ -10,12 +10,11 @@ import { useStore } from '../store';
 const UserForm = (props: any) => {
   const { id, email: defaultEmail = '', role: defaultRole = 'editor', onAdd, onUpdate } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [, dispatch] = useStore();
 
   const [email, setEmail] = useState(defaultEmail);
   const [role, setRole] = useState(defaultRole);
-  const [sendEmail, setSendEmail] = useState('checked');
+  const [sendEmail, setSendEmail] = useState(true);
 
   const userExists = !!id;
 
@@ -27,7 +26,7 @@ const UserForm = (props: any) => {
     if (id) {
       onUpdate({ id, role });
     } else {
-      onAdd({ email, role, sendEmail: sendEmail === 'checked' });
+      onAdd({ email, role, sendEmail });
     }
 
     dispatch({ type: 'CLOSE_DIALOG' });
@@ -39,7 +38,7 @@ const UserForm = (props: any) => {
         label="Email"
         value={email}
         onChange={(e: any) => setEmail(e.target.value)}
-        placeholder={``}
+        placeholder={''}
         disabled={!!defaultEmail}
         onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
       />
@@ -54,8 +53,7 @@ const UserForm = (props: any) => {
       </Space>
 
       {!id && (
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: string; defaultValue: string; on... Remove this comment to see the full error message
-        <Checkbox defaultValue={sendEmail} onChange={(e) => setSendEmail(e.target.checked)}>
+        <Checkbox checked={sendEmail} onChange={(e) => setSendEmail(e.target.checked)}>
           Send new user email
         </Checkbox>
       )}

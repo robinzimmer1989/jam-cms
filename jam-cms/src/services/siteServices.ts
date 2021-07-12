@@ -15,9 +15,7 @@ export const getSites = async ({}, dispatch: any, config: any) => {
   return result;
 };
 
-export const getSite = async ({
-  siteID
-}: any, dispatch: any, config: any) => {
+export const getSite = async ({ siteID }: any, dispatch: any, config: any) => {
   let result = await db('getSite', { siteID }, dispatch, config);
 
   if (result) {
@@ -26,9 +24,7 @@ export const getSite = async ({
   return result;
 };
 
-export const addSite = async ({
-  title
-}: any, dispatch: any, config: any) => {
+export const addSite = async ({ title }: any, dispatch: any, config: any) => {
   let result = await db('createSite', { title }, dispatch, config);
 
   if (result) {
@@ -48,7 +44,7 @@ export const updateSite = async (
     siteUrl,
     googleMapsApi,
     apiKey,
-    editorOptions
+    editorOptions,
   }: any,
   dispatch: any,
   config: any
@@ -77,9 +73,7 @@ export const updateSite = async (
   return result;
 };
 
-export const deleteSite = async ({
-  id
-}: any, dispatch: any, config: any) => {
+export const deleteSite = async ({ id }: any, dispatch: any, config: any) => {
   let result = await db('deleteSite', { id }, dispatch, config);
 
   if (result) {
@@ -89,9 +83,7 @@ export const deleteSite = async ({
   return result;
 };
 
-export const deploySite = async ({
-  id
-}: any, dispatch: any, config: any) => {
+export const deploySite = async ({ id }: any, dispatch: any, config: any) => {
   let result = await db('deploySite', { id }, dispatch, config);
 
   if (result) {
@@ -101,10 +93,7 @@ export const deploySite = async ({
   return result;
 };
 
-export const syncFields = async ({
-  fields,
-  apiKey
-}: any, dispatch: any, config: any) => {
+export const syncFields = async ({ fields, apiKey }: any, dispatch: any, config: any) => {
   let result = await db('syncFields', { fields: JSON.stringify(fields), apiKey }, dispatch, config);
 
   if (result) {
@@ -114,9 +103,7 @@ export const syncFields = async ({
   return result;
 };
 
-export const getUnpublishedChanges = async ({
-  siteID
-}: any, dispatch: any, config: any) => {
+export const getUnpublishedChanges = async ({ siteID }: any, dispatch: any, config: any) => {
   const result = await db('getUnpublishedChanges', { siteID }, dispatch, config);
   return result;
 };

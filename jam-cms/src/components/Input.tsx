@@ -22,8 +22,9 @@ const Input = (props: any) => {
   return (
     <Space direction="vertical" size={6}>
       {label && <Caption className={className} children={label} />}
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ type: string; children: any; }' is not ass... Remove this comment to see the full error message */}
-      {instructions && <Typography type="secondary" children={instructions} />}
+
+      {instructions && <Typography.Text type="secondary" children={instructions} />}
+
       {!!rows ? (
         <AntInput.TextArea
           value={value}

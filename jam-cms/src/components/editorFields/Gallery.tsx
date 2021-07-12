@@ -1,5 +1,4 @@
 import React from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled, { css } from 'styled-components';
 import produce from 'immer';
 import {
@@ -151,9 +150,7 @@ const icon = css`
   height: 14px;
   width: 14px;
 
-  ${({
-  disabled
-}: any) =>
+  ${({ disabled }: any) =>
     disabled &&
     css`
       svg {
@@ -172,13 +169,13 @@ const RemoveIcon = styled.div`
   top: 4px;
 `;
 
-const LeftIcon = styled.div`
+const LeftIcon = styled('div' as any)`
   ${icon}
   left: calc(50% - 20px);
   bottom: 4px;
 `;
 
-const RightIcon = styled.div`
+const RightIcon = styled('div' as any)`
   ${icon}
   right: calc(50% - 25px);
   bottom: 4px;

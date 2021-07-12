@@ -4,12 +4,11 @@ import { get } from 'lodash';
 // import app components
 import { db } from '.';
 
-export const addCollection = async ({
-  siteID,
-  id,
-  title,
-  slug
-}: any, dispatch: any, config: any) => {
+export const addCollection = async (
+  { siteID, id, title, slug }: any,
+  dispatch: any,
+  config: any
+) => {
   let result = await db('createCollection', { siteID, id, title, slug }, dispatch, config);
 
   if (result) {
@@ -19,12 +18,11 @@ export const addCollection = async ({
   return result;
 };
 
-export const updateCollection = async ({
-  siteID,
-  id,
-  title,
-  slug
-}: any, dispatch: any, config: any) => {
+export const updateCollection = async (
+  { siteID, id, title, slug }: any,
+  dispatch: any,
+  config: any
+) => {
   let result = await db(
     'updateCollection',
     {
@@ -44,10 +42,7 @@ export const updateCollection = async ({
   return result;
 };
 
-export const deleteCollection = async ({
-  siteID,
-  id
-}: any, dispatch: any, config: any) => {
+export const deleteCollection = async ({ siteID, id }: any, dispatch: any, config: any) => {
   let result = await db('deleteCollection', { siteID, id }, dispatch, config);
 
   if (result) {
@@ -61,10 +56,9 @@ const transformCollection = (collection: any) => {
   const nextCollection = produce(collection, (draft: any) => {
     if (get(draft, `posts.items`)) {
       draft.posts = draft.posts.items.reduce(
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'ac' implicitly has an 'any' type.
-        (ac, a) => ({
+        (ac: any, a: any) => ({
           ...ac,
-          [a.id]: a
+          [a.id]: a,
         }),
         {}
       );

@@ -13,7 +13,6 @@ const PrivateEditor = (props: any) => {
     pageContext: { databaseId: postID },
   } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,

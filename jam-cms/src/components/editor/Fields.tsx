@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Space, Typography } from 'antd';
 
@@ -28,15 +27,9 @@ import ColorPicker from '../editorFields/ColorPicker';
 
 import { useStore } from '../../store';
 
-export const getField = ({
-  index,
-  field,
-  site,
-  onChangeElement,
-  dispatch,
-  level = 1
-}: any) => {
+export const getField = ({ index, field, site, onChangeElement, dispatch, level = 1 }: any) => {
   let component;
+
   switch (field.type) {
     case 'group':
       component = (
@@ -51,7 +44,10 @@ export const getField = ({
 
     case 'text':
       component = (
-        <Text {...field} onChange={(e: any) => onChangeElement({ ...field, value: e.target.value })} />
+        <Text
+          {...field}
+          onChange={(e: any) => onChangeElement({ ...field, value: e.target.value })}
+        />
       );
       break;
 
@@ -72,7 +68,9 @@ export const getField = ({
       break;
 
     case 'number':
-      component = <Number {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />;
+      component = (
+        <Number {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
+      );
       break;
 
     case 'date_picker':
@@ -107,7 +105,9 @@ export const getField = ({
       break;
 
     case 'select':
-      component = <Select {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />;
+      component = (
+        <Select {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
+      );
       break;
 
     case 'checkbox':
@@ -117,7 +117,9 @@ export const getField = ({
       break;
 
     case 'radio':
-      component = <Radio {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />;
+      component = (
+        <Radio {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
+      );
       break;
 
     case 'repeater':
@@ -200,7 +202,9 @@ export const getField = ({
       break;
 
     case 'menu':
-      component = <Menu {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />;
+      component = (
+        <Menu {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
+      );
       break;
 
     case 'google_map':
@@ -238,7 +242,6 @@ export const getField = ({
 const Fields = (props: any) => {
   const { fields, onChangeElement } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       editorState: { site },
@@ -269,10 +272,8 @@ const Container = styled.div`
   }
 `;
 
-const FieldContainer = styled.div`
-  padding: 8px ${({
-  level
-}: any) => (level === 1 ? '16px' : '4px')};
+const FieldContainer = styled('div' as any)`
+  padding: 8px ${({ level }: any) => (level === 1 ? '16px' : '4px')};
 `;
 
 export default Fields;

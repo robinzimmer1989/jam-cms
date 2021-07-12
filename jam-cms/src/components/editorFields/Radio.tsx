@@ -14,7 +14,8 @@ const Radio = (props: any) => {
 
   return (
     <AntRadio.Group onChange={handleChange} value={value || defaultValue}>
-      {options && options.map((o: any) => <AntRadio key={o.value} value={o.value} children={o.name} />)}
+      {options &&
+        options.map((o: any) => <AntRadio key={o.value} value={o.value} children={o.name} />)}
     </AntRadio.Group>
   );
 };

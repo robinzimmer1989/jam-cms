@@ -5,14 +5,12 @@ export default function formatFields(fields: any) {
     postTypes: {},
     taxonomies: fields?.taxonomies,
     themeOptions: fields?.themeOptions,
-  };
+  } as any;
 
   fields?.postTypes?.map((o: any) => {
-    const templates = {};
-    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-    o?.templates?.map((p: any) => templates[p.id] = p);
+    const templates = {} as any;
+    o?.templates?.map((p: any) => (templates[p.id] = p));
 
-    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     formattedFields.postTypes[o.id] = { ...o, templates };
   });
 

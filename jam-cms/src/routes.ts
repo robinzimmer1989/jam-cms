@@ -7,7 +7,7 @@ export const ROUTE_TAXONOMY = '/taxonomy';
 export const ROUTE_PROFILE = '/profile';
 export const ROUTE_USERS = '/users';
 
-const getRoute = (route: any, args: any) => {
+const getRoute = (route: String, args: any = {}) => {
   const siteID = args?.siteID || 'default';
   const base = `${ROUTE_SITE}/${siteID}`;
 

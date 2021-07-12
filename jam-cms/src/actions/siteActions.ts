@@ -1,13 +1,11 @@
 import { navigate } from '@reach/router';
 
+// import app components
 import { siteServices } from '../services';
 import getRoute from '../routes';
 
-export const addSite = async ({
-  title,
-  ownerID
-}: any, dispatch: any, config: any) => {
-  const result = await siteServices.addSite({ title, ownerID }, dispatch, config);
+export const addSite = async ({ title }: any, dispatch: any, config: any) => {
+  const result = await siteServices.addSite({ title }, dispatch, config);
 
   if (result) {
     dispatch({ type: 'ADD_SITE', payload: result });
@@ -28,9 +26,7 @@ export const updateSite = async (args: any, dispatch: any, config: any) => {
   return result;
 };
 
-export const deleteSite = async ({
-  id
-}: any, dispatch: any, config: any) => {
+export const deleteSite = async ({ id }: any, dispatch: any, config: any) => {
   const result = await siteServices.deleteSite({ id }, dispatch, config);
 
   if (result) {
@@ -50,10 +46,7 @@ export const getSites = async (args: any, dispatch: any, config: any) => {
   return result;
 };
 
-export const getSite = async ({
-  siteID,
-  siteHasChanged
-}: any, dispatch: any, config: any) => {
+export const getSite = async ({ siteID, siteHasChanged }: any, dispatch: any, config: any) => {
   const result = await siteServices.getSite({ siteID }, dispatch, config);
 
   if (result) {
@@ -68,9 +61,7 @@ export const getSite = async ({
   return result;
 };
 
-export const deploySite = async ({
-  id
-}: any, dispatch: any, config: any) => {
+export const deploySite = async ({ id }: any, dispatch: any, config: any) => {
   const result = await siteServices.deploySite({ id }, dispatch, config);
 
   if (result) {
@@ -80,10 +71,7 @@ export const deploySite = async ({
   return result;
 };
 
-export const syncFields = async ({
-  fields,
-  apiKey
-}: any, dispatch: any, config: any) => {
+export const syncFields = async ({ fields, apiKey }: any, dispatch: any, config: any) => {
   const result = await siteServices.syncFields({ fields, apiKey }, dispatch, config);
 
   if (result) {
@@ -93,9 +81,7 @@ export const syncFields = async ({
   return result;
 };
 
-export const getUnpublishedChanges = async ({
-  siteID
-}: any, dispatch: any, config: any) => {
+export const getUnpublishedChanges = async ({ siteID }: any, dispatch: any, config: any) => {
   const result = await siteServices.getUnpublishedChanges({ siteID }, dispatch, config);
   return result;
 };

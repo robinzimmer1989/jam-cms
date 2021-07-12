@@ -6,12 +6,8 @@ import { db } from '.';
 import { auth } from '../utils';
 import { authActions } from '../actions';
 
-export const addMediaItem = async ({
-  siteID,
-  file
-}: any, dispatch: any, config: any) => {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-  const user = auth.getUser(config);
+export const addMediaItem = async ({ siteID, file }: any, dispatch: any, config: any) => {
+  const user = auth.getUser();
 
   if (!user?.authToken) {
     authActions.signOut({}, dispatch, config);
@@ -44,30 +40,21 @@ export const addMediaItem = async ({
   }
 };
 
-export const updateMediaItem = async ({
-  siteID,
-  id,
-  altText
-}: any, dispatch: any, config: any) => {
+export const updateMediaItem = async ({ siteID, id, altText }: any, dispatch: any, config: any) => {
   let result = await db('updateMediaItem', { siteID, id, altText }, dispatch, config);
   return result;
 };
 
-export const deleteMediaItem = async ({
-  siteID,
-  id
-}: any, dispatch: any, config: any) => {
+export const deleteMediaItem = async ({ siteID, id }: any, dispatch: any, config: any) => {
   let result = await db('deleteMediaItem', { siteID, id }, dispatch, config);
   return result;
 };
 
-export const getMediaItems = async ({
-  siteID,
-  page,
-  limit,
-  search,
-  allow
-}: any, dispatch: any, config: any) => {
+export const getMediaItems = async (
+  { siteID, page, limit, search, allow }: any,
+  dispatch: any,
+  config: any
+) => {
   let result = await db('getMediaItems', { siteID, page, limit, search, allow }, dispatch, config);
   return result;
 };

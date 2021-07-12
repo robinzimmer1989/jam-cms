@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+// import app components
 import { formatFields } from '../utils';
 
 import { configReducer } from './configState';
@@ -8,15 +9,9 @@ import { appState, appReducer } from './appState';
 import { editorState, editorReducer } from './editorState';
 import { cmsState, sitesReducer } from './cmsState';
 
-export const StateContext = createContext({});
+export const StateContext = createContext({} as any);
 
-export const StoreProvider = ({
-  children,
-  source,
-  settings,
-  siteID = 'default',
-  fields
-}: any) => {
+export const StoreProvider = ({ children, source, settings, siteID = 'default', fields }: any) => {
   const config = { source, settings, siteID, fields: formatFields(fields) };
 
   const initialState = {
@@ -27,25 +22,16 @@ export const StoreProvider = ({
     cmsState,
   };
 
-  const reducer = (
-    {
-      authState,
-      appState,
-      editorState,
-      cmsState
-    }: any,
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'action' implicitly has an 'any' type.
-    action
-  ) => ({
-    config: configReducer(config, action),
-    authState: authReducer(authState, action),
-    appState: appReducer(appState, action),
-    editorState: editorReducer(editorState, action),
-    cmsState: sitesReducer(cmsState, action)
-  });
+  const reducer = ({ authState, appState, editorState, cmsState }: any, action: any) =>
+    ({
+      config: configReducer(config, action),
+      authState: authReducer(authState, action),
+      appState: appReducer(appState, action),
+      editorState: editorReducer(editorState, action),
+      cmsState: sitesReducer(cmsState, action),
+    } as any);
 
   return (
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
     <StateContext.Provider value={useReducer(reducer, initialState)}>
       {children}
     </StateContext.Provider>

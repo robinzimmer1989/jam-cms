@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Space, Typography } from 'antd';
+import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -7,8 +8,7 @@ import Caption from '../components/Caption';
 
 import { useStore } from '../store';
 
-const Home = () => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
+const Profile = (props: RouteComponentProps) => {
   const [
     {
       authState: { authUser },
@@ -35,4 +35,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Profile;

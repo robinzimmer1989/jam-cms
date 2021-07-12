@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { navigate } from '@reach/router';
+import { navigate, RouteComponentProps } from '@reach/router';
 import { PageHeader, Space, Button } from 'antd';
 
 // import app components
@@ -13,8 +13,7 @@ import { siteActions } from '../actions';
 import { useStore } from '../store';
 import getRoute from '../routes';
 
-const Home = () => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
+const Home = (props: RouteComponentProps) => {
   const [
     {
       config,
@@ -31,7 +30,6 @@ const Home = () => {
         await siteActions.getSites({}, dispatch, config);
         setLoaded(true);
       } else {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         navigate(getRoute(`dashboard`));
       }
     };

@@ -1,5 +1,5 @@
 export default function getParameter(param: any) {
-  var result = false,
+  var result = '',
     tmp = [];
   if (typeof window !== `undefined`) {
     window.location.search
@@ -8,10 +8,10 @@ export default function getParameter(param: any) {
       .forEach((item) => {
         tmp = item.split('=');
         if (tmp[0] === param) {
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
           result = decodeURIComponent(tmp[1]);
         }
       });
   }
+
   return result;
 }

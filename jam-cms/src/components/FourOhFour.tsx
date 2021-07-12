@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from '@reach/router';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Empty, Button } from 'antd';
 
@@ -8,7 +7,6 @@ import getRoute from '../routes';
 import { useStore } from '../store';
 
 const FourOhFour = () => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       cmsState: { siteID },

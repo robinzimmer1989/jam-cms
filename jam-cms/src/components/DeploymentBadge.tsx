@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-import { Space, Button, notification, Tooltip } from 'antd';
+import { Space, Button, Tooltip } from 'antd';
 import { DeploymentUnitOutlined } from '@ant-design/icons';
 
 // import app components
@@ -13,12 +12,11 @@ const DeploymentBadge = (props: any) => {
     deployment: { badgeImage, badgeLink, buildHook, lastBuild },
   } = props;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
       authState: { authUser },
-      cmsState: { siteID, sites, deploymentImage },
+      cmsState: { siteID, deploymentImage },
     },
     dispatch,
   ] = useStore();

@@ -1,33 +1,22 @@
 import { authServices } from '../services';
 import { auth } from '../utils';
 
-export const signIn = async ({
-  email,
-  password
-}: any, url: any) => {
+export const signIn = async ({ email, password }: any, url: any) => {
   const result = await authServices.signIn({ email, password }, url);
   return result;
 };
 
-export const signOut = async ({
-  onLogout
-}: any, dispatch: any, config: any) => {
+export const signOut = async ({ onLogout }: any, dispatch: any, config: any) => {
   auth.logout(onLogout);
   dispatch({ type: `REMOVE_AUTH_USER` });
 };
 
-export const forgetPassword = async ({
-  email
-}: any, url: any) => {
+export const forgetPassword = async ({ email }: any, url: any) => {
   const result = await authServices.forgetPassword({ email }, url);
   return result;
 };
 
-export const resetPassword = async ({
-  key,
-  login,
-  password
-}: any, url: any) => {
+export const resetPassword = async ({ key, login, password }: any, url: any) => {
   const result = await authServices.resetPassword({ key, login, password }, url);
   return result;
 };

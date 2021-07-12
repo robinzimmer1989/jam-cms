@@ -19,7 +19,6 @@ const TermForm = (props: any) => {
 
   const termExists = !!id;
 
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [, dispatch] = useStore();
 
   const [title, setTitle] = useState(defaultTitle);

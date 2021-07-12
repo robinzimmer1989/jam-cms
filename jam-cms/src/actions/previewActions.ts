@@ -1,9 +1,6 @@
 import { previewServices } from '../services';
 
-export const getSitePreview = async ({
-  siteID,
-  previewID
-}: any, dispatch: any, config: any) => {
+export const getSitePreview = async ({ siteID, previewID }: any, dispatch: any, config: any) => {
   const result = await previewServices.getSitePreview({ siteID, previewID }, dispatch, config);
 
   if (result) {
@@ -13,10 +10,7 @@ export const getSitePreview = async ({
   return result;
 };
 
-export const getPostPreview = async ({
-  siteID,
-  previewID
-}: any, dispatch: any, config: any) => {
+export const getPostPreview = async ({ siteID, previewID }: any, dispatch: any, config: any) => {
   const result = await previewServices.getPostPreview({ siteID, previewID }, dispatch, config);
 
   if (result) {
@@ -26,11 +20,11 @@ export const getPostPreview = async ({
   return result;
 };
 
-export const generatePreviewLink = async ({
-  siteID,
-  postID,
-  expiryDate
-}: any, dispatch: any, config: any) => {
+export const generatePreviewLink = async (
+  { siteID, postID, expiryDate }: any,
+  dispatch: any,
+  config: any
+) => {
   const result = await previewServices.generatePreviewLink(
     { siteID, postID, expiryDate },
     dispatch,

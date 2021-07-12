@@ -1,7 +1,7 @@
 export default function createDataTree(dataset: any) {
   let hashTable = Object.create(null);
 
-  dataset.forEach((aData: any) => hashTable[aData.id] = { ...aData, childNodes: [] });
+  dataset.forEach((aData: any) => (hashTable[aData.id] = { ...aData, childNodes: [] }));
 
   let dataTree: any = [];
 

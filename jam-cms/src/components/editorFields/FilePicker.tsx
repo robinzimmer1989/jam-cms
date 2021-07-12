@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Space } from 'antd';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 
 // import app components
@@ -47,7 +46,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled('div' as any)`
   height: 80px;
   width: 80px;
   margin-right: 10px;

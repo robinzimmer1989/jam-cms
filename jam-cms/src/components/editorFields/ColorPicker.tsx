@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import ChromePicker from 'react-color';
 
 const ColorPicker = (props: any) => {
@@ -56,23 +54,21 @@ const Code = styled.div`
   font-size: 12px;
 `;
 
-const StyledChromePicker = styled(ChromePicker)`
+const StyledChromePicker = styled(ChromePicker as any)`
   position: absolute;
   z-index: 12;
   left: 0;
   top: 35px;
 `;
 
-const ClickAwayListener = styled.div`
+const ClickAwayListener = styled('div' as any)`
   position: fixed;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
   z-index: 11;
-  pointer-events: ${({
-  open
-}: any) => (open ? 'all' : 'none')};
+  pointer-events: ${({ open }: any) => (open ? 'all' : 'none')};
 `;
 
 export default ColorPicker;

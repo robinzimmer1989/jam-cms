@@ -6,12 +6,11 @@ import produce from 'immer';
 import { postActions } from '../actions';
 import generateSlug from './generateSlug';
 
-export default async function addPost({
-  site,
-  postTypeID,
-  title,
-  parentID
-}: any, dispatch: any, config: any) {
+export default async function addPost(
+  { site, postTypeID, title, parentID }: any,
+  dispatch: any,
+  config: any
+) {
   const result = await postActions.addPost(
     { siteID: site.id, postTypeID, status: 'draft', title, parentID },
     dispatch,

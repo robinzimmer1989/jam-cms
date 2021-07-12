@@ -48,14 +48,13 @@ export const getPreviewID = () => {
   return preview;
 };
 
-export const getCurrentUser = () => isBrowser && getUser();
-
 export const logout = (onLogout: any) => {
   if (!isBrowser) {
     return;
   }
 
   setUser({});
+
   // Reload page
   typeof onLogout === 'function'
     ? onLogout()

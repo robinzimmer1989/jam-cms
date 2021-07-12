@@ -8,7 +8,6 @@ import { authActions, userActions } from '../actions';
 import { getUser, getPreviewID } from '../utils/auth';
 
 const AuthProvider = (props: any) => {
-  // @ts-expect-error ts-migrate(2461) FIXME: Type '{}' is not an array type.
   const [
     {
       config,
@@ -19,8 +18,7 @@ const AuthProvider = (props: any) => {
 
   const [timer, setTimer] = useState(0);
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-  const user = getUser(config);
+  const user = getUser();
   const previewID = getPreviewID();
 
   useEffect(() => {

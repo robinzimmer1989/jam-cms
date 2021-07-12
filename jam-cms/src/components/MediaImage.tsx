@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'styl... Remove this comment to see the full error message
 import styled from 'styled-components';
 import { Button, Space, Row, Col, Popconfirm, Typography } from 'antd';
 
@@ -14,7 +13,7 @@ const MediaImage = (props: any) => {
   const { file, onSelect, onDelete, onUpdate } = props;
 
   const [data, setData] = useState({ ...file });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
 
   useEffect(() => {
     setData(file);
@@ -23,21 +22,19 @@ const MediaImage = (props: any) => {
   const handleChange = (e: any) => setData({ ...data, [e.target.name]: e.target.value });
 
   const handleUpdateMediaItem = async () => {
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"update"' is not assignable to p... Remove this comment to see the full error message
     setLoading('update');
 
     onUpdate(data);
 
-    setLoading(false);
+    setLoading('');
   };
 
   const handlDeleteMediaItem = async () => {
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '"delete"' is not assignable to p... Remove this comment to see the full error message
     setLoading('delete');
 
     await onDelete();
 
-    setLoading(false);
+    setLoading('');
   };
 
   return (
@@ -48,7 +45,7 @@ const MediaImage = (props: any) => {
         </Col>
         <Col span={12}>
           <Space direction="vertical" size={20}>
-            <Content span={12}>
+            <Content>
               <Space direction="vertical">
                 <Row gutter={[8, 8]} align="middle">
                   {data?.filename && (
@@ -117,14 +114,12 @@ const MediaImage = (props: any) => {
                     okText="Yes"
                     cancelText="No"
                   >
-                    {/* @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message */}
                     <Button children={`Delete`} danger loading={loading === 'delete'} />
                   </Popconfirm>
 
                   <Button
                     onClick={handleUpdateMediaItem}
                     children={'Update'}
-                    // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
                     loading={loading === 'update'}
                   />
                 </Space>
