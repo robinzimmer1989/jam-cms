@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { Empty } from 'antd';
 import axios from 'axios';
 import { set } from 'lodash';
 
@@ -11,7 +9,8 @@ import { useStore } from '../../store';
 
 const Editor = (props: any) => {
   const {
-    pageContext: { databaseId: postID, themeOptions, siteTitle },
+    postID,
+    pageContext: { themeOptions, siteTitle },
     defaultComponent,
     sidebarOptions,
   } = props;
@@ -64,8 +63,8 @@ const Editor = (props: any) => {
 
   // If there is a query, we need to wait for it
   const loaded = template?.query && !query ? false : true;
-  // Load query in case post has one assigned
 
+  // Load query in case post has one assigned
   useEffect(() => {
     const loadQuery = async () => {
       // TODO: Move to utils function
@@ -115,7 +114,7 @@ const Editor = (props: any) => {
         <>
           {loaded ? (
             <>
-              {!!Component && post?.content ? (
+              {!!Component && post?.content && (
                 <Component
                   data={getPostData()}
                   pageContext={{
@@ -137,15 +136,6 @@ const Editor = (props: any) => {
                     pagination,
                   }}
                 />
-              ) : (
-                <EmptyContainer className="jam-cms">
-                  <Empty
-                    imageStyle={{
-                      height: 120,
-                    }}
-                    description={'No Template'}
-                  />
-                </EmptyContainer>
               )}
             </>
           ) : (
@@ -169,11 +159,5 @@ const Editor = (props: any) => {
     </>
   );
 };
-const EmptyContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-`;
+
 export default Editor;

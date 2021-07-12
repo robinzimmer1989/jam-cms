@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Typography, Button, Space, message } from 'antd';
 import { EditOutlined, LockOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ import EditorWrapper from './EditorWrapper';
 import Loader from '../Loader';
 import Sidebar from './Sidebar';
 import Editor from './Editor';
-import { getTemplateByPost } from '../../utils';
+import { getTemplateByPost, getPostID } from '../../utils';
 import { useStore } from '../../store';
 import { postActions } from '../../actions';
 import getRoute from '../../routes';
@@ -19,18 +19,20 @@ import getRoute from '../../routes';
 let postLockID: any = null;
 
 const AdminEditor = (props: any) => {
-  const {
-    pageContext: { databaseId: postID },
-  } = props;
+  const { defaultComponent } = props;
 
   const [
     {
       config,
       cmsState: { sites, siteID },
-      editorState: { site, post, editorSettings },
+      editorState: { post, editorSettings },
     },
     dispatch,
   ] = useStore();
+
+  const postID = useMemo(() => {
+    return getPostID(sites[siteID]);
+  }, [window.location.pathname]);
 
   // Timer for lock check
   const [postLockTimer, setPostLockTimer] = useState(0);
@@ -42,7 +44,7 @@ const AdminEditor = (props: any) => {
   const template = getTemplateByPost(post, config?.fields);
   const Component = template?.component;
 
-  const loaded = postID && post?.id === postID && !!site;
+  const loaded = postID && post?.id === postID;
 
   // For the post lock functionality we need 4 useEffect functions to cover the whole process
   // 1. Set up interval function on initial load and remove post lock in case user leaves the editor
@@ -173,10 +175,18 @@ const AdminEditor = (props: any) => {
 
   const sidebarOptions = { ...sites?.[siteID]?.editorOptions?.sidebar, active: sidebarActive };
 
+  if (!postID) {
+    return defaultComponent;
+  }
+
   return (
     <>
       <EditorWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
-        {loaded ? <Editor {...props} sidebarOptions={sidebarOptions} /> : <Loader />}
+        {loaded ? (
+          <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
+        ) : (
+          <Loader />
+        )}
       </EditorWrapper>
 
       {loaded && (

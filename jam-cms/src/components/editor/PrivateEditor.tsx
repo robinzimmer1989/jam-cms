@@ -10,7 +10,8 @@ import { postActions } from '../../actions';
 
 const PrivateEditor = (props: any) => {
   const {
-    pageContext: { databaseId: postID },
+    pageContext: { databseId: postID },
+    defaultComponent,
   } = props;
 
   const [
@@ -44,8 +45,14 @@ const PrivateEditor = (props: any) => {
     return () => dispatch({ type: `CLEAR_EDITOR` });
   }, [postID]);
 
+  if (!postID) {
+    return defaultComponent;
+  }
+
   return (
-    <EditorWrapper loaded={loaded}>{loaded ? <Editor {...props} /> : <Loader />}</EditorWrapper>
+    <EditorWrapper loaded={loaded}>
+      {loaded ? <Editor postID={postID} {...props} /> : <Loader />}
+    </EditorWrapper>
   );
 };
 

@@ -22,6 +22,7 @@ import formatFields from './formatFields';
 import renderImage from './renderImage';
 import addPost from './addPost';
 import useOnScreen from './useOnScreen';
+import getPostID from './getPostID';
 
 export {
   createDataTree,
@@ -48,4 +49,5 @@ export {
   renderImage,
   addPost,
   useOnScreen,
+  getPostID,
 };

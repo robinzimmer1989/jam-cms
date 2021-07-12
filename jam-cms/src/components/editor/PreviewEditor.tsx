@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
@@ -7,23 +7,25 @@ import EditorWrapper from './EditorWrapper';
 import Editor from './Editor';
 import Loader from '../Loader';
 
-import { auth } from '../../utils';
+import { auth, getPostID } from '../../utils';
 import { useStore } from '../../store';
 import { previewActions } from '../../actions';
 
 const PreviewEditor = (props: any) => {
-  const {
-    pageContext: { databaseId: postID },
-  } = props;
+  const { defaultComponent } = props;
 
   const [
     {
       config,
-      cmsState: { siteID },
+      cmsState: { sites, siteID },
       editorState: { post },
     },
     dispatch,
   ] = useStore();
+
+  const postID = useMemo(() => {
+    return getPostID(sites[siteID]);
+  }, [window.location.pathname]);
 
   const previewID = auth.getPreviewID();
 
@@ -49,9 +51,15 @@ const PreviewEditor = (props: any) => {
     return () => dispatch({ type: `CLEAR_EDITOR` });
   }, [postID]);
 
+  if (!postID) {
+    return defaultComponent;
+  }
+
   return (
     <>
-      <EditorWrapper loaded={loaded}>{loaded ? <Editor {...props} /> : <Loader />}</EditorWrapper>
+      <EditorWrapper loaded={loaded}>
+        {loaded ? <Editor postID={postID} {...props} /> : <Loader />}
+      </EditorWrapper>
 
       <PreviewBanner children={`Preview`} type="primary" />
     </>
