@@ -2,7 +2,7 @@ import React from 'react';
 
 // import external css files
 import 'minireset.css';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import 'jodit/build/jodit.min.css';
 
 // import components
