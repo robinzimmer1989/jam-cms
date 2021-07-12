@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 import styled, { css } from 'styled-components';
 import { debounce } from 'lodash';
 import { Space, Button, Typography } from 'antd';

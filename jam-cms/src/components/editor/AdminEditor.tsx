@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Typography, Button, Space, message } from 'antd';
 import { EditOutlined, LockOutlined } from '@ant-design/icons';
 import useKeypress from 'react-use-keypress';
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 
 // import app components
 import EditorWrapper from './EditorWrapper';

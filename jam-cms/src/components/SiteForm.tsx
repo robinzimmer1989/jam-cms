@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Button } from 'antd';
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 
 // import app components
 import Input from './Input';

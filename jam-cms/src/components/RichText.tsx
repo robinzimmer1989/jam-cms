@@ -1,6 +1,6 @@
 import React from 'react';
 import Parser from 'html-react-parser';
-import { Link } from '@reach/router';
+import { Link } from 'gatsby';
 
 const RichText = (props: any) => {
   const { children } = props;

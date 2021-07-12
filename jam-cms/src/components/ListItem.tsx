@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Card, List, Typography } from 'antd';
-import { Link } from '@reach/router';
+import { Link } from 'gatsby';
 import Parser from 'html-react-parser';
 
 // import app components

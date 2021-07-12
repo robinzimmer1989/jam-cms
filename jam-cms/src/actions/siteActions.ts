@@ -1,4 +1,4 @@
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 
 // import app components
 import { siteServices } from '../services';
