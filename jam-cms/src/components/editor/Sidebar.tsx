@@ -17,7 +17,7 @@ import {
   Popconfirm,
 } from 'antd';
 import { set } from 'lodash';
-import { HomeOutlined } from '@ant-design/icons';
+import { HomeOutlined, EllipsisOutlined } from '@ant-design/icons';
 
 // import app components
 import Fields from './Fields';
@@ -596,7 +596,7 @@ const EditorSidebar = (props: any) => {
           <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable} />
         </Tabs>
 
-        <Dropdown.Button
+        <Dropdown
           disabled={!editable}
           overlay={
             <Menu>
@@ -621,7 +621,9 @@ const EditorSidebar = (props: any) => {
               </Menu.Item>
             </Menu>
           }
-        />
+        >
+          <Button type="text" size="middle" icon={<EllipsisOutlined />} />
+        </Dropdown>
       </TabsContainer>
 
       <TabContainer>
