@@ -30,7 +30,7 @@ const AvatarMenu = (props: any) => {
   return (
     <Dropdown overlay={dropDownMenu} arrow trigger={['click']}>
       <div>
-        <Button size={'small'} icon={<UserOutlined />} ghost={ghost} />
+        <Button size={'middle'} icon={<UserOutlined />} ghost={ghost} />
       </div>
     </Dropdown>
   );
