@@ -3,7 +3,6 @@ import pageDefault from './templates/postTypes/page/default/config';
 import pageContact from './templates/postTypes/page/contact/config';
 import postDefault from './templates/postTypes/post/default/config';
 import postArchive from './templates/postTypes/post/archive/config';
-import teamDefault from './templates/postTypes/team/default/config';
 
 // import theme options
 import header from './components/header/config';
@@ -20,14 +19,6 @@ const fields = {
       id: 'post',
       title: 'Post',
       templates: [postDefault, postArchive],
-    },
-    {
-      id: 'team',
-      title: 'Team',
-      options: {
-        rewrite_slug: 'team-member', // CPT only
-      },
-      templates: [teamDefault],
     },
   ],
   taxonomies: [
