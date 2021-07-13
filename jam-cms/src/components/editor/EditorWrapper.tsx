@@ -63,7 +63,8 @@ const EditorWrapper = (props: any) => {
                     <Button children="Cancel" onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} />
                     <Button
                       children="Discard changes"
-                      color="danger"
+                      danger
+                      type="primary"
                       onClick={() => {
                         // Clicking on a tags with nested elements (i.e. span) returns the wrong 'target'. That's why we need to find the correct node ourselves.
                         const href =
