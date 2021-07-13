@@ -8,6 +8,7 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
+import { unionBy } from 'lodash';
 
 // import app components
 import MediaImage from './MediaImage';
@@ -66,7 +67,7 @@ const MediaLibrary = (props: any) => {
 
     if (result) {
       setMedia({
-        items: clear ? result.items : media.items.concat(result.items),
+        items: clear ? result.items : unionBy(media.items, result.items, 'id'),
         page: result.page,
       });
     }
@@ -113,14 +114,20 @@ const MediaLibrary = (props: any) => {
       }
     }
     if (status === 'done') {
-      message.success(`${name} file uploaded successfully.`);
+      message.success({
+        className: 'media-upload-success',
+        content: `${name} file uploaded successfully.`,
+      });
       setLoading(false);
     } else if (status === 'error') {
       // TODO: length computable is set to false and therefore throwing an error if file size is too big.
       // However, this has nothing to do with the actual file upload to the backend, so we not gonna display an error here.
       // But this should be fixed at some point.
       if (!error?.lengthComputable) {
-        message.success(`${name} file uploaded successfully.`);
+        message.success({
+          className: 'media-upload-success',
+          content: `${name} file uploaded successfully.`,
+        });
       } else {
         console.log(info);
         message.error(`${name} file upload failed.`);
@@ -168,6 +175,7 @@ const MediaLibrary = (props: any) => {
           <PageHeader
             title={
               <Button
+                id="upload-media"
                 icon={<UploadOutlined />}
                 children="Upload"
                 type="primary"
@@ -187,7 +195,13 @@ const MediaLibrary = (props: any) => {
           />
 
           {uploader && (
-            <Upload.Dragger name="file" multiple onChange={handleFileUpload} showUploadList={false}>
+            <Upload.Dragger
+              id="file-dropzone"
+              name="file"
+              multiple
+              onChange={handleFileUpload}
+              showUploadList={false}
+            >
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
               </p>
