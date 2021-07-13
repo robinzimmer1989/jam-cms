@@ -192,10 +192,11 @@ const LoginForm = (props: any) => {
                   <Success children={data.success} />
                 ) : (
                   <Space direction="vertical" size={20}>
-                    <Form onFinish={formData?.handleSubmit}>
+                    <Form id="form" onFinish={formData?.handleSubmit}>
                       <Space direction="vertical" size={20}>
                         {(data.form === 'login' || data.form === 'forget') && (
                           <Input
+                            id="email"
                             label={`Email`}
                             value={data.email}
                             onChange={handleChange}
@@ -205,6 +206,7 @@ const LoginForm = (props: any) => {
                         )}
                         {(data.form === 'login' || data.form === 'reset') && (
                           <Input
+                            id="password"
                             label={`Password`}
                             value={data.password}
                             type="password"
@@ -215,6 +217,7 @@ const LoginForm = (props: any) => {
                         )}
                         {data?.error && <Error children={data.error} />}
                         <Button
+                          id="submit"
                           loading={data.loading}
                           children={`Submit`}
                           type="primary"
