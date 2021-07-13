@@ -55,6 +55,8 @@
     "babel-plugin-inline-react-svg": "^2.0.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^5.2.4",
+    "cypress": "^7.7.0",
+    "cypress-file-upload": "^5.0.8",
     "eslint": "^7.25.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
