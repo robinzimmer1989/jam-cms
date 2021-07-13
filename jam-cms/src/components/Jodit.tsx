@@ -63,7 +63,7 @@ const HTMLEditor = (props: any) => {
     dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: !fullscreen } });
 
   const handleSelectImage = (image: any) => {
-    const html = `<img src="${image.url}" alt="${image.altText}" />`;
+    const html = `<img src="${image.url}" alt="${image.altText}" class="wp-image-${image.id}" />`;
 
     editor.s.insertHTML(html);
 
