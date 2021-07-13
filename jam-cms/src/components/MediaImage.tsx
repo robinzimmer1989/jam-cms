@@ -23,17 +23,13 @@ const MediaImage = (props: any) => {
 
   const handleUpdateMediaItem = async () => {
     setLoading('update');
-
-    onUpdate(data);
-
+    await onUpdate(data);
     setLoading('');
   };
 
   const handlDeleteMediaItem = async () => {
     setLoading('delete');
-
     await onDelete();
-
     setLoading('');
   };
 
@@ -112,21 +108,36 @@ const MediaImage = (props: any) => {
                     title="Are you sure?"
                     onConfirm={handlDeleteMediaItem}
                     okText="Yes"
+                    okButtonProps={{
+                      id: 'delete-media-confirm',
+                    }}
                     cancelText="No"
                   >
-                    <Button children={`Delete`} danger loading={loading === 'delete'} />
+                    <Button
+                      id="delete-media"
+                      children={`Delete`}
+                      danger
+                      loading={loading === 'delete'}
+                    />
                   </Popconfirm>
 
                   <Button
+                    id="update-media"
                     onClick={handleUpdateMediaItem}
                     children={'Update'}
+                    type="primary"
                     loading={loading === 'update'}
                   />
                 </Space>
               </Col>
               {onSelect && (
                 <Col>
-                  <Button onClick={() => onSelect(file)} children={`Select`} type="primary" />
+                  <Button
+                    id="select-media"
+                    onClick={() => onSelect(file)}
+                    children={`Select`}
+                    type="primary"
+                  />
                 </Col>
               )}
             </Row>

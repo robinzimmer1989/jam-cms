@@ -81,7 +81,7 @@ const MediaLibrary = (props: any) => {
         items: media.items.map((o: any) => (o.id === result.id ? result : o)),
         page: media.page,
       });
-      message.success(`Saved successfully.`);
+      message.success({ className: 'media-update-success', content: 'Saved successfully.' });
     }
   };
 
@@ -94,7 +94,7 @@ const MediaLibrary = (props: any) => {
         page: media.page,
       });
       handleCloseDialog();
-      message.success(`Deleted successfully.`);
+      message.success({ className: 'media-delete-success', content: 'Deleted successfully..' });
     }
   };
 
@@ -185,6 +185,7 @@ const MediaLibrary = (props: any) => {
             }
             extra={[
               <Input.Search
+                id="search-media"
                 key="search"
                 allowClear
                 value={search}
@@ -209,11 +210,11 @@ const MediaLibrary = (props: any) => {
             </Upload.Dragger>
           )}
 
-          <MediaItems>
+          <MediaItems id="media-items">
             {media.items &&
               media.items.map((o: any) => {
                 return (
-                  <MediaItem key={(o as any).id}>
+                  <MediaItem key={(o as any).id} className="media-item">
                     <MediaItemInner onClick={() => setActiveFile(o)}>
                       {renderImage(o)}
                     </MediaItemInner>
