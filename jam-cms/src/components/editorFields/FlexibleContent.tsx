@@ -218,9 +218,8 @@ const FlexibleContent = (props: any) => {
   );
 };
 
-const Container = styled.div`
+const Container = styled('div' as any)`
   padding: 8px ${({ level }: any) => (level === 0 ? '16px' : '4px')};
-  background: #fff;
 
   .ant-collapse-item {
     position: relative;
