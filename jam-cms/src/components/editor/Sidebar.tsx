@@ -654,6 +654,10 @@ const Container = styled.div`
 
   .ant-tabs > .ant-tabs-nav {
     margin-bottom: 0;
+
+    &:before {
+      content: none;
+    }
   }
 `;
 
@@ -675,6 +679,7 @@ const TabsContainer = styled.div`
   align-items: center;
   padding-right: 10px;
   background: #fff;
+  border-bottom: 1px solid #f0f0f0;
 
   .ant-tabs-nav-wrap {
     padding: 0 15px;
