@@ -4,12 +4,6 @@ const config = {
   label: 'Test',
   fields: [
     {
-      id: 'wysiwyg',
-      type: 'wysiwyg',
-      label: 'Text',
-      instructions: 'Some instructions...', // optional
-    },
-    {
       id: 'checkbox',
       type: 'checkbox',
       label: 'Checkbox',
