@@ -20,6 +20,7 @@ const DatePicker = (props: any) => {
         value={moment(value || defaultValue, format)}
         onChange={(value) => onChange(value ? (value as any)._d : '')}
         allowClear={false}
+        style={{ width: '100%' }}
       />
     )
   );

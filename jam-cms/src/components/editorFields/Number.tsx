@@ -11,6 +11,7 @@ const Number = (props: any) => {
       step={step}
       defaultValue={value || defaultValue}
       onChange={onChange}
+      style={{ width: '100%' }}
     />
   );
 };
