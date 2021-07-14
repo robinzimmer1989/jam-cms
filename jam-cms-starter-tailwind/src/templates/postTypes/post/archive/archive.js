@@ -153,11 +153,9 @@ export const Query = graphql`
         ... on WpTemplate_ArchivePost {
           templateName
           acf {
-            content {
-              tag
-              headline
-              text
-            }
+            tag
+            headline
+            text
           }
         }
       }

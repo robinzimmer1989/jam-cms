@@ -27,38 +27,23 @@ const config = {
   }`,
   fields: [
     {
-      id: 'header',
-      global: true,
+      id: 'tag',
+      type: 'text',
+      label: 'Tag',
+      defaultValue: 'Mustache try-hard',
     },
     {
-      id: 'content',
-      label: 'Content',
-      type: 'group',
-      fields: [
-        {
-          id: 'tag',
-          type: 'text',
-          label: 'Tag',
-          defaultValue: 'Mustache try-hard',
-        },
-        {
-          id: 'headline',
-          type: 'text',
-          label: 'Headline',
-          defaultValue: 'Glossier chia salvia gastropub tote bag master',
-        },
-        {
-          id: 'text',
-          type: 'text',
-          label: 'Text',
-          defaultValue:
-            'Next level cred squid, butcher kombucha woke vexillologist art party poke. Mlkshk flannel tbh DIY.',
-        },
-      ],
+      id: 'headline',
+      type: 'text',
+      label: 'Headline',
+      defaultValue: 'Glossier chia salvia gastropub tote bag master',
     },
     {
-      id: 'footer',
-      global: true,
+      id: 'text',
+      type: 'text',
+      label: 'Text',
+      defaultValue:
+        'Next level cred squid, butcher kombucha woke vexillologist art party poke. Mlkshk flannel tbh DIY.',
     },
   ],
 };

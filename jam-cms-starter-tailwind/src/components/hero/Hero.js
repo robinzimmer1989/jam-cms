@@ -30,16 +30,10 @@ const Hero = (props) => {
         )}
       </div>
       <div>
-        {image ? (
+        {image && (
           <GatsbyImage
             image={image}
             alt={image.altText}
-            className="object-cover object-top w-full h-64 mx-auto lg:h-auto xl:mr-24 md:max-w-sm"
-          />
-        ) : (
-          <img
-            src="https://kitwind.io/assets/kometa/two-thirds-phone.png"
-            alt=""
             className="object-cover object-top w-full h-64 mx-auto lg:h-auto xl:mr-24 md:max-w-sm"
           />
         )}

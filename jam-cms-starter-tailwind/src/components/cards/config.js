@@ -6,8 +6,6 @@ const config = {
       id: 'introduction',
       type: 'wysiwyg',
       label: 'Introduction',
-      defaultValue:
-        '<h3>Chartreuse coloring book shabby chic, pabst sriracha forage vinyl raclette</h3><p>Lomo squid craft beer, celiac occupy asymmetrical bespoke. Air plant palo santo sriracha messenger bag poke single-origin coffee butcher tattooed shabby chic venmo fingerstache aesthetic.</p>',
     },
     {
       id: 'columns',

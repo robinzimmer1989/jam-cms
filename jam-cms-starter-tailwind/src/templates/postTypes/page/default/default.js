@@ -28,8 +28,8 @@ const Template = (props) => {
 
   return (
     <Layout {...props} seo={seo}>
-      {acf?.blocks?.flex &&
-        acf.blocks.flex.map(({ id: fieldId, fieldGroupName, ...rest }, index) => {
+      {acf?.flex &&
+        acf.flex.map(({ id: fieldId, fieldGroupName, ...rest }, index) => {
           const id = fieldId || fieldGroupName?.split('_').pop().toLowerCase();
 
           const Component = blocks?.[id];
@@ -59,111 +59,109 @@ export const Query = graphql`
         ... on WpDefaultTemplate {
           templateName
           acf {
-            blocks {
-              flex {
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Hero {
-                  fieldGroupName
-                  buttons {
-                    button {
-                      target
-                      title
-                      url
-                    }
-                    variant
+            flex {
+              ... on WpDefaultTemplate_Acf_Flex_Hero {
+                fieldGroupName
+                buttons {
+                  button {
+                    target
+                    title
+                    url
                   }
-                  headline
-                  image {
-                    id
-                    altText
-                    localFile {
-                      childImageSharp {
-                        gatsbyImageData(width: 1920, placeholder: BLURRED)
-                      }
-                    }
-                  }
-                  subline
+                  variant
                 }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Cards {
-                  columns
-                  introduction
+                headline
+                image {
+                  id
+                  altText
+                  localFile {
+                    childImageSharp {
+                      gatsbyImageData(width: 1920, placeholder: BLURRED)
+                    }
+                  }
+                }
+                subline
+              }
+              ... on WpDefaultTemplate_Acf_Flex_Cards {
+                columns
+                introduction
+                fieldGroupName
+                items {
+                  headline
                   fieldGroupName
-                  items {
-                    headline
+                  text
+                  link {
+                    target
+                    title
+                    url
+                  }
+                }
+              }
+              ... on WpDefaultTemplate_Acf_Flex_Textimage {
+                fieldGroupName
+                alignment
+                buttons {
+                  button {
+                    target
+                    title
+                    url
+                  }
+                  variant
+                  fieldGroupName
+                }
+                image {
+                  altText
+                  sourceUrl
+                  svg
+                  localFile {
+                    childImageSharp {
+                      gatsbyImageData(width: 800, placeholder: BLURRED)
+                    }
+                  }
+                }
+                text
+              }
+              ... on WpDefaultTemplate_Acf_Flex_Texteditor {
+                fieldGroupName
+                flex {
+                  ... on WpDefaultTemplate_Acf_Flex_Texteditor_Flex_Text {
                     fieldGroupName
                     text
-                    link {
-                      target
-                      title
-                      url
-                    }
                   }
-                }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Textimage {
-                  fieldGroupName
-                  alignment
-                  buttons {
-                    button {
-                      target
-                      title
-                      url
-                    }
-                    variant
+                  ... on WpDefaultTemplate_Acf_Flex_Texteditor_Flex_Textimage {
+                    alignment
                     fieldGroupName
-                  }
-                  image {
-                    altText
-                    sourceUrl
-                    svg
-                    localFile {
-                      childImageSharp {
-                        gatsbyImageData(width: 800, placeholder: BLURRED)
-                      }
-                    }
-                  }
-                  text
-                }
-                ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor {
-                  fieldGroupName
-                  flex {
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Text {
-                      fieldGroupName
-                      text
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Textimage {
-                      alignment
-                      fieldGroupName
-                      image {
-                        altText
-                        localFile {
-                          childImageSharp {
-                            gatsbyImageData(width: 600, placeholder: BLURRED)
-                          }
-                        }
-                      }
-                      text
-                    }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Gallery {
-                      columns
-                      fieldGroupName
-                      gallery {
-                        altText
-                        localFile {
-                          childImageSharp {
-                            gatsbyImageData(width: 600, placeholder: BLURRED)
-                          }
+                    image {
+                      altText
+                      localFile {
+                        childImageSharp {
+                          gatsbyImageData(width: 600, placeholder: BLURRED)
                         }
                       }
                     }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Embed {
-                      fieldGroupName
-                      url
+                    text
+                  }
+                  ... on WpDefaultTemplate_Acf_Flex_Texteditor_Flex_Gallery {
+                    columns
+                    fieldGroupName
+                    gallery {
+                      altText
+                      localFile {
+                        childImageSharp {
+                          gatsbyImageData(width: 600, placeholder: BLURRED)
+                        }
+                      }
                     }
-                    ... on WpDefaultTemplate_Acf_Blocks_Flex_Texteditor_Flex_Quote {
-                      author
-                      fieldGroupName
-                      position
-                      text
-                    }
+                  }
+                  ... on WpDefaultTemplate_Acf_Flex_Texteditor_Flex_Embed {
+                    fieldGroupName
+                    url
+                  }
+                  ... on WpDefaultTemplate_Acf_Flex_Texteditor_Flex_Quote {
+                    author
+                    fieldGroupName
+                    position
+                    text
                   }
                 }
               }

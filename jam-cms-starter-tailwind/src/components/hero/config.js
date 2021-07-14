@@ -13,14 +13,11 @@ const config = {
       id: 'headline',
       type: 'text',
       label: 'Headline',
-      defaultValue: 'Activated charcoal mustache typewriter copper mug',
     },
     {
       id: 'subline',
       type: 'text',
       label: 'Subline',
-      defaultValue:
-        'Viral pour-over ugh narwhal flexitarian raclette woke wayfarers direct trade godard yr kogi gentrify authentic',
     },
     {
       id: 'buttons',

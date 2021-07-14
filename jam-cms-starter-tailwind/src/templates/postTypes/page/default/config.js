@@ -10,30 +10,15 @@ const config = {
   label: 'Default Page',
   fields: [
     {
-      id: 'header',
-      global: true,
-    },
-    {
-      id: 'blocks',
-      label: 'Content',
-      type: 'group',
-      fields: [
-        {
-          id: 'flex',
-          label: 'Blocks',
-          type: 'flexible_content',
-          items: Object.values({
-            hero,
-            cards,
-            textimage,
-            texteditor,
-          }),
-        },
-      ],
-    },
-    {
-      id: 'footer',
-      global: true,
+      id: 'flex',
+      label: 'Blocks',
+      type: 'flexible_content',
+      items: Object.values({
+        hero,
+        cards,
+        textimage,
+        texteditor,
+      }),
     },
   ],
 };

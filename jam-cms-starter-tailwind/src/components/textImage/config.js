@@ -29,8 +29,6 @@ const config = {
       id: 'text',
       type: 'wysiwyg',
       label: 'Text',
-      defaultValue:
-        '<h2>Sustainable authentic polaroid</h2><p>Taxidermy fam whatever, hell of bespoke mustache try-hard health goth coloring book paleo jianbing +1 vice pitchfork. Mustache keytar butcher brunch XOXO hammock.</p>',
     },
     {
       id: 'buttons',

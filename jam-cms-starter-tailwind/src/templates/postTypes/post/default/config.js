@@ -4,17 +4,9 @@ const config = {
   label: 'Post Default',
   fields: [
     {
-      id: 'header',
-      global: true,
-    },
-    {
       id: 'text',
       label: 'Content',
       type: 'wysiwyg',
-    },
-    {
-      id: 'footer',
-      global: true,
     },
   ],
 };
