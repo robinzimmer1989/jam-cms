@@ -166,11 +166,17 @@ const EditorSidebar = (props: any) => {
 
     if (postResult || siteResult) {
       message.success('Updated successfully');
+
       // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
+
+      const newFrontPage = siteResult ? siteResult.frontPage : sites[siteID].frontPage;
+      const newPost = postResult ? { ...postResult } : { ...post };
+
       const nextPostType = produce(sites[siteID].postTypes[post.postTypeID], (draft: any) => {
-        return set(draft, `posts.${post.id}`, post);
+        return set(draft, `posts.${newPost.id}`, newPost);
       });
-      const slug = generateSlug(nextPostType, post.id, sites[siteID].frontPage, true);
+
+      const slug = generateSlug(nextPostType, newPost.id, newFrontPage, true);
       navigate(slug);
     }
   };
