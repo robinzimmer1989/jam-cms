@@ -129,6 +129,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
           site={site}
           dispatch={dispatch}
           onChange={(value: any) => onChangeElement({ ...field, value })}
+          level={level}
         />
       );
       break;
@@ -140,6 +141,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
           site={site}
           dispatch={dispatch}
           onChange={(value: any) => onChangeElement({ ...field, value })}
+          level={level}
         />
       );
       break;
@@ -225,7 +227,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
       {field.type === 'repeater' || field.type === 'flexible_content' || field.type === 'group' ? (
         component
       ) : (
-        <FieldContainer level={level + 1}>
+        <FieldContainer level={level}>
           <Space direction="vertical" size={6}>
             <Caption children={field.label || field.id} />
             {field.instructions && (
@@ -273,7 +275,7 @@ const Container = styled.div`
 `;
 
 const FieldContainer = styled('div' as any)`
-  padding: 8px ${({ level }: any) => (level === 1 ? '16px' : '4px')};
+  padding: 8px ${({ level }: any) => (level === 0 ? '16px' : '4px')};
 `;
 
 export default Fields;

@@ -11,7 +11,7 @@ import { getField } from '../editor/Fields';
 import { colors } from '../../theme';
 
 const Repeater = (props: any) => {
-  const { id, label, instructions, site, items, value, onChange, dispatch } = props;
+  const { id, label, instructions, site, items, value, onChange, dispatch, level } = props;
 
   const values = value || [];
 
@@ -58,12 +58,10 @@ const Repeater = (props: any) => {
 
   const getListStyle = (isDraggingOver: any) => ({
     background: isDraggingOver ? colors.tertiary : '#fff',
-    padding: 2,
   });
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     userSelect: 'none',
-    padding: 2,
     ...draggableStyle,
   });
 
@@ -103,105 +101,103 @@ const Repeater = (props: any) => {
   };
 
   return (
-    <Container>
-      <LabelContainer>
-        <Space direction="vertical" size={6}>
-          <Caption children={label || id} />
-          {instructions && <Typography.Text type="secondary" children={instructions} />}
-        </Space>
-      </LabelContainer>
-
-      {values && (
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided: any, snapshot: any) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}
-              >
-                {values.map((value: any, index: number) => {
-                  return (
-                    <Draggable
-                      key={index}
-                      draggableId={`item-${index}`}
-                      index={index}
-                      isDragDisabled={childActive.includes(index)}
-                    >
-                      {(provided: any, snapshot: any) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                        >
-                          <Collapse
-                            activeKey={childActive}
-                            onChange={() => handleToggleChild(index)}
-                            expandIconPosition="right"
+    <Container level={level}>
+      <Space direction="vertical" size={6}>
+        <Caption children={label || id} />
+        {instructions && <Typography.Text type="secondary" children={instructions} />}
+        {values && (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided: any, snapshot: any) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}
+                >
+                  {values.map((value: any, index: number) => {
+                    return (
+                      <Draggable
+                        key={index}
+                        draggableId={`item-${index}`}
+                        index={index}
+                        isDragDisabled={childActive.includes(index)}
+                      >
+                        {(provided: any, snapshot: any) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                           >
-                            <Collapse.Panel
-                              key={index}
-                              header={`Item ${index + 1}`}
-                              extra={
-                                <DeleteIcon
-                                  className={`icon`}
-                                  onClick={(e: any) => e.stopPropagation()}
-                                >
-                                  <DeleteIconContainer>
-                                    <Popconfirm
-                                      title="Are you sure？"
-                                      onConfirm={() => handleRemove(index)}
-                                      icon={
-                                        <QuestionCircleOutlined style={{ color: colors.danger }} />
-                                      }
-                                      placement="left"
-                                    >
-                                      <DeleteTwoTone twoToneColor={colors.danger} />
-                                    </Popconfirm>
-                                  </DeleteIconContainer>
-                                </DeleteIcon>
-                              }
+                            <Collapse
+                              activeKey={childActive}
+                              onChange={() => handleToggleChild(index)}
+                              expandIconPosition="right"
                             >
-                              {items &&
-                                items.map((field: any, subIndex: any) => {
-                                  return (
-                                    <div key={subIndex}>
-                                      {getField({
-                                        field: { ...field, value: value[field.id] },
-                                        index,
-                                        site,
-                                        onChangeElement: (value: any) => handleChange(value, index),
-                                        dispatch,
-                                      })}
-                                    </div>
-                                  );
-                                })}
-                            </Collapse.Panel>
-                          </Collapse>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
+                              <Collapse.Panel
+                                key={index}
+                                header={`Item ${index + 1}`}
+                                extra={
+                                  <DeleteIcon
+                                    className={`icon`}
+                                    onClick={(e: any) => e.stopPropagation()}
+                                  >
+                                    <DeleteIconContainer>
+                                      <Popconfirm
+                                        title="Are you sure？"
+                                        onConfirm={() => handleRemove(index)}
+                                        icon={
+                                          <QuestionCircleOutlined
+                                            style={{ color: colors.danger }}
+                                          />
+                                        }
+                                        placement="left"
+                                      >
+                                        <DeleteTwoTone twoToneColor={colors.danger} />
+                                      </Popconfirm>
+                                    </DeleteIconContainer>
+                                  </DeleteIcon>
+                                }
+                              >
+                                {items &&
+                                  items.map((field: any, subIndex: any) => {
+                                    return (
+                                      <div key={subIndex}>
+                                        {getField({
+                                          field: { ...field, value: value[field.id] },
+                                          index,
+                                          site,
+                                          onChangeElement: (value: any) =>
+                                            handleChange(value, index),
+                                          dispatch,
+                                        })}
+                                      </div>
+                                    );
+                                  })}
+                              </Collapse.Panel>
+                            </Collapse>
+                          </div>
+                        )}
+                      </Draggable>
+                    );
+                  })}
 
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
-
-      <AddContainer>
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        )}
         <AddButton siblings={values && values.length > 0} onClick={handleAdd}>
           <PlusOutlined />
         </AddButton>
-      </AddContainer>
+      </Space>
     </Container>
   );
 };
 
 const Container = styled.div`
+  padding: 8px ${({ level }: any) => (level === 0 ? '16px' : '4px')};
   background: #fff;
 
   .ant-collapse-item {
@@ -211,10 +207,6 @@ const Container = styled.div`
   .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     cursor: grab;
   }
-`;
-
-const LabelContainer = styled.div`
-  padding: 12px 4px 0;
 `;
 
 const DeleteIconContainer = styled.div`
@@ -233,10 +225,6 @@ const DeleteIcon = styled.div`
   top: 0;
   height: 100%;
   display: flex;
-`;
-
-const AddContainer = styled.div`
-  padding: 4px;
 `;
 
 const AddButton = styled('div' as any)`
