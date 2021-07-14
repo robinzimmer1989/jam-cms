@@ -40,7 +40,7 @@ const EditorWrapper = (props: any) => {
     const anchors = document.querySelector('#jam-cms')?.querySelectorAll('a') || [];
 
     for (let i = 0; i < anchors.length; i++) {
-      anchors[i].onclick = (e) => {
+      anchors[i].onclick = (e: any) => {
         // Always allow links which open in a new browser tab
         if ((e.target as any)?.target === '_blank') {
           return true;
@@ -67,11 +67,12 @@ const EditorWrapper = (props: any) => {
                       type="primary"
                       onClick={() => {
                         // Clicking on a tags with nested elements (i.e. span) returns the wrong 'target'. That's why we need to find the correct node ourselves.
-                        const href =
-                          (e as any)?.path?.length && (e as any).path.find((o: any) => o.href);
-                        if (href) {
-                          navigate(href);
+                        const node = e?.path?.length && e.path.find((o: any) => o.href);
+
+                        if (node) {
+                          navigate(node.href);
                         }
+
                         dispatch({ type: 'CLOSE_DIALOG' });
                       }}
                     />
