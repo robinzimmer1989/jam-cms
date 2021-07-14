@@ -74,7 +74,7 @@ const Map = (props: any) => {
             value={defaultValue.address}
             onChange={handleChange}
             onSearch={() => handleSearch(defaultValue.address)}
-            placeholder={defaultValue?.address || 'Enter an address'}
+            placeholder={defaultValue?.address || 'Search location'}
           />
           <MapContainer>
             <GoogleMapReact
