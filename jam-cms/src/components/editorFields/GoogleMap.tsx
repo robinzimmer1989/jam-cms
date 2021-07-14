@@ -47,16 +47,20 @@ const Map = (props: any) => {
   };
 
   const handleGeocode = async (lat: string, lng: string) => {
-    const result = await Geocode.fromLatLng(lat, lng);
+    try {
+      const result = await Geocode.fromLatLng(lat, lng);
 
-    const { formatted_address } = result?.results?.[0];
+      const { formatted_address } = result?.results?.[0];
 
-    if (formatted_address) {
-      onChange({
-        address: formatted_address,
-        lat,
-        lng,
-      });
+      if (formatted_address) {
+        onChange({
+          address: formatted_address,
+          lat,
+          lng,
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
