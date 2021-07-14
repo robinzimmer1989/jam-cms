@@ -24,32 +24,37 @@ const Group = (props: any) => {
   return (
     <Collapse expandIconPosition="right">
       <Collapse.Panel key="group" header={`${label || id}`}>
-        {instructions && (
-          <LabelContainer>
-            <Typography.Text type="secondary" children={instructions} />
-          </LabelContainer>
-        )}
-        {fields &&
-          fields.map((field: any, index: any) => {
-            return (
-              <div key={index}>
-                {getField({
-                  field: { ...field, value: values?.[field.id] },
-                  index,
-                  site,
-                  onChangeElement: (value: any) => handleChange(value),
-                  dispatch,
-                })}
-              </div>
-            );
-          })}
+        <LabelContainer>
+          {instructions && <Typography.Text type="secondary" children={instructions} />}
+        </LabelContainer>
+
+        <ContentContainer>
+          {fields &&
+            fields.map((field: any, index: any) => {
+              return (
+                <div key={index}>
+                  {getField({
+                    field: { ...field, value: values?.[field.id] },
+                    index,
+                    site,
+                    onChangeElement: (value: any) => handleChange(value),
+                    dispatch,
+                  })}
+                </div>
+              );
+            })}
+        </ContentContainer>
       </Collapse.Panel>
     </Collapse>
   );
 };
 
 const LabelContainer = styled.div`
-  padding: 12px 4px 0;
+  padding: 12px 12px 0;
+`;
+
+const ContentContainer = styled.div`
+  padding: 12px 8px 0;
 `;
 
 export default Group;
