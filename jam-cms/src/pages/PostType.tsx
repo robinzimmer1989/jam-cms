@@ -188,7 +188,8 @@ const PostType = (props: any) => {
     extra.push(
       <Button
         key="add"
-        children={`Add`}
+        id="create-post"
+        children="Add"
         disabled={!postType}
         onClick={() =>
           dispatch({
