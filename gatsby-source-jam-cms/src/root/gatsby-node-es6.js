@@ -181,23 +181,21 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
 
       await Promise.all(
         array.map(async (node, i) => {
-          let {
-            id,
-            databaseId,
-            uri,
-            status,
-            template: { templateName },
-          } = node;
+          let { id, databaseId, uri, status, template } = node;
 
-          const isArchive = templateName.startsWith('Archive');
-          const archivePostType = templateName.replace('Archive', '').toLowerCase();
+          if (!template || !template.templateName) {
+            return;
+          }
+
+          const isArchive = template.templateName.startsWith('Archive');
+          const archivePostType = template.templateName.replace('Archive', '').toLowerCase();
 
           let templatePath;
 
           if (isArchive) {
             templatePath = getPath('postTypes', archivePostType, 'archive');
           } else {
-            templatePath = getPath('postTypes', postType, templateName);
+            templatePath = getPath('postTypes', postType, template.templateName);
           }
 
           // Check if component for private path exists
@@ -267,7 +265,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             // Check if error was already shown
             if (!missingTemplates[templatePath]) {
               reporter.warn(
-                `Template file not found. Gatsby won't create any pages for template '${templateName.toLowerCase()}' of post type '${postType}'. Add a template file to ${templatePath}`
+                `Template file not found. Gatsby won't create any pages for template '${template.templateName.toLowerCase()}' of post type '${postType}'. Add a template file to ${templatePath}`
               );
 
               // Only show error message about missing template once

@@ -47,7 +47,7 @@ const EditorSidebar = (props: any) => {
 
   const { fields } = config;
   const [loading, setLoading] = useState('');
-  const [sidebar, setSidebar] = useState('content');
+  const [sidebar, setSidebar] = useState(editable ? 'content' : 'settings');
   const [expiryDate, setExpiryDate] = useState(48);
   const [previewLink, setPreviewLink] = useState('');
 
@@ -592,7 +592,7 @@ const EditorSidebar = (props: any) => {
       <TabsContainer>
         <Tabs activeKey={sidebar} tabBarGutter={0} onChange={(value) => setSidebar(value)}>
           <Tabs.TabPane key={'content'} tab={'Content'} disabled={!editable} />
-          <Tabs.TabPane key={'settings'} tab={'Settings'} disabled={!editable} />
+          <Tabs.TabPane key={'settings'} tab={'Settings'} />
           <Tabs.TabPane key={'seo'} tab={'SEO'} disabled={!editable} />
         </Tabs>
 

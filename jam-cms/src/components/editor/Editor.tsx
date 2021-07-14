@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 import { set } from 'lodash';
+import { Empty } from 'antd';
 
 // import app components
 import Loader from '../Loader';
@@ -114,7 +116,7 @@ const Editor = (props: any) => {
         <>
           {loaded ? (
             <>
-              {!!Component && post?.content && (
+              {!!Component && post?.content ? (
                 <Component
                   data={getPostData()}
                   pageContext={{
@@ -136,6 +138,15 @@ const Editor = (props: any) => {
                     pagination,
                   }}
                 />
+              ) : (
+                <EmptyContainer style={{ background: 'transparent' }} className="jam-cms">
+                  <Empty
+                    imageStyle={{
+                      height: 120,
+                    }}
+                    description={'No Template'}
+                  />
+                </EmptyContainer>
               )}
             </>
           ) : (
@@ -159,5 +170,13 @@ const Editor = (props: any) => {
     </>
   );
 };
+
+const EmptyContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+`;
 
 export default Editor;

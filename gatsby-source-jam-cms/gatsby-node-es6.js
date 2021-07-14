@@ -311,19 +311,28 @@ var createPages = /*#__PURE__*/function () {
                         _context3.next = 3;
                         return Promise.all(array.map( /*#__PURE__*/function () {
                           var _ref8 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(node, i) {
-                            var id, databaseId, uri, status, templateName, isArchive, archivePostType, templatePath, renderPrivate, privatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
+                            var id, databaseId, uri, status, template, isArchive, archivePostType, templatePath, renderPrivate, privatePath, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
                             return _regenerator["default"].wrap(function _callee2$(_context2) {
                               while (1) {
                                 switch (_context2.prev = _context2.next) {
                                   case 0:
-                                    id = node.id, databaseId = node.databaseId, uri = node.uri, status = node.status, templateName = node.template.templateName;
-                                    isArchive = templateName.startsWith('Archive');
-                                    archivePostType = templateName.replace('Archive', '').toLowerCase();
+                                    id = node.id, databaseId = node.databaseId, uri = node.uri, status = node.status, template = node.template;
+
+                                    if (!(!template || !template.templateName)) {
+                                      _context2.next = 3;
+                                      break;
+                                    }
+
+                                    return _context2.abrupt("return");
+
+                                  case 3:
+                                    isArchive = template.templateName.startsWith('Archive');
+                                    archivePostType = template.templateName.replace('Archive', '').toLowerCase();
 
                                     if (isArchive) {
                                       templatePath = getPath('postTypes', archivePostType, 'archive');
                                     } else {
-                                      templatePath = getPath('postTypes', postType, templateName);
+                                      templatePath = getPath('postTypes', postType, template.templateName);
                                     } // Check if component for private path exists
 
 
@@ -391,14 +400,14 @@ var createPages = /*#__PURE__*/function () {
                                     } else {
                                       // Check if error was already shown
                                       if (!missingTemplates[templatePath]) {
-                                        reporter.warn("Template file not found. Gatsby won't create any pages for template '".concat(templateName.toLowerCase(), "' of post type '").concat(postType, "'. Add a template file to ").concat(templatePath)); // Only show error message about missing template once
+                                        reporter.warn("Template file not found. Gatsby won't create any pages for template '".concat(template.templateName.toLowerCase(), "' of post type '").concat(postType, "'. Add a template file to ").concat(templatePath)); // Only show error message about missing template once
 
                                         // Only show error message about missing template once
                                         missingTemplates[templatePath] = true;
                                       }
                                     }
 
-                                  case 8:
+                                  case 10:
                                   case "end":
                                     return _context2.stop();
                                 }
