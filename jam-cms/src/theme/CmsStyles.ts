@@ -68,6 +68,10 @@ const styles = css`
     display: flex;
   }
 
+  .ant-radio-inner:after {
+    display: block;
+  }
+
   .ant-space-vertical {
     width: 100%;
   }
