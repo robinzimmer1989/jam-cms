@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Space, Button, Select as AntSelect } from 'antd';
+import { Space, Button } from 'antd';
 
 // import app components
 import Input from './Input';
-import Select from './Select';
 import PostTreeSelect from './PostTreeSelect';
 import { useStore } from '../store';
 
 const PostForm = (props: any) => {
-  const { postTypeID: defaultPostTypeID, onSubmit } = props;
+  const { postTypeID, onSubmit } = props;
 
   const [
     {
@@ -18,23 +17,30 @@ const PostForm = (props: any) => {
   ] = useStore();
 
   const [title, setTitle] = useState('');
-  const [postTypeID, setPostTypeID] = useState(defaultPostTypeID || 'page');
   const [parentID, setParentID] = useState(0);
+  const [loading, setLoading] = useState(false);
   const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
 
   const handleSubmit = async () => {
     if (!title) {
       return;
     }
+
+    setLoading(true);
+
     await onSubmit({ postTypeID, title, parentID });
+
     setTitle('');
     setParentID(0);
+    setLoading(false);
+
     dispatch({ type: 'CLOSE_DIALOG' });
   };
 
   return (
     <Space direction="vertical" size={20}>
       <Input
+        id="post-title"
         label="Title"
         value={title}
         onChange={(e: any) => setTitle(e.target.value)}
@@ -42,22 +48,9 @@ const PostForm = (props: any) => {
         onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
       />
 
-      {!defaultPostTypeID &&
-        sites[siteID]?.postTypes &&
-        Object.values(sites[siteID].postTypes).length > 1 && (
-          <Select label="Post Type" value={postTypeID} onChange={(v: any) => setPostTypeID(v)}>
-            {Object.values(sites[siteID].postTypes).map((o) => (
-              <AntSelect.Option
-                key={(o as any).id}
-                value={(o as any).id}
-                children={(o as any).title}
-              />
-            ))}
-          </Select>
-        )}
-
       {postTypeID === 'page' && (
         <PostTreeSelect
+          id="post-parent"
           label="Parent"
           items={Object.values(posts)}
           value={parentID}
@@ -65,7 +58,14 @@ const PostForm = (props: any) => {
         />
       )}
 
-      <Button children={`Add`} onClick={handleSubmit} type="primary" disabled={!title} />
+      <Button
+        id="submit-create-post"
+        children="Add"
+        onClick={handleSubmit}
+        type="primary"
+        disabled={!title}
+        loading={loading}
+      />
     </Space>
   );
 };
