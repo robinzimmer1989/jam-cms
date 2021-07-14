@@ -195,10 +195,6 @@ const HTMLEditor = (props: any) => {
 };
 
 const Container = styled('div' as any)`
-  .jodit-placeholder {
-    padding: 8px 0;
-  }
-
   .jodit-container.jodit.jodit-wysiwyg_mode {
     ${({ fullscreen }: any) =>
       fullscreen
@@ -235,12 +231,15 @@ const Container = styled('div' as any)`
   }
 
   .jodit-container:not(.jodit_inline) .jodit-wysiwyg {
-    padding: 8px 0;
+    padding: 8px;
+    border-left: 1px solid ${colors.tertiary};
+    border-right: 1px solid ${colors.tertiary};
+    border-bottom: 1px solid ${colors.tertiary};
   }
 
   .jodit-toolbar__box:not(:empty) {
     width: 100% !important;
-    border: 1px solid #dadada;
+    border: 1px solid ${colors.tertiary};
     border-radius: 4px;
     background: ${colors.secondaryContrast};
   }
@@ -310,7 +309,7 @@ const Global = createGlobalStyle`
 
     // Style popup
     .jodit-popup{
-      border: 1px solid #dadada;
+      border: 1px solid ${colors.tertiary};
       border-radius: 4px;
       box-shadow: none;
       overflow: hidden;
