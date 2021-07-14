@@ -164,8 +164,9 @@ const MediaLibrary = (props: any) => {
   };
 
   const handleSelectMultiple = () => {
-    dispatch({ type: 'CLOSE_DIALOG' });
     onSelect && onSelect(selected);
+
+    dispatch({ type: 'CLOSE_DIALOG' });
   };
 
   return (
