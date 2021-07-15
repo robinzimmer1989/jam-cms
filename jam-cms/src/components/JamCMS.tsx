@@ -1,10 +1,10 @@
 import React from 'react';
 
 // import app components
-import Loader from './components/Loader';
-import { StoreProvider } from './store';
+import Loader from './Loader';
+import { StoreProvider } from '../store';
 
-const Router = React.lazy(() => import('./components/router/Router'));
+const Router = React.lazy(() => import('./router/Router'));
 
 const JamCMS = (props: any) => {
   return (

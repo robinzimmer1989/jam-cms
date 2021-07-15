@@ -3,7 +3,7 @@ import { PageProps } from 'gatsby';
 import { Redirect } from '@reach/router';
 
 // import app components
-import JamCMS from './JamCMS';
+import JamCMS from './components/JamCMS';
 import LoginForm from './components/LoginForm';
 import RichText from './components/RichText';
 import GatsbyImage from './components/GatsbyImage';
