@@ -9,7 +9,10 @@ import 'jodit/build/jodit.min.css';
 import AdminRouter from './AdminRouter';
 import PreviewRouter from './PreviewRouter';
 import PrivateRouter from './PrivateRouter';
+import Loader from '../Loader';
 
+import useAuth from '../../hooks/useAuth';
+import useSite from '../../hooks/useSite';
 import { useStore } from '../../store';
 import { getPreviewID } from '../../utils/auth';
 
@@ -20,6 +23,9 @@ const Router = (props: any) => {
     },
   ] = useStore();
 
+  useAuth();
+  useSite();
+
   const previewID = getPreviewID();
 
   if (previewID) {
@@ -29,7 +35,7 @@ const Router = (props: any) => {
   } else if (authUser?.capabilities?.read) {
     return <PrivateRouter {...props} />;
   } else {
-    return null;
+    return <Loader />;
   }
 };
 

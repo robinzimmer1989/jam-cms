@@ -1,7 +1,6 @@
 import React from 'react';
 
 // import app components
-import AuthProvider from './components/AuthProvider';
 import Loader from './components/Loader';
 import { StoreProvider } from './store';
 
@@ -11,9 +10,7 @@ const JamCMS = (props: any) => {
   return (
     <React.Suspense fallback={<Loader />}>
       <StoreProvider {...props}>
-        <AuthProvider>
-          <Router pageContext={props?.pageContext} defaultComponent={props.children} />
-        </AuthProvider>
+        <Router pageContext={props?.pageContext} defaultComponent={props.children} />
       </StoreProvider>
     </React.Suspense>
   );

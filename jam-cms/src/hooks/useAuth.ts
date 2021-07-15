@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // import components
-import Loader from './Loader';
-
 import { useStore } from '../store';
 import { authActions, userActions } from '../actions';
-import { getUser, getPreviewID } from '../utils/auth';
+import { getUser } from '../utils/auth';
 
-const AuthProvider = (props: any) => {
-  const [
-    {
-      config,
-      authState: { authUser },
-    },
-    dispatch,
-  ] = useStore();
+const useAuth = () => {
+  const [{ config }, dispatch] = useStore();
 
   const [timer, setTimer] = useState(0);
 
   const user = getUser();
-  const previewID = getPreviewID();
 
   useEffect(() => {
     let intervalID: any = null;
@@ -55,8 +46,6 @@ const AuthProvider = (props: any) => {
       loadUser();
     }
   }, []);
-
-  return authUser || previewID ? props.children : <Loader />;
 };
 
-export default AuthProvider;
+export default useAuth;

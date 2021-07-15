@@ -16,7 +16,7 @@ import Loader from '../Loader';
 
 import { CmsStyles } from '../../theme';
 import { useStore } from '../../store';
-import { siteActions } from '../../actions';
+
 import {
   ROUTE_APP,
   ROUTE_PROFILE,
@@ -31,36 +31,12 @@ import {
 const AdminRouter = (props: any) => {
   const [
     {
-      config,
       authState: { authUser },
       appState: { dialog },
       cmsState: { sites, siteID },
-      editorState: { siteHasChanged },
     },
     dispatch,
   ] = useStore();
-
-  // timer for refresh token and site updates
-  const [timer, setTimer] = useState(0);
-
-  useEffect(() => {
-    const intervalID = setInterval(() => {
-      setTimer((time) => time + 1);
-    }, 60000); // 60 seconds
-
-    // Clear timer
-    return () => {
-      clearInterval(intervalID);
-    };
-  }, []);
-
-  useEffect(() => {
-    const loadSite = async () => {
-      await siteActions.getSite({ siteID: config.siteID, siteHasChanged }, dispatch, config);
-    };
-
-    loadSite();
-  }, [timer]);
 
   // Wait until site is loaded
   if (!sites[siteID]) {
