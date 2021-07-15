@@ -26,13 +26,10 @@ const Home = (props: RouteComponentProps) => {
 
   useEffect(() => {
     const loadSites = async () => {
-      if (!!config.multisite) {
-        await siteActions.getSites({}, dispatch, config);
-        setLoaded(true);
-      } else {
-        navigate(getRoute(`dashboard`));
-      }
+      await siteActions.getSites({}, dispatch, config);
+      setLoaded(true);
     };
+
     loadSites();
   }, []);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
@@ -31,6 +31,7 @@ import {
 const AdminRouter = (props: any) => {
   const [
     {
+      config,
       authState: { authUser },
       appState: { dialog },
       cmsState: { sites, siteID },
@@ -40,7 +41,7 @@ const AdminRouter = (props: any) => {
 
   // Wait until site is loaded
   if (!sites[siteID]) {
-    return <Loader />;
+    return <Loader text="Load Website" />;
   }
 
   return (
@@ -48,7 +49,8 @@ const AdminRouter = (props: any) => {
       <CmsStyles />
 
       <Router>
-        <Home path={`${ROUTE_APP}`} />
+        {!!config.multisite && <Home path={`${ROUTE_APP}`} />}
+
         <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} />
         <Dashboard path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} />
         <Media path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} />

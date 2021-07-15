@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageProps } from 'gatsby';
+import { Redirect } from '@reach/router';
 
 // import app components
 import JamCMS from './JamCMS';
@@ -11,24 +12,34 @@ import { isLoggedIn, getPreviewID } from './utils/auth';
 interface Props extends PageProps {
   source?: string;
   fields?: any;
-  settings?: {
+  settings: {
     postsPerPage?: number;
     sunc?: boolean;
+    multisite?: boolean;
   };
   siteID: any;
+  children: any;
 }
 
 const Index = (props: Props) => {
-  const { source } = props;
+  const { source, settings, children } = props;
 
-  return isLoggedIn() || getPreviewID() ? (
-    <JamCMS {...props} />
-  ) : (
-    React.cloneElement(props.children, { source })
-  );
+  // Check if user has access to jamCMS
+  const allowAccess = isLoggedIn() || getPreviewID();
+
+  if (allowAccess) {
+    // Redirect to default site if no multisite is detected
+    if (children?.props?.location?.pathname === '/jam-cms' && !settings?.multisite) {
+      return <Redirect to="/jam-cms/site/default" noThrow />;
+    } else {
+      return <JamCMS {...props} />;
+    }
+  } else {
+    return React.cloneElement(children, { source });
+  }
 };
 
 export default Index;
 
-// Export all useful frontend components
+// Export all useful frontend components / functions
 export { RichText, GatsbyImage, LoginForm, isLoggedIn };
