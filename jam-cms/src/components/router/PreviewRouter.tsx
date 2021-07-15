@@ -16,7 +16,7 @@ const PreviewRouter = (props: any) => {
 
   // Wait until site is loaded
   if (!sites[siteID]) {
-    return <Loader />;
+    return <Loader text="Load Website" />;
   }
 
   return (
