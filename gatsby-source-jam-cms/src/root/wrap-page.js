@@ -1,5 +1,4 @@
 const React = require('react');
-const { navigate } = require('gatsby');
 const JamCms = require('jam-cms').default;
 
 const preferDefault = (m) => (m && m.default) || m;
