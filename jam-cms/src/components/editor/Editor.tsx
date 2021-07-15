@@ -150,7 +150,7 @@ const Editor = (props: any) => {
               )}
             </>
           ) : (
-            <Loader />
+            <Loader text="Load Query" />
           )}
         </>
       ) : (

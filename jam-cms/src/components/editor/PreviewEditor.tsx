@@ -58,7 +58,7 @@ const PreviewEditor = (props: any) => {
   return (
     <>
       <EditorWrapper loaded={loaded}>
-        {loaded ? <Editor postID={postID} {...props} /> : <Loader />}
+        {loaded ? <Editor postID={postID} {...props} /> : <Loader text="Load Post" />}
       </EditorWrapper>
 
       <PreviewBanner children={`Preview`} type="primary" />
