@@ -9,7 +9,11 @@ const Loader = (props: any) => {
     <Container>
       <Content>
         <Spin size="large" />
-        {text && <Typography.Text style={{ marginTop: 20 }}>{text}</Typography.Text>}
+        {text && (
+          <Typography.Text style={{ fontSize: 12, marginTop: 20, textTransform: 'uppercase' }}>
+            {text}
+          </Typography.Text>
+        )}
       </Content>
     </Container>
   );
