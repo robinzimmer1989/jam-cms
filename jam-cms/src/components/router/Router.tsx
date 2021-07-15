@@ -26,16 +26,14 @@ const Router = (props: any) => {
   useAuth();
   useSite();
 
-  const previewID = getPreviewID();
-
-  if (previewID) {
+  if (getPreviewID()) {
     return <PreviewRouter {...props} />;
   } else if (authUser?.capabilities?.edit_posts) {
     return <AdminRouter {...props} />;
   } else if (authUser?.capabilities?.read) {
     return <PrivateRouter {...props} />;
   } else {
-    return <Loader />;
+    return <Loader text="Authenticate User" />;
   }
 };
 
