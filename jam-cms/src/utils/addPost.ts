@@ -1,4 +1,4 @@
-import { navigate } from 'gatsby';
+import { navigate } from '@reach/router';
 import { set } from 'lodash';
 import produce from 'immer';
 

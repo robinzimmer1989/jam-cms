@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, navigate } from 'gatsby';
+import { Link, navigate } from '@reach/router';
 import {
   Button,
   PageHeader,

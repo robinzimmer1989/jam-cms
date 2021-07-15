@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { navigate } from 'gatsby';
+import { navigate } from '@reach/router';
 import produce from 'immer';
 import {
   Space,

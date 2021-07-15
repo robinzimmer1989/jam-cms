@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, navigate } from 'gatsby';
+import { Link, navigate } from '@reach/router';
 import { Button, Card, Space, Form, message, Row } from 'antd';
 
 // import app components

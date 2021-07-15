@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link } from '@reach/router';
 import { navigate } from 'gatsby';
 import styled from 'styled-components';
 import { Menu, Button, Dropdown } from 'antd';

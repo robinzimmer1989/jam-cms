@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'gatsby';
+import { Link } from '@reach/router';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
 import { PageHeader, Layout, Menu } from 'antd';

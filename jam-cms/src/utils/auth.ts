@@ -1,4 +1,4 @@
-import { navigate } from 'gatsby';
+import { navigate } from '@reach/router';
 
 import getStorageKey from './getStorageKey';
 import getParameter from './getParameter';
