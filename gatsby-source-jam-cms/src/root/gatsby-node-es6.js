@@ -265,7 +265,7 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
             // Check if error was already shown
             if (!missingTemplates[templatePath]) {
               reporter.warn(
-                `Template file not found. Gatsby won't create any pages for template '${template.templateName.toLowerCase()}' of post type '${postType}'. Add a template file to ${templatePath}`
+                `Template file not found. Gatsby won't create any pages for template '${template.templateName.toLowerCase()}' of post type '${postType}'.`
               );
 
               // Only show error message about missing template once

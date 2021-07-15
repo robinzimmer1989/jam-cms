@@ -400,7 +400,7 @@ var createPages = /*#__PURE__*/function () {
                                     } else {
                                       // Check if error was already shown
                                       if (!missingTemplates[templatePath]) {
-                                        reporter.warn("Template file not found. Gatsby won't create any pages for template '".concat(template.templateName.toLowerCase(), "' of post type '").concat(postType, "'. Add a template file to ").concat(templatePath)); // Only show error message about missing template once
+                                        reporter.warn("Template file not found. Gatsby won't create any pages for template '".concat(template.templateName.toLowerCase(), "' of post type '").concat(postType, "'.")); // Only show error message about missing template once
 
                                         // Only show error message about missing template once
                                         missingTemplates[templatePath] = true;
