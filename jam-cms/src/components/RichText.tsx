@@ -37,7 +37,7 @@ const RichText = (props: any) => {
 
               // The parser function complains when there is invalid inline CSS (missing ':').
               // That's why we need to remove it so the user can type in the code editor.
-              if (node.attribs.style) {
+              if (node?.attribs?.style) {
                 node.attribs.style = node.attribs.style
                   .split(';')
                   .filter((s: string) => s.includes(':'))
@@ -45,7 +45,9 @@ const RichText = (props: any) => {
               }
 
               // Remove all special characters from string. This is necessary when using the code editor and start adding html elements.
-              node.name = node.name.replace(/[^a-zA-Z1-9:]/g, '');
+              if (node?.name) {
+                node.name = node.name.replace(/[^a-zA-Z1-9]/g, '');
+              }
 
               return node;
             }
