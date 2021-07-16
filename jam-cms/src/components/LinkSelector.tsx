@@ -44,7 +44,7 @@ const LinkSelector = (props: any) => {
   };
 
   const handleRemove = () => {
-    onChange({ title: link.title, url: '', target: '' });
+    onChange({ title: link?.title, url: '', target: '' });
     setLink({ title: '', url: '', target: '' });
     dispatch({ type: `CLOSE_DIALOG` });
   };
@@ -57,7 +57,7 @@ const LinkSelector = (props: any) => {
         (o) => (o as any).id === post.postTypeID
       );
       setLink({
-        title: link.title || post.title,
+        title: link?.title || post?.title,
         url: generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
         target: false,
       });
@@ -101,7 +101,7 @@ const LinkSelector = (props: any) => {
             children={'Update'}
             onClick={handleSubmit}
             type="primary"
-            disabled={!link.url || !link.title}
+            disabled={!link?.url || !link?.title}
           />
         </Space>
       </Space>
