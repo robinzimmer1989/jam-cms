@@ -16,17 +16,13 @@ var fields;
 
 try {
   // eslint-disable-next-line
-  fields = preferDefault(require(GATSBY_FIELDS_PATH)); // loop through post types and templates and add React component to fields object
+  fields = GATSBY_FIELDS; // loop through post types and templates and add React component to fields object
 
   if (fields && fields.postTypes) {
     for (var postTypeIndex in fields.postTypes) {
-      var postType = fields.postTypes[postTypeIndex];
-
       for (var templateIndex in fields.postTypes[postTypeIndex].templates) {
-        var template = fields.postTypes[postTypeIndex].templates[templateIndex]; // eslint-disable-next-line
-
-        var component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType.id, "/").concat(template.id, "/").concat(template.id)));
-        fields.postTypes[postTypeIndex].templates[templateIndex].component = component;
+        var template = fields.postTypes[postTypeIndex].templates[templateIndex];
+        fields.postTypes[postTypeIndex].templates[templateIndex].component = preferDefault(require("".concat(GATSBY_TEMPLATE_PATH).concat(template.componentPath)));
       }
     }
   }

@@ -1,83 +1,63 @@
 import path from 'path';
 import fs from 'fs';
-import axios from 'axios';
 
+import syncFields from './syncFields';
 import getThemeSettings from './getThemeSettings';
+import addPathToFields from './addPathToFields';
+import createJamPages from './createPages';
+import createJamTaxonomies from './createTaxonomies';
 
-let fieldsPath,
-  templatesPath,
-  hasError = false;
+let args = { fields: null, templatePath: '', hasError: false };
 
-export const onPreInit = async ({ store, reporter }, { fields, source, apiKey, settings }) => {
-  if (!apiKey) {
-    reporter.error('jamCMS: Api key is required');
-    return;
-  }
+let directory = [];
 
-  if (!source) {
-    reporter.error('jamCMS: Source URL is required');
-    return;
-  }
-
-  // import templates
-  templatesPath = path.join(store.getState().program.directory, `src/templates`);
-
-  // Use default path if no fields variable is provided
-  fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
-
-  // Don't sync if setting is explicitly set to false
-  if (settings && settings.sync === false) {
-    return reporter.info('jamCMS: Syncing disabled');
-  }
-
-  // Import field object
-  const fieldsObject = await import(fieldsPath);
-
-  if (!fieldsObject) {
-    return reporter.error('jamCMS: No fields object found');
-  }
-
-  // Remove potential trailing slash
-  const url = source.replace(/\/+$/, '');
-
-  // Sync fields with backend
-  try {
-    const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-      fields: JSON.stringify(fieldsObject.default),
-    });
-
-    if (result.data) {
-      reporter.success(result.data);
-    }
-  } catch (err) {
-    hasError = true;
-
-    if (err?.response?.data?.code === 'rest_no_route') {
-      reporter.error('jamCMS: Plugin not found');
+function getDirectory(dir) {
+  fs.readdirSync(dir).forEach((f) => {
+    const relativePath = path.join(dir, f);
+    if (fs.statSync(relativePath).isDirectory()) {
+      return getDirectory(relativePath);
     } else {
-      reporter.error(err?.response?.data?.message);
+      return directory.push(relativePath);
     }
+  });
+}
+
+getDirectory('./src/templates');
+
+export const onPreInit = async (gatsby, pluginOptions) => {
+  const hasError = await syncFields(gatsby, pluginOptions, directory);
+
+  if (hasError) {
+    args = { hasError };
+  } else {
+    const fields = await addPathToFields(gatsby, pluginOptions, directory);
+
+    args = {
+      fields,
+      templatePath: path.join(gatsby.store.getState().program.directory, `src/templates`),
+      hasError: false,
+    };
   }
 };
 
 export const onCreateWebpackConfig = ({ actions, plugins }) => {
-  // Make field path variable globally available so we can import the templates in the wrap-page.js file (gatsby-browser only)
+  // Make template path and fields variable globally available so we can import the templates in the wrap-page.js (gatsby-browser only)
   actions.setWebpackConfig({
     plugins: [
       plugins.define({
-        GATSBY_FIELDS_PATH: JSON.stringify(fieldsPath),
-        GATSBY_TEMPLATES_PATH: JSON.stringify(templatesPath),
+        GATSBY_FIELDS: JSON.stringify(args.fields),
+        GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath),
       }),
     ],
   });
 };
 
-export const createPages = async ({ store, actions, reporter, graphql }, pluginOptions) => {
-  if (hasError) {
+export const createPages = async (gatsby, pluginOptions) => {
+  if (args.hasError) {
     return;
   }
 
-  const { settings, fields } = pluginOptions;
+  const { siteTitle, themeOptions, protectedPosts } = await getThemeSettings(gatsby, pluginOptions);
 
   // Prepare jamCMS object with default values for page context
   const jamCMS = {
@@ -90,262 +70,18 @@ export const createPages = async ({ store, actions, reporter, graphql }, pluginO
     },
   };
 
-  // Use default path if no fields variable is provided
-  fieldsPath = fields || path.join(store.getState().program.directory, `src/fields`);
+  await createJamPages(gatsby, pluginOptions, {
+    siteTitle,
+    themeOptions,
+    protectedPosts,
+    jamCMS,
+    directory,
+  });
 
-  const { siteTitle, themeOptions, protectedPosts } = await getThemeSettings(
-    { reporter },
-    pluginOptions
-  );
-
-  const allNodes = {};
-
-  try {
-    // Get all post types
-    const {
-      data: { allWpContentType },
-    } = await graphql(/* GraphQL */ `
-      query ALL_CONTENT_TYPES {
-        allWpContentType {
-          nodes {
-            graphqlSingleName
-          }
-        }
-      }
-    `);
-
-    for (const contentType of allWpContentType.nodes) {
-      const { graphqlSingleName: postType } = contentType;
-
-      // Don't create single pages for media items
-      if (postType === 'mediaItem') {
-        continue;
-      }
-
-      // Capitalize post type name
-      const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
-      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
-
-      const { data } = await graphql(/* GraphQL */ `
-        query ALL_CONTENT_NODES {
-            ${gatsbyNodeListFieldName}{
-            nodes {
-              id
-              databaseId              
-              uri
-              status
-              template {
-                templateName
-              }
-            }
-          }
-        }
-      `);
-
-      allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
-    }
-  } catch (err) {
-    if (err.response && err.response.data.message) {
-      reporter.error(err.response.data.message);
-    }
-  }
-
-  // Initialize missing templates object
-  const missingTemplates = {};
-
-  const allowedExtensions = ['.js', '.jsx', '.tsx'];
-
-  const getPath = (type, postType, templateName) => {
-    let thePath;
-
-    for (const extension of allowedExtensions) {
-      // TODO: Path can be changed via gatsby-config option
-      const templatePath = path.resolve(
-        `./src/templates/${type}/${postType}/${templateName.toLowerCase()}/${templateName.toLowerCase()}${extension}`
-      );
-
-      if (fs.existsSync(templatePath)) {
-        thePath = templatePath;
-      }
-    }
-
-    return thePath;
-  };
-
-  await Promise.all(
-    Object.keys(allNodes).map(async (postType) => {
-      // Merge nodes of GraphQL query and protected posts from custom WP endpoint
-      const array = protectedPosts
-        ? allNodes[postType].concat(protectedPosts[postType])
-        : allNodes[postType];
-
-      await Promise.all(
-        array.map(async (node, i) => {
-          let { id, databaseId, uri, status, template } = node;
-
-          if (!template || !template.templateName) {
-            return;
-          }
-
-          const isArchive = template.templateName.startsWith('Archive');
-          const archivePostType = template.templateName.replace('Archive', '').toLowerCase();
-
-          let templatePath;
-
-          if (isArchive) {
-            templatePath = getPath('postTypes', archivePostType, 'archive');
-          } else {
-            templatePath = getPath('postTypes', postType, template.templateName);
-          }
-
-          // Check if component for private path exists
-          let renderPrivate = false;
-
-          const privatePath = path.resolve(`./src/templates/private.js`);
-
-          if (status === 'private' && fs.existsSync(privatePath)) {
-            renderPrivate = true;
-          }
-
-          if (fs.existsSync(templatePath)) {
-            if (isArchive) {
-              const numberOfPosts = allNodes[archivePostType].length;
-
-              let postsPerPageUsed = 10;
-
-              if (settings && settings.postsPerPage) {
-                postsPerPageUsed = settings.postsPerPage;
-              }
-
-              const numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
-
-              for (let page = 1; page <= numberOfPages; page++) {
-                let pathname = uri;
-
-                if (page > 1) {
-                  pathname = `${uri}page/${page}`;
-                }
-
-                actions.createPage({
-                  component: renderPrivate ? privatePath : templatePath,
-                  path: pathname,
-                  context: {
-                    id,
-                    databaseId,
-                    status,
-                    siteTitle,
-                    themeOptions,
-                    pagination: {
-                      basePath: uri,
-                      numberOfPosts,
-                      postsPerPage: postsPerPageUsed,
-                      numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
-                      page,
-                    },
-                    jamCMS,
-                  },
-                });
-              }
-            } else {
-              actions.createPage({
-                component: renderPrivate ? privatePath : templatePath,
-                path: uri,
-                context: {
-                  id,
-                  databaseId,
-                  status,
-                  siteTitle,
-                  themeOptions,
-                  pagination: {},
-                  jamCMS,
-                },
-              });
-            }
-          } else {
-            // Check if error was already shown
-            if (!missingTemplates[templatePath]) {
-              reporter.warn(
-                `Template file not found. Gatsby won't create any pages for template '${template.templateName.toLowerCase()}' of post type '${postType}'.`
-              );
-
-              // Only show error message about missing template once
-              missingTemplates[templatePath] = true;
-            }
-          }
-        })
-      );
-    })
-  );
-
-  try {
-    // Get all taxonomies
-    const {
-      data: { allWpTaxonomy },
-    } = await graphql(/* GraphQL */ `
-      query ALL_TAXONOMIES {
-        allWpTaxonomy {
-          nodes {
-            graphqlSingleName
-          }
-        }
-      }
-    `);
-
-    for (const taxonomy of allWpTaxonomy.nodes) {
-      const { graphqlSingleName } = taxonomy;
-
-      // Don't create single pages for media items
-      if (graphqlSingleName === 'postFormat') {
-        continue;
-      }
-
-      // Capitalize post type name
-      const nodesTypeName = graphqlSingleName.charAt(0).toUpperCase() + graphqlSingleName.slice(1);
-      const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
-
-      const { data } = await graphql(/* GraphQL */ `
-        query ALL_TERM_NODES {
-            ${gatsbyNodeListFieldName}{
-            nodes {
-              id
-              databaseId
-              slug
-              uri
-              status
-            }
-          }
-        }
-      `);
-
-      await Promise.all(
-        data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
-          const templatePath = getPath('taxonomies', graphqlSingleName, 'single');
-
-          if (fs.existsSync(templatePath)) {
-            const { id, databaseId, uri, slug } = node;
-
-            actions.createPage({
-              component: templatePath,
-              path: uri,
-              context: { id, databaseId, siteTitle, slug, themeOptions, jamCMS },
-            });
-          } else {
-            // Check if error was already shown
-            if (!missingTemplates[templatePath]) {
-              reporter.warn(
-                `Template file not found. Gatsby won't create any pages for taxonomy '${graphqlSingleName}'. Add a template file to ${templatePath}`
-              );
-
-              // Only show error message about missing template once
-              missingTemplates[templatePath] = true;
-            }
-          }
-        })
-      );
-    }
-  } catch (err) {
-    if (err.response && err.response.data.message) {
-      reporter.error(err.response.data.message);
-    }
-  }
+  await createJamTaxonomies(gatsby, pluginOptions, {
+    siteTitle,
+    themeOptions,
+    jamCMS,
+    directory,
+  });
 };
