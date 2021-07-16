@@ -171,7 +171,7 @@ const HTMLEditor = (props: any) => {
   }, [loaded, fullscreen]);
 
   return (
-    <Container fullscreen={fullscreen}>
+    <Container className={fullscreen ? 'jodit-fullscreen' : ''} fullscreen={fullscreen}>
       <Global />
 
       {jodit}
@@ -293,11 +293,14 @@ const Container = styled('div' as any)`
 `;
 
 const Global = createGlobalStyle`
-  // Fullsize styles
-  .jodit-container:not(.jodit_inline){
-    background: ${colors.secondaryContrast} !important;
-    .jodit-workplace {
-      background: #fff;
+  
+  .jodit-fullscreen {
+    .jodit-container:not(.jodit_inline){
+      background: ${colors.secondaryContrast} !important;
+      
+      .jodit-workplace {
+        background: #fff;
+      }
     }
   }
 
