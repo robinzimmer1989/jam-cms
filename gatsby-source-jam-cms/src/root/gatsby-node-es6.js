@@ -4,10 +4,11 @@ import fs from 'fs';
 import syncFields from './syncFields';
 import getThemeSettings from './getThemeSettings';
 import addPathToFields from './addPathToFields';
+import getTemplatePath from './getTemplatePath';
 import createJamPages from './createPages';
 import createJamTaxonomies from './createTaxonomies';
 
-let args = { fields: null, templatePath: '', hasError: false };
+let args = { fields: null, templatePath: '', privateTemplateExists: false, hasError: false };
 
 let directory = [];
 
@@ -32,9 +33,13 @@ export const onPreInit = async (gatsby, pluginOptions) => {
   } else {
     const fields = await addPathToFields(gatsby, pluginOptions, directory);
 
+    // Get private path to see if template exists. Only then we wanna show the option in WordPress.
+    const privatePath = getTemplatePath(directory, { prefix: 'protected', template: 'private' });
+
     args = {
       fields,
       templatePath: path.join(gatsby.store.getState().program.directory, `src/templates`),
+      privateTemplateExists: !!privatePath,
       hasError: false,
     };
   }
@@ -47,6 +52,7 @@ export const onCreateWebpackConfig = ({ actions, plugins }) => {
       plugins.define({
         GATSBY_FIELDS: JSON.stringify(args.fields),
         GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath),
+        GATSBY_PRIVATE_TEMPLATE_EXISTS: JSON.stringify(args.privateTemplateExists),
       }),
     ],
   });

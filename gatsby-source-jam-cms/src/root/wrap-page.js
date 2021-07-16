@@ -3,10 +3,10 @@ const JamCms = require('jam-cms').default;
 
 const preferDefault = (m) => (m && m.default) || m;
 
-let fields;
+let fields = null,
+  privateTemplateExists = false;
 
 try {
-  // eslint-disable-next-line
   fields = GATSBY_FIELDS;
 
   // loop through post types and templates and add React component to fields object
@@ -21,6 +21,8 @@ try {
       }
     }
   }
+
+  privateTemplateExists = GATSBY_PRIVATE_TEMPLATE_EXISTS;
 } catch (e) {
   if (e.toString().indexOf(`Error: Cannot find module`) !== -1) {
     console.warn(`Couldn't find template`);
@@ -31,7 +33,14 @@ try {
 
 // eslint-disable-next-line react/prop-types,react/display-name
 module.exports = ({ element, props }, { source, settings, siteID }) => (
-  <JamCms {...props} fields={fields} source={source} settings={settings} siteID={siteID}>
+  <JamCms
+    {...props}
+    fields={fields}
+    source={source}
+    settings={settings}
+    siteID={siteID}
+    privateTemplateExists={privateTemplateExists}
+  >
     {element}
   </JamCms>
 );

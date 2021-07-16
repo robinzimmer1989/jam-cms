@@ -13,11 +13,12 @@ interface Props extends PageProps {
   source?: string;
   fields?: any;
   settings: {
-    postsPerPage?: number;
-    sunc?: boolean;
-    multisite?: boolean;
+    postsPerPage: number;
+    sync: boolean;
+    multisite: boolean;
   };
   siteID: any;
+  privateTemplateExists: boolean;
   children: any;
 }
 

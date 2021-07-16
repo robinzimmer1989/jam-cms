@@ -21,6 +21,8 @@ var _getThemeSettings = _interopRequireDefault(require("./getThemeSettings"));
 
 var _addPathToFields = _interopRequireDefault(require("./addPathToFields"));
 
+var _getTemplatePath = _interopRequireDefault(require("./getTemplatePath"));
+
 var _createPages = _interopRequireDefault(require("./createPages"));
 
 var _createTaxonomies = _interopRequireDefault(require("./createTaxonomies"));
@@ -28,6 +30,7 @@ var _createTaxonomies = _interopRequireDefault(require("./createTaxonomies"));
 var args = {
   fields: null,
   templatePath: '',
+  privateTemplateExists: false,
   hasError: false
 };
 var directory = [];
@@ -48,7 +51,7 @@ getDirectory('./src/templates');
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(gatsby, pluginOptions) {
-    var hasError, fields;
+    var hasError, fields, privatePath;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -67,7 +70,7 @@ var onPreInit = /*#__PURE__*/function () {
             args = {
               hasError: hasError
             };
-            _context.next = 11;
+            _context.next = 12;
             break;
 
           case 7:
@@ -76,13 +79,19 @@ var onPreInit = /*#__PURE__*/function () {
 
           case 9:
             fields = _context.sent;
+            // Get private path to see if template exists. Only then we wanna show the option in WordPress.
+            privatePath = (0, _getTemplatePath["default"])(directory, {
+              prefix: 'protected',
+              template: 'private'
+            });
             args = {
               fields: fields,
               templatePath: _path["default"].join(gatsby.store.getState().program.directory, "src/templates"),
+              privateTemplateExists: !!privatePath,
               hasError: false
             };
 
-          case 11:
+          case 12:
           case "end":
             return _context.stop();
         }
@@ -104,7 +113,8 @@ var onCreateWebpackConfig = function onCreateWebpackConfig(_ref2) {
   actions.setWebpackConfig({
     plugins: [plugins.define({
       GATSBY_FIELDS: JSON.stringify(args.fields),
-      GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath)
+      GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath),
+      GATSBY_PRIVATE_TEMPLATE_EXISTS: JSON.stringify(args.privateTemplateExists)
     })]
   });
 };

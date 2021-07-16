@@ -315,11 +315,13 @@ const EditorSidebar = (props: any) => {
             <AntSelect.Option value={'publish'} children={'Publish'} />
             <AntSelect.Option value={'draft'} children={'Draft'} />
             <AntSelect.Option value={'trash'} children={'Trash'} />
-            <AntSelect.Option
-              value={'private'}
-              children={'Private'}
-              disabled={post?.template.startsWith('archive-')}
-            />
+            {config?.privateTemplateExists && (
+              <AntSelect.Option
+                value={'private'}
+                children={'Private'}
+                disabled={post?.template.startsWith('archive-')}
+              />
+            )}
           </Select>
 
           {post?.postTypeID === 'page' && post.id !== site?.frontPage && (

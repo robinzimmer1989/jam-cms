@@ -44,7 +44,6 @@ const syncFields = async (
 
     if (result.data) {
       reporter.success(result.data);
-
       return false;
     }
   } catch (err) {

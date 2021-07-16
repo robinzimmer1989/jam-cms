@@ -8,6 +8,7 @@ module.exports = {
   globals: {
     GATSBY_FIELDS: false,
     GATSBY_TEMPLATE_PATH: false,
+    GATSBY_PRIVATE_TEMPLATE_EXISTS: false,
   },
   parser: '@babel/eslint-parser',
   parserOptions: {

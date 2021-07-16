@@ -12,10 +12,10 @@ var preferDefault = function preferDefault(m) {
   return m && m["default"] || m;
 };
 
-var fields;
+var fields = null,
+    privateTemplateExists = false;
 
 try {
-  // eslint-disable-next-line
   fields = GATSBY_FIELDS; // loop through post types and templates and add React component to fields object
 
   if (fields && fields.postTypes) {
@@ -26,6 +26,8 @@ try {
       }
     }
   }
+
+  privateTemplateExists = GATSBY_PRIVATE_TEMPLATE_EXISTS;
 } catch (e) {
   if (e.toString().indexOf("Error: Cannot find module") !== -1) {
     console.warn("Couldn't find template");
@@ -45,6 +47,7 @@ module.exports = function (_ref, _ref2) {
     fields: fields,
     source: source,
     settings: settings,
-    siteID: siteID
+    siteID: siteID,
+    privateTemplateExists: privateTemplateExists
   }), element);
 };
