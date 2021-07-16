@@ -92,7 +92,7 @@ const Map = (props: any) => {
           </MapContainer>
         </Space>
       ) : (
-        <Typography>Please add GoogleMaps API key in settings.</Typography>
+        <Typography>Please add an Google Maps API key in the site settings.</Typography>
       )}
     </>
   );
