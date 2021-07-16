@@ -6,7 +6,6 @@ import texteditor from '../../../../components/textEditor/config';
 
 const config = {
   id: 'default',
-  postTypeID: 'page',
   label: 'Default Page',
   fields: [
     {

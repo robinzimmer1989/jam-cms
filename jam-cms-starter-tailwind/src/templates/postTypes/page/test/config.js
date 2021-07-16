@@ -1,6 +1,5 @@
 const config = {
   id: 'test',
-  postTypeID: 'page',
   label: 'Test',
   fields: [
     {

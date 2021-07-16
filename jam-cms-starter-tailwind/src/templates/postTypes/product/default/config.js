@@ -1,6 +1,5 @@
 const config = {
   id: 'default',
-  postTypeID: 'product',
   label: 'Product',
   fields: [
     {

@@ -37,6 +37,9 @@ const Editor = (props: any) => {
   // We need to check if post is front page to return the correct basePath for pagination
   const isFrontPage = postID === sites?.[siteID]?.frontPage;
 
+  // The 'true' template id is a combination of id and post type
+  const templateID = `${template?.id}-${post?.postTypeID}`;
+
   // The pagination object will be available once we have the post id and therefore template id
   const pagination = useMemo(() => {
     let pagination = {};
@@ -47,7 +50,7 @@ const Editor = (props: any) => {
         : 1;
       const postsPerPage = config?.settings?.postsPerPage || 10;
       const numberOfPosts = Object.values(
-        sites?.[siteID]?.postTypes?.[template?.postTypeID]?.posts || {}
+        sites?.[siteID]?.postTypes?.[post?.postTypeID]?.posts || {}
       ).filter((o) => (o as any).status === 'publish').length;
       pagination = {
         basePath: isFrontPage ? '/' : `/${post.slug}/`,
@@ -58,10 +61,7 @@ const Editor = (props: any) => {
       };
     }
     return pagination;
-  }, [isFrontPage, template?.id, pathname]);
-
-  // The 'true' template id is a combination of id and post type
-  const templateID = `${template?.id}-${template?.postTypeID}`;
+  }, [isFrontPage, templateID, pathname]);
 
   // If there is a query, we need to wait for it
   const loaded = template?.query && !query ? false : true;
