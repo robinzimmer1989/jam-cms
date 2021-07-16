@@ -15,7 +15,7 @@ const Link = (props: any) => {
         </div>
       )}
       <Space>
-        <Button children={exists ? 'Edit' : 'Add'} onClick={onClick} size="small" />
+        <Button children={exists ? 'Edit' : 'Add Link'} onClick={onClick} size="small" />
         {exists && <Button children="Remove" onClick={onRemove} size="small" danger />}
       </Space>
     </Space>
