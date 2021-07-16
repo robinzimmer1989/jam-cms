@@ -30,6 +30,7 @@ const HTMLEditor = (props: any) => {
   const [loaded, setLoaded] = useState(false);
   const [content, setContent] = useState(defaultValue);
   const [index, setIndex] = useState(0);
+  const [mode, setMode] = useState(1);
 
   // We can't trigger the onChange callback within the useMemo function because this resets other fields
   // We're using an index instead of the content which should make the comparison more efficient
@@ -59,8 +60,8 @@ const HTMLEditor = (props: any) => {
     }
   }, [defaultValue, loaded]);
 
-  const handleToggleFullscreen = () =>
-    dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: !fullscreen } });
+  const handleSetFullscreen = (value: boolean) =>
+    dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: value } });
 
   const handleSelectImage = (image: any) => {
     const html = `<img src="${image.url}" alt="${image.altText}" class="wp-image-${image.id}" />`;
@@ -100,6 +101,7 @@ const HTMLEditor = (props: any) => {
       showCharsCounter: false,
       showXPathInStatusbar: false,
       toolbarButtonSize: 'small',
+      defaultMode: mode,
       placeholder: 'Write something...',
       // Clean: https://xdsoft.net/jodit/doc/options/cleanHTML/
       cleanHTML: {
@@ -110,7 +112,7 @@ const HTMLEditor = (props: any) => {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
         fullsize: {
           exec: function (e: any) {
-            handleToggleFullscreen();
+            handleSetFullscreen(!fullscreen);
           },
           update: function (e: any) {
             var t = e.j,
@@ -120,6 +122,14 @@ const HTMLEditor = (props: any) => {
           },
           tooltip: 'Open editor in fullsize',
           mode: 3,
+        },
+        source: {
+          mode: 3,
+          exec: function (e: any) {
+            setMode((mode) => (mode === 1 ? 2 : 1));
+          },
+          isActive: 'function(e){return e.getRealMode()===o.MODE_SOURCE}',
+          tooltip: 'Change mode',
         },
         link: {
           isActive:
@@ -168,7 +178,7 @@ const HTMLEditor = (props: any) => {
         />
       )
     );
-  }, [loaded, fullscreen]);
+  }, [loaded, fullscreen, mode]);
 
   return (
     <Container className={fullscreen ? 'jodit-fullscreen' : ''} fullscreen={fullscreen}>
@@ -195,7 +205,8 @@ const HTMLEditor = (props: any) => {
 };
 
 const Container = styled('div' as any)`
-  .jodit-container.jodit.jodit-wysiwyg_mode {
+  .jodit-wysiwyg_mode,
+  .jodit-source__mode {
     ${({ fullscreen }: any) =>
       fullscreen
         ? css`
@@ -293,14 +304,24 @@ const Container = styled('div' as any)`
 `;
 
 const Global = createGlobalStyle`
+
+  .jodit-container{
+    background: transparent !important;
+  }
+
+  .jodit-workplace {
+    background: #fff;
+  }
   
   .jodit-fullscreen {
+    .jodit-toolbar-editor-collection {
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     .jodit-container:not(.jodit_inline){
       background: ${colors.secondaryContrast} !important;
-      
-      .jodit-workplace {
-        background: #fff;
-      }
     }
   }
 
