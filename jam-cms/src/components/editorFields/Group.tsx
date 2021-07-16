@@ -24,9 +24,11 @@ const Group = (props: any) => {
   return (
     <Collapse expandIconPosition="right">
       <Collapse.Panel key="group" header={`${label || id}`}>
-        <LabelContainer>
-          {instructions && <Typography.Text type="secondary" children={instructions} />}
-        </LabelContainer>
+        {instructions && (
+          <LabelContainer>
+            <Typography.Text type="secondary" children={instructions} />
+          </LabelContainer>
+        )}
 
         <ContentContainer>
           {fields &&
@@ -54,7 +56,7 @@ const LabelContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  padding: 12px 8px 0;
+  padding-bottom: 12px;
 `;
 
 export default Group;

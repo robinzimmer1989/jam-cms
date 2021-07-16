@@ -268,12 +268,17 @@ const Container = styled.div`
   }
 
   .ant-collapse-header {
-    padding: 12px 16px 12px 30px;
+    padding: 12px 40px 12px 10px !important;
+    cursor: grab;
+  }
+
+  .ant-collapse-item {
+    position: relative;
   }
 `;
 
 const FieldContainer = styled('div' as any)`
-  padding: 8px ${({ level }: any) => (level === 0 ? '16px' : '4px')};
+  padding: 12px ${({ level }: any) => (level === 0 ? '16px' : '10px')};
 `;
 
 export default Fields;

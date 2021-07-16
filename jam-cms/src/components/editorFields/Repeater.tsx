@@ -57,11 +57,12 @@ const Repeater = (props: any) => {
   };
 
   const getListStyle = (isDraggingOver: any) => ({
-    background: isDraggingOver ? colors.tertiary : '#fff',
+    background: isDraggingOver ? colors.tertiary : 'transparent',
   });
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     userSelect: 'none',
+    padding: '1px 0',
     ...draggableStyle,
   });
 
@@ -197,15 +198,7 @@ const Repeater = (props: any) => {
 };
 
 const Container = styled('div' as any)`
-  padding: 8px ${({ level }: any) => (level === 0 ? '16px' : '4px')};
-
-  .ant-collapse-item {
-    position: relative;
-  }
-
-  .ant-collapse > .ant-collapse-item > .ant-collapse-header {
-    cursor: grab;
-  }
+  padding: 12px ${({ level }: any) => (level === 0 ? '16px' : '10px')};
 `;
 
 const DeleteIconContainer = styled.div`

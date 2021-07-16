@@ -121,7 +121,7 @@ const styles = css`
   }
 
   .ant-collapse-content > .ant-collapse-content-box {
-    padding: 4px;
+    padding: 0;
   }
 
   .ant-collapse-arrow {
