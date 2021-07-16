@@ -350,7 +350,8 @@ const LoadingContainer = styled('div' as any)`
 `;
 
 const ActionBar = styled.div`
-  position: absolute;
+  position: fixed;
+  z-index: 1;
   bottom: 0;
   left: 0;
   width: 100%;
