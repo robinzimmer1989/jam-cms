@@ -4,6 +4,7 @@ import pageTest from './templates/postTypes/page/test/config';
 import postDefault from './templates/postTypes/post/default/config';
 import postArchive from './templates/postTypes/post/archive/config';
 import productDefault from './templates/postTypes/product/default/config';
+import productArchive from './templates/postTypes/product/archive/config';
 
 // import theme options
 import header from './components/header/config';
@@ -25,9 +26,9 @@ const fields = {
       id: 'product',
       title: 'Product',
       options: {
-        rewrite_slug: 'products', // CPT only
+        rewrite_slug: 'products',
       },
-      templates: [productDefault],
+      templates: [productDefault, productArchive],
     },
   ],
   taxonomies: [
