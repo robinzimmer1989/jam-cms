@@ -6,8 +6,13 @@ import { Empty } from 'antd';
 
 // import app components
 import Loader from '../Loader';
+import useForceUpdate from '../../hooks/useForceUpdate';
 import { formatFieldsToProps, formatTaxonomiesForEditor, getTemplateByPost } from '../../utils';
 import { useStore } from '../../store';
+
+// We need to store the template ID in a global variable to detect template changes.
+// Using useEffect doesn't work, because a template switch will immediately render the new component with wrong props.
+let globalTemplateID: string = '';
 
 const Editor = (props: any) => {
   const {
@@ -20,7 +25,6 @@ const Editor = (props: any) => {
   const [
     {
       config,
-      authState: { authUser },
       cmsState: { sites, siteID },
       editorState: { site, post },
     },
@@ -28,30 +32,39 @@ const Editor = (props: any) => {
 
   // GraphQL query result
   const [query, setQuery] = useState(null);
+
+  const forceUpdate = useForceUpdate();
+
   const template = getTemplateByPost(post, config?.fields);
   const Component = template?.component;
-  const pathname = window.location.pathname.replace(/\/$/, '');
 
-  const isNumber = (n: any) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
+  // The 'true' template id is a combination of id and post type.
+  const templateID = `${template?.id}-${post?.archivePostType || post?.postTypeID}`;
+
+  const postsPerPage = post?.archivePostsPerPage;
 
   // We need to check if post is front page to return the correct basePath for pagination
   const isFrontPage = postID === sites?.[siteID]?.frontPage;
 
-  // The 'true' template id is a combination of id and post type
-  const templateID = `${template?.id}-${post?.postTypeID}`;
+  const pathname = window.location.pathname.replace(/\/$/, '');
+
+  const isNumber = (n: any) => !isNaN(parseFloat(n)) && !isNaN(n - 0);
 
   // The pagination object will be available once we have the post id and therefore template id
   const pagination = useMemo(() => {
     let pagination = {};
-    if (authUser?.capabilities?.edit_posts && template?.id === 'archive') {
+
+    // We can't generate the pagination object for protected pages because those don't have access to the site object and therefore not to the number of posts.
+    if (template?.id === 'archive' && sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
       // Get the page number if exists
       const page = isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
         : 1;
-      const postsPerPage = config?.settings?.postsPerPage || 10;
+
       const numberOfPosts = Object.values(
-        sites?.[siteID]?.postTypes?.[post?.postTypeID]?.posts || {}
-      ).filter((o) => (o as any).status === 'publish').length;
+        sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts
+      ).filter((o: any) => o.status === 'publish').length;
+
       pagination = {
         basePath: isFrontPage ? '/' : `/${post.slug}/`,
         numberOfPosts,
@@ -60,11 +73,9 @@ const Editor = (props: any) => {
         page,
       };
     }
-    return pagination;
-  }, [isFrontPage, templateID, pathname]);
 
-  // If there is a query, we need to wait for it
-  const loaded = template?.query && !query ? false : true;
+    return pagination;
+  }, [isFrontPage, templateID, postsPerPage, pathname]);
 
   // Load query in case post has one assigned
   useEffect(() => {
@@ -72,20 +83,34 @@ const Editor = (props: any) => {
       // TODO: Move to utils function
       const cleanedUrl = config?.source.replace(/\/+$/, '');
       const result = await axios.post(`${cleanedUrl}/graphql`, { query: template.query });
+
       if (result?.data) {
         setQuery(result.data);
       }
     };
-    template?.query && loadQuery();
+
+    // Update global template id
+    globalTemplateID = templateID;
+
+    if (template?.query) {
+      loadQuery();
+    } else {
+      // If the user toggles between two templates without a query, then simply resetting the query with setQuery(null) doesn't trigger an re-render.
+      // That's why we use a custom hook to mimic a state update.
+      forceUpdate();
+    }
   }, [templateID]);
 
   const getPostData = () => {
     // Generate query variable i.e. 'wpPage'
     const nodeType = `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
+
     // Destructure query data in case user requested more information about post (i.e. wpPost comments)
     const { [nodeType]: nodeTypeQueryData, ...otherQueryData } = (query as any)?.data || {};
+
     // Generate default page data
     const data = { ...otherQueryData };
+
     const nodeTypeData = {
       id: post.id,
       seo: post.seo,
@@ -95,20 +120,32 @@ const Editor = (props: any) => {
       postTypeID: post.postTypeID,
       ...formatTaxonomiesForEditor(post, site),
     };
+
     data[nodeType] = { ...nodeTypeQueryData, ...nodeTypeData };
+
     const acfData = formatFieldsToProps({
       global: false,
       content: post.content,
       site,
       template,
     });
+
     if (post.postTypeID === 'page') {
       set(data, `${nodeType}.template.acf`, acfData);
     } else {
       set(data, `${nodeType}.acf`, acfData);
     }
+
     return data;
   };
+
+  // If there is a query, we need to wait for it.
+  // We also need to wait until global and local template ID are identical to prevent an error when a user switches between two template where both have queries.
+  let loaded = true;
+
+  if ((template?.query && !query) || globalTemplateID !== templateID) {
+    loaded = false;
+  }
 
   return (
     <>
