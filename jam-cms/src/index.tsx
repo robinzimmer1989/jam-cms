@@ -13,7 +13,6 @@ interface Props extends PageProps {
   source?: string;
   fields?: any;
   settings: {
-    postsPerPage: number;
     sync: boolean;
     multisite: boolean;
   };
