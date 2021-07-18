@@ -23,7 +23,6 @@ module.exports = {
         apiKey: process.env.GATSBY_JAM_CMS_API_KEY,
         fields: path.join(__dirname, 'src/fields'), // default: 'src/fields
         settings: {
-          postsPerPage: 2, // default: 10
           sync: true, // true (default) || false
         },
       },

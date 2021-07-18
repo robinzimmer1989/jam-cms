@@ -54,11 +54,28 @@ const EditorSidebar = (props: any) => {
   const handleChangePost = (name: string, value: any) => {
     const nextPost = produce(post, (draft: any) => {
       set(draft, `${name}`, value);
+
       if (name === 'template') {
+        // Clear content on template change
         set(draft, 'content', {});
+
+        // Populate archive values accordingly
+        if (value.startsWith('archive-')) {
+          const archivePostType = value.split('-')[1];
+
+          set(draft, 'archive', true);
+          set(draft, 'archivePostType', archivePostType);
+          set(draft, 'archivePostsPerPage', 10);
+        } else {
+          set(draft, 'archive', false);
+          set(draft, 'archivePostType', '');
+          set(draft, 'archivePostsPerPage', 10);
+        }
       }
+
       return draft;
     });
+
     dispatch({
       type: 'UPDATE_EDITOR_POST',
       payload: nextPost,
@@ -250,14 +267,14 @@ const EditorSidebar = (props: any) => {
       ? Object.values(postTypeTemplates).filter((o) => (o as any).id !== 'archive')
       : [];
 
-    // Get all templates with id 'archive'
+    // Get all templates with id 'archive'. We have to add the postTypeID separately because it doesn't exist on the template (anymore).
     const archiveTemplatesArray: any = [];
     if (post?.postTypeID === 'page' && fields?.postTypes) {
       Object.values(fields?.postTypes).map(
-        (o) =>
-          (o as any)?.templates &&
-          Object.values((o as any).templates).map(
-            (p) => (p as any).id === 'archive' && archiveTemplatesArray.push(p)
+        (o: any) =>
+          o?.templates &&
+          Object.values(o.templates).map(
+            (p: any) => p.id === 'archive' && archiveTemplatesArray.push({ ...p, postTypeID: o.id })
           )
       );
     }
@@ -281,7 +298,7 @@ const EditorSidebar = (props: any) => {
           {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
             <Select
               value={post?.template}
-              onChange={(value: any) => handleChangePost('template', value)}
+              onChange={(value: string) => handleChangePost('template', value)}
               label={'Template'}
             >
               {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
@@ -305,6 +322,19 @@ const EditorSidebar = (props: any) => {
                 </AntSelect.OptGroup>
               )}
             </Select>
+          )}
+
+          {post?.template.startsWith('archive-') && (
+            <Input
+              label="Posts per Page"
+              type="number"
+              value={post?.archivePostsPerPage}
+              name="archivePostsPerPage"
+              min="1"
+              onChange={(e: any) =>
+                handleChangePost('archivePostsPerPage', parseInt(e.target.value))
+              }
+            />
           )}
 
           <Select

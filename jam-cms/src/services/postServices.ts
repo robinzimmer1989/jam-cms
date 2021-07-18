@@ -18,6 +18,9 @@ export const updatePost = async (
   {
     siteID,
     id,
+    archive,
+    archivePostType,
+    archivePostsPerPage,
     postTypeID,
     title,
     slug,
@@ -38,6 +41,9 @@ export const updatePost = async (
     {
       siteID,
       id,
+      archive,
+      archivePostType,
+      archivePostsPerPage,
       postTypeID,
       title,
       slug,

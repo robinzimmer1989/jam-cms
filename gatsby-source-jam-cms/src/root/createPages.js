@@ -4,7 +4,7 @@ import getTemplatePath from './getTemplatePath';
 
 const createJamPages = async (
   { actions, reporter, graphql },
-  { settings },
+  {},
   { siteTitle, themeOptions, protectedPosts, jamCMS, directory }
 ) => {
   const allNodes = {};
@@ -38,6 +38,16 @@ const createJamPages = async (
       const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
+      // Assign archive query parameters to page
+      const archiveFragment =
+        nodesTypeName === 'Page'
+          ? `
+            archive
+            archivePostType
+            archivePostsPerPage
+          `
+          : ``;
+
       const { data } = await graphql(/* GraphQL */ `
         query ALL_CONTENT_NODES {
             ${gatsbyNodeListFieldName}{
@@ -49,6 +59,7 @@ const createJamPages = async (
               template {
                 templateName
               }
+              ${archiveFragment}
             }
           }
         }
@@ -74,16 +85,22 @@ const createJamPages = async (
 
       await Promise.all(
         array.map(async (node, i) => {
-          let { id, databaseId, uri, status, template } = node;
+          let {
+            id,
+            databaseId,
+            uri,
+            status,
+            template,
+            archive,
+            archivePostType,
+            archivePostsPerPage,
+          } = node;
 
           if (!template || !template.templateName) {
             return;
           }
 
-          const isArchive = template.templateName.startsWith('Archive');
-          const archivePostType = template.templateName.replace('Archive', '').toLowerCase();
-
-          const templatePath = isArchive
+          const templatePath = archive
             ? getTemplatePath(directory, {
                 prefix: `postTypes/${archivePostType}`,
                 template: 'archive',
@@ -96,16 +113,9 @@ const createJamPages = async (
           if (templatePath) {
             const component = status === 'private' && privatePath ? privatePath : templatePath;
 
-            if (isArchive) {
+            if (archive) {
               const numberOfPosts = allNodes[archivePostType].length;
-
-              let postsPerPageUsed = 10;
-
-              if (settings && settings.postsPerPage) {
-                postsPerPageUsed = settings.postsPerPage;
-              }
-
-              const numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
+              const numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 
               for (let page = 1; page <= numberOfPages; page++) {
                 let pathname = uri;
@@ -126,8 +136,8 @@ const createJamPages = async (
                     pagination: {
                       basePath: uri,
                       numberOfPosts,
-                      postsPerPage: postsPerPageUsed,
-                      numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
+                      postsPerPage: archivePostsPerPage,
+                      numberOfPages: Math.ceil(numberOfPosts / archivePostsPerPage),
                       page,
                     },
                     jamCMS,

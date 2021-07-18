@@ -9,6 +9,8 @@ exports["default"] = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
+var _objectDestructuringEmpty2 = _interopRequireDefault(require("@babel/runtime/helpers/objectDestructuringEmpty"));
+
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _path = _interopRequireDefault(require("path"));
@@ -23,14 +25,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var createJamPages = /*#__PURE__*/function () {
   var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(_ref, _ref2, _ref3) {
-    var actions, reporter, graphql, settings, siteTitle, themeOptions, protectedPosts, jamCMS, directory, allNodes, privatePath, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, _yield$graphql2, data, missingTemplates;
+    var actions, reporter, graphql, siteTitle, themeOptions, protectedPosts, jamCMS, directory, allNodes, privatePath, _yield$graphql, allWpContentType, _iterator, _step, contentType, postType, nodesTypeName, gatsbyNodeListFieldName, archiveFragment, _yield$graphql2, data, missingTemplates;
 
     return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
             actions = _ref.actions, reporter = _ref.reporter, graphql = _ref.graphql;
-            settings = _ref2.settings;
+            (0, _objectDestructuringEmpty2["default"])(_ref2);
             siteTitle = _ref3.siteTitle, themeOptions = _ref3.themeOptions, protectedPosts = _ref3.protectedPosts, jamCMS = _ref3.jamCMS, directory = _ref3.directory;
             allNodes = {}; // Get path to private component
 
@@ -54,7 +56,7 @@ var createJamPages = /*#__PURE__*/function () {
 
           case 13:
             if ((_step = _iterator.n()).done) {
-              _context3.next = 27;
+              _context3.next = 28;
               break;
             }
 
@@ -66,59 +68,61 @@ var createJamPages = /*#__PURE__*/function () {
               break;
             }
 
-            return _context3.abrupt("continue", 25);
+            return _context3.abrupt("continue", 26);
 
           case 18:
             // Capitalize post type name
             nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
-            gatsbyNodeListFieldName = "allWp".concat(nodesTypeName);
-            _context3.next = 22;
+            gatsbyNodeListFieldName = "allWp".concat(nodesTypeName); // Assign archive query parameters to page
+
+            archiveFragment = nodesTypeName === 'Page' ? "\n            archive\n            archivePostType\n            archivePostsPerPage\n          " : "";
+            _context3.next = 23;
             return graphql(
             /* GraphQL */
-            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId              \n              uri\n              status\n              template {\n                templateName\n              }\n            }\n          }\n        }\n      "));
+            "\n        query ALL_CONTENT_NODES {\n            ".concat(gatsbyNodeListFieldName, "{\n            nodes {\n              id\n              databaseId              \n              uri\n              status\n              template {\n                templateName\n              }\n              ").concat(archiveFragment, "\n            }\n          }\n        }\n      "));
 
-          case 22:
+          case 23:
             _yield$graphql2 = _context3.sent;
             data = _yield$graphql2.data;
             allNodes[postType] = data[gatsbyNodeListFieldName].nodes;
 
-          case 25:
+          case 26:
             _context3.next = 13;
             break;
 
-          case 27:
-            _context3.next = 32;
+          case 28:
+            _context3.next = 33;
             break;
 
-          case 29:
-            _context3.prev = 29;
+          case 30:
+            _context3.prev = 30;
             _context3.t0 = _context3["catch"](11);
 
             _iterator.e(_context3.t0);
 
-          case 32:
-            _context3.prev = 32;
+          case 33:
+            _context3.prev = 33;
 
             _iterator.f();
 
-            return _context3.finish(32);
+            return _context3.finish(33);
 
-          case 35:
-            _context3.next = 40;
+          case 36:
+            _context3.next = 41;
             break;
 
-          case 37:
-            _context3.prev = 37;
+          case 38:
+            _context3.prev = 38;
             _context3.t1 = _context3["catch"](5);
 
             if (_context3.t1.response && _context3.t1.response.data.message) {
               reporter.error(_context3.t1.response.data.message);
             }
 
-          case 40:
+          case 41:
             // Initialize missing templates object
             missingTemplates = {};
-            _context3.next = 43;
+            _context3.next = 44;
             return Promise.all(Object.keys(allNodes).map( /*#__PURE__*/function () {
               var _ref5 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(postType) {
                 var array;
@@ -131,12 +135,12 @@ var createJamPages = /*#__PURE__*/function () {
                         _context2.next = 3;
                         return Promise.all(array.map( /*#__PURE__*/function () {
                           var _ref6 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(node, i) {
-                            var id, databaseId, uri, status, template, isArchive, archivePostType, templatePath, component, numberOfPosts, postsPerPageUsed, numberOfPages, page, pathname;
+                            var id, databaseId, uri, status, template, archive, archivePostType, archivePostsPerPage, templatePath, component, numberOfPosts, numberOfPages, page, pathname;
                             return _regenerator["default"].wrap(function _callee$(_context) {
                               while (1) {
                                 switch (_context.prev = _context.next) {
                                   case 0:
-                                    id = node.id, databaseId = node.databaseId, uri = node.uri, status = node.status, template = node.template;
+                                    id = node.id, databaseId = node.databaseId, uri = node.uri, status = node.status, template = node.template, archive = node.archive, archivePostType = node.archivePostType, archivePostsPerPage = node.archivePostsPerPage;
 
                                     if (!(!template || !template.templateName)) {
                                       _context.next = 3;
@@ -146,9 +150,7 @@ var createJamPages = /*#__PURE__*/function () {
                                     return _context.abrupt("return");
 
                                   case 3:
-                                    isArchive = template.templateName.startsWith('Archive');
-                                    archivePostType = template.templateName.replace('Archive', '').toLowerCase();
-                                    templatePath = isArchive ? (0, _getTemplatePath["default"])(directory, {
+                                    templatePath = archive ? (0, _getTemplatePath["default"])(directory, {
                                       prefix: "postTypes/".concat(archivePostType),
                                       template: 'archive'
                                     }) : (0, _getTemplatePath["default"])(directory, {
@@ -159,15 +161,9 @@ var createJamPages = /*#__PURE__*/function () {
                                     if (templatePath) {
                                       component = status === 'private' && privatePath ? privatePath : templatePath;
 
-                                      if (isArchive) {
+                                      if (archive) {
                                         numberOfPosts = allNodes[archivePostType].length;
-                                        postsPerPageUsed = 10;
-
-                                        if (settings && settings.postsPerPage) {
-                                          postsPerPageUsed = settings.postsPerPage;
-                                        }
-
-                                        numberOfPages = Math.ceil(numberOfPosts / postsPerPageUsed);
+                                        numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 
                                         for (page = 1; page <= numberOfPages; page++) {
                                           pathname = uri;
@@ -188,8 +184,8 @@ var createJamPages = /*#__PURE__*/function () {
                                               pagination: {
                                                 basePath: uri,
                                                 numberOfPosts: numberOfPosts,
-                                                postsPerPage: postsPerPageUsed,
-                                                numberOfPages: Math.ceil(numberOfPosts / postsPerPageUsed),
+                                                postsPerPage: archivePostsPerPage,
+                                                numberOfPages: Math.ceil(numberOfPosts / archivePostsPerPage),
                                                 page: page
                                               },
                                               jamCMS: jamCMS
@@ -221,7 +217,7 @@ var createJamPages = /*#__PURE__*/function () {
                                       }
                                     }
 
-                                  case 7:
+                                  case 5:
                                   case "end":
                                     return _context.stop();
                                 }
@@ -247,12 +243,12 @@ var createJamPages = /*#__PURE__*/function () {
               };
             }()));
 
-          case 43:
+          case 44:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[5, 37], [11, 29, 32, 35]]);
+    }, _callee3, null, [[5, 38], [11, 30, 33, 36]]);
   }));
 
   return function createJamPages(_x, _x2, _x3) {
