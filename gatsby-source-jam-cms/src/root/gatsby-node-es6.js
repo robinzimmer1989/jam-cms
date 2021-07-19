@@ -3,12 +3,12 @@ import fs from 'fs';
 
 import syncFields from './syncFields';
 import getThemeSettings from './getThemeSettings';
-import addPathToFields from './addPathToFields';
-import getTemplatePath from './getTemplatePath';
 import createJamPages from './createPages';
 import createJamTaxonomies from './createTaxonomies';
 
-let args = { fields: null, templatePath: '', privateTemplateExists: false, hasError: false };
+let hasError = false,
+  fieldsPath = '',
+  templatesPath = '';
 
 let directory = [];
 
@@ -26,40 +26,27 @@ function getDirectory(dir) {
 getDirectory('./src/templates');
 
 export const onPreInit = async (gatsby, pluginOptions) => {
-  const hasError = await syncFields(gatsby, pluginOptions, directory);
+  hasError = await syncFields(gatsby, pluginOptions);
 
-  if (hasError) {
-    args = { hasError };
-  } else {
-    const fields = await addPathToFields(gatsby, pluginOptions, directory);
-
-    // Get private path to see if template exists. Only then we wanna show the option in WordPress.
-    const privatePath = getTemplatePath(directory, { prefix: 'protected', template: 'private' });
-
-    args = {
-      fields,
-      templatePath: path.join(gatsby.store.getState().program.directory, `src/templates`),
-      privateTemplateExists: !!privatePath,
-      hasError: false,
-    };
-  }
+  templatesPath = path.join(gatsby.store.getState().program.directory, `src/templates`);
+  fieldsPath =
+    pluginOptions.fields || path.join(gatsby.store.getState().program.directory, `src/fields`);
 };
 
 export const onCreateWebpackConfig = ({ actions, plugins }) => {
-  // Make template path and fields variable globally available so we can import the templates in the wrap-page.js (gatsby-browser only)
+  // Make template path and fields path variable globally available so we can import the templates in the wrap-page.js (gatsby-browser)
   actions.setWebpackConfig({
     plugins: [
       plugins.define({
-        GATSBY_FIELDS: JSON.stringify(args.fields),
-        GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath),
-        GATSBY_PRIVATE_TEMPLATE_EXISTS: JSON.stringify(args.privateTemplateExists),
+        GATSBY_FIELDS_PATH: JSON.stringify(fieldsPath),
+        GATSBY_TEMPLATES_PATH: JSON.stringify(templatesPath),
       }),
     ],
   });
 };
 
 export const createPages = async (gatsby, pluginOptions) => {
-  if (args.hasError) {
+  if (hasError) {
     return;
   }
 

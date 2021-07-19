@@ -16,21 +16,35 @@ var fields = null,
     privateTemplateExists = false;
 
 try {
-  fields = GATSBY_FIELDS; // loop through post types and templates and add React component to fields object
+  fields = preferDefault(require(GATSBY_FIELDS_PATH)); // loop through post types and templates and add React component to fields object
 
   if (fields && fields.postTypes) {
     for (var postTypeIndex in fields.postTypes) {
+      var postType = fields.postTypes[postTypeIndex];
+
       for (var templateIndex in fields.postTypes[postTypeIndex].templates) {
         var template = fields.postTypes[postTypeIndex].templates[templateIndex];
-        fields.postTypes[postTypeIndex].templates[templateIndex].component = preferDefault(require("".concat(GATSBY_TEMPLATE_PATH).concat(template.componentPath)));
+        fields.postTypes[postTypeIndex].templates[templateIndex].component = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/postTypes/").concat(postType.id, "/").concat(template.id, "/").concat(template.id)));
       }
     }
   }
-
-  privateTemplateExists = GATSBY_PRIVATE_TEMPLATE_EXISTS;
 } catch (e) {
   if (e.toString().indexOf("Error: Cannot find module") !== -1) {
     console.warn("Couldn't find template");
+  } else {
+    console.warn(e);
+  }
+}
+
+try {
+  var privateTemplate = preferDefault(require("".concat(GATSBY_TEMPLATES_PATH, "/protected/private")));
+
+  if (privateTemplate) {
+    privateTemplateExists = true;
+  }
+} catch (e) {
+  if (e.toString().indexOf("Error: Cannot find module") !== -1) {
+    console.warn("Couldn't find private template");
   } else {
     console.warn(e);
   }

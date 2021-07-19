@@ -19,20 +19,13 @@ var _syncFields = _interopRequireDefault(require("./syncFields"));
 
 var _getThemeSettings = _interopRequireDefault(require("./getThemeSettings"));
 
-var _addPathToFields = _interopRequireDefault(require("./addPathToFields"));
-
-var _getTemplatePath = _interopRequireDefault(require("./getTemplatePath"));
-
 var _createPages = _interopRequireDefault(require("./createPages"));
 
 var _createTaxonomies = _interopRequireDefault(require("./createTaxonomies"));
 
-var args = {
-  fields: null,
-  templatePath: '',
-  privateTemplateExists: false,
-  hasError: false
-};
+var hasError = false,
+    fieldsPath = '',
+    templatesPath = '';
 var directory = [];
 
 function getDirectory(dir) {
@@ -51,47 +44,19 @@ getDirectory('./src/templates');
 
 var onPreInit = /*#__PURE__*/function () {
   var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(gatsby, pluginOptions) {
-    var hasError, fields, privatePath;
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return (0, _syncFields["default"])(gatsby, pluginOptions, directory);
+            return (0, _syncFields["default"])(gatsby, pluginOptions);
 
           case 2:
             hasError = _context.sent;
+            templatesPath = _path["default"].join(gatsby.store.getState().program.directory, "src/templates");
+            fieldsPath = pluginOptions.fields || _path["default"].join(gatsby.store.getState().program.directory, "src/fields");
 
-            if (!hasError) {
-              _context.next = 7;
-              break;
-            }
-
-            args = {
-              hasError: hasError
-            };
-            _context.next = 12;
-            break;
-
-          case 7:
-            _context.next = 9;
-            return (0, _addPathToFields["default"])(gatsby, pluginOptions, directory);
-
-          case 9:
-            fields = _context.sent;
-            // Get private path to see if template exists. Only then we wanna show the option in WordPress.
-            privatePath = (0, _getTemplatePath["default"])(directory, {
-              prefix: 'protected',
-              template: 'private'
-            });
-            args = {
-              fields: fields,
-              templatePath: _path["default"].join(gatsby.store.getState().program.directory, "src/templates"),
-              privateTemplateExists: !!privatePath,
-              hasError: false
-            };
-
-          case 12:
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -109,12 +74,11 @@ exports.onPreInit = onPreInit;
 var onCreateWebpackConfig = function onCreateWebpackConfig(_ref2) {
   var actions = _ref2.actions,
       plugins = _ref2.plugins;
-  // Make template path and fields variable globally available so we can import the templates in the wrap-page.js (gatsby-browser only)
+  // Make template path and fields path variable globally available so we can import the templates in the wrap-page.js (gatsby-browser)
   actions.setWebpackConfig({
     plugins: [plugins.define({
-      GATSBY_FIELDS: JSON.stringify(args.fields),
-      GATSBY_TEMPLATE_PATH: JSON.stringify(args.templatePath),
-      GATSBY_PRIVATE_TEMPLATE_EXISTS: JSON.stringify(args.privateTemplateExists)
+      GATSBY_FIELDS_PATH: JSON.stringify(fieldsPath),
+      GATSBY_TEMPLATES_PATH: JSON.stringify(templatesPath)
     })]
   });
 };
@@ -129,7 +93,7 @@ var createPages = /*#__PURE__*/function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            if (!args.hasError) {
+            if (!hasError) {
               _context2.next = 2;
               break;
             }
