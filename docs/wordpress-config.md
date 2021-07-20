@@ -19,13 +19,13 @@ define( 'WP_POST_REVISIONS', true );
 
 ## Documentation
 
-- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms.md)
-- [Features](https://github.com/robinzimmer1989/jam-cms/docs/features.md)
-- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md)
-- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields.md)
-- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates.md)
-- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config.md)
+- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/what-is-jam-cms.md)
+- [Features](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/features.md)
+- [Get Started](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/get-started.md)
+- [Fields](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/fields.md)
+- [Templates](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/templates.md)
+- [Field Types](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/field-types.md)
+- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/gatsby-config.md)
 - WordPress configuration
-- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues.md)
-- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog.md)
+- [Know issues](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/known-issues.md)
+- [Changelog](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/changelog.md)

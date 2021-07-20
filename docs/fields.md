@@ -1,6 +1,6 @@
 # Fields
 
-In the last [section](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md) we added the `fields.js` file to the `src` directory. Now, we gonna populate it with content.
+In the last [section](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/get-started.md) we added the `fields.js` file to the `src` directory. Now, we gonna populate it with content.
 
 ## Post Types
 
@@ -43,7 +43,7 @@ const fields = {
   (...)
 ```
 
-In the next step we gonna popuate the `fields` array for one of the templates. The array expects - similar to the template itself - an object with `id`, `label` and `type`. You can check out all possible field types [here](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md).
+In the next step we gonna popuate the `fields` array for one of the templates. The array expects - similar to the template itself - an object with `id`, `label` and `type`. You can check out all possible field types [here](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/field-types.md).
 
 ```
 const fields = {
@@ -237,13 +237,13 @@ const fields = {
 
 ## Documentation
 
-- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms.md)
-- [Features](https://github.com/robinzimmer1989/jam-cms/docs/features.md)
-- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md)
+- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/what-is-jam-cms.md)
+- [Features](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/features.md)
+- [Get Started](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/get-started.md)
 - Fields
-- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates.md)
-- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config.md)
-- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/docs/wordpress-config.md)
-- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues.md)
-- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog.md)
+- [Templates](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/templates.md)
+- [Field Types](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/field-types.md)
+- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/gatsby-config.md)
+- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/wordpress-config.md)
+- [Know issues](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/known-issues.md)
+- [Changelog](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/changelog.md)

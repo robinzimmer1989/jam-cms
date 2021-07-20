@@ -28,7 +28,7 @@ Install the following plugins to your WordPress site.
 
 ## Gatsby
 
-If you want a kick-start, check out the [starter theme](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-starter-theme), otherwise install the following plugins:
+If you want a kick-start, check out the [starter theme](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/gatsby-starter-theme), otherwise install the following plugins:
 
 ```
 yarn add gatsby-source-jam-cms jam-cms
@@ -62,13 +62,13 @@ To build out pages server-side, jamCMS relies on the `gatsby-source-wordpress` p
 
 ## Documentation
 
-- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms.md)
-- [Features](https://github.com/robinzimmer1989/jam-cms/docs/features.md)
+- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/what-is-jam-cms.md)
+- [Features](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/features.md)
 - Get Started
-- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields.md)
-- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates.md)
-- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config.md)
-- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/docs/wordpress-config.md)
-- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues.md)
-- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog.md)
+- [Fields](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/fields.md)
+- [Templates](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/templates.md)
+- [Field Types](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/field-types.md)
+- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/gatsby-config.md)
+- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/wordpress-config.md)
+- [Know issues](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/known-issues.md)
+- [Changelog](https://github.com/robinzimmer1989/jam-cms/blob/master/docs/changelog.md)
