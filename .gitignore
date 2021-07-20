@@ -10,6 +10,20 @@ dist
 # misc
 jam-cms-website
 jam-cms/README.md
+
+gatsby-source-jam-cms/README.md
+gatsby-source-jam-cms/addPathToFields.js
+gatsby-source-jam-cms/createPages.js
+gatsby-source-jam-cms/createTaxonomies.js
+gatsby-source-jam-cms/gatsby-browser.js
+gatsby-source-jam-cms/gatsby-node-es6.js
+gatsby-source-jam-cms/gatsby-node.js
+gatsby-source-jam-cms/gatsby-ssr.js
+gatsby-source-jam-cms/getTemplatePath.js
+gatsby-source-jam-cms/getThemeSettings.js
+gatsby-source-jam-cms/syncFields.js
+gatsby-source-jam-cms/wrap-page.js
+
 public
 .wordpress-cache
 .DS_Store
