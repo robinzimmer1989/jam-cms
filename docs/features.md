@@ -21,13 +21,13 @@ There are a lot of reasons why you should use jamCMS. Here are the most importan
 
 ## Documentation
 
-- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms)
+- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms.md)
 - Features
-- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started)
-- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields)
-- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates)
-- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config)
-- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/docs/wordpress-config)
-- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues)
-- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog)
+- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md)
+- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields.md)
+- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates.md)
+- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md)
+- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config.md)
+- [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/docs/wordpress-config.md)
+- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues.md)
+- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog.md)

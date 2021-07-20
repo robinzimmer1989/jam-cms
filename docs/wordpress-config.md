@@ -19,13 +19,13 @@ define( 'WP_POST_REVISIONS', true );
 
 ## Documentation
 
-- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms)
-- [Features](https://github.com/robinzimmer1989/jam-cms/docs/features)
-- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started)
-- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields)
-- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates)
-- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config)
+- [What is jamCMS?](https://github.com/robinzimmer1989/jam-cms/docs/what-is-jam-cms.md)
+- [Features](https://github.com/robinzimmer1989/jam-cms/docs/features.md)
+- [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md)
+- [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields.md)
+- [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates.md)
+- [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types.md)
+- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config.md)
 - WordPress configuration
-- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues)
-- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog)
+- [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues.md)
+- [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog.md)

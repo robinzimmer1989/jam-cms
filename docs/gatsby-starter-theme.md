@@ -2,7 +2,7 @@
 
 The easiest way to get started is using the [TailwindCSS starter theme](https://github.com/robinzimmer1989/jam-cms/tree/master/jam-cms-starter-tailwind).
 
-Once downloaded, create a .env.development file in the root directory with the following variables. Check out [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started) for details.
+Once downloaded, create a .env.development file in the root directory with the following variables. Check out [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started.md) for details.
 
 ```
 GATSBY_JAM_CMS_URL=YOUR_WP_URL
