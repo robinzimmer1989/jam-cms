@@ -1,6 +1,28 @@
-<img src="https://raw.githubusercontent.com/robinzimmer1989/jam-cms/adf550c8b95751b8924b11b6a2fc9bf0b1c34cd0/src/icons/jamCMS.svg" alt="jamCMS Logo" />
+# Gatsby configuration
 
-A CMS for the JAMStack world. Made for developers.
+On this page, you'll find all possible options you can pass into the `gatsby-source-jam-cms` plugin.
+Check out the [Get Started](https://github.com/robinzimmer1989/jam-cms/docs/get-started) page to learn more about setting up the environmental variables.
+
+```
+const path = require(`path`);
+
+plugins: [
+  (...),
+  {
+    resolve: `gatsby-source-jam-cms`,
+    options: {
+      source: YOUR_WP_URL,
+      apiKey: YOUR_API_KEY,
+      // Change path to fields object
+      fields: path.join(__dirname, 'src/fields'),
+      settings: {
+        // Deactivate automatic syncing of post types, templates and fields to WordPress
+        sync: true,
+      },
+    },
+  },
+]
+```
 
 ## Documentation
 
@@ -10,7 +32,7 @@ A CMS for the JAMStack world. Made for developers.
 - [Fields](https://github.com/robinzimmer1989/jam-cms/docs/fields)
 - [Templates](https://github.com/robinzimmer1989/jam-cms/docs/templates)
 - [Field Types](https://github.com/robinzimmer1989/jam-cms/docs/field-types)
-- [Gatsby configuration](https://github.com/robinzimmer1989/jam-cms/docs/gatsby-config)
+- Gatsby configuration
 - [WordPress configuration](https://github.com/robinzimmer1989/jam-cms/docs/wordpress-config)
 - [Know issues](https://github.com/robinzimmer1989/jam-cms/docs/known-issues)
 - [Changelog](https://github.com/robinzimmer1989/jam-cms/docs/changelog)
