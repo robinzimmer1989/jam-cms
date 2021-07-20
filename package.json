@@ -2,6 +2,7 @@
   "private": true,
   "workspaces": [
     "gatsby-source-jam-cms",
+    "gatsby-starter-default",
     "jam-cms-starter-tailwind",
     "jam-cms"
   ]
