@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.9.1
+
+- Fix: jam-cms export error
+- Fix: check for templates directory before trying to read it
+
 ### 1.9.0
 
 - Convert to TypeScript

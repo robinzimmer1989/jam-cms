@@ -1,6 +1,6 @@
 # Templates
 
-The template files must be stored in a specific spot so jamCMS knows about their existence and can import them on the fly. There will be customization options in the future to allow for a differnt file/folder structure.
+The template files must be stored in a specific spot so jamCMS knows about their existence and can import them on the fly. There will be customization options in the future to allow for a different file/folder structure.
 
 ## Post Types
 

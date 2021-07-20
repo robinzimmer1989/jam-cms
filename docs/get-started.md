@@ -54,6 +54,8 @@ const fields = {
   taxonomies: [],
   themeOptions: []
 };
+
+export default fields
 ```
 
 That's it! You can now run `gatsby-develop`, navigate to `http:localhost:8000/jam-cms` and log in with your WordPress credentials.
