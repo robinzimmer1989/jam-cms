@@ -68,7 +68,7 @@
     "ts-migrate": "^0.1.19"
   },
   "scripts": {
-    "build": "rimraf dist && babel src --out-dir dist --ignore **/__tests__ --extensions \".ts,.js\"",
+    "build": "rimraf dist && babel src --out-dir dist --ignore **/__tests__ --extensions \".ts,.tsx,.js\"",
     "watch": "babel -w src --out-dir dist --ignore **/__tests__ --verbose --extensions \".ts,.tsx,.js\" --source-maps",
     "test": "echo \"Error: no test specified\"",
     "lint": "eslint --debug src/index.js"
