@@ -113,7 +113,7 @@ const createJamPages = async (
           if (templatePath) {
             const component = status === 'private' && privatePath ? privatePath : templatePath;
 
-            if (archive && archivePostType && allNodes[archivePostType]) {
+            if (archive && archivePostType) {
               const numberOfPosts = allNodes[archivePostType].length;
               const numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 

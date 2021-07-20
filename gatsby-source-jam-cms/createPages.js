@@ -161,7 +161,7 @@ var createJamPages = /*#__PURE__*/function () {
                                     if (templatePath) {
                                       component = status === 'private' && privatePath ? privatePath : templatePath;
 
-                                      if (archive && archivePostType && allNodes[archivePostType]) {
+                                      if (archive && archivePostType) {
                                         numberOfPosts = allNodes[archivePostType].length;
                                         numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 
