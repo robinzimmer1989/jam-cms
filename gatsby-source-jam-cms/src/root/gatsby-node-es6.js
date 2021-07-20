@@ -13,14 +13,16 @@ let hasError = false,
 let directory = [];
 
 function getDirectory(dir) {
-  fs.readdirSync(dir).forEach((f) => {
-    const relativePath = path.join(dir, f);
-    if (fs.statSync(relativePath).isDirectory()) {
-      return getDirectory(relativePath);
-    } else {
-      return directory.push(relativePath);
-    }
-  });
+  if (fs.existsSync(dir)) {
+    fs.readdirSync(dir).forEach((f) => {
+      const relativePath = path.join(dir, f);
+      if (fs.statSync(relativePath).isDirectory()) {
+        return getDirectory(relativePath);
+      } else {
+        return directory.push(relativePath);
+      }
+    });
+  }
 }
 
 getDirectory('./src/templates');
