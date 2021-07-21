@@ -6,18 +6,21 @@ import getParameter from './getParameter';
 const storageKey = getStorageKey();
 const isBrowser = typeof window !== `undefined`;
 
+export const deleteUser = () => {
+  if (storageKey) {
+    localStorage.removeItem(storageKey);
+  }
+};
+
 export const setUser = (user: any) => {
   if (storageKey) {
-    window.localStorage[storageKey] = JSON.stringify(user);
+    localStorage.setItem(storageKey, JSON.stringify(user));
   }
 };
 
 export const getUser = () => {
-  if (storageKey && window.localStorage[storageKey]) {
-    let user = JSON.parse(window.localStorage[storageKey]);
-    return user ? user : {};
-  }
-  return {};
+  const user = localStorage.getItem(storageKey);
+  return user ? JSON.parse(user) : {};
 };
 
 export const isLoggedIn = () => {
@@ -25,7 +28,7 @@ export const isLoggedIn = () => {
     return false;
   }
 
-  const user = getUser();
+  const user: any = getUser();
 
   if (user) {
     return !!user.authToken;
@@ -53,7 +56,7 @@ export const logout = (onLogout: any) => {
     return;
   }
 
-  setUser({});
+  deleteUser();
 
   // Reload page
   typeof onLogout === 'function'
