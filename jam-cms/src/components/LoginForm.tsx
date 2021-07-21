@@ -70,8 +70,8 @@ const LoginForm = (props: any) => {
     try {
       const result: any = await authActions.signIn({ email, password }, url);
 
-      // While technically logging in as a subscriber succeeds, we gonna display an error message instead.
-      if (!result?.authToken || result?.errors?.[0]?.message) {
+      // While technically logging in as i.e. a subscriber succeeds, we gonna display an error message instead if user doesn't have level 1 capabilities.
+      if (!result?.authToken || (isAdmin && !result?.capabilities?.level_1)) {
         setData({ ...data, error: 'Email or password wrong.', loading: false });
       } else {
         auth.setUser(result);
