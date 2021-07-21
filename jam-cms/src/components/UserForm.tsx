@@ -9,7 +9,13 @@ import { useStore } from '../store';
 
 const UserForm = (props: any) => {
   const { id, email: defaultEmail = '', roles: defaultRoles = ['editor'], onAdd, onUpdate } = props;
-  const [, dispatch] = useStore();
+
+  const [
+    {
+      cmsState: { sites, siteID },
+    },
+    dispatch,
+  ] = useStore();
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(defaultEmail);
@@ -50,9 +56,9 @@ const UserForm = (props: any) => {
       <Space direction="vertical" size={2}>
         <Caption children="Role" />
         <Select defaultValue={roles?.[0] || defaultRoles?.[0]} onChange={(v) => setRoles([v])}>
-          <Select.Option value={'subscriber'} children={'Subscriber'} />
-          <Select.Option value={'editor'} children={'Editor'} />
-          <Select.Option value={'administrator'} children={'Admin'} />
+          {sites?.[siteID]?.userRoles.map((o: any) => {
+            return <Select.Option key={o.id} value={o.id} children={o.name} />;
+          })}
         </Select>
       </Space>
 
