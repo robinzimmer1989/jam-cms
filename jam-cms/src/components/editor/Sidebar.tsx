@@ -468,6 +468,16 @@ const EditorSidebar = (props: any) => {
               }
             />
           </Space>
+
+          <Space direction="vertical" size={6}>
+            <Caption children="No Index" />
+            <Checkbox
+              value={post?.seo?.metaRobotsNoindex}
+              checked={post?.seo?.metaRobotsNoindex === 'noindex'}
+              onChange={(e) => handleChangePost('seo.metaRobotsNoindex', e.target.checked)}
+              children="Block Search Indexing"
+            />
+          </Space>
         </Space>
       </Content>
     );
