@@ -10,7 +10,7 @@ import { postActions } from '../../actions';
 
 const PrivateEditor = (props: any) => {
   const {
-    pageContext: { databseId: postID },
+    pageContext: { databaseId: postID },
     defaultComponent,
   } = props;
 
