@@ -26,7 +26,7 @@ const Tag = styled.span`
     `}
 
   ${({ children }: any) =>
-    children === 'trash' &&
+    (children === 'trash' || children === 'blocked') &&
     css`
       background: ${colors.danger};
       color: #fff;

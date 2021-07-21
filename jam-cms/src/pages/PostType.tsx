@@ -254,6 +254,9 @@ const PostType = (props: any) => {
       badges.push(<Tag key="status" children={o.status} />);
     }
 
+    if (o.seo?.metaRobotsNoindex === 'noindex') {
+      badges.push(<Tag key="noindex" children="blocked" />);
+    }
     return (
       <React.Fragment key={o.id}>
         <ListItem
