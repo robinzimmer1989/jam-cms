@@ -18,7 +18,7 @@ const useAuth = () => {
     if (user?.authToken) {
       intervalID = setInterval(() => {
         setTimer((time) => time + 1);
-      }, 60000); // 60 seconds
+      }, 90000); // 90 seconds
     }
 
     // Clear timer
