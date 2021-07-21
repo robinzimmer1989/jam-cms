@@ -1,3 +1,4 @@
+import * as auth from './auth';
 import createDataTree from './createDataTree';
 import formatSlug from './formatSlug';
 import formatSite from './formatSite';
@@ -10,7 +11,6 @@ import removeFromTree from './removeFromTree';
 import deepCopyTree from './deepCopyTree';
 import formatFieldForEditor from './formatFieldForEditor';
 import formatTaxonomiesForEditor from './formatTaxonomiesForEditor';
-import * as auth from './auth';
 import generateRandomString from './generateRandomString';
 import convertFileSize from './convertFileSize';
 import formatFieldsToProps from './formatFieldsToProps';
@@ -23,6 +23,7 @@ import renderImage from './renderImage';
 import addPost from './addPost';
 import useOnScreen from './useOnScreen';
 import getPostID from './getPostID';
+import validateAccess from './validateAccess';
 
 export {
   createDataTree,
@@ -50,4 +51,5 @@ export {
   addPost,
   useOnScreen,
   getPostID,
+  validateAccess,
 };
