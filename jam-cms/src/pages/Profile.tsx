@@ -16,9 +16,9 @@ const Profile = (props: RouteComponentProps) => {
   ] = useStore();
 
   return (
-    <CmsLayout pageTitle={`Profile`}>
+    <CmsLayout pageTitle="Profile">
       <Space direction="vertical" size={40}>
-        <Card title={`Personal Information`}>
+        <Card title="Personal Information">
           <Space direction="vertical" size={20}>
             <Space direction="vertical" size={2}>
               <Caption children="Email" />
@@ -26,7 +26,7 @@ const Profile = (props: RouteComponentProps) => {
             </Space>
             <Space direction="vertical" size={2}>
               <Caption children="Role" />
-              <Typography>{authUser?.role}</Typography>
+              <Typography>{authUser?.roles.join(', ')}</Typography>
             </Space>
           </Space>
         </Card>

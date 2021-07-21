@@ -80,7 +80,7 @@ const Users = (props: RouteComponentProps) => {
         <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
       </PageHeader>
 
-      <StyledListItem title={authUser?.email} subtitle={authUser?.role} />
+      <StyledListItem title={authUser?.email} subtitle={authUser?.roles?.join(', ')} />
 
       <InfiniteScroll
         pageStart={0}
@@ -110,9 +110,9 @@ const Users = (props: RouteComponentProps) => {
             ];
             return (
               <StyledListItem
-                key={(o as any).id}
-                title={(o as any).email}
-                subtitle={(o as any).role}
+                key={o.id}
+                title={o.email}
+                subtitle={o.roles?.join(', ')}
                 actions={actions}
               />
             );
