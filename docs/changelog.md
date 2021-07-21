@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.9.2
+
+- Fix: Tweak auth logic to allow for faster access
+- Fix: Get user roles from WordPress
+- Fix: Fix private post wrapper
+
 ### 1.9.1
 
 - Fix: jam-cms export error
