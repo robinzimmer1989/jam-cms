@@ -3,15 +3,16 @@ import axios from 'axios';
 import Parser from 'html-react-parser';
 
 // import app components
-import { getUser, getPreviewID } from '../utils/auth';
+import { getUser } from '../utils/auth';
+import { validateAccess } from '../utils';
 import { authActions } from '../actions';
 
 const db = async (endpoint: any, params: any, dispatch: any, config: any) => {
-  const user = getUser();
-
-  if (!user?.authToken && !getPreviewID()) {
-    authActions.signOut({}, dispatch, config);
+  if (!validateAccess()) {
+    return authActions.signOut({}, dispatch, config);
   }
+
+  const user = getUser();
 
   try {
     const formData = new FormData();
@@ -33,7 +34,7 @@ const db = async (endpoint: any, params: any, dispatch: any, config: any) => {
     return result?.data;
   } catch (err) {
     if (err?.response?.data?.message) {
-      if (endpoint === 'getAuthUser' || endpoint === 'getSite') {
+      if (endpoint === 'getSite') {
         authActions.signOut({}, dispatch, config);
       } else {
         message.error(Parser(err.response.data.message));
