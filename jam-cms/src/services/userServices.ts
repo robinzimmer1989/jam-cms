@@ -9,11 +9,6 @@ export const addUser = async (
   return result;
 };
 
-export const getAuthUser = async ({}, dispatch: any, config: any) => {
-  let result = await db('getAuthUser', {}, dispatch, config);
-  return result;
-};
-
 export const getUser = async ({ siteID, id }: any, dispatch: any, config: any) => {
   let result = await db('getUser', { siteID, id }, dispatch, config);
   return result;

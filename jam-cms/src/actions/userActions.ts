@@ -1,5 +1,4 @@
 import { userServices } from '../services';
-import { authActions } from '../actions';
 
 export const addUser = async (
   { siteID, email, role, sendEmail }: any,
@@ -7,20 +6,6 @@ export const addUser = async (
   config: any
 ) => {
   const result = await userServices.addUser({ siteID, email, role, sendEmail }, dispatch, config);
-  return result;
-};
-
-export const getAuthUser = async ({}, dispatch: any, config: any) => {
-  const result = await userServices.getAuthUser({}, dispatch, config);
-
-  if (result) {
-    if (result.hasOwnProperty('success') && !result.success) {
-      authActions.signOut({}, dispatch, config);
-    } else {
-      dispatch({ type: `ADD_AUTH_USER`, payload: result });
-    }
-  }
-
   return result;
 };
 

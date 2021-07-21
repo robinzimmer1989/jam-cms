@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// import app components
-import { authActions } from '../actions';
+import { auth } from '../utils';
 
 // TODO: add trailing slash function to utils and pass in endpoint via settings (doesn't need to be /graphql)
 const getEndpoint = (url: any) => `${url.replace(/\/+$/, '')}/graphql`;
@@ -21,13 +20,38 @@ export const signIn = async ({ email, password }: any, url: any) => {
           ) {
             authToken
             refreshToken
-            user{
+            user {
+              jwtAuthExpiration
               capabilities
             }
           }
         }
       `,
     });
+
+    // Format response accordingly
+    if (result?.data?.data?.login?.authToken) {
+      const {
+        data: {
+          data: {
+            login: {
+              authToken,
+              refreshToken,
+              user: { jwtAuthExpiration, capabilities },
+            },
+          },
+        },
+      } = result;
+
+      const formattedCapabilities: any = {};
+
+      capabilities.map((s: string) => {
+        formattedCapabilities[s] = true;
+      });
+
+      return { authToken, refreshToken, jwtAuthExpiration, capabilities: formattedCapabilities };
+    }
+
     return result?.data;
   } catch (err) {
     console.log(err);
@@ -80,7 +104,7 @@ export const resetPassword = async ({ key, login, password }: any, url: any) => 
 
 export const refreshToken = async ({ refreshToken }: any, dispatch: any, config: any) => {
   const endpoint = getEndpoint(config.source);
-  const result = await axios.post(endpoint, {
+  const result: any = await axios.post(endpoint, {
     query: `
       mutation {
         refreshJwtAuthToken(
@@ -94,8 +118,78 @@ export const refreshToken = async ({ refreshToken }: any, dispatch: any, config:
       }
     `,
   });
-  if ((result as any)?.errors?.length > 0) {
-    authActions.signOut({}, dispatch, config);
+
+  if (result?.data?.data?.refreshJwtAuthToken) {
+    const {
+      data: {
+        data: {
+          refreshJwtAuthToken: { authToken },
+        },
+      },
+    } = result;
+
+    return authToken;
   }
-  return result?.data;
+
+  return false;
+};
+
+export const getAuthUser = async ({}, dispatch: any, config: any) => {
+  const endpoint = getEndpoint(config.source);
+
+  const user = auth.getUser();
+
+  if (user?.authToken) {
+    const result: any = await axios.post(
+      endpoint,
+      {
+        query: `
+        query {
+          viewer {
+            id
+            email
+            capabilities
+            jwtAuthExpiration
+            roles {
+              nodes {
+                name
+              }
+            }
+          }
+        }
+      `,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${user.authToken}`,
+        },
+      }
+    );
+
+    if (result?.data?.data?.viewer) {
+      const {
+        data: {
+          data: {
+            viewer: { id, email, capabilities, roles, jwtAuthExpiration },
+          },
+        },
+      } = result;
+
+      const formattedCapabilities: any = {};
+
+      capabilities.map((s: string) => {
+        formattedCapabilities[s] = true;
+      });
+
+      return {
+        id,
+        email,
+        capabilities: formattedCapabilities,
+        roles: roles?.nodes.map((o: any) => o.name),
+        jwtAuthExpiration,
+      };
+    }
+  }
+
+  return false;
 };

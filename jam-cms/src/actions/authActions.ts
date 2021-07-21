@@ -25,12 +25,34 @@ export const refreshToken = async ({}, dispatch: any, config: any) => {
   const { refreshToken } = auth.getUser();
 
   if (refreshToken) {
-    const result = await authServices.refreshToken({ refreshToken }, dispatch, config);
+    const authToken = await authServices.refreshToken({ refreshToken }, dispatch, config);
 
-    if (result?.data?.refreshJwtAuthToken) {
-      auth.setUser({ refreshToken, ...result.data.refreshJwtAuthToken });
+    if (authToken) {
+      const user = auth.getUser();
+
+      // Overwrite auth token
+      auth.setUser({ ...user, authToken });
+    } else {
+      signOut({}, dispatch, config);
     }
-
-    return result;
   }
+};
+
+export const getAuthUser = async ({}, dispatch: any, config: any) => {
+  const result = await authServices.getAuthUser({}, dispatch, config);
+
+  if (result) {
+    const { jwtAuthExpiration } = result;
+
+    const user = auth.getUser();
+
+    // Overwrite jwtAuthExpiration
+    auth.setUser({ ...user, jwtAuthExpiration });
+
+    dispatch({ type: `ADD_AUTH_USER`, payload: result });
+  } else {
+    signOut({}, dispatch, config);
+  }
+
+  return result;
 };

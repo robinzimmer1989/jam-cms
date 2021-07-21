@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 // import components
 import { useStore } from '../store';
-import { authActions, userActions } from '../actions';
+import { authActions } from '../actions';
 import { getUser } from '../utils/auth';
 
 const useAuth = () => {
@@ -39,7 +39,7 @@ const useAuth = () => {
 
   useEffect(() => {
     const loadUser = async () => {
-      await userActions.getAuthUser({}, dispatch, config);
+      await authActions.getAuthUser({}, dispatch, config);
     };
 
     if (user?.authToken) {

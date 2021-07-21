@@ -68,13 +68,13 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result = await authActions.signIn({ email, password }, url);
+      const result: any = await authActions.signIn({ email, password }, url);
 
-      if (!result?.data?.login?.authToken || result?.errors?.[0]?.message) {
+      // While technically logging in as a subscriber succeeds, we gonna display an error message instead.
+      if (!result?.authToken || result?.errors?.[0]?.message) {
         setData({ ...data, error: 'Email or password wrong.', loading: false });
       } else {
-        auth.setUser(result.data.login);
-
+        auth.setUser(result);
         setData({ ...data, loading: false });
       }
     } catch (err) {

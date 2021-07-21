@@ -1,8 +1,13 @@
 import produce from 'immer';
 
-export const authState = {
-  authUser: null,
+const defaultState = {
+  id: null,
+  email: '',
+  roles: '',
+  capabilities: {},
 };
+
+export const authState = { ...defaultState };
 
 export const authReducer = (state: any, action: any) => {
   const { payload } = action;
@@ -14,7 +19,7 @@ export const authReducer = (state: any, action: any) => {
         break;
 
       case `REMOVE_AUTH_USER`:
-        draft.authUser = null;
+        draft.authUser = { ...defaultState };
         break;
 
       default:
