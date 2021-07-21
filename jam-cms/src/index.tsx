@@ -7,7 +7,8 @@ import JamCMS from './components/JamCMS';
 import LoginForm from './components/LoginForm';
 import RichText from './components/RichText';
 import GatsbyImage from './components/GatsbyImage';
-import { isLoggedIn, getPreviewID } from './utils/auth';
+import { isLoggedIn, deleteUser } from './utils/auth';
+import { validateAccess } from './utils';
 
 interface Props extends PageProps {
   source?: string;
@@ -21,11 +22,18 @@ interface Props extends PageProps {
   children: any;
 }
 
+let firstRender = true;
+
 const Index = (props: Props) => {
   const { source, settings, children } = props;
 
-  // Check if user has access to jamCMS
-  const allowAccess = isLoggedIn() || getPreviewID();
+  // Check if user has access to jamCMS.
+  // We can only check for jwtAuthExpiration on initial render because the expiry date doesn't get set again when refreshing the token.
+  const allowAccess = validateAccess(firstRender);
+
+  if (firstRender) {
+    firstRender = false;
+  }
 
   if (allowAccess) {
     // Redirect to default site if no multisite is detected
@@ -35,6 +43,7 @@ const Index = (props: Props) => {
       return <JamCMS {...props} />;
     }
   } else {
+    deleteUser();
     return React.cloneElement(children, { source });
   }
 };
