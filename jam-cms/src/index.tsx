@@ -22,18 +22,11 @@ interface Props extends PageProps {
   children: any;
 }
 
-let firstRender = true;
-
 const Index = (props: Props) => {
   const { source, settings, children } = props;
 
   // Check if user has access to jamCMS.
-  // We can only check for jwtAuthExpiration on initial render because the expiry date doesn't get set again when refreshing the token.
-  const allowAccess = validateAccess(firstRender);
-
-  if (firstRender) {
-    firstRender = false;
-  }
+  const allowAccess = validateAccess();
 
   if (allowAccess) {
     // Redirect to default site if no multisite is detected
