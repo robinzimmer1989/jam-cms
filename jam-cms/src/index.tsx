@@ -7,7 +7,7 @@ import JamCMS from './components/JamCMS';
 import LoginForm from './components/LoginForm';
 import RichText from './components/RichText';
 import GatsbyImage from './components/GatsbyImage';
-import { isLoggedIn, deleteUser } from './utils/auth';
+import { isLoggedIn, deleteUser, logout } from './utils/auth';
 import { validateAccess } from './utils';
 
 interface Props extends PageProps {
@@ -44,4 +44,4 @@ const Index = (props: Props) => {
 export default Index;
 
 // Export all useful frontend components / functions
-export { RichText, GatsbyImage, LoginForm, isLoggedIn };
+export { RichText, GatsbyImage, LoginForm, isLoggedIn, logout };

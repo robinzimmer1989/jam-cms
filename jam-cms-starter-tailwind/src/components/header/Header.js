@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'gatsby';
+import { isLoggedIn, logout } from 'jam-cms';
 
 const Header = (props) => {
   const { menu } = props;
@@ -45,6 +46,15 @@ const Header = (props) => {
                 </li>
               );
             })}
+
+          {isLoggedIn() && (
+            <li
+              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:opacity-90"
+              onClick={logout}
+            >
+              Logout
+            </li>
+          )}
         </ul>
         <div className="lg:hidden">
           <button
