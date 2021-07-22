@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.9.3
+
+- Feat: Add noindex checkbox to editor sidebar
+- Feat: Add export for logout function
+- Fix: Share previews
+
 ### 1.9.2
 
 - Fix: Tweak auth logic to allow for faster access
