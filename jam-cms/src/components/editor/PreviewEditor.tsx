@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 // import app components
-import EditorWrapper from './EditorWrapper';
 import Editor from './Editor';
 import Loader from '../Loader';
 
@@ -40,13 +39,7 @@ const PreviewEditor = (props: any) => {
     return () => dispatch({ type: `CLEAR_EDITOR` });
   }, []);
 
-  return (
-    <>
-      <EditorWrapper loaded={!loading}>
-        {loading ? <Loader text="Load Preview" /> : <Editor postID={post?.id} {...props} />}
-      </EditorWrapper>
-    </>
-  );
+  return <>{loading ? <Loader text="Load Preview" /> : <Editor postID={post?.id} {...props} />}</>;
 };
 
 export default PreviewEditor;

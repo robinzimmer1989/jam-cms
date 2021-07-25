@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
 // import app components
-import EditorWrapper from './EditorWrapper';
 import Editor from './Editor';
 import Loader from '../Loader';
 
@@ -49,11 +48,7 @@ const PrivateEditor = (props: any) => {
     return defaultComponent;
   }
 
-  return (
-    <EditorWrapper loaded={loaded}>
-      {loaded ? <Editor postID={postID} {...props} /> : <Loader text="Load Post" />}
-    </EditorWrapper>
-  );
+  return <>{loaded ? <Editor postID={postID} {...props} /> : <Loader text="Load Post" />}</>;
 };
 
 export default PrivateEditor;
