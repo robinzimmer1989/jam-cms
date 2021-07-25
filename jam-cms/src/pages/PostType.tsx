@@ -128,7 +128,11 @@ const PostType = (props: any) => {
   };
 
   const handleEmptyTrash = async () => {
-    const result = await postActions.emptyTrash({ siteID, postTypeID }, dispatch, config);
+    const result = await postActions.emptyTrash(
+      { siteID, postTypeID, language: activeLanguage },
+      dispatch,
+      config
+    );
     if (result) {
       message.info({ content: 'Trashed emptied successfully' });
     }

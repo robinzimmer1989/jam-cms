@@ -68,8 +68,12 @@ export const deletePost = async ({ siteID, id }: any, dispatch: any, config: any
   return result;
 };
 
-export const emptyTrash = async ({ siteID, postTypeID }: any, dispatch: any, config: any) => {
-  let result = await db('emptyTrash', { siteID, postTypeID }, dispatch, config);
+export const emptyTrash = async (
+  { siteID, postTypeID, language }: any,
+  dispatch: any,
+  config: any
+) => {
+  let result = await db('emptyTrash', { siteID, postTypeID, language }, dispatch, config);
   return result;
 };
 
