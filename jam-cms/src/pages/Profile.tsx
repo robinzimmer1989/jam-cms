@@ -24,10 +24,12 @@ const Profile = (props: RouteComponentProps) => {
               <Caption children="Email" />
               <Typography>{authUser?.email}</Typography>
             </Space>
-            <Space direction="vertical" size={2}>
-              <Caption children="Role" />
-              <Typography>{authUser?.roles.join(', ')}</Typography>
-            </Space>
+            {authUser?.roles && (
+              <Space direction="vertical" size={2}>
+                <Caption children="Role" />
+                <Typography>{authUser.roles.join(', ')}</Typography>
+              </Space>
+            )}
           </Space>
         </Card>
       </Space>
