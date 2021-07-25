@@ -81,6 +81,13 @@ const PostType = (props: any) => {
     }
   }, []);
 
+  useEffect(() => {
+    // Reset state to fix bug when user switches from one post type directly to another
+    setFilter('all');
+    setCategory(null);
+    setSearch('');
+  }, [postTypeID]);
+
   const handleSync = async () => {
     setIsSyncing(true);
     await siteActions.syncFields(
