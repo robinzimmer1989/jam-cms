@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, navigate } from '@reach/router';
+import { navigate } from '@reach/router';
+
 import {
   Button,
   PageHeader,
@@ -13,6 +14,7 @@ import {
   Alert,
   Popconfirm,
 } from 'antd';
+
 import produce from 'immer';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -21,6 +23,7 @@ import CmsLayout from '../components/CmsLayout';
 import PostForm from '../components/PostForm';
 import ListItem from '../components/ListItem';
 import Tag from '../components/Tag';
+import LanguageSelector from '../components/LanguageSelector';
 import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
 import { createDataTree, generateSlug, addPost } from '../utils';
@@ -33,7 +36,7 @@ const PostType = (props: any) => {
   const [
     {
       config,
-      cmsState: { sites, siteID },
+      cmsState: { sites, siteID, activeLanguage },
     },
     dispatch,
   ] = useStore();
@@ -43,15 +46,25 @@ const PostType = (props: any) => {
   const [search, setSearch] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
 
+  // Check if post type supports different languages
+  const hasLanguages = !!sites[siteID]?.languages?.postTypes?.find((s: string) => s === postTypeID);
+
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
+
+  // Filter by language
+  const postsPerLanguage = hasLanguages
+    ? posts.filter((o: any) => o.language === activeLanguage)
+    : posts;
 
   let visiblePosts: any = [];
 
   // Filter by category
   visiblePosts = !!category
-    ? posts.filter((o: any) => o?.taxonomies?.[category?.taxonomy]?.includes(category.term))
-    : posts;
+    ? postsPerLanguage.filter((o: any) =>
+        o?.taxonomies?.[category?.taxonomy]?.includes(category.term)
+      )
+    : postsPerLanguage;
 
   // Filter by post status
   visiblePosts =
@@ -126,8 +139,8 @@ const PostType = (props: any) => {
       {['all', 'publish', 'draft', 'private', 'trash'].map((name) => {
         const count =
           name === 'all'
-            ? posts.filter((o) => (o as any).status !== 'trash').length
-            : posts.filter((o) => (o as any).status === name).length;
+            ? postsPerLanguage.filter((o) => (o as any).status !== 'trash').length
+            : postsPerLanguage.filter((o) => (o as any).status === name).length;
         return <Tabs.TabPane key={name} tab={`${name.toUpperCase()} (${count})`} />;
       })}
     </Tabs>
@@ -207,7 +220,13 @@ const PostType = (props: any) => {
   }
 
   const renderPost = (o: any, level: any) => {
-    const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;
+    const slug = generateSlug({
+      site: sites[siteID],
+      postTypeID,
+      postID: o.id,
+      leadingSlash: true,
+    });
+
     const actions = [];
     const isLocked = !!o.locked;
 
@@ -238,11 +257,14 @@ const PostType = (props: any) => {
         )}
       </Menu>
     );
+
     actions.unshift(
-      <Dropdown.Button overlay={menu} trigger={['click']}>
-        <Link to={slug}>{isLocked ? 'View' : 'Edit'}</Link>
-      </Dropdown.Button>
+      <Dropdown.Button key="menu" overlay={menu} trigger={['click']}></Dropdown.Button>
     );
+
+    if (hasLanguages) {
+      actions.unshift(<LanguageSelector post={o} />);
+    }
 
     let badges = [];
 

@@ -24,6 +24,7 @@ import addPost from './addPost';
 import useOnScreen from './useOnScreen';
 import getPostID from './getPostID';
 import validateAccess from './validateAccess';
+import translatePost from './translatePost';
 
 export {
   createDataTree,
@@ -52,4 +53,5 @@ export {
   useOnScreen,
   getPostID,
   validateAccess,
+  translatePost,
 };

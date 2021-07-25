@@ -1,31 +1,50 @@
 import formatSlug from './formatSlug';
 import getParentSlug from './getParentSlug';
 
-export default function generateSlug(
-  postType: any,
-  postID: any,
-  frontPage: any,
-  trailingSlash = false
-) {
-  if (postID === frontPage) {
+export default function generateSlug({
+  site,
+  postTypeID,
+  postID,
+  leadingSlash = false,
+  trailingSlash = false,
+}: any) {
+  if (postID === site?.frontPage) {
     return trailingSlash ? '/' : '';
   }
 
-  if (!postType?.posts?.[postID]) {
+  if (!site?.postTypes?.[postTypeID]?.posts?.[postID]) {
     return '';
   }
 
   const {
-    slug: postTypeSlug,
-    posts,
-    posts: {
-      [postID]: { slug: postSlug, parentID },
+    postTypes: {
+      [postTypeID]: {
+        slug: postTypeSlug,
+        posts,
+        posts: {
+          [postID]: { slug: postSlug, parentID, language },
+        },
+      },
     },
-  } = postType;
+  } = site;
 
   const parentSlug = getParentSlug(posts, parentID);
 
-  const slug = formatSlug(`${postTypeSlug}/${parentSlug}/${postSlug}`, trailingSlash);
+  let languageSlug = '';
+
+  if (
+    site?.languages?.defaultLanguage &&
+    site?.languages?.postTypes.find((s: string) => s === postTypeID) &&
+    site.languages.defaultLanguage !== language
+  ) {
+    languageSlug = site?.languages?.languages.find((o: any) => o.slug === language)?.slug;
+  }
+
+  const slug = formatSlug(
+    `${languageSlug}/${postTypeSlug}/${parentSlug}/${postSlug}`,
+    leadingSlash,
+    trailingSlash
+  );
 
   return slug;
 }

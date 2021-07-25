@@ -7,6 +7,7 @@ import { Link, navigate } from '@reach/router';
 // import app components
 import DeploymentBadge from './DeploymentBadge';
 import AvatarMenu from './AvatarMenu';
+import LanguageSwitcher from './LanguageSwitcher';
 import { useStore } from '../store';
 import getRoute from '../routes';
 
@@ -101,6 +102,14 @@ const CmsHeader = (props: any) => {
     );
 
     buttons.push(<AvatarMenu key="avatar-menu" />);
+
+    if (sites[siteID]?.languages?.languages?.length > 1) {
+      buttons.push(
+        <div key="language-switcher">
+          <LanguageSwitcher />
+        </div>
+      );
+    }
 
     buttons.push(
       <Link key="view-website" to="/">

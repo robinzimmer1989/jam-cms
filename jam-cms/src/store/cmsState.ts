@@ -1,9 +1,10 @@
 import produce from 'immer';
-import { unionBy, set } from 'lodash';
+import { set } from 'lodash';
 
 const DEFAULT_STATE = {
   siteID: null,
   sites: {},
+  activeLanguage: null,
   deploymentImage: '',
 };
 
@@ -28,6 +29,11 @@ export const sitesReducer = (state: any, action: any) => {
       case `ADD_SITE`:
         draft.siteID = payload.id;
         set(draft, `sites.${payload.id}`, payload);
+
+        // Set active language if applicable
+        if (payload?.languages?.defaultLanguage && !draft.activeLanguage) {
+          draft.activeLanguage = payload.languages.defaultLanguage;
+        }
         break;
 
       case `ADD_SITE_SETTING`:
@@ -92,11 +98,20 @@ export const sitesReducer = (state: any, action: any) => {
         break;
 
       /******************************
+       * Language
+       ******************************/
+      case `SET_ACTIVE_LANGUAGE`:
+        draft.activeLanguage = payload;
+        break;
+
+      /******************************
        * Clear
        ******************************/
       case `CLEAR_POST_STATE`:
         draft.siteID = null;
         draft.sites = {};
+        draft.activeLanguage = null;
+        draft.deploymentImage = '';
         break;
 
       default:

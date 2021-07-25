@@ -26,6 +26,7 @@ import Select from '../Select';
 import Caption from '../Caption';
 import PostTreeSelect from '../PostTreeSelect';
 import MediaLibrary from '../MediaLibrary';
+import LanguageList from '../LanguageList';
 import FilePicker from '../editorFields/FilePicker';
 import { postActions, siteActions, previewActions } from '../../actions';
 import { useStore } from '../../store';
@@ -185,15 +186,22 @@ const EditorSidebar = (props: any) => {
       message.success('Updated successfully');
 
       // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
-
       const newFrontPage = siteResult ? siteResult.frontPage : sites[siteID].frontPage;
       const newPost = postResult ? { ...postResult } : { ...post };
 
-      const nextPostType = produce(sites[siteID].postTypes[post.postTypeID], (draft: any) => {
-        return set(draft, `posts.${newPost.id}`, newPost);
+      const nextSite = produce(sites[siteID], (draft: any) => {
+        set(draft, `postTypes.${newPost.postTypeID}.posts.${newPost.id}`, newPost);
+        set(draft, `frontPage`, newFrontPage);
+        return draft;
       });
 
-      const slug = generateSlug(nextPostType, newPost.id, newFrontPage, true);
+      const slug = generateSlug({
+        site: nextSite,
+        postTypeID: newPost.postTypeID,
+        postID: newPost.id,
+        leadingSlash: true,
+      });
+
       navigate(slug);
     }
   };
@@ -524,6 +532,16 @@ const EditorSidebar = (props: any) => {
     );
   };
 
+  const renderTranslations = () => {
+    return (
+      <Content>
+        <Space direction="vertical">
+          <LanguageList post={post} type="list" />
+        </Space>
+      </Content>
+    );
+  };
+
   const renderPreview = () => {
     return (
       <Content>
@@ -650,6 +668,13 @@ const EditorSidebar = (props: any) => {
           disabled={!editable}
           overlay={
             <Menu>
+              {!!sites[siteID]?.languages?.postTypes?.find(
+                (s: string) => s === post.postTypeID
+              ) && (
+                <Menu.Item key="translations" onClick={() => setSidebar('translations')}>
+                  Translations
+                </Menu.Item>
+              )}
               {post?.revisionsEnabled && (
                 <Menu.Item key="preview" onClick={() => setSidebar('preview')}>
                   Share Preview
@@ -683,6 +708,7 @@ const EditorSidebar = (props: any) => {
         {sidebar === 'revisions' && post?.revisionsEnabled && renderRevisions()}
         {sidebar === 'theme' && renderThemeSettings()}
         {sidebar === 'preview' && renderPreview()}
+        {sidebar === 'translations' && renderTranslations()}
       </TabContainer>
     </Container>
   );

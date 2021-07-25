@@ -46,7 +46,13 @@ const Menu = (props: any) => {
   };
 
   const renderPost = (o: any, level: any) => {
-    const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;
+    const slug = generateSlug({
+      site: sites[siteID],
+      postTypeID: postType.id,
+      postID: o.id,
+      leadingSlash: true,
+    });
+
     let badges = [];
     if (sites?.[siteID]?.frontPage === o.id) {
       badges.push(<Tag key="front" children={'front'} />);
@@ -66,7 +72,12 @@ const Menu = (props: any) => {
               postTypeID: o.postTypeID,
               postID: o.id,
               children: [],
-              url: generateSlug(postType, o.id, sites?.[siteID]?.frontPage, true),
+              url: generateSlug({
+                site: sites[siteID],
+                postTypeID: postType.id,
+                postID: o.id,
+                leadingSlash: true,
+              }),
             })
           }
         >

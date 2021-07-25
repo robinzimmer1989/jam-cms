@@ -116,3 +116,14 @@ export const takeOverPost = async (args: any, dispatch: any, config: any) => {
 
   return result;
 };
+
+export const translatePost = async (args: any, dispatch: any, config: any) => {
+  const result = await postServices.translatePost(args, dispatch, config);
+
+  if (result) {
+    dispatch({ type: 'ADD_POST', payload: { ...result, siteID: args.siteID } });
+    dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID: args.siteID } });
+  }
+
+  return result;
+};
