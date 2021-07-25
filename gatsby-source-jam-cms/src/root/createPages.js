@@ -84,7 +84,11 @@ const createJamPages = async (
         : allNodes[postType];
 
       await Promise.all(
-        array.map(async (node, i) => {
+        array.map(async (node) => {
+          if (!node || !node.template || !node.template.templateName) {
+            return;
+          }
+
           let {
             id,
             databaseId,
@@ -95,10 +99,6 @@ const createJamPages = async (
             archivePostType,
             archivePostsPerPage,
           } = node;
-
-          if (!template || !template.templateName) {
-            return;
-          }
 
           const templatePath = archive
             ? getTemplatePath(directory, {
