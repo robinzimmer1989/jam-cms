@@ -9,7 +9,7 @@ export default function generateSlug({
   trailingSlash = false,
 }: any) {
   if (postID === site?.frontPage) {
-    return trailingSlash ? '/' : '';
+    return leadingSlash ? '/' : '';
   }
 
   if (!site?.postTypes?.[postTypeID]?.posts?.[postID]) {
@@ -33,6 +33,7 @@ export default function generateSlug({
   let languageSlug = '';
 
   if (
+    language &&
     site?.languages?.defaultLanguage &&
     site?.languages?.postTypes.find((s: string) => s === postTypeID) &&
     site.languages.defaultLanguage !== language

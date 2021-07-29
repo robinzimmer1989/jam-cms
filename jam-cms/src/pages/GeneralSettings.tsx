@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Space, message, Select as AntSelect, Tabs } from 'antd';
+import { Button, Card, Space, message, Select as AntSelect, Tabs, Table } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 import { RouteComponentProps } from '@reach/router';
@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 // import app components
 import Input from '../components/Input';
 import Select from '../components/Select';
-import LanguageForm from '../components/forms/LanguageForm';
+import LanguageSettings from '../components/settings/LanguageSettings';
 import CmsLayout from '../components/CmsLayout';
 
 import { useStore } from '../store';
@@ -65,7 +65,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
     message.success('Updated successfully');
   };
 
-  const tabs: any = ['general', 'deployment', 'sync', 'api', 'editor', 'languages'];
+  const tabs: any = ['general', 'deployment', 'syncing', 'api', 'editor', 'languages'];
 
   return (
     <CmsLayout pageTitle={`Settings`}>
@@ -138,14 +138,14 @@ const GeneralSettings = (props: RouteComponentProps) => {
         </Card>
       )}
 
-      {tab === 'sync' && (
-        <Card title={'Sync'}>
+      {tab === 'syncing' && (
+        <Card title={'Syncing'}>
           <Space direction="vertical" size={20}>
             <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
 
             <Button
-              loading={loading === 'sync'}
-              onClick={() => handleUpdate({ apiKey: true }, 'sync')}
+              loading={loading === 'syncing'}
+              onClick={() => handleUpdate({ apiKey: true }, 'syncing')}
               children={`Regenerate`}
               type="primary"
             />
@@ -221,30 +221,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
         </Card>
       )}
 
-      {tab === 'languages' && (
-        <Card
-          title="Languages"
-          extra={[
-            <Button
-              key="add-language"
-              type="primary"
-              onClick={() =>
-                dispatch({
-                  type: 'SET_DIALOG',
-                  payload: {
-                    open: true,
-                    title: `Add`,
-                    component: <LanguageForm />,
-                  },
-                })
-              }
-              children="Add"
-            />,
-          ]}
-        >
-          <Space direction="vertical" size={20}></Space>
-        </Card>
-      )}
+      {tab === 'languages' && <LanguageSettings />}
     </CmsLayout>
   );
 };

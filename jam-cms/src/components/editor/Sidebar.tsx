@@ -161,11 +161,19 @@ const EditorSidebar = (props: any) => {
     }
 
     if (postHasChanged || action === 'publish') {
-      postResult = await postActions.updatePost(
-        { siteID: id, ...post, status, templateObject },
-        dispatch,
-        config
-      );
+      const args = {
+        siteID: id,
+        ...post,
+        status,
+        templateObject,
+      };
+
+      // Check if post type supports languages
+      if (!!sites[siteID]?.languages?.postTypes?.find((s: string) => s === post?.postTypeID)) {
+        args.language = post?.language || sites[siteID]?.languages?.defaultLanguage;
+      }
+
+      postResult = await postActions.updatePost(args, dispatch, config);
 
       // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
       if (!siteHasChanged) {
@@ -532,11 +540,11 @@ const EditorSidebar = (props: any) => {
     );
   };
 
-  const renderTranslations = () => {
+  const renderLanguages = () => {
     return (
       <Content>
         <Space direction="vertical">
-          <LanguageList post={post} type="list" />
+          <LanguageList onChange={(value: string) => handleChangePost('language', value)} />
         </Space>
       </Content>
     );
@@ -671,8 +679,8 @@ const EditorSidebar = (props: any) => {
               {!!sites[siteID]?.languages?.postTypes?.find(
                 (s: string) => s === post.postTypeID
               ) && (
-                <Menu.Item key="translations" onClick={() => setSidebar('translations')}>
-                  Translations
+                <Menu.Item key="languages" onClick={() => setSidebar('languages')}>
+                  Languages
                 </Menu.Item>
               )}
               {post?.revisionsEnabled && (
@@ -708,7 +716,7 @@ const EditorSidebar = (props: any) => {
         {sidebar === 'revisions' && post?.revisionsEnabled && renderRevisions()}
         {sidebar === 'theme' && renderThemeSettings()}
         {sidebar === 'preview' && renderPreview()}
-        {sidebar === 'translations' && renderTranslations()}
+        {sidebar === 'languages' && renderLanguages()}
       </TabContainer>
     </Container>
   );

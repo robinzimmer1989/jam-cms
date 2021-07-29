@@ -3,7 +3,7 @@ import produce from 'immer';
 import { set } from 'lodash';
 
 // import app components
-import { postActions } from '../actions';
+import { languageActions } from '../actions';
 import generateSlug from './generateSlug';
 
 export default async function translatePost(
@@ -11,7 +11,7 @@ export default async function translatePost(
   dispatch: any,
   config: any
 ) {
-  const result = await postActions.translatePost({ siteID, id, language }, dispatch, config);
+  const result = await languageActions.translatePost({ siteID, id, language }, dispatch, config);
 
   if (result) {
     // We need to add update the translated posts, so they know about the new translation

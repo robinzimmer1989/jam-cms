@@ -24,6 +24,7 @@ export const updatePost = async (
     postTypeID,
     title,
     slug,
+    language,
     status,
     content,
     seo,
@@ -47,6 +48,7 @@ export const updatePost = async (
       postTypeID,
       title,
       slug,
+      language,
       status,
       content: JSON.stringify(content),
       seo: JSON.stringify(seo),
@@ -104,10 +106,5 @@ export const removePostLock = async ({ siteID, id }: any, dispatch: any, config:
 
 export const takeOverPost = async ({ siteID, id }: any, dispatch: any, config: any) => {
   let result = await db('takeOverPost', { siteID, id }, dispatch, config);
-  return result;
-};
-
-export const translatePost = async ({ siteID, id, language }: any, dispatch: any, config: any) => {
-  let result = await db('translatePost', { siteID, id, language }, dispatch, config);
   return result;
 };

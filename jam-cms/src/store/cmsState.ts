@@ -104,6 +104,23 @@ export const sitesReducer = (state: any, action: any) => {
         draft.activeLanguage = payload;
         break;
 
+      case `UPDATE_LANGUAGES`:
+        set(draft, `sites.${payload.siteID}.languages`, payload.languages);
+        break;
+
+      case `DELETE_LANGUAGE`:
+        draft.sites[payload.siteID].languages.languages = draft.sites?.[
+          payload?.siteID
+        ]?.languages?.languages?.filter((o: any) => o.id !== payload?.id);
+        break;
+
+      case `UPDATE_LANGUAGE_SETTINGS`:
+        draft.sites[payload.siteID].languages = {
+          ...draft.sites[payload.siteID].languages,
+          ...payload.settings,
+        };
+        break;
+
       /******************************
        * Clear
        ******************************/

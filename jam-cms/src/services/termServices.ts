@@ -2,13 +2,13 @@
 import { db } from '.';
 
 export const addTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description }: any,
+  { siteID, taxonomyID, id, title, slug, parentID, description, language }: any,
   dispatch: any,
   config: any
 ) => {
   let result = await db(
     'createTerm',
-    { siteID, taxonomyID, id, title, slug, parentID, description },
+    { siteID, taxonomyID, id, title, slug, parentID, description, language },
     dispatch,
     config
   );
@@ -16,7 +16,7 @@ export const addTerm = async (
 };
 
 export const updateTerm = async (
-  { siteID, taxonomyID, id, title, slug, parentID, description }: any,
+  { siteID, taxonomyID, id, title, slug, parentID, description, language }: any,
   dispatch: any,
   config: any
 ) => {
@@ -30,6 +30,7 @@ export const updateTerm = async (
       slug,
       parentID,
       description,
+      language,
     },
     dispatch,
     config

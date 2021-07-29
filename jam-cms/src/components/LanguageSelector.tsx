@@ -1,30 +1,26 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Parser from 'html-react-parser';
-import { Link } from '@reach/router';
 import { Tooltip } from 'antd';
 import { EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 // import app components
-import { generateSlug, translatePost } from '../utils';
 import { useStore } from '../store';
 
 const LanguageSelector = (props: any) => {
-  const { post } = props;
+  const { post, onEdit, onTranslate } = props;
 
   const [
     {
-      config,
       cmsState: { siteID, sites },
     },
-    dispatch,
   ] = useStore();
 
   const [loading, setLoading] = useState('');
 
-  const handleTranslatePost = async ({ id, language }: any) => {
+  const handleTranslate = async ({ id, language }: any) => {
     setLoading(language);
-    await translatePost({ sites, siteID, id, language }, dispatch, config);
+    await onTranslate({ id, language });
     setLoading('');
   };
 
@@ -36,21 +32,12 @@ const LanguageSelector = (props: any) => {
         if (post.language === p.slug || post.translations?.[p.slug]) {
           return (
             <Tooltip key={p.id} title="Edit translation" mouseEnterDelay={0.5}>
-              <Link
-                to={generateSlug({
-                  site: sites[siteID],
-                  postTypeID: post.postTypeID,
-                  postID: post.language === p.slug ? post.id : post.translations[p.slug],
-                  leadingSlash: true,
-                })}
-              >
-                <Item>
-                  {flag}
-                  <IconContainer>
-                    <EditTwoTone />
-                  </IconContainer>
-                </Item>
-              </Link>
+              <Item onClick={() => onEdit(p.slug)}>
+                {flag}
+                <IconContainer>
+                  <EditTwoTone />
+                </IconContainer>
+              </Item>
             </Tooltip>
           );
         } else {
@@ -59,7 +46,7 @@ const LanguageSelector = (props: any) => {
           return (
             <Tooltip key={p.id} title="Add translation" mouseEnterDelay={0.5}>
               <Item
-                onClick={() => !isLoading && handleTranslatePost({ id: post.id, language: p.slug })}
+                onClick={() => !isLoading && handleTranslate({ id: post.id, language: p.slug })}
               >
                 {flag}
                 <IconContainer>

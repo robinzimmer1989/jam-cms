@@ -2,22 +2,22 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Parser from 'html-react-parser';
 import { Link } from '@reach/router';
-import { Space, Tooltip, List, Button, Typography } from 'antd';
+import { Space, Tooltip, List, Button, Typography, Select as AntSelect } from 'antd';
 import { EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 // import app components
 import Caption from './Caption';
+import Select from './Select';
 import { generateSlug, translatePost } from '../utils';
 import { useStore } from '../store';
 
 const LanguageList = (props: any) => {
-  const { post } = props;
-
+  const { onChange } = props;
   const [
     {
       config,
       cmsState: { siteID, sites },
-      editorState: { postHasChanged },
+      editorState: { post, postHasChanged },
     },
     dispatch,
   ] = useStore();
@@ -33,99 +33,87 @@ const LanguageList = (props: any) => {
   return (
     <>
       <Space direction="vertical" size={20}>
-        <Space direction="vertical" size={6}>
-          <Caption children="Language" />
-          <List
-            itemLayout="vertical"
-            size="small"
-            bordered
-            dataSource={[post]}
-            renderItem={(item: any) => {
-              const language = sites[siteID]?.languages?.languages?.find(
-                (p: any) => p.slug === item.language
-              );
+        <Select label="Language" value={post?.language || 'none'} onChange={onChange}>
+          {!post?.language && <AntSelect.Option value="none">Select...</AntSelect.Option>}
 
-              return (
-                <List.Item key={item.id}>
-                  <Space>
-                    <IconContainer children={language.flag && Parser(language.flag)} />
-                    {item.title}
-                  </Space>
-                </List.Item>
-              );
-            }}
-          />
-        </Space>
-        <Space direction="vertical" size={6}>
-          <Caption children="Translations" />
-          {postHasChanged && (
-            <Typography children="Links have been disabled. Pleaes save your post to continue." />
-          )}
-          <List
-            itemLayout="vertical"
-            size="small"
-            bordered
-            dataSource={sites[siteID]?.languages?.languages?.filter(
-              (p: any) => p.slug !== post.language
+          {sites[siteID]?.languages?.languages?.map((o: any) => (
+            <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
+          ))}
+        </Select>
+
+        {post?.language && (
+          <Space direction="vertical" size={6}>
+            <Caption children="Translations" />
+            {postHasChanged && (
+              <Typography children="Links have been disabled. Please save your post to continue." />
             )}
-            renderItem={(language: any) => {
-              let icon = null;
-              let title = '';
+            <List
+              itemLayout="vertical"
+              size="small"
+              bordered
+              dataSource={sites[siteID]?.languages?.languages?.filter(
+                (p: any) => p.slug !== post?.language
+              )}
+              renderItem={(language: any) => {
+                let icon = null;
+                let title = '';
 
-              if (post.translations?.[language.slug]) {
-                icon = (
-                  <Tooltip title="Edit translation" placement="left">
-                    <Link
-                      to={generateSlug({
-                        site: sites[siteID],
-                        postTypeID: post.postTypeID,
-                        postID: post.translations[language.slug],
-                        leadingSlash: true,
-                      })}
-                    >
+                if (post?.translations?.[language.slug]) {
+                  icon = (
+                    <Tooltip title="Edit translation" placement="left">
+                      <Link
+                        to={generateSlug({
+                          site: sites[siteID],
+                          postTypeID: post.postTypeID,
+                          postID: post.translations[language.slug],
+                          leadingSlash: true,
+                        })}
+                      >
+                        <Button
+                          type="text"
+                          shape="circle"
+                          icon={<EditTwoTone />}
+                          disabled={postHasChanged}
+                        />
+                      </Link>
+                    </Tooltip>
+                  );
+
+                  title =
+                    sites[siteID].postTypes?.[post?.postTypeID]?.posts?.[
+                      post?.translations?.[language.slug]
+                    ]?.title;
+                } else {
+                  const isLoading = loading === language.slug;
+
+                  icon = (
+                    <Tooltip title="Add translation" placement="left">
                       <Button
                         type="text"
                         shape="circle"
-                        icon={<EditTwoTone />}
+                        icon={<PlusCircleTwoTone spin={isLoading} />}
                         disabled={postHasChanged}
+                        onClick={() =>
+                          !isLoading &&
+                          handleTranslatePost({ id: post.id, language: language.slug })
+                        }
                       />
-                    </Link>
-                  </Tooltip>
+                    </Tooltip>
+                  );
+                }
+
+                return (
+                  <List.Item key={language.id} extra={<IconContainer children={icon} />}>
+                    <Space>
+                      <IconContainer children={language.flag && Parser(language.flag)} />
+                      {title}
+                    </Space>
+                  </List.Item>
                 );
-
-                title =
-                  sites[siteID].postTypes?.[post?.postTypeID]?.posts?.[
-                    post.translations?.[language.slug]
-                  ]?.title;
-              } else {
-                const isLoading = loading === language.slug;
-
-                icon = (
-                  <Tooltip title="Add translation" placement="left">
-                    <Button
-                      type="text"
-                      shape="circle"
-                      icon={<PlusCircleTwoTone spin={isLoading} />}
-                      disabled={postHasChanged}
-                      onClick={() =>
-                        !isLoading && handleTranslatePost({ id: post.id, language: language.slug })
-                      }
-                    />
-                  </Tooltip>
-                );
-              }
-
-              return (
-                <List.Item key={language.id} extra={<IconContainer children={icon} />}>
-                  <Space>
-                    <IconContainer children={language.flag && Parser(language.flag)} />
-                    {title}
-                  </Space>
-                </List.Item>
-              );
-            }}
-          />
-        </Space>
+              }}
+            />
+          </Space>
+        )}
       </Space>
     </>
   );

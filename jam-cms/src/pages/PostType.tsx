@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { navigate } from '@reach/router';
-
+import produce from 'immer';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   Button,
   PageHeader,
@@ -15,9 +16,6 @@ import {
   Popconfirm,
 } from 'antd';
 
-import produce from 'immer';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import PostForm from '../components/PostForm';
@@ -26,7 +24,7 @@ import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
 import { postActions, siteActions } from '../actions';
 import { useStore } from '../store';
-import { createDataTree, generateSlug, addPost } from '../utils';
+import { createDataTree, generateSlug, addPost, translatePost } from '../utils';
 import { colors } from '../theme';
 import getRoute from '../routes';
 
@@ -46,15 +44,20 @@ const PostType = (props: any) => {
   const [search, setSearch] = useState('');
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // Check if post type supports different languages
-  const hasLanguages = !!sites[siteID]?.languages?.postTypes?.find((s: string) => s === postTypeID);
+  // Check if post type supports languages
+  const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+    (s: string) => s === postTypeID
+  );
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
 
+  // Check if there are untranslated posts
+  const postsWithoutLanguage = postTypeSupportsLanguages && posts.find((o: any) => !o.language);
+
   // Filter by language
-  const postsPerLanguage = hasLanguages
-    ? posts.filter((o: any) => o.language === activeLanguage)
+  const postsPerLanguage = postTypeSupportsLanguages
+    ? posts.filter((o: any) => (activeLanguage === 'all' ? o : o.language === activeLanguage))
     : posts;
 
   let visiblePosts: any = [];
@@ -138,6 +141,10 @@ const PostType = (props: any) => {
     }
   };
 
+  const handleTranslatePost = async ({ id, language }: any) => {
+    await translatePost({ sites, siteID, id, language }, dispatch, config);
+  };
+
   const filterItems = (
     <Tabs defaultActiveKey="all" onChange={(v) => setFilter(v)}>
       {['all', 'publish', 'draft', 'private', 'trash'].map((name) => {
@@ -198,7 +205,12 @@ const PostType = (props: any) => {
         placement="bottomRight"
         disabled={visiblePosts.length === 0}
       >
-        <Button children={'Empty trash'} disabled={visiblePosts.length === 0} danger />
+        <Button
+          children={'Empty trash'}
+          disabled={visiblePosts.length === 0}
+          type="primary"
+          danger
+        />
       </Popconfirm>
     );
   } else {
@@ -236,6 +248,10 @@ const PostType = (props: any) => {
 
     const menu = (
       <Menu>
+        <Menu.Item key="edit" onClick={() => navigate(slug)}>
+          Edit
+        </Menu.Item>
+
         <Menu.Item key="duplicate" onClick={() => handleDuplicatePost({ postID: o.id })}>
           Duplicate
         </Menu.Item>
@@ -266,8 +282,23 @@ const PostType = (props: any) => {
       <Dropdown.Button key="menu" overlay={menu} trigger={['click']}></Dropdown.Button>
     );
 
-    if (hasLanguages) {
-      actions.unshift(<LanguageSelector post={o} />);
+    if (postTypeSupportsLanguages && o.language) {
+      actions.unshift(
+        <LanguageSelector
+          post={o}
+          onTranslate={handleTranslatePost}
+          onEdit={(language: string) =>
+            navigate(
+              generateSlug({
+                site: sites[siteID],
+                postTypeID: o.postTypeID,
+                postID: o.language === language ? o.id : o.translations[language],
+                leadingSlash: true,
+              })
+            )
+          }
+        />
+      );
     }
 
     let badges = [];
@@ -342,8 +373,6 @@ const PostType = (props: any) => {
 
   return (
     <CmsLayout pageTitle={config?.fields?.postTypes?.[postTypeID]?.title || postType?.title}>
-      <PageHeader title={filterItems} extra={extra} />
-
       {!postType && (
         <Alert
           message="Unknown post type"
@@ -357,6 +386,21 @@ const PostType = (props: any) => {
           }
         />
       )}
+
+      {postsWithoutLanguage && (
+        <Alert
+          message="There are posts without a language"
+          type="info"
+          showIcon
+          // action={
+          //   <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+          //     Sync to WordPress
+          //   </Button>
+          // }
+        />
+      )}
+
+      <PageHeader title={filterItems} extra={extra} />
 
       {visiblePosts && (
         <Space direction="vertical" size={8}>

@@ -3,10 +3,11 @@ import { Button, PageHeader, Popconfirm, Space, Alert } from 'antd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import TermForm from '../components/TermForm';
+import TermForm from '../components/forms/TermForm';
 import ListItem from '../components/ListItem';
+import LanguageSelector from '../components/LanguageSelector';
 
-import { createDataTree } from '../utils';
+import { createDataTree, translateTerm } from '../utils';
 import { termActions, siteActions } from '../actions';
 import { useStore } from '../store';
 
@@ -16,16 +17,32 @@ const Taxonomy = (props: any) => {
   const [
     {
       config,
-      cmsState: { siteID, sites },
+      cmsState: { siteID, sites, activeLanguage },
     },
     dispatch,
   ] = useStore();
-
+  console.log(sites[siteID]);
   const [isSyncing, setIsSyncing] = useState(false);
 
   const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
 
-  const terms = taxonomy?.terms ? createDataTree(taxonomy.terms) : [];
+  // Check if taxonomy supports languages
+  const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
+    (s: string) => s === taxonomyID
+  );
+
+  // Check if there are untranslated taxonomies
+  const taxonomiesWithoutLanguage =
+    taxonomySupportsLanguages && taxonomy?.terms.find((o: any) => !o.language);
+
+  // Filter by language
+  const termsPerLanguage = taxonomySupportsLanguages
+    ? taxonomy?.terms.filter((o: any) =>
+        activeLanguage === 'all' ? o : o.language === activeLanguage
+      )
+    : taxonomy?.terms;
+
+  const terms = termsPerLanguage ? createDataTree(termsPerLanguage) : [];
 
   const handleSync = async () => {
     setIsSyncing(true);
@@ -37,16 +54,16 @@ const Taxonomy = (props: any) => {
     setIsSyncing(false);
   };
 
-  const handleUpsert = async ({ id, title, slug, parentID, description }: any) => {
+  const handleUpsert = async ({ id, title, slug, parentID, description, language }: any) => {
     if (id) {
       await termActions.updateTerm(
-        { siteID, taxonomyID, id, title, slug, parentID, description },
+        { siteID, taxonomyID, id, title, slug, parentID, description, language },
         dispatch,
         config
       );
     } else {
       await termActions.addTerm(
-        { siteID, taxonomyID, id, title, slug, parentID, description },
+        { siteID, taxonomyID, id, title, slug, parentID, description, language },
         dispatch,
         config
       );
@@ -63,9 +80,33 @@ const Taxonomy = (props: any) => {
       payload: {
         open: true,
         title: `Term`,
-        component: <TermForm {...term} terms={taxonomy?.terms} onSubmit={handleUpsert} />,
+        component: (
+          <TermForm
+            {...term}
+            taxonomyID={taxonomyID}
+            terms={taxonomy?.terms}
+            onSubmit={handleUpsert}
+          />
+        ),
       },
     });
+  };
+
+  const handleEditTranslation = (term: any, language: string) => {
+    if (term.language === language) {
+      handleOpenDialog(term);
+    } else if (term.translations[language]) {
+      const translatedTerm = taxonomy?.terms.find((o: any) => o.id === term.translations[language]);
+      handleOpenDialog(translatedTerm);
+    }
+  };
+
+  const handleTranslateTerm = async ({ id, language }: any) => {
+    const result = await translateTerm({ sites, siteID, id, language }, dispatch, config);
+
+    if (result) {
+      handleOpenDialog(result);
+    }
   };
 
   const renderTerm = (o: any, level: any) => {
@@ -84,6 +125,16 @@ const Taxonomy = (props: any) => {
 
     actions.push(<Button size="small" children={`Edit`} onClick={() => handleOpenDialog(o)} />);
 
+    if (taxonomySupportsLanguages && o.language) {
+      actions.unshift(
+        <LanguageSelector
+          post={o}
+          onTranslate={handleTranslateTerm}
+          onEdit={(language: string) => handleEditTranslation(o, language)}
+        />
+      );
+    }
+
     return (
       <React.Fragment key={o.id}>
         <ListItem level={level} actions={actions} title={o.title} subtitle={o.slug} />
@@ -99,6 +150,19 @@ const Taxonomy = (props: any) => {
         config?.fields?.taxonomies?.find((o: any) => o.id === taxonomyID)?.title || taxonomy?.title
       }
     >
+      {taxonomiesWithoutLanguage && (
+        <Alert
+          message="There are terms without a language"
+          type="info"
+          showIcon
+          // action={
+          //   <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+          //     Sync to WordPress
+          //   </Button>
+          // }
+        />
+      )}
+
       <PageHeader>
         <Button
           children={`Add`}

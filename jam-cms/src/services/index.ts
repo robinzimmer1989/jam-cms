@@ -6,6 +6,7 @@ import * as postServices from './postServices';
 import * as siteServices from './siteServices';
 import * as termServices from './termServices';
 import * as previewServices from './previewServices';
+import * as languageServices from './languageServices';
 
 import db from './request';
 
@@ -19,4 +20,5 @@ export {
   siteServices,
   termServices,
   previewServices,
+  languageServices,
 };

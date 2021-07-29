@@ -73,12 +73,8 @@ const TaxonomyForm = (props: any) => {
           onChange={(v: any) => setPostTypes(v)}
         >
           {site?.postTypes &&
-            Object.values(site.postTypes).map((o) => (
-              <AntSelect.Option
-                key={(o as any).id}
-                value={(o as any).id}
-                children={(o as any).title}
-              />
+            Object.values(site.postTypes).map((o: any) => (
+              <AntSelect.Option key={o.id} value={o.id} children={o.title} />
             ))}
         </Select>
       </Space>

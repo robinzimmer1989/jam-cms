@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Space, Select as AntSelect } from 'antd';
 
 // import app components
-import Select from './Select';
-import Input from './Input';
-import { useStore } from '../store';
+import Select from '../Select';
+import Input from '../Input';
+import { useStore } from '../../store';
 
 const TermForm = (props: any) => {
   const {
@@ -13,25 +13,38 @@ const TermForm = (props: any) => {
     slug: defaultSlug = '',
     parentID: defaultParentID = 0,
     description: defaultDescription = '',
+    language: defaultLanguage = '',
+    taxonomyID,
     terms,
     onSubmit,
   } = props;
 
   const termExists = !!id;
 
-  const [, dispatch] = useStore();
+  const [
+    {
+      cmsState: { sites, siteID },
+    },
+    dispatch,
+  ] = useStore();
 
   const [title, setTitle] = useState(defaultTitle);
   const [slug, setSlug] = useState(defaultSlug);
   const [parentID, setParentID] = useState(defaultParentID);
   const [description, setDescription] = useState(defaultDescription);
+  const [language, setLanguage] = useState(defaultLanguage);
+
+  // Check if taxonomy supports languages
+  const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
+    (s: string) => s === taxonomyID
+  );
 
   const handleSubmit = async () => {
     if (!title) {
       return;
     }
 
-    await onSubmit({ id, title, slug, parentID, description });
+    await onSubmit({ id, title, slug, parentID, description, language });
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -52,6 +65,20 @@ const TermForm = (props: any) => {
           onChange={(e: any) => setSlug(e.target.value)}
           onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
         />
+
+        {taxonomySupportsLanguages && (
+          <Select
+            label="Language"
+            value={language || 'none'}
+            onChange={(value: string) => setLanguage(value)}
+          >
+            {!language && <AntSelect.Option value="none">Select...</AntSelect.Option>}
+
+            {sites[siteID]?.languages?.languages?.map((o: any) => (
+              <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
+            ))}
+          </Select>
+        )}
 
         <Input
           rows={4}
