@@ -7,12 +7,12 @@ import { postActions } from '../actions';
 import generateSlug from './generateSlug';
 
 export default async function addPost(
-  { site, postTypeID, title, parentID }: any,
+  { site, postTypeID, title, language }: any,
   dispatch: any,
   config: any
 ) {
   const result = await postActions.addPost(
-    { siteID: site.id, postTypeID, status: 'draft', title, parentID },
+    { siteID: site.id, postTypeID, status: 'draft', title, language },
     dispatch,
     config
   );

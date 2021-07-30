@@ -18,7 +18,7 @@ import {
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import PostForm from '../components/PostForm';
+import PostForm from '../components/forms/PostForm';
 import ListItem from '../components/ListItem';
 import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
@@ -115,8 +115,8 @@ const PostType = (props: any) => {
     await postActions.deletePost({ siteID, id: postID }, dispatch, config);
   };
 
-  const handleAddPost = async ({ postTypeID, title, parentID }: any) => {
-    await addPost({ site: sites[siteID], postTypeID, title, parentID }, dispatch, config);
+  const handleAddPost = async (args: any) => {
+    await addPost({ site: sites[siteID], ...args }, dispatch, config);
   };
 
   const handleTrashPost = async ({ postID }: any) => {

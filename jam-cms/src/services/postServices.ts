@@ -1,11 +1,11 @@
 import { db } from '.';
 
 export const addPost = async (
-  { siteID, postTypeID, title, parentID }: any,
+  { siteID, postTypeID, title, language }: any,
   dispatch: any,
   config: any
 ) => {
-  let result = await db('createPost', { siteID, title, postTypeID, parentID }, dispatch, config);
+  let result = await db('createPost', { siteID, title, postTypeID, language }, dispatch, config);
   return result;
 };
 

@@ -32,6 +32,7 @@ const LanguageSettings = () => {
   const languages = sites[siteID]?.languages;
 
   const [postTypes, setPostTypes] = useState(languages?.postTypes);
+  const [taxonomies, setTaxonomies] = useState(languages?.taxonomies);
   const [defaultLanguage, setDefaultLanguage] = useState(languages?.defaultLanguage);
 
   const [loading, setLoading] = useState(null as any);
@@ -40,7 +41,7 @@ const LanguageSettings = () => {
     setLoading({ action: 'update-settings' });
 
     const result = await languageActions.updateSettings(
-      { siteID, defaultLanguage, postTypes },
+      { siteID, defaultLanguage, postTypes, taxonomies },
       dispatch,
       config
     );
@@ -65,7 +66,7 @@ const LanguageSettings = () => {
 
   const handleDeleteLanguage = async (language: any) => {
     setLoading({ id: language.id, action: 'delete-language' });
-    await languageActions.deleteLanguage({ id: language.id, siteID }, dispatch, config);
+    await languageActions.deleteLanguage({ siteID, ...language }, dispatch, config);
     setLoading(null);
   };
 
@@ -137,15 +138,34 @@ const LanguageSettings = () => {
           <Space direction="vertical" size={6}>
             <Caption children="Post Types" />
             <Checkbox.Group
-              options={Object.values(sites[siteID].postTypes).map((o: any) => {
-                return {
-                  value: o.id,
-                  label: o.title,
-                  disabled: o.id === 'page' || o.id === 'post',
-                };
-              })}
+              options={Object.values(sites[siteID].postTypes)
+                .filter((o: any) => !!config?.fields?.postTypes[o.id])
+                .map((o: any) => {
+                  return {
+                    value: o.id,
+                    label: o.title,
+                    disabled: o.id === 'page' || o.id === 'post',
+                  };
+                })}
               defaultValue={postTypes}
               onChange={(values: any) => setPostTypes(values)}
+            />
+          </Space>
+
+          <Space direction="vertical" size={6}>
+            <Caption children="Taxonomies" />
+            <Checkbox.Group
+              options={Object.values(sites[siteID].taxonomies)
+                .filter((o: any) => !!config?.fields?.taxonomies.find((p: any) => p.id === o.id))
+                .map((o: any) => {
+                  return {
+                    value: o.id,
+                    label: o.title,
+                    disabled: o.id === 'category' || o.id === 'post_tag',
+                  };
+                })}
+              defaultValue={taxonomies}
+              onChange={(values: any) => setTaxonomies(values)}
             />
           </Space>
 

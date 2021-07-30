@@ -43,7 +43,7 @@ const LanguageForm = (props: any) => {
   const handleChange = (e: any) => setLanguage({ ...language, [e.target.name]: e.target.value });
 
   const handleUpsert = async () => {
-    const { id, name, slug, locale } = language;
+    const { id, name, slug, locale, flag } = language;
 
     if (!name || !slug || !locale) {
       return;
@@ -94,9 +94,21 @@ const LanguageForm = (props: any) => {
 
       <Input label="Name" name="name" value={language.name} onChange={handleChange} />
 
-      <Input label="Locale" name="locale" value={language.locale} onChange={handleChange} />
+      <Input
+        label="Locale"
+        name="locale"
+        value={language.locale}
+        onChange={handleChange}
+        disabled
+      />
 
-      <Input label="Language Code" name="slug" value={language.slug} onChange={handleChange} />
+      <Input
+        label="Language Code"
+        name="slug"
+        value={language.slug}
+        onChange={handleChange}
+        disabled
+      />
 
       <Button
         id="add-language"

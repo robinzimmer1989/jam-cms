@@ -21,8 +21,8 @@ const Taxonomy = (props: any) => {
     },
     dispatch,
   ] = useStore();
-  console.log(sites[siteID]);
-  const [isSyncing, setIsSyncing] = useState(false);
+
+  const [loading, setLoading] = useState(null as any);
 
   const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
 
@@ -45,13 +45,13 @@ const Taxonomy = (props: any) => {
   const terms = termsPerLanguage ? createDataTree(termsPerLanguage) : [];
 
   const handleSync = async () => {
-    setIsSyncing(true);
+    setLoading({ action: 'syncing' });
     await siteActions.syncFields(
       { fields: config.fields, apiKey: sites[siteID]?.apiKey },
       dispatch,
       config
     );
-    setIsSyncing(false);
+    setLoading(null);
   };
 
   const handleUpsert = async ({ id, title, slug, parentID, description, language }: any) => {
@@ -71,7 +71,9 @@ const Taxonomy = (props: any) => {
   };
 
   const handleDelete = async ({ termID }: any) => {
+    setLoading({ action: 'delete', id: termID });
     await termActions.deleteTerm({ siteID, taxonomyID, id: termID }, dispatch, config);
+    setLoading(null);
   };
 
   const handleOpenDialog = (term: any = {}) => {
@@ -119,11 +121,16 @@ const Taxonomy = (props: any) => {
         okText="Yes"
         cancelText="No"
       >
-        <Button size="small" children={`Delete`} danger />
+        <Button
+          size="small"
+          children="Delete"
+          loading={loading?.id === o.id && loading?.action === 'delete'}
+          danger
+        />
       </Popconfirm>
     );
 
-    actions.push(<Button size="small" children={`Edit`} onClick={() => handleOpenDialog(o)} />);
+    actions.push(<Button size="small" children="Edit" onClick={() => handleOpenDialog(o)} />);
 
     if (taxonomySupportsLanguages && o.language) {
       actions.unshift(
@@ -156,7 +163,7 @@ const Taxonomy = (props: any) => {
           type="info"
           showIcon
           // action={
-          //   <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+          //   <Button size="small" type="ghost" onClick={handleSync} loading={loading}>
           //     Sync to WordPress
           //   </Button>
           // }
@@ -179,7 +186,12 @@ const Taxonomy = (props: any) => {
           type="info"
           showIcon
           action={
-            <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+            <Button
+              size="small"
+              type="ghost"
+              onClick={handleSync}
+              loading={loading?.action === 'syncing'}
+            >
               Sync to WordPress
             </Button>
           }

@@ -13,7 +13,7 @@ import {
 
 // import app components
 import CmsHeader from './CmsHeader';
-import PostForm from './PostForm';
+import PostForm from './forms/PostForm';
 import Logo from '../icons/jamCMS.svg';
 import { addPost } from '../utils';
 import { colors } from '../theme';
@@ -32,8 +32,8 @@ const CmsLayout = (props: any) => {
     dispatch,
   ] = useStore();
 
-  const handleAddPost = async ({ postTypeID, title, parentID }: any) => {
-    await addPost({ site: sites[siteID], postTypeID, title, parentID }, dispatch, config);
+  const handleAddPost = async (args: any) => {
+    await addPost({ site: sites[siteID], ...args }, dispatch, config);
   };
 
   return (

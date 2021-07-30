@@ -14,14 +14,15 @@ export default async function translateTerm(
   if (result) {
     // We need to add update the translated terms, so they know about the new translation
     Object.keys(result.translations).map((k) => {
-      const nextTerm = produce(
-        sites[siteID]?.taxonomies?.[result?.taxonomyID].terms[result.translations[k]],
-        (draft: any) => {
-          set(draft, `translations.${result?.language}`, result?.id);
-          return draft;
-        }
+      const term = sites[siteID]?.taxonomies?.[result?.taxonomyID].terms.find(
+        (o: any) => o.id === result.translations[k]
       );
-      dispatch({ type: 'ADD_TERM', payload: { ...nextTerm, siteID } });
+
+      const nextTerm = produce(term, (draft: any) => {
+        set(draft, `translations.${result?.language}`, result?.id);
+        return draft;
+      });
+      dispatch({ type: 'UPDATE_TERM', payload: { ...nextTerm, siteID } });
     });
   }
 

@@ -29,13 +29,18 @@ export const deleteLanguage = async ({ siteID, id }: any, dispatch: any, config:
 };
 
 export const updateSettings = async (
-  { siteID, defaultLanguage, postTypes }: any,
+  { siteID, defaultLanguage, postTypes, taxonomies }: any,
   dispatch: any,
   config: any
 ) => {
   let result = await db(
     'updateLanguageSettings',
-    { siteID, defaultLanguage, postTypes: JSON.stringify(postTypes) },
+    {
+      siteID,
+      defaultLanguage,
+      postTypes: JSON.stringify(postTypes),
+      taxonomies: JSON.stringify(taxonomies),
+    },
     dispatch,
     config
   );

@@ -23,16 +23,23 @@ const TermForm = (props: any) => {
 
   const [
     {
-      cmsState: { sites, siteID },
+      cmsState: { sites, siteID, activeLanguage },
     },
     dispatch,
   ] = useStore();
+
+  const initialLanguage = defaultLanguage
+    ? defaultLanguage
+    : activeLanguage === 'all'
+    ? sites[siteID]?.languages?.defaultLanguage
+    : activeLanguage;
 
   const [title, setTitle] = useState(defaultTitle);
   const [slug, setSlug] = useState(defaultSlug);
   const [parentID, setParentID] = useState(defaultParentID);
   const [description, setDescription] = useState(defaultDescription);
-  const [language, setLanguage] = useState(defaultLanguage);
+  const [language, setLanguage] = useState(initialLanguage);
+  const [loading, setLoading] = useState(false);
 
   // Check if taxonomy supports languages
   const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
@@ -44,7 +51,9 @@ const TermForm = (props: any) => {
       return;
     }
 
+    setLoading(true);
     await onSubmit({ id, title, slug, parentID, description, language });
+    setLoading(false);
 
     dispatch({ type: 'CLOSE_DIALOG' });
   };
@@ -69,11 +78,9 @@ const TermForm = (props: any) => {
         {taxonomySupportsLanguages && (
           <Select
             label="Language"
-            value={language || 'none'}
+            value={language}
             onChange={(value: string) => setLanguage(value)}
           >
-            {!language && <AntSelect.Option value="none">Select...</AntSelect.Option>}
-
             {sites[siteID]?.languages?.languages?.map((o: any) => (
               <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
             ))}
@@ -103,6 +110,7 @@ const TermForm = (props: any) => {
         onClick={handleSubmit}
         type="primary"
         block
+        loading={loading}
       />
     </Space>
   );

@@ -375,6 +375,7 @@ const EditorSidebar = (props: any) => {
               label="Parent"
               items={Object.values(postType.posts).filter((o) => (o as any).id !== post.id)}
               value={post?.parentID}
+              language={post?.language}
               onChange={(value: any) => handleChangePost('parentID', value)}
             />
           )}

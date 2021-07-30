@@ -6,10 +6,13 @@ import Caption from './Caption';
 import { createDataTree } from '../utils';
 
 const PostTreeSelect = (props: any) => {
-  const { items = [], value, label, onChange } = props;
+  const { items = [], value, label, language = null, onChange } = props;
 
   const tree = useMemo(() => {
-    const treePosts = createDataTree(items);
+    // Filter posts by language. This is only applicable if component is used as parent ID selector
+    const filteredPosts = language ? items.filter((o: any) => o.language === language) : items;
+
+    const treePosts = createDataTree(filteredPosts);
 
     const renderTreeNode = (item: any) => {
       return (
