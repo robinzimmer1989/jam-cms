@@ -603,7 +603,7 @@ const EditorSidebar = (props: any) => {
   };
 
   return (
-    <Container id="jam-cms-sidebar" sidebar={sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
+    <Container id="jam-cms-sidebar" sidebar={sites[siteID]?.editorOptions?.sidebar} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>

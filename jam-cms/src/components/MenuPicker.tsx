@@ -54,7 +54,7 @@ const Menu = (props: any) => {
     });
 
     let badges = [];
-    if (sites?.[siteID]?.frontPage === o.id) {
+    if (sites[siteID]?.frontPage === o.id) {
       badges.push(<Tag key="front" children={'front'} />);
     }
     if (o.status === 'draft' || o.status === 'trash') {

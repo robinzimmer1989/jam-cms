@@ -39,7 +39,7 @@ const CmsHeader = (props: any) => {
     },
   ] = useStore();
 
-  const deployment = sites?.[siteID]?.deployment;
+  const deployment = sites[siteID]?.deployment;
 
   const notifications: any = [];
 
@@ -48,21 +48,22 @@ const CmsHeader = (props: any) => {
     notifications.push('undeployed-changes');
   }
 
-  if (!sites?.[siteID]?.frontPage) {
+  if (!sites[siteID]?.frontPage) {
     notifications.push('missing-front-page');
   }
 
   if (
-    sites?.[siteID]?.frontPage &&
-    sites?.[siteID]?.postTypes?.['page']?.posts?.[sites?.[siteID]?.frontPage]?.status !== 'publish'
+    sites[siteID]?.frontPage &&
+    sites[siteID]?.postTypes?.['page']?.posts?.[sites[siteID]?.frontPage]?.status !== 'publish'
   ) {
     notifications.push('unpublished-front-page');
   }
 
-  // Add CMS errors
-  if (sites?.[siteID]?.errors?.length) {
-    sites[siteID].errors.map((o: any) => notifications.push(o.id));
-  }
+  if (sites)
+    if (sites[siteID]?.errors?.length) {
+      // Add CMS errors
+      sites[siteID].errors.map((o: any) => notifications.push(o.id));
+    }
 
   return useMemo(() => {
     const buttons = [];
@@ -75,7 +76,7 @@ const CmsHeader = (props: any) => {
           itemLayout="horizontal"
           dataSource={notifications}
           renderItem={(key: string) => {
-            const item = messages?.[key] || sites?.[siteID]?.errors.find((o: any) => o.id === key);
+            const item = messages?.[key] || sites[siteID]?.errors.find((o: any) => o.id === key);
 
             return (
               <List.Item key={key} onClick={item.onClick}>

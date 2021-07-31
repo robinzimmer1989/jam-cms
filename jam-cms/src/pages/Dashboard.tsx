@@ -19,7 +19,7 @@ const Dashboard = (props: RouteComponentProps) => {
   ] = useStore();
 
   const [changes, setChanges] = useState(null as any);
-  const lastBuild = sites?.[siteID]?.deployment?.lastBuild;
+  const lastBuild = sites[siteID]?.deployment?.lastBuild;
 
   useEffect(() => {
     const getUnpublishedChanges = async () => {
@@ -33,7 +33,7 @@ const Dashboard = (props: RouteComponentProps) => {
 
   const handleDeploy = async () => {
     await siteActions.deploySite({ id: siteID }, dispatch, config);
-    if (sites?.[siteID]?.deployment?.badgeImage) {
+    if (sites[siteID]?.deployment?.badgeImage) {
       dispatch({
         type: 'SET_DEPLOYMENT_IMAGE',
         payload: `${sites[siteID].deployment.badgeImage}?v=${Math.floor(
@@ -43,7 +43,7 @@ const Dashboard = (props: RouteComponentProps) => {
     }
   };
 
-  const deploymentButton = sites?.[siteID]?.deployment?.buildHook
+  const deploymentButton = sites[siteID]?.deployment?.buildHook
     ? [<Button key="deploy" type="primary" onClick={handleDeploy} children="Deploy Website" />]
     : null;
 

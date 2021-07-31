@@ -86,7 +86,7 @@ const PostType = (props: any) => {
   // Create data tree
   visiblePosts = createDataTree(visiblePosts);
 
-  const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
+  const taxonomies = Object.values(sites[siteID]?.taxonomies).filter((o) =>
     (o as any)?.postTypes.includes(postTypeID)
   );
 
@@ -303,7 +303,7 @@ const PostType = (props: any) => {
 
     let badges = [];
 
-    if (sites?.[siteID]?.frontPage === o.id) {
+    if (sites[siteID]?.frontPage === o.id) {
       badges.push(<Tag key="front" children={'front'} />);
     }
 

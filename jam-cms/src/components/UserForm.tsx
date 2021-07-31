@@ -56,7 +56,7 @@ const UserForm = (props: any) => {
       <Space direction="vertical" size={2}>
         <Caption children="Role" />
         <Select defaultValue={roles?.[0] || defaultRoles?.[0]} onChange={(v) => setRoles([v])}>
-          {sites?.[siteID]?.userRoles.map((o: any) => {
+          {sites[siteID]?.userRoles.map((o: any) => {
             return <Select.Option key={o.id} value={o.id} children={o.name} />;
           })}
         </Select>

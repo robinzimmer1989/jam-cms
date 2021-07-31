@@ -51,7 +51,7 @@ const Editor = (props: any) => {
   const postsPerPage = post?.archivePostsPerPage;
 
   // We need to check if post is front page to return the correct basePath for pagination
-  const isFrontPage = postID === sites?.[siteID]?.frontPage;
+  const isFrontPage = postID === sites[siteID]?.frontPage;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
 
@@ -62,14 +62,14 @@ const Editor = (props: any) => {
     let pagination = {};
 
     // We can't generate the pagination object for protected pages because those don't have access to the site object and therefore not to the number of posts.
-    if (template?.id === 'archive' && sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
+    if (template?.id === 'archive' && sites[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
       // Get the page number if exists
       const page = isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
         : 1;
 
       const numberOfPosts = Object.values(
-        sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts
+        sites[siteID]?.postTypes?.[post?.archivePostType]?.posts
       ).filter((o: any) => o.status === 'publish').length;
 
       pagination = {
@@ -155,7 +155,7 @@ const Editor = (props: any) => {
 
   const renderComponent = () => {
     const pageContext: any = {
-      siteTitle: sites?.[siteID]?.title || siteTitle,
+      siteTitle: sites[siteID]?.title || siteTitle,
       seo: post?.seo,
       pagination,
       jamCMS: {
