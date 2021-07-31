@@ -295,6 +295,33 @@ const EditorSidebar = (props: any) => {
       );
     }
 
+    let isFrontPage = false;
+
+    if (
+      post?.id === site?.frontPage ||
+      post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage
+    ) {
+      isFrontPage = true;
+    }
+
+    const frontPageSlug =
+      isFrontPage && post?.language && post?.language !== site?.languages?.defaultLanguage
+        ? `/${post.language}`
+        : '/';
+
+    // We only wanna display the front page checkbox for pages, and if polylang is activated, then only if the page is assigned to the default language.
+    let renderFrontPageSetting = false;
+
+    if (post?.postTypeID === 'page') {
+      if (isFrontPage) {
+        if (frontPageSlug === '/') {
+          renderFrontPageSetting = true;
+        }
+      } else {
+        renderFrontPageSetting = true;
+      }
+    }
+
     return (
       <Content>
         <Space direction="vertical" size={20}>
@@ -305,10 +332,10 @@ const EditorSidebar = (props: any) => {
           />
 
           <Input
-            value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+            value={isFrontPage ? frontPageSlug : post?.slug}
             onChange={(e: any) => handleChangePost('slug', e.target.value)}
             label={'Slug'}
-            disabled={post?.id === site?.frontPage}
+            disabled={isFrontPage}
           />
 
           {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
@@ -370,7 +397,7 @@ const EditorSidebar = (props: any) => {
             )}
           </Select>
 
-          {post?.postTypeID === 'page' && post.id !== site?.frontPage && (
+          {post?.postTypeID === 'page' && !isFrontPage && (
             <PostTreeSelect
               label="Parent"
               items={Object.values(postType.posts).filter((o) => (o as any).id !== post.id)}
@@ -431,10 +458,10 @@ const EditorSidebar = (props: any) => {
             </Space>
           )}
 
-          {post?.postTypeID === 'page' && (
+          {renderFrontPageSetting && (
             <Checkbox
               value={post?.id}
-              checked={post?.id === site?.frontPage}
+              checked={isFrontPage}
               onChange={(e) =>
                 handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
               }

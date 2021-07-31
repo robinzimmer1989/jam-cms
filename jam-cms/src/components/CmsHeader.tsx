@@ -28,6 +28,11 @@ const messages: any = {
     description:
       "The homepage status is set to draft or trash and therefore won't get included in the build.",
   },
+  'untranslated-front-page': {
+    onClick: () => navigate(getRoute('collection', { postTypeID: 'page' })),
+    title: 'Translation missing',
+    description: 'Translate the homepage in all languages.',
+  },
 };
 
 const CmsHeader = (props: any) => {
@@ -57,6 +62,25 @@ const CmsHeader = (props: any) => {
     sites[siteID]?.postTypes?.['page']?.posts?.[sites[siteID]?.frontPage]?.status !== 'publish'
   ) {
     notifications.push('unpublished-front-page');
+  }
+
+  // Check if all languages have a front page assigned
+  if (sites[siteID]?.frontPage && sites[siteID]?.languages?.languages) {
+    // Get all translations of front page
+    const translations =
+      sites[siteID]?.postTypes?.page?.posts?.[sites[siteID]?.frontPage]?.translations;
+
+    // Initialize missing translations
+    const missingTranslations = [];
+
+    // Loop through all available languages and check if a translation exist
+    sites[siteID]?.languages?.languages.map(
+      (o: any) => !translations[o.slug] && missingTranslations.push(o.name)
+    );
+
+    if (missingTranslations.length > 0) {
+      notifications.push('untranslated-front-page');
+    }
   }
 
   if (sites)

@@ -22,7 +22,7 @@ export default function generateSlug({
         slug: postTypeSlug,
         posts,
         posts: {
-          [postID]: { slug: postSlug, parentID, language },
+          [postID]: { slug: postSlug, parentID, language, translations },
         },
       },
     },
@@ -30,6 +30,7 @@ export default function generateSlug({
 
   const parentSlug = getParentSlug(posts, parentID);
 
+  // Get language slug if applicable
   let languageSlug = '';
 
   if (
@@ -41,11 +42,15 @@ export default function generateSlug({
     languageSlug = site?.languages?.languages.find((o: any) => o.slug === language)?.slug;
   }
 
-  const slug = formatSlug(
+  // Check if the translation of the default language equals the front page id
+  // If this is the case the post is a front page as well (i.e. "/en")
+  if (translations?.[site?.languages?.defaultLanguage] === site?.frontPage) {
+    return formatSlug(languageSlug, leadingSlash, trailingSlash);
+  }
+
+  return formatSlug(
     `${languageSlug}/${postTypeSlug}/${parentSlug}/${postSlug}`,
     leadingSlash,
     trailingSlash
   );
-
-  return slug;
 }

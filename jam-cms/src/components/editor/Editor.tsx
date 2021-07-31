@@ -51,7 +51,9 @@ const Editor = (props: any) => {
   const postsPerPage = post?.archivePostsPerPage;
 
   // We need to check if post is front page to return the correct basePath for pagination
-  const isFrontPage = postID === sites[siteID]?.frontPage;
+  const isFrontPage =
+    postID === sites[siteID]?.frontPage ||
+    post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
 
