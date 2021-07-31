@@ -5,17 +5,7 @@ import { graphql } from 'gatsby';
 import Layout from '../../../../components/Layout';
 
 const Template = (props) => {
-  const {
-    data: {
-      wpProduct: { seo },
-    },
-  } = props;
-
-  return (
-    <Layout {...props} seo={seo}>
-      Test
-    </Layout>
-  );
+  return <Layout {...props}>Test</Layout>;
 };
 
 export const Query = graphql`
@@ -24,13 +14,6 @@ export const Query = graphql`
       id
       databaseId
       title
-      seo {
-        title
-        metaDesc
-        opengraphImage {
-          sourceUrl
-        }
-      }
     }
   }
 `;

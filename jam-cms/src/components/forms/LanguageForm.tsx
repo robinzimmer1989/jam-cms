@@ -94,21 +94,9 @@ const LanguageForm = (props: any) => {
 
       <Input label="Name" name="name" value={language.name} onChange={handleChange} />
 
-      <Input
-        label="Locale"
-        name="locale"
-        value={language.locale}
-        onChange={handleChange}
-        disabled
-      />
+      <Input label="Language Code" name="slug" value={language.slug} onChange={handleChange} />
 
-      <Input
-        label="Language Code"
-        name="slug"
-        value={language.slug}
-        onChange={handleChange}
-        disabled
-      />
+      <Input label="Locale" name="locale" value={language.locale} disabled />
 
       <Button
         id="add-language"

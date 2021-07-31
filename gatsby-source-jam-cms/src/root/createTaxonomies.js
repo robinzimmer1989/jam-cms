@@ -5,7 +5,7 @@ import getTemplatePath from './getTemplatePath';
 const createJamTaxonomies = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, jamCMS, directory }
+  { siteTitle, themeOptions, activePlugins, jamCMS, directory }
 ) => {
   try {
     // Get all taxonomies

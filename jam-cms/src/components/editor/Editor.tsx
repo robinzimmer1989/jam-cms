@@ -6,8 +6,14 @@ import { Empty } from 'antd';
 
 // import app components
 import Loader from '../Loader';
+import Seo from '../Seo';
 import useForceUpdate from '../../hooks/useForceUpdate';
-import { formatFieldsToProps, formatTaxonomiesForEditor, getTemplateByPost } from '../../utils';
+import {
+  formatFieldsToProps,
+  formatTaxonomiesForEditor,
+  getTemplateByPost,
+  generateSlug,
+} from '../../utils';
 import { useStore } from '../../store';
 
 // We need to store the template ID in a global variable to detect template changes.
@@ -20,6 +26,7 @@ const Editor = (props: any) => {
     pageContext: { themeOptions, siteTitle },
     defaultComponent,
     sidebarOptions,
+    ...rest
   } = props;
 
   const [
@@ -113,7 +120,6 @@ const Editor = (props: any) => {
 
     const nodeTypeData = {
       id: post.id,
-      seo: post.seo,
       title: post.title,
       date: post.createdAt,
       featuredImage: post.featuredImage,
@@ -147,6 +153,76 @@ const Editor = (props: any) => {
     loaded = false;
   }
 
+  const renderComponent = () => {
+    const pageContext: any = {
+      siteTitle: sites?.[siteID]?.title || siteTitle,
+      seo: post?.seo,
+      pagination,
+      jamCMS: {
+        sidebar: {
+          ...sidebarOptions,
+        },
+      },
+      themeOptions: site?.themeOptions
+        ? formatFieldsToProps({
+            global: true,
+            themeOptions: config?.fields?.themeOptions,
+            content: site?.themeOptions,
+            site,
+            template,
+          })
+        : themeOptions,
+    };
+
+    // Check if post type supports languages
+    const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+      (s: string) => s === post.postTypeID
+    );
+
+    if (postTypeSupportsLanguages) {
+      pageContext.language = {};
+      pageContext.translations = [];
+
+      const getLanguageParameters = (post: any) => {
+        const { slug, name, locale } =
+          sites[siteID].languages?.languages?.find((o: any) => o.slug === post.language) || {};
+
+        return slug ? { slug, name, locale } : {};
+      };
+
+      // Add language information to pageContext if applicable
+      if (post?.language) {
+        pageContext.language = getLanguageParameters(post);
+      }
+
+      if (post?.translations) {
+        Object.values(post.translations).map((id: any) => {
+          const translatedPost = sites[siteID].postTypes[post.postTypeID].posts[id];
+
+          if (translatedPost) {
+            pageContext.translations.push({
+              title: translatedPost.title,
+              uri: generateSlug({
+                site: sites[siteID],
+                postTypeID: post.postTypeID,
+                postID: translatedPost.id,
+                leadingSlash: true,
+              }),
+              language: getLanguageParameters(translatedPost),
+            });
+          }
+        });
+      }
+    }
+
+    return (
+      <>
+        <Seo {...props} pageContext={pageContext} />
+        <Component {...rest} data={getPostData()} pageContext={pageContext} />
+      </>
+    );
+  };
+
   return (
     <>
       {postID ? (
@@ -154,27 +230,7 @@ const Editor = (props: any) => {
           {loaded ? (
             <>
               {!!Component && post?.content ? (
-                <Component
-                  data={getPostData()}
-                  pageContext={{
-                    siteTitle: sites?.[siteID]?.title || siteTitle,
-                    jamCMS: {
-                      sidebar: {
-                        ...sidebarOptions,
-                      },
-                    },
-                    themeOptions: site?.themeOptions
-                      ? formatFieldsToProps({
-                          global: true,
-                          themeOptions: config?.fields?.themeOptions,
-                          content: site?.themeOptions,
-                          site,
-                          template,
-                        })
-                      : themeOptions,
-                    pagination,
-                  }}
-                />
+                renderComponent()
               ) : (
                 <EmptyContainer style={{ background: 'transparent' }} className="jam-cms">
                   <Empty
@@ -192,6 +248,8 @@ const Editor = (props: any) => {
         </>
       ) : (
         <>
+          <Seo {...props} />
+
           {React.cloneElement(defaultComponent, {
             pageContext: {
               pagination,
