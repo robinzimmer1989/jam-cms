@@ -25,7 +25,28 @@ try {
   }
 } catch (e) {
   if (e.toString().indexOf(`Error: Cannot find module`) !== -1) {
-    console.warn(`Couldn't find template`);
+    console.warn(`Couldn't find template for post type`);
+  } else {
+    console.warn(e);
+  }
+}
+
+try {
+  fields = preferDefault(require(GATSBY_FIELDS_PATH));
+
+  // loop through taxonomies and add React component to fields object
+  if (fields && fields.taxonomies) {
+    for (const taxonomyIndex in fields.taxonomies) {
+      const taxonomy = fields.taxonomies[taxonomyIndex];
+
+      fields.taxonomies[taxonomyIndex].component = preferDefault(
+        require(`${GATSBY_TEMPLATES_PATH}/taxonomies/${taxonomy.id}/single/single`)
+      );
+    }
+  }
+} catch (e) {
+  if (e.toString().indexOf(`Error: Cannot find module`) !== -1) {
+    console.warn(`Couldn't find template for taxonomy`);
   } else {
     console.warn(e);
   }
