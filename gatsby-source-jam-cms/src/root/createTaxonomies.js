@@ -1,11 +1,13 @@
 import path from 'path';
 
+// import app components
 import getTemplatePath from './getTemplatePath';
+import fragments from './fragments';
 
 const createJamTaxonomies = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, activePlugins, jamCMS, directory }
+  { siteTitle, themeOptions, activePlugins, languages, jamCMS, directory }
 ) => {
   try {
     // Get all taxonomies
@@ -33,6 +35,14 @@ const createJamTaxonomies = async (
       const nodesTypeName = graphqlSingleName.charAt(0).toUpperCase() + graphqlSingleName.slice(1);
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
+      // Prepare fragments
+      const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
+
+      const languageFragment =
+        activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)
+          ? fragments.language
+          : '';
+
       const { data } = await graphql(/* GraphQL */ `
         query ALL_TERM_NODES {
             ${gatsbyNodeListFieldName}{
@@ -42,6 +52,8 @@ const createJamTaxonomies = async (
               slug
               uri
               status
+              ${seoFragment}
+              ${languageFragment}
             }
           }
         }
@@ -55,12 +67,30 @@ const createJamTaxonomies = async (
           });
 
           if (templatePath) {
-            const { id, databaseId, uri, slug } = node;
+            const { id, databaseId, uri } = node;
+
+            const context = {
+              id,
+              databaseId,
+              siteTitle,
+              themeOptions,
+              jamCMS,
+              pagination: {},
+            };
+
+            if (activePlugins.includes('yoast')) {
+              context.seo = node.seo;
+            }
+
+            if (activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)) {
+              context.language = node.language;
+              context.translations = node.translations;
+            }
 
             actions.createPage({
               component: path.resolve(`./${templatePath}`),
               path: uri,
-              context: { id, databaseId, siteTitle, slug, themeOptions, jamCMS },
+              context,
             });
           } else {
             // Check if error was already shown

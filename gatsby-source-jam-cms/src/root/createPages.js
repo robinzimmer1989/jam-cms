@@ -1,40 +1,25 @@
 import path from 'path';
 
+// import app components
 import getTemplatePath from './getTemplatePath';
+import fragments from './fragments';
 
 const createJamPages = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, protectedPosts, activePlugins, jamCMS, directory }
+  { siteTitle, themeOptions, protectedPosts, activePlugins, languages, jamCMS, directory }
 ) => {
   const allNodes = {};
 
   // Get path to private component
   const privatePath = getTemplatePath(directory, { prefix: 'protected', template: 'private' });
 
-  const defaultLanguageFragment = activePlugins.includes('polylang')
-    ? `
-      defaultLanguage {
-        id
-        locale
-        name
-        slug
-      }
-    `
-    : ``;
-
   try {
     // Get all post types
     const {
-      data: { allWpContentType, wp },
+      data: { allWpContentType },
     } = await graphql(/* GraphQL */ `
       query ALL_CONTENT_TYPES {
-        wp {
-          generalSettings {
-            title
-          }
-          ${defaultLanguageFragment}
-        }
         allWpContentType {
           nodes {
             graphqlSingleName
@@ -55,48 +40,15 @@ const createJamPages = async (
       const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
-      const seoFragment = activePlugins.includes('yoast')
-        ? `
-          seo {
-            title
-            metaDesc
-            metaRobotsNoindex
-            opengraphImage {
-              sourceUrl
-            }
-            fullHead
-          }
-          `
-        : ``;
+      // Prepare fragments
+      const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
 
-      const languageFragment = activePlugins.includes('polylang')
-        ? `
-          language {
-            slug
-            name
-            locale
-          }
-          translations {
-            title
-            uri
-            language {
-              slug
-              name
-              locale
-            }
-          }
-          `
-        : ``;
+      const languageFragment =
+        activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)
+          ? fragments.language
+          : '';
 
-      // Assign archive query parameters to page
-      const archiveFragment =
-        nodesTypeName === 'Page'
-          ? `
-            archive
-            archivePostType
-            archivePostsPerPage
-          `
-          : ``;
+      const archiveFragment = nodesTypeName === 'Page' ? fragments.archive : '';
 
       const { data } = await graphql(/* GraphQL */ `
         query ALL_CONTENT_NODES {
@@ -166,7 +118,7 @@ const createJamPages = async (
             context.seo = node.seo;
           }
 
-          if (activePlugins.includes('polylang')) {
+          if (activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)) {
             context.language = node.language;
             context.translations = node.translations;
           }
