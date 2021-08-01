@@ -174,7 +174,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
       )}
 
       {tab === 'editor' && (
-        <Card title={'Editor Sidebar'}>
+        <Card title={'Sidebar'}>
           <Space direction="vertical" size={20}>
             <Select
               label="Position"
