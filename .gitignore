@@ -24,6 +24,7 @@ gatsby-source-jam-cms/getThemeSettings.js
 gatsby-source-jam-cms/Seo.js
 gatsby-source-jam-cms/syncFields.js
 gatsby-source-jam-cms/wrap-page.js
+gatsby-source-jam-cms/fragments.js
 
 public
 .wordpress-cache
