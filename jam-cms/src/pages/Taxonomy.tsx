@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, PageHeader, Popconfirm, Space, Alert } from 'antd';
+import { Link } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -7,7 +8,7 @@ import TermForm from '../components/forms/TermForm';
 import ListItem from '../components/ListItem';
 import LanguageSelector from '../components/LanguageSelector';
 
-import { createDataTree, translateTerm } from '../utils';
+import { createDataTree, generateSlug, translateTerm } from '../utils';
 import { termActions, siteActions } from '../actions';
 import { useStore } from '../store';
 
@@ -26,6 +27,10 @@ const Taxonomy = (props: any) => {
 
   const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
 
+  const terms = Object.values(taxonomy.terms);
+
+  const hasTemplate = !!config?.fields?.taxonomies.find((o: any) => o.id === taxonomyID).component;
+
   // Check if taxonomy supports languages
   const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
     (s: string) => s === taxonomyID
@@ -33,16 +38,14 @@ const Taxonomy = (props: any) => {
 
   // Check if there are untranslated taxonomies
   const taxonomiesWithoutLanguage =
-    taxonomySupportsLanguages && taxonomy?.terms.find((o: any) => !o.language);
+    taxonomySupportsLanguages && terms.find((o: any) => !o.language);
 
   // Filter by language
   const termsPerLanguage = taxonomySupportsLanguages
-    ? taxonomy?.terms.filter((o: any) =>
-        activeLanguage === 'all' ? o : o.language === activeLanguage
-      )
-    : taxonomy?.terms;
+    ? terms.filter((o: any) => (activeLanguage === 'all' ? o : o.language === activeLanguage))
+    : terms;
 
-  const terms = termsPerLanguage ? createDataTree(termsPerLanguage) : [];
+  const treeTerms = termsPerLanguage ? createDataTree(termsPerLanguage) : [];
 
   const handleSync = async () => {
     setLoading({ action: 'syncing' });
@@ -83,12 +86,7 @@ const Taxonomy = (props: any) => {
         open: true,
         title: `Term`,
         component: (
-          <TermForm
-            {...term}
-            taxonomyID={taxonomyID}
-            terms={taxonomy?.terms}
-            onSubmit={handleUpsert}
-          />
+          <TermForm {...term} taxonomyID={taxonomyID} terms={terms} onSubmit={handleUpsert} />
         ),
       },
     });
@@ -98,7 +96,7 @@ const Taxonomy = (props: any) => {
     if (term.language === language) {
       handleOpenDialog(term);
     } else if (term.translations[language]) {
-      const translatedTerm = taxonomy?.terms.find((o: any) => o.id === term.translations[language]);
+      const translatedTerm = terms.find((o: any) => o.id === term.translations[language]);
       handleOpenDialog(translatedTerm);
     }
   };
@@ -113,6 +111,13 @@ const Taxonomy = (props: any) => {
 
   const renderTerm = (o: any, level: any) => {
     const actions = [];
+
+    const slug = generateSlug({
+      site: sites[siteID],
+      taxonomyID: o.taxonomyID,
+      termID: o.id,
+      leadingSlash: true,
+    });
 
     actions.push(
       <Popconfirm
@@ -132,6 +137,14 @@ const Taxonomy = (props: any) => {
 
     actions.push(<Button size="small" children="Edit" onClick={() => handleOpenDialog(o)} />);
 
+    if (hasTemplate) {
+      actions.push(
+        <Link to={slug}>
+          <Button size="small" children="View" />
+        </Link>
+      );
+    }
+
     if (taxonomySupportsLanguages && o.language) {
       actions.unshift(
         <LanguageSelector
@@ -144,7 +157,7 @@ const Taxonomy = (props: any) => {
 
     return (
       <React.Fragment key={o.id}>
-        <ListItem level={level} actions={actions} title={o.title} subtitle={o.slug} />
+        <ListItem level={level} actions={actions} title={o.title} subtitle={slug} />
 
         {o.childNodes.map((p: any) => renderTerm(p, level + 1))}
       </React.Fragment>
@@ -199,7 +212,7 @@ const Taxonomy = (props: any) => {
       )}
 
       <Space direction="vertical" size={8}>
-        {terms && terms.map((item: any) => renderTerm(item, 0))}
+        {treeTerms && treeTerms.map((item: any) => renderTerm(item, 0))}
       </Space>
     </CmsLayout>
   );

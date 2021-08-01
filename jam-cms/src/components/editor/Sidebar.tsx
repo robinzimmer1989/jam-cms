@@ -424,7 +424,7 @@ const EditorSidebar = (props: any) => {
                       defaultValue={post.taxonomies[k]}
                     >
                       {o.terms &&
-                        o.terms.map((p: any) => {
+                        Object.values(o.terms).map((p: any) => {
                           return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
                         })}
                     </Select>

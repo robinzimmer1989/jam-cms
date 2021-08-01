@@ -29,11 +29,18 @@ const LanguageSelector = (props: any) => {
       {sites[siteID]?.languages?.languages?.map((p: any) => {
         const flag = p.flag && Parser(p.flag);
 
-        if (post.language === p.slug || post.translations?.[p.slug]) {
+        if (post.language === p.slug) {
+          return (
+            <Item key={p.id} onClick={() => onEdit(p.slug)}>
+              {flag}
+            </Item>
+          );
+        } else if (post.translations?.[p.slug]) {
           return (
             <Tooltip key={p.id} title="Edit translation" mouseEnterDelay={0.5}>
               <Item onClick={() => onEdit(p.slug)}>
                 {flag}
+
                 <IconContainer>
                   <EditTwoTone />
                 </IconContainer>

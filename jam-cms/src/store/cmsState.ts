@@ -56,24 +56,42 @@ export const sitesReducer = (state: any, action: any) => {
        * Terms
        ******************************/
       case `ADD_TERM`:
-        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms.push(payload);
+        set(
+          draft,
+          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${payload.id}`,
+          payload
+        );
         break;
 
       case `UPDATE_TERM`:
-        const termIndex = draft.sites[payload.siteID].taxonomies[
-          payload.taxonomyID
-        ].terms.findIndex((o: any) => o.id === payload.id);
         set(
           draft,
-          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${termIndex}`,
+          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${payload.id}`,
           payload
         );
         break;
 
       case `DELETE_TERM`:
-        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms = draft.sites[
-          payload.siteID
-        ].taxonomies[payload.taxonomyID].terms.filter((o: any) => o.id !== parseInt(payload.id));
+        // Payload: siteID, taxonomyID, id
+
+        // Get the term that needs to be deleted
+        const termToDelete =
+          draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[payload.id];
+
+        // In case the term has translations, we wanna loop trough them and remove the reference to the term that has been deleted
+        if (termToDelete.translations) {
+          Object.keys(termToDelete.translations).map((language: string) => {
+            // This is the term id of the translated term
+            const termID = termToDelete.translations[language];
+
+            delete draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[termID]
+              .translations[termToDelete.language];
+          });
+        }
+
+        // Finally we can remove the actual term
+        delete draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[payload.id];
+
         break;
 
       /******************************
@@ -88,12 +106,48 @@ export const sitesReducer = (state: any, action: any) => {
         break;
 
       case `DELETE_POST`:
+        // Payload: siteID, postTypeID, id
+
+        // Get the post that needs to be deleted
+        const postToDelete =
+          draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id];
+
+        // In case the post has translations, we wanna loop trough them and remove the reference to the post that has been deleted
+        if (postToDelete.translations) {
+          Object.keys(postToDelete.translations).map((language: string) => {
+            // This is the post id of the translated post
+            const postID = postToDelete.translations[language];
+
+            delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[postID]
+              .translations[postToDelete.language];
+          });
+        }
+
+        // Finally we can remove the actual post
         delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id];
+
         break;
 
       case `DELETE_POSTS`:
-        payload.posts.map((o: any) => {
-          delete draft.sites[payload.siteID].postTypes[o.postTypeID].posts[o.id];
+        // Payload: siteID, postTypeID, postIDs
+
+        payload.postIDs.map((id: number) => {
+          // Get the post that needs to be deleted
+          const postToDelete = draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[id];
+
+          // In case the post has translations, we wanna loop trough them and remove the reference to the post that has been deleted
+          if (postToDelete.translations) {
+            Object.keys(postToDelete.translations).map((language: string) => {
+              // This is the post id of the translated post
+              const postID = postToDelete.translations[language];
+
+              delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[postID]
+                .translations[postToDelete.language];
+            });
+          }
+
+          // Finally we can remove the actual post
+          delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[id];
         });
         break;
 

@@ -99,7 +99,7 @@ const TermForm = (props: any) => {
         <Select value={parentID} onChange={(value: any) => setParentID(value)} label={'Parent'}>
           <AntSelect.Option value={0} children="None" />
           {terms &&
-            terms
+            Object.values(terms)
               .filter((o: any) => o.id !== id)
               .map((o: any) => <AntSelect.Option key={o.id} value={o.id} children={o.title} />)}
         </Select>

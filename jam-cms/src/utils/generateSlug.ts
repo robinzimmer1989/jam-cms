@@ -1,13 +1,7 @@
 import formatSlug from './formatSlug';
 import getParentSlug from './getParentSlug';
 
-export default function generateSlug({
-  site,
-  postTypeID,
-  postID,
-  leadingSlash = false,
-  trailingSlash = false,
-}: any) {
+const generatePostSlug = ({ site, postTypeID, postID, leadingSlash, trailingSlash }: any) => {
   if (postID === site?.frontPage) {
     return leadingSlash ? '/' : '';
   }
@@ -53,4 +47,68 @@ export default function generateSlug({
     leadingSlash,
     trailingSlash
   );
+};
+
+const generateTermSlug = ({ site, taxonomyID, termID, leadingSlash, trailingSlash }: any) => {
+  const {
+    taxonomies: {
+      [taxonomyID]: {
+        slug: taxonomySlug,
+        terms,
+        terms: {
+          [termID]: { slug: termSlug, parentID, language },
+        },
+      },
+    },
+  } = site;
+
+  const parentSlug = getParentSlug(terms, parentID);
+
+  // Get language slug if applicable
+  let languageSlug = '';
+
+  if (
+    language &&
+    site?.languages?.defaultLanguage &&
+    site?.languages?.taxonomies.find((s: string) => s === taxonomyID) &&
+    site.languages.defaultLanguage !== language
+  ) {
+    languageSlug = site?.languages?.languages.find((o: any) => o.slug === language)?.slug;
+  }
+
+  return formatSlug(
+    `${languageSlug}/${taxonomySlug}/${parentSlug}/${termSlug}`,
+    leadingSlash,
+    trailingSlash
+  );
+};
+
+export default function generateSlug({
+  site,
+  postTypeID,
+  postID,
+  taxonomyID,
+  termID,
+  leadingSlash = false,
+  trailingSlash = false,
+}: any) {
+  if (postTypeID && postID) {
+    return generatePostSlug({
+      site,
+      postTypeID,
+      postID,
+      leadingSlash,
+      trailingSlash,
+    });
+  } else if (taxonomyID && termID) {
+    return generateTermSlug({
+      site,
+      taxonomyID,
+      termID,
+      leadingSlash,
+      trailingSlash,
+    });
+  }
+
+  return '';
 }

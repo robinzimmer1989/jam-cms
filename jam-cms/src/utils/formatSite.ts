@@ -33,6 +33,20 @@ export default function formatSite(site: any) {
 
     // Convert taxonomies to object structure
     if (get(draft, `taxonomies.items`)) {
+      draft.taxonomies.items.map((o: any, i: any) => {
+        if (get(o, `terms`)) {
+          return (draft.taxonomies.items[i].terms = draft.taxonomies.items[i].terms.reduce(
+            (ac: any, a: any) => ({
+              ...ac,
+              [a.id]: a,
+            }),
+            {}
+          ));
+        }
+
+        return null;
+      });
+
       draft.taxonomies = draft.taxonomies.items.reduce(
         (ac: any, a: any) => ({
           ...ac,

@@ -14,9 +14,7 @@ export default async function translateTerm(
   if (result) {
     // We need to add update the translated terms, so they know about the new translation
     Object.keys(result.translations).map((k) => {
-      const term = sites[siteID]?.taxonomies?.[result?.taxonomyID].terms.find(
-        (o: any) => o.id === result.translations[k]
-      );
+      const term = sites[siteID]?.taxonomies?.[result?.taxonomyID].terms[result.translations[k]];
 
       const nextTerm = produce(term, (draft: any) => {
         set(draft, `translations.${result?.language}`, result?.id);

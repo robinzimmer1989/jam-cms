@@ -112,7 +112,7 @@ const PostType = (props: any) => {
   };
 
   const handleDeletePost = async ({ postID }: any) => {
-    await postActions.deletePost({ siteID, id: postID }, dispatch, config);
+    await postActions.deletePost({ siteID, postTypeID, id: postID }, dispatch, config);
   };
 
   const handleAddPost = async (args: any) => {
@@ -167,13 +167,13 @@ const PostType = (props: any) => {
         allowClear
         placeholder="Select category"
       >
-        {taxonomies.map((o) => {
+        {taxonomies.map((o: any) => {
           return (
-            <Select.OptGroup key={(o as any).id} label={(o as any).title}>
-              {(o as any).terms &&
-                (o as any).terms.map((p: any) => {
+            <Select.OptGroup key={o.id} label={o.title}>
+              {o.terms &&
+                Object.values(o.terms).map((p: any) => {
                   return (
-                    <Select.Option key={p.id} value={p.id} taxonomy={(o as any).id}>
+                    <Select.Option key={p.id} value={p.id} taxonomy={o.id}>
                       {p.title}
                     </Select.Option>
                   );
