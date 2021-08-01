@@ -8,12 +8,12 @@ import Layout from '../../../../components/Layout';
 const Template = (props) => {
   const {
     data: {
-      wpPost: { title, date, acf, categories, seo },
+      wpPost: { title, date, acf, categories },
     },
   } = props;
 
   return (
-    <Layout {...props} seo={seo}>
+    <Layout {...props}>
       <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div className="max-w-screen-sm sm:text-center sm:mx-auto">
           {categories?.nodes.map((o) => (
@@ -54,13 +54,6 @@ export const Query = graphql`
           databaseId
           name
           uri
-        }
-      }
-      seo {
-        title
-        metaDesc
-        opengraphImage {
-          sourceUrl
         }
       }
       acf {
