@@ -28,8 +28,6 @@ const PostForm = (props: any) => {
     (s: string) => s === postTypeID
   );
 
-  const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
-
   const handleSubmit = async () => {
     if (!title) {
       return;
@@ -56,7 +54,7 @@ const PostForm = (props: any) => {
         onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
       />
 
-      {postTypeSupportsLanguages && (
+      {postTypeSupportsLanguages && sites[siteID]?.languages?.languages?.length > 0 && (
         <Select label="Language" value={language} onChange={(value: string) => setLanguage(value)}>
           {sites[siteID]?.languages?.languages?.map((o: any) => (
             <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
