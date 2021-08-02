@@ -151,14 +151,19 @@ const PostType = (props: any) => {
   };
 
   const handleEmptyTrash = async () => {
+    setLoading('empty-trash');
+
     const result = await postActions.emptyTrash(
       { siteID, postTypeID, language: activeLanguage },
       dispatch,
       config
     );
+
     if (result) {
       message.info({ content: 'Trashed emptied successfully' });
     }
+
+    setLoading('');
   };
 
   const handleTranslatePost = async ({ id, language }: any) => {
@@ -257,6 +262,7 @@ const PostType = (props: any) => {
           disabled={visiblePosts.length === 0}
           type="primary"
           danger
+          loading={loading === 'empty-trash'}
         />
       </Popconfirm>
     );
