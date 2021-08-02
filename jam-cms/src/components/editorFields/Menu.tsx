@@ -25,20 +25,20 @@ const Menu = (props: any) => {
   const [items, setItems] = useState([]);
   const [modal, setModal] = useState(false);
 
-  let menuItems: any = [];
-
   const translatedMenu =
     !!site?.languages && post?.language && Array.isArray(value[post?.language]);
 
-  if (translatedMenu) {
-    menuItems = value[post?.language];
-  } else {
-    menuItems = Array.isArray(value) ? value : [];
-  }
-
   useEffect(() => {
+    let menuItems: any = [];
+
+    if (translatedMenu) {
+      menuItems = value[post?.language];
+    } else {
+      menuItems = Array.isArray(value) ? value : [];
+    }
+
     setItems(deepCopyTree(menuItems));
-  }, [menuItems]);
+  }, [value]);
 
   // When a post is saved while a menu item is open, we need to manually reset the editing array to allow dragging
   useEffect(() => {
