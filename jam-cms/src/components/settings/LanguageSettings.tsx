@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -37,6 +37,11 @@ const LanguageSettings = () => {
 
   const [loading, setLoading] = useState(null as any);
 
+  useEffect(() => {
+    // Update default language (changes when first language is added or current default language gets deleted)
+    setDefaultLanguage(languages?.defaultLanguage);
+  }, [languages?.defaultLanguage]);
+
   const handleUpdate = async () => {
     setLoading({ action: 'update-settings' });
 
@@ -58,7 +63,7 @@ const LanguageSettings = () => {
       type: 'SET_DIALOG',
       payload: {
         open: true,
-        title: !!language ? 'Edit' : 'Add',
+        title: !!language?.id ? 'Edit' : 'Add',
         component: <LanguageForm language={language} />,
       },
     });
