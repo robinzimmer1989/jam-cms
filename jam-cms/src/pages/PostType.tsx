@@ -22,7 +22,7 @@ import PostForm from '../components/forms/PostForm';
 import ListItem from '../components/ListItem';
 import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
-import { postActions, siteActions } from '../actions';
+import { postActions, siteActions, languageActions } from '../actions';
 import { useStore } from '../store';
 import { createDataTree, generateSlug, addPost, translatePost } from '../utils';
 import { colors } from '../theme';
@@ -42,7 +42,7 @@ const PostType = (props: any) => {
   const [filter, setFilter] = useState('all');
   const [category, setCategory] = useState(null as any);
   const [search, setSearch] = useState('');
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [loading, setLoading] = useState('');
 
   // Check if post type supports languages
   const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
@@ -98,13 +98,33 @@ const PostType = (props: any) => {
   }, []);
 
   const handleSync = async () => {
-    setIsSyncing(true);
+    setLoading('sync');
     await siteActions.syncFields(
       { fields: config.fields, apiKey: sites[siteID]?.apiKey },
       dispatch,
       config
     );
-    setIsSyncing(false);
+    setLoading('');
+  };
+
+  const handleTranslateMass = async () => {
+    setLoading('translate');
+
+    const language =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    await languageActions.translateMass(
+      {
+        siteID,
+        postTypeID,
+        type: 'post',
+        ids: posts.filter((o: any) => !o.language).map((o: any) => o.id),
+        language,
+      },
+      dispatch,
+      config
+    );
+    setLoading('');
   };
 
   const handleDuplicatePost = async ({ postID }: any) => {
@@ -143,6 +163,33 @@ const PostType = (props: any) => {
 
   const handleTranslatePost = async ({ id, language }: any) => {
     await translatePost({ sites, siteID, id, language }, dispatch, config);
+  };
+
+  const renderUntranslatedPostsWarning = () => {
+    const languageSlug =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    const languageName = sites[siteID]?.languages?.languages.find(
+      (o: any) => o.slug === languageSlug
+    )?.name;
+
+    return (
+      <Alert
+        message="There are posts without a language"
+        type="info"
+        showIcon
+        action={
+          <Button
+            size="small"
+            type="ghost"
+            onClick={handleTranslateMass}
+            loading={loading === 'translate'}
+          >
+            Translate to {languageName}
+          </Button>
+        }
+      />
+    );
   };
 
   const filterItems = (
@@ -383,25 +430,14 @@ const PostType = (props: any) => {
           type="info"
           showIcon
           action={
-            <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+            <Button size="small" type="ghost" onClick={handleSync} loading={loading === 'sync'}>
               Sync to WordPress
             </Button>
           }
         />
       )}
 
-      {postsWithoutLanguage && (
-        <Alert
-          message="There are posts without a language"
-          type="info"
-          showIcon
-          // action={
-          //   <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
-          //     Sync to WordPress
-          //   </Button>
-          // }
-        />
-      )}
+      {postsWithoutLanguage && renderUntranslatedPostsWarning()}
 
       <PageHeader title={filterItems} extra={extra} />
 

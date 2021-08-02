@@ -70,3 +70,13 @@ export const translateTerm = async (args: any, dispatch: any, config: any) => {
 
   return result;
 };
+
+export const translateMass = async (args: any, dispatch: any, config: any) => {
+  const result = await languageServices.translateMass(args, dispatch, config);
+
+  if (result) {
+    dispatch({ type: 'SET_LANGUAGE_IN_MASS', payload: args });
+  }
+
+  return result;
+};

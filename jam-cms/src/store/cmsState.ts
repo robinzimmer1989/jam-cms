@@ -181,6 +181,27 @@ export const sitesReducer = (state: any, action: any) => {
         };
         break;
 
+      case `SET_LANGUAGE_IN_MASS`:
+        // Payload: siteID, postTypeID / taxonomyID, type, ids, language
+
+        payload.ids.map((id: number) => {
+          if (payload.type === 'post') {
+            set(
+              draft,
+              `sites.${payload.siteID}.postTypes.${payload.postTypeID}.posts.${id}.language`,
+              payload.language
+            );
+          } else {
+            set(
+              draft,
+              `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${id}.language`,
+              payload.language
+            );
+          }
+        });
+
+        break;
+
       /******************************
        * Clear
        ******************************/

@@ -56,3 +56,17 @@ export const translateTerm = async ({ siteID, id, language }: any, dispatch: any
   let result = await db('translateTerm', { siteID, id, language }, dispatch, config);
   return result;
 };
+
+export const translateMass = async (
+  { siteID, type, ids, language }: any,
+  dispatch: any,
+  config: any
+) => {
+  let result = await db(
+    'setLanguageInMass',
+    { siteID, type, ids: JSON.stringify(ids), language },
+    dispatch,
+    config
+  );
+  return result;
+};

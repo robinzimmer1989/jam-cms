@@ -9,7 +9,7 @@ import ListItem from '../components/ListItem';
 import LanguageSelector from '../components/LanguageSelector';
 
 import { createDataTree, generateSlug, translateTerm } from '../utils';
-import { termActions, siteActions } from '../actions';
+import { termActions, siteActions, languageActions } from '../actions';
 import { useStore } from '../store';
 
 const Taxonomy = (props: any) => {
@@ -51,6 +51,26 @@ const Taxonomy = (props: any) => {
     setLoading({ action: 'syncing' });
     await siteActions.syncFields(
       { fields: config.fields, apiKey: sites[siteID]?.apiKey },
+      dispatch,
+      config
+    );
+    setLoading(null);
+  };
+
+  const handleTranslateMass = async () => {
+    setLoading({ action: 'translate' });
+
+    const language =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    await languageActions.translateMass(
+      {
+        siteID,
+        taxonomyID,
+        type: 'term',
+        ids: terms.filter((o: any) => !o.language).map((o: any) => o.id),
+        language,
+      },
       dispatch,
       config
     );
@@ -107,6 +127,33 @@ const Taxonomy = (props: any) => {
     if (result) {
       handleOpenDialog(result);
     }
+  };
+
+  const renderUntranslatedTermsWarning = () => {
+    const languageSlug =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    const languageName = sites[siteID]?.languages?.languages.find(
+      (o: any) => o.slug === languageSlug
+    )?.name;
+
+    return (
+      <Alert
+        message="There are terms without a language"
+        type="info"
+        showIcon
+        action={
+          <Button
+            size="small"
+            type="ghost"
+            onClick={handleTranslateMass}
+            loading={loading?.action === 'translate'}
+          >
+            Translate to {languageName}
+          </Button>
+        }
+      />
+    );
   };
 
   const renderTerm = (o: any, level: any) => {
@@ -170,18 +217,7 @@ const Taxonomy = (props: any) => {
         config?.fields?.taxonomies?.find((o: any) => o.id === taxonomyID)?.title || taxonomy?.title
       }
     >
-      {taxonomiesWithoutLanguage && (
-        <Alert
-          message="There are terms without a language"
-          type="info"
-          showIcon
-          // action={
-          //   <Button size="small" type="ghost" onClick={handleSync} loading={loading}>
-          //     Sync to WordPress
-          //   </Button>
-          // }
-        />
-      )}
+      {taxonomiesWithoutLanguage && renderUntranslatedTermsWarning()}
 
       <PageHeader>
         <Button
