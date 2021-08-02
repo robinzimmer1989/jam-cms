@@ -137,7 +137,12 @@ const createJamPages = async (
             const component = status === 'private' && privatePath ? privatePath : templatePath;
 
             if (archive && archivePostType) {
-              const numberOfPosts = allNodes[archivePostType].length;
+              // In case the node has a language assigned we wanna filter the posts accordingly
+              const filteredPosts = allNodes[archivePostType].filter((o) =>
+                node?.language ? o.language === node?.language : o
+              );
+
+              const numberOfPosts = filteredPosts.length;
 
               const numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 

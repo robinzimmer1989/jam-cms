@@ -70,12 +70,22 @@ const Editor = (props: any) => {
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
         : 1;
 
-      const numberOfPosts = Object.values(
-        sites[siteID]?.postTypes?.[post?.archivePostType]?.posts
-      ).filter((o: any) => o.status === 'publish').length;
+      // We only wanna query for published posts
+      // And in case the post has a language assigned we wanna filter the posts accordingly
+      const filteredPosts = Object.values(sites[siteID]?.postTypes?.[post?.archivePostType]?.posts)
+        .filter((o: any) => o.status === 'publish')
+        .filter((o: any) => (post?.language ? o.language === post?.language : o));
+
+      const numberOfPosts = filteredPosts.length;
 
       pagination = {
-        basePath: isFrontPage ? '/' : `/${post.slug}/`,
+        basePath: generateSlug({
+          site,
+          postTypeID: post.postTypeID,
+          postID: post.id,
+          leadingSlash: true,
+          trailingSlash: true,
+        }),
         numberOfPosts,
         postsPerPage,
         numberOfPages: Math.ceil(numberOfPosts / postsPerPage),
@@ -91,7 +101,13 @@ const Editor = (props: any) => {
     const loadQuery = async () => {
       // TODO: Move to utils function
       const cleanedUrl = config?.source.replace(/\/+$/, '');
-      const result = await axios.post(`${cleanedUrl}/graphql`, { query: template.query });
+
+      let query = template.query;
+
+      // We need to replace any static variables with the correct values here
+      query = query.replaceAll('$language', post?.language?.toUpperCase());
+
+      const result = await axios.post(`${cleanedUrl}/graphql`, { query });
 
       if (result?.data) {
         setQuery(result.data);
