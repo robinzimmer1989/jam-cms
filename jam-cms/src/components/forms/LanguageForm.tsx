@@ -43,7 +43,7 @@ const LanguageForm = (props: any) => {
   const handleChange = (e: any) => setLanguage({ ...language, [e.target.name]: e.target.value });
 
   const handleUpsert = async () => {
-    const { id, name, slug, locale, flag } = language;
+    const { id, name, slug, locale } = language;
 
     if (!name || !slug || !locale) {
       return;
@@ -77,8 +77,8 @@ const LanguageForm = (props: any) => {
         }
         value={language.locale}
         onChange={(value: string) => {
-          const selectedLanguage = languages.find((o: any) => o.locale === value);
-          setLanguage(selectedLanguage);
+          const selectedLanguage: any = languages.find((o: any) => o.locale === value) || {};
+          setLanguage({ ...language, ...selectedLanguage });
         }}
         label={'Select a language'}
         loading={loadingLanguages}
