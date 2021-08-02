@@ -65,7 +65,11 @@ const GeneralSettings = (props: RouteComponentProps) => {
     message.success('Updated successfully');
   };
 
-  const tabs: any = ['general', 'deployment', 'syncing', 'api', 'editor', 'languages'];
+  const tabs: any = ['general', 'deployment', 'syncing', 'api', 'editor'];
+
+  if (!!site?.languages) {
+    tabs.push('languages');
+  }
 
   return (
     <CmsLayout pageTitle={`Settings`}>
