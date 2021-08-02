@@ -130,7 +130,7 @@ const CmsHeader = (props: any) => {
 
     buttons.push(<AvatarMenu key="avatar-menu" />);
 
-    if (sites[siteID]?.languages?.languages?.length > 1) {
+    if (sites[siteID]?.languages?.languages?.length > 0) {
       buttons.push(
         <div key="language-switcher">
           <LanguageSwitcher />
