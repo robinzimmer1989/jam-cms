@@ -133,6 +133,10 @@ const Taxonomy = (props: any) => {
     const languageSlug =
       activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
 
+    if (!languageSlug) {
+      return null;
+    }
+
     const languageName = sites[siteID]?.languages?.languages.find(
       (o: any) => o.slug === languageSlug
     )?.name;
