@@ -31,7 +31,7 @@ const Seo = (props: any) => {
       <meta property="twitter:image" content={seo.opengraphImage?.sourceUrl || ''} />
       <meta property="twitter:title" content={Parser(seo.title || '')} />
 
-      {language ? (
+      {language?.locale ? (
         <link
           rel="alternate"
           href={location.href}
