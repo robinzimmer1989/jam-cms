@@ -156,8 +156,13 @@ const EditorSidebar = (props: any) => {
     setPreviewLink('');
 
     let postResult, siteResult;
+
     if (siteHasChanged) {
-      siteResult = await siteActions.updateSite({ id, themeOptions, frontPage }, dispatch, config);
+      siteResult = await siteActions.updateSite(
+        { id, themeOptions, frontPage, language: post.language },
+        dispatch,
+        config
+      );
     }
 
     if (postHasChanged || action === 'publish') {

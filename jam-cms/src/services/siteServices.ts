@@ -45,6 +45,7 @@ export const updateSite = async (
     googleMapsApi,
     apiKey,
     editorOptions,
+    language,
   }: any,
   dispatch: any,
   config: any
@@ -61,6 +62,7 @@ export const updateSite = async (
       themeOptions: JSON.stringify(themeOptions),
       deployment: JSON.stringify(deployment),
       editorOptions: JSON.stringify(editorOptions),
+      language,
     },
     dispatch,
     config

@@ -6,7 +6,9 @@ import { RichText } from 'jam-cms';
 import Github from '../../icons/github.svg';
 
 const Footer = (props) => {
-  const { text, email, phone, address, github, footermenu } = props;
+  const { text, email, phone, address, github, footermenu, language } = props;
+
+  const menuItems = Array.isArray(footermenu) ? footermenu : footermenu?.[language?.slug];
 
   return (
     <div className="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -105,8 +107,8 @@ const Footer = (props) => {
           © Copyright {new Date().getFullYear()}. All rights reserved.
         </p>
         <ul className="flex flex-col mb-3 space-y-2 lg:mb-0 sm:space-y-0 sm:space-x-5 sm:flex-row">
-          {footermenu &&
-            footermenu.map((o, i) => {
+          {menuItems &&
+            menuItems.map((o, i) => {
               return (
                 <li key={i}>
                   <Link

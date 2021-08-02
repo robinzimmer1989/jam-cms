@@ -54,11 +54,11 @@ const Layout = (props) => {
         </style>
       </Helmet>
 
-      <Header {...pageContext?.themeOptions?.header} />
+      <Header language={pageContext?.language} {...pageContext?.themeOptions?.header} />
 
       {children}
 
-      <Footer {...pageContext?.themeOptions?.footer} />
+      <Footer language={pageContext?.language} {...pageContext?.themeOptions?.footer} />
     </>
   );
 };

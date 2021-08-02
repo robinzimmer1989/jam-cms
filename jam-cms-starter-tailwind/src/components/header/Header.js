@@ -3,7 +3,9 @@ import { Link } from 'gatsby';
 import { isLoggedIn, logout } from 'jam-cms';
 
 const Header = (props) => {
-  const { menu } = props;
+  const { menu, language } = props;
+
+  const menuItems = Array.isArray(menu) ? menu : menu?.[language?.slug];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -31,8 +33,8 @@ const Header = (props) => {
           </span>
         </a>
         <ul className="flex items-center hidden space-x-8 lg:flex">
-          {menu &&
-            menu.map((o, i) => {
+          {menuItems &&
+            menuItems.map((o, i) => {
               return (
                 <li key={i}>
                   <Link
