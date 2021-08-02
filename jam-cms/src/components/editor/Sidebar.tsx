@@ -709,13 +709,14 @@ const EditorSidebar = (props: any) => {
           disabled={!editable}
           overlay={
             <Menu>
-              {!!sites[siteID]?.languages?.postTypes?.find(
-                (s: string) => s === post.postTypeID
-              ) && (
-                <Menu.Item key="languages" onClick={() => setSidebar('languages')}>
-                  Languages
-                </Menu.Item>
-              )}
+              {sites[siteID]?.languages?.languages?.length > 1 &&
+                !!sites[siteID]?.languages?.postTypes?.find(
+                  (s: string) => s === post.postTypeID
+                ) && (
+                  <Menu.Item key="languages" onClick={() => setSidebar('languages')}>
+                    Languages
+                  </Menu.Item>
+                )}
               {post?.revisionsEnabled && (
                 <Menu.Item key="preview" onClick={() => setSidebar('preview')}>
                   Share Preview
