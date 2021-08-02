@@ -3,7 +3,7 @@ const defaults = {
     sidebar: {
       width: 320,
       position: 'left',
-      defaultOpen: false,
+      defaultOpen: 'true',
       style: 'inline',
     },
   },
