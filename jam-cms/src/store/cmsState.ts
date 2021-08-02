@@ -31,8 +31,8 @@ export const sitesReducer = (state: any, action: any) => {
         set(draft, `sites.${payload.id}`, payload);
 
         // Set active language if applicable
-        if (payload?.languages?.defaultLanguage && !draft.activeLanguage) {
-          draft.activeLanguage = payload.languages.defaultLanguage;
+        if (!!payload?.languages && !draft.activeLanguage) {
+          draft.activeLanguage = payload.languages.defaultLanguage || 'all';
         }
         break;
 
@@ -170,6 +170,11 @@ export const sitesReducer = (state: any, action: any) => {
         // Reset language if active language gets deleted
         if (draft.activeLanguage === payload.slug) {
           draft.activeLanguage = 'all';
+        }
+
+        // Reset default language in case user deletes it
+        if (draft.sites[payload.siteID].languages.defaultLanguage === payload.slug) {
+          draft.sites[payload.siteID].languages.defaultLanguage = false;
         }
 
         break;
