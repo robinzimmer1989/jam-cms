@@ -227,23 +227,26 @@ const PostType = (props: any) => {
         key="taxonomies"
         style={{ width: 160 }}
         onChange={(v, o: any) => setCategory(o?.taxonomy ? { taxonomy: o.taxonomy, term: v } : '')}
+        value={category?.term}
         allowClear
         placeholder="Select category"
       >
-        {taxonomies.map((o: any) => {
-          return (
-            <Select.OptGroup key={o.id} label={o.title}>
-              {o.terms &&
-                Object.values(o.terms).map((p: any) => {
-                  return (
-                    <Select.Option key={p.id} value={p.id} taxonomy={o.id}>
-                      {p.title}
-                    </Select.Option>
-                  );
-                })}
-            </Select.OptGroup>
-          );
-        })}
+        {taxonomies
+          .filter((o: any) => !!config?.fields?.taxonomies.find((p: any) => p.id === o.id))
+          .map((o: any) => {
+            return (
+              <Select.OptGroup key={o.id} label={o.title}>
+                {o.terms &&
+                  Object.values(o.terms).map((p: any) => {
+                    return (
+                      <Select.Option key={p.id} value={p.id} taxonomy={o.id}>
+                        {p.title}
+                      </Select.Option>
+                    );
+                  })}
+              </Select.OptGroup>
+            );
+          })}
       </Select>
     );
   }
