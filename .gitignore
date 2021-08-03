@@ -14,7 +14,7 @@ jam-cms/README.md
 gatsby-source-jam-cms/README.md
 gatsby-source-jam-cms/addPathToFields.js
 gatsby-source-jam-cms/createPages.js
-gatsby-source-jam-cms/createTaxonomies.js
+gatsby-source-jam-cms/createTerms.js
 gatsby-source-jam-cms/gatsby-browser.js
 gatsby-source-jam-cms/gatsby-node-es6.js
 gatsby-source-jam-cms/gatsby-node.js

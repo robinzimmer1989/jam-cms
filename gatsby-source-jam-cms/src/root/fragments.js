@@ -12,10 +12,9 @@ const fragments = {
       opengraphImage {
         sourceUrl
       }
-      fullHead
     }
   `,
-  language: `
+  languagePage: `
     language {
       slug
       name
@@ -23,6 +22,22 @@ const fragments = {
     }
     translations {
       title
+      uri
+      language {
+        slug
+        name
+        locale
+      }
+    }
+  `,
+  languageTerm: `
+    language {
+      slug
+      name
+      locale
+    }
+    translations {
+      name
       uri
       language {
         slug

@@ -4,7 +4,7 @@ import fs from 'fs';
 import syncFields from './syncFields';
 import getThemeSettings from './getThemeSettings';
 import createJamPages from './createPages';
-import createJamTaxonomies from './createTaxonomies';
+import createJamTerms from './createTerms';
 
 let hasError = false,
   fieldsPath = '',
@@ -76,7 +76,7 @@ export const createPages = async (gatsby, pluginOptions) => {
     directory,
   });
 
-  await createJamTaxonomies(gatsby, pluginOptions, {
+  await createJamTerms(gatsby, pluginOptions, {
     siteTitle,
     themeOptions,
     activePlugins,

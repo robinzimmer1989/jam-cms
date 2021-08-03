@@ -4,7 +4,7 @@ import path from 'path';
 import getTemplatePath from './getTemplatePath';
 import fragments from './fragments';
 
-const createJamTaxonomies = async (
+const createJamTerms = async (
   { actions, reporter, graphql },
   {},
   { siteTitle, themeOptions, activePlugins, languages, jamCMS, directory }
@@ -39,19 +39,18 @@ const createJamTaxonomies = async (
       const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
 
       const languageFragment =
-        activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)
-          ? fragments.language
+        activePlugins.includes('polylang') && languages?.taxonomies?.includes(graphqlSingleName)
+          ? fragments.languageTerm
           : '';
 
       const { data } = await graphql(/* GraphQL */ `
         query ALL_TERM_NODES {
-            ${gatsbyNodeListFieldName}{
+          ${gatsbyNodeListFieldName}{
             nodes {
               id
               databaseId
               slug
               uri
-              status
               ${seoFragment}
               ${languageFragment}
             }
@@ -61,17 +60,22 @@ const createJamTaxonomies = async (
 
       await Promise.all(
         data[gatsbyNodeListFieldName].nodes.map(async (node, i) => {
+          if (!node) {
+            return;
+          }
+
           const templatePath = getTemplatePath(directory, {
             prefix: `taxonomies/${graphqlSingleName}`,
             template: 'single',
           });
 
           if (templatePath) {
-            const { id, databaseId, uri } = node;
+            const { id, databaseId, slug, uri } = node;
 
             const context = {
               id,
               databaseId,
+              slug,
               siteTitle,
               themeOptions,
               jamCMS,
@@ -82,7 +86,10 @@ const createJamTaxonomies = async (
               context.seo = node.seo;
             }
 
-            if (activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)) {
+            if (
+              activePlugins.includes('polylang') &&
+              languages?.taxonomies?.includes(graphqlSingleName)
+            ) {
               context.language = node.language;
               context.translations = node.translations;
             }
@@ -113,4 +120,4 @@ const createJamTaxonomies = async (
   }
 };
 
-export default createJamTaxonomies;
+export default createJamTerms;
