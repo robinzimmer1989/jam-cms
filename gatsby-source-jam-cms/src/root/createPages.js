@@ -104,10 +104,6 @@ const createJamPages = async (
             archivePostsPerPage,
           } = node;
 
-          if (!template || !template.templateName) {
-            return;
-          }
-
           const context = {
             id,
             databaseId,
