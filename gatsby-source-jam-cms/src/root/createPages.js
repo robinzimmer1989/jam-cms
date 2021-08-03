@@ -41,18 +41,18 @@ const createJamPages = async (
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
       // Prepare fragments
+      const archiveFragment = nodesTypeName === 'Page' ? fragments.archive : '';
+
       const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
 
       const languageFragment =
         activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)
-          ? fragments.language
+          ? fragments.languagePage
           : '';
-
-      const archiveFragment = nodesTypeName === 'Page' ? fragments.archive : '';
 
       const { data } = await graphql(/* GraphQL */ `
         query ALL_CONTENT_NODES {
-            ${gatsbyNodeListFieldName}{
+          ${gatsbyNodeListFieldName}{
             nodes {
               id
               databaseId              
