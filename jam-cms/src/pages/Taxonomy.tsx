@@ -188,13 +188,13 @@ const Taxonomy = (props: any) => {
 
     actions.push(<Button size="small" children="Edit" onClick={() => handleOpenDialog(o)} />);
 
-    if (hasTemplate) {
-      actions.push(
-        <Link to={slug}>
-          <Button size="small" children="View" />
-        </Link>
-      );
-    }
+    // if (hasTemplate) {
+    //   actions.push(
+    //     <Link to={slug}>
+    //       <Button size="small" children="View" />
+    //     </Link>
+    //   );
+    // }
 
     if (taxonomySupportsLanguages && o.language) {
       actions.unshift(
