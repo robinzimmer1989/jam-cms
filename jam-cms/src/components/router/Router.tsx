@@ -2,9 +2,8 @@ import React from 'react';
 import { Redirect } from '@reach/router';
 
 // import external css files
-import 'minireset.css';
-import 'antd/dist/antd.min.css';
-import 'jodit/build/jodit.min.css';
+import '../../styles/antd.css';
+import '../../styles/jodit.min.css';
 
 // import components
 import AdminRouter from './AdminRouter';
