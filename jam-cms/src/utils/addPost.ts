@@ -7,26 +7,29 @@ import { postActions } from '../actions';
 import generateSlug from './generateSlug';
 
 export default async function addPost(
-  { site, postTypeID, title, parentID }: any,
+  { site, postTypeID, title, language }: any,
   dispatch: any,
   config: any
 ) {
   const result = await postActions.addPost(
-    { siteID: site.id, postTypeID, status: 'draft', title, parentID },
+    { siteID: site.id, postTypeID, status: 'draft', title, language },
     dispatch,
     config
   );
 
   if (result?.id) {
-    const postType = site?.postTypes?.[postTypeID];
-
-    // Add post to post type so we can then generate the slug and the route the newly created post
-    const nextPostType = produce(postType, (draft: any) => {
-      return set(draft, `posts.${result.id}`, result);
+    // Add post to site so we can then generate the slug and the route the newly created post
+    const nextSite = produce(site, (draft: any) => {
+      return set(draft, `postTypes.${result.postTypeID}.posts.${result.id}`, result);
     });
 
-    const slug = generateSlug(nextPostType, result.id, site?.frontPage);
+    const slug = generateSlug({
+      site: nextSite,
+      postTypeID,
+      postID: result.id,
+      leadingSlash: true,
+    });
 
-    navigate(`/${slug}`);
+    navigate(slug);
   }
 }

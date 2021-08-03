@@ -26,11 +26,11 @@ export const updatePost = async (args: any, dispatch: any, config: any) => {
   return result;
 };
 
-export const deletePost = async ({ siteID, id }: any, dispatch: any, config: any) => {
-  const result = await postServices.deletePost({ siteID, id }, dispatch, config);
+export const deletePost = async (args: any, dispatch: any, config: any) => {
+  const result = await postServices.deletePost(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `DELETE_POST`, payload: { ...result, siteID } });
+    dispatch({ type: `DELETE_POST`, payload: { ...args, id: result } });
   }
 
   return result;
@@ -40,7 +40,7 @@ export const emptyTrash = async (args: any, dispatch: any, config: any) => {
   const result = await postServices.emptyTrash(args, dispatch, config);
 
   if (result) {
-    dispatch({ type: `DELETE_POSTS`, payload: { posts: result, siteID: args.siteID } });
+    dispatch({ type: `DELETE_POSTS`, payload: { ...args, postIDs: result } });
   }
 
   return result;

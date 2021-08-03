@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, navigate } from '@reach/router';
+import { navigate } from '@reach/router';
+import produce from 'immer';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   Button,
   PageHeader,
@@ -13,17 +15,16 @@ import {
   Alert,
   Popconfirm,
 } from 'antd';
-import produce from 'immer';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import PostForm from '../components/PostForm';
+import PostForm from '../components/forms/PostForm';
 import ListItem from '../components/ListItem';
 import Tag from '../components/Tag';
-import { postActions, siteActions } from '../actions';
+import LanguageSelector from '../components/LanguageSelector';
+import { postActions, siteActions, languageActions } from '../actions';
 import { useStore } from '../store';
-import { createDataTree, generateSlug, addPost } from '../utils';
+import { createDataTree, generateSlug, addPost, translatePost } from '../utils';
 import { colors } from '../theme';
 import getRoute from '../routes';
 
@@ -33,7 +34,7 @@ const PostType = (props: any) => {
   const [
     {
       config,
-      cmsState: { sites, siteID },
+      cmsState: { sites, siteID, activeLanguage },
     },
     dispatch,
   ] = useStore();
@@ -41,17 +42,32 @@ const PostType = (props: any) => {
   const [filter, setFilter] = useState('all');
   const [category, setCategory] = useState(null as any);
   const [search, setSearch] = useState('');
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [loading, setLoading] = useState('');
+
+  // Check if post type supports languages
+  const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+    (s: string) => s === postTypeID
+  );
 
   const postType = sites[siteID]?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
+
+  // Check if there are untranslated posts
+  const postsWithoutLanguage = postTypeSupportsLanguages && posts.find((o: any) => !o.language);
+
+  // Filter by language
+  const postsPerLanguage = postTypeSupportsLanguages
+    ? posts.filter((o: any) => (activeLanguage === 'all' ? o : o.language === activeLanguage))
+    : posts;
 
   let visiblePosts: any = [];
 
   // Filter by category
   visiblePosts = !!category
-    ? posts.filter((o: any) => o?.taxonomies?.[category?.taxonomy]?.includes(category.term))
-    : posts;
+    ? postsPerLanguage.filter((o: any) =>
+        o?.taxonomies?.[category?.taxonomy]?.includes(category.term)
+      )
+    : postsPerLanguage;
 
   // Filter by post status
   visiblePosts =
@@ -70,7 +86,7 @@ const PostType = (props: any) => {
   // Create data tree
   visiblePosts = createDataTree(visiblePosts);
 
-  const taxonomies = Object.values(sites?.[siteID]?.taxonomies).filter((o) =>
+  const taxonomies = Object.values(sites[siteID]?.taxonomies).filter((o) =>
     (o as any)?.postTypes.includes(postTypeID)
   );
 
@@ -89,13 +105,33 @@ const PostType = (props: any) => {
   }, [postTypeID]);
 
   const handleSync = async () => {
-    setIsSyncing(true);
+    setLoading('sync');
     await siteActions.syncFields(
       { fields: config.fields, apiKey: sites[siteID]?.apiKey },
       dispatch,
       config
     );
-    setIsSyncing(false);
+    setLoading('');
+  };
+
+  const handleTranslateMass = async () => {
+    setLoading('translate');
+
+    const language =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    await languageActions.translateMass(
+      {
+        siteID,
+        postTypeID,
+        type: 'post',
+        ids: posts.filter((o: any) => !o.language).map((o: any) => o.id),
+        language,
+      },
+      dispatch,
+      config
+    );
+    setLoading('');
   };
 
   const handleDuplicatePost = async ({ postID }: any) => {
@@ -103,11 +139,11 @@ const PostType = (props: any) => {
   };
 
   const handleDeletePost = async ({ postID }: any) => {
-    await postActions.deletePost({ siteID, id: postID }, dispatch, config);
+    await postActions.deletePost({ siteID, postTypeID, id: postID }, dispatch, config);
   };
 
-  const handleAddPost = async ({ postTypeID, title, parentID }: any) => {
-    await addPost({ site: sites[siteID], postTypeID, title, parentID }, dispatch, config);
+  const handleAddPost = async (args: any) => {
+    await addPost({ site: sites[siteID], ...args }, dispatch, config);
   };
 
   const handleTrashPost = async ({ postID }: any) => {
@@ -122,10 +158,54 @@ const PostType = (props: any) => {
   };
 
   const handleEmptyTrash = async () => {
-    const result = await postActions.emptyTrash({ siteID, postTypeID }, dispatch, config);
+    setLoading('empty-trash');
+
+    const result = await postActions.emptyTrash(
+      { siteID, postTypeID, language: activeLanguage },
+      dispatch,
+      config
+    );
+
     if (result) {
       message.info({ content: 'Trashed emptied successfully' });
     }
+
+    setLoading('');
+  };
+
+  const handleTranslatePost = async ({ id, language }: any) => {
+    await translatePost({ sites, siteID, id, language }, dispatch, config);
+  };
+
+  const renderUntranslatedPostsWarning = () => {
+    const languageSlug =
+      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+
+    if (!languageSlug) {
+      return null;
+    }
+
+    const languageName = sites[siteID]?.languages?.languages.find(
+      (o: any) => o.slug === languageSlug
+    )?.name;
+
+    return (
+      <Alert
+        message="There are posts without a language"
+        type="info"
+        showIcon
+        action={
+          <Button
+            size="small"
+            type="ghost"
+            onClick={handleTranslateMass}
+            loading={loading === 'translate'}
+          >
+            Translate to {languageName}
+          </Button>
+        }
+      />
+    );
   };
 
   const filterItems = (
@@ -133,8 +213,8 @@ const PostType = (props: any) => {
       {['all', 'publish', 'draft', 'private', 'trash'].map((name) => {
         const count =
           name === 'all'
-            ? posts.filter((o) => (o as any).status !== 'trash').length
-            : posts.filter((o) => (o as any).status === name).length;
+            ? postsPerLanguage.filter((o) => (o as any).status !== 'trash').length
+            : postsPerLanguage.filter((o) => (o as any).status === name).length;
         return <Tabs.TabPane key={name} tab={`${name.toUpperCase()} (${count})`} />;
       })}
     </Tabs>
@@ -150,13 +230,13 @@ const PostType = (props: any) => {
         allowClear
         placeholder="Select category"
       >
-        {taxonomies.map((o) => {
+        {taxonomies.map((o: any) => {
           return (
-            <Select.OptGroup key={(o as any).id} label={(o as any).title}>
-              {(o as any).terms &&
-                (o as any).terms.map((p: any) => {
+            <Select.OptGroup key={o.id} label={o.title}>
+              {o.terms &&
+                Object.values(o.terms).map((p: any) => {
                   return (
-                    <Select.Option key={p.id} value={p.id} taxonomy={(o as any).id}>
+                    <Select.Option key={p.id} value={p.id} taxonomy={o.id}>
                       {p.title}
                     </Select.Option>
                   );
@@ -188,7 +268,13 @@ const PostType = (props: any) => {
         placement="bottomRight"
         disabled={visiblePosts.length === 0}
       >
-        <Button children={'Empty trash'} disabled={visiblePosts.length === 0} danger />
+        <Button
+          children={'Empty trash'}
+          disabled={visiblePosts.length === 0}
+          type="primary"
+          danger
+          loading={loading === 'empty-trash'}
+        />
       </Popconfirm>
     );
   } else {
@@ -214,12 +300,22 @@ const PostType = (props: any) => {
   }
 
   const renderPost = (o: any, level: any) => {
-    const slug = `/${generateSlug(postType, o.id, sites?.[siteID]?.frontPage)}`;
+    const slug = generateSlug({
+      site: sites[siteID],
+      postTypeID,
+      postID: o.id,
+      leadingSlash: true,
+    });
+
     const actions = [];
     const isLocked = !!o.locked;
 
     const menu = (
       <Menu>
+        <Menu.Item key="edit" onClick={() => navigate(slug)}>
+          Edit
+        </Menu.Item>
+
         <Menu.Item key="duplicate" onClick={() => handleDuplicatePost({ postID: o.id })}>
           Duplicate
         </Menu.Item>
@@ -245,15 +341,36 @@ const PostType = (props: any) => {
         )}
       </Menu>
     );
+
     actions.unshift(
-      <Dropdown.Button overlay={menu} trigger={['click']}>
-        <Link to={slug}>{isLocked ? 'View' : 'Edit'}</Link>
-      </Dropdown.Button>
+      <Dropdown.Button key="menu" overlay={menu} trigger={['click']}></Dropdown.Button>
     );
+
+    if (postTypeSupportsLanguages && o.language) {
+      actions.unshift(
+        <LanguageSelector
+          post={o}
+          onTranslate={handleTranslatePost}
+          onEdit={(language: string) =>
+            navigate(
+              generateSlug({
+                site: sites[siteID],
+                postTypeID: o.postTypeID,
+                postID: o.language === language ? o.id : o.translations[language],
+                leadingSlash: true,
+              })
+            )
+          }
+        />
+      );
+    }
 
     let badges = [];
 
-    if (sites?.[siteID]?.frontPage === o.id) {
+    if (
+      sites[siteID]?.frontPage === o.id ||
+      o?.translations?.[sites[siteID]?.languages?.defaultLanguage] === sites[siteID]?.frontPage
+    ) {
       badges.push(<Tag key="front" children={'front'} />);
     }
 
@@ -323,8 +440,6 @@ const PostType = (props: any) => {
 
   return (
     <CmsLayout pageTitle={config?.fields?.postTypes?.[postTypeID]?.title || postType?.title}>
-      <PageHeader title={filterItems} extra={extra} />
-
       {!postType && (
         <Alert
           message="Unknown post type"
@@ -332,12 +447,16 @@ const PostType = (props: any) => {
           type="info"
           showIcon
           action={
-            <Button size="small" type="ghost" onClick={handleSync} loading={isSyncing}>
+            <Button size="small" type="ghost" onClick={handleSync} loading={loading === 'sync'}>
               Sync to WordPress
             </Button>
           }
         />
       )}
+
+      {postsWithoutLanguage && renderUntranslatedPostsWarning()}
+
+      <PageHeader title={filterItems} extra={extra} />
 
       {visiblePosts && (
         <Space direction="vertical" size={8}>

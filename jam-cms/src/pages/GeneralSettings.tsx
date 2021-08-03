@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Space, message, Select as AntSelect } from 'antd';
+import { Button, Card, Space, message, Select as AntSelect, Tabs, Table } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
 import { RouteComponentProps } from '@reach/router';
@@ -7,6 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 // import app components
 import Input from '../components/Input';
 import Select from '../components/Select';
+import LanguageSettings from '../components/settings/LanguageSettings';
 import CmsLayout from '../components/CmsLayout';
 
 import { useStore } from '../store';
@@ -22,6 +23,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
     dispatch,
   ] = useStore();
 
+  const [tab, setTab] = useState('general');
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
@@ -63,9 +65,21 @@ const GeneralSettings = (props: RouteComponentProps) => {
     message.success('Updated successfully');
   };
 
+  const tabs: any = ['general', 'deployment', 'syncing', 'api', 'editor'];
+
+  if (!!site?.languages) {
+    tabs.push('languages');
+  }
+
   return (
     <CmsLayout pageTitle={`Settings`}>
-      <Space direction="vertical" size={40}>
+      <Tabs defaultActiveKey="all" onChange={(v) => setTab(v)}>
+        {tabs.map((name: string) => (
+          <Tabs.TabPane key={name} tab={name.toUpperCase()} />
+        ))}
+      </Tabs>
+
+      {tab === 'general' && (
         <Card title={`General`}>
           <Space direction="vertical" size={20}>
             <Input label="Title" value={site?.title} name="title" onChange={handleChange} />
@@ -85,7 +99,9 @@ const GeneralSettings = (props: RouteComponentProps) => {
             />
           </Space>
         </Card>
+      )}
 
+      {tab === 'deployment' && (
         <Card title={`Deployment`}>
           <Space direction="vertical" size={20}>
             <Input
@@ -124,20 +140,24 @@ const GeneralSettings = (props: RouteComponentProps) => {
             />
           </Space>
         </Card>
+      )}
 
-        <Card title={'Sync'}>
+      {tab === 'syncing' && (
+        <Card title={'Syncing'}>
           <Space direction="vertical" size={20}>
             <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
 
             <Button
-              loading={loading === 'apikey'}
-              onClick={() => handleUpdate({ apiKey: true }, 'apikey')}
+              loading={loading === 'syncing'}
+              onClick={() => handleUpdate({ apiKey: true }, 'syncing')}
               children={`Regenerate`}
               type="primary"
             />
           </Space>
         </Card>
+      )}
 
+      {tab === 'api' && (
         <Card title={`API keys`}>
           <Space direction="vertical" size={20}>
             <Input
@@ -148,15 +168,17 @@ const GeneralSettings = (props: RouteComponentProps) => {
             />
 
             <Button
-              loading={loading === 'general'}
-              onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'general')}
+              loading={loading === 'api'}
+              onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'api')}
               children={`Update`}
               type="primary"
             />
           </Space>
         </Card>
+      )}
 
-        <Card title={'Editor Sidebar'}>
+      {tab === 'editor' && (
+        <Card title={'Sidebar'}>
           <Space direction="vertical" size={20}>
             <Select
               label="Position"
@@ -187,13 +209,13 @@ const GeneralSettings = (props: RouteComponentProps) => {
             </Select>
 
             <Button
-              loading={loading === 'editorOptions'}
+              loading={loading === 'editor'}
               onClick={() =>
                 handleUpdate(
                   {
                     editorOptions: site?.editorOptions,
                   },
-                  'editorOptions'
+                  'editor'
                 )
               }
               children={`Update`}
@@ -201,7 +223,9 @@ const GeneralSettings = (props: RouteComponentProps) => {
             />
           </Space>
         </Card>
-      </Space>
+      )}
+
+      {tab === 'languages' && <LanguageSettings />}
     </CmsLayout>
   );
 };

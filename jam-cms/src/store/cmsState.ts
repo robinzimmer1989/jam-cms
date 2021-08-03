@@ -1,9 +1,10 @@
 import produce from 'immer';
-import { unionBy, set } from 'lodash';
+import { set } from 'lodash';
 
 const DEFAULT_STATE = {
   siteID: null,
   sites: {},
+  activeLanguage: null,
   deploymentImage: '',
 };
 
@@ -28,6 +29,11 @@ export const sitesReducer = (state: any, action: any) => {
       case `ADD_SITE`:
         draft.siteID = payload.id;
         set(draft, `sites.${payload.id}`, payload);
+
+        // Set active language if applicable
+        if (!!payload?.languages && !draft.activeLanguage) {
+          draft.activeLanguage = payload.languages.defaultLanguage || 'all';
+        }
         break;
 
       case `ADD_SITE_SETTING`:
@@ -50,24 +56,42 @@ export const sitesReducer = (state: any, action: any) => {
        * Terms
        ******************************/
       case `ADD_TERM`:
-        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms.push(payload);
+        set(
+          draft,
+          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${payload.id}`,
+          payload
+        );
         break;
 
       case `UPDATE_TERM`:
-        const termIndex = draft.sites[payload.siteID].taxonomies[
-          payload.taxonomyID
-        ].terms.findIndex((o: any) => o.id === payload.id);
         set(
           draft,
-          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${termIndex}`,
+          `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${payload.id}`,
           payload
         );
         break;
 
       case `DELETE_TERM`:
-        draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms = draft.sites[
-          payload.siteID
-        ].taxonomies[payload.taxonomyID].terms.filter((o: any) => o.id !== parseInt(payload.id));
+        // Payload: siteID, taxonomyID, id
+
+        // Get the term that needs to be deleted
+        const termToDelete =
+          draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[payload.id];
+
+        // In case the term has translations, we wanna loop trough them and remove the reference to the term that has been deleted
+        if (termToDelete.translations) {
+          Object.keys(termToDelete.translations).map((language: string) => {
+            // This is the term id of the translated term
+            const termID = termToDelete.translations[language];
+
+            delete draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[termID]
+              .translations[termToDelete.language];
+          });
+        }
+
+        // Finally we can remove the actual term
+        delete draft.sites[payload.siteID].taxonomies[payload.taxonomyID].terms[payload.id];
+
         break;
 
       /******************************
@@ -82,13 +106,105 @@ export const sitesReducer = (state: any, action: any) => {
         break;
 
       case `DELETE_POST`:
+        // Payload: siteID, postTypeID, id
+
+        // Get the post that needs to be deleted
+        const postToDelete =
+          draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id];
+
+        // In case the post has translations, we wanna loop trough them and remove the reference to the post that has been deleted
+        if (postToDelete.translations) {
+          Object.keys(postToDelete.translations).map((language: string) => {
+            // This is the post id of the translated post
+            const postID = postToDelete.translations[language];
+
+            delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[postID]
+              .translations[postToDelete.language];
+          });
+        }
+
+        // Finally we can remove the actual post
         delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[payload.id];
+
         break;
 
       case `DELETE_POSTS`:
-        payload.posts.map((o: any) => {
-          delete draft.sites[payload.siteID].postTypes[o.postTypeID].posts[o.id];
+        // Payload: siteID, postTypeID, postIDs
+
+        payload.postIDs.map((id: number) => {
+          // Get the post that needs to be deleted
+          const postToDelete = draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[id];
+
+          // In case the post has translations, we wanna loop trough them and remove the reference to the post that has been deleted
+          if (postToDelete.translations) {
+            Object.keys(postToDelete.translations).map((language: string) => {
+              // This is the post id of the translated post
+              const postID = postToDelete.translations[language];
+
+              delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[postID]
+                .translations[postToDelete.language];
+            });
+          }
+
+          // Finally we can remove the actual post
+          delete draft.sites[payload.siteID].postTypes[payload.postTypeID].posts[id];
         });
+        break;
+
+      /******************************
+       * Language
+       ******************************/
+      case `SET_ACTIVE_LANGUAGE`:
+        draft.activeLanguage = payload;
+        break;
+
+      case `UPDATE_LANGUAGES`:
+        set(draft, `sites.${payload.siteID}.languages`, payload.languages);
+        break;
+
+      case `DELETE_LANGUAGE`:
+        draft.sites[payload.siteID].languages.languages = draft.sites?.[
+          payload?.siteID
+        ]?.languages?.languages?.filter((o: any) => o.id !== payload?.id);
+
+        // Reset language if active language gets deleted
+        if (draft.activeLanguage === payload.slug) {
+          draft.activeLanguage = 'all';
+        }
+
+        // Reset default language in case user deletes it
+        if (draft.sites[payload.siteID].languages.defaultLanguage === payload.slug) {
+          draft.sites[payload.siteID].languages.defaultLanguage = false;
+        }
+
+        break;
+
+      case `UPDATE_LANGUAGE_SETTINGS`:
+        draft.sites[payload.siteID].languages = {
+          ...draft.sites[payload.siteID].languages,
+          ...payload.settings,
+        };
+        break;
+
+      case `SET_LANGUAGE_IN_MASS`:
+        // Payload: siteID, postTypeID / taxonomyID, type, ids, language
+
+        payload.ids.map((id: number) => {
+          if (payload.type === 'post') {
+            set(
+              draft,
+              `sites.${payload.siteID}.postTypes.${payload.postTypeID}.posts.${id}.language`,
+              payload.language
+            );
+          } else {
+            set(
+              draft,
+              `sites.${payload.siteID}.taxonomies.${payload.taxonomyID}.terms.${id}.language`,
+              payload.language
+            );
+          }
+        });
+
         break;
 
       /******************************
@@ -97,6 +213,8 @@ export const sitesReducer = (state: any, action: any) => {
       case `CLEAR_POST_STATE`:
         draft.siteID = null;
         draft.sites = {};
+        draft.activeLanguage = null;
+        draft.deploymentImage = '';
         break;
 
       default:

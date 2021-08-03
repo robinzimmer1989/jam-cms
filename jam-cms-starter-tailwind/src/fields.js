@@ -37,6 +37,11 @@ const fields = {
       title: 'Category',
       postTypes: ['post'],
     },
+    {
+      id: 'product_cat',
+      title: 'Product Category',
+      postTypes: ['product'],
+    },
   ],
   themeOptions: [
     header,

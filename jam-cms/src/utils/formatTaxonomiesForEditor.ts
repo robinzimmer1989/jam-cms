@@ -14,25 +14,27 @@ export default function formatTaxonomiesForEditor(post: any, site: any) {
 
     const { graphqlPluralName } = taxonomy;
 
-    site.taxonomies[k].terms.map(({ id, title, uri, description, count, parentID }: any) => {
-      if (post.taxonomies[k].includes(id)) {
-        const taxonomy = {
-          id,
-          databaseId: id,
-          name: title,
-          uri,
-          description,
-          count,
-          parentId: parentID,
-        };
+    Object.values(site.taxonomies[k].terms).map(
+      ({ id, title, uri, description, count, parentID }: any) => {
+        if (post.taxonomies[k].includes(id)) {
+          const taxonomy = {
+            id,
+            databaseId: id,
+            name: title,
+            uri,
+            description,
+            count,
+            parentId: parentID,
+          };
 
-        if (taxonomies[graphqlPluralName]) {
-          taxonomies[graphqlPluralName].nodes.push(taxonomy);
-        } else {
-          taxonomies[graphqlPluralName] = { nodes: [taxonomy] };
+          if (taxonomies[graphqlPluralName]) {
+            taxonomies[graphqlPluralName].nodes.push(taxonomy);
+          } else {
+            taxonomies[graphqlPluralName] = { nodes: [taxonomy] };
+          }
         }
       }
-    });
+    );
   });
 
   return taxonomies;

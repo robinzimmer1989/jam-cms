@@ -17,7 +17,7 @@ const Menu = (props: any) => {
 
   const [
     {
-      editorState: { siteHasChanged },
+      editorState: { site, post, siteHasChanged },
     },
   ] = useStore();
 
@@ -25,16 +25,33 @@ const Menu = (props: any) => {
   const [items, setItems] = useState([]);
   const [modal, setModal] = useState(false);
 
+  const translatedMenu =
+    !!site?.languages && post?.language && Array.isArray(value[post?.language]);
+
+  useEffect(() => {
+    let menuItems: any = [];
+
+    if (translatedMenu) {
+      menuItems = value[post?.language];
+    } else {
+      menuItems = Array.isArray(value) ? value : [];
+    }
+
+    setItems(deepCopyTree(menuItems));
+  }, [value]);
+
   // When a post is saved while a menu item is open, we need to manually reset the editing array to allow dragging
   useEffect(() => {
     !siteHasChanged && setEditing([]);
   }, [siteHasChanged]);
 
-  useEffect(() => {
-    if (value && Array.isArray(value)) {
-      setItems(deepCopyTree(value));
+  const handleChange = (newValue: any) => {
+    if (translatedMenu) {
+      onChange({ ...value, [post?.language]: newValue });
+    } else {
+      onChange(newValue);
     }
-  }, [value]);
+  };
 
   // Function provided by Ant Design
   const onDrop = (info: any) => {
@@ -122,7 +139,7 @@ const Menu = (props: any) => {
       }
     }
 
-    onChange(data);
+    handleChange(data);
   };
 
   const handleUpdate = (e: any, name: string, key: string) => {
@@ -140,12 +157,12 @@ const Menu = (props: any) => {
       key,
       value: e.target.value,
     });
-    onChange(newItems);
+    handleChange(newItems);
   };
 
   const handleRemove = (key: string) => {
     const newItems = removeFromTree({ children: [...items] }, key);
-    onChange(newItems.children);
+    handleChange(newItems.children);
 
     // Remove key from array
     const nextValue = produce(editing, (draft: any) => {
@@ -162,7 +179,7 @@ const Menu = (props: any) => {
       draft.push(item);
       return draft;
     });
-    onChange(nextValue);
+    handleChange(nextValue);
   };
 
   const handleToggleCollapse = (key: string | number) => {

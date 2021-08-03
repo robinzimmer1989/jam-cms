@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
-import { Space, Button } from 'antd';
+import { Space, Button, Select as AntSelect } from 'antd';
 
 // import app components
-import Input from './Input';
-import PostTreeSelect from './PostTreeSelect';
-import { useStore } from '../store';
+import Input from '../Input';
+import Select from '../Select';
+import { useStore } from '../../store';
 
 const PostForm = (props: any) => {
   const { postTypeID, onSubmit } = props;
 
   const [
     {
-      cmsState: { sites, siteID },
+      cmsState: { sites, siteID, activeLanguage },
     },
     dispatch,
   ] = useStore();
 
+  const defaultLanguage =
+    activeLanguage === 'all' ? sites[siteID]?.languages?.defaultLanguage : activeLanguage;
+
   const [title, setTitle] = useState('');
-  const [parentID, setParentID] = useState(0);
+  const [language, setLanguage] = useState(defaultLanguage);
   const [loading, setLoading] = useState(false);
-  const posts = sites[siteID]?.postTypes?.[postTypeID]?.posts;
+
+  // Check if post type supports languages
+  const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+    (s: string) => s === postTypeID
+  );
 
   const handleSubmit = async () => {
     if (!title) {
@@ -28,10 +35,9 @@ const PostForm = (props: any) => {
 
     setLoading(true);
 
-    await onSubmit({ postTypeID, title, parentID });
+    await onSubmit({ postTypeID, title, language });
 
     setTitle('');
-    setParentID(0);
     setLoading(false);
 
     dispatch({ type: 'CLOSE_DIALOG' });
@@ -48,14 +54,12 @@ const PostForm = (props: any) => {
         onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
       />
 
-      {postTypeID === 'page' && (
-        <PostTreeSelect
-          id="post-parent"
-          label="Parent"
-          items={Object.values(posts)}
-          value={parentID}
-          onChange={(value: any) => setParentID(value)}
-        />
+      {postTypeSupportsLanguages && sites[siteID]?.languages?.languages?.length > 0 && (
+        <Select label="Language" value={language} onChange={(value: string) => setLanguage(value)}>
+          {sites[siteID]?.languages?.languages?.map((o: any) => (
+            <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
+          ))}
+        </Select>
       )}
 
       <Button

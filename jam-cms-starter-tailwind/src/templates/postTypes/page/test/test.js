@@ -121,60 +121,60 @@ export const Query = graphql`
       id
       databaseId
       title
-      template {
-        ... on WpTemplate_Test {
-          templateName
-          acf {
-            checkbox
-            color
-            date
-            fieldGroupName
-            file {
-              slug
-            }
-            flexible {
-              ... on WpTemplate_Test_Acf_Flexible_Layout1 {
-                text
-              }
-              ... on WpTemplate_Test_Acf_Flexible_Layout2 {
-                text
-                image {
-                  slug
-                }
-              }
-            }
-            gallery {
-              slug
-            }
-            group {
-              text
-            }
-            image {
-              slug
-            }
-            link {
-              target
-              title
-              url
-            }
-            map {
-              streetAddress
-              latitude
-              longitude
-            }
-            number
-            radio
-            repeater {
-              image {
-                slug
-              }
-            }
-            select
-            text
-            wysiwyg
-          }
-        }
-      }
+      # template {
+      #   ... on WpTemplate_Test {
+      #     templateName
+      #     acf {
+      #       checkbox
+      #       color
+      #       date
+      #       fieldGroupName
+      #       file {
+      #         slug
+      #       }
+      #       flexible {
+      #         ... on WpTemplate_Test_Acf_Flexible_Layout1 {
+      #           text
+      #         }
+      #         ... on WpTemplate_Test_Acf_Flexible_Layout2 {
+      #           text
+      #           image {
+      #             slug
+      #           }
+      #         }
+      #       }
+      #       gallery {
+      #         slug
+      #       }
+      #       group {
+      #         text
+      #       }
+      #       image {
+      #         slug
+      #       }
+      #       link {
+      #         target
+      #         title
+      #         url
+      #       }
+      #       map {
+      #         streetAddress
+      #         latitude
+      #         longitude
+      #       }
+      #       number
+      #       radio
+      #       repeater {
+      #         image {
+      #           slug
+      #         }
+      #       }
+      #       select
+      #       text
+      #       wysiwyg
+      #     }
+      #   }
+      # }
     }
   }
 `;

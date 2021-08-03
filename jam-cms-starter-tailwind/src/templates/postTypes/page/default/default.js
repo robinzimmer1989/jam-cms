@@ -21,13 +21,12 @@ const Template = (props) => {
     data: {
       wpPage: {
         template: { acf },
-        seo,
       },
     },
   } = props;
 
   return (
-    <Layout {...props} seo={seo}>
+    <Layout {...props}>
       {acf?.flex &&
         acf.flex.map(({ id: fieldId, fieldGroupName, ...rest }, index) => {
           const id = fieldId || fieldGroupName?.split('_').pop().toLowerCase();
@@ -45,16 +44,6 @@ export const Query = graphql`
       id
       databaseId
       title
-      template {
-        templateName
-      }
-      seo {
-        title
-        metaDesc
-        opengraphImage {
-          sourceUrl
-        }
-      }
       template {
         ... on WpDefaultTemplate {
           templateName

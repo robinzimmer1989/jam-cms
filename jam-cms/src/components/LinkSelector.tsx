@@ -53,12 +53,14 @@ const LinkSelector = (props: any) => {
     setPost(id);
     if (id) {
       const post = allPosts.find((o: any) => o.id === id);
-      const postType = Object.values(sites[siteID]?.postTypes).find(
-        (o) => (o as any).id === post.postTypeID
-      );
       setLink({
         title: link?.title || post?.title,
-        url: generateSlug(postType, post.id, sites[siteID]?.frontPage, true),
+        url: generateSlug({
+          site: sites[siteID],
+          postTypeID: post.postTypeID,
+          postID: post.id,
+          leadingSlash: true,
+        }),
         target: false,
       });
     }
@@ -108,4 +110,5 @@ const LinkSelector = (props: any) => {
     </>
   );
 };
+
 export default LinkSelector;

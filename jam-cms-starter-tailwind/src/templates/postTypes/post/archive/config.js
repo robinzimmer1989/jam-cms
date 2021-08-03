@@ -2,7 +2,7 @@ const config = {
   id: 'archive',
   label: 'Posts',
   query: `{
-    allWpPost: posts {
+    allWpPost: posts (where: {language: $language}) {
       nodes {
         id
         title

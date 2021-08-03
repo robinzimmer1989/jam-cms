@@ -26,6 +26,7 @@ import Select from '../Select';
 import Caption from '../Caption';
 import PostTreeSelect from '../PostTreeSelect';
 import MediaLibrary from '../MediaLibrary';
+import LanguageList from '../LanguageList';
 import FilePicker from '../editorFields/FilePicker';
 import { postActions, siteActions, previewActions } from '../../actions';
 import { useStore } from '../../store';
@@ -155,16 +156,29 @@ const EditorSidebar = (props: any) => {
     setPreviewLink('');
 
     let postResult, siteResult;
-    if (siteHasChanged) {
-      siteResult = await siteActions.updateSite({ id, themeOptions, frontPage }, dispatch, config);
-    }
 
-    if (postHasChanged || action === 'publish') {
-      postResult = await postActions.updatePost(
-        { siteID: id, ...post, status, templateObject },
+    if (siteHasChanged) {
+      siteResult = await siteActions.updateSite(
+        { id, themeOptions, frontPage, language: post.language },
         dispatch,
         config
       );
+    }
+
+    if (postHasChanged || action === 'publish') {
+      const args = {
+        siteID: id,
+        ...post,
+        status,
+        templateObject,
+      };
+
+      // Check if post type supports languages
+      if (!!sites[siteID]?.languages?.postTypes?.find((s: string) => s === post?.postTypeID)) {
+        args.language = post?.language || sites[siteID]?.languages?.defaultLanguage;
+      }
+
+      postResult = await postActions.updatePost(args, dispatch, config);
 
       // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
       if (!siteHasChanged) {
@@ -185,15 +199,22 @@ const EditorSidebar = (props: any) => {
       message.success('Updated successfully');
 
       // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
-
       const newFrontPage = siteResult ? siteResult.frontPage : sites[siteID].frontPage;
       const newPost = postResult ? { ...postResult } : { ...post };
 
-      const nextPostType = produce(sites[siteID].postTypes[post.postTypeID], (draft: any) => {
-        return set(draft, `posts.${newPost.id}`, newPost);
+      const nextSite = produce(sites[siteID], (draft: any) => {
+        set(draft, `postTypes.${newPost.postTypeID}.posts.${newPost.id}`, newPost);
+        set(draft, `frontPage`, newFrontPage);
+        return draft;
       });
 
-      const slug = generateSlug(nextPostType, newPost.id, newFrontPage, true);
+      const slug = generateSlug({
+        site: nextSite,
+        postTypeID: newPost.postTypeID,
+        postID: newPost.id,
+        leadingSlash: true,
+      });
+
       navigate(slug);
     }
   };
@@ -279,6 +300,33 @@ const EditorSidebar = (props: any) => {
       );
     }
 
+    let isFrontPage = false;
+
+    if (
+      post?.id === site?.frontPage ||
+      post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage
+    ) {
+      isFrontPage = true;
+    }
+
+    const frontPageSlug =
+      isFrontPage && post?.language && post?.language !== site?.languages?.defaultLanguage
+        ? `/${post.language}`
+        : '/';
+
+    // We only wanna display the front page checkbox for pages, and if polylang is activated, then only if the page is assigned to the default language.
+    let renderFrontPageSetting = false;
+
+    if (post?.postTypeID === 'page') {
+      if (isFrontPage) {
+        if (frontPageSlug === '/') {
+          renderFrontPageSetting = true;
+        }
+      } else {
+        renderFrontPageSetting = true;
+      }
+    }
+
     return (
       <Content>
         <Space direction="vertical" size={20}>
@@ -289,10 +337,10 @@ const EditorSidebar = (props: any) => {
           />
 
           <Input
-            value={post?.id === site?.frontPage ? '/' : post?.slug || ''}
+            value={isFrontPage ? frontPageSlug : post?.slug}
             onChange={(e: any) => handleChangePost('slug', e.target.value)}
             label={'Slug'}
-            disabled={post?.id === site?.frontPage}
+            disabled={isFrontPage}
           />
 
           {(postTypeTemplatesArray.length > 1 || archiveTemplatesArray.length > 0) && (
@@ -354,11 +402,12 @@ const EditorSidebar = (props: any) => {
             )}
           </Select>
 
-          {post?.postTypeID === 'page' && post.id !== site?.frontPage && (
+          {post?.postTypeID === 'page' && !isFrontPage && (
             <PostTreeSelect
               label="Parent"
               items={Object.values(postType.posts).filter((o) => (o as any).id !== post.id)}
               value={post?.parentID}
+              language={post?.language}
               onChange={(value: any) => handleChangePost('parentID', value)}
             />
           )}
@@ -380,7 +429,7 @@ const EditorSidebar = (props: any) => {
                       defaultValue={post.taxonomies[k]}
                     >
                       {o.terms &&
-                        o.terms.map((p: any) => {
+                        Object.values(o.terms).map((p: any) => {
                           return <AntSelect.Option key={p.id} value={p.id} children={p.title} />;
                         })}
                     </Select>
@@ -414,10 +463,10 @@ const EditorSidebar = (props: any) => {
             </Space>
           )}
 
-          {post?.postTypeID === 'page' && (
+          {renderFrontPageSetting && (
             <Checkbox
               value={post?.id}
-              checked={post?.id === site?.frontPage}
+              checked={isFrontPage}
               onChange={(e) =>
                 handleChangeSite('frontPage', e.target.checked ? e.target.value : '')
               }
@@ -524,6 +573,16 @@ const EditorSidebar = (props: any) => {
     );
   };
 
+  const renderLanguages = () => {
+    return (
+      <Content>
+        <Space direction="vertical">
+          <LanguageList onChange={(value: string) => handleChangePost('language', value)} />
+        </Space>
+      </Content>
+    );
+  };
+
   const renderPreview = () => {
     return (
       <Content>
@@ -576,7 +635,7 @@ const EditorSidebar = (props: any) => {
   };
 
   return (
-    <Container id="jam-cms-sidebar" sidebar={sites?.[siteID]?.editorOptions?.sidebar} {...rest}>
+    <Container id="jam-cms-sidebar" sidebar={sites[siteID]?.editorOptions?.sidebar} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>
@@ -650,6 +709,14 @@ const EditorSidebar = (props: any) => {
           disabled={!editable}
           overlay={
             <Menu>
+              {sites[siteID]?.languages?.languages?.length > 1 &&
+                !!sites[siteID]?.languages?.postTypes?.find(
+                  (s: string) => s === post.postTypeID
+                ) && (
+                  <Menu.Item key="languages" onClick={() => setSidebar('languages')}>
+                    Languages
+                  </Menu.Item>
+                )}
               {post?.revisionsEnabled && (
                 <Menu.Item key="preview" onClick={() => setSidebar('preview')}>
                   Share Preview
@@ -683,6 +750,7 @@ const EditorSidebar = (props: any) => {
         {sidebar === 'revisions' && post?.revisionsEnabled && renderRevisions()}
         {sidebar === 'theme' && renderThemeSettings()}
         {sidebar === 'preview' && renderPreview()}
+        {sidebar === 'languages' && renderLanguages()}
       </TabContainer>
     </Container>
   );

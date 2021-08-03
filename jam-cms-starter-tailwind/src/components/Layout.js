@@ -4,17 +4,14 @@ import Helmet from 'react-helmet';
 // import app components
 import Header from './header/Header';
 import Footer from './footer/Footer';
-import Seo from './Seo';
 
 const Layout = (props) => {
-  const { pageContext, seo, children } = props;
+  const { pageContext, children } = props;
 
   const colors = pageContext?.themeOptions?.colors;
 
   return (
     <>
-      <Seo seo={seo} />
-
       <Helmet>
         <style>
           {`
@@ -57,11 +54,11 @@ const Layout = (props) => {
         </style>
       </Helmet>
 
-      <Header {...pageContext?.themeOptions?.header} />
+      <Header language={pageContext?.language} {...pageContext?.themeOptions?.header} />
 
       {children}
 
-      <Footer {...pageContext?.themeOptions?.footer} />
+      <Footer language={pageContext?.language} {...pageContext?.themeOptions?.footer} />
     </>
   );
 };

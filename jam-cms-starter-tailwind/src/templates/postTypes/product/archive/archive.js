@@ -7,7 +7,6 @@ import Layout from '../../../../components/Layout';
 const Template = (props) => {
   const {
     data: {
-      wpPage: { seo },
       allWpProduct: { nodes: products },
     },
     pageContext: {
@@ -59,7 +58,7 @@ const Template = (props) => {
   };
 
   return (
-    <Layout {...props} seo={seo}>
+    <Layout {...props}>
       <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div className="grid max-w-sm gap-5 mb-8 lg:grid-cols-3 sm:mx-auto lg:max-w-full">
           {products &&
@@ -102,13 +101,6 @@ export const Query = graphql`
     wpPage(id: { eq: $id }) {
       id
       title
-      seo {
-        title
-        metaDesc
-        opengraphImage {
-          sourceUrl
-        }
-      }
     }
     allWpProduct {
       nodes {

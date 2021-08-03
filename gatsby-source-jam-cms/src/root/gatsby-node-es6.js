@@ -52,7 +52,8 @@ export const createPages = async (gatsby, pluginOptions) => {
     return;
   }
 
-  const { siteTitle, themeOptions, protectedPosts } = await getThemeSettings(gatsby, pluginOptions);
+  const { siteTitle, themeOptions, protectedPosts, activePlugins, languages } =
+    await getThemeSettings(gatsby, pluginOptions);
 
   // Prepare jamCMS object with default values for page context
   const jamCMS = {
@@ -69,6 +70,8 @@ export const createPages = async (gatsby, pluginOptions) => {
     siteTitle,
     themeOptions,
     protectedPosts,
+    activePlugins,
+    languages,
     jamCMS,
     directory,
   });
@@ -76,6 +79,8 @@ export const createPages = async (gatsby, pluginOptions) => {
   await createJamTaxonomies(gatsby, pluginOptions, {
     siteTitle,
     themeOptions,
+    activePlugins,
+    languages,
     jamCMS,
     directory,
   });

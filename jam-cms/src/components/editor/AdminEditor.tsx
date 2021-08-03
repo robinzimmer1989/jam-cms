@@ -39,7 +39,7 @@ const AdminEditor = (props: any) => {
 
   // Determine if sidebar should be open on default when visiting the editor
   const [sidebarActive, setSidebarActive] = useState(
-    !!sites?.[siteID]?.editorOptions?.sidebar?.defaultOpen
+    !!sites[siteID]?.editorOptions?.sidebar?.defaultOpen
   );
   const template = getTemplateByPost(post, config?.fields);
   const Component = template?.component;
@@ -173,7 +173,7 @@ const AdminEditor = (props: any) => {
     setSidebarActive(!sidebarActive);
   };
 
-  const sidebarOptions = { ...sites?.[siteID]?.editorOptions?.sidebar, active: sidebarActive };
+  const sidebarOptions = { ...sites[siteID]?.editorOptions?.sidebar, active: sidebarActive };
 
   if (!postID) {
     return defaultComponent;
@@ -192,7 +192,7 @@ const AdminEditor = (props: any) => {
       {loaded && (
         <>
           {post?.locked ? (
-            <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
+            <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
               <Button
                 icon={<LockOutlined />}
                 onClick={handleOpenTakeOverDialog}
@@ -209,7 +209,7 @@ const AdminEditor = (props: any) => {
                   onToggleSidebar={handleToggleSidebar}
                 />
               ) : (
-                <FloatingButton sidebarPosition={sites?.[siteID]?.editorOptions?.sidebar?.position}>
+                <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
                   <Button
                     icon={<EditOutlined />}
                     onClick={handleToggleSidebar}

@@ -1,11 +1,11 @@
 import { db } from '.';
 
 export const addPost = async (
-  { siteID, postTypeID, title, parentID }: any,
+  { siteID, postTypeID, title, language }: any,
   dispatch: any,
   config: any
 ) => {
-  let result = await db('createPost', { siteID, title, postTypeID, parentID }, dispatch, config);
+  let result = await db('createPost', { siteID, title, postTypeID, language }, dispatch, config);
   return result;
 };
 
@@ -24,6 +24,7 @@ export const updatePost = async (
     postTypeID,
     title,
     slug,
+    language,
     status,
     content,
     seo,
@@ -47,6 +48,7 @@ export const updatePost = async (
       postTypeID,
       title,
       slug,
+      language,
       status,
       content: JSON.stringify(content),
       seo: JSON.stringify(seo),
@@ -68,8 +70,12 @@ export const deletePost = async ({ siteID, id }: any, dispatch: any, config: any
   return result;
 };
 
-export const emptyTrash = async ({ siteID, postTypeID }: any, dispatch: any, config: any) => {
-  let result = await db('emptyTrash', { siteID, postTypeID }, dispatch, config);
+export const emptyTrash = async (
+  { siteID, postTypeID, language }: any,
+  dispatch: any,
+  config: any
+) => {
+  let result = await db('emptyTrash', { siteID, postTypeID, language }, dispatch, config);
   return result;
 };
 

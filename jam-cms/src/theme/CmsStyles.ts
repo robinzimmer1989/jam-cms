@@ -62,6 +62,7 @@ const styles = css`
 
   .ant-list-item {
     padding: 10px 0;
+    border-color: #d9d9d9;
   }
 
   .ant-list-item-meta-avatar {

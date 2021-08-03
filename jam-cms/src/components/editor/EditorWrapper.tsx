@@ -92,12 +92,12 @@ const EditorWrapper = (props: any) => {
       id="jam-cms"
       loaded={loaded}
       locked={locked}
-      sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
+      sidebar={{ active: sidebarActive, ...sites[siteID]?.editorOptions?.sidebar }}
     >
       <Inner
         loaded={loaded}
         locked={locked}
-        sidebar={{ active: sidebarActive, ...sites?.[siteID]?.editorOptions?.sidebar }}
+        sidebar={{ active: sidebarActive, ...sites[siteID]?.editorOptions?.sidebar }}
         windowWidth={windowWidth}
       >
         {children}

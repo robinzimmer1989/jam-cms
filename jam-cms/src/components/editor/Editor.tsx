@@ -6,8 +6,14 @@ import { Empty } from 'antd';
 
 // import app components
 import Loader from '../Loader';
+import Seo from '../Seo';
 import useForceUpdate from '../../hooks/useForceUpdate';
-import { formatFieldsToProps, formatTaxonomiesForEditor, getTemplateByPost } from '../../utils';
+import {
+  formatFieldsToProps,
+  formatTaxonomiesForEditor,
+  getTemplateByPost,
+  generateSlug,
+} from '../../utils';
 import { useStore } from '../../store';
 
 // We need to store the template ID in a global variable to detect template changes.
@@ -20,6 +26,7 @@ const Editor = (props: any) => {
     pageContext: { themeOptions, siteTitle },
     defaultComponent,
     sidebarOptions,
+    ...rest
   } = props;
 
   const [
@@ -44,7 +51,9 @@ const Editor = (props: any) => {
   const postsPerPage = post?.archivePostsPerPage;
 
   // We need to check if post is front page to return the correct basePath for pagination
-  const isFrontPage = postID === sites?.[siteID]?.frontPage;
+  const isFrontPage =
+    postID === sites[siteID]?.frontPage ||
+    post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage;
 
   const pathname = window.location.pathname.replace(/\/$/, '');
 
@@ -55,18 +64,28 @@ const Editor = (props: any) => {
     let pagination = {};
 
     // We can't generate the pagination object for protected pages because those don't have access to the site object and therefore not to the number of posts.
-    if (template?.id === 'archive' && sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
+    if (template?.id === 'archive' && sites[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
       // Get the page number if exists
       const page = isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
         : 1;
 
-      const numberOfPosts = Object.values(
-        sites?.[siteID]?.postTypes?.[post?.archivePostType]?.posts
-      ).filter((o: any) => o.status === 'publish').length;
+      // We only wanna query for published posts
+      // And in case the post has a language assigned we wanna filter the posts accordingly
+      const filteredPosts = Object.values(sites[siteID]?.postTypes?.[post?.archivePostType]?.posts)
+        .filter((o: any) => o.status === 'publish')
+        .filter((o: any) => (post?.language ? o.language === post?.language : o));
+
+      const numberOfPosts = filteredPosts.length;
 
       pagination = {
-        basePath: isFrontPage ? '/' : `/${post.slug}/`,
+        basePath: generateSlug({
+          site,
+          postTypeID: post.postTypeID,
+          postID: post.id,
+          leadingSlash: true,
+          trailingSlash: true,
+        }),
         numberOfPosts,
         postsPerPage,
         numberOfPages: Math.ceil(numberOfPosts / postsPerPage),
@@ -82,7 +101,13 @@ const Editor = (props: any) => {
     const loadQuery = async () => {
       // TODO: Move to utils function
       const cleanedUrl = config?.source.replace(/\/+$/, '');
-      const result = await axios.post(`${cleanedUrl}/graphql`, { query: template.query });
+
+      let query = template.query;
+
+      // We need to replace any static variables with the correct values here
+      query = query.replaceAll('$language', post?.language?.toUpperCase());
+
+      const result = await axios.post(`${cleanedUrl}/graphql`, { query });
 
       if (result?.data) {
         setQuery(result.data);
@@ -113,7 +138,6 @@ const Editor = (props: any) => {
 
     const nodeTypeData = {
       id: post.id,
-      seo: post.seo,
       title: post.title,
       date: post.createdAt,
       featuredImage: post.featuredImage,
@@ -147,6 +171,76 @@ const Editor = (props: any) => {
     loaded = false;
   }
 
+  const renderComponent = () => {
+    const pageContext: any = {
+      siteTitle: sites[siteID]?.title || siteTitle,
+      seo: post?.seo,
+      pagination,
+      jamCMS: {
+        sidebar: {
+          ...sidebarOptions,
+        },
+      },
+      themeOptions: site?.themeOptions
+        ? formatFieldsToProps({
+            global: true,
+            themeOptions: config?.fields?.themeOptions,
+            content: site?.themeOptions,
+            site,
+            template,
+          })
+        : themeOptions,
+    };
+
+    // Check if post type supports languages
+    const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+      (s: string) => s === post.postTypeID
+    );
+
+    if (postTypeSupportsLanguages) {
+      pageContext.language = {};
+      pageContext.translations = [];
+
+      const getLanguageParameters = (post: any) => {
+        const { slug, name, locale } =
+          sites[siteID].languages?.languages?.find((o: any) => o.slug === post.language) || {};
+
+        return slug ? { slug, name, locale } : {};
+      };
+
+      // Add language information to pageContext if applicable
+      if (post?.language) {
+        pageContext.language = getLanguageParameters(post);
+      }
+
+      if (post?.translations) {
+        Object.values(post.translations).map((id: any) => {
+          const translatedPost = sites[siteID].postTypes[post.postTypeID].posts[id];
+
+          if (translatedPost) {
+            pageContext.translations.push({
+              title: translatedPost.title,
+              uri: generateSlug({
+                site: sites[siteID],
+                postTypeID: post.postTypeID,
+                postID: translatedPost.id,
+                leadingSlash: true,
+              }),
+              language: getLanguageParameters(translatedPost),
+            });
+          }
+        });
+      }
+    }
+
+    return (
+      <>
+        <Seo {...props} pageContext={pageContext} />
+        <Component {...rest} data={getPostData()} pageContext={pageContext} />
+      </>
+    );
+  };
+
   return (
     <>
       {postID ? (
@@ -154,27 +248,7 @@ const Editor = (props: any) => {
           {loaded ? (
             <>
               {!!Component && post?.content ? (
-                <Component
-                  data={getPostData()}
-                  pageContext={{
-                    siteTitle: sites?.[siteID]?.title || siteTitle,
-                    jamCMS: {
-                      sidebar: {
-                        ...sidebarOptions,
-                      },
-                    },
-                    themeOptions: site?.themeOptions
-                      ? formatFieldsToProps({
-                          global: true,
-                          themeOptions: config?.fields?.themeOptions,
-                          content: site?.themeOptions,
-                          site,
-                          template,
-                        })
-                      : themeOptions,
-                    pagination,
-                  }}
-                />
+                renderComponent()
               ) : (
                 <EmptyContainer style={{ background: 'transparent' }} className="jam-cms">
                   <Empty
@@ -192,6 +266,8 @@ const Editor = (props: any) => {
         </>
       ) : (
         <>
+          <Seo {...props} />
+
           {React.cloneElement(defaultComponent, {
             pageContext: {
               pagination,

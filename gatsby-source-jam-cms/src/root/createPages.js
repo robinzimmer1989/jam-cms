@@ -1,11 +1,13 @@
 import path from 'path';
 
+// import app components
 import getTemplatePath from './getTemplatePath';
+import fragments from './fragments';
 
 const createJamPages = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, protectedPosts, jamCMS, directory }
+  { siteTitle, themeOptions, protectedPosts, activePlugins, languages, jamCMS, directory }
 ) => {
   const allNodes = {};
 
@@ -38,15 +40,15 @@ const createJamPages = async (
       const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
-      // Assign archive query parameters to page
-      const archiveFragment =
-        nodesTypeName === 'Page'
-          ? `
-            archive
-            archivePostType
-            archivePostsPerPage
-          `
-          : ``;
+      // Prepare fragments
+      const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
+
+      const languageFragment =
+        activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)
+          ? fragments.language
+          : '';
+
+      const archiveFragment = nodesTypeName === 'Page' ? fragments.archive : '';
 
       const { data } = await graphql(/* GraphQL */ `
         query ALL_CONTENT_NODES {
@@ -60,6 +62,8 @@ const createJamPages = async (
                 templateName
               }
               ${archiveFragment}
+              ${seoFragment}
+              ${languageFragment}
             }
           }
         }
@@ -100,6 +104,29 @@ const createJamPages = async (
             archivePostsPerPage,
           } = node;
 
+          if (!template || !template.templateName) {
+            return;
+          }
+
+          const context = {
+            id,
+            databaseId,
+            status,
+            siteTitle,
+            themeOptions,
+            jamCMS,
+            pagination: {},
+          };
+
+          if (activePlugins.includes('yoast')) {
+            context.seo = node.seo;
+          }
+
+          if (activePlugins.includes('polylang') && languages?.postTypes?.includes(postType)) {
+            context.language = node.language;
+            context.translations = node.translations;
+          }
+
           const templatePath = archive
             ? getTemplatePath(directory, {
                 prefix: `postTypes/${archivePostType}`,
@@ -114,7 +141,13 @@ const createJamPages = async (
             const component = status === 'private' && privatePath ? privatePath : templatePath;
 
             if (archive && archivePostType) {
-              const numberOfPosts = allNodes[archivePostType].length;
+              // In case the node has a language assigned we wanna filter the posts accordingly
+              const filteredPosts = allNodes[archivePostType].filter((o) =>
+                node?.language ? o.language === node?.language : o
+              );
+
+              const numberOfPosts = filteredPosts.length;
+
               const numberOfPages = Math.ceil(numberOfPosts / archivePostsPerPage);
 
               for (let page = 1; page <= numberOfPages; page++) {
@@ -124,39 +157,25 @@ const createJamPages = async (
                   pathname = `${uri}page/${page}`;
                 }
 
+                context.pagination = {
+                  basePath: uri,
+                  numberOfPosts,
+                  postsPerPage: archivePostsPerPage,
+                  numberOfPages: Math.ceil(numberOfPosts / archivePostsPerPage),
+                  page,
+                };
+
                 actions.createPage({
                   component: path.resolve(`./${component}`),
                   path: pathname,
-                  context: {
-                    id,
-                    databaseId,
-                    status,
-                    siteTitle,
-                    themeOptions,
-                    pagination: {
-                      basePath: uri,
-                      numberOfPosts,
-                      postsPerPage: archivePostsPerPage,
-                      numberOfPages: Math.ceil(numberOfPosts / archivePostsPerPage),
-                      page,
-                    },
-                    jamCMS,
-                  },
+                  context,
                 });
               }
             } else {
               actions.createPage({
                 component: path.resolve(`./${component}`),
                 path: uri,
-                context: {
-                  id,
-                  databaseId,
-                  status,
-                  siteTitle,
-                  themeOptions,
-                  pagination: {},
-                  jamCMS,
-                },
+                context,
               });
             }
           } else {
