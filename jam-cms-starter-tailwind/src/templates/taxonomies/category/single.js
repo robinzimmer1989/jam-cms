@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, Link } from 'gatsby';
 
 // import app components
-import Layout from '../../../../components/Layout';
+import Layout from '../../../components/Layout';
 
 const Template = (props) => {
   const {
