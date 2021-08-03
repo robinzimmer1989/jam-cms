@@ -14,12 +14,6 @@ All field ID's must be lowercase and can't have special characters. This is caus
 }
 ```
 
-### Global styles overwrites
-
-We’re using [Ant Design](https://ant.design/) under the hood and the library is adding global CSS to the site. There is no way to prevent this behavior currently. There are some open [issues](https://github.com/ant-design/ant-design/issues/9363) for this and hopefully this will be resolved soon.
-
-You can overcome this issue by simply overwriting the CSS properties in case they screw something up. It’s important to note that the behavior is different in development and build mode (SSR), so make sure you pay attention to style changes in both environments.
-
 ### Gatsby Image only supports fluid
 
 When using `<GatsbyImage />` you need to import it directly from `jam-cms`. This is important to make sure new images will work in the jamCMS backend on a live site.
