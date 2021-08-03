@@ -7,12 +7,12 @@ import fragments from './fragments';
 const createJamPages = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, protectedPosts, activePlugins, languages, jamCMS, directory }
+  { siteTitle, themeOptions, protectedPosts, activePlugins, languages, jamCMS }
 ) => {
   const allNodes = {};
 
   // Get path to private component
-  const privatePath = getTemplatePath(directory, { prefix: 'protected', template: 'private' });
+  const privatePath = getTemplatePath({ prefix: 'protected', template: 'private' });
 
   try {
     // Get all post types
@@ -124,11 +124,11 @@ const createJamPages = async (
           }
 
           const templatePath = archive
-            ? getTemplatePath(directory, {
+            ? getTemplatePath({
                 prefix: `postTypes/${archivePostType}`,
                 template: 'archive',
               })
-            : getTemplatePath(directory, {
+            : getTemplatePath({
                 prefix: `postTypes/${postType}`,
                 template: template.templateName,
               });

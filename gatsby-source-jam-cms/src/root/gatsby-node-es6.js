@@ -1,36 +1,20 @@
 import path from 'path';
-import fs from 'fs';
 
+// import functions
 import syncFields from './syncFields';
 import getThemeSettings from './getThemeSettings';
-import createJamPages from './createPages';
-import createJamTerms from './createTerms';
+import pages from './createPages';
+import terms from './createTerms';
 
-let hasError = false,
-  fieldsPath = '',
+let fieldsPath = '',
   templatesPath = '';
 
-let directory = [];
-
-function getDirectory(dir) {
-  if (fs.existsSync(dir)) {
-    fs.readdirSync(dir).forEach((f) => {
-      const relativePath = path.join(dir, f);
-      if (fs.statSync(relativePath).isDirectory()) {
-        return getDirectory(relativePath);
-      } else {
-        return directory.push(relativePath);
-      }
-    });
-  }
-}
-
-getDirectory('./src/templates');
-
 export const onPreInit = async (gatsby, pluginOptions) => {
-  hasError = await syncFields(gatsby, pluginOptions);
+  // Sync post types, templates and fields to WordPress
+  await syncFields(gatsby, pluginOptions);
 
   templatesPath = path.join(gatsby.store.getState().program.directory, `src/templates`);
+
   fieldsPath =
     pluginOptions.fields || path.join(gatsby.store.getState().program.directory, `src/fields`);
 };
@@ -48,10 +32,6 @@ export const onCreateWebpackConfig = ({ actions, plugins }) => {
 };
 
 export const createPages = async (gatsby, pluginOptions) => {
-  if (hasError) {
-    return;
-  }
-
   const { siteTitle, themeOptions, protectedPosts, activePlugins, languages } =
     await getThemeSettings(gatsby, pluginOptions);
 
@@ -66,22 +46,20 @@ export const createPages = async (gatsby, pluginOptions) => {
     },
   };
 
-  await createJamPages(gatsby, pluginOptions, {
+  await pages(gatsby, pluginOptions, {
     siteTitle,
     themeOptions,
     protectedPosts,
     activePlugins,
     languages,
     jamCMS,
-    directory,
   });
 
-  await createJamTerms(gatsby, pluginOptions, {
+  await terms(gatsby, pluginOptions, {
     siteTitle,
     themeOptions,
     activePlugins,
     languages,
     jamCMS,
-    directory,
   });
 };

@@ -7,7 +7,7 @@ import fragments from './fragments';
 const createJamTerms = async (
   { actions, reporter, graphql },
   {},
-  { siteTitle, themeOptions, activePlugins, languages, jamCMS, directory }
+  { siteTitle, themeOptions, activePlugins, languages, jamCMS }
 ) => {
   try {
     // Get all taxonomies
@@ -64,7 +64,7 @@ const createJamTerms = async (
             return;
           }
 
-          const templatePath = getTemplatePath(directory, {
+          const templatePath = getTemplatePath({
             prefix: `taxonomies/${graphqlSingleName}`,
             template: 'single',
           });

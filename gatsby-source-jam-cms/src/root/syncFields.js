@@ -6,13 +6,13 @@ const syncFields = async (
   { fields: fieldsPathPlugin, source, apiKey, settings }
 ) => {
   if (!apiKey) {
-    reporter.error('jamCMS: Api key is required');
-    return true;
+    reporter.panicOnBuild('jamCMS: Api key is required');
+    return;
   }
 
   if (!source) {
-    reporter.error('jamCMS: Source URL is required');
-    return true;
+    reporter.panicOnBuild('jamCMS: Source URL is required');
+    return;
   }
 
   // Use default path if no fields variable is provided
@@ -22,7 +22,7 @@ const syncFields = async (
   // Don't sync if setting is explicitly set to false, but still continue with process
   if (settings && settings.sync === false) {
     reporter.info('jamCMS: Syncing disabled');
-    return false;
+    return;
   }
 
   // Import field object
@@ -30,7 +30,7 @@ const syncFields = async (
 
   if (!fields) {
     reporter.error('jamCMS: No fields object found');
-    return true;
+    return;
   }
 
   // Remove potential trailing slash
@@ -44,17 +44,14 @@ const syncFields = async (
 
     if (result.data) {
       reporter.success(result.data);
-      return false;
     }
   } catch (err) {
     if (err?.response?.data?.code === 'rest_no_route') {
-      reporter.error('jamCMS: Plugin not found');
+      reporter.panicOnBuild('jamCMS: Plugin not found');
     } else {
-      reporter.error(err?.response?.data?.message);
+      reporter.panicOnBuild(err?.response?.data?.message);
     }
   }
-
-  return true;
 };
 
 export default syncFields;
