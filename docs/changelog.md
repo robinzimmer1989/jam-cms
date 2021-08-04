@@ -1,5 +1,12 @@
 # Changelog
 
+### 1.10.0
+
+- Feat: Multilingual support with Polylang
+- Feat: Automatic SEO support out of the box
+- Fix: Reset category dropdown when user switches between post types
+- Fix: Remove global antd css
+
 ### 1.9.3
 
 - Feat: Add noindex checkbox to editor sidebar

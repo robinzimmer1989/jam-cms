@@ -11,18 +11,20 @@ Install the following plugins to your WordPress site.
 - Custom Post Type UI (1.9.2)
 - WP Gatsby (1.0.10)
 - WPGraphQL (1.5.0)
-- [WPGraphQL for Advanced Custom Fields (0.5.2)](https://github.com/wp-graphql/wp-graphql-acf/tags)
+- [WPGraphQL for Advanced Custom Fields (0.5.3)](https://github.com/wp-graphql/wp-graphql-acf/tags)
 - [WPGraphQL JWT Authentication (0.4.1)](https://github.com/wp-graphql/wp-graphql-jwt-authentication/tags)
   Follow the plugin instructions and add a secret key to your wp-config.php file.
-- Yoast SEO (16.6.1)
-- WPGraphQL Yoast SEO Addon (4.14.2)
+- Yoast SEO (16.8)
+- WPGraphQL Yoast SEO Addon (4.15.0)
 
 ### Optional plugins
 
-- Classic Editor (1.6)
+- Classic Editor (1.6.2)
 - JAMstack Deployments (1.1.1)
 - Post Types Order (1.9.5.6)
 - Safe SVG (1.9.9)
+- Polylang (3.1)
+- [WP GraphQL Polylang (0.5.0)](https://github.com/valu-digital/wp-graphql-polylang/tags)
 
 * jamCMS has been tested with the given version numbers. That doesn't mean that newer or older plugin versions don't work, but if you run into any issues, try out the given version number and then open an [issue](https://github.com/robinzimmer1989/jam-cms/issues).
 
