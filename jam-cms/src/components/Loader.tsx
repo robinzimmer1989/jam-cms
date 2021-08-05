@@ -6,7 +6,7 @@ const Loader = (props: any) => {
   const { text = '' } = props;
 
   return (
-    <Container>
+    <Container className="jam-cms">
       <Content>
         <Spin size="large" />
         {text && (
@@ -20,7 +20,7 @@ const Loader = (props: any) => {
 };
 
 const Container = styled.div`
-  height: calc(100vh - 50px);
+  height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
