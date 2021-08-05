@@ -257,6 +257,7 @@ const PostType = (props: any) => {
       allowClear
       defaultValue={search}
       onChange={(e) => setSearch(e.target.value.toLowerCase())}
+      style={{ width: 180 }}
     />
   );
 
