@@ -129,8 +129,8 @@ const Header = (props) => {
                 </div>
                 <nav>
                   <ul className="space-y-4">
-                    {menu &&
-                      menu.map((o, i) => {
+                    {menuItems &&
+                      menuItems.map((o, i) => {
                         return (
                           <li key={i}>
                             <Link
