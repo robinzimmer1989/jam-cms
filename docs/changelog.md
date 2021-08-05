@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.10.1
+
+- Fix: Use antd minified css
+- Fix: Admin font styles
+- Fix: Jodit: Adding link to empty textfield
+
 ### 1.10.0
 
 - Feat: Multilingual support with Polylang
