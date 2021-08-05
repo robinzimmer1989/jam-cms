@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'gatsby';
-import { isLoggedIn, logout } from 'jam-cms';
+import { GatsbyImage, isLoggedIn, logout } from 'jam-cms';
 
 const Header = (props) => {
-  const { menu, language } = props;
+  const { logo, menu, language } = props;
 
   const menuItems = Array.isArray(menu) ? menu : menu?.[language?.slug];
 
@@ -12,25 +12,14 @@ const Header = (props) => {
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
       <div className="relative flex items-center justify-between">
-        <a href="/" aria-label="Company" title="Company" className="inline-flex items-center">
-          <svg
-            className="w-8 text-primary"
-            viewBox="0 0 24 24"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeMiterlimit="10"
-            stroke="currentColor"
-            fill="none"
-          >
-            <rect x="3" y="1" width="7" height="12" />
-            <rect x="3" y="17" width="7" height="6" />
-            <rect x="14" y="1" width="7" height="6" />
-            <rect x="14" y="11" width="7" height="12" />
-          </svg>
-          <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-            Company
-          </span>
+        <a
+          href="/"
+          aria-label="Company"
+          title="Company"
+          className="inline-flex items-center"
+          style={{ width: 220 }}
+        >
+          {logo && <GatsbyImage image={logo} />}
         </a>
         <ul className="flex items-center hidden space-x-8 lg:flex">
           {menuItems &&
@@ -84,33 +73,6 @@ const Header = (props) => {
             <div className="absolute top-0 left-0 w-full z-40">
               <div className="p-5 bg-white border rounded shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <a
-                      href="/"
-                      aria-label="Company"
-                      title="Company"
-                      className="inline-flex items-center"
-                    >
-                      <svg
-                        className="w-8 text-primary"
-                        viewBox="0 0 24 24"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeMiterlimit="10"
-                        stroke="currentColor"
-                        fill="none"
-                      >
-                        <rect x="3" y="1" width="7" height="12" />
-                        <rect x="3" y="17" width="7" height="6" />
-                        <rect x="14" y="1" width="7" height="6" />
-                        <rect x="14" y="11" width="7" height="12" />
-                      </svg>
-                      <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-                        Company
-                      </span>
-                    </a>
-                  </div>
                   <div>
                     <button
                       aria-label="Close Menu"

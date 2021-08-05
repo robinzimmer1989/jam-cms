@@ -4,6 +4,11 @@ const config = {
   type: 'group',
   fields: [
     {
+      id: 'logo',
+      type: 'image',
+      label: 'Logo',
+    },
+    {
       id: 'menu',
       type: 'menu',
       label: 'Menu',
