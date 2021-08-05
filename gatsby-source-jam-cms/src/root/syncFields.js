@@ -36,11 +36,17 @@ const syncFields = async (
   // Remove potential trailing slash
   const url = source.replace(/\/+$/, '');
 
+  // Remove potential white space
+  const sanitizedApiKey = apiKey.replace(/\s/g, '');
+
   // Sync fields with backend
   try {
-    const result = await axios.post(`${url}/wp-json/jamcms/v1/syncFields?apiKey=${apiKey}`, {
-      fields: JSON.stringify(fields.default),
-    });
+    const result = await axios.post(
+      `${url}/wp-json/jamcms/v1/syncFields?apiKey=${sanitizedApiKey}`,
+      {
+        fields: JSON.stringify(fields.default),
+      }
+    );
 
     if (result.data) {
       reporter.success(result.data);
