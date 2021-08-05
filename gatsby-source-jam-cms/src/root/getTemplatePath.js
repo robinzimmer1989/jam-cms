@@ -3,16 +3,19 @@ import fs from 'fs';
 const getTemplatePath = ({ prefix, template }) => {
   const base = './src/templates';
 
-  if (!fs.existsSync(`${base}/${prefix}`)) {
+  if (!fs.existsSync(`${base}/${prefix}`) || !template) {
     return null;
   }
+
+  // Make sure template path is lowercase
+  const templateName = template.toLowerCase();
 
   let path = '';
 
   try {
     // Option 1: Templates can be stored in i.e. 'src/templates/postTypes/page/default.tsx'
     fs.readdirSync(`${base}/${prefix}`).forEach((file) => {
-      if (file.includes(`${template.toLowerCase()}.`)) {
+      if (file.includes(`${templateName}.`)) {
         path = `${base}/${prefix}/${file}`;
       }
     });
@@ -24,9 +27,9 @@ const getTemplatePath = ({ prefix, template }) => {
 
   try {
     // Option 2: Templates can be stored in i.e. 'src/templates/postTypes/page/default/default.tsx'
-    fs.readdirSync(`${base}/${prefix}/${template}`).forEach((file) => {
-      if (file.includes(`${template.toLowerCase()}.`)) {
-        path = `${base}/${prefix}/${template.toLowerCase()}/${file}`;
+    fs.readdirSync(`${base}/${prefix}/${templateName}`).forEach((file) => {
+      if (file.includes(`${templateName}.`)) {
+        path = `${base}/${prefix}/${templateName}/${file}`;
       }
     });
 
