@@ -48,10 +48,7 @@ module.exports = {
       resolve: `gatsby-plugin-webfonts`,
       options: {
         fonts: {
-          google: [
-            { family: `Source Sans Pro`, variant: ['300', '400', '500', '700'] },
-            { family: `Merriweather`, variant: ['400', '700'] },
-          ],
+          google: [{ family: `Style+Script`, variant: ['400'] }],
         },
       },
     },
