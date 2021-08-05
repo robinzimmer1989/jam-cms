@@ -39,47 +39,49 @@ const AdminRouter = (props: any) => {
     dispatch,
   ] = useStore();
 
-  // Wait until site is loaded
-  if (!sites[siteID]) {
-    return <Loader text="Load Website" />;
-  }
-
   return (
     <>
       <CmsStyles />
+      {sites[siteID] ? (
+        <>
+          <Router>
+            {!!config.multisite && <Home path={`${ROUTE_APP}`} />}
 
-      <Router>
-        {!!config.multisite && <Home path={`${ROUTE_APP}`} />}
+            <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} />
+            <Dashboard path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} />
+            <Media path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} />
+            <PostType path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_POST_TYPE}/:postTypeID`} />
+            <Taxonomy path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`} />
 
-        <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} />
-        <Dashboard path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} />
-        <Media path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} />
-        <PostType path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_POST_TYPE}/:postTypeID`} />
-        <Taxonomy path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`} />
+            {authUser?.capabilities?.manage_options && (
+              <GeneralSettings
+                path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_GENERAL}`}
+              />
+            )}
 
-        {authUser?.capabilities?.manage_options && (
-          <GeneralSettings path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_GENERAL}`} />
-        )}
+            {authUser?.capabilities?.list_users && (
+              <Users path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`} />
+            )}
 
-        {authUser?.capabilities?.list_users && (
-          <Users path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`} />
-        )}
+            <AdminEditor path={'*'} {...props} />
+          </Router>
 
-        <AdminEditor path={'*'} {...props} />
-      </Router>
-
-      {dialog.open && (
-        <Modal
-          transitionName="none"
-          maskTransitionName="none"
-          title={dialog.title}
-          visible={true}
-          onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
-          destroyOnClose
-          children={dialog.component}
-          width={dialog.width}
-          footer={null}
-        />
+          {dialog.open && (
+            <Modal
+              transitionName="none"
+              maskTransitionName="none"
+              title={dialog.title}
+              visible={true}
+              onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
+              destroyOnClose
+              children={dialog.component}
+              width={dialog.width}
+              footer={null}
+            />
+          )}
+        </>
+      ) : (
+        <Loader text="Load Website" />
       )}
     </>
   );
