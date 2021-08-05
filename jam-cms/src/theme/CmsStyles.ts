@@ -3,19 +3,6 @@ import { createGlobalStyle, css } from 'styled-components';
 import colors from './colors';
 
 const styles = css`
-  background: ${colors.secondaryContrast};
-
-  * {
-    letter-spacing: normal;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-      'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-      'Noto Color Emoji';
-  }
-
-  a {
-    text-decoration: none;
-  }
-
   img {
     margin: 0;
   }
@@ -134,18 +121,6 @@ const styles = css`
   .ant-scroll-number-only-unit {
     font-size: 10px;
   }
-`;
-
-export default createGlobalStyle`
-
-  body {
-    overflow-y: scroll;
-  }
-
-  .ant-modal-body {
-    background: ${colors.secondaryContrast};
-    ${styles}
-  }
 
   .ant-menu-item-group-title {
     font-size: 10px;
@@ -173,8 +148,44 @@ export default createGlobalStyle`
   .ant-btn > span {
     display: inline-flex;
   }
-  
-  .jam-cms {
+`;
+
+const fontStyles = css`
+  letter-spacing: normal;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+  a {
+    text-decoration: none;
+  }
+`;
+
+export default createGlobalStyle`
+
+  body {
+    overflow-y: scroll;
+  }
+
+  .ant-modal-root {
     ${styles}
+    ${fontStyles}
+  }
+
+  .ant-modal-body {
+    background: ${colors.secondaryContrast};
+  }
+
+  .jam-cms {
+    background: ${colors.secondaryContrast};
+    ${styles}
+    ${fontStyles}
+  }
+  
+  .ant-dropdown,
+  .ant-select-dropdown,
+  .ant-popover,
+  .ant-menu {
+    ${fontStyles}
   }
 `;
