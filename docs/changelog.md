@@ -1,5 +1,13 @@
 # Changelog
 
+### 1.10.2
+
+- Fix: Casing error for Netlify builds
+- Fix: Image flashing for Gatsby image
+- Fix: SVG support for GatsbyImage component
+- Fix: Remove source map reference for antd css
+- Fix: Font style issue for ant message component
+
 ### 1.10.1
 
 - Fix: Use antd minified css
