@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from '@reach/router';
 
 // import external css files
-import '../../styles/antd.css';
+import '../../styles/antd.min.css';
 import '../../styles/jodit.min.css';
 
 // import components
