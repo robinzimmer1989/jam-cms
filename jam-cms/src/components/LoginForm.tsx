@@ -182,8 +182,8 @@ const LoginForm = (props: any) => {
   const formData = getFormData();
 
   return (
-    <>
-      <Container>
+    <Container>
+      <Box>
         {data?.form && (
           <Card title={formData?.title}>
             {url ? (
@@ -247,7 +247,7 @@ const LoginForm = (props: any) => {
             )}
           </Card>
         )}
-      </Container>
+      </Box>
 
       {backLink && (
         <Row justify="center">
@@ -256,15 +256,23 @@ const LoginForm = (props: any) => {
           </Link>
         </Row>
       )}
-    </>
+    </Container>
   );
 };
 
 const Container = styled.div`
-  margin-bottom: 20px;
+  letter-spacing: normal;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
   .ant-space {
     width: 100%;
   }
+`;
+
+const Box = styled.div`
+  margin-bottom: 20px;
 `;
 
 const Success = styled.div`
