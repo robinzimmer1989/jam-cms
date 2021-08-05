@@ -519,7 +519,7 @@ const EditorSidebar = (props: any) => {
           </Space>
 
           <Space direction="vertical" size={6}>
-            <Caption children="No Index" />
+            <Caption children="Advanced Settings" />
             <Checkbox
               value={post?.seo?.metaRobotsNoindex}
               checked={post?.seo?.metaRobotsNoindex === 'noindex'}
