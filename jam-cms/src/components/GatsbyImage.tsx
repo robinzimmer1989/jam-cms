@@ -1,38 +1,53 @@
 import React, { useMemo } from 'react';
 import { GatsbyImage as Image, getImage } from 'gatsby-plugin-image';
+import Parser from 'html-react-parser';
 
 const GatsbyImage = (props: any) => {
   const { image, alt = '', ...rest } = props;
 
-  // useMemo prevents the element from re-rendering when dealing with SVG images
-  // TODO: There might be a better solution for this in the future
-  const component = useMemo(() => {
-    let imageObject = image?.localFile && getImage(image.localFile);
+  if (image?.svg) {
+    return Parser(image.svg);
+  }
 
-    if (!imageObject && image?.sourceUrl) {
-      imageObject = {
-        height: image?.height || 0,
-        width: image?.width || 0,
-        images: {
-          fallback: {
-            sizes: image?.sizes || '',
-            srcSet: image?.srcSet || '',
-            src: image?.sourceUrl,
-          },
-          sources: [
-            {
-              sizes: image?.sizes || '',
-              srcSet: image?.srcSet || '',
-              type: image?.mediaType || '',
+  const id =
+    image?.id ||
+    image?.sourceUrl ||
+    image?.localFile?.childImageSharp?.gatsbyImageData?.images?.fallback?.src;
+
+  const component = useMemo(() => {
+    if (image?.localFile) {
+      return <Image {...rest} image={getImage(image.localFile)} alt={alt} />;
+    } else if (image?.sourceUrl) {
+      return (
+        <Image
+          {...rest}
+          image={{
+            height: image?.height,
+            width: image?.width,
+            images: {
+              fallback: {
+                sizes: image?.sizes || '',
+                srcSet: image?.srcSet || '',
+                src: image.sourceUrl,
+              },
+              sources: [
+                {
+                  sizes: image?.sizes || '',
+                  srcSet: image?.srcSet || '',
+                  type: image?.mediaType || 'image',
+                },
+              ],
             },
-          ],
-        },
-        layout: 'constrained',
-        placeholder: { fallback: '' },
-      };
+            layout: 'constrained',
+            placeholder: { fallback: '' },
+          }}
+          alt={alt}
+        />
+      );
+    } else {
+      return null;
     }
-    return imageObject ? <Image {...rest} image={imageObject} alt={alt} /> : null;
-  }, [image]);
+  }, [id]);
 
   return component;
 };
