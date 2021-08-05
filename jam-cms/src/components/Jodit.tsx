@@ -139,7 +139,7 @@ const HTMLEditor = (props: any) => {
             setLink({
               title: e.s?.range.cloneContents().textContent || e.s.current()?.textContent || '',
               url: t && typeof t.getAttribute === 'function' ? t.getAttribute('href') : '',
-              target: t.target || '',
+              target: t ? t.target : '',
             });
             setModal('link');
             return;
