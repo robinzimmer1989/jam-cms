@@ -185,7 +185,8 @@ export default createGlobalStyle`
   .ant-dropdown,
   .ant-select-dropdown,
   .ant-popover,
-  .ant-menu {
+  .ant-menu,
+  .ant-message {
     ${fontStyles}
   }
 `;
