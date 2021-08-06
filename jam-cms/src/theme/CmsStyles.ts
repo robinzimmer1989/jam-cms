@@ -180,6 +180,24 @@ export default createGlobalStyle`
     background: ${colors.secondaryContrast};
     ${styles}
     ${fontStyles}
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    a,
+    span,
+    ol,
+    ul,
+    li,
+    input,
+    textarea,
+    caption {
+      ${fontStyles}
+    }
   }
   
   .ant-dropdown,

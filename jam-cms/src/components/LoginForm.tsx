@@ -182,7 +182,7 @@ const LoginForm = (props: any) => {
   const formData = getFormData();
 
   return (
-    <Container>
+    <Container className="jam-cms">
       <Box>
         {data?.form && (
           <Card title={formData?.title}>
