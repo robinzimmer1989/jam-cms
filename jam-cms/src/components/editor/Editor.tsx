@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { set } from 'lodash';
-import { Empty } from 'antd';
+import { Empty, Alert } from 'antd';
 
 // import app components
 import Loader from '../Loader';
@@ -39,6 +39,7 @@ const Editor = (props: any) => {
 
   // GraphQL query result
   const [query, setQuery] = useState(null);
+  const [queryError, setQueryError] = useState(false as any);
 
   const forceUpdate = useForceUpdate();
 
@@ -107,10 +108,16 @@ const Editor = (props: any) => {
       // We need to replace any static variables with the correct values here
       query = query.replaceAll('$language', post?.language?.toUpperCase());
 
-      const result = await axios.post(`${cleanedUrl}/graphql`, { query });
+      try {
+        const result = await axios.post(`${cleanedUrl}/graphql`, { query });
 
-      if (result?.data) {
-        setQuery(result.data);
+        if (result?.data?.errors?.length) {
+          setQueryError(result.data.errors);
+        } else if (result?.data) {
+          setQuery(result.data);
+        }
+      } catch (err) {
+        console.log(err);
       }
     };
 
@@ -245,12 +252,22 @@ const Editor = (props: any) => {
     <>
       {postID ? (
         <>
-          {loaded ? (
+          {queryError ? (
+            <EmptyContainer className="jam-cms" alignItems={'flex-start'} textAlign={'left'}>
+              <Alert
+                style={{ width: '100%' }}
+                message="Query failed"
+                type="error"
+                showIcon
+                description={queryError.map((o: any) => o.message).join(', ')}
+              ></Alert>
+            </EmptyContainer>
+          ) : loaded ? (
             <>
               {!!Component && post?.content ? (
                 renderComponent()
               ) : (
-                <EmptyContainer style={{ background: 'transparent' }} className="jam-cms">
+                <EmptyContainer className="jam-cms" alignItems={'center'} textAlign={'center'}>
                   <Empty
                     imageStyle={{
                       height: 120,
@@ -284,12 +301,14 @@ const Editor = (props: any) => {
   );
 };
 
-const EmptyContainer = styled.div`
+const EmptyContainer = styled('div' as any)`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: ${({ alignItems }) => alignItems};
   height: 100vh;
-  text-align: center;
+  text-align: ${({ textAlign }) => textAlign};
+  background: transparent;
+  padding: 20px;
 `;
 
 export default Editor;
