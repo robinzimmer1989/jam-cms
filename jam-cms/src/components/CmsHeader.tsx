@@ -94,7 +94,8 @@ const CmsHeader = (props: any) => {
   return useMemo(() => {
     const buttons = [];
 
-    buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
+    sites[siteID] &&
+      buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
 
     const notificationsContent = (
       <Notifications>

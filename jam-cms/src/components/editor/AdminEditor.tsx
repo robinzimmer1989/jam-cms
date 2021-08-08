@@ -30,9 +30,11 @@ const AdminEditor = (props: any) => {
     dispatch,
   ] = useStore();
 
+  const site = sites[siteID];
+
   const postID = useMemo(() => {
-    return getPostID(sites[siteID]);
-  }, [window.location.pathname]);
+    return site?.id && getPostID(site);
+  }, [site?.id, window.location.pathname]);
 
   // Timer for lock check
   const [postLockTimer, setPostLockTimer] = useState(0);
@@ -175,21 +177,13 @@ const AdminEditor = (props: any) => {
 
   const sidebarOptions = { ...sites[siteID]?.editorOptions?.sidebar, active: sidebarActive };
 
-  if (!postID) {
-    return defaultComponent;
-  }
-
   return (
     <>
       <EditorWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
-        {loaded ? (
-          <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
-        ) : (
-          <Loader text="Load Post" />
-        )}
+        <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
       </EditorWrapper>
 
-      {loaded && (
+      {loaded ? (
         <>
           {post?.locked ? (
             <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
@@ -221,10 +215,24 @@ const AdminEditor = (props: any) => {
             </>
           )}
         </>
+      ) : (
+        <LoadingContainer>
+          <Loader />
+        </LoadingContainer>
       )}
     </>
   );
 };
+
+const LoadingContainer = styled.div`
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.6);
+`;
 
 const FloatingButton = styled('div' as any)`
   position: fixed;

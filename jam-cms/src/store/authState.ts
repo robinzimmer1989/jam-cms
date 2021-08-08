@@ -1,10 +1,16 @@
 import produce from 'immer';
 
+import { getUser } from '../utils/auth';
+
+// Get 'capabilities' information from local storage to avoid unnecessary waiting to fetch authUser.
+// Technically, someone could manipulate those values manually, but the API call for site or post afterwards would fail anyway.
+const storageUser = getUser();
+
 const defaultState = {
   id: null,
   email: '',
   roles: '',
-  capabilities: {},
+  capabilities: storageUser.capabilities,
 };
 
 export const authState = { ...defaultState };

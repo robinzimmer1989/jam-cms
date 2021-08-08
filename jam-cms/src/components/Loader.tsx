@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { Spin, Typography } from 'antd';
 
 const Loader = (props: any) => {
-  const { text = '' } = props;
+  const { text = '', height = '100vh', py = 0 } = props;
 
   return (
-    <Container className="jam-cms">
+    <Container className="jam-cms" height={height} py={py}>
       <Content>
         <Spin size="large" />
         {text && (
@@ -19,12 +19,14 @@ const Loader = (props: any) => {
   );
 };
 
-const Container = styled.div`
-  height: 100vh;
+const Container = styled('div' as any)`
+  height: ${({ height }) => height};
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-top: ${({ py }) => `${py}px`};
+  padding-bottom: ${({ py }) => `${py}px`};
 `;
 
 const Content = styled.div`

@@ -5,7 +5,6 @@ import { set } from 'lodash';
 import { Empty, Alert } from 'antd';
 
 // import app components
-import Loader from '../Loader';
 import Seo from '../Seo';
 import useForceUpdate from '../../hooks/useForceUpdate';
 import {
@@ -174,7 +173,7 @@ const Editor = (props: any) => {
   // We also need to wait until global and local template ID are identical to prevent an error when a user switches between two template where both have queries.
   let loaded = true;
 
-  if ((template?.query && !query) || globalTemplateID !== templateID) {
+  if (!site?.id || !post?.id || (template?.query && !query) || globalTemplateID !== templateID) {
     loaded = false;
   }
 
@@ -250,7 +249,7 @@ const Editor = (props: any) => {
 
   return (
     <>
-      {postID ? (
+      {loaded ? (
         <>
           {queryError ? (
             <EmptyContainer className="jam-cms" alignItems={'flex-start'} textAlign={'left'}>
@@ -262,7 +261,7 @@ const Editor = (props: any) => {
                 description={queryError.map((o: any) => o.message).join(', ')}
               ></Alert>
             </EmptyContainer>
-          ) : loaded ? (
+          ) : (
             <>
               {!!Component && post?.content ? (
                 renderComponent()
@@ -277,8 +276,6 @@ const Editor = (props: any) => {
                 </EmptyContainer>
               )}
             </>
-          ) : (
-            <Loader text="Load Query" />
           )}
         </>
       ) : (
@@ -286,14 +283,16 @@ const Editor = (props: any) => {
           <Seo {...props} />
 
           {React.cloneElement(defaultComponent, {
-            pageContext: {
-              pagination,
-              themeOptions: formatFieldsToProps({
-                themeOptions: config?.fields?.themeOptions,
-                content: site?.themeOptions,
-                site,
-              }),
-            },
+            pageContext: loaded
+              ? {
+                  pagination,
+                  themeOptions: formatFieldsToProps({
+                    themeOptions: config?.fields?.themeOptions,
+                    content: site?.themeOptions,
+                    site,
+                  }),
+                }
+              : props.pageContext,
           })}
         </>
       )}

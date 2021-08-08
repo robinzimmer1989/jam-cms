@@ -20,6 +20,7 @@ import {
 import CmsLayout from '../components/CmsLayout';
 import PostForm from '../components/forms/PostForm';
 import ListItem from '../components/ListItem';
+import Loader from '../components/Loader';
 import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
 import { postActions, siteActions, languageActions } from '../actions';
@@ -86,9 +87,11 @@ const PostType = (props: any) => {
   // Create data tree
   visiblePosts = createDataTree(visiblePosts);
 
-  const taxonomies = Object.values(sites[siteID]?.taxonomies).filter((o) =>
-    (o as any)?.postTypes.includes(postTypeID)
-  );
+  const taxonomies =
+    sites[siteID] &&
+    Object.values(sites[siteID]?.taxonomies).filter((o) =>
+      (o as any)?.postTypes.includes(postTypeID)
+    );
 
   useEffect(() => {
     // Navigate to dashboard if template not found in fields object
@@ -444,7 +447,7 @@ const PostType = (props: any) => {
 
   return (
     <CmsLayout pageTitle={config?.fields?.postTypes?.[postTypeID]?.title || postType?.title}>
-      {!postType && (
+      {sites[siteID] && !postType && (
         <Alert
           message="Unknown post type"
           description="Restart the development process or sync new data now"
@@ -462,46 +465,52 @@ const PostType = (props: any) => {
 
       <PageHeader title={filterItems} extra={extra} />
 
-      {visiblePosts && (
-        <Space direction="vertical" size={8}>
-          {filter === 'all' && postTypeID !== 'page' ? (
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="droppable">
-                {(provided: any, snapshot: any) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    {visiblePosts.map((o: any, i: any) => {
-                      return (
-                        <Draggable key={o.id} draggableId={`item-${o.id}`} index={i}>
-                          {(provided: any, snapshot: any) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getItemStyle(
-                                snapshot.isDragging,
-                                provided.draggableProps.style
+      {sites[siteID] ? (
+        <>
+          {visiblePosts && (
+            <Space direction="vertical" size={8}>
+              {filter === 'all' && postTypeID !== 'page' ? (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="droppable">
+                    {(provided: any, snapshot: any) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        style={getListStyle(snapshot.isDraggingOver)}
+                      >
+                        {visiblePosts.map((o: any, i: any) => {
+                          return (
+                            <Draggable key={o.id} draggableId={`item-${o.id}`} index={i}>
+                              {(provided: any, snapshot: any) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={getItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                  )}
+                                >
+                                  {renderPost(o, 0)}
+                                </div>
                               )}
-                            >
-                              {renderPost(o, 0)}
-                            </div>
-                          )}
-                        </Draggable>
-                      );
-                    })}
+                            </Draggable>
+                          );
+                        })}
 
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          ) : (
-            visiblePosts.map((o: any) => renderPost(o, 0))
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                visiblePosts.map((o: any) => renderPost(o, 0))
+              )}
+            </Space>
           )}
-        </Space>
+        </>
+      ) : (
+        <Loader height={'auto'} py={100} />
       )}
     </CmsLayout>
   );

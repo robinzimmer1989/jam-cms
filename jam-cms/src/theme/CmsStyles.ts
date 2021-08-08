@@ -177,7 +177,6 @@ export default createGlobalStyle`
   }
 
   .jam-cms {
-    background: ${colors.secondaryContrast};
     ${styles}
     ${fontStyles}
 

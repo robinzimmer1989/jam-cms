@@ -128,9 +128,10 @@ const CmsLayout = (props: any) => {
                             );
                           })}
 
-                        {Object.values(sites[siteID].postTypes).length - 1 !== i && (
-                          <Menu.Divider />
-                        )}
+                        {sites[siteID] &&
+                          Object.values(sites[siteID].postTypes).length - 1 !== i && (
+                            <Menu.Divider />
+                          )}
                       </Menu.SubMenu>
                     );
                   })}

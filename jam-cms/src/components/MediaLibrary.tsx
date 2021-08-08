@@ -182,6 +182,7 @@ const MediaLibrary = (props: any) => {
                 type="primary"
                 onClick={() => setUploader(!uploader)}
                 loading={loading}
+                disabled={!siteID}
               />
             }
             extra={[
