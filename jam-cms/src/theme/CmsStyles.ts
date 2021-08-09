@@ -203,7 +203,8 @@ export default createGlobalStyle`
   .ant-select-dropdown,
   .ant-popover,
   .ant-menu,
-  .ant-message {
+  .ant-message,
+  .ant-tooltip {
     ${fontStyles}
   }
 `;
