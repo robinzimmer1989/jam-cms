@@ -14,22 +14,20 @@ const Seo = (props: any) => {
 
   return (
     <Helmet htmlAttributes={{ lang: language?.slug || '' }}>
-      <title>
-        {`${Parser(seo.title || '')}${seo.title && siteTitle && ' - '}${Parser(siteTitle || '')}`}
-      </title>
-      <meta name="description" content={Parser(seo.metaDesc || '')} />
+      <title>{`${Parser(seo.title || '')}`}</title>
+      <meta name="description" content={`${Parser(seo.metaDesc || '')}`} />
 
       <meta name="robots" content={seo?.metaRobotsNoindex || 'index'} />
 
-      <meta property="og:description" content={Parser(seo.metaDesc || '')} />
+      <meta property="og:description" content={`${Parser(seo.metaDesc || '')}`} />
       <meta property="og:type" content="website" />
       <meta property="og:image" content={seo.opengraphImage?.sourceUrl || ''} />
-      <meta property="og:site_name" content={Parser(siteTitle || '')} />
-      <meta property="og:title" content={Parser(seo.title || '')} />
+      <meta property="og:site_name" content={`${Parser(siteTitle || '')}`} />
+      <meta property="og:title" content={`${Parser(seo.title || '')}`} />
 
       <meta property="twitter:card" content="summary" />
       <meta property="twitter:image" content={seo.opengraphImage?.sourceUrl || ''} />
-      <meta property="twitter:title" content={Parser(seo.title || '')} />
+      <meta property="twitter:title" content={`${Parser(seo.title || '')}`} />
 
       {language?.locale ? (
         <link
