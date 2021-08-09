@@ -3,6 +3,7 @@ import path from 'path';
 // import app components
 import getTemplatePath from './getTemplatePath';
 import fragments from './fragments';
+import casing from './casing';
 
 const createJamPages = async (
   { actions, reporter, graphql },
@@ -37,7 +38,7 @@ const createJamPages = async (
       }
 
       // Capitalize post type name
-      const nodesTypeName = postType.charAt(0).toUpperCase() + postType.slice(1);
+      const nodesTypeName = casing(graphqlSingleName, 'pascal');
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
       // Prepare fragments
@@ -125,11 +126,11 @@ const createJamPages = async (
 
           const templatePath = archive
             ? getTemplatePath({
-                prefix: `postTypes/${archivePostType}`,
+                prefix: `postTypes/${casing(archivePostType)}`,
                 template: 'archive',
               })
             : getTemplatePath({
-                prefix: `postTypes/${postType}`,
+                prefix: `postTypes/${casing(postType)}`,
                 template: template.templateName,
               });
 

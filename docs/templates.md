@@ -4,7 +4,7 @@ The template files must be stored in one of two specific locations so jamCMS kno
 
 ## Post Types
 
-Post types must be stored here, where `POST_TYPE_ID` is i.e. page, post or custom_post_type and `TEMPLATE_ID` is i.e. default, archive or other_page_template.
+Post types must be stored here, where `POST_TYPE_ID` is i.e. page, post or custom_post_type and `TEMPLATE_ID` is i.e. default, archive or otherPageTemplate.
 
 ```
 src/templates/postTypes/[POST_TYPE_ID]/[TEMPLATE_ID].[js|jsx|tsx]
@@ -18,7 +18,7 @@ src/templates/postTypes/[POST_TYPE_ID]/[TEMPLATE_ID]/[TEMPLATE_ID].[js|jsx|tsx]
 
 ## Archives
 
-Archive templates are stored within the post type folder. The `POST_TYPE_ID` is i.e. page, post or custom_post_type.
+Archive templates are stored within the post type folder. The `POST_TYPE_ID` is i.e. page, post or customPostType.
 
 ```
 src/templates/postTypes/[POST_TYPE_ID]/archive.[js|jsx|tsx]
@@ -32,7 +32,7 @@ src/templates/postTypes/[POST_TYPE_ID]/archive/archive.[js|jsx|tsx]
 
 ## Taxonomies
 
-Taxonomy templates must be saved here where `TAXONOMY_ID` is i.e. category, post_tag or custom_taxonomy:
+Taxonomy templates must be saved here where `TAXONOMY_ID` is i.e. category, postTag or customTaxonomy:
 
 ```
 src/templates/taxonomies/[TAXONOMY_ID]/single.[js|jsx|tsx]
