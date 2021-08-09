@@ -180,10 +180,14 @@ const AdminEditor = (props: any) => {
   return (
     <>
       <EditorWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
-        <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
+        {loaded ? (
+          <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
+        ) : (
+          <Loader />
+        )}
       </EditorWrapper>
 
-      {loaded ? (
+      {loaded && (
         <>
           {post?.locked ? (
             <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
@@ -215,10 +219,6 @@ const AdminEditor = (props: any) => {
             </>
           )}
         </>
-      ) : (
-        <LoadingContainer>
-          <Loader />
-        </LoadingContainer>
       )}
     </>
   );
