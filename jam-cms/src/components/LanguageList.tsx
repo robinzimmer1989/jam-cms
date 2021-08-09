@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Parser from 'html-react-parser';
-import { Link } from '@reach/router';
-import { Space, Tooltip, List, Button, Typography, Select as AntSelect } from 'antd';
+import { navigate } from '@reach/router';
+import { Space, Tooltip, List, Button, Popconfirm, Select as AntSelect } from 'antd';
 import { EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 // import app components
@@ -17,7 +17,7 @@ const LanguageList = (props: any) => {
     {
       config,
       cmsState: { siteID, sites },
-      editorState: { post, postHasChanged },
+      editorState: { post, postHasChanged, siteHasChanged },
     },
     dispatch,
   ] = useStore();
@@ -44,9 +44,6 @@ const LanguageList = (props: any) => {
         {post?.language && (
           <Space direction="vertical" size={6}>
             <Caption children="Translations" />
-            {postHasChanged && (
-              <Typography children="Links have been disabled. Please save your post to continue." />
-            )}
             <List
               itemLayout="vertical"
               size="small"
@@ -56,29 +53,22 @@ const LanguageList = (props: any) => {
               )}
               renderItem={(language: any) => {
                 let icon = null;
+                let onClick = () => {};
+                let tooltip = '';
                 let title = '';
 
                 if (post?.translations?.[language.slug]) {
-                  icon = (
-                    <Tooltip title="Edit translation" placement="left">
-                      <Link
-                        to={generateSlug({
-                          site: sites[siteID],
-                          postTypeID: post.postTypeID,
-                          postID: post.translations[language.slug],
-                          leadingSlash: true,
-                        })}
-                      >
-                        <Button
-                          type="text"
-                          shape="circle"
-                          icon={<EditTwoTone />}
-                          disabled={postHasChanged}
-                        />
-                      </Link>
-                    </Tooltip>
-                  );
-
+                  tooltip = 'Edit translation';
+                  icon = <EditTwoTone />;
+                  onClick = () =>
+                    navigate(
+                      generateSlug({
+                        site: sites[siteID],
+                        postTypeID: post.postTypeID,
+                        postID: post.translations[language.slug],
+                        leadingSlash: true,
+                      })
+                    );
                   title =
                     sites[siteID].postTypes?.[post?.postTypeID]?.posts?.[
                       post?.translations?.[language.slug]
@@ -86,29 +76,40 @@ const LanguageList = (props: any) => {
                 } else {
                   const isLoading = loading === language.slug;
 
-                  icon = (
-                    <Tooltip title="Add translation" placement="left">
-                      <Button
-                        type="text"
-                        shape="circle"
-                        icon={<PlusCircleTwoTone spin={isLoading} />}
-                        disabled={postHasChanged}
-                        onClick={() =>
-                          !isLoading &&
-                          handleTranslatePost({ id: post.id, language: language.slug })
-                        }
-                      />
-                    </Tooltip>
-                  );
+                  tooltip = 'Add translation';
+                  icon = <PlusCircleTwoTone spin={isLoading} />;
+                  onClick = () =>
+                    !isLoading && handleTranslatePost({ id: post.id, language: language.slug });
                 }
 
                 return (
-                  <List.Item key={language.id} extra={<IconContainer children={icon} />}>
-                    <Space>
-                      <IconContainer children={language.flag && Parser(language.flag)} />
-                      {title}
-                    </Space>
-                  </List.Item>
+                  <Popconfirm
+                    placement="bottomRight"
+                    title="Discard unsaved changes?"
+                    onConfirm={onClick}
+                    disabled={!postHasChanged && !siteHasChanged}
+                  >
+                    <List.Item
+                      key={language.id}
+                      extra={
+                        <IconContainer>
+                          <Tooltip title={tooltip} placement="left">
+                            <Button
+                              type="text"
+                              shape="circle"
+                              icon={icon}
+                              onClick={() => !postHasChanged && !siteHasChanged && onClick()}
+                            />
+                          </Tooltip>
+                        </IconContainer>
+                      }
+                    >
+                      <Space>
+                        <IconContainer children={language.flag && Parser(language.flag)} />
+                        {title}
+                      </Space>
+                    </List.Item>
+                  </Popconfirm>
                 );
               }}
             />
