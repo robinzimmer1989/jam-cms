@@ -641,7 +641,7 @@ const EditorSidebar = (props: any) => {
           <Space size={15}>
             <Popconfirm
               placement="rightTop"
-              title="Are you sure to discard unsaved changes?"
+              title="Discard unsaved changes?"
               onConfirm={() =>
                 navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))
               }
