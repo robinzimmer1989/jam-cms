@@ -75,20 +75,27 @@ const GeneralSettings = (props: RouteComponentProps) => {
     <CmsLayout pageTitle={`Settings`}>
       <Tabs defaultActiveKey="all" onChange={(v) => setTab(v)}>
         {tabs.map((name: string) => (
-          <Tabs.TabPane key={name} tab={name.toUpperCase()} />
+          <Tabs.TabPane key={name} tab={name.toUpperCase()} disabled={!sites[siteID]} />
         ))}
       </Tabs>
 
       {tab === 'general' && (
         <Card title={`General`}>
           <Space direction="vertical" size={20}>
-            <Input label="Title" value={site?.title} name="title" onChange={handleChange} />
+            <Input
+              label="Title"
+              value={site?.title}
+              name="title"
+              onChange={handleChange}
+              disabled={!sites[siteID]}
+            />
 
             <Input
               label="Frontend URL"
               value={site?.siteUrl}
               name="siteUrl"
               onChange={handleChange}
+              disabled={!sites[siteID]}
             />
 
             <Button
@@ -96,6 +103,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
               onClick={() => handleUpdate({ title: site.title, siteUrl: site.siteUrl }, 'general')}
               children={`Update`}
               type="primary"
+              disabled={!sites[siteID]}
             />
           </Space>
         </Card>
