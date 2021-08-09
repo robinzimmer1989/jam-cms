@@ -13,20 +13,14 @@ let JoditEditor = (props: any) => <></>;
 const HTMLEditor = (props: any) => {
   const { defaultValue = '', onChange } = props;
 
-  const [
-    {
-      editorState: {
-        editorSettings: { fullscreen },
-      },
-    },
-    dispatch,
-  ] = useStore();
+  const [, dispatch] = useStore();
 
   const editorRef = useRef(null);
 
   const [modal, setModal] = useState('');
   const [link, setLink] = useState({} as any);
   const [editor, setEditor] = useState({} as any);
+  const [editorFullscreen, setEditorFullscreen] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [content, setContent] = useState(defaultValue);
   const [index, setIndex] = useState(0);
@@ -60,8 +54,11 @@ const HTMLEditor = (props: any) => {
     }
   }, [defaultValue, loaded]);
 
-  const handleSetFullscreen = (value: boolean) =>
+  const handleSetFullscreen = (value: boolean) => {
+    // We are updating the global and local state for fullscreen. This way we prevent opening the wrong editor (in case there is more than one).
     dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: value } });
+    setEditorFullscreen(value);
+  };
 
   const handleSelectImage = (image: any) => {
     const html = `<img src="${image.url}" alt="${image.altText}" class="wp-image-${image.id}" />`;
@@ -112,12 +109,12 @@ const HTMLEditor = (props: any) => {
         // We store the fullscreen state in the global state to avoid certain responsiveness bugs with the popup menu
         fullsize: {
           exec: function (e: any) {
-            handleSetFullscreen(!fullscreen);
+            handleSetFullscreen(!editorFullscreen);
           },
           update: function (e: any) {
             var t = e.j,
-              n = fullscreen ? 'shrink' : 'fullsize';
-            (e.state.activated = fullscreen),
+              n = editorFullscreen ? 'shrink' : 'fullsize';
+            (e.state.activated = editorFullscreen),
               t.o.textIcons ? (e.state.text = n) : (e.state.icon.name = n);
           },
           tooltip: 'Open editor in fullsize',
@@ -178,10 +175,10 @@ const HTMLEditor = (props: any) => {
         />
       )
     );
-  }, [loaded, fullscreen, mode]);
+  }, [loaded, editorFullscreen, mode]);
 
   return (
-    <Container className={fullscreen ? 'jodit-fullscreen' : ''} fullscreen={fullscreen}>
+    <Container className={editorFullscreen ? 'jodit-fullscreen' : ''} fullscreen={editorFullscreen}>
       <Global />
 
       {jodit}
