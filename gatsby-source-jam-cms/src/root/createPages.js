@@ -38,11 +38,12 @@ const createJamPages = async (
       }
 
       // Capitalize post type name
-      const nodesTypeName = casing(graphqlSingleName, 'pascal');
+      const nodesTypeName = casing(postType, 'pascal');
+
       const gatsbyNodeListFieldName = `allWp${nodesTypeName}`;
 
       // Prepare fragments
-      const archiveFragment = nodesTypeName === 'Page' ? fragments.archive : '';
+      const archiveFragment = postType === 'page' ? fragments.archive : '';
 
       const seoFragment = activePlugins.includes('yoast') ? fragments.seo : '';
 

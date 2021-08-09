@@ -5,10 +5,10 @@ const casing = (string, type = 'camel') => {
 
   string = string.replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ''));
 
-  string = string.substr(0, 1).toLowerCase() + string.substr(1);
-
   if (type === 'pascal') {
     string = string.charAt(0).toUpperCase() + string.slice(1);
+  } else {
+    string = string.charAt(0).toLowerCase() + string.slice(1);
   }
 
   return string;
