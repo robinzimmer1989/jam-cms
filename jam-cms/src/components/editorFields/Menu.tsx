@@ -111,7 +111,11 @@ const Menu = (props: any) => {
       loop(data, dropKey, (item: any) => {
         item.children = item.children || [];
         // where to insert
-        item.children.push(dragObj);
+        if (dropPosition === 0) {
+          item.children.unshift(dragObj);
+        } else {
+          item.children.push(dragObj);
+        }
       });
     } else if (
       (info.node.props.children || []).length > 0 && // Has children
