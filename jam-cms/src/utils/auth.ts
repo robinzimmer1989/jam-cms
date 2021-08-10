@@ -7,48 +7,48 @@ const storageKey = getStorageKey();
 const isBrowser = typeof window !== `undefined`;
 
 export const deleteUser = () => {
-  if (storageKey) {
+  if (isBrowser && storageKey) {
     localStorage.removeItem(storageKey);
   }
 };
 
 export const setUser = (user: any) => {
-  if (storageKey) {
+  if (isBrowser && storageKey) {
     localStorage.setItem(storageKey, JSON.stringify(user));
   }
 };
 
 export const getUser = () => {
-  const user = localStorage.getItem(storageKey);
-  return user ? JSON.parse(user) : {};
+  if (isBrowser && storageKey) {
+    const user = localStorage.getItem(storageKey);
+    return user ? JSON.parse(user) : {};
+  }
+
+  return {};
 };
 
 export const isLoggedIn = () => {
-  if (!isBrowser) {
-    return false;
-  }
+  if (isBrowser) {
+    const user: any = getUser();
 
-  const user: any = getUser();
-
-  if (user) {
-    return !!user.authToken;
+    if (user) {
+      return !!user.authToken;
+    }
   }
 
   return false;
 };
 
 export const getPreviewID = () => {
-  if (!isBrowser) {
-    return false;
+  if (isBrowser) {
+    const preview = getParameter('preview');
+
+    if (preview) {
+      return preview;
+    }
   }
 
-  const preview = getParameter('preview');
-
-  if (!preview) {
-    return false;
-  }
-
-  return preview;
+  return false;
 };
 
 export const logout = (onLogout: any) => {
