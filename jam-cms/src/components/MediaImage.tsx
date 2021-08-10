@@ -6,7 +6,7 @@ import { Button, Space, Row, Col, Popconfirm, Typography } from 'antd';
 import Caption from './Caption';
 import Input from './Input';
 
-import { convertFileSize, renderImage } from '../utils';
+import { convertFileSize, renderMediaItem } from '../utils';
 import { colors } from '../theme';
 
 const MediaImage = (props: any) => {
@@ -37,7 +37,7 @@ const MediaImage = (props: any) => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={12} style={{ background: `${colors.secondaryContrast}` }}>
-          <ImageContainer>{renderImage(file)}</ImageContainer>
+          <ImageContainer>{renderMediaItem(file, false)}</ImageContainer>
         </Col>
         <Col span={12}>
           <Space direction="vertical" size={20}>
@@ -97,7 +97,10 @@ const MediaImage = (props: any) => {
                 />
 
                 <Input label="Url" value={data.url} onChange={() => {}} name={`url`} disabled />
-                <Typography.Paragraph copyable={{ text: data.sourceUrl }} children={'Copy Link'} />
+                <Typography.Paragraph
+                  copyable={{ text: data.sourceUrl || data.url }}
+                  children={'Copy Link'}
+                />
               </Space>
             </Content>
 

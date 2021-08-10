@@ -12,7 +12,7 @@ import { unionBy } from 'lodash';
 
 // import app components
 import MediaImage from './MediaImage';
-import { renderImage, useOnScreen } from '../utils';
+import { renderMediaItem, useOnScreen } from '../utils';
 import { mediaActions } from '../actions';
 import { useStore } from '../store';
 import { colors } from '../theme';
@@ -218,7 +218,7 @@ const MediaLibrary = (props: any) => {
                 return (
                   <MediaItem key={(o as any).id} className="media-item">
                     <MediaItemInner onClick={() => setActiveFile(o)}>
-                      {renderImage(o)}
+                      {renderMediaItem(o)}
                     </MediaItemInner>
 
                     {multiple && (

@@ -19,7 +19,7 @@ import validateEmail from './validateEmail';
 import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
 import formatFields from './formatFields';
-import renderImage from './renderImage';
+import renderMediaItem from './renderMediaItem';
 import addPost from './addPost';
 import useOnScreen from './useOnScreen';
 import getPostID from './getPostID';
@@ -49,7 +49,7 @@ export {
   getParameter,
   getTemplateByPost,
   formatFields,
-  renderImage,
+  renderMediaItem,
   addPost,
   useOnScreen,
   getPostID,
