@@ -152,9 +152,37 @@ const styles = css`
 
 const fontStyles = css`
   letter-spacing: normal;
+  line-height: normal;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  span,
+  strong,
+  em,
+  blockquote,
+  ol,
+  ul,
+  dl,
+  li {
+    letter-spacing: normal;
+    line-height: normal;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+      'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+      'Noto Color Emoji';
+  }
+
+  li {
+    list-style-type: none;
+  }
 
   a {
     text-decoration: none;
@@ -179,24 +207,6 @@ export default createGlobalStyle`
   .jam-cms {
     ${styles}
     ${fontStyles}
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    a,
-    span,
-    ol,
-    ul,
-    li,
-    input,
-    textarea,
-    caption {
-      ${fontStyles}
-    }
   }
   
   .ant-dropdown,
