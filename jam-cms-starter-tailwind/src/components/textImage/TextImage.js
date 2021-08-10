@@ -6,7 +6,7 @@ import Parser from 'html-react-parser';
 import Button from '../button/Button';
 
 const TextImage = (props) => {
-  const { image, alignment, text, buttons } = props;
+  const { image, alignment, size, text, buttons } = props;
 
   return (
     <div className="px-4 py-8 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-12">
@@ -30,23 +30,11 @@ const TextImage = (props) => {
           </div>
         </div>
         <div className={`order-${alignment === 'left' ? 1 : 2}`}>
-          {image ? (
-            <>
-              {image?.svg ? (
-                Parser(image.svg)
-              ) : (
-                <GatsbyImage
-                  objectFit="contain"
-                  image={image}
-                  alt={image.altText}
-                  className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
-                />
-              )}
-            </>
-          ) : (
-            <img
-              src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
-              alt=""
+          {image && (
+            <GatsbyImage
+              imgStyle={{ objectFit: size }}
+              image={image}
+              alt={image.altText}
               className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none md:h-96 lg:h-full"
             />
           )}

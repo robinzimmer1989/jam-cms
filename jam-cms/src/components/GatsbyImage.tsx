@@ -3,7 +3,7 @@ import { GatsbyImage as Image, getImage } from 'gatsby-plugin-image';
 import Parser from 'html-react-parser';
 
 const GatsbyImage = (props: any) => {
-  const { image, alt = '', ...rest } = props;
+  const { image, alt = '', objectFit, imgStyle, ...rest } = props;
 
   if (image?.svg) {
     return <>{Parser(image.svg)}</>;
@@ -16,11 +16,21 @@ const GatsbyImage = (props: any) => {
 
   const component = useMemo(() => {
     if (image?.localFile) {
-      return <Image {...rest} image={getImage(image.localFile)} alt={alt} />;
+      return (
+        <Image
+          {...rest}
+          objectFit={objectFit}
+          imgStyle={imgStyle}
+          image={getImage(image.localFile)}
+          alt={alt}
+        />
+      );
     } else if (image?.sourceUrl) {
       return (
         <Image
           {...rest}
+          objectFit={objectFit}
+          imgStyle={imgStyle}
           image={{
             height: image?.height,
             width: image?.width,
@@ -47,7 +57,7 @@ const GatsbyImage = (props: any) => {
     } else {
       return null;
     }
-  }, [id]);
+  }, [id, objectFit, imgStyle]);
 
   return component;
 };

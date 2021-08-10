@@ -26,6 +26,22 @@ const config = {
       ],
     },
     {
+      id: 'size',
+      type: 'select',
+      label: 'Image Size',
+      defaultValue: 'cover',
+      options: [
+        {
+          name: 'Cover',
+          value: 'cover',
+        },
+        {
+          name: 'Contain',
+          value: 'contain',
+        },
+      ],
+    },
+    {
       id: 'text',
       type: 'wysiwyg',
       label: 'Text',
