@@ -1,5 +1,17 @@
 # Changelog
 
+### 1.10.3
+
+- Fix: Antd typography
+- Fix: Better error handling for bad query
+- Fix: Perceived loading time for site fetch
+- Fix: Duplicated site title in SEO component
+- Fix: Casing for post types / taxonomies like 'product_cat'
+- Fix: Allow menu item drop to first position in submenu
+- Fix: Fullscreen mode when multiple wysiwyg editors are present
+- Fix: Display of videos in media gallery
+- Fix: Listen for image style changes in use memo hook for Gatsby image component
+
 ### 1.10.2
 
 - Fix: Casing error for Netlify builds
