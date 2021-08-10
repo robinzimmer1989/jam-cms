@@ -6,7 +6,7 @@ const GatsbyImage = (props: any) => {
   const { image, alt = '', ...rest } = props;
 
   if (image?.svg) {
-    return Parser(image.svg);
+    return <>{Parser(image.svg)}</>;
   }
 
   const id =
