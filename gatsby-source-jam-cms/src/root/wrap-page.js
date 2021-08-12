@@ -57,7 +57,7 @@ if (fields && fields.postTypes) {
 }
 
 // Loop through taxonomies and add React component to fields object
-if (fields && fields.postTypes) {
+if (fields && fields.taxonomies) {
   for (const taxonomyIndex in fields.taxonomies) {
     const taxonomy = fields.taxonomies[taxonomyIndex].id;
 
