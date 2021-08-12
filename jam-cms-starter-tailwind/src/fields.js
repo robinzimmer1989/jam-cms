@@ -38,7 +38,7 @@ const fields = {
       postTypes: ['post'],
     },
     {
-      id: 'product_cat',
+      id: 'productCat',
       title: 'Product Category',
       postTypes: ['product'],
     },
