@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Space, message, Select as AntSelect, Tabs, Table } from 'antd';
+import { Button, Card, Space, message, Select as AntSelect, Tabs } from 'antd';
 import produce from 'immer';
 import { set } from 'lodash';
-import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import Input from '../components/Input';
 import Select from '../components/Select';
 import LanguageSettings from '../components/settings/LanguageSettings';
 import CmsLayout from '../components/CmsLayout';
+import { RootState, useAppDispatch, useAppSelector, siteReducer, addEditorSite } from '../redux';
 
-import { useStore } from '../store';
-import { siteActions } from '../actions';
+const GeneralSettings = (props: any) => {
+  const { fields } = props;
 
-const GeneralSettings = (props: RouteComponentProps) => {
-  const [
-    {
+  const {
+    cms: {
       config,
-      cmsState: { sites, siteID },
-      editorState: { site },
+      site,
+      editor: { site: editorSite },
     },
-    dispatch,
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [tab, setTab] = useState('general');
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    dispatch({
-      type: `ADD_EDITOR_SITE`,
-      payload: sites[siteID],
-    });
+    dispatch(addEditorSite(site));
   }, []);
 
   const handleChange = (e: any) => {
-    const nextSite = produce(site, (draft: any) => {
+    const nextSite = produce(editorSite, (draft: any) => {
       return set(draft, `${e.target.name}`, e.target.value);
     });
 
@@ -45,7 +42,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
   };
 
   const handleChangeSelect = (value: any, name: any) => {
-    const nextSite = produce(site, (draft: any) => {
+    const nextSite = produce(editorSite, (draft: any) => {
       return set(draft, `${name}`, value);
     });
 
@@ -56,10 +53,8 @@ const GeneralSettings = (props: RouteComponentProps) => {
   };
 
   const handleUpdate = async (args: any, loader: any) => {
-    const { id } = site;
-
     setLoading(loader);
-    await siteActions.updateSite({ id, ...args }, dispatch, config);
+    await siteReducer.updateSite(args);
     setLoading(null);
 
     message.success('Updated successfully');
@@ -67,15 +62,15 @@ const GeneralSettings = (props: RouteComponentProps) => {
 
   const tabs: any = ['general', 'deployment', 'syncing', 'api', 'editor'];
 
-  if (!!site?.languages) {
+  if (!!editorSite?.languages) {
     tabs.push('languages');
   }
 
   return (
-    <CmsLayout pageTitle={`Settings`}>
+    <CmsLayout fields={fields} pageTitle={`Settings`}>
       <Tabs defaultActiveKey="all" onChange={(v) => setTab(v)}>
         {tabs.map((name: string) => (
-          <Tabs.TabPane key={name} tab={name.toUpperCase()} disabled={!sites[siteID]} />
+          <Tabs.TabPane key={name} tab={name.toUpperCase()} disabled={!site} />
         ))}
       </Tabs>
 
@@ -84,26 +79,28 @@ const GeneralSettings = (props: RouteComponentProps) => {
           <Space direction="vertical" size={20}>
             <Input
               label="Title"
-              value={site?.title}
+              value={editorSite?.title}
               name="title"
               onChange={handleChange}
-              disabled={!sites[siteID]}
+              disabled={!site}
             />
 
             <Input
               label="Frontend URL"
-              value={site?.siteUrl}
+              value={editorSite?.siteUrl}
               name="siteUrl"
               onChange={handleChange}
-              disabled={!sites[siteID]}
+              disabled={!site}
             />
 
             <Button
               loading={loading === 'general'}
-              onClick={() => handleUpdate({ title: site.title, siteUrl: site.siteUrl }, 'general')}
+              onClick={() =>
+                handleUpdate({ title: editorSite?.title, siteUrl: editorSite?.siteUrl }, 'general')
+              }
               children={`Update`}
               type="primary"
-              disabled={!sites[siteID]}
+              disabled={!site}
             />
           </Space>
         </Card>
@@ -114,21 +111,21 @@ const GeneralSettings = (props: RouteComponentProps) => {
           <Space direction="vertical" size={20}>
             <Input
               label="Build Hook"
-              value={site?.deployment?.buildHook}
+              value={editorSite?.deployment?.buildHook}
               name="deployment.buildHook"
               onChange={handleChange}
             />
 
             <Input
               label="Badge Image"
-              value={site?.deployment?.badgeImage}
+              value={editorSite?.deployment?.badgeImage}
               name="deployment.badgeImage"
               onChange={handleChange}
             />
 
             <Input
               label="Badge Link"
-              value={site?.deployment?.badgeLink}
+              value={editorSite?.deployment?.badgeLink}
               name="deployment.badgeLink"
               onChange={handleChange}
             />
@@ -138,7 +135,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
               onClick={() =>
                 handleUpdate(
                   {
-                    deployment: site?.deployment,
+                    deployment: editorSite?.deployment,
                   },
                   'deployment'
                 )
@@ -153,7 +150,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
       {tab === 'syncing' && (
         <Card title={'Syncing'}>
           <Space direction="vertical" size={20}>
-            <Input label="Api Key" value={site?.apiKey} name="apiKey" disabled />
+            <Input label="Api Key" value={editorSite?.apiKey} name="apiKey" disabled />
 
             <Button
               loading={loading === 'syncing'}
@@ -170,14 +167,14 @@ const GeneralSettings = (props: RouteComponentProps) => {
           <Space direction="vertical" size={20}>
             <Input
               label="Google Maps API Key"
-              value={site?.googleMapsApi}
+              value={editorSite?.googleMapsApi}
               name="googleMapsApi"
               onChange={handleChange}
             />
 
             <Button
               loading={loading === 'api'}
-              onClick={() => handleUpdate({ googleMapsApi: site.googleMapsApi }, 'api')}
+              onClick={() => handleUpdate({ googleMapsApi: editorSite?.googleMapsApi }, 'api')}
               children={`Update`}
               type="primary"
             />
@@ -190,7 +187,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
           <Space direction="vertical" size={20}>
             <Select
               label="Position"
-              value={site?.editorOptions?.sidebar?.position}
+              value={editorSite?.editorOptions?.sidebar?.position}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.position')}
             >
               <AntSelect.Option value="left" children="Left" />
@@ -199,7 +196,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
 
             <Select
               label="Style"
-              value={site?.editorOptions?.sidebar?.style}
+              value={editorSite?.editorOptions?.sidebar?.style}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.style')}
             >
               <AntSelect.Option value="inline" children="Inline" />
@@ -209,7 +206,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
 
             <Select
               label="Default Status"
-              value={site?.editorOptions?.sidebar?.defaultOpen}
+              value={editorSite?.editorOptions?.sidebar?.defaultOpen}
               onChange={(v: any) => handleChangeSelect(v, 'editorOptions.sidebar.defaultOpen')}
             >
               <AntSelect.Option value={'true'} children="Open" />
@@ -221,7 +218,7 @@ const GeneralSettings = (props: RouteComponentProps) => {
               onClick={() =>
                 handleUpdate(
                   {
-                    editorOptions: site?.editorOptions,
+                    editorOptions: editorSite?.editorOptions,
                   },
                   'editor'
                 )

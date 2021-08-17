@@ -5,18 +5,19 @@ import { debounce } from 'lodash';
 import { Space, Button, Typography } from 'antd';
 
 // import app components
-import { useStore } from '../../store';
+import { RootState, useAppDispatch, useAppSelector, showDialog, hideDialog } from '../../redux';
 
 const EditorWrapper = (props: any) => {
   const { sidebarActive, loaded, locked, children } = props;
 
-  const [
-    {
-      cmsState: { sites, siteID },
-      editorState: { siteHasChanged, postHasChanged, changeIndex },
+  const {
+    cms: {
+      site,
+      editor: { siteHasChanged, postHasChanged, changeIndex },
     },
-    dispatch,
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   // We need the window width to calculate scaling
   const [windowWidth, setWindowWidth] = useState(null as any);
@@ -49,9 +50,8 @@ const EditorWrapper = (props: any) => {
         if (siteHasChanged || postHasChanged) {
           e.preventDefault();
           // Display confirmation dialog
-          dispatch({
-            type: 'SET_DIALOG',
-            payload: {
+          dispatch(
+            showDialog({
               open: true,
               title: 'Warning',
               component: (
@@ -60,7 +60,7 @@ const EditorWrapper = (props: any) => {
                     children={'There are unsaved changes. Are you sure you want to discard them?'}
                   />
                   <Space>
-                    <Button children="Cancel" onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} />
+                    <Button children="Cancel" onClick={() => dispatch(hideDialog())} />
                     <Button
                       children="Discard changes"
                       danger
@@ -73,15 +73,15 @@ const EditorWrapper = (props: any) => {
                           navigate(node.href);
                         }
 
-                        dispatch({ type: 'CLOSE_DIALOG' });
+                        dispatch(hideDialog());
                       }}
                     />
                   </Space>
                 </Space>
               ),
               width: 320,
-            },
-          });
+            })
+          );
         }
       };
     }
@@ -92,12 +92,12 @@ const EditorWrapper = (props: any) => {
       id="jam-cms"
       loaded={loaded}
       locked={locked}
-      sidebar={{ active: sidebarActive, ...sites[siteID]?.editorOptions?.sidebar }}
+      sidebar={{ active: sidebarActive, ...site?.editorOptions?.sidebar }}
     >
       <Inner
         loaded={loaded}
         locked={locked}
-        sidebar={{ active: sidebarActive, ...sites[siteID]?.editorOptions?.sidebar }}
+        sidebar={{ active: sidebarActive, ...site?.editorOptions?.sidebar }}
         windowWidth={windowWidth}
       >
         {children}

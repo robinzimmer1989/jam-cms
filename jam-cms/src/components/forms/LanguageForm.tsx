@@ -5,35 +5,26 @@ import Parser from 'html-react-parser';
 // import app components
 import Select from '../Select';
 import Input from '../Input';
-import { languageActions } from '../../actions';
-import { useStore } from '../../store';
+import { RootState, useAppDispatch, useAppSelector, languageReducer } from '../../redux';
 
 const LanguageForm = (props: any) => {
   const { language: defaultLanguage = { id: null, name: '', slug: '', locale: '' } } = props;
 
-  const [
-    {
-      config,
-      cmsState: { siteID },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { languages },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [loadingLanguages, setLoadingLanguages] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [languages, setLanguages] = useState([]);
   const [language, setLanguage] = useState(defaultLanguage);
 
   useEffect(() => {
     // Load language options for select field
     const loadLanguages = async () => {
-      const result = await languageActions.getLanguages({}, dispatch, config);
-
-      if (result) {
-        setLanguages(result);
-      }
-
+      await languageReducer.getLanguages();
       setLoadingLanguages(false);
     };
 
@@ -52,9 +43,9 @@ const LanguageForm = (props: any) => {
     setLoading(true);
 
     if (id) {
-      await languageActions.updateLanguage({ siteID, id, name, slug, locale }, dispatch, config);
+      await languageReducer.updateLanguage({ id, name, slug, locale });
     } else {
-      await languageActions.addLanguage({ siteID, name, slug, locale }, dispatch, config);
+      await languageReducer.addLanguage({ name, slug, locale });
     }
 
     // Reset to default and close modal

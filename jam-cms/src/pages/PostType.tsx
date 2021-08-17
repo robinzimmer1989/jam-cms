@@ -24,21 +24,19 @@ import Loader from '../components/Loader';
 import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
 import { postActions, siteActions, languageActions } from '../actions';
-import { useStore } from '../store';
-import { createDataTree, generateSlug, addPost, translatePost } from '../utils';
+import { postReducer, RootState, useAppDispatch, useAppSelector } from '../redux';
+import { createDataTree, generateSlug } from '../utils';
 import { colors } from '../theme';
 import getRoute from '../routes';
 
 const PostType = (props: any) => {
-  const { postTypeID } = props;
+  const { postTypeID, fields } = props;
 
-  const [
-    {
-      config,
-      cmsState: { sites, siteID, activeLanguage },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { config, site, activeLanguage },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [filter, setFilter] = useState('all');
   const [category, setCategory] = useState(null as any);
@@ -46,11 +44,11 @@ const PostType = (props: any) => {
   const [loading, setLoading] = useState('');
 
   // Check if post type supports languages
-  const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+  const postTypeSupportsLanguages = !!site?.languages?.postTypes?.find(
     (s: string) => s === postTypeID
   );
 
-  const postType = sites[siteID]?.postTypes?.[postTypeID];
+  const postType = site?.postTypes?.[postTypeID];
   const posts = postType?.posts ? Object.values(postType.posts) : [];
 
   // Check if there are untranslated posts
@@ -88,15 +86,13 @@ const PostType = (props: any) => {
   visiblePosts = createDataTree(visiblePosts);
 
   const taxonomies =
-    sites[siteID] &&
-    Object.values(sites[siteID]?.taxonomies).filter((o) =>
-      (o as any)?.postTypes.includes(postTypeID)
-    );
+    site &&
+    Object.values(site?.taxonomies).filter((o) => (o as any)?.postTypes.includes(postTypeID));
 
   useEffect(() => {
     // Navigate to dashboard if template not found in fields object
-    if (!config?.fields?.postTypes?.[postTypeID]) {
-      navigate(getRoute('dashboard', { siteID }));
+    if (!fields?.postTypes?.[postTypeID]) {
+      navigate(getRoute('dashboard'));
     }
   }, []);
 
@@ -109,23 +105,17 @@ const PostType = (props: any) => {
 
   const handleSync = async () => {
     setLoading('sync');
-    await siteActions.syncFields(
-      { fields: config.fields, apiKey: sites[siteID]?.apiKey },
-      dispatch,
-      config
-    );
+    await siteActions.syncFields({ fields, apiKey: site?.apiKey }, dispatch, config);
     setLoading('');
   };
 
   const handleTranslateMass = async () => {
     setLoading('translate');
 
-    const language =
-      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+    const language = activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
 
     await languageActions.translateMass(
       {
-        siteID,
         postTypeID,
         type: 'post',
         ids: posts.filter((o: any) => !o.language).map((o: any) => o.id),
@@ -138,20 +128,20 @@ const PostType = (props: any) => {
   };
 
   const handleDuplicatePost = async ({ postID }: any) => {
-    await postActions.duplicatePost({ siteID, id: postID }, dispatch, config);
+    await postActions.duplicatePost({ id: postID }, dispatch, config);
   };
 
   const handleDeletePost = async ({ postID }: any) => {
-    await postActions.deletePost({ siteID, postTypeID, id: postID }, dispatch, config);
+    await postActions.deletePost({ postTypeID, id: postID }, dispatch, config);
   };
 
   const handleAddPost = async (args: any) => {
-    await addPost({ site: sites[siteID], ...args }, dispatch, config);
+    dispatch(postReducer.addPost(args));
   };
 
   const handleTrashPost = async ({ postID }: any) => {
     const result = await postActions.updatePost(
-      { siteID, postTypeID, id: postID, status: 'trash' },
+      { postTypeID, id: postID, status: 'trash' },
       dispatch,
       config
     );
@@ -164,7 +154,7 @@ const PostType = (props: any) => {
     setLoading('empty-trash');
 
     const result = await postActions.emptyTrash(
-      { siteID, postTypeID, language: activeLanguage },
+      { postTypeID, language: activeLanguage },
       dispatch,
       config
     );
@@ -177,20 +167,18 @@ const PostType = (props: any) => {
   };
 
   const handleTranslatePost = async ({ id, language }: any) => {
-    await translatePost({ sites, siteID, id, language }, dispatch, config);
+    dispatch(postReducer.translatePost({ id, language }));
   };
 
   const renderUntranslatedPostsWarning = () => {
     const languageSlug =
-      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+      activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
 
     if (!languageSlug) {
       return null;
     }
 
-    const languageName = sites[siteID]?.languages?.languages.find(
-      (o: any) => o.slug === languageSlug
-    )?.name;
+    const languageName = site?.languages?.languages.find((o: any) => o.slug === languageSlug)?.name;
 
     return (
       <Alert
@@ -235,7 +223,7 @@ const PostType = (props: any) => {
         placeholder="Select category"
       >
         {taxonomies
-          .filter((o: any) => !!config?.fields?.taxonomies.find((p: any) => p.id === o.id))
+          .filter((o: any) => !!fields?.taxonomies.find((p: any) => p.id === o.id))
           .map((o: any) => {
             return (
               <Select.OptGroup key={o.id} label={o.title}>
@@ -308,7 +296,7 @@ const PostType = (props: any) => {
 
   const renderPost = (o: any, level: any) => {
     const slug = generateSlug({
-      site: sites[siteID],
+      site: site,
       postTypeID,
       postID: o.id,
       leadingSlash: true,
@@ -361,7 +349,7 @@ const PostType = (props: any) => {
           onEdit={(language: string) =>
             navigate(
               generateSlug({
-                site: sites[siteID],
+                site: site,
                 postTypeID: o.postTypeID,
                 postID: o.language === language ? o.id : o.translations[language],
                 leadingSlash: true,
@@ -375,8 +363,8 @@ const PostType = (props: any) => {
     let badges = [];
 
     if (
-      sites[siteID]?.frontPage === o.id ||
-      o?.translations?.[sites[siteID]?.languages?.defaultLanguage] === sites[siteID]?.frontPage
+      site?.frontPage === o.id ||
+      o?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage
     ) {
       badges.push(<Tag key="front" children={'front'} />);
     }
@@ -442,12 +430,15 @@ const PostType = (props: any) => {
       return draft;
     });
 
-    await postActions.reorderPosts({ siteID, postType, posts: nextPosts }, dispatch, config);
+    await postActions.reorderPosts({ posts: nextPosts }, dispatch, config);
   };
 
   return (
-    <CmsLayout pageTitle={config?.fields?.postTypes?.[postTypeID]?.title || postType?.title}>
-      {sites[siteID] && !postType && (
+    <CmsLayout
+      fields={fields}
+      pageTitle={fields?.postTypes?.[postTypeID]?.title || postType?.title}
+    >
+      {site && !postType && (
         <Alert
           message="Unknown post type"
           description="Restart the development process or sync new data now"
@@ -465,7 +456,7 @@ const PostType = (props: any) => {
 
       <PageHeader title={filterItems} extra={extra} />
 
-      {sites[siteID] ? (
+      {site ? (
         <>
           {visiblePosts && (
             <Space direction="vertical" size={8}>

@@ -8,21 +8,20 @@ import Input from './Input';
 import ListItem from './ListItem';
 import Tag from './Tag';
 import { createDataTree, generateRandomString, generateSlug } from '../utils';
-import { useStore } from '../store';
+import { RootState, useAppSelector } from '../redux';
 
 const Menu = (props: any) => {
   const { onAdd } = props;
-  const [
-    {
-      cmsState: { sites, siteID },
-    },
-  ] = useStore();
+
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
   const [filter, setFilter] = useState('page');
   const [link, setLink] = useState({ title: '', url: '' });
 
   // Get posts by filter
-  const postType = sites[siteID]?.postTypes?.[filter];
+  const postType = site?.postTypes?.[filter];
   let posts = postType?.posts ? Object.values(postType.posts) : [];
 
   // Sort posts by menu order
@@ -47,7 +46,7 @@ const Menu = (props: any) => {
 
   const renderPost = (o: any, level: any) => {
     const slug = generateSlug({
-      site: sites[siteID],
+      site,
       postTypeID: postType.id,
       postID: o.id,
       leadingSlash: true,
@@ -55,8 +54,9 @@ const Menu = (props: any) => {
 
     let badges = [];
     if (
-      sites[siteID]?.frontPage === o.id ||
-      o?.translations?.[sites[siteID]?.languages?.defaultLanguage] === sites[siteID]?.frontPage
+      site?.frontPage === o.id ||
+      (site?.languages?.defaultLanguage &&
+        o?.translations?.[site.languages.defaultLanguage] === site?.frontPage)
     ) {
       badges.push(<Tag key="front" children={'front'} />);
     }
@@ -76,7 +76,7 @@ const Menu = (props: any) => {
               postID: o.id,
               children: [],
               url: generateSlug({
-                site: sites[siteID],
+                site: site,
                 postTypeID: postType.id,
                 postID: o.id,
                 leadingSlash: true,
@@ -109,7 +109,7 @@ const Menu = (props: any) => {
       <Tabs defaultActiveKey={filter} onChange={(v) => setFilter(v)}>
         <Tabs.TabPane key={'page'} tab={'PAGE'} />
 
-        {Object.values(sites[siteID]?.postTypes)
+        {Object.values(site?.postTypes)
           .filter((o) => (o as any).id !== 'page')
           .map((o) => {
             return <Tabs.TabPane key={(o as any).id} tab={(o as any).id.toUpperCase()} />;

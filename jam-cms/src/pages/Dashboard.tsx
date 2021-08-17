@@ -5,52 +5,33 @@ import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import { siteActions } from '../actions';
-import { useStore } from '../store';
+import { RootState, useAppDispatch, useAppSelector, siteReducer } from '../redux';
 import { version } from '../../package.json';
 
-const Dashboard = (props: RouteComponentProps) => {
-  const [
-    {
-      config,
-      cmsState: { sites, siteID },
-    },
-    dispatch,
-  ] = useStore();
+const Dashboard = (props: any) => {
+  const { fields } = props;
 
-  const [changes, setChanges] = useState(null as any);
+  const {
+    cms: { site, unpublishedChanges },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
+
   const [loading, setLoading] = useState(false);
 
-  const lastBuild = sites[siteID]?.deployment?.lastBuild;
+  const lastBuild = site?.deployment?.lastBuild;
 
   useEffect(() => {
-    const getUnpublishedChanges = async () => {
-      const result = await siteActions.getUnpublishedChanges({ siteID }, dispatch, config);
-      if (result) {
-        setChanges(result);
-      }
-    };
-    getUnpublishedChanges();
+    dispatch(siteReducer.getUnpublishedChanges());
   }, [lastBuild]);
 
   const handleDeploy = async () => {
     setLoading(true);
-
-    await siteActions.deploySite({ id: siteID }, dispatch, config);
-
-    if (sites[siteID]?.deployment?.badgeImage) {
-      dispatch({
-        type: 'SET_DEPLOYMENT_IMAGE',
-        payload: `${sites[siteID].deployment.badgeImage}?v=${Math.floor(
-          Math.random() * Math.floor(100)
-        )}`,
-      });
-    }
-
+    await siteReducer.deploySite();
     setLoading(false);
   };
 
-  const deploymentButton = sites[siteID]?.deployment?.buildHook
+  const deploymentButton = site?.deployment?.buildHook
     ? [
         <Button
           key="deploy"
@@ -63,14 +44,14 @@ const Dashboard = (props: RouteComponentProps) => {
     : null;
 
   return (
-    <CmsLayout pageTitle={`Dashboard`}>
+    <CmsLayout fields={fields} pageTitle={`Dashboard`}>
       <Space direction="vertical" size={40}>
         <Card title="Unpublished changes" extra={deploymentButton}>
-          {changes === null ? (
+          {unpublishedChanges === null ? (
             <Skeleton paragraph={{ rows: 4 }} active />
-          ) : (changes as any)?.length ? (
+          ) : unpublishedChanges.length ? (
             <List
-              dataSource={changes}
+              dataSource={unpublishedChanges}
               renderItem={(o) => (
                 <List.Item actions={[<span key="type">{(o as any).actionType}</span>]}>
                   <List.Item.Meta

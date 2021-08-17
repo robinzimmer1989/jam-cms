@@ -25,20 +25,17 @@ import Gallery from '../editorFields/Gallery';
 import GoogleMap from '../editorFields/GoogleMap';
 import ColorPicker from '../editorFields/ColorPicker';
 
-import { useStore } from '../../store';
+import { useAppDispatch, showDialog } from '../../redux';
 
-export const getField = ({ index, field, site, onChangeElement, dispatch, level = 1 }: any) => {
+export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
+  const dispatch: any = useAppDispatch();
+
   let component;
 
   switch (field.type) {
     case 'group':
       component = (
-        <Group
-          {...field}
-          site={site}
-          dispatch={dispatch}
-          onChange={(value: any) => onChangeElement({ ...field, value })}
-        />
+        <Group {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
       );
       break;
 
@@ -85,9 +82,8 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
           {...field}
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
-            dispatch({
-              type: `SET_DIALOG`,
-              payload: {
+            dispatch(
+              showDialog({
                 open: true,
                 title: 'Link',
                 component: (
@@ -97,8 +93,8 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
                   />
                 ),
                 width: 500,
-              },
-            })
+              })
+            )
           }
         />
       );
@@ -126,8 +122,6 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
       component = (
         <Repeater
           {...field}
-          site={site}
-          dispatch={dispatch}
           onChange={(value: any) => onChangeElement({ ...field, value })}
           level={level}
         />
@@ -138,8 +132,6 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
       component = (
         <FlexibleContent
           {...field}
-          site={site}
-          dispatch={dispatch}
           onChange={(value: any) => onChangeElement({ ...field, value })}
           level={level}
         />
@@ -152,9 +144,8 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
           {...field}
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
-            dispatch({
-              type: `SET_DIALOG`,
-              payload: {
+            dispatch(
+              showDialog({
                 open: true,
                 title: 'Media',
                 component: (
@@ -164,8 +155,8 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
                   />
                 ),
                 width: 1024,
-              },
-            })
+              })
+            )
           }
         />
       );
@@ -211,11 +202,7 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
 
     case 'google_map':
       component = (
-        <GoogleMap
-          {...field}
-          site={site}
-          onChange={(value: any) => onChangeElement({ ...field, value })}
-        />
+        <GoogleMap {...field} onChange={(value: any) => onChangeElement({ ...field, value })} />
       );
       break;
 
@@ -244,19 +231,12 @@ export const getField = ({ index, field, site, onChangeElement, dispatch, level 
 const Fields = (props: any) => {
   const { fields, onChangeElement } = props;
 
-  const [
-    {
-      editorState: { site },
-    },
-    dispatch,
-  ] = useStore();
-
   return (
     <Container>
       {fields &&
         fields
           .filter((field: any) => !!field)
-          .map((field: any) => getField({ field, site, onChangeElement, dispatch, level: 0 }))}
+          .map((field: any) => getField({ field, onChangeElement, level: 0 }))}
     </Container>
   );
 };

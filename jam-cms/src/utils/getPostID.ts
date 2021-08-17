@@ -1,6 +1,10 @@
 import generateSlug from './generateSlug';
 
 export default function getPostID(site: any) {
+  if (!site) {
+    return null;
+  }
+
   const pathname = window.location.pathname;
   const sanitizedPathname = pathname === '/' ? pathname : pathname.replace(/\/$/, '');
 

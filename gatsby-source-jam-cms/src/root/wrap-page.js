@@ -111,13 +111,12 @@ try {
 }
 
 // eslint-disable-next-line react/prop-types,react/display-name
-module.exports = ({ element, props }, { source, settings, siteID }) => (
+module.exports = ({ element, props }, { source, settings }) => (
   <JamCms
     {...props}
     fields={fields}
     source={source}
     settings={settings}
-    siteID={siteID}
     privateTemplateExists={privateTemplateExists}
   >
     {element}

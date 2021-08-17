@@ -6,19 +6,16 @@ import { Button } from 'antd';
 // import components
 import PreviewEditor from '../editor/PreviewEditor';
 import Loader from '../Loader';
-
-import { useStore } from '../../store';
+import { RootState, useAppSelector } from '../../redux';
 
 const PreviewRouter = (props: any) => {
-  const [
-    {
-      cmsState: { sites, siteID },
-    },
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
   return (
     <>
-      {sites[siteID] ? (
+      {site ? (
         <Router>
           <PreviewEditor path={'*'} {...props} />
         </Router>

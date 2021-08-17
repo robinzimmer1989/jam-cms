@@ -11,37 +11,35 @@ import Loader from '../Loader';
 import Sidebar from './Sidebar';
 import Editor from './Editor';
 import { getTemplateByPost, getPostID } from '../../utils';
-import { useStore } from '../../store';
-import { postActions } from '../../actions';
 import getRoute from '../../routes';
+import { RootState, useAppDispatch, useAppSelector, postReducer } from '../../redux';
 
 // We need to store the post ID so we can remove the lock when navigating to a different page (old ID won't be available anymore)
 let postLockID: any = null;
 
 const AdminEditor = (props: any) => {
-  const { defaultComponent } = props;
+  const { fields, defaultComponent } = props;
 
-  const [
-    {
-      config,
-      cmsState: { sites, siteID },
-      editorState: { post, editorSettings },
+  const {
+    ui: { editorSettings },
+    cms: {
+      site,
+      editor: { post },
     },
-    dispatch,
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const postID = useMemo(() => {
-    return sites[siteID]?.id && getPostID(sites[siteID]);
-  }, [sites[siteID]?.id, window.location.pathname]);
+    return getPostID(site);
+  }, [site?.id, window.location.pathname]);
 
   // Timer for lock check
   const [postLockTimer, setPostLockTimer] = useState(0);
 
   // Determine if sidebar should be open on default when visiting the editor
-  const [sidebarActive, setSidebarActive] = useState(
-    !!sites[siteID]?.editorOptions?.sidebar?.defaultOpen
-  );
-  const template = getTemplateByPost(post, config?.fields);
+  const [sidebarActive, setSidebarActive] = useState(!!site?.editorOptions?.sidebar?.defaultOpen);
+  const template = getTemplateByPost(post, fields);
   const Component = template?.component;
 
   const loaded = postID && post?.id === postID;
@@ -59,7 +57,7 @@ const AdminEditor = (props: any) => {
 
     return () => {
       clearInterval(intervalID);
-      if (loaded && !post.locked) {
+      if (loaded && !post?.locked) {
         // Remove post lock once we leave the post editor
         removePostLock(postID);
       }
@@ -97,7 +95,7 @@ const AdminEditor = (props: any) => {
   useEffect(() => {
     loadPost();
     // Add fresh copy of editor to state
-    dispatch({ type: 'ADD_EDITOR_SITE', payload: sites[siteID] });
+    dispatch({ type: 'ADD_EDITOR_SITE', payload: site });
     return () => dispatch({ type: 'CLEAR_EDITOR' });
   }, [postID]);
 
@@ -106,18 +104,11 @@ const AdminEditor = (props: any) => {
   });
 
   const loadPost = async () => {
-    if (!postID) {
-      return;
-    }
-    const result = await postActions.getPost({ siteID, postID }, dispatch, config);
-    if (result) {
-      dispatch({ type: 'ADD_POST', payload: { ...result, siteID } });
-      dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID } });
-    }
+    postID && postReducer.getPost({ id: postID });
   };
 
   const handleTakeOver = async () => {
-    await postActions.takeOverPost({ siteID, id: postID }, dispatch, config);
+    await postReducer.takeOverPost({ id: postID });
   };
 
   const handleOpenTakeOverDialog = () => {
@@ -129,7 +120,7 @@ const AdminEditor = (props: any) => {
         component: (
           <Space direction="vertical" size={20}>
             <Typography.Text>
-              This content is currently locked. If you take over, {post.locked.email} will be
+              This content is currently locked. If you take over, {post?.locked?.email} will be
               blocked from continuing to edit.
             </Typography.Text>
 
@@ -137,9 +128,7 @@ const AdminEditor = (props: any) => {
               <Button
                 onClick={() => {
                   dispatch({ type: 'CLOSE_DIALOG' });
-                  navigate(
-                    getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
-                  );
+                  navigate(getRoute(`collection`, { postTypeID: post?.postTypeID || 'page' }));
                 }}
                 children="Dashboard"
               />
@@ -153,11 +142,11 @@ const AdminEditor = (props: any) => {
   };
 
   const refreshPostLock = async () => {
-    await postActions.refreshPostLock({ siteID, id: postID }, dispatch, config);
+    await postReducer.refreshPostLock({ id: postID });
   };
 
   const removePostLock = async (id: any) => {
-    await postActions.removePostLock({ siteID, id }, dispatch, config);
+    await postReducer.removePostLock({ id });
   };
 
   const handleToggleSidebar = () => {
@@ -173,7 +162,7 @@ const AdminEditor = (props: any) => {
     setSidebarActive(!sidebarActive);
   };
 
-  const sidebarOptions = { ...sites[siteID]?.editorOptions?.sidebar, active: sidebarActive };
+  const sidebarOptions = { ...site?.editorOptions?.sidebar, active: sidebarActive };
 
   if (!postID) {
     return defaultComponent;
@@ -183,7 +172,7 @@ const AdminEditor = (props: any) => {
     <>
       <EditorWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
         {loaded ? (
-          <Editor postID={postID} {...props} sidebarOptions={sidebarOptions} />
+          <Editor fields={fields} postID={postID} {...props} sidebarOptions={sidebarOptions} />
         ) : (
           <Loader />
         )}
@@ -192,7 +181,7 @@ const AdminEditor = (props: any) => {
       {loaded && (
         <>
           {post?.locked ? (
-            <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
+            <FloatingButton sidebarPosition={site?.editorOptions?.sidebar?.position}>
               <Button
                 icon={<LockOutlined />}
                 onClick={handleOpenTakeOverDialog}
@@ -205,11 +194,12 @@ const AdminEditor = (props: any) => {
               {sidebarActive ? (
                 <Sidebar
                   className="jam-cms"
+                  fields={fields}
                   editable={!!Component}
                   onToggleSidebar={handleToggleSidebar}
                 />
               ) : (
-                <FloatingButton sidebarPosition={sites[siteID]?.editorOptions?.sidebar?.position}>
+                <FloatingButton sidebarPosition={site?.editorOptions?.sidebar?.position}>
                   <Button
                     icon={<EditOutlined />}
                     onClick={handleToggleSidebar}

@@ -6,17 +6,13 @@ import { Menu, Button, Dropdown } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 // import app components
-import { useStore } from '../store';
-import { authActions } from '../actions';
+import { logout } from '../utils/auth';
 import getRoute from '../routes';
 
 const AvatarMenu = (props: any) => {
   const { ghost } = props;
 
-  const [{ config }, dispatch] = useStore();
-
-  const handleSignOut = () =>
-    authActions.signOut({ onLogout: () => navigate('/') }, dispatch, config);
+  const handleSignOut = () => logout(() => navigate('/'));
 
   const dropDownMenu = (
     <StyledMenu>

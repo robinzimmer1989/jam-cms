@@ -6,7 +6,7 @@ import { Button, Card, Space, Form, message, Row } from 'antd';
 // import app components
 import Input from './Input';
 
-import { authActions } from '../actions';
+import { authServices } from '../services';
 import { ROUTE_APP } from '../routes';
 import { auth, validateEmail, getParameter } from '../utils';
 import { colors } from '../theme';
@@ -68,7 +68,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result: any = await authActions.signIn({ email, password }, url);
+      const result: any = await authServices.signIn({ email, password }, url);
 
       // While technically logging in as i.e. a subscriber succeeds, we gonna display an error message instead if user doesn't have level 1 capabilities.
       if (!result?.authToken || (isAdmin && !result?.capabilities?.level_1)) {
@@ -99,7 +99,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result = await authActions.forgetPassword({ email }, url);
+      const result = await authServices.forgetPassword({ email }, url);
 
       if (result?.data?.sendPasswordResetEmail) {
         setData({
@@ -128,7 +128,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result = await authActions.resetPassword({ key, login, password }, url);
+      const result = await authServices.resetPassword({ key, login, password }, url);
 
       if (result?.data?.resetUserPassword) {
         setData({

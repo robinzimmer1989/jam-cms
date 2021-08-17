@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 
 // import components
-import { useStore } from '../store';
-import { authActions } from '../actions';
 import { getUser } from '../utils/auth';
+import { authReducer, useAppDispatch } from '../redux';
 
 const useAuth = () => {
-  const [{ config }, dispatch] = useStore();
+  const dispatch: any = useAppDispatch();
 
   const [timer, setTimer] = useState(0);
 
@@ -29,7 +28,7 @@ const useAuth = () => {
 
   useEffect(() => {
     const refreshToken = async () => {
-      await authActions.refreshToken({}, dispatch, config);
+      authReducer.refreshToken();
     };
 
     if (timer > 0) {
@@ -38,13 +37,7 @@ const useAuth = () => {
   }, [timer]);
 
   useEffect(() => {
-    const loadUser = async () => {
-      await authActions.getAuthUser({}, dispatch, config);
-    };
-
-    if (user?.authToken) {
-      loadUser();
-    }
+    dispatch(authReducer.getAuthUser());
   }, []);
 };
 

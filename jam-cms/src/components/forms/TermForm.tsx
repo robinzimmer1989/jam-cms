@@ -4,7 +4,7 @@ import { Button, Space, Select as AntSelect } from 'antd';
 // import app components
 import Select from '../Select';
 import Input from '../Input';
-import { useStore } from '../../store';
+import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
 
 const TermForm = (props: any) => {
   const {
@@ -19,19 +19,18 @@ const TermForm = (props: any) => {
     onSubmit,
   } = props;
 
-  const termExists = !!id;
+  const {
+    cms: { site, activeLanguage },
+  } = useAppSelector((state: RootState) => state);
 
-  const [
-    {
-      cmsState: { sites, siteID, activeLanguage },
-    },
-    dispatch,
-  ] = useStore();
+  const dispatch: any = useAppDispatch();
+
+  const termExists = !!id;
 
   const initialLanguage = defaultLanguage
     ? defaultLanguage
     : activeLanguage === 'all'
-    ? sites[siteID]?.languages?.defaultLanguage
+    ? site?.languages?.defaultLanguage
     : activeLanguage;
 
   const [title, setTitle] = useState(defaultTitle);
@@ -42,7 +41,7 @@ const TermForm = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   // Check if taxonomy supports languages
-  const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
+  const taxonomySupportsLanguages = !!site?.languages?.taxonomies?.find(
     (s: string) => s === taxonomyID
   );
 
@@ -55,7 +54,7 @@ const TermForm = (props: any) => {
     await onSubmit({ id, title, slug, parentID, description, language });
     setLoading(false);
 
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(hideDialog());
   };
 
   return (
@@ -81,7 +80,7 @@ const TermForm = (props: any) => {
             value={language}
             onChange={(value: string) => setLanguage(value)}
           >
-            {sites[siteID]?.languages?.languages?.map((o: any) => (
+            {site?.languages?.languages?.map((o: any) => (
               <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
             ))}
           </Select>

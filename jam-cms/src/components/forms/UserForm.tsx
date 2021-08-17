@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import { Space, Button, Select, Checkbox } from 'antd';
 
 // import app components
-import Input from './Input';
-import Caption from './Caption';
-
-import { useStore } from '../store';
+import Input from '../Input';
+import Caption from '../Caption';
+import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
 
 const UserForm = (props: any) => {
   const { id, email: defaultEmail = '', roles: defaultRoles = ['editor'], onAdd, onUpdate } = props;
 
-  const [
-    {
-      cmsState: { sites, siteID },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState(defaultEmail);
@@ -39,7 +37,7 @@ const UserForm = (props: any) => {
 
     setLoading(false);
 
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(hideDialog());
   };
 
   return (
@@ -56,7 +54,7 @@ const UserForm = (props: any) => {
       <Space direction="vertical" size={2}>
         <Caption children="Role" />
         <Select defaultValue={roles?.[0] || defaultRoles?.[0]} onChange={(v) => setRoles([v])}>
-          {sites[siteID]?.userRoles.map((o: any) => {
+          {site?.userRoles.map((o: any) => {
             return <Select.Option key={o.id} value={o.id} children={o.name} />;
           })}
         </Select>

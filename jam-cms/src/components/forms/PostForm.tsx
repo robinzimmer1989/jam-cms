@@ -4,27 +4,26 @@ import { Space, Button, Select as AntSelect } from 'antd';
 // import app components
 import Input from '../Input';
 import Select from '../Select';
-import { useStore } from '../../store';
+import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
 
 const PostForm = (props: any) => {
   const { postTypeID, onSubmit } = props;
 
-  const [
-    {
-      cmsState: { sites, siteID, activeLanguage },
-    },
-    dispatch,
-  ] = useStore();
+  const dispatch: any = useAppDispatch();
+
+  const {
+    cms: { site, activeLanguage },
+  } = useAppSelector((state: RootState) => state);
 
   const defaultLanguage =
-    activeLanguage === 'all' ? sites[siteID]?.languages?.defaultLanguage : activeLanguage;
+    activeLanguage === 'all' ? site?.languages?.defaultLanguage : activeLanguage;
 
   const [title, setTitle] = useState('');
   const [language, setLanguage] = useState(defaultLanguage);
   const [loading, setLoading] = useState(false);
 
   // Check if post type supports languages
-  const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
+  const postTypeSupportsLanguages = !!site?.languages?.postTypes?.find(
     (s: string) => s === postTypeID
   );
 
@@ -40,7 +39,7 @@ const PostForm = (props: any) => {
     setTitle('');
     setLoading(false);
 
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(hideDialog());
   };
 
   return (
@@ -54,13 +53,19 @@ const PostForm = (props: any) => {
         onKeyDown={(e: any) => e.key === 'Enter' && handleSubmit()}
       />
 
-      {postTypeSupportsLanguages && sites[siteID]?.languages?.languages?.length > 0 && (
-        <Select label="Language" value={language} onChange={(value: string) => setLanguage(value)}>
-          {sites[siteID]?.languages?.languages?.map((o: any) => (
-            <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
-          ))}
-        </Select>
-      )}
+      {postTypeSupportsLanguages &&
+        site?.languages?.languages &&
+        site.languages.languages.length > 0 && (
+          <Select
+            label="Language"
+            value={language}
+            onChange={(value: string) => setLanguage(value)}
+          >
+            {site?.languages?.languages?.map((o: any) => (
+              <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
+            ))}
+          </Select>
+        )}
 
       <Button
         id="submit-create-post"

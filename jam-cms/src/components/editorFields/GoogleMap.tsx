@@ -7,6 +7,7 @@ import { EnvironmentTwoTone as MarkerIcon } from '@ant-design/icons';
 
 // import app components
 import { colors } from '../../theme';
+import { RootState, useAppSelector } from '../../redux';
 
 const Marker = () => (
   <Icon>
@@ -15,7 +16,11 @@ const Marker = () => (
 );
 
 const Map = (props: any) => {
-  const { site, value, onChange } = props;
+  const { value, onChange } = props;
+
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
   let defaultValue = value || { lat: 59.95, lng: 30.33, address: '' };
 

@@ -19,7 +19,6 @@ interface Props extends PageProps {
     sync: boolean;
     multisite: boolean;
   };
-  siteID: any;
   privateTemplateExists: boolean;
   children: any;
 }

@@ -9,17 +9,17 @@ import produce from 'immer';
 import Input from '../Input';
 import MenuPicker from '../MenuPicker';
 import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../../utils';
-import { useStore } from '../../store';
 import { colors } from '../../theme';
+import { RootState, useAppSelector } from '../../redux';
 
 const Menu = (props: any) => {
   const { value = [], maxLevel = 3, onChange } = props;
 
-  const [
-    {
-      editorState: { site, post, siteHasChanged },
+  const {
+    cms: {
+      editor: { site, post, siteHasChanged },
     },
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
 
   const [editing, setEditing] = useState([]);
   const [items, setItems] = useState([]);
@@ -32,7 +32,7 @@ const Menu = (props: any) => {
     let menuItems: any = [];
 
     if (translatedMenu) {
-      menuItems = value[post?.language];
+      menuItems = value[post?.language || ''];
     } else {
       menuItems = Array.isArray(value) ? value : [];
     }
@@ -47,7 +47,7 @@ const Menu = (props: any) => {
 
   const handleChange = (newValue: any) => {
     if (translatedMenu) {
-      onChange({ ...value, [post?.language]: newValue });
+      onChange({ ...value, [post?.language || '']: newValue });
     } else {
       onChange(newValue);
     }

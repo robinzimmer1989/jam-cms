@@ -5,17 +5,17 @@ import { Modal } from 'antd';
 // import app components
 import LinkSelector from './LinkSelector';
 import MediaLibrary from './MediaLibrary';
+import { useAppDispatch, updateEditorSettings } from '../redux';
 import { colors } from '../theme';
-import { useStore } from '../store';
 
-let JoditEditor = (props: any) => <></>;
+let JoditEditor = () => <></>;
 
 const HTMLEditor = (props: any) => {
   const { defaultValue = '', onChange } = props;
 
-  const [, dispatch] = useStore();
+  const dispatch: any = useAppDispatch();
 
-  const editorRef = useRef(null);
+  const editorRef: any = useRef(null);
 
   const [modal, setModal] = useState('');
   const [link, setLink] = useState({} as any);
@@ -30,7 +30,7 @@ const HTMLEditor = (props: any) => {
   // We're using an index instead of the content which should make the comparison more efficient
   useEffect(() => {
     // The editor fires one onChange event on load if no content is given and two events if the textfield already has a default value.
-    // As a result the postHasChanged / siteHasChanged flags will be true so the user won't be able to navigate away, even though has didn't change anything.
+    // As a result the postHasChanged / siteHasChanged flags will be true so the user won't be able to navigate away, even though nothing has changed.
     // That's why we add a check for the index and default value here.
     if ((defaultValue && index > 1) || (!defaultValue && index > 0)) {
       onChange(content);
@@ -56,7 +56,7 @@ const HTMLEditor = (props: any) => {
 
   const handleSetFullscreen = (value: boolean) => {
     // We are updating the global and local state for fullscreen. This way we prevent opening the wrong editor (in case there is more than one).
-    dispatch({ type: 'UPDATE_EDITOR_SETTINGS', payload: { fullscreen: value } });
+    dispatch(updateEditorSettings({ fullscreen: value }));
     setEditorFullscreen(value);
   };
 

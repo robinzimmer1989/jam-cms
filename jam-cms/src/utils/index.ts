@@ -20,12 +20,9 @@ import getParameter from './getParameter';
 import getTemplateByPost from './getTemplateByPost';
 import formatFields from './formatFields';
 import renderMediaItem from './renderMediaItem';
-import addPost from './addPost';
 import useOnScreen from './useOnScreen';
 import getPostID from './getPostID';
 import validateAccess from './validateAccess';
-import translatePost from './translatePost';
-import translateTerm from './translateTerm';
 
 export {
   createDataTree,
@@ -50,10 +47,7 @@ export {
   getTemplateByPost,
   formatFields,
   renderMediaItem,
-  addPost,
   useOnScreen,
   getPostID,
   validateAccess,
-  translatePost,
-  translateTerm,
 };

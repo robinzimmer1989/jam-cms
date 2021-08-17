@@ -2,24 +2,21 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, PageHeader, Spin, Popconfirm, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
-import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import ListItem from '../components/ListItem';
-import UserForm from '../components/UserForm';
-import { userActions } from '../actions';
-import { useStore } from '../store';
+import UserForm from '../components/forms/UserForm';
+import { RootState, useAppSelector, useAppDispatch, userReducer, showDialog } from '../redux';
 
-const Users = (props: RouteComponentProps) => {
-  const [
-    {
-      config,
-      cmsState: { siteID },
-      authState: { authUser },
-    },
-    dispatch,
-  ] = useStore();
+const Users = (props: any) => {
+  const { fields } = props;
+
+  const {
+    auth: { user: authUser },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [page, setPage] = useState(0);
   const [items, setItems] = useState([] as any);
@@ -30,7 +27,8 @@ const Users = (props: RouteComponentProps) => {
 
   const loadUsers = async (page: any) => {
     if (page > -1) {
-      const result = await userActions.getUsers({ siteID, page, limit: 10 }, dispatch, config);
+      const result: any = await userReducer.getUsers({ page, limit: 10 });
+
       if (result) {
         setItems((items: any) => items.concat(result.items));
         setPage(result.page);
@@ -41,17 +39,17 @@ const Users = (props: RouteComponentProps) => {
   const handleLoadMore = () => page && loadUsers(page);
 
   const handleOpenDialog = (user = {}) =>
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
+    dispatch(
+      showDialog({
         open: true,
         title: 'User',
         component: <UserForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
-      },
-    });
+      })
+    );
 
   const handleAdd = async ({ email, role, sendEmail }: any) => {
-    const result = await userActions.addUser({ siteID, email, role, sendEmail }, dispatch, config);
+    const result: any = await userReducer.addUser({ email, role, sendEmail });
+
     if (result) {
       setItems((items: any) => [result, ...items]);
       message.success(`Added successfully.`);
@@ -59,7 +57,8 @@ const Users = (props: RouteComponentProps) => {
   };
 
   const handleUpdate = async ({ id, role }: any) => {
-    const result = await userActions.updateUser({ siteID, id, role }, dispatch, config);
+    const result: any = await userReducer.updateUser({ id, role });
+
     if (result) {
       setItems((items: any) => items.map((o: any) => (o.id === result.id ? result : o)));
       message.success(`Saved successfully.`);
@@ -67,7 +66,8 @@ const Users = (props: RouteComponentProps) => {
   };
 
   const handleDelete = async ({ id }: any) => {
-    const result = await userActions.deleteUser({ siteID, id }, dispatch, config);
+    const result: any = await userReducer.deleteUser({ id });
+
     if (result) {
       setItems((items: any) => items.filter((o: any) => o.id !== result.id));
       message.success(`Deleted successfully.`);
@@ -75,7 +75,7 @@ const Users = (props: RouteComponentProps) => {
   };
 
   return (
-    <CmsLayout pageTitle={`Users`}>
+    <CmsLayout fields={fields} pageTitle={`Users`}>
       <PageHeader>
         <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
       </PageHeader>

@@ -28,25 +28,37 @@ import PostTreeSelect from '../PostTreeSelect';
 import MediaLibrary from '../MediaLibrary';
 import LanguageList from '../LanguageList';
 import FilePicker from '../editorFields/FilePicker';
-import { postActions, siteActions, previewActions } from '../../actions';
-import { useStore } from '../../store';
+
 import { colors } from '../../theme';
 import { generateSlug, getTemplateByPost, formatFieldForEditor } from '../../utils';
 import getRoute from '../../routes';
+import {
+  RootState,
+  useAppSelector,
+  useAppDispatch,
+  postReducer,
+  siteReducer,
+  previewReducer,
+  updateEditorSite,
+  addEditorPost,
+  updateEditorPost,
+  hideDialog,
+} from '../../redux';
 
 const EditorSidebar = (props: any) => {
-  const { editable, onToggleSidebar, ...rest } = props;
-  const [
-    {
-      config,
-      authState: { authUser },
-      cmsState: { sites, siteID },
-      editorState: { site, post, siteHasChanged, postHasChanged },
-    },
-    dispatch,
-  ] = useStore();
+  const { fields, editable, onToggleSidebar, ...rest } = props;
 
-  const { fields } = config;
+  const {
+    auth: { user: authUser },
+    cms: {
+      config,
+      site,
+      editor: { site: editorSite, post, siteHasChanged, postHasChanged },
+    },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
+
   const [loading, setLoading] = useState('');
   const [sidebar, setSidebar] = useState(editable ? 'content' : 'settings');
   const [expiryDate, setExpiryDate] = useState(48);
@@ -77,56 +89,42 @@ const EditorSidebar = (props: any) => {
       return draft;
     });
 
-    dispatch({
-      type: 'UPDATE_EDITOR_POST',
-      payload: nextPost,
-    });
+    dispatch(addEditorPost(nextPost));
   };
 
-  const handleSelectRevision = async (postID: any) => {
-    setLoading(postID);
-    const result = await postActions.getPost({ siteID, postID }, dispatch, config);
+  const handleSelectRevision = async (postID: number) => {
+    setLoading(postID.toString());
+
+    const result: any = await postReducer.getPost({ id: postID });
+
     if (result) {
       // Update existing post with title, content, post date and revisionID.
       const { content, title, revisionID } = result;
-      dispatch({
-        type: 'UPDATE_EDITOR_POST',
-        payload: { ...post, content, title, revisionID, siteID },
-      });
+
+      dispatch(updateEditorPost({ ...post, content, title, revisionID }));
     }
     setLoading('');
   };
 
   const handleChangeSite = (name: any, value: any) => {
-    const nextSite = produce(site, (draft: any) => set(draft, `${name}`, value));
-    dispatch({
-      type: 'UPDATE_EDITOR_SITE',
-      payload: nextSite,
-    });
+    const nextSite = produce(editorSite, (draft: any) => set(draft, `${name}`, value));
+    dispatch(updateEditorSite(nextSite));
   };
 
   const handleSelectImage = (name: any, image: any) => {
     handleChangePost(name, image);
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(hideDialog());
   };
 
   const handleChangeContent = (field: any) => {
     if (field.global) {
-      const nextSite = produce(site, (draft: any) => {
-        return set(draft, `themeOptions.${field.id}`, field);
-      });
-      dispatch({
-        type: 'UPDATE_EDITOR_SITE',
-        payload: nextSite,
-      });
+      const nextSite = produce(editorSite, (draft: any) =>
+        set(draft, `themeOptions.${field.id}`, field)
+      );
+      dispatch(updateEditorSite(nextSite));
     } else {
-      const nextPost = produce(post, (draft: any) => {
-        return set(draft, `content.${field.id}`, field);
-      });
-      dispatch({
-        type: 'UPDATE_EDITOR_POST',
-        payload: nextPost,
-      });
+      const nextPost = produce(post, (draft: any) => set(draft, `content.${field.id}`, field));
+      dispatch(updateEditorPost(nextPost));
     }
   };
 
@@ -137,9 +135,10 @@ const EditorSidebar = (props: any) => {
   const handleUpdate = (status: string) => handleSave('update', status);
 
   const handleSave = async (action: string, status: string) => {
-    const { id, themeOptions, frontPage } = site;
+    const { themeOptions, frontPage } = editorSite || {};
+
     // Trigger dummy message to give user feedback
-    if (!siteHasChanged && !postHasChanged && post.status === status) {
+    if (!siteHasChanged && !postHasChanged && post?.status === status) {
       return message.success('Updated successfully');
     }
 
@@ -158,54 +157,34 @@ const EditorSidebar = (props: any) => {
     let postResult, siteResult;
 
     if (siteHasChanged) {
-      siteResult = await siteActions.updateSite(
-        { id, themeOptions, frontPage, language: post.language },
-        dispatch,
-        config
-      );
+      siteResult = await siteReducer.updateSite({ themeOptions, frontPage });
     }
 
     if (postHasChanged || action === 'publish') {
       const args = {
-        siteID: id,
         ...post,
         status,
         templateObject,
       };
 
-      // Check if post type supports languages
-      if (!!sites[siteID]?.languages?.postTypes?.find((s: string) => s === post?.postTypeID)) {
-        args.language = post?.language || sites[siteID]?.languages?.defaultLanguage;
+      // Check if post type supports languages. If yes, assign default language if it doesn't exist yet.
+      if (!!site?.languages?.postTypes?.find((s: string) => s === post?.postTypeID)) {
+        args.language = post?.language || site?.languages?.defaultLanguage;
       }
 
-      postResult = await postActions.updatePost(args, dispatch, config);
-
-      // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
-      if (!siteHasChanged) {
-        dispatch({
-          type: 'ADD_SITE_SETTING',
-          payload: {
-            id: siteID,
-            key: 'deployment.undeployedChanges',
-            value: true,
-          },
-        });
-      }
+      postResult = await postReducer.updatePost(args);
     }
-
-    setLoading('');
 
     if (postResult || siteResult) {
       message.success('Updated successfully');
 
       // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
-      const newFrontPage = siteResult ? siteResult.frontPage : sites[siteID].frontPage;
+      const newFrontPage = siteResult?.frontPage || site?.frontPage;
       const newPost = postResult ? { ...postResult } : { ...post };
 
-      const nextSite = produce(sites[siteID], (draft: any) => {
+      const nextSite = produce(site, (draft: any) => {
         set(draft, `postTypes.${newPost.postTypeID}.posts.${newPost.id}`, newPost);
         set(draft, `frontPage`, newFrontPage);
-        return draft;
       });
 
       const slug = generateSlug({
@@ -217,14 +196,12 @@ const EditorSidebar = (props: any) => {
 
       navigate(slug);
     }
+
+    setLoading('');
   };
 
   const handleGeneratePreviewLink = async () => {
-    const result = await previewActions.generatePreviewLink(
-      { siteID, postID: post.id, expiryDate },
-      dispatch,
-      config
-    );
+    const result: any = await previewReducer.getPreviewLink({ postID: post?.id, expiryDate });
     if (result) {
       setPreviewLink(result);
     }
@@ -241,12 +218,12 @@ const EditorSidebar = (props: any) => {
             // Use field from themeOptions (single source of truth) and add value from site state
             field = {
               ...fields?.themeOptions.find((p: any) => p.id === o.id),
-              value: site?.themeOptions?.[o.id]?.value,
+              value: editorSite?.themeOptions?.[o.id]?.value,
             };
           } else {
             field = post?.content?.[o.id] || o;
           }
-          const formattedField = formatFieldForEditor({ field, site });
+          const formattedField = formatFieldForEditor({ field, site: editorSite });
           return {
             global: o.global,
             ...field,
@@ -269,8 +246,8 @@ const EditorSidebar = (props: any) => {
       .map((o: any) => {
         const formattedField = formatFieldForEditor({
           // Pass in fields from editor site state or global option itself
-          field: site?.themeOptions?.[o.id] || o,
-          site,
+          field: editorSite?.themeOptions?.[o.id] || o,
+          site: editorSite,
         });
         return { global: true, ...o, value: formattedField?.value };
       });
@@ -282,8 +259,8 @@ const EditorSidebar = (props: any) => {
   };
 
   const renderSettings = () => {
-    const postType = sites[siteID]?.postTypes?.[post?.postTypeID];
-    const postTypeTemplates = fields?.postTypes?.[post?.postTypeID]?.templates;
+    const postType = site?.postTypes?.[post?.postTypeID || ''];
+    const postTypeTemplates = fields?.postTypes?.[post?.postTypeID || '']?.templates;
     const postTypeTemplatesArray = postTypeTemplates
       ? Object.values(postTypeTemplates).filter((o) => (o as any).id !== 'archive')
       : [];
@@ -303,14 +280,15 @@ const EditorSidebar = (props: any) => {
     let isFrontPage = false;
 
     if (
-      post?.id === site?.frontPage ||
-      post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage
+      post?.id === editorSite?.frontPage ||
+      (editorSite?.languages?.defaultLanguage &&
+        post?.translations?.[editorSite.languages.defaultLanguage] === editorSite?.frontPage)
     ) {
       isFrontPage = true;
     }
 
     const frontPageSlug =
-      isFrontPage && post?.language && post?.language !== site?.languages?.defaultLanguage
+      isFrontPage && post?.language && post?.language !== editorSite?.languages?.defaultLanguage
         ? `/${post.language}`
         : '/';
 
@@ -414,9 +392,9 @@ const EditorSidebar = (props: any) => {
 
           {post?.taxonomies &&
             Object.keys(post.taxonomies)
-              .filter((k) => !!config?.fields?.taxonomies?.find((o: any) => o.id === k))
+              .filter((k) => !!fields?.taxonomies?.find((o: any) => o.id === k))
               .map((k) => {
-                const o = sites[siteID].taxonomies[k];
+                const o = site?.taxonomies[k];
                 return (
                   o && (
                     <Select
@@ -541,18 +519,18 @@ const EditorSidebar = (props: any) => {
           {post?.revisions?.length > 0 ? (
             <>
               <Button
-                type={!post.revisionID ? 'primary' : 'default'}
-                onClick={() => !!post.revisionID && handleSelectRevision(post.id)}
+                type={!post?.revisionID ? 'primary' : 'default'}
+                onClick={() => !!post?.revisionID && handleSelectRevision(post.id)}
                 children={'Current version'}
-                loading={loading === post.id}
+                loading={loading === post?.id.toString()}
                 block
               />
 
-              {post.revisions.map((o: any) => (
+              {post?.revisions.map((o: any) => (
                 <Button
                   key={o.id}
-                  type={o.id === post.revisionID ? 'primary' : 'default'}
-                  onClick={() => o.id !== post.revisionID && handleSelectRevision(o.id)}
+                  type={o.id === post?.revisionID ? 'primary' : 'default'}
+                  onClick={() => o.id !== post?.revisionID && handleSelectRevision(o.id)}
                   children={o.title}
                   loading={loading === o.id}
                   block
@@ -635,7 +613,7 @@ const EditorSidebar = (props: any) => {
   };
 
   return (
-    <Container id="jam-cms-sidebar" sidebar={sites[siteID]?.editorOptions?.sidebar} {...rest}>
+    <Container id="jam-cms-sidebar" sidebar={site?.editorOptions?.sidebar} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>
@@ -643,7 +621,7 @@ const EditorSidebar = (props: any) => {
               placement="rightTop"
               title="Discard unsaved changes?"
               onConfirm={() =>
-                navigate(getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' }))
+                navigate(getRoute(`collection`, { postTypeID: post?.postTypeID || 'page' }))
               }
               disabled={!postHasChanged && !siteHasChanged}
             >
@@ -654,9 +632,7 @@ const EditorSidebar = (props: any) => {
                 ghost
                 onClick={() => {
                   if (!postHasChanged && !siteHasChanged) {
-                    navigate(
-                      getRoute(`collection`, { siteID, postTypeID: post?.postTypeID || 'page' })
-                    );
+                    navigate(getRoute(`collection`, { postTypeID: post?.postTypeID || 'page' }));
                   }
                 }}
               />
@@ -709,10 +685,9 @@ const EditorSidebar = (props: any) => {
           disabled={!editable}
           overlay={
             <Menu>
-              {sites[siteID]?.languages?.languages?.length > 1 &&
-                !!sites[siteID]?.languages?.postTypes?.find(
-                  (s: string) => s === post.postTypeID
-                ) && (
+              {site?.languages?.languages &&
+                site.languages.languages.length > 1 &&
+                !!site?.languages?.postTypes?.find((s: string) => s === post?.postTypeID) && (
                   <Menu.Item key="languages" onClick={() => setSidebar('languages')}>
                     Languages
                   </Menu.Item>

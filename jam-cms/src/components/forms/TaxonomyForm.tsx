@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Button, Space, Select as AntSelect } from 'antd';
 
 // import app components
-import Select from './Select';
-import Input from './Input';
-import { useStore } from '../store';
+import Select from '../Select';
+import Input from '../Input';
+
+import { useAppDispatch, hideDialog } from '../../redux';
 
 const TaxonomyForm = (props: any) => {
   const {
@@ -16,20 +17,21 @@ const TaxonomyForm = (props: any) => {
     onSubmit,
   } = props;
 
-  const taxonomyExists = !!defaultId;
+  const dispatch: any = useAppDispatch();
 
-  const [, dispatch] = useStore();
   const [title, setTitle] = useState(defaultTitle);
   const [id, setId] = useState(defaultId);
   const [slug, setSlug] = useState(defaultSlug);
   const [postTypes, setPostTypes] = useState(defaultPostTypes);
+
+  const taxonomyExists = !!defaultId;
 
   const handleSubmit = async () => {
     if (!title || !id) {
       return;
     }
     await onSubmit({ id, title, slug, postTypes });
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(hideDialog());
   };
 
   const handleChangeId = (e: any) => {

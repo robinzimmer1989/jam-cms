@@ -11,7 +11,7 @@ import { getField } from '../editor/Fields';
 import { colors } from '../../theme';
 
 const FlexibleContent = (props: any) => {
-  const { id, label, instructions, site, items, value, onChange, dispatch, level } = props;
+  const { id, label, instructions, items, value, onChange, level } = props;
 
   const values = value || [];
 
@@ -183,10 +183,8 @@ const FlexibleContent = (props: any) => {
                                             value: value?.[field.id],
                                           },
                                           index,
-                                          site,
                                           onChangeElement: (value: any) =>
                                             handleChange(value, index),
-                                          dispatch,
                                         })}
                                       </div>
                                     );

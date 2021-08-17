@@ -14,42 +14,42 @@ import Parser from 'html-react-parser';
 
 // import app components
 import Select from '../Select';
-import LanguageForm from '../forms/LanguageForm';
-
-import { useStore } from '../../store';
-import { languageActions } from '../../actions';
 import Caption from '../Caption';
 
-const LanguageSettings = () => {
-  const [
-    {
-      config,
-      cmsState: { sites, siteID },
-    },
-    dispatch,
-  ] = useStore();
+import LanguageForm from '../forms/LanguageForm';
 
-  const languages = sites[siteID]?.languages;
+import { RootState, useAppDispatch, useAppSelector, languageReducer } from '../../redux';
 
-  const [postTypes, setPostTypes] = useState(languages?.postTypes);
-  const [taxonomies, setTaxonomies] = useState(languages?.taxonomies);
-  const [defaultLanguage, setDefaultLanguage] = useState(languages?.defaultLanguage);
+const LanguageSettings = (props: any) => {
+  const { fields } = props;
+
+  const {
+    cms: { config, site },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
+
+  const languages = site?.languages;
+
+  const [postTypes, setPostTypes] = useState(languages?.postTypes || []);
+  const [taxonomies, setTaxonomies] = useState(languages?.taxonomies || []);
+  const [defaultLanguage, setDefaultLanguage] = useState(languages?.defaultLanguage || '');
 
   const [loading, setLoading] = useState(null as any);
 
   useEffect(() => {
     // Update default language (changes when first language is added or current default language gets deleted)
-    setDefaultLanguage(languages?.defaultLanguage);
+    setDefaultLanguage(languages?.defaultLanguage || '');
   }, [languages?.defaultLanguage]);
 
   const handleUpdate = async () => {
     setLoading({ action: 'update-settings' });
 
-    const result = await languageActions.updateSettings(
-      { siteID, defaultLanguage, postTypes, taxonomies },
-      dispatch,
-      config
-    );
+    const result: any = await languageReducer.updateLanguageSettings({
+      defaultLanguage,
+      postTypes,
+      taxonomies,
+    });
 
     if (result) {
       message.success('Updated successfully');
@@ -71,7 +71,7 @@ const LanguageSettings = () => {
 
   const handleDeleteLanguage = async (language: any) => {
     setLoading({ id: language.id, action: 'delete-language' });
-    await languageActions.deleteLanguage({ siteID, ...language }, dispatch, config);
+    await languageReducer.deleteLanguage(language);
     setLoading(null);
   };
 
@@ -86,7 +86,7 @@ const LanguageSettings = () => {
         <Table
           pagination={false}
           dataSource={
-            sites[siteID]?.languages?.languages?.map((o: any) => {
+            site?.languages?.languages?.map((o: any) => {
               return { ...o, key: o.id };
             }) || []
           }
@@ -135,7 +135,7 @@ const LanguageSettings = () => {
             value={defaultLanguage}
             onChange={(value: string) => setDefaultLanguage(value)}
           >
-            {sites[siteID]?.languages?.languages?.map((o: any) => (
+            {site?.languages?.languages?.map((o: any) => (
               <AntSelect.Option key={o.slug} value={o.slug} children={o.name} />
             ))}
           </Select>
@@ -143,8 +143,8 @@ const LanguageSettings = () => {
           <Space direction="vertical" size={6}>
             <Caption children="Post Types" />
             <Checkbox.Group
-              options={Object.values(sites[siteID].postTypes)
-                .filter((o: any) => !!config?.fields?.postTypes[o.id])
+              options={Object.values(site?.postTypes)
+                .filter((o: any) => !!fields?.postTypes[o.id])
                 .map((o: any) => {
                   return {
                     value: o.id,
@@ -160,8 +160,8 @@ const LanguageSettings = () => {
           <Space direction="vertical" size={6}>
             <Caption children="Taxonomies" />
             <Checkbox.Group
-              options={Object.values(sites[siteID].taxonomies)
-                .filter((o: any) => !!config?.fields?.taxonomies.find((p: any) => p.id === o.id))
+              options={Object.values(site?.taxonomies)
+                .filter((o: any) => !!fields?.taxonomies.find((p: any) => p.id === o.id))
                 .map((o: any) => {
                   return {
                     value: o.id,

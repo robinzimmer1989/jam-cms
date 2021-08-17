@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, PageHeader, Popconfirm, Space, Alert } from 'antd';
-import { Link } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
@@ -8,31 +7,30 @@ import TermForm from '../components/forms/TermForm';
 import ListItem from '../components/ListItem';
 import LanguageSelector from '../components/LanguageSelector';
 
-import { createDataTree, generateSlug, translateTerm } from '../utils';
+import { createDataTree, generateSlug } from '../utils';
+import { RootState, useAppDispatch, useAppSelector } from '../redux';
+import { termReducer } from '../redux';
 import { termActions, siteActions, languageActions } from '../actions';
-import { useStore } from '../store';
 
 const Taxonomy = (props: any) => {
-  const { taxonomyID } = props;
+  const { taxonomyID, fields } = props;
 
-  const [
-    {
-      config,
-      cmsState: { siteID, sites, activeLanguage },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { config, site, activeLanguage },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [loading, setLoading] = useState(null as any);
 
-  const taxonomy = sites[siteID]?.taxonomies?.[taxonomyID];
+  const taxonomy = site?.taxonomies?.[taxonomyID];
 
   const terms = Object.values(taxonomy.terms);
 
-  const hasTemplate = !!config?.fields?.taxonomies.find((o: any) => o.id === taxonomyID).component;
+  const hasTemplate = !!fields?.taxonomies.find((o: any) => o.id === taxonomyID).component;
 
   // Check if taxonomy supports languages
-  const taxonomySupportsLanguages = !!sites[siteID]?.languages?.taxonomies?.find(
+  const taxonomySupportsLanguages = !!site?.languages?.taxonomies?.find(
     (s: string) => s === taxonomyID
   );
 
@@ -49,23 +47,17 @@ const Taxonomy = (props: any) => {
 
   const handleSync = async () => {
     setLoading({ action: 'syncing' });
-    await siteActions.syncFields(
-      { fields: config.fields, apiKey: sites[siteID]?.apiKey },
-      dispatch,
-      config
-    );
+    await siteActions.syncFields({ fields, apiKey: site?.apiKey }, dispatch, config);
     setLoading(null);
   };
 
   const handleTranslateMass = async () => {
     setLoading({ action: 'translate' });
 
-    const language =
-      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+    const language = activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
 
     await languageActions.translateMass(
       {
-        siteID,
         taxonomyID,
         type: 'term',
         ids: terms.filter((o: any) => !o.language).map((o: any) => o.id),
@@ -80,13 +72,13 @@ const Taxonomy = (props: any) => {
   const handleUpsert = async ({ id, title, slug, parentID, description, language }: any) => {
     if (id) {
       await termActions.updateTerm(
-        { siteID, taxonomyID, id, title, slug, parentID, description, language },
+        { taxonomyID, id, title, slug, parentID, description, language },
         dispatch,
         config
       );
     } else {
       await termActions.addTerm(
-        { siteID, taxonomyID, id, title, slug, parentID, description, language },
+        { taxonomyID, id, title, slug, parentID, description, language },
         dispatch,
         config
       );
@@ -95,7 +87,7 @@ const Taxonomy = (props: any) => {
 
   const handleDelete = async ({ termID }: any) => {
     setLoading({ action: 'delete', id: termID });
-    await termActions.deleteTerm({ siteID, taxonomyID, id: termID }, dispatch, config);
+    await termActions.deleteTerm({ taxonomyID, id: termID }, dispatch, config);
     setLoading(null);
   };
 
@@ -122,24 +114,19 @@ const Taxonomy = (props: any) => {
   };
 
   const handleTranslateTerm = async ({ id, language }: any) => {
-    const result = await translateTerm({ sites, siteID, id, language }, dispatch, config);
-
-    if (result) {
-      handleOpenDialog(result);
-    }
+    dispatch(termReducer.translateTerm({ id, language }));
+    // handleOpenDialog(result);
   };
 
   const renderUntranslatedTermsWarning = () => {
     const languageSlug =
-      activeLanguage !== 'all' ? activeLanguage : sites[siteID]?.languages?.defaultLanguage;
+      activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
 
     if (!languageSlug) {
       return null;
     }
 
-    const languageName = sites[siteID]?.languages?.languages.find(
-      (o: any) => o.slug === languageSlug
-    )?.name;
+    const languageName = site?.languages?.languages.find((o: any) => o.slug === languageSlug)?.name;
 
     return (
       <Alert
@@ -164,7 +151,7 @@ const Taxonomy = (props: any) => {
     const actions = [];
 
     const slug = generateSlug({
-      site: sites[siteID],
+      site: site,
       taxonomyID: o.taxonomyID,
       termID: o.id,
       leadingSlash: true,
@@ -217,8 +204,9 @@ const Taxonomy = (props: any) => {
 
   return (
     <CmsLayout
+      fields={fields}
       pageTitle={
-        config?.fields?.taxonomies?.find((o: any) => o.id === taxonomyID)?.title || taxonomy?.title
+        fields?.taxonomies?.find((o: any) => o.id === taxonomyID)?.title || taxonomy?.title
       }
     >
       {taxonomiesWithoutLanguage && renderUntranslatedTermsWarning()}

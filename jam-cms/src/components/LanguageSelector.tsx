@@ -5,16 +5,14 @@ import { Tooltip } from 'antd';
 import { EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 
 // import app components
-import { useStore } from '../store';
+import { RootState, useAppDispatch, useAppSelector } from '../redux';
 
 const LanguageSelector = (props: any) => {
   const { post, onEdit, onTranslate } = props;
 
-  const [
-    {
-      cmsState: { siteID, sites },
-    },
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
   const [loading, setLoading] = useState('');
 
@@ -26,7 +24,7 @@ const LanguageSelector = (props: any) => {
 
   return (
     <Container>
-      {sites[siteID]?.languages?.languages?.map((p: any) => {
+      {site?.languages?.languages?.map((p: any) => {
         const flag = p.flag && Parser(p.flag);
 
         if (post.language === p.slug) {

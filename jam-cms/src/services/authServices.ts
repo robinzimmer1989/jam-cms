@@ -102,8 +102,8 @@ export const resetPassword = async ({ key, login, password }: any, url: any) => 
   return result?.data;
 };
 
-export const refreshToken = async ({ refreshToken }: any, dispatch: any, config: any) => {
-  const endpoint = getEndpoint(config.source);
+export const refreshToken = async ({ refreshToken }: any, url: string) => {
+  const endpoint = getEndpoint(url);
   const result: any = await axios.post(endpoint, {
     query: `
       mutation {
@@ -134,16 +134,13 @@ export const refreshToken = async ({ refreshToken }: any, dispatch: any, config:
   return false;
 };
 
-export const getAuthUser = async ({}, dispatch: any, config: any) => {
-  const endpoint = getEndpoint(config.source);
-
+export const getAuthUser = async (url: string) => {
   const user = auth.getUser();
 
-  if (user?.authToken) {
-    const result: any = await axios.post(
-      endpoint,
-      {
-        query: `
+  const result: any = await axios.post(
+    url,
+    {
+      query: `
         query {
           viewer {
             id
@@ -158,38 +155,13 @@ export const getAuthUser = async ({}, dispatch: any, config: any) => {
           }
         }
       `,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${user.authToken}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${user.authToken}`,
-        },
-      }
-    );
-
-    if (result?.data?.data?.viewer) {
-      const {
-        data: {
-          data: {
-            viewer: { id, email, capabilities, roles, jwtAuthExpiration },
-          },
-        },
-      } = result;
-
-      const formattedCapabilities: any = {};
-
-      capabilities.map((s: string) => {
-        formattedCapabilities[s] = true;
-      });
-
-      return {
-        id,
-        email,
-        capabilities: formattedCapabilities,
-        roles: roles?.nodes.map((o: any) => o.name),
-        jwtAuthExpiration,
-      };
     }
-  }
+  );
 
-  return false;
+  return result;
 };

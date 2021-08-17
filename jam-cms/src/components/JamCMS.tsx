@@ -1,18 +1,22 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 
 // import app components
-import Loader from './Loader';
-import { StoreProvider } from '../store';
-
-const Router = React.lazy(() => import('./router/Router'));
+import Router from './router/Router';
+import { store } from '../redux';
 
 const JamCMS = (props: any) => {
+  const { fields, source, settings, privateTemplateExists } = props;
+
   return (
-    <React.Suspense fallback={<Loader />}>
-      <StoreProvider {...props}>
-        <Router pageContext={props?.pageContext} defaultComponent={props.children} />
-      </StoreProvider>
-    </React.Suspense>
+    <Provider store={store}>
+      <Router
+        pageContext={props?.pageContext}
+        defaultComponent={props.children}
+        config={{ source, settings, privateTemplateExists }}
+        fields={fields}
+      />
+    </Provider>
   );
 };
 

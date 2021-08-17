@@ -13,7 +13,7 @@ import {
   getTemplateByPost,
   generateSlug,
 } from '../../utils';
-import { useStore } from '../../store';
+import { RootState, useAppDispatch, useAppSelector } from '../../redux';
 
 // We need to store the template ID in a global variable to detect template changes.
 // Using useEffect doesn't work, because a template switch will immediately render the new component with wrong props.
@@ -21,6 +21,7 @@ let globalTemplateID: string = '';
 
 const Editor = (props: any) => {
   const {
+    fields,
     postID,
     pageContext: { themeOptions, siteTitle },
     defaultComponent,
@@ -28,13 +29,13 @@ const Editor = (props: any) => {
     ...rest
   } = props;
 
-  const [
-    {
+  const {
+    cms: {
       config,
-      cmsState: { sites, siteID },
-      editorState: { site, post },
+      site,
+      editor: { site: editorSite, post },
     },
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
 
   // GraphQL query result
   const [query, setQuery] = useState(null);
@@ -42,18 +43,19 @@ const Editor = (props: any) => {
 
   const forceUpdate = useForceUpdate();
 
-  const template = getTemplateByPost(post, config?.fields);
+  const template = getTemplateByPost(post, fields);
   const Component = template?.component;
 
   // The 'true' template id is a combination of id and post type.
   const templateID = `${template?.id}-${post?.archivePostType || post?.postTypeID}`;
 
-  const postsPerPage = post?.archivePostsPerPage;
+  const postsPerPage = post?.archivePostsPerPage || 10;
 
   // We need to check if post is front page to return the correct basePath for pagination
   const isFrontPage =
-    postID === sites[siteID]?.frontPage ||
-    post?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage;
+    postID === site?.frontPage ||
+    (editorSite?.languages?.defaultLanguage &&
+      post?.translations?.[editorSite.languages.defaultLanguage] === editorSite?.frontPage);
 
   const pathname = window.location.pathname.replace(/\/$/, '');
 
@@ -63,8 +65,10 @@ const Editor = (props: any) => {
   const pagination = useMemo(() => {
     let pagination = {};
 
+    const archivePostType = post?.archivePostType || '';
+
     // We can't generate the pagination object for protected pages because those don't have access to the site object and therefore not to the number of posts.
-    if (template?.id === 'archive' && sites[siteID]?.postTypes?.[post?.archivePostType]?.posts) {
+    if (template?.id === 'archive' && site?.postTypes?.[archivePostType]?.posts) {
       // Get the page number if exists
       const page = isNumber(pathname.substring(pathname.lastIndexOf('/') + 1))
         ? parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
@@ -72,7 +76,7 @@ const Editor = (props: any) => {
 
       // We only wanna query for published posts
       // And in case the post has a language assigned we wanna filter the posts accordingly
-      const filteredPosts = Object.values(sites[siteID]?.postTypes?.[post?.archivePostType]?.posts)
+      const filteredPosts = Object.values(site?.postTypes?.[archivePostType]?.posts)
         .filter((o: any) => o.status === 'publish')
         .filter((o: any) => (post?.language ? o.language === post?.language : o));
 
@@ -80,9 +84,9 @@ const Editor = (props: any) => {
 
       pagination = {
         basePath: generateSlug({
-          site,
-          postTypeID: post.postTypeID,
-          postID: post.id,
+          site: editorSite,
+          postTypeID: post?.postTypeID,
+          postID: post?.id,
           leadingSlash: true,
           trailingSlash: true,
         }),
@@ -134,7 +138,9 @@ const Editor = (props: any) => {
 
   const getPostData = () => {
     // Generate query variable i.e. 'wpPage'
-    const nodeType = `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`;
+    const nodeType = post
+      ? `wp${post.postTypeID.charAt(0).toUpperCase() + post.postTypeID.slice(1)}`
+      : '';
 
     // Destructure query data in case user requested more information about post (i.e. wpPost comments)
     const { [nodeType]: nodeTypeQueryData, ...otherQueryData } = (query as any)?.data || {};
@@ -143,24 +149,24 @@ const Editor = (props: any) => {
     const data = { ...otherQueryData };
 
     const nodeTypeData = {
-      id: post.id,
-      title: post.title,
-      date: post.createdAt,
-      featuredImage: post.featuredImage,
-      postTypeID: post.postTypeID,
-      ...formatTaxonomiesForEditor(post, site),
+      id: post?.id,
+      title: post?.title,
+      date: post?.createdAt,
+      featuredImage: post?.featuredImage,
+      postTypeID: post?.postTypeID,
+      ...formatTaxonomiesForEditor(post, editorSite),
     };
 
     data[nodeType] = { ...nodeTypeQueryData, ...nodeTypeData };
 
     const acfData = formatFieldsToProps({
       global: false,
-      content: post.content,
-      site,
+      content: post?.content,
+      site: editorSite,
       template,
     });
 
-    if (post.postTypeID === 'page') {
+    if (post?.postTypeID === 'page') {
       set(data, `${nodeType}.template.acf`, acfData);
     } else {
       set(data, `${nodeType}.acf`, acfData);
@@ -173,13 +179,18 @@ const Editor = (props: any) => {
   // We also need to wait until global and local template ID are identical to prevent an error when a user switches between two template where both have queries.
   let loaded = true;
 
-  if (!site?.id || !post?.id || (template?.query && !query) || globalTemplateID !== templateID) {
+  if (
+    !editorSite?.id ||
+    !post?.id ||
+    (template?.query && !query) ||
+    globalTemplateID !== templateID
+  ) {
     loaded = false;
   }
 
   const renderComponent = () => {
     const pageContext: any = {
-      siteTitle: sites[siteID]?.title || siteTitle,
+      siteTitle: site?.title || siteTitle,
       seo: post?.seo,
       pagination,
       jamCMS: {
@@ -190,17 +201,17 @@ const Editor = (props: any) => {
       themeOptions: site?.themeOptions
         ? formatFieldsToProps({
             global: true,
-            themeOptions: config?.fields?.themeOptions,
-            content: site?.themeOptions,
-            site,
+            themeOptions: fields?.themeOptions,
+            content: editorSite?.themeOptions,
+            site: editorSite,
             template,
           })
         : themeOptions,
     };
 
     // Check if post type supports languages
-    const postTypeSupportsLanguages = !!sites[siteID]?.languages?.postTypes?.find(
-      (s: string) => s === post.postTypeID
+    const postTypeSupportsLanguages = !!site?.languages?.postTypes?.find(
+      (s: string) => s === post?.postTypeID
     );
 
     if (postTypeSupportsLanguages) {
@@ -209,7 +220,7 @@ const Editor = (props: any) => {
 
       const getLanguageParameters = (post: any) => {
         const { slug, name, locale } =
-          sites[siteID].languages?.languages?.find((o: any) => o.slug === post.language) || {};
+          site?.languages?.languages?.find((o: any) => o.slug === post.language) || {};
 
         return slug ? { slug, name, locale } : {};
       };
@@ -221,13 +232,13 @@ const Editor = (props: any) => {
 
       if (post?.translations) {
         Object.values(post.translations).map((id: any) => {
-          const translatedPost = sites[siteID].postTypes[post.postTypeID].posts[id];
+          const translatedPost = site?.postTypes[post.postTypeID].posts[id];
 
           if (translatedPost) {
             pageContext.translations.push({
               title: translatedPost.title,
               uri: generateSlug({
-                site: sites[siteID],
+                site,
                 postTypeID: post.postTypeID,
                 postID: translatedPost.id,
                 leadingSlash: true,
@@ -287,9 +298,9 @@ const Editor = (props: any) => {
               ? {
                   pagination,
                   themeOptions: formatFieldsToProps({
-                    themeOptions: config?.fields?.themeOptions,
-                    content: site?.themeOptions,
-                    site,
+                    themeOptions: fields?.themeOptions,
+                    content: editorSite?.themeOptions,
+                    site: editorSite,
                   }),
                 }
               : props.pageContext,

@@ -3,14 +3,16 @@ import { Router } from '@reach/router';
 
 // import components
 import PrivateEditor from '../editor/PrivateEditor';
-import { useStore } from '../../store';
+import { RootState, useAppSelector } from '../../redux';
 
 const PrivateRouter = (props: any) => {
-  const [{ config }] = useStore();
+  const {
+    cms: { config },
+  } = useAppSelector((state: RootState) => state);
 
   // We don't need to load the PrivateEditor if page is published
   if (props?.pageContext?.status === 'publish') {
-    return React.cloneElement(props?.defaultComponent, { source: config.source });
+    return React.cloneElement(props?.defaultComponent, { source: config?.source });
   }
 
   return (

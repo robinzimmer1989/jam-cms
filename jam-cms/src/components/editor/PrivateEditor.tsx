@@ -4,8 +4,7 @@ import React, { useEffect } from 'react';
 import Editor from './Editor';
 import Loader from '../Loader';
 
-import { useStore } from '../../store';
-import { postActions } from '../../actions';
+import { RootState, useAppDispatch, useAppSelector, postReducer, clearEditor } from '../../redux';
 
 const PrivateEditor = (props: any) => {
   const {
@@ -13,35 +12,20 @@ const PrivateEditor = (props: any) => {
     defaultComponent,
   } = props;
 
-  const [
-    {
-      config,
-
-      cmsState: { siteID },
-      editorState: { post },
+  const {
+    cms: {
+      editor: { post },
     },
-    dispatch,
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const loaded = postID && post?.id === postID;
 
   useEffect(() => {
-    const loadPost = async () => {
-      if (!postID) {
-        return;
-      }
+    postID && postReducer.getPost({ id: postID });
 
-      const result = await postActions.getPost({ siteID, postID }, dispatch, config);
-
-      if (result) {
-        dispatch({ type: 'ADD_POST', payload: { ...result, siteID } });
-        dispatch({ type: 'ADD_EDITOR_POST', payload: { ...result, siteID } });
-      }
-    };
-
-    loadPost();
-
-    return () => dispatch({ type: `CLEAR_EDITOR` });
+    return () => dispatch(clearEditor());
   }, [postID]);
 
   if (!postID) {

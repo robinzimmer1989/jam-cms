@@ -5,6 +5,10 @@ import { get } from 'lodash';
 import defaults from '../defaults';
 
 export default function formatSite(site: any) {
+  if (!site) {
+    return null;
+  }
+
   const nextSite = produce(site, (draft: any) => {
     // Convert posts and then post types to object structure
     if (get(draft, `postTypes.items`)) {

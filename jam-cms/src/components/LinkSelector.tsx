@@ -5,17 +5,16 @@ import { Space, Checkbox, Button } from 'antd';
 import Input from './Input';
 import PostTreeSelect from './PostTreeSelect';
 import { generateSlug } from '../utils';
-import { useStore } from '../store';
+import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../redux';
 
 const LinkSelector = (props: any) => {
   const { value = {}, placeholder, onChange, removable } = props;
 
-  const [
-    {
-      cmsState: { sites, siteID },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [post, setPost] = useState('');
   const [link, setLink] = useState(value);
@@ -27,7 +26,7 @@ const LinkSelector = (props: any) => {
 
   const allPosts: any = [];
 
-  Object.values(sites[siteID]?.postTypes).map((o: any) => {
+  Object.values(site?.postTypes).map((o: any) => {
     Object.values((o as any).posts).map(
       (p: any) => (p as any).status === 'publish' && allPosts.push({ ...p, caption: o.title })
     );
@@ -40,13 +39,13 @@ const LinkSelector = (props: any) => {
   const handleSubmit = () => {
     onChange(link);
     setLink({ title: '', url: '', target: '' });
-    dispatch({ type: `CLOSE_DIALOG` });
+    dispatch(hideDialog());
   };
 
   const handleRemove = () => {
     onChange({ title: link?.title, url: '', target: '' });
     setLink({ title: '', url: '', target: '' });
-    dispatch({ type: `CLOSE_DIALOG` });
+    dispatch(hideDialog());
   };
 
   const handleTreeSelect = (id: any) => {
@@ -56,7 +55,7 @@ const LinkSelector = (props: any) => {
       setLink({
         title: link?.title || post?.title,
         url: generateSlug({
-          site: sites[siteID],
+          site,
           postTypeID: post.postTypeID,
           postID: post.id,
           leadingSlash: true,

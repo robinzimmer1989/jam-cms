@@ -1,13 +1,14 @@
 import React from 'react';
-import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import MediaLibrary from '../components/MediaLibrary';
 
-const Media = (props: RouteComponentProps) => {
+const Media = (props: any) => {
+  const { fields } = props;
+
   return (
-    <CmsLayout pageTitle={`Media`}>
+    <CmsLayout fields={fields} pageTitle={`Media`}>
       <MediaLibrary />
     </CmsLayout>
   );

@@ -8,7 +8,7 @@ import { Link, navigate } from '@reach/router';
 import DeploymentBadge from './DeploymentBadge';
 import AvatarMenu from './AvatarMenu';
 import LanguageSwitcher from './LanguageSwitcher';
-import { useStore } from '../store';
+import { RootState, useAppSelector } from '../redux';
 import getRoute from '../routes';
 
 const messages: any = {
@@ -38,13 +38,11 @@ const messages: any = {
 const CmsHeader = (props: any) => {
   const { title } = props;
 
-  const [
-    {
-      cmsState: { siteID, sites },
-    },
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
-  const deployment = sites[siteID]?.deployment;
+  const deployment = site?.deployment;
 
   const notifications: any = [];
 
@@ -53,27 +51,27 @@ const CmsHeader = (props: any) => {
     notifications.push('undeployed-changes');
   }
 
-  if (!sites[siteID]?.frontPage) {
+  if (!site?.frontPage) {
     notifications.push('missing-front-page');
   }
 
   if (
-    sites[siteID]?.frontPage &&
-    sites[siteID]?.postTypes?.['page']?.posts?.[sites[siteID]?.frontPage]?.status !== 'publish'
+    site?.frontPage &&
+    site?.postTypes?.['page']?.posts?.[site?.frontPage]?.status !== 'publish'
   ) {
     notifications.push('unpublished-front-page');
   }
 
   // Check if all languages have a front page assigned
-  if (sites[siteID]?.frontPage && sites[siteID]?.languages?.languages) {
+  if (site?.frontPage && site?.languages?.languages) {
     // Get all translations of front page
-    const frontPagePost = sites[siteID]?.postTypes?.page?.posts?.[sites[siteID]?.frontPage];
+    const frontPagePost = site?.postTypes?.page?.posts?.[site?.frontPage];
 
     // Initialize missing translations
     const missingTranslations = [];
 
     // Loop through all available languages and check if a translation exist
-    sites[siteID]?.languages?.languages.map(
+    site?.languages?.languages.map(
       (o: any) =>
         frontPagePost?.language !== o.slug &&
         !frontPagePost?.translations[o.slug] &&
@@ -85,17 +83,15 @@ const CmsHeader = (props: any) => {
     }
   }
 
-  if (sites)
-    if (sites[siteID]?.errors?.length) {
-      // Add CMS errors
-      sites[siteID].errors.map((o: any) => notifications.push(o.id));
-    }
+  if (site?.errors?.length) {
+    // Add CMS errors
+    site.errors.map((o: any) => notifications.push(o.id));
+  }
 
   return useMemo(() => {
     const buttons = [];
 
-    sites[siteID] &&
-      buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
+    site && buttons.push(<DeploymentBadge key="deployment-badge" deployment={deployment} />);
 
     const notificationsContent = (
       <Notifications>
@@ -103,7 +99,7 @@ const CmsHeader = (props: any) => {
           itemLayout="horizontal"
           dataSource={notifications}
           renderItem={(key: string) => {
-            const item = messages?.[key] || sites[siteID]?.errors.find((o: any) => o.id === key);
+            const item = messages?.[key] || site?.errors.find((o: any) => o.id === key);
 
             return (
               <List.Item key={key} onClick={item.onClick}>
@@ -131,7 +127,7 @@ const CmsHeader = (props: any) => {
 
     buttons.push(<AvatarMenu key="avatar-menu" />);
 
-    if (sites[siteID]?.languages?.languages?.length > 0) {
+    if (site?.languages?.languages) {
       buttons.push(
         <div key="language-switcher">
           <LanguageSwitcher />

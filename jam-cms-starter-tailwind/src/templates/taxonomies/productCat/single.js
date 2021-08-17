@@ -42,7 +42,7 @@ const Template = (props) => {
           )}
         </div>
         <div className="grid max-w-sm gap-5 mb-8 lg:grid-cols-3 sm:mx-auto lg:max-w-full">
-          {product?.nodes &&
+          {/* {product?.nodes &&
             product.nodes.map((o) => (
               <div
                 key={o.id}
@@ -67,7 +67,7 @@ const Template = (props) => {
                   Read more
                 </Link>
               </div>
-            ))}
+            ))} */}
         </div>
       </div>
     </Layout>
@@ -78,13 +78,6 @@ export const Query = graphql`
   query ProductCategory($slug: String!) {
     wpProductCat(slug: { eq: $slug }) {
       name
-      product {
-        nodes {
-          id
-          title
-          uri
-        }
-      }
     }
   }
 `;

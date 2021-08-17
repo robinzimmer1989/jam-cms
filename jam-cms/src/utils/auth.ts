@@ -48,7 +48,7 @@ export const getPreviewID = () => {
     }
   }
 
-  return false;
+  return '';
 };
 
 export const logout = (onLogout: any) => {

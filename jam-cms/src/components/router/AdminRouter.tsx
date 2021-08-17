@@ -3,7 +3,6 @@ import { Router } from '@reach/router';
 import { Modal } from 'antd';
 
 // import components
-import Home from '../../pages/Home';
 import Profile from '../../pages/Profile';
 import Dashboard from '../../pages/Dashboard';
 import Media from '../../pages/Media';
@@ -12,15 +11,13 @@ import GeneralSettings from '../../pages/GeneralSettings';
 import Taxonomy from '../../pages/Taxonomy';
 import Users from '../../pages/Users';
 import AdminEditor from '../editor/AdminEditor';
-import Loader from '../Loader';
-
 import { CmsStyles } from '../../theme';
-import { useStore } from '../../store';
+import { hideDialog } from '../../redux/slices/uiSlice';
+import { RootState, useAppSelector, useAppDispatch } from '../../redux';
 
 import {
   ROUTE_APP,
   ROUTE_PROFILE,
-  ROUTE_SITE,
   ROUTE_MEDIA,
   ROUTE_POST_TYPE,
   ROUTE_SETTINGS_GENERAL,
@@ -29,38 +26,35 @@ import {
 } from '../../routes';
 
 const AdminRouter = (props: any) => {
-  const [
-    {
-      config,
-      authState: { authUser },
-      appState: { dialog },
-      cmsState: { sites, siteID },
-    },
-    dispatch,
-  ] = useStore();
+  const { fields } = props;
+
+  const {
+    ui: { dialog },
+    auth: { user: authUser },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
       <CmsStyles />
 
       <Router>
-        {!!config.multisite && <Home path={`${ROUTE_APP}`} />}
-
-        <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} />
-        <Dashboard path={`${ROUTE_APP}${ROUTE_SITE}/:siteID`} />
-        <Media path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_MEDIA}`} />
-        <PostType path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_POST_TYPE}/:postTypeID`} />
-        <Taxonomy path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_TAXONOMY}/:taxonomyID`} />
+        <Profile path={`${ROUTE_APP}${ROUTE_PROFILE}`} fields={fields} />
+        <Dashboard path={`${ROUTE_APP}`} fields={fields} />
+        <Media path={`${ROUTE_APP}${ROUTE_MEDIA}`} fields={fields} />
+        <PostType path={`${ROUTE_APP}${ROUTE_POST_TYPE}/:postTypeID`} fields={fields} />
+        <Taxonomy path={`${ROUTE_APP}${ROUTE_TAXONOMY}/:taxonomyID`} fields={fields} />
 
         {authUser?.capabilities?.manage_options && (
-          <GeneralSettings path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_SETTINGS_GENERAL}`} />
+          <GeneralSettings path={`${ROUTE_APP}${ROUTE_SETTINGS_GENERAL}`} fields={fields} />
         )}
 
         {authUser?.capabilities?.list_users && (
-          <Users path={`${ROUTE_APP}${ROUTE_SITE}/:siteID${ROUTE_USERS}`} />
+          <Users path={`${ROUTE_APP}${ROUTE_USERS}`} fields={fields} />
         )}
 
-        <AdminEditor path={'*'} {...props} />
+        <AdminEditor path={'*'} {...props} fields={fields} />
       </Router>
 
       {dialog.open && (
@@ -68,8 +62,8 @@ const AdminRouter = (props: any) => {
           transitionName="none"
           maskTransitionName="none"
           title={dialog.title}
-          visible={true}
-          onCancel={() => dispatch({ type: 'CLOSE_DIALOG' })}
+          visible={dialog.open}
+          onCancel={() => dispatch(hideDialog())}
           destroyOnClose
           children={dialog.component}
           width={dialog.width}

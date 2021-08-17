@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // import external css files
 import '../../styles/antd.min.css';
@@ -12,15 +12,23 @@ import Loader from '../Loader';
 
 import useAuth from '../../hooks/useAuth';
 import useSite from '../../hooks/useSite';
-import { useStore } from '../../store';
+
 import { getPreviewID } from '../../utils/auth';
+import { setConfig } from '../../redux/slices/cmsSlice';
+import { RootState, useAppSelector, useAppDispatch } from '../../redux';
 
 const Router = (props: any) => {
-  const [
-    {
-      authState: { authUser },
-    },
-  ] = useStore();
+  const { config } = props;
+
+  const {
+    auth: { user: authUser },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setConfig(config));
+  }, []);
 
   useAuth();
   useSite();

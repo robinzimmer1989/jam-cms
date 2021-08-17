@@ -13,8 +13,7 @@ import { unionBy } from 'lodash';
 // import app components
 import MediaImage from './MediaImage';
 import { renderMediaItem, useOnScreen } from '../utils';
-import { mediaActions } from '../actions';
-import { useStore } from '../store';
+import { RootState, useAppSelector, useAppDispatch, mediaReducer } from '../redux';
 import { colors } from '../theme';
 
 const MediaLibrary = (props: any) => {
@@ -22,13 +21,11 @@ const MediaLibrary = (props: any) => {
   const ref = useRef();
   const isVisible = useOnScreen(ref);
 
-  const [
-    {
-      config,
-      cmsState: { siteID },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [media, setMedia] = useState({ items: [], page: 0 } as any);
   const [activeFile, setActiveFile] = useState(null as any);
@@ -45,11 +42,13 @@ const MediaLibrary = (props: any) => {
 
   const handleSearch = async (value: any) => {
     if (value) {
-      const result = await mediaActions.getMediaItems(
-        { siteID, page: 0, search: value, limit: 24, allow },
-        dispatch,
-        config
-      );
+      const result: any = await mediaReducer.getMediaItems({
+        page: 0,
+        search: value,
+        limit: 24,
+        allow,
+      });
+
       if (result) {
         setMedia({ items: result.items, page: result.page });
       }
@@ -59,11 +58,7 @@ const MediaLibrary = (props: any) => {
   };
 
   const loadMediaItems = async (page: any, clear = false) => {
-    const result = await mediaActions.getMediaItems(
-      { siteID, page, limit: 24, allow },
-      dispatch,
-      config
-    );
+    const result: any = await mediaReducer.getMediaItems({ page, limit: 24, allow });
 
     if (result) {
       setMedia({
@@ -74,8 +69,10 @@ const MediaLibrary = (props: any) => {
   };
 
   const handleUpdateMediaItem = async (mediaItem: any) => {
-    const { id, altText, siteID } = mediaItem;
-    const result = await mediaActions.updateMediaItem({ id, altText, siteID }, dispatch, config);
+    const { id, altText } = mediaItem;
+
+    const result: any = await mediaReducer.updateMediaItem({ id, altText });
+
     if (result) {
       setMedia({
         items: media.items.map((o: any) => (o.id === result.id ? result : o)),
@@ -86,7 +83,7 @@ const MediaLibrary = (props: any) => {
   };
 
   const handlDeleteMediaItem = async () => {
-    const result = await mediaActions.deleteMediaItem({ ...activeFile, siteID }, dispatch, config);
+    const result: any = await mediaReducer.deleteMediaItem({ ...activeFile });
 
     if (result) {
       setMedia({
@@ -104,11 +101,9 @@ const MediaLibrary = (props: any) => {
     } = info;
     if (status !== 'uploading') {
       setLoading(true);
-      const result = await mediaActions.uploadMediaItem(
-        { siteID, file: originFileObj },
-        dispatch,
-        config
-      );
+
+      const result = await mediaReducer.addMediaItem({ file: originFileObj });
+
       if (result) {
         setMedia({ items: [result, ...media.items], page: media.page });
       }
@@ -182,7 +177,7 @@ const MediaLibrary = (props: any) => {
                 type="primary"
                 onClick={() => setUploader(!uploader)}
                 loading={loading}
-                disabled={!siteID}
+                disabled={!site?.id}
               />
             }
             extra={[

@@ -8,25 +8,27 @@ import { EditTwoTone, PlusCircleTwoTone } from '@ant-design/icons';
 // import app components
 import Caption from './Caption';
 import Select from './Select';
-import { generateSlug, translatePost } from '../utils';
-import { useStore } from '../store';
+import { generateSlug } from '../utils';
+import { RootState, useAppDispatch, useAppSelector } from '../redux';
+import { postReducer } from '../redux';
 
 const LanguageList = (props: any) => {
   const { onChange } = props;
-  const [
-    {
-      config,
-      cmsState: { siteID, sites },
-      editorState: { post, postHasChanged, siteHasChanged },
+
+  const {
+    cms: {
+      site,
+      editor: { post, postHasChanged, siteHasChanged },
     },
-    dispatch,
-  ] = useStore();
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   const [loading, setLoading] = useState('');
 
   const handleTranslatePost = async ({ id, language }: any) => {
     setLoading(language);
-    await translatePost({ sites, siteID, id, language }, dispatch, config);
+    dispatch(postReducer.translatePost({ id, language }));
     setLoading('');
   };
 
@@ -36,7 +38,7 @@ const LanguageList = (props: any) => {
         <Select label="Language" value={post?.language || 'none'} onChange={onChange}>
           {!post?.language && <AntSelect.Option value="none">Select...</AntSelect.Option>}
 
-          {sites[siteID]?.languages?.languages?.map((o: any) => (
+          {site?.languages?.languages?.map((o: any) => (
             <AntSelect.Option key={o.id} value={o.slug} children={o.name} />
           ))}
         </Select>
@@ -48,9 +50,7 @@ const LanguageList = (props: any) => {
               itemLayout="vertical"
               size="small"
               bordered
-              dataSource={sites[siteID]?.languages?.languages?.filter(
-                (p: any) => p.slug !== post?.language
-              )}
+              dataSource={site?.languages?.languages?.filter((p: any) => p.slug !== post?.language)}
               renderItem={(language: any) => {
                 let icon = null;
                 let onClick = () => {};
@@ -63,14 +63,14 @@ const LanguageList = (props: any) => {
                   onClick = () =>
                     navigate(
                       generateSlug({
-                        site: sites[siteID],
+                        site: site,
                         postTypeID: post.postTypeID,
                         postID: post.translations[language.slug],
                         leadingSlash: true,
                       })
                     );
                   title =
-                    sites[siteID].postTypes?.[post?.postTypeID]?.posts?.[
+                    site?.postTypes?.[post?.postTypeID]?.posts?.[
                       post?.translations?.[language.slug]
                     ]?.title;
                 } else {

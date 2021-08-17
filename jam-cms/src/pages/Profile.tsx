@@ -1,22 +1,21 @@
 import React from 'react';
 import { Card, Space, Typography } from 'antd';
-import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
 import Caption from '../components/Caption';
 
-import { useStore } from '../store';
+import { RootState, useAppSelector } from '../redux';
 
-const Profile = (props: RouteComponentProps) => {
-  const [
-    {
-      authState: { authUser },
-    },
-  ] = useStore();
+const Profile = (props: any) => {
+  const { fields } = props;
+
+  const {
+    auth: { user: authUser },
+  } = useAppSelector((state: RootState) => state);
 
   return (
-    <CmsLayout pageTitle="Profile">
+    <CmsLayout fields={fields} pageTitle="Profile">
       <Space direction="vertical" size={40}>
         <Card title="Personal Information">
           <Space direction="vertical" size={20}>
@@ -24,6 +23,7 @@ const Profile = (props: RouteComponentProps) => {
               <Caption children="Email" />
               <Typography>{authUser?.email}</Typography>
             </Space>
+
             {authUser?.roles && (
               <Space direction="vertical" size={2}>
                 <Caption children="Role" />

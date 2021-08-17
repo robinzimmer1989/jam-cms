@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react';
 
 // import components
-import { useStore } from '../store';
-import { previewActions, siteActions } from '../actions';
 import { getPreviewID } from '../utils/auth';
+import { siteReducer } from '../redux';
+import { RootState, useAppSelector, useAppDispatch, previewReducer } from '../redux';
 
 const useSite = () => {
-  const [
-    {
-      config,
-      authState: { authUser },
-      editorState: { siteHasChanged },
-    },
-    dispatch,
-  ] = useStore();
+  const {
+    auth: { user: authUser },
+  } = useAppSelector((state: RootState) => state);
+
+  const dispatch: any = useAppDispatch();
 
   // timer for refresh token and site updates
   const [timer, setTimer] = useState(0);
@@ -32,16 +29,12 @@ const useSite = () => {
   }, []);
 
   useEffect(() => {
-    const loadSite = async () => {
-      await siteActions.getSite({ siteID: config.siteID, siteHasChanged }, dispatch, config);
-    };
-
-    authUser?.capabilities?.edit_posts && loadSite();
+    dispatch(siteReducer.getSite());
   }, [timer, authUser]);
 
   useEffect(() => {
     const loadPreview = async () => {
-      await previewActions.getSitePreview({ siteID: config.siteID, previewID }, dispatch, config);
+      await previewReducer.getSitePreview({ previewID });
     };
 
     if (previewID) {

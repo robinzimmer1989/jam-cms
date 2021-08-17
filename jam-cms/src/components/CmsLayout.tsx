@@ -15,25 +15,23 @@ import {
 import CmsHeader from './CmsHeader';
 import PostForm from './forms/PostForm';
 import Logo from '../icons/jamCMS.svg';
-import { addPost } from '../utils';
 import { colors } from '../theme';
-import { useStore } from '../store';
+import { showDialog } from '../redux/slices/uiSlice';
+import { postReducer, RootState, useAppDispatch, useAppSelector } from '../redux';
 import getRoute from '../routes';
 
 const CmsLayout = (props: any) => {
-  const { pageTitle, children } = props;
+  const { pageTitle, fields, children } = props;
 
-  const [
-    {
-      config,
-      authState: { authUser },
-      cmsState: { siteID, sites },
-    },
-    dispatch,
-  ] = useStore();
+  const dispatch: any = useAppDispatch();
+
+  const {
+    auth: { user: authUser },
+    cms: { site },
+  } = useAppSelector((state: RootState) => state);
 
   const handleAddPost = async (args: any) => {
-    await addPost({ site: sites[siteID], ...args }, dispatch, config);
+    dispatch(postReducer.addPost(args));
   };
 
   return (
@@ -65,11 +63,11 @@ const CmsLayout = (props: any) => {
 
             <Menu theme="dark" mode="vertical" defaultSelectedKeys={[pageTitle]}>
               <Menu.Item key="Dashboard" icon={<PieChartOutlined />}>
-                <Link to={getRoute(`dashboard`, { siteID })}>Dashboard</Link>
+                <Link to={getRoute(`dashboard`)}>Dashboard</Link>
               </Menu.Item>
 
               <Menu.Item key="Media" icon={<FolderOpenOutlined />}>
-                <Link to={getRoute(`media`, { siteID })}>Media</Link>
+                <Link to={getRoute(`media`)}>Media</Link>
               </Menu.Item>
 
               <Menu.SubMenu
@@ -78,13 +76,13 @@ const CmsLayout = (props: any) => {
                 title="Collections"
                 popupOffset={[1, -4]}
               >
-                {config?.fields?.postTypes &&
-                  Object.values(config.fields.postTypes).map((o, i) => {
+                {fields?.postTypes &&
+                  Object.values(fields.postTypes).map((o, i) => {
                     // Render taxonomies per post type (they can be assigned to multiple post types)
                     // We grab them from the fields object
                     const postTypeTaxonomies: any = [];
-                    config?.fields?.taxonomies &&
-                      Object.values(config.fields.taxonomies).map(
+                    fields?.taxonomies &&
+                      Object.values(fields.taxonomies).map(
                         (p) =>
                           (p as any).postTypes.includes((o as any).id) && postTypeTaxonomies.push(p)
                       );
@@ -95,23 +93,26 @@ const CmsLayout = (props: any) => {
                         popupOffset={[1, -4]}
                       >
                         <Menu.Item key={(o as any).title}>
-                          <Link to={getRoute(`collection`, { siteID, postTypeID: (o as any).id })}>
+                          <Link
+                            to={getRoute(`collection`, {
+                              postTypeID: (o as any).id,
+                            })}
+                          >
                             All
                           </Link>
                         </Menu.Item>
                         <Menu.Item
                           key={`add-${(o as any).id}`}
                           onClick={() =>
-                            dispatch({
-                              type: 'SET_DIALOG',
-                              payload: {
+                            dispatch(
+                              showDialog({
                                 open: true,
                                 title: `Add ${(o as any).title}`,
                                 component: (
                                   <PostForm onSubmit={handleAddPost} postTypeID={(o as any).id} />
                                 ),
-                              },
-                            })
+                              })
+                            )
                           }
                         >
                           Add new
@@ -121,17 +122,14 @@ const CmsLayout = (props: any) => {
                           postTypeTaxonomies.map((p: any) => {
                             return (
                               <Menu.Item key={p.title}>
-                                <Link to={getRoute(`taxonomy`, { siteID, taxonomyID: p.id })}>
+                                <Link to={getRoute(`taxonomy`, { taxonomyID: p.id })}>
                                   {p.title}
                                 </Link>
                               </Menu.Item>
                             );
                           })}
 
-                        {sites[siteID] &&
-                          Object.values(sites[siteID].postTypes).length - 1 !== i && (
-                            <Menu.Divider />
-                          )}
+                        {site && Object.values(site.postTypes).length - 1 !== i && <Menu.Divider />}
                       </Menu.SubMenu>
                     );
                   })}
@@ -139,13 +137,13 @@ const CmsLayout = (props: any) => {
 
               {authUser?.capabilities?.list_users && (
                 <Menu.Item key="Users" icon={<UsergroupAddOutlined />}>
-                  <Link to={getRoute(`users`, { siteID })}>Users</Link>
+                  <Link to={getRoute(`users`)}>Users</Link>
                 </Menu.Item>
               )}
 
               {authUser?.capabilities?.manage_options && (
                 <Menu.Item key="Settings" icon={<SettingOutlined />}>
-                  <Link to={getRoute(`settings-general`, { siteID })}>Settings</Link>
+                  <Link to={getRoute(`settings-general`)}>Settings</Link>
                 </Menu.Item>
               )}
             </Menu>

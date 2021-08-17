@@ -8,7 +8,7 @@ import { Collapse, Typography } from 'antd';
 import { getField } from '../editor/Fields';
 
 const Group = (props: any) => {
-  const { id, label, instructions, site, fields, value, onChange, dispatch } = props;
+  const { id, label, instructions, fields, value, onChange } = props;
 
   let values = value || {};
 
@@ -38,9 +38,7 @@ const Group = (props: any) => {
                   {getField({
                     field: { ...field, value: values?.[field.id] },
                     index,
-                    site,
                     onChangeElement: (value: any) => handleChange(value),
-                    dispatch,
                   })}
                 </div>
               );
