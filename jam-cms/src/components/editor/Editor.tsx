@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { set } from 'lodash';
 import { Empty, Alert } from 'antd';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // import app components
 import Seo from '../Seo';
+import ErrorFallback from '../ErrorFallback';
 import useForceUpdate from '../../hooks/useForceUpdate';
 import {
   formatFieldsToProps,
@@ -13,10 +15,10 @@ import {
   getTemplateByPost,
   generateSlug,
 } from '../../utils';
-import { RootState, useAppDispatch, useAppSelector } from '../../redux';
+import { RootState, useAppSelector } from '../../redux';
 
 // We need to store the template ID in a global variable to detect template changes.
-// Using useEffect doesn't work, because a template switch will immediately render the new component with wrong props.
+// Using useEffect doesn't work, because a template switch will immediately render the new component with wrong props which most likely leads to an JS error.
 let globalTemplateID: string = '';
 
 const Editor = (props: any) => {
@@ -33,6 +35,7 @@ const Editor = (props: any) => {
     cms: {
       config,
       site,
+      siteLoaded,
       editor: { site: editorSite, post },
     },
   } = useAppSelector((state: RootState) => state);
@@ -179,12 +182,7 @@ const Editor = (props: any) => {
   // We also need to wait until global and local template ID are identical to prevent an error when a user switches between two template where both have queries.
   let loaded = true;
 
-  if (
-    !editorSite?.id ||
-    !post?.id ||
-    (template?.query && !query) ||
-    globalTemplateID !== templateID
-  ) {
+  if (!siteLoaded || !post?.id || (template?.query && !query) || globalTemplateID !== templateID) {
     loaded = false;
   }
 
@@ -275,7 +273,9 @@ const Editor = (props: any) => {
           ) : (
             <>
               {!!Component && post?.content ? (
-                renderComponent()
+                <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => {}}>
+                  {renderComponent()}
+                </ErrorBoundary>
               ) : (
                 <EmptyContainer className="jam-cms" alignItems={'center'} textAlign={'center'}>
                   <Empty

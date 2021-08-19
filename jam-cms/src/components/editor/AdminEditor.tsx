@@ -12,7 +12,14 @@ import Sidebar from './Sidebar';
 import Editor from './Editor';
 import { getTemplateByPost, getPostID } from '../../utils';
 import getRoute from '../../routes';
-import { RootState, useAppDispatch, useAppSelector, postReducer } from '../../redux';
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+  postActions,
+  uiActions,
+  cmsActions,
+} from '../../redux';
 
 // We need to store the post ID so we can remove the lock when navigating to a different page (old ID won't be available anymore)
 let postLockID: any = null;
@@ -24,25 +31,27 @@ const AdminEditor = (props: any) => {
     ui: { editorSettings },
     cms: {
       site,
+      siteLoaded,
       editor: { post },
     },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
 
-  const postID = useMemo(() => {
+  const postID: number = useMemo(() => {
     return getPostID(site);
-  }, [site?.id, window.location.pathname]);
+  }, [siteLoaded, window.location.pathname]);
 
   // Timer for lock check
   const [postLockTimer, setPostLockTimer] = useState(0);
 
   // Determine if sidebar should be open on default when visiting the editor
   const [sidebarActive, setSidebarActive] = useState(!!site?.editorOptions?.sidebar?.defaultOpen);
+
   const template = getTemplateByPost(post, fields);
   const Component = template?.component;
 
-  const loaded = postID && post?.id === postID;
+  const postLoaded = postID && post?.id === postID;
 
   // For the post lock functionality we need 4 useEffect functions to cover the whole process
   // 1. Set up interval function on initial load and remove post lock in case user leaves the editor
@@ -57,7 +66,7 @@ const AdminEditor = (props: any) => {
 
     return () => {
       clearInterval(intervalID);
-      if (loaded && !post?.locked) {
+      if (postLoaded && !post?.locked) {
         // Remove post lock once we leave the post editor
         removePostLock(postID);
       }
@@ -66,7 +75,7 @@ const AdminEditor = (props: any) => {
 
   useEffect(() => {
     // Skip initial fetch (postLockTimer = 0) because we're already setting the status on initial getPost fetch in WP
-    if (loaded && postLockTimer) {
+    if (postLoaded && postLockTimer) {
       if (post?.locked) {
         // Fetch post again in case it's locked to determine if other user is still editing
         loadPost();
@@ -94,27 +103,28 @@ const AdminEditor = (props: any) => {
 
   useEffect(() => {
     loadPost();
+
     // Add fresh copy of editor to state
-    dispatch({ type: 'ADD_EDITOR_SITE', payload: site });
-    return () => dispatch({ type: 'CLEAR_EDITOR' });
+    dispatch(cmsActions.addEditorSite(site));
+
+    return () => dispatch(cmsActions.clearEditor());
   }, [postID]);
 
   useKeypress('Escape', () => {
     !editorSettings.fullscreen && setSidebarActive(!sidebarActive);
   });
 
-  const loadPost = async () => {
-    postID && postReducer.getPost({ id: postID });
-  };
+  const loadPost = async () => dispatch(postActions.getPost({ id: postID }));
 
-  const handleTakeOver = async () => {
-    await postReducer.takeOverPost({ id: postID });
-  };
+  const handleTakeOver = async () => dispatch(postActions.takeOverPost({ id: postID }));
+
+  const refreshPostLock = async () => dispatch(postActions.refreshPostLock({ id: postID }));
+
+  const removePostLock = async (id: number) => dispatch(postActions.removePostLock({ id }));
 
   const handleOpenTakeOverDialog = () => {
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
+    dispatch(
+      uiActions.showDialog({
         open: true,
         title: 'Locked',
         component: (
@@ -127,26 +137,18 @@ const AdminEditor = (props: any) => {
             <Space>
               <Button
                 onClick={() => {
-                  dispatch({ type: 'CLOSE_DIALOG' });
+                  dispatch(uiActions.hideDialog());
                   navigate(getRoute(`collection`, { postTypeID: post?.postTypeID || 'page' }));
                 }}
                 children="Dashboard"
               />
-              <Button onClick={() => dispatch({ type: 'CLOSE_DIALOG' })} children="Preview" />
+              <Button onClick={() => dispatch(uiActions.hideDialog())} children="Preview" />
               <Button onClick={handleTakeOver} type="primary" children="Take Over" />
             </Space>
           </Space>
         ),
-      },
-    });
-  };
-
-  const refreshPostLock = async () => {
-    await postReducer.refreshPostLock({ id: postID });
-  };
-
-  const removePostLock = async (id: any) => {
-    await postReducer.removePostLock({ id });
+      })
+    );
   };
 
   const handleToggleSidebar = () => {
@@ -162,23 +164,23 @@ const AdminEditor = (props: any) => {
     setSidebarActive(!sidebarActive);
   };
 
-  const sidebarOptions = { ...site?.editorOptions?.sidebar, active: sidebarActive };
-
   if (!postID) {
     return defaultComponent;
   }
 
+  const sidebarOptions = { ...site?.editorOptions?.sidebar, active: sidebarActive };
+
   return (
     <>
-      <EditorWrapper sidebarActive={sidebarActive} loaded={loaded} locked={!!post?.locked}>
-        {loaded ? (
+      <EditorWrapper sidebarOptions={sidebarOptions} loaded={postLoaded} locked={!!post?.locked}>
+        {postLoaded ? (
           <Editor fields={fields} postID={postID} {...props} sidebarOptions={sidebarOptions} />
         ) : (
           <Loader />
         )}
       </EditorWrapper>
 
-      {loaded && (
+      {postLoaded && (
         <>
           {post?.locked ? (
             <FloatingButton sidebarPosition={site?.editorOptions?.sidebar?.position}>
@@ -196,6 +198,7 @@ const AdminEditor = (props: any) => {
                   className="jam-cms"
                   fields={fields}
                   editable={!!Component}
+                  sidebarOptions={sidebarOptions}
                   onToggleSidebar={handleToggleSidebar}
                 />
               ) : (

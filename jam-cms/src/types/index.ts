@@ -1,4 +1,4 @@
-import { AuthUser, Capabilities } from './authTypes';
+import { AuthUser } from './authTypes';
 import { Dialog } from './uiTypes';
 import {
   Config,
@@ -14,6 +14,8 @@ import {
   UnpublishedChange,
   UserRole,
   User,
+  MediaItem,
+  Capabilities,
 } from './cmsTypes';
 
 export {
@@ -33,4 +35,5 @@ export {
   UnpublishedChange,
   UserRole,
   User,
+  MediaItem,
 };

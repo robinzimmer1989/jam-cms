@@ -73,7 +73,7 @@ export interface Post {
   createdAt: string;
   featuredImage?: any;
   language?: string;
-  locked?: boolean | User;
+  locked?: User | null;
   order: number;
   parentID: number;
   postTypeID: string;
@@ -82,6 +82,7 @@ export interface Post {
   status: string;
   taxonomies: any;
   template: string;
+  templateObject?: any;
   title: string;
   translations: any;
   updatedAt: string;
@@ -141,4 +142,8 @@ export interface Site {
   title: string;
   userRoles: UserRole[];
   errors?: any;
+}
+
+export interface MediaItem {
+  id: number;
 }

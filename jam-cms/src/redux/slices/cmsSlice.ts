@@ -1,40 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { set, get } from 'lodash';
+import { set, get, unionBy } from 'lodash';
 import produce from 'immer';
 import { navigate } from '@reach/router';
 
 // import app components
-import {
-  getSite,
-  updateSite,
-  deploySite,
-  syncFields,
-  getUnpublishedChanges,
-} from '../reducer/siteReducer';
-import {
-  getPost,
-  addPost,
-  updatePost,
-  deletePost,
-  duplicatePost,
-  emptyTrash,
-  reorderPosts,
-  refreshPostLock,
-  takeOverPost,
-  translatePost,
-} from '../reducer/postReducer';
-import { addTerm, updateTerm, deleteTerm, translateTerm } from '../reducer/termReducer';
-import { getSitePreview, getPostPreview } from '../reducer/previewReducer';
-import {
-  getLanguages,
-  addLanguage,
-  updateLanguage,
-  deleteLanguage,
-  updateLanguageSettings,
-  translateMass,
-} from '../reducer/languageReducer';
+import * as siteActions from '../actions/siteActions';
+import * as postActions from '../actions/postActions';
+import * as termActions from '../actions/termActions';
+import * as previewActions from '../actions/previewActions';
+import * as languageActions from '../actions/languageActions';
+import * as userActions from '../actions/userActions';
+import * as mediaActions from '../actions/mediaActions';
 
-import { Site, Post, Term, Config, Language, UnpublishedChange } from '../../types';
+import {
+  Site,
+  Post,
+  Term,
+  Config,
+  User,
+  Language,
+  UnpublishedChange,
+  MediaItem,
+} from '../../types';
 import { generateSlug } from '../../utils';
 
 export interface Editor {
@@ -46,19 +33,32 @@ export interface Editor {
 }
 
 export interface CmsState {
+  loading: string[];
   config: Config | null;
   site: Site | null;
-  unpublishedChanges: UnpublishedChange[];
+  siteLoaded: boolean;
+  unpublishedChanges: UnpublishedChange[] | null;
   activeLanguage: string;
   languages: Language[];
   deploymentImage: string;
   editor: Editor;
+  users: {
+    items: User[];
+    page: number;
+  };
+  media: {
+    items: MediaItem[];
+    page: number;
+    search: string;
+  };
 }
 
 const initialState: CmsState = {
+  loading: [],
   config: null,
   site: null,
-  unpublishedChanges: [],
+  siteLoaded: false,
+  unpublishedChanges: null,
   activeLanguage: '',
   languages: [],
   deploymentImage: '',
@@ -68,6 +68,15 @@ const initialState: CmsState = {
     post: null,
     postHasChanged: false,
     changeIndex: 0,
+  },
+  users: {
+    items: [],
+    page: 0,
+  },
+  media: {
+    items: [],
+    page: 0,
+    search: '',
   },
 };
 
@@ -91,7 +100,7 @@ export const cmsSlice = createSlice({
     },
     updateEditorSite: (state: any, action: PayloadAction<any>) => {
       state.editor.site = { ...state.editor.site, ...action.payload };
-      state.editor.siteHasChanged = false;
+      state.editor.siteHasChanged = true;
       state.editor.changeIndex += 1;
     },
     addEditorPost: (state: any, action: PayloadAction<Post>) => {
@@ -101,7 +110,7 @@ export const cmsSlice = createSlice({
     },
     updateEditorPost: (state: any, action: PayloadAction<any>) => {
       state.editor.post = { ...state.editor.post, ...action.payload };
-      state.editor.postHasChanged = false;
+      state.editor.postHasChanged = true;
       state.editor.changeIndex += 1;
     },
     clearEditor: (state: any) => {
@@ -112,20 +121,26 @@ export const cmsSlice = createSlice({
     /******************************
      * Sites
      ******************************/
-    builder.addCase(getSite.fulfilled, (state, action: PayloadAction<Site>) => {
+    builder.addCase(siteActions.getSite.fulfilled, (state, action: PayloadAction<Site>) => {
       if (action.payload) {
         state.site = action.payload;
+        state.siteLoaded = true;
+
+        // Set active language if applicable
+        if (!state.activeLanguage && action.payload?.languages?.defaultLanguage) {
+          state.activeLanguage = action.payload?.languages?.defaultLanguage || 'all';
+        }
       }
     });
 
-    builder.addCase(updateSite.fulfilled, (state, action: PayloadAction<Site>) => {
+    builder.addCase(siteActions.updateSite.fulfilled, (state, action: PayloadAction<Site>) => {
       if (action.payload) {
         state.site = action.payload;
         state.editor.site = action.payload;
       }
     });
 
-    builder.addCase(deploySite.fulfilled, (state, action: PayloadAction<Site>) => {
+    builder.addCase(siteActions.deploySite.fulfilled, (state, action: PayloadAction<Site>) => {
       if (action.payload) {
         state.site = action.payload;
 
@@ -137,14 +152,14 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(syncFields.fulfilled, (state, action: PayloadAction<Site>) => {
+    builder.addCase(siteActions.syncFields.fulfilled, (state, action: PayloadAction<Site>) => {
       if (action.payload) {
         state.site = action.payload;
       }
     });
 
     builder.addCase(
-      getUnpublishedChanges.fulfilled,
+      siteActions.getUnpublishedChanges.fulfilled,
       (state, action: PayloadAction<UnpublishedChange[]>) => {
         if (action.payload) {
           state.unpublishedChanges = action.payload;
@@ -155,17 +170,19 @@ export const cmsSlice = createSlice({
     /******************************
      * Posts
      ******************************/
-    builder.addCase(getPost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.getPost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
         set(
           state,
           `site.postTypes.${action.payload.postTypeID}.posts.${action.payload.id}`,
           action.payload
         );
+
+        set(state, `editor.post`, action.payload);
       }
     });
 
-    builder.addCase(addPost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.addPost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
         set(
           state,
@@ -193,7 +210,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
         set(
           state,
@@ -201,18 +218,14 @@ export const cmsSlice = createSlice({
           action.payload
         );
 
-        set(
-          state,
-          `editor.site.postTypes.${action.payload.postTypeID}.posts.${action.payload.id}`,
-          action.payload
-        );
+        set(state, `editor.post`, action.payload);
 
         // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
         set(state, `site.deployment.undeployedChanges`, true);
       }
     });
 
-    builder.addCase(deletePost.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(postActions.deletePost.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload) {
         // Get the term that needs to be deleted
         const post = get(
@@ -237,7 +250,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(duplicatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.duplicatePost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
         set(
           state,
@@ -247,7 +260,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(emptyTrash.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(postActions.emptyTrash.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload) {
         action.payload.postIDs.map((id: number) => {
           // Get the post that needs to be deleted
@@ -271,7 +284,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(reorderPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
+    builder.addCase(postActions.reorderPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
       if (action.payload) {
         action.payload.map((o: Post) => {
           set(state, `site.postTypes.${o.postTypeID}.posts.${o.id}.order`, o.order);
@@ -279,7 +292,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(refreshPostLock.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.refreshPostLock.fulfilled, (state, action: PayloadAction<Post>) => {
       // If the property locked is set in the result, it means someone took over the post and we need to disable editing for the current user
       if (action.payload?.locked?.id) {
         set(
@@ -296,7 +309,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(takeOverPost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.takeOverPost.fulfilled, (state, action: PayloadAction<Post>) => {
       // If the property locked is set in the result, it means someone took over the post and we need to disable editing for the current user
       if (action.payload) {
         set(
@@ -313,7 +326,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(translatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(postActions.translatePost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
         set(
           state,
@@ -353,7 +366,7 @@ export const cmsSlice = createSlice({
     /******************************
      * Terms
      ******************************/
-    builder.addCase(addTerm.fulfilled, (state, action: PayloadAction<Term>) => {
+    builder.addCase(termActions.addTerm.fulfilled, (state, action: PayloadAction<Term>) => {
       if (action.payload) {
         set(
           state,
@@ -363,7 +376,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(updateTerm.fulfilled, (state, action: PayloadAction<Term>) => {
+    builder.addCase(termActions.updateTerm.fulfilled, (state, action: PayloadAction<Term>) => {
       if (action.payload) {
         set(
           state,
@@ -373,7 +386,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(deleteTerm.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(termActions.deleteTerm.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload) {
         // Get the term that needs to be deleted
         const term = get(
@@ -398,7 +411,7 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(translateTerm.fulfilled, (state, action: PayloadAction<Term>) => {
+    builder.addCase(termActions.translateTerm.fulfilled, (state, action: PayloadAction<Term>) => {
       if (action.payload) {
         set(
           state,
@@ -418,82 +431,186 @@ export const cmsSlice = createSlice({
     });
 
     /******************************
-     * Previews
+     * Users
      ******************************/
-    builder.addCase(getSitePreview.fulfilled, (state, action: PayloadAction<Site>) => {
+    builder.addCase(userActions.addUser.fulfilled, (state, action: PayloadAction<User>) => {
       if (action.payload) {
-        state.site = action.payload;
+        state.users.items = [action.payload, ...state.users.items];
       }
     });
 
-    builder.addCase(getPostPreview.fulfilled, (state, action: PayloadAction<Post>) => {
+    builder.addCase(userActions.updateUser.fulfilled, (state, action: PayloadAction<User>) => {
       if (action.payload) {
-        state.editor.post = action.payload;
+        state.users.items = state.users.items.map((o: User) =>
+          o.id === action.payload.id ? action.payload : o
+        );
       }
     });
+
+    builder.addCase(userActions.deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
+      if (action.payload) {
+        state.users.items = state.users.items.filter((o: User) => o.id !== action.payload);
+      }
+    });
+
+    builder.addCase(
+      userActions.getUsers.fulfilled,
+      (state, action: PayloadAction<{ items: User[]; page: number }>) => {
+        if (action.payload) {
+          state.users.items = state.users.items.concat(action.payload.items);
+          state.users.page = action.payload.page;
+        }
+      }
+    );
+
+    /******************************
+     * Media
+     ******************************/
+    builder.addCase(
+      mediaActions.addMediaItem.fulfilled,
+      (state, action: PayloadAction<MediaItem>) => {
+        if (action.payload) {
+          state.media.items = [action.payload, ...state.media.items];
+        }
+      }
+    );
+
+    builder.addCase(
+      mediaActions.updateMediaItem.fulfilled,
+      (state, action: PayloadAction<MediaItem>) => {
+        if (action.payload) {
+          state.media.items = state.media.items.map((o: MediaItem) =>
+            o.id === action.payload.id ? action.payload : o
+          );
+        }
+      }
+    );
+
+    builder.addCase(
+      mediaActions.deleteMediaItem.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        if (action.payload) {
+          state.media.items = state.media.items.filter((o: MediaItem) => o.id !== action.payload);
+        }
+      }
+    );
+
+    builder.addCase(
+      mediaActions.getMediaItems.fulfilled,
+      (state, action: PayloadAction<{ items: MediaItem[]; page: number; search: string }>) => {
+        if (action.payload) {
+          state.media.items =
+            state.media.search === action.payload.search
+              ? unionBy(state.media.items, action.payload.items, 'id')
+              : action.payload.items;
+          state.media.page = action.payload.page;
+          state.media.search = action.payload.search;
+        }
+      }
+    );
+
+    /******************************
+     * Previews
+     ******************************/
+    builder.addCase(
+      previewActions.getSitePreview.fulfilled,
+      (state, action: PayloadAction<Site>) => {
+        if (action.payload) {
+          state.site = action.payload;
+          state.siteLoaded = true;
+        }
+      }
+    );
+
+    builder.addCase(
+      previewActions.getPostPreview.fulfilled,
+      (state, action: PayloadAction<Post>) => {
+        if (action.payload) {
+          state.editor.post = action.payload;
+        }
+      }
+    );
 
     /******************************
      * Languages
      ******************************/
-    builder.addCase(getLanguages.fulfilled, (state, action: PayloadAction<Language[]>) => {
-      if (action.payload) {
-        state.languages = action.payload;
-      }
-    });
-
-    builder.addCase(addLanguage.fulfilled, (state, action: PayloadAction<Language[]>) => {
-      if (action.payload) {
-        set(state, `site.languages`, action.payload);
-      }
-    });
-
-    builder.addCase(updateLanguage.fulfilled, (state, action: PayloadAction<Language[]>) => {
-      if (action.payload) {
-        set(state, `site.languages`, action.payload);
-      }
-    });
-
-    builder.addCase(deleteLanguage.fulfilled, (state, action: PayloadAction<Language>) => {
-      if (action.payload) {
-        state.site?.languages?.languages?.filter((o: Language) => o.id !== action.payload.id);
-
-        // Reset language if active language gets deleted
-        if (state.activeLanguage === action.payload.slug) {
-          state.activeLanguage = 'all';
-        }
-
-        // Reset default language in case user deletes it
-        if (state?.site?.languages?.defaultLanguage === action.payload.slug) {
-          state.site.languages.defaultLanguage = '';
+    builder.addCase(
+      languageActions.getLanguages.fulfilled,
+      (state, action: PayloadAction<Language[]>) => {
+        if (action.payload) {
+          state.languages = action.payload;
         }
       }
-    });
+    );
 
-    builder.addCase(updateLanguageSettings.fulfilled, (state, action: PayloadAction<any>) => {
-      if (state.site && action.payload) {
-        state.site.languages = { ...state.site.languages, ...action.payload };
+    builder.addCase(
+      languageActions.addLanguage.fulfilled,
+      (state, action: PayloadAction<Language[]>) => {
+        if (action.payload) {
+          set(state, `site.languages`, action.payload);
+        }
       }
-    });
+    );
 
-    builder.addCase(translateMass.fulfilled, (state, action: PayloadAction<any>) => {
-      if (state.site && action.payload) {
-        action.payload.ids.map((id: number) => {
-          if (action.payload.type === 'post') {
-            set(
-              state,
-              `site.postTypes.${action.payload.postTypeID}.posts.${id}.language`,
-              action.payload.language
-            );
-          } else {
-            set(
-              state,
-              `site.taxonomies.${action.payload.taxonomyID}.terms.${id}.language`,
-              action.payload.language
-            );
+    builder.addCase(
+      languageActions.updateLanguage.fulfilled,
+      (state, action: PayloadAction<Language[]>) => {
+        if (action.payload) {
+          set(state, `site.languages`, action.payload);
+        }
+      }
+    );
+
+    builder.addCase(
+      languageActions.deleteLanguage.fulfilled,
+      (state, action: PayloadAction<Language>) => {
+        if (action.payload) {
+          state.site?.languages?.languages?.filter((o: Language) => o.id !== action.payload.id);
+
+          // Reset language if active language gets deleted
+          if (state.activeLanguage === action.payload.slug) {
+            state.activeLanguage = 'all';
           }
-        });
+
+          // Reset default language in case user deletes it
+          if (state?.site?.languages?.defaultLanguage === action.payload.slug) {
+            state.site.languages.defaultLanguage = '';
+          }
+        }
       }
-    });
+    );
+
+    builder.addCase(
+      languageActions.updateLanguageSettings.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        if (state.site && action.payload) {
+          state.site.languages = { ...state.site.languages, ...action.payload };
+        }
+      }
+    );
+
+    builder.addCase(
+      languageActions.translateMass.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        if (state.site && action.payload) {
+          action.payload.ids.map((id: number) => {
+            if (action.payload.type === 'post') {
+              set(
+                state,
+                `site.postTypes.${action.payload.postTypeID}.posts.${id}.language`,
+                action.payload.language
+              );
+            } else {
+              set(
+                state,
+                `site.taxonomies.${action.payload.taxonomyID}.terms.${id}.language`,
+                action.payload.language
+              );
+            }
+          });
+        }
+      }
+    );
   },
 });
 

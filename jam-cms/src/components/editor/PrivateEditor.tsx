@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Editor from './Editor';
 import Loader from '../Loader';
 
-import { RootState, useAppDispatch, useAppSelector, postReducer, clearEditor } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, postActions, clearEditor } from '../../redux';
 
 const PrivateEditor = (props: any) => {
   const {
@@ -23,7 +23,7 @@ const PrivateEditor = (props: any) => {
   const loaded = postID && post?.id === postID;
 
   useEffect(() => {
-    postID && postReducer.getPost({ id: postID });
+    postID && postActions.getPost({ id: postID });
 
     return () => dispatch(clearEditor());
   }, [postID]);

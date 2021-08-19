@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from 'antd';
 
 // import app components
-import { RootState, useAppDispatch, useAppSelector, setActiveLanguage } from '../redux';
+import { RootState, useAppDispatch, useAppSelector, cmsActions } from '../redux';
 
 const LanguageSwitcher = () => {
   const {
@@ -14,7 +14,7 @@ const LanguageSwitcher = () => {
   return (
     <Select
       value={activeLanguage}
-      onChange={(v: any) => dispatch(setActiveLanguage(v))}
+      onChange={(v: any) => dispatch(cmsActions.setActiveLanguage(v))}
       style={{ width: '100px' }}
     >
       <Select.Option value="all">All</Select.Option>

@@ -5,14 +5,13 @@ import { debounce } from 'lodash';
 import { Space, Button, Typography } from 'antd';
 
 // import app components
-import { RootState, useAppDispatch, useAppSelector, showDialog, hideDialog } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, uiActions } from '../../redux';
 
 const EditorWrapper = (props: any) => {
-  const { sidebarActive, loaded, locked, children } = props;
+  const { sidebarOptions, loaded, locked, children } = props;
 
   const {
     cms: {
-      site,
       editor: { siteHasChanged, postHasChanged, changeIndex },
     },
   } = useAppSelector((state: RootState) => state);
@@ -51,7 +50,7 @@ const EditorWrapper = (props: any) => {
           e.preventDefault();
           // Display confirmation dialog
           dispatch(
-            showDialog({
+            uiActions.showDialog({
               open: true,
               title: 'Warning',
               component: (
@@ -60,7 +59,7 @@ const EditorWrapper = (props: any) => {
                     children={'There are unsaved changes. Are you sure you want to discard them?'}
                   />
                   <Space>
-                    <Button children="Cancel" onClick={() => dispatch(hideDialog())} />
+                    <Button children="Cancel" onClick={() => dispatch(uiActions.hideDialog())} />
                     <Button
                       children="Discard changes"
                       danger
@@ -73,7 +72,7 @@ const EditorWrapper = (props: any) => {
                           navigate(node.href);
                         }
 
-                        dispatch(hideDialog());
+                        dispatch(uiActions.hideDialog());
                       }}
                     />
                   </Space>
@@ -88,18 +87,8 @@ const EditorWrapper = (props: any) => {
   }, [changeIndex]);
 
   return (
-    <Container
-      id="jam-cms"
-      loaded={loaded}
-      locked={locked}
-      sidebar={{ active: sidebarActive, ...site?.editorOptions?.sidebar }}
-    >
-      <Inner
-        loaded={loaded}
-        locked={locked}
-        sidebar={{ active: sidebarActive, ...site?.editorOptions?.sidebar }}
-        windowWidth={windowWidth}
-      >
+    <Container id="jam-cms" loaded={loaded} locked={locked} sidebar={sidebarOptions}>
+      <Inner loaded={loaded} locked={locked} sidebar={sidebarOptions} windowWidth={windowWidth}>
         {children}
       </Inner>
     </Container>

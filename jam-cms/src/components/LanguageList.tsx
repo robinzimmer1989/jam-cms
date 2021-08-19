@@ -10,7 +10,7 @@ import Caption from './Caption';
 import Select from './Select';
 import { generateSlug } from '../utils';
 import { RootState, useAppDispatch, useAppSelector } from '../redux';
-import { postReducer } from '../redux';
+import { postActions } from '../redux';
 
 const LanguageList = (props: any) => {
   const { onChange } = props;
@@ -28,7 +28,7 @@ const LanguageList = (props: any) => {
 
   const handleTranslatePost = async ({ id, language }: any) => {
     setLoading(language);
-    dispatch(postReducer.translatePost({ id, language }));
+    dispatch(postActions.translatePost({ id, language }));
     setLoading('');
   };
 

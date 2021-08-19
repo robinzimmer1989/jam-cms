@@ -36,17 +36,16 @@ import {
   RootState,
   useAppSelector,
   useAppDispatch,
-  postReducer,
-  siteReducer,
-  previewReducer,
-  updateEditorSite,
-  addEditorPost,
-  updateEditorPost,
-  hideDialog,
+  postActions,
+  siteActions,
+  previewActions,
+  uiActions,
+  cmsActions,
 } from '../../redux';
+import { Post } from '../../types';
 
 const EditorSidebar = (props: any) => {
-  const { fields, editable, onToggleSidebar, ...rest } = props;
+  const { fields, editable, onToggleSidebar, sidebarOptions, ...rest } = props;
 
   const {
     auth: { user: authUser },
@@ -89,31 +88,31 @@ const EditorSidebar = (props: any) => {
       return draft;
     });
 
-    dispatch(addEditorPost(nextPost));
+    nextPost && dispatch(cmsActions.addEditorPost(nextPost));
   };
 
   const handleSelectRevision = async (postID: number) => {
     setLoading(postID.toString());
 
-    const result: any = await postReducer.getPost({ id: postID });
+    const result: any = await dispatch(postActions.getPost({ id: postID }));
 
     if (result) {
       // Update existing post with title, content, post date and revisionID.
       const { content, title, revisionID } = result;
 
-      dispatch(updateEditorPost({ ...post, content, title, revisionID }));
+      dispatch(cmsActions.updateEditorPost({ ...post, content, title, revisionID }));
     }
     setLoading('');
   };
 
   const handleChangeSite = (name: any, value: any) => {
     const nextSite = produce(editorSite, (draft: any) => set(draft, `${name}`, value));
-    dispatch(updateEditorSite(nextSite));
+    dispatch(cmsActions.updateEditorSite(nextSite));
   };
 
   const handleSelectImage = (name: any, image: any) => {
     handleChangePost(name, image);
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   const handleChangeContent = (field: any) => {
@@ -121,10 +120,10 @@ const EditorSidebar = (props: any) => {
       const nextSite = produce(editorSite, (draft: any) =>
         set(draft, `themeOptions.${field.id}`, field)
       );
-      dispatch(updateEditorSite(nextSite));
+      dispatch(cmsActions.updateEditorSite(nextSite));
     } else {
       const nextPost = produce(post, (draft: any) => set(draft, `content.${field.id}`, field));
-      dispatch(updateEditorPost(nextPost));
+      dispatch(cmsActions.updateEditorPost(nextPost));
     }
   };
 
@@ -135,18 +134,9 @@ const EditorSidebar = (props: any) => {
   const handleUpdate = (status: string) => handleSave('update', status);
 
   const handleSave = async (action: string, status: string) => {
-    const { themeOptions, frontPage } = editorSite || {};
-
     // Trigger dummy message to give user feedback
     if (!siteHasChanged && !postHasChanged && post?.status === status) {
       return message.success('Updated successfully');
-    }
-
-    let templateObject = getTemplateByPost(post, fields);
-
-    // Nullify template object if syncing is disabled or not in development mode
-    if (config?.settings?.sync === false || process.env.NODE_ENV !== 'development') {
-      templateObject = null;
     }
 
     setLoading(action);
@@ -157,11 +147,22 @@ const EditorSidebar = (props: any) => {
     let postResult, siteResult;
 
     if (siteHasChanged) {
-      siteResult = await siteReducer.updateSite({ themeOptions, frontPage });
+      const { themeOptions, frontPage } = editorSite || {};
+      siteResult = await dispatch(siteActions.updateSite({ themeOptions, frontPage }));
     }
 
     if (postHasChanged || action === 'publish') {
-      const args = {
+      if (!post) {
+        return;
+      }
+
+      // Get template object if syncing is enabled and in development mode
+      const templateObject =
+        config?.settings?.sync && process.env.NODE_ENV === 'development'
+          ? getTemplateByPost(post, fields)
+          : null;
+
+      const args: Post = {
         ...post,
         status,
         templateObject,
@@ -172,25 +173,25 @@ const EditorSidebar = (props: any) => {
         args.language = post?.language || site?.languages?.defaultLanguage;
       }
 
-      postResult = await postReducer.updatePost(args);
+      postResult = await dispatch(postActions.updatePost(args));
     }
 
-    if (postResult || siteResult) {
+    if (postResult?.payload || siteResult?.payload) {
       message.success('Updated successfully');
 
       // We need to generate the slug and navigate to it in case the user has changed the post name or set a new front page
-      const newFrontPage = siteResult?.frontPage || site?.frontPage;
-      const newPost = postResult ? { ...postResult } : { ...post };
+      const nextFrontPage = siteResult?.payload?.frontPage || site?.frontPage;
+      const nextPost = postResult?.payload ? { ...postResult?.payload } : { ...post };
 
       const nextSite = produce(site, (draft: any) => {
-        set(draft, `postTypes.${newPost.postTypeID}.posts.${newPost.id}`, newPost);
-        set(draft, `frontPage`, newFrontPage);
+        set(draft, `postTypes.${nextPost.postTypeID}.posts.${nextPost.id}`, nextPost);
+        set(draft, `frontPage`, nextFrontPage);
       });
 
       const slug = generateSlug({
         site: nextSite,
-        postTypeID: newPost.postTypeID,
-        postID: newPost.id,
+        postTypeID: nextPost.postTypeID,
+        postID: nextPost.id,
         leadingSlash: true,
       });
 
@@ -201,9 +202,12 @@ const EditorSidebar = (props: any) => {
   };
 
   const handleGeneratePreviewLink = async () => {
-    const result: any = await previewReducer.getPreviewLink({ postID: post?.id, expiryDate });
-    if (result) {
-      setPreviewLink(result);
+    if (post) {
+      const result = await dispatch(previewActions.getPreviewLink({ postID: post.id, expiryDate }));
+
+      if (result?.payload) {
+        setPreviewLink(result.payload);
+      }
     }
   };
 
@@ -422,9 +426,8 @@ const EditorSidebar = (props: any) => {
                 value={post?.featuredImage}
                 onRemove={() => handleSelectImage('featuredImage', null)}
                 onClick={() =>
-                  dispatch({
-                    type: `SET_DIALOG`,
-                    payload: {
+                  dispatch(
+                    uiActions.showDialog({
                       open: true,
                       title: 'Media',
                       component: (
@@ -434,8 +437,8 @@ const EditorSidebar = (props: any) => {
                         />
                       ),
                       width: 1024,
-                    },
-                  })
+                    })
+                  )
                 }
               />
             </Space>
@@ -478,9 +481,8 @@ const EditorSidebar = (props: any) => {
               value={post?.seo?.opengraphImage}
               onRemove={() => handleSelectImage('seo.opengraphImage', null)}
               onClick={() =>
-                dispatch({
-                  type: `SET_DIALOG`,
-                  payload: {
+                dispatch(
+                  uiActions.showDialog({
                     open: true,
                     title: 'Media',
                     component: (
@@ -490,8 +492,8 @@ const EditorSidebar = (props: any) => {
                       />
                     ),
                     width: 1024,
-                  },
-                })
+                  })
+                )
               }
             />
           </Space>
@@ -613,7 +615,7 @@ const EditorSidebar = (props: any) => {
   };
 
   return (
-    <Container id="jam-cms-sidebar" sidebar={site?.editorOptions?.sidebar} {...rest}>
+    <Container id="jam-cms-sidebar" sidebar={sidebarOptions} {...rest}>
       <Header>
         <Row justify="space-between">
           <Space size={15}>

@@ -14,8 +14,7 @@ import useAuth from '../../hooks/useAuth';
 import useSite from '../../hooks/useSite';
 
 import { getPreviewID } from '../../utils/auth';
-import { setConfig } from '../../redux/slices/cmsSlice';
-import { RootState, useAppSelector, useAppDispatch } from '../../redux';
+import { RootState, useAppSelector, useAppDispatch, cmsActions } from '../../redux';
 
 const Router = (props: any) => {
   const { config } = props;
@@ -27,7 +26,7 @@ const Router = (props: any) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setConfig(config));
+    dispatch(cmsActions.setConfig(config));
   }, []);
 
   useAuth();

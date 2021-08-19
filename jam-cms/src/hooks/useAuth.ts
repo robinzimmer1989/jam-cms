@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 
 // import components
 import { getUser } from '../utils/auth';
-import { authReducer, useAppDispatch } from '../redux';
+import { RootState, useAppSelector, useAppDispatch, authActions } from '../redux';
 
 const useAuth = () => {
+  const {
+    auth: { userLoaded },
+  } = useAppSelector((state: RootState) => state);
+
   const dispatch: any = useAppDispatch();
 
   const [timer, setTimer] = useState(0);
@@ -17,7 +21,7 @@ const useAuth = () => {
     if (user?.authToken) {
       intervalID = setInterval(() => {
         setTimer((time) => time + 1);
-      }, 90000); // 90 seconds
+      }, 60000); // 60 seconds
     }
 
     // Clear timer
@@ -27,17 +31,11 @@ const useAuth = () => {
   }, []);
 
   useEffect(() => {
-    const refreshToken = async () => {
-      authReducer.refreshToken();
-    };
-
-    if (timer > 0) {
-      refreshToken();
-    }
+    user?.authToken && userLoaded && dispatch(authActions.refreshToken());
   }, [timer]);
 
   useEffect(() => {
-    dispatch(authReducer.getAuthUser());
+    user?.authToken && !userLoaded && dispatch(authActions.getAuthUser());
   }, []);
 };
 

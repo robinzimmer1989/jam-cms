@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 // import app components
 import Router from './router/Router';
 import { store } from '../redux';
+import { formatFields } from '../utils';
 
 const JamCMS = (props: any) => {
   const { fields, source, settings, privateTemplateExists } = props;
@@ -14,7 +15,7 @@ const JamCMS = (props: any) => {
         pageContext={props?.pageContext}
         defaultComponent={props.children}
         config={{ source, settings, privateTemplateExists }}
-        fields={fields}
+        fields={formatFields(fields)}
       />
     </Provider>
   );

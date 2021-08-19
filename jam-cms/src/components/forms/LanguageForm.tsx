@@ -5,7 +5,7 @@ import Parser from 'html-react-parser';
 // import app components
 import Select from '../Select';
 import Input from '../Input';
-import { RootState, useAppDispatch, useAppSelector, languageReducer } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, languageActions, uiActions } from '../../redux';
 
 const LanguageForm = (props: any) => {
   const { language: defaultLanguage = { id: null, name: '', slug: '', locale: '' } } = props;
@@ -16,19 +16,11 @@ const LanguageForm = (props: any) => {
 
   const dispatch: any = useAppDispatch();
 
-  const [loadingLanguages, setLoadingLanguages] = useState(true);
   const [loading, setLoading] = useState(false);
-
   const [language, setLanguage] = useState(defaultLanguage);
 
   useEffect(() => {
-    // Load language options for select field
-    const loadLanguages = async () => {
-      await languageReducer.getLanguages();
-      setLoadingLanguages(false);
-    };
-
-    loadLanguages();
+    dispatch(languageActions.getLanguages());
   }, []);
 
   const handleChange = (e: any) => setLanguage({ ...language, [e.target.name]: e.target.value });
@@ -43,16 +35,16 @@ const LanguageForm = (props: any) => {
     setLoading(true);
 
     if (id) {
-      await languageReducer.updateLanguage({ id, name, slug, locale });
+      dispatch(languageActions.updateLanguage({ id, name, slug, locale }));
     } else {
-      await languageReducer.addLanguage({ name, slug, locale });
+      dispatch(languageActions.addLanguage({ name, slug, locale }));
     }
 
     // Reset to default and close modal
     setLanguage({ id: null, name: '', slug: '', locale: '' });
     setLoading(false);
 
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(uiActions.hideDialog());
   };
 
   return (
@@ -72,7 +64,7 @@ const LanguageForm = (props: any) => {
           setLanguage({ ...language, ...selectedLanguage });
         }}
         label={'Select a language'}
-        loading={loadingLanguages}
+        loading={languages.length === 0}
       >
         {languages.map((o: any) => (
           <AntSelect.Option

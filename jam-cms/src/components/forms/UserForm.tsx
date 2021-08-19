@@ -4,7 +4,7 @@ import { Space, Button, Select, Checkbox } from 'antd';
 // import app components
 import Input from '../Input';
 import Caption from '../Caption';
-import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, uiActions } from '../../redux';
 
 const UserForm = (props: any) => {
   const { id, email: defaultEmail = '', roles: defaultRoles = ['editor'], onAdd, onUpdate } = props;
@@ -37,7 +37,7 @@ const UserForm = (props: any) => {
 
     setLoading(false);
 
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   return (

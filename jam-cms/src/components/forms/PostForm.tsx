@@ -4,7 +4,7 @@ import { Space, Button, Select as AntSelect } from 'antd';
 // import app components
 import Input from '../Input';
 import Select from '../Select';
-import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, uiActions } from '../../redux';
 
 const PostForm = (props: any) => {
   const { postTypeID, onSubmit } = props;
@@ -39,7 +39,7 @@ const PostForm = (props: any) => {
     setTitle('');
     setLoading(false);
 
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   return (

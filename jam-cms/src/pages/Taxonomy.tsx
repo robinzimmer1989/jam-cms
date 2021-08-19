@@ -8,15 +8,21 @@ import ListItem from '../components/ListItem';
 import LanguageSelector from '../components/LanguageSelector';
 
 import { createDataTree, generateSlug } from '../utils';
-import { RootState, useAppDispatch, useAppSelector } from '../redux';
-import { termReducer } from '../redux';
-import { termActions, siteActions, languageActions } from '../actions';
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+  termActions,
+  siteActions,
+  languageActions,
+  uiActions,
+} from '../redux';
 
 const Taxonomy = (props: any) => {
   const { taxonomyID, fields } = props;
 
   const {
-    cms: { config, site, activeLanguage },
+    cms: { site, activeLanguage },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
@@ -47,61 +53,54 @@ const Taxonomy = (props: any) => {
 
   const handleSync = async () => {
     setLoading({ action: 'syncing' });
-    await siteActions.syncFields({ fields, apiKey: site?.apiKey }, dispatch, config);
+    await dispatch(siteActions.syncFields({ fields, apiKey: site?.apiKey || '' }));
     setLoading(null);
   };
 
   const handleTranslateMass = async () => {
     setLoading({ action: 'translate' });
 
-    const language = activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
+    const language =
+      activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage || '';
 
-    await languageActions.translateMass(
-      {
-        taxonomyID,
+    await dispatch(
+      languageActions.translateMass({
         type: 'term',
         ids: terms.filter((o: any) => !o.language).map((o: any) => o.id),
         language,
-      },
-      dispatch,
-      config
+      })
     );
     setLoading(null);
   };
 
   const handleUpsert = async ({ id, title, slug, parentID, description, language }: any) => {
     if (id) {
-      await termActions.updateTerm(
-        { taxonomyID, id, title, slug, parentID, description, language },
-        dispatch,
-        config
+      await dispatch(
+        termActions.updateTerm({ taxonomyID, id, title, slug, parentID, description, language })
       );
     } else {
-      await termActions.addTerm(
-        { taxonomyID, id, title, slug, parentID, description, language },
-        dispatch,
-        config
+      await dispatch(
+        termActions.addTerm({ taxonomyID, title, slug, parentID, description, language })
       );
     }
   };
 
   const handleDelete = async ({ termID }: any) => {
     setLoading({ action: 'delete', id: termID });
-    await termActions.deleteTerm({ taxonomyID, id: termID }, dispatch, config);
+    await dispatch(termActions.deleteTerm({ taxonomyID, id: termID }));
     setLoading(null);
   };
 
   const handleOpenDialog = (term: any = {}) => {
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
+    dispatch(
+      uiActions.showDialog({
         open: true,
         title: `Term`,
         component: (
           <TermForm {...term} taxonomyID={taxonomyID} terms={terms} onSubmit={handleUpsert} />
         ),
-      },
-    });
+      })
+    );
   };
 
   const handleEditTranslation = (term: any, language: string) => {
@@ -114,8 +113,8 @@ const Taxonomy = (props: any) => {
   };
 
   const handleTranslateTerm = async ({ id, language }: any) => {
-    dispatch(termReducer.translateTerm({ id, language }));
-    // handleOpenDialog(result);
+    const result: any = await dispatch(termActions.translateTerm({ id, language }));
+    handleOpenDialog(result);
   };
 
   const renderUntranslatedTermsWarning = () => {

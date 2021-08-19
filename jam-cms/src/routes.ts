@@ -1,5 +1,4 @@
-export const ROUTE_BASE = '/jam-cms';
-export const ROUTE_APP = '/jam-cms/app';
+export const ROUTE_APP = '/jam-cms';
 export const ROUTE_MEDIA = '/media';
 export const ROUTE_POST_TYPE = '/collections';
 export const ROUTE_SETTINGS_GENERAL = '/settings';

@@ -12,8 +12,7 @@ import Taxonomy from '../../pages/Taxonomy';
 import Users from '../../pages/Users';
 import AdminEditor from '../editor/AdminEditor';
 import { CmsStyles } from '../../theme';
-import { hideDialog } from '../../redux/slices/uiSlice';
-import { RootState, useAppSelector, useAppDispatch } from '../../redux';
+import { RootState, useAppSelector, useAppDispatch, uiActions } from '../../redux';
 
 import {
   ROUTE_APP,
@@ -63,7 +62,7 @@ const AdminRouter = (props: any) => {
           maskTransitionName="none"
           title={dialog.title}
           visible={dialog.open}
-          onCancel={() => dispatch(hideDialog())}
+          onCancel={() => dispatch(uiActions.hideDialog())}
           destroyOnClose
           children={dialog.component}
           width={dialog.width}

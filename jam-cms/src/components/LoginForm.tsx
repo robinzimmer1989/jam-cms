@@ -6,8 +6,7 @@ import { Button, Card, Space, Form, message, Row } from 'antd';
 // import app components
 import Input from './Input';
 
-import { authServices } from '../services';
-import { ROUTE_APP } from '../routes';
+import { authActions } from '../redux';
 import { auth, validateEmail, getParameter } from '../utils';
 import { colors } from '../theme';
 
@@ -36,11 +35,7 @@ const LoginForm = (props: any) => {
   // Navigate to jamCMS backend if this is admin form
   useEffect(() => {
     if (isAuthed) {
-      if (isAdmin) {
-        navigate(ROUTE_APP);
-      } else {
-        navigate(window.location.pathname);
-      }
+      navigate(window.location.pathname);
     }
   }, [isAuthed]);
 
@@ -68,7 +63,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result: any = await authServices.signIn({ email, password }, url);
+      const result = await authActions.signIn({ email, password }, url);
 
       // While technically logging in as i.e. a subscriber succeeds, we gonna display an error message instead if user doesn't have level 1 capabilities.
       if (!result?.authToken || (isAdmin && !result?.capabilities?.level_1)) {
@@ -80,6 +75,7 @@ const LoginForm = (props: any) => {
     } catch (err) {
       console.log('error...: ', err);
       message.error({ content: 'Oops, something went wrong' });
+      setData({ ...data, loading: false });
     }
   };
 
@@ -99,7 +95,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result = await authServices.forgetPassword({ email }, url);
+      const result = await authActions.forgetPassword({ email }, url);
 
       if (result?.data?.sendPasswordResetEmail) {
         setData({
@@ -128,7 +124,7 @@ const LoginForm = (props: any) => {
     setData({ ...data, loading: true });
 
     try {
-      const result = await authServices.resetPassword({ key, login, password }, url);
+      const result = await authActions.resetPassword({ key, login, password }, url);
 
       if (result?.data?.resetUserPassword) {
         setData({

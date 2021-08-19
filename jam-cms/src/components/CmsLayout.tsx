@@ -16,8 +16,8 @@ import CmsHeader from './CmsHeader';
 import PostForm from './forms/PostForm';
 import Logo from '../icons/jamCMS.svg';
 import { colors } from '../theme';
-import { showDialog } from '../redux/slices/uiSlice';
-import { postReducer, RootState, useAppDispatch, useAppSelector } from '../redux';
+
+import { postActions, RootState, useAppDispatch, useAppSelector, uiActions } from '../redux';
 import getRoute from '../routes';
 
 const CmsLayout = (props: any) => {
@@ -30,9 +30,7 @@ const CmsLayout = (props: any) => {
     cms: { site },
   } = useAppSelector((state: RootState) => state);
 
-  const handleAddPost = async (args: any) => {
-    dispatch(postReducer.addPost(args));
-  };
+  const handleAddPost = async (args: any) => dispatch(postActions.addPost(args));
 
   return (
     <>
@@ -105,7 +103,7 @@ const CmsLayout = (props: any) => {
                           key={`add-${(o as any).id}`}
                           onClick={() =>
                             dispatch(
-                              showDialog({
+                              uiActions.showDialog({
                                 open: true,
                                 title: `Add ${(o as any).title}`,
                                 component: (

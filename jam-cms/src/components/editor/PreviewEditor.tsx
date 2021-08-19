@@ -5,13 +5,7 @@ import Editor from './Editor';
 import Loader from '../Loader';
 
 import { getPreviewID } from '../../utils/auth';
-import {
-  RootState,
-  useAppDispatch,
-  useAppSelector,
-  previewReducer,
-  clearEditor,
-} from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, previewActions, cmsActions } from '../../redux';
 
 const PreviewEditor = (props: any) => {
   const {
@@ -23,9 +17,9 @@ const PreviewEditor = (props: any) => {
   const dispatch: any = useAppDispatch();
 
   useEffect(() => {
-    previewReducer.getPostPreview({ previewID: getPreviewID() });
+    dispatch(previewActions.getPostPreview({ previewID: getPreviewID() }));
 
-    return () => dispatch(clearEditor());
+    return () => dispatch(cmsActions.clearEditor());
   }, []);
 
   return <>{post ? <Editor postID={post?.id} {...props} /> : <Loader text="Load Preview" />}</>;

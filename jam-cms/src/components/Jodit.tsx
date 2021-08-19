@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 // import app components
 import LinkSelector from './LinkSelector';
 import MediaLibrary from './MediaLibrary';
-import { useAppDispatch, updateEditorSettings } from '../redux';
+import { useAppDispatch, uiActions } from '../redux';
 import { colors } from '../theme';
 
 let JoditEditor = () => <></>;
@@ -56,7 +56,7 @@ const HTMLEditor = (props: any) => {
 
   const handleSetFullscreen = (value: boolean) => {
     // We are updating the global and local state for fullscreen. This way we prevent opening the wrong editor (in case there is more than one).
-    dispatch(updateEditorSettings({ fullscreen: value }));
+    dispatch(uiActions.updateEditorSettings({ fullscreen: value }));
     setEditorFullscreen(value);
   };
 

@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Post } from '../../types';
-import db from '../api/db';
+import db from '../api/rest';
 
 export interface AddPostArgs {
   title: string;
   language?: string;
 }
 
-export const addPost = createAsyncThunk('cms/addPost', async (args: AddPostArgs, thunkAPI) => {
+export const addPost = createAsyncThunk('post/add', async (args: AddPostArgs, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -21,19 +21,20 @@ export const addPost = createAsyncThunk('cms/addPost', async (args: AddPostArgs,
 });
 
 export interface GetPostArgs {
-  id: number;
+  id: number | null;
 }
 
-export const getPost = createAsyncThunk('cms/getPost', async (args: GetPostArgs, thunkAPI) => {
+export const getPost = createAsyncThunk('post/get', async (args: GetPostArgs, thunkAPI) => {
   const {
     cms: {
       config: { source },
     },
   }: any = thunkAPI.getState();
 
-  const response = await db('getPost', args, source);
-
-  return response;
+  if (args.id) {
+    const response = await db('getPost', args, source);
+    return response;
+  }
 });
 
 export interface UpdatePostArgs {
@@ -42,21 +43,21 @@ export interface UpdatePostArgs {
   archivePostType?: string;
   archivePostsPerPage?: number;
   postTypeID: string;
-  title: string;
-  slug: string;
-  language: string;
-  status: string;
-  content: any;
-  seo: any;
-  parentID: number;
-  taxonomies: number[];
-  featuredImage: number;
-  template: string;
-  templateObject: any;
+  title?: string;
+  slug?: string;
+  language?: string;
+  status?: string;
+  content?: any;
+  seo?: any;
+  parentID?: number;
+  taxonomies?: number[];
+  featuredImage?: number;
+  template?: string;
+  templateObject?: any;
 }
 
 export const updatePost = createAsyncThunk(
-  'cms/updatePost',
+  'post/update',
   async (args: UpdatePostArgs, thunkAPI) => {
     const {
       cms: {
@@ -76,7 +77,7 @@ export interface DeletePostArgs {
 }
 
 export const deletePost = createAsyncThunk(
-  'cms/deletePost',
+  'post/delete',
   async (args: DeletePostArgs, thunkAPI) => {
     const {
       cms: {
@@ -101,7 +102,7 @@ export interface EmptyTrashArgs {
 }
 
 export const emptyTrash = createAsyncThunk(
-  'cms/emptyTrash',
+  'post/emptyTrash',
   async (args: EmptyTrashArgs, thunkAPI) => {
     const {
       cms: {
@@ -120,7 +121,7 @@ export interface DuplicatePostArgs {
 }
 
 export const duplicatePost = createAsyncThunk(
-  'cms/duplicatePost',
+  'post/duplicate',
   async (args: DuplicatePostArgs, thunkAPI) => {
     const {
       cms: {
@@ -139,7 +140,7 @@ export interface ReorderPostsArgs {
 }
 
 export const reorderPosts = createAsyncThunk(
-  'cms/reorderPosts',
+  'post/reorderPosts',
   async (args: ReorderPostsArgs, thunkAPI) => {
     const {
       cms: {
@@ -167,7 +168,7 @@ export interface RefreshPostLockArgs {
 }
 
 export const refreshPostLock = createAsyncThunk(
-  'cms/refreshPostLock',
+  'post/refreshLock',
   async (args: RefreshPostLockArgs, thunkAPI) => {
     const {
       cms: {
@@ -186,7 +187,7 @@ export interface RemovePostLockArgs {
 }
 
 export const removePostLock = createAsyncThunk(
-  'cms/removePostLock',
+  'post/removeLock',
   async (args: RemovePostLockArgs, thunkAPI) => {
     const {
       cms: {
@@ -205,7 +206,7 @@ export interface TakeOverPostArgs {
 }
 
 export const takeOverPost = createAsyncThunk(
-  'cms/takeOverPost',
+  'post/takeOverPost',
   async (args: TakeOverPostArgs, thunkAPI) => {
     const {
       cms: {
@@ -225,7 +226,7 @@ export interface TranslatePostArgs {
 }
 
 export const translatePost = createAsyncThunk(
-  'cms/translatePost',
+  'post/translate',
   async (args: TranslatePostArgs, thunkAPI) => {
     const {
       cms: {

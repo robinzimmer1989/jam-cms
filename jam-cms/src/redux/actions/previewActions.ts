@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 
 export interface GetSitePreviewArgs {
   previewID: string;
 }
 
 export const getSitePreview = createAsyncThunk(
-  'cms/getSitePreview',
+  'preview/getSite',
   async (args: GetSitePreviewArgs, thunkAPI) => {
     const {
       cms: {
@@ -26,7 +26,7 @@ export interface GetPostPreviewArgs {
 }
 
 export const getPostPreview = createAsyncThunk(
-  'cms/getPostPreview',
+  'preview/getPost',
   async (args: GetPostPreviewArgs, thunkAPI) => {
     const {
       cms: {
@@ -46,7 +46,7 @@ export interface GetPreviewLinkArgs {
 }
 
 export const getPreviewLink = createAsyncThunk(
-  'cms/getPreviewLink',
+  'preview/getLink',
   async (args: GetPreviewLinkArgs, thunkAPI) => {
     const {
       cms: {

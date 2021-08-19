@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 
 export interface TranslateTermArgs {
   id: number;
@@ -8,7 +8,7 @@ export interface TranslateTermArgs {
 }
 
 export const translateTerm = createAsyncThunk(
-  'cms/translateTerm',
+  'term/translate',
   async (args: TranslateTermArgs, thunkAPI) => {
     const {
       cms: {
@@ -31,7 +31,7 @@ export interface AddTermArgs {
   language?: string;
 }
 
-export const addTerm = createAsyncThunk('cms/addTerm', async (args: AddTermArgs, thunkAPI) => {
+export const addTerm = createAsyncThunk('term/add', async (args: AddTermArgs, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -54,7 +54,7 @@ export interface UpdateTermArgs {
 }
 
 export const updateTerm = createAsyncThunk(
-  'cms/updateTerm',
+  'term/update',
   async (args: UpdateTermArgs, thunkAPI) => {
     const {
       cms: {
@@ -74,7 +74,7 @@ export interface DeleteTermArgs {
 }
 
 export const deleteTerm = createAsyncThunk(
-  'cms/deleteTerm',
+  'term/delete',
   async (args: DeleteTermArgs, thunkAPI) => {
     const {
       cms: {

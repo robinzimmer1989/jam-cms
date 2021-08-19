@@ -1,13 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 
-export const getLanguages = createAsyncThunk('cms/getLanguages', async ({}, thunkAPI) => {
+export const getLanguages = createAsyncThunk('language/list', async ({}, thunkAPI) => {
   const {
     cms: {
       config: { source },
     },
   }: any = thunkAPI.getState();
+
+  console.log('test12');
 
   const response = await db('getLanguages', {}, source);
 
@@ -21,7 +23,7 @@ export interface AddLanguageArgs {
 }
 
 export const addLanguage = createAsyncThunk(
-  'cms/addLanguage',
+  'language/add',
   async (args: AddLanguageArgs, thunkAPI) => {
     const {
       cms: {
@@ -43,7 +45,7 @@ export interface UpdateLanguageArgs {
 }
 
 export const updateLanguage = createAsyncThunk(
-  'cms/updateLanguage',
+  'language/update',
   async (args: UpdateLanguageArgs, thunkAPI) => {
     const {
       cms: {
@@ -62,7 +64,7 @@ export interface DeleteLanguageArgs {
 }
 
 export const deleteLanguage = createAsyncThunk(
-  'cms/deleteLanguage',
+  'language/delete',
   async (args: DeleteLanguageArgs, thunkAPI) => {
     const {
       cms: {
@@ -83,7 +85,7 @@ export interface UpdateSettingsArgs {
 }
 
 export const updateLanguageSettings = createAsyncThunk(
-  'cms/updateLanguageSettings',
+  'language/updateSettings',
   async (args: UpdateSettingsArgs, thunkAPI) => {
     const {
       cms: {
@@ -106,7 +108,7 @@ export interface TranslateMassArgs {
 }
 
 export const translateMass = createAsyncThunk(
-  'cms/translateMass',
+  'language/translateMass',
   async (args: TranslateMassArgs, thunkAPI) => {
     const {
       cms: {

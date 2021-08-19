@@ -8,15 +8,15 @@ import Input from '../components/Input';
 import Select from '../components/Select';
 import LanguageSettings from '../components/settings/LanguageSettings';
 import CmsLayout from '../components/CmsLayout';
-import { RootState, useAppDispatch, useAppSelector, siteReducer, addEditorSite } from '../redux';
+import { RootState, useAppDispatch, useAppSelector, siteActions, cmsActions } from '../redux';
 
 const GeneralSettings = (props: any) => {
   const { fields } = props;
 
   const {
     cms: {
-      config,
       site,
+      siteLoaded,
       editor: { site: editorSite },
     },
   } = useAppSelector((state: RootState) => state);
@@ -27,34 +27,24 @@ const GeneralSettings = (props: any) => {
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    dispatch(addEditorSite(site));
-  }, []);
+    siteLoaded && dispatch(cmsActions.addEditorSite(site));
+  }, [siteLoaded]);
 
   const handleChange = (e: any) => {
-    const nextSite = produce(editorSite, (draft: any) => {
-      return set(draft, `${e.target.name}`, e.target.value);
-    });
-
-    dispatch({
-      type: `UPDATE_EDITOR_SITE`,
-      payload: nextSite,
-    });
+    const nextSite = produce(editorSite, (draft: any) =>
+      set(draft, `${e.target.name}`, e.target.value)
+    );
+    dispatch(cmsActions.updateEditorSite(nextSite));
   };
 
   const handleChangeSelect = (value: any, name: any) => {
-    const nextSite = produce(editorSite, (draft: any) => {
-      return set(draft, `${name}`, value);
-    });
-
-    dispatch({
-      type: `UPDATE_EDITOR_SITE`,
-      payload: nextSite,
-    });
+    const nextSite = produce(editorSite, (draft: any) => set(draft, `${name}`, value));
+    dispatch(cmsActions.updateEditorSite(nextSite));
   };
 
   const handleUpdate = async (args: any, loader: any) => {
     setLoading(loader);
-    await siteReducer.updateSite(args);
+    await dispatch(siteActions.updateSite(args));
     setLoading(null);
 
     message.success('Updated successfully');

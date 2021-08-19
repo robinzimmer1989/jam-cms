@@ -4,7 +4,7 @@ import { Button, Space, Select as AntSelect } from 'antd';
 // import app components
 import Select from '../Select';
 import Input from '../Input';
-import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, uiActions } from '../../redux';
 
 const TermForm = (props: any) => {
   const {
@@ -54,7 +54,7 @@ const TermForm = (props: any) => {
     await onSubmit({ id, title, slug, parentID, description, language });
     setLoading(false);
 
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   return (

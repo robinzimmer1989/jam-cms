@@ -18,7 +18,7 @@ import Caption from '../Caption';
 
 import LanguageForm from '../forms/LanguageForm';
 
-import { RootState, useAppDispatch, useAppSelector, languageReducer } from '../../redux';
+import { RootState, useAppDispatch, useAppSelector, languageActions, uiActions } from '../../redux';
 
 const LanguageSettings = (props: any) => {
   const { fields } = props;
@@ -45,7 +45,7 @@ const LanguageSettings = (props: any) => {
   const handleUpdate = async () => {
     setLoading({ action: 'update-settings' });
 
-    const result: any = await languageReducer.updateLanguageSettings({
+    const result: any = await languageActions.updateLanguageSettings({
       defaultLanguage,
       postTypes,
       taxonomies,
@@ -59,19 +59,18 @@ const LanguageSettings = (props: any) => {
   };
 
   const handleOpenForm = async (language: any = null) => {
-    dispatch({
-      type: 'SET_DIALOG',
-      payload: {
+    dispatch(
+      uiActions.showDialog({
         open: true,
         title: !!language?.id ? 'Edit' : 'Add',
         component: <LanguageForm language={language} />,
-      },
-    });
+      })
+    );
   };
 
   const handleDeleteLanguage = async (language: any) => {
     setLoading({ id: language.id, action: 'delete-language' });
-    await languageReducer.deleteLanguage(language);
+    await languageActions.deleteLanguage(language);
     setLoading(null);
   };
 

@@ -5,7 +5,7 @@ import { Button, Space, Select as AntSelect } from 'antd';
 import Select from '../Select';
 import Input from '../Input';
 
-import { useAppDispatch, hideDialog } from '../../redux';
+import { useAppDispatch, uiActions } from '../../redux';
 
 const TaxonomyForm = (props: any) => {
   const {
@@ -31,7 +31,7 @@ const TaxonomyForm = (props: any) => {
       return;
     }
     await onSubmit({ id, title, slug, postTypes });
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   const handleChangeId = (e: any) => {

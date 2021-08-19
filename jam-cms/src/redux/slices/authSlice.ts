@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { getUser } from '../../utils/auth';
 import { AuthUser } from '../../types';
-import { getAuthUser } from '../reducer/authReducer';
+import { getAuthUser } from '../actions/authActions';
 
 // Get 'capabilities' information from local storage to avoid unnecessary waiting to fetch user.
 // Technically, someone could manipulate those values manually, but the API call for site or post afterwards would fail anyway.
@@ -10,6 +10,7 @@ const storageUser = getUser();
 
 export interface AuthState {
   user: AuthUser;
+  userLoaded: boolean;
 }
 
 const initialState: AuthState = {
@@ -20,6 +21,7 @@ const initialState: AuthState = {
     roles: [],
     jwtAuthExpiration: '',
   },
+  userLoaded: false,
 };
 
 export const authSlice = createSlice({
@@ -30,6 +32,7 @@ export const authSlice = createSlice({
     builder.addCase(getAuthUser.fulfilled, (state, action: PayloadAction<AuthUser | null>) => {
       if (action.payload) {
         state.user = action.payload;
+        state.userLoaded = true;
       }
     });
   },

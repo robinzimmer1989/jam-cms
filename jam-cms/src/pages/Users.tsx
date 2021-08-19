@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, PageHeader, Spin, Popconfirm, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -7,69 +7,59 @@ import InfiniteScroll from 'react-infinite-scroller';
 import CmsLayout from '../components/CmsLayout';
 import ListItem from '../components/ListItem';
 import UserForm from '../components/forms/UserForm';
-import { RootState, useAppSelector, useAppDispatch, userReducer, showDialog } from '../redux';
+import { User } from '../types';
+import { RootState, useAppSelector, useAppDispatch, userActions, uiActions } from '../redux';
 
 const Users = (props: any) => {
   const { fields } = props;
 
   const {
     auth: { user: authUser },
+    cms: {
+      users: { items, page },
+    },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
 
-  const [page, setPage] = useState(0);
-  const [items, setItems] = useState([] as any);
-
   useEffect(() => {
-    loadUsers(page || 0);
+    loadUsers(page);
   }, []);
 
-  const loadUsers = async (page: any) => {
-    if (page > -1) {
-      const result: any = await userReducer.getUsers({ page, limit: 10 });
-
-      if (result) {
-        setItems((items: any) => items.concat(result.items));
-        setPage(result.page);
-      }
-    }
-  };
+  const loadUsers = async (page: any) =>
+    page > -1 && dispatch(userActions.getUsers({ page, limit: 10 }));
 
   const handleLoadMore = () => page && loadUsers(page);
 
-  const handleOpenDialog = (user = {}) =>
+  const handleOpenDialog = (user: User | null) =>
     dispatch(
-      showDialog({
+      uiActions.showDialog({
         open: true,
         title: 'User',
-        component: <UserForm onUpdate={handleUpdate} onAdd={handleAdd} {...user} />,
+        component: <UserForm onUpdate={handleUpdate} onAdd={handleAdd} {...(user || {})} />,
       })
     );
 
   const handleAdd = async ({ email, role, sendEmail }: any) => {
-    const result: any = await userReducer.addUser({ email, role, sendEmail });
+    const { payload } = await dispatch(userActions.addUser({ email, role, sendEmail }));
 
-    if (result) {
-      setItems((items: any) => [result, ...items]);
+    if (payload) {
       message.success(`Added successfully.`);
     }
   };
 
   const handleUpdate = async ({ id, role }: any) => {
-    const result: any = await userReducer.updateUser({ id, role });
+    const { payload } = await dispatch(userActions.updateUser({ id, role }));
 
-    if (result) {
-      setItems((items: any) => items.map((o: any) => (o.id === result.id ? result : o)));
+    if (payload) {
       message.success(`Saved successfully.`);
     }
   };
 
   const handleDelete = async ({ id }: any) => {
-    const result: any = await userReducer.deleteUser({ id });
+    const { payload } = await dispatch(userActions.deleteUser({ id }));
 
-    if (result) {
-      setItems((items: any) => items.filter((o: any) => o.id !== result.id));
+    if (payload) {
       message.success(`Deleted successfully.`);
     }
   };
@@ -77,7 +67,7 @@ const Users = (props: any) => {
   return (
     <CmsLayout fields={fields} pageTitle={`Users`}>
       <PageHeader>
-        <Button children={`Add`} onClick={handleOpenDialog} type="primary" />
+        <Button children={`Add`} onClick={() => handleOpenDialog(null)} type="primary" />
       </PageHeader>
 
       <StyledListItem title={authUser?.email} subtitle={authUser?.roles?.join(', ')} />
@@ -93,7 +83,7 @@ const Users = (props: any) => {
         }
       >
         {items &&
-          items.map((o: any) => {
+          items.map((o: User) => {
             const actions = [
               <Popconfirm
                 key="delete"

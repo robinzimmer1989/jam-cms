@@ -1,4 +1,4 @@
-import { RootState, useAppDispatch, useAppSelector } from './store';
+import { store, RootState, useAppDispatch, useAppSelector } from './store';
 
 import {
   setConfig,
@@ -13,27 +13,16 @@ import {
 
 import { showDialog, hideDialog, updateEditorSettings } from './slices/uiSlice';
 
-import * as authReducer from './reducer/authReducer';
-import * as siteReducer from './reducer/siteReducer';
-import * as postReducer from './reducer/postReducer';
-import * as termReducer from './reducer/termReducer';
-import * as mediaReducer from './reducer/mediaReducer';
-import * as previewReducer from './reducer/previewReducer';
-import * as userReducer from './reducer/userReducer';
-import * as languageReducer from './reducer/languageReducer';
+import * as authActions from './actions/authActions';
+import * as siteActions from './actions/siteActions';
+import * as postActions from './actions/postActions';
+import * as termActions from './actions/termActions';
+import * as mediaActions from './actions/mediaActions';
+import * as previewActions from './actions/previewActions';
+import * as userActions from './actions/userActions';
+import * as languageActions from './actions/languageActions';
 
-export {
-  RootState,
-  useAppDispatch,
-  useAppSelector,
-  authReducer,
-  siteReducer,
-  postReducer,
-  termReducer,
-  mediaReducer,
-  previewReducer,
-  userReducer,
-  languageReducer,
+const cmsActions = {
   setConfig,
   setDeploymentImage,
   setActiveLanguage,
@@ -42,7 +31,23 @@ export {
   addEditorPost,
   updateEditorPost,
   clearEditor,
-  showDialog,
-  hideDialog,
-  updateEditorSettings,
+};
+
+const uiActions = { showDialog, hideDialog, updateEditorSettings };
+
+export {
+  store,
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+  authActions,
+  siteActions,
+  postActions,
+  termActions,
+  mediaActions,
+  previewActions,
+  userActions,
+  languageActions,
+  cmsActions,
+  uiActions,
 };

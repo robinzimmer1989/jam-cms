@@ -4,16 +4,18 @@ import Parser from 'html-react-parser';
 import { isObject } from 'lodash';
 
 // import app components
-import { getUser } from '../../utils/auth';
+import { getUser, logout } from '../../utils/auth';
 import { validateAccess } from '../../utils';
 
 const db = async (
-  endpoint: any,
+  endpoint: string,
   args: any,
   source: string,
   contentType: string = 'x-www-form-urlencoded'
 ) => {
   if (!validateAccess()) {
+    logout({});
+    return;
   }
 
   const user = getUser();
@@ -24,7 +26,10 @@ const db = async (
     Object.keys(args).map((key) => {
       if (typeof args[key] !== 'undefined') {
         // Transform objects to string
-        const value = isObject(args[key]) ? JSON.stringify(args[key]) : args[key];
+        const value =
+          isObject(args[key]) && contentType === 'x-www-form-urlencoded'
+            ? JSON.stringify(args[key])
+            : args[key];
 
         formData.append(key, value);
       }

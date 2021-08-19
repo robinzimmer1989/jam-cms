@@ -4,13 +4,7 @@ import { Space, Button, Tooltip } from 'antd';
 import { DeploymentUnitOutlined } from '@ant-design/icons';
 
 // import app components
-import {
-  RootState,
-  useAppSelector,
-  useAppDispatch,
-  setDeploymentImage,
-  siteReducer,
-} from '../redux';
+import { RootState, useAppSelector, useAppDispatch, cmsActions, siteActions } from '../redux';
 
 const DeploymentBadge = (props: any) => {
   const {
@@ -33,7 +27,9 @@ const DeploymentBadge = (props: any) => {
       interval = setInterval(
         () =>
           dispatch(
-            setDeploymentImage(`${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`)
+            cmsActions.setDeploymentImage(
+              `${badgeImage}?v=${Math.floor(Math.random() * Math.floor(100))}`
+            )
           ),
         10000
       );
@@ -43,7 +39,7 @@ const DeploymentBadge = (props: any) => {
   }, []);
 
   const handleDeploy = async () => {
-    dispatch(siteReducer.deploySite());
+    dispatch(siteActions.deploySite());
   };
 
   return (

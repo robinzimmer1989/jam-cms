@@ -5,14 +5,14 @@ import { RouteComponentProps } from '@reach/router';
 
 // import app components
 import CmsLayout from '../components/CmsLayout';
-import { RootState, useAppDispatch, useAppSelector, siteReducer } from '../redux';
+import { RootState, useAppDispatch, useAppSelector, siteActions } from '../redux';
 import { version } from '../../package.json';
 
 const Dashboard = (props: any) => {
   const { fields } = props;
 
   const {
-    cms: { site, unpublishedChanges },
+    cms: { site, siteLoaded, unpublishedChanges },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
@@ -22,12 +22,12 @@ const Dashboard = (props: any) => {
   const lastBuild = site?.deployment?.lastBuild;
 
   useEffect(() => {
-    dispatch(siteReducer.getUnpublishedChanges());
-  }, [lastBuild]);
+    siteLoaded && dispatch(siteActions.getUnpublishedChanges());
+  }, [siteLoaded, lastBuild]);
 
   const handleDeploy = async () => {
     setLoading(true);
-    await siteReducer.deploySite();
+    await siteActions.deploySite();
     setLoading(false);
   };
 
@@ -65,7 +65,9 @@ const Dashboard = (props: any) => {
             <Empty description={'No changes'} />
           )}
         </Card>
-        <Typography.Text type="secondary">Version: {version}</Typography.Text>
+        <Typography.Text type="secondary" style={{ fontSize: 14 }}>
+          Version: {version}
+        </Typography.Text>
       </Space>
     </CmsLayout>
   );

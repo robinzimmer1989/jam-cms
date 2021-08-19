@@ -5,7 +5,7 @@ import { Space, Checkbox, Button } from 'antd';
 import Input from './Input';
 import PostTreeSelect from './PostTreeSelect';
 import { generateSlug } from '../utils';
-import { RootState, useAppDispatch, useAppSelector, hideDialog } from '../redux';
+import { RootState, useAppDispatch, useAppSelector, uiActions } from '../redux';
 
 const LinkSelector = (props: any) => {
   const { value = {}, placeholder, onChange, removable } = props;
@@ -39,13 +39,13 @@ const LinkSelector = (props: any) => {
   const handleSubmit = () => {
     onChange(link);
     setLink({ title: '', url: '', target: '' });
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   const handleRemove = () => {
     onChange({ title: link?.title, url: '', target: '' });
     setLink({ title: '', url: '', target: '' });
-    dispatch(hideDialog());
+    dispatch(uiActions.hideDialog());
   };
 
   const handleTreeSelect = (id: any) => {

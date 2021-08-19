@@ -8,12 +8,12 @@ import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
-import { unionBy } from 'lodash';
 
 // import app components
 import MediaImage from './MediaImage';
 import { renderMediaItem, useOnScreen } from '../utils';
-import { RootState, useAppSelector, useAppDispatch, mediaReducer } from '../redux';
+import { RootState, useAppSelector, useAppDispatch, mediaActions, uiActions } from '../redux';
+import { MediaItem } from '../types';
 import { colors } from '../theme';
 
 const MediaLibrary = (props: any) => {
@@ -22,74 +22,62 @@ const MediaLibrary = (props: any) => {
   const isVisible = useOnScreen(ref);
 
   const {
-    cms: { site },
+    cms: {
+      site,
+      media: { items, page },
+    },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
 
-  const [media, setMedia] = useState({ items: [], page: 0 } as any);
   const [activeFile, setActiveFile] = useState(null as any);
   const [uploader, setUploader] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
   const [selected, setSelected] = useState(defaultSelected);
   const [search, setSearch] = useState('');
 
-  const activeFileIndex = activeFile && media.items.findIndex((o: any) => o.id === activeFile.id);
+  const activeFileIndex = activeFile && items.findIndex((o: any) => o.id === activeFile.id);
 
   useEffect(() => {
-    isVisible && media.page > -1 && loadMediaItems(media.page);
+    isVisible && page > -1 && loadMediaItems(page);
   }, [isVisible]);
 
   const handleSearch = async (value: any) => {
+    setLoading('search');
+
     if (value) {
-      const result: any = await mediaReducer.getMediaItems({
-        page: 0,
-        search: value,
-        limit: 24,
-        allow,
-      });
-
-      if (result) {
-        setMedia({ items: result.items, page: result.page });
-      }
+      await dispatch(
+        mediaActions.getMediaItems({
+          page: 0,
+          search: value,
+          limit: 24,
+          allow,
+        })
+      );
     } else {
-      loadMediaItems(0, true);
+      await loadMediaItems(0);
     }
+
+    setLoading('');
   };
 
-  const loadMediaItems = async (page: any, clear = false) => {
-    const result: any = await mediaReducer.getMediaItems({ page, limit: 24, allow });
-
-    if (result) {
-      setMedia({
-        items: clear ? result.items : unionBy(media.items, result.items, 'id'),
-        page: result.page,
-      });
-    }
-  };
+  const loadMediaItems = async (page: any) =>
+    dispatch(mediaActions.getMediaItems({ page, limit: 24, allow }));
 
   const handleUpdateMediaItem = async (mediaItem: any) => {
     const { id, altText } = mediaItem;
 
-    const result: any = await mediaReducer.updateMediaItem({ id, altText });
+    const { payload } = await dispatch(mediaActions.updateMediaItem({ id, altText }));
 
-    if (result) {
-      setMedia({
-        items: media.items.map((o: any) => (o.id === result.id ? result : o)),
-        page: media.page,
-      });
+    if (payload) {
       message.success({ className: 'media-update-success', content: 'Saved successfully.' });
     }
   };
 
   const handlDeleteMediaItem = async () => {
-    const result: any = await mediaReducer.deleteMediaItem({ ...activeFile });
+    const result: any = await dispatch(mediaActions.deleteMediaItem({ ...activeFile }));
 
     if (result) {
-      setMedia({
-        items: media.items.filter((o: any) => o.id !== parseInt(result)),
-        page: media.page,
-      });
       handleCloseDialog();
       message.success({ className: 'media-delete-success', content: 'Deleted successfully..' });
     }
@@ -99,21 +87,18 @@ const MediaLibrary = (props: any) => {
     const {
       file: { status, name, originFileObj, error },
     } = info;
+
     if (status !== 'uploading') {
-      setLoading(true);
-
-      const result = await mediaReducer.addMediaItem({ file: originFileObj });
-
-      if (result) {
-        setMedia({ items: [result, ...media.items], page: media.page });
-      }
+      setLoading('upload');
+      await dispatch(mediaActions.addMediaItem({ file: originFileObj }));
     }
+
     if (status === 'done') {
       message.success({
         className: 'media-upload-success',
         content: `${name} file uploaded successfully.`,
       });
-      setLoading(false);
+      setLoading('');
     } else if (status === 'error') {
       // TODO: length computable is set to false and therefore throwing an error if file size is too big.
       // However, this has nothing to do with the actual file upload to the backend, so we not gonna display an error here.
@@ -127,7 +112,7 @@ const MediaLibrary = (props: any) => {
         console.log(info);
         message.error(`${name} file upload failed.`);
       }
-      setLoading(false);
+      setLoading('');
     }
   };
 
@@ -135,7 +120,7 @@ const MediaLibrary = (props: any) => {
     setActiveFile(null);
   };
 
-  const handleClickCheckbox = (image: any) => {
+  const handleClickCheckbox = (image: MediaItem) => {
     const nextSelection = produce(selected, (draft: any) => {
       const index = selected.findIndex((o: any) => o.id === image.id);
       if (index > -1) {
@@ -152,7 +137,7 @@ const MediaLibrary = (props: any) => {
     if (multiple) {
       handleClickCheckbox(item);
     } else {
-      dispatch({ type: 'CLOSE_DIALOG' });
+      dispatch(uiActions.hideDialog());
       onSelect(item);
     }
     setActiveFile(null);
@@ -161,7 +146,7 @@ const MediaLibrary = (props: any) => {
   const handleSelectMultiple = () => {
     onSelect && onSelect(selected);
 
-    dispatch({ type: 'CLOSE_DIALOG' });
+    dispatch(uiActions.hideDialog());
   };
 
   return (
@@ -176,8 +161,8 @@ const MediaLibrary = (props: any) => {
                 children="Upload"
                 type="primary"
                 onClick={() => setUploader(!uploader)}
-                loading={loading}
-                disabled={!site?.id}
+                loading={loading === 'upload'}
+                disabled={!site}
               />
             }
             extra={[
@@ -188,6 +173,7 @@ const MediaLibrary = (props: any) => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onSearch={handleSearch}
+                loading={loading === 'search'}
               />,
             ]}
           />
@@ -207,11 +193,11 @@ const MediaLibrary = (props: any) => {
             </Upload.Dragger>
           )}
 
-          <MediaItems id="media-items">
-            {media.items &&
-              media.items.map((o: any) => {
+          <Items id="media-items">
+            {items &&
+              items.map((o: MediaItem) => {
                 return (
-                  <MediaItem key={(o as any).id} className="media-item">
+                  <Item key={(o as any).id} className="media-item">
                     <MediaItemInner onClick={() => setActiveFile(o)}>
                       {renderMediaItem(o)}
                     </MediaItemInner>
@@ -221,7 +207,7 @@ const MediaLibrary = (props: any) => {
                         <Checkbox checked={!!selected.find((p: any) => p.id === (o as any).id)} />
                       </CheckboxContainer>
                     )}
-                  </MediaItem>
+                  </Item>
                 );
               })}
 
@@ -231,10 +217,10 @@ const MediaLibrary = (props: any) => {
             <DummyItem />
             <DummyItem />
 
-            <LoadingContainer ref={ref} key={0} visible={media.page > -1}>
+            <LoadingContainer ref={ref} key={0} visible={page > -1}>
               <Spin size="large" />
             </LoadingContainer>
-          </MediaItems>
+          </Items>
 
           {multiple && selected.length > 0 && (
             <ActionBar>
@@ -258,7 +244,7 @@ const MediaLibrary = (props: any) => {
           <PrevButton>
             <Button
               icon={<ArrowLeftOutlined />}
-              onClick={() => setActiveFile(media.items[activeFileIndex - 1])}
+              onClick={() => setActiveFile(items[activeFileIndex - 1])}
               disabled={activeFileIndex === 0}
             />
           </PrevButton>
@@ -271,8 +257,8 @@ const MediaLibrary = (props: any) => {
           <NextButton>
             <Button
               icon={<ArrowRightOutlined />}
-              onClick={() => setActiveFile(media.items[activeFileIndex + 1])}
-              disabled={activeFileIndex === media.items.length - 1}
+              onClick={() => setActiveFile(items[activeFileIndex + 1])}
+              disabled={activeFileIndex === items.length - 1}
             />
           </NextButton>
         </Modal>
@@ -285,13 +271,13 @@ const Container = styled('div' as any)`
   padding-bottom: ${({ actionBar }: any) => (actionBar ? '40px' : 0)};
 `;
 
-const MediaItems = styled.div`
+const Items = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 `;
 
-const MediaItem = styled.div`
+const Item = styled.div`
   float: left;
   position: relative;
   height: 140px;

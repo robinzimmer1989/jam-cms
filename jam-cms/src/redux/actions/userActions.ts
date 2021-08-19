@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 
 export interface AddUserArgs {
   email: string;
@@ -8,7 +8,7 @@ export interface AddUserArgs {
   sendEmail: boolean;
 }
 
-export const addUser = createAsyncThunk('cms/addUser', async (args: AddUserArgs, thunkAPI) => {
+export const addUser = createAsyncThunk('user/add', async (args: AddUserArgs, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -20,28 +20,12 @@ export const addUser = createAsyncThunk('cms/addUser', async (args: AddUserArgs,
   return response;
 });
 
-export interface GetUserArgs {
-  id: number;
-}
-
-export const getUser = createAsyncThunk('cms/getUser', async (args: GetUserArgs, thunkAPI) => {
-  const {
-    cms: {
-      config: { source },
-    },
-  }: any = thunkAPI.getState();
-
-  const response = await db('getUser', args, source);
-
-  return response;
-});
-
 export interface GetUsersArgs {
   page: number;
   limit: number;
 }
 
-export const getUsers = createAsyncThunk('cms/getUsers', async (args: GetUsersArgs, thunkAPI) => {
+export const getUsers = createAsyncThunk('user/get', async (args: GetUsersArgs, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -59,7 +43,7 @@ export interface UpdateUsersArgs {
 }
 
 export const updateUser = createAsyncThunk(
-  'cms/updateUser',
+  'user/update',
   async (args: UpdateUsersArgs, thunkAPI) => {
     const {
       cms: {
@@ -78,7 +62,7 @@ export interface DeleteUserArgs {
 }
 
 export const deleteUser = createAsyncThunk(
-  'cms/deleteUser',
+  'user/delete',
   async (args: DeleteUserArgs, thunkAPI) => {
     const {
       cms: {

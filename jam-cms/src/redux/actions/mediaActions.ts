@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 
 export interface AddMediaItemArgs {
   file: any;
 }
 
 export const addMediaItem = createAsyncThunk(
-  'cms/addMediaItem',
+  'media/add',
   async (args: AddMediaItemArgs, thunkAPI) => {
     const {
       cms: {
@@ -27,7 +27,7 @@ export interface UpdateMediaItemArgs {
 }
 
 export const updateMediaItem = createAsyncThunk(
-  'cms/updateMediaItem',
+  'media/update',
   async (args: UpdateMediaItemArgs, thunkAPI) => {
     const {
       cms: {
@@ -46,7 +46,7 @@ export interface DeleteMediaItemArgs {
 }
 
 export const deleteMediaItem = createAsyncThunk(
-  'cms/deleteMediaItem',
+  'media/delete',
   async (args: DeleteMediaItemArgs, thunkAPI) => {
     const {
       cms: {
@@ -68,7 +68,7 @@ export interface GetMediaItemsArgs {
 }
 
 export const getMediaItems = createAsyncThunk(
-  'cms/getMediaItems',
+  'media/getAll',
   async (args: GetMediaItemsArgs, thunkAPI) => {
     const {
       cms: {

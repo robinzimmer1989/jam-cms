@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import db from '../api/db';
+import db from '../api/rest';
 import { Deployment, EditorOptions } from '../../types';
 import { formatSite } from '../../utils';
 
-export const getSite = createAsyncThunk('cms/getSite', async (args, thunkAPI) => {
+export const getSite = createAsyncThunk('site/get', async (args, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -30,7 +30,7 @@ export interface UpdateSiteArgs {
 }
 
 export const updateSite = createAsyncThunk(
-  'cms/updateSite',
+  'site/update',
   async (args: UpdateSiteArgs, thunkAPI) => {
     const {
       cms: {
@@ -46,7 +46,7 @@ export const updateSite = createAsyncThunk(
   }
 );
 
-export const deploySite = createAsyncThunk('cms/deploySite', async (args, thunkAPI) => {
+export const deploySite = createAsyncThunk('site/deploy', async (args, thunkAPI) => {
   const {
     cms: {
       config: { source },
@@ -66,7 +66,7 @@ export interface SyncSiteArgs {
 }
 
 export const syncFields = createAsyncThunk(
-  'cms/syncFields',
+  'site/syncFields',
   async (args: SyncSiteArgs, thunkAPI) => {
     const {
       cms: {
@@ -83,7 +83,7 @@ export const syncFields = createAsyncThunk(
 );
 
 export const getUnpublishedChanges = createAsyncThunk(
-  'cms/getUnpublishedChanges',
+  'site/getUnpublishedChanges',
   async (args, thunkAPI) => {
     const {
       cms: {

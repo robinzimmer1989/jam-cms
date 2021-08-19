@@ -23,8 +23,15 @@ import ListItem from '../components/ListItem';
 import Loader from '../components/Loader';
 import Tag from '../components/Tag';
 import LanguageSelector from '../components/LanguageSelector';
-import { postActions, siteActions, languageActions } from '../actions';
-import { postReducer, RootState, useAppDispatch, useAppSelector } from '../redux';
+import {
+  RootState,
+  useAppDispatch,
+  useAppSelector,
+  uiActions,
+  postActions,
+  siteActions,
+  languageActions,
+} from '../redux';
 import { createDataTree, generateSlug } from '../utils';
 import { colors } from '../theme';
 import getRoute from '../routes';
@@ -33,7 +40,7 @@ const PostType = (props: any) => {
   const { postTypeID, fields } = props;
 
   const {
-    cms: { config, site, activeLanguage },
+    cms: { site, activeLanguage },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
@@ -105,46 +112,43 @@ const PostType = (props: any) => {
 
   const handleSync = async () => {
     setLoading('sync');
-    await siteActions.syncFields({ fields, apiKey: site?.apiKey }, dispatch, config);
+    await dispatch(siteActions.syncFields({ fields, apiKey: site?.apiKey || '' }));
     setLoading('');
   };
 
   const handleTranslateMass = async () => {
     setLoading('translate');
 
-    const language = activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage;
+    const language =
+      activeLanguage !== 'all' ? activeLanguage : site?.languages?.defaultLanguage || '';
 
-    await languageActions.translateMass(
-      {
-        postTypeID,
+    await dispatch(
+      languageActions.translateMass({
         type: 'post',
         ids: posts.filter((o: any) => !o.language).map((o: any) => o.id),
         language,
-      },
-      dispatch,
-      config
+      })
     );
     setLoading('');
   };
 
   const handleDuplicatePost = async ({ postID }: any) => {
-    await postActions.duplicatePost({ id: postID }, dispatch, config);
+    await dispatch(postActions.duplicatePost({ id: postID }));
   };
 
   const handleDeletePost = async ({ postID }: any) => {
-    await postActions.deletePost({ postTypeID, id: postID }, dispatch, config);
+    await dispatch(postActions.deletePost({ postTypeID, id: postID }));
   };
 
   const handleAddPost = async (args: any) => {
-    dispatch(postReducer.addPost(args));
+    dispatch(postActions.addPost(args));
   };
 
   const handleTrashPost = async ({ postID }: any) => {
-    const result = await postActions.updatePost(
-      { postTypeID, id: postID, status: 'trash' },
-      dispatch,
-      config
+    const result: any = await dispatch(
+      postActions.updatePost({ postTypeID, id: postID, status: 'trash' })
     );
+
     if (result) {
       message.info('Post has been trashed');
     }
@@ -153,10 +157,8 @@ const PostType = (props: any) => {
   const handleEmptyTrash = async () => {
     setLoading('empty-trash');
 
-    const result = await postActions.emptyTrash(
-      { postTypeID, language: activeLanguage },
-      dispatch,
-      config
+    const result: any = await dispatch(
+      postActions.emptyTrash({ postTypeID, language: activeLanguage })
     );
 
     if (result) {
@@ -167,7 +169,7 @@ const PostType = (props: any) => {
   };
 
   const handleTranslatePost = async ({ id, language }: any) => {
-    dispatch(postReducer.translatePost({ id, language }));
+    dispatch(postActions.translatePost({ id, language }));
   };
 
   const renderUntranslatedPostsWarning = () => {
@@ -280,14 +282,13 @@ const PostType = (props: any) => {
         children="Add"
         disabled={!postType}
         onClick={() =>
-          dispatch({
-            type: 'SET_DIALOG',
-            payload: {
+          dispatch(
+            uiActions.showDialog({
               open: true,
               title: `Add ${postType.title}`,
               component: <PostForm onSubmit={handleAddPost} postTypeID={postTypeID} />,
-            },
-          })
+            })
+          )
         }
         type="primary"
       />
@@ -364,7 +365,7 @@ const PostType = (props: any) => {
 
     if (
       site?.frontPage === o.id ||
-      o?.translations?.[site?.languages?.defaultLanguage] === site?.frontPage
+      o?.translations?.[site?.languages?.defaultLanguage || ''] === site?.frontPage
     ) {
       badges.push(<Tag key="front" children={'front'} />);
     }
@@ -418,7 +419,7 @@ const PostType = (props: any) => {
       return;
     }
 
-    const nextPosts = produce(visiblePosts, (draft: any) => {
+    const nextPosts: any = produce(visiblePosts, (draft: any) => {
       if (newIndex > -1 && newIndex < draft.length) {
         const temp = draft[index];
         draft[index] = draft[newIndex];
@@ -430,7 +431,7 @@ const PostType = (props: any) => {
       return draft;
     });
 
-    await postActions.reorderPosts({ posts: nextPosts }, dispatch, config);
+    await postActions.reorderPosts({ posts: nextPosts });
   };
 
   return (

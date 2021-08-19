@@ -148,6 +148,12 @@ const styles = css`
   .ant-btn > span {
     display: inline-flex;
   }
+
+  .ant-modal-close-x {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const fontStyles = css`

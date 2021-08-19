@@ -12,9 +12,12 @@ import {
 import Img from '../GatsbyImage';
 import MediaLibrary from '../MediaLibrary';
 import { colors } from '../../theme';
+import { useAppDispatch, uiActions } from '../../redux';
 
 const Gallery = (props: any) => {
-  const { onChange, value, dispatch } = props;
+  const { onChange, value } = props;
+
+  const dispatch: any = useAppDispatch();
 
   const values = value || [];
 
@@ -44,17 +47,16 @@ const Gallery = (props: any) => {
   };
 
   const handleClickAdd = () => {
-    dispatch({
-      type: `SET_DIALOG`,
-      payload: {
+    dispatch(
+      uiActions.showDialog({
         open: true,
         title: 'Media',
         component: (
           <MediaLibrary onSelect={handleSelect} allow={['image']} selected={values} multiple />
         ),
         width: 1024,
-      },
-    });
+      })
+    );
   };
 
   return (

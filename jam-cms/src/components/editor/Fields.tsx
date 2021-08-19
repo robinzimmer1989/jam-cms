@@ -25,7 +25,7 @@ import Gallery from '../editorFields/Gallery';
 import GoogleMap from '../editorFields/GoogleMap';
 import ColorPicker from '../editorFields/ColorPicker';
 
-import { useAppDispatch, showDialog } from '../../redux';
+import { useAppDispatch, uiActions } from '../../redux';
 
 export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
   const dispatch: any = useAppDispatch();
@@ -83,7 +83,7 @@ export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
             dispatch(
-              showDialog({
+              uiActions.showDialog({
                 open: true,
                 title: 'Link',
                 component: (
@@ -145,7 +145,7 @@ export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
             dispatch(
-              showDialog({
+              uiActions.showDialog({
                 open: true,
                 title: 'Media',
                 component: (
@@ -178,17 +178,16 @@ export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
           {...field}
           onRemove={() => onChangeElement({ ...field, value: null })}
           onClick={() =>
-            dispatch({
-              type: `SET_DIALOG`,
-              payload: {
+            dispatch(
+              uiActions.showDialog({
                 open: true,
                 title: 'Media',
                 component: (
                   <MediaLibrary onSelect={(value: any) => onChangeElement({ ...field, value })} />
                 ),
                 width: 1024,
-              },
-            })
+              })
+            )
           }
         />
       );
