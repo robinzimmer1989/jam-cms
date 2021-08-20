@@ -6,7 +6,7 @@ const config = {
       id: 'checkbox',
       type: 'checkbox',
       label: 'Checkbox',
-      defaultValue: 'checkbox-1', // optional
+      defaultValue: ['checkbox-1'], // optional
       instructions: 'Some instructions...', // optional
       options: [
         {
