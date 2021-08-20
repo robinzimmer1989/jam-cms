@@ -230,7 +230,7 @@ const Editor = (props: any) => {
 
       if (post?.translations) {
         Object.values(post.translations).map((id: any) => {
-          const translatedPost = site?.postTypes[post.postTypeID].posts[id];
+          const translatedPost = site?.postTypes[post.postTypeID]?.posts?.[id];
 
           if (translatedPost) {
             pageContext.translations.push({
