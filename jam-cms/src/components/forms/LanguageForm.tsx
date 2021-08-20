@@ -20,7 +20,7 @@ const LanguageForm = (props: any) => {
   const [language, setLanguage] = useState(defaultLanguage);
 
   useEffect(() => {
-    dispatch(languageActions.getLanguages());
+    languages.length === 0 && dispatch(languageActions.getLanguages());
   }, []);
 
   const handleChange = (e: any) => setLanguage({ ...language, [e.target.name]: e.target.value });
@@ -35,9 +35,9 @@ const LanguageForm = (props: any) => {
     setLoading(true);
 
     if (id) {
-      dispatch(languageActions.updateLanguage({ id, name, slug, locale }));
+      await dispatch(languageActions.updateLanguage({ id, name, slug, locale }));
     } else {
-      dispatch(languageActions.addLanguage({ name, slug, locale }));
+      await dispatch(languageActions.addLanguage({ name, slug, locale }));
     }
 
     // Reset to default and close modal

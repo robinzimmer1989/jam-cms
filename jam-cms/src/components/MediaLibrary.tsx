@@ -79,7 +79,7 @@ const MediaLibrary = (props: any) => {
 
     if (result) {
       handleCloseDialog();
-      message.success({ className: 'media-delete-success', content: 'Deleted successfully..' });
+      message.success({ className: 'media-delete-success', content: 'Deleted successfully' });
     }
   };
 

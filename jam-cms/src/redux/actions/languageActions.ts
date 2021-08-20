@@ -2,14 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import db from '../api/rest';
 
-export const getLanguages = createAsyncThunk('language/list', async ({}, thunkAPI) => {
+export const getLanguages = createAsyncThunk('language/list', async (args, thunkAPI) => {
   const {
     cms: {
       config: { source },
     },
   }: any = thunkAPI.getState();
-
-  console.log('test12');
 
   const response = await db('getLanguages', {}, source);
 

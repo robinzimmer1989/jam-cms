@@ -24,7 +24,7 @@ const LanguageSettings = (props: any) => {
   const { fields } = props;
 
   const {
-    cms: { config, site },
+    cms: { site },
   } = useAppSelector((state: RootState) => state);
 
   const dispatch: any = useAppDispatch();
@@ -34,8 +34,7 @@ const LanguageSettings = (props: any) => {
   const [postTypes, setPostTypes] = useState(languages?.postTypes || []);
   const [taxonomies, setTaxonomies] = useState(languages?.taxonomies || []);
   const [defaultLanguage, setDefaultLanguage] = useState(languages?.defaultLanguage || '');
-
-  const [loading, setLoading] = useState(null as any);
+  const [loading, setLoading] = useState({ action: '', payload: '' });
 
   useEffect(() => {
     // Update default language (changes when first language is added or current default language gets deleted)
@@ -43,19 +42,21 @@ const LanguageSettings = (props: any) => {
   }, [languages?.defaultLanguage]);
 
   const handleUpdate = async () => {
-    setLoading({ action: 'update-settings' });
+    setLoading({ action: 'update-settings', payload: '' });
 
-    const result: any = await languageActions.updateLanguageSettings({
-      defaultLanguage,
-      postTypes,
-      taxonomies,
-    });
+    const { payload } = await dispatch(
+      languageActions.updateLanguageSettings({
+        defaultLanguage,
+        postTypes,
+        taxonomies,
+      })
+    );
 
-    if (result) {
+    if (payload) {
       message.success('Updated successfully');
     }
 
-    setLoading(null);
+    setLoading({ action: '', payload: '' });
   };
 
   const handleOpenForm = async (language: any = null) => {
@@ -69,9 +70,11 @@ const LanguageSettings = (props: any) => {
   };
 
   const handleDeleteLanguage = async (language: any) => {
-    setLoading({ id: language.id, action: 'delete-language' });
-    await languageActions.deleteLanguage(language);
-    setLoading(null);
+    setLoading({ payload: language.id, action: 'delete-language' });
+
+    await dispatch(languageActions.deleteLanguage(language));
+
+    setLoading({ action: '', payload: '' });
   };
 
   return (
@@ -118,7 +121,9 @@ const LanguageSettings = (props: any) => {
                     id="delete-language"
                     children="Delete"
                     danger
-                    loading={loading?.action === 'delete-language' && loading?.id === language.id}
+                    loading={
+                      loading?.action === 'delete-language' && loading?.payload === language.id
+                    }
                   />
                 </Popconfirm>
               </Space>

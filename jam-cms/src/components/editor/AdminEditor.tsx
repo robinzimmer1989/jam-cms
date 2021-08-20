@@ -102,10 +102,12 @@ const AdminEditor = (props: any) => {
   }, [post?.locked?.id]);
 
   useEffect(() => {
-    loadPost();
+    if (postID > 0) {
+      loadPost();
 
-    // Add fresh copy of editor to state
-    dispatch(cmsActions.addEditorSite(site));
+      // Add fresh copy of editor to state
+      dispatch(cmsActions.addEditorSite(site));
+    }
 
     return () => dispatch(cmsActions.clearEditor());
   }, [postID]);
@@ -114,13 +116,13 @@ const AdminEditor = (props: any) => {
     !editorSettings.fullscreen && setSidebarActive(!sidebarActive);
   });
 
-  const loadPost = async () => dispatch(postActions.getPost({ id: postID }));
+  const loadPost = async () => await dispatch(postActions.getPost({ id: postID }));
 
-  const handleTakeOver = async () => dispatch(postActions.takeOverPost({ id: postID }));
+  const handleTakeOver = async () => await dispatch(postActions.takeOverPost({ id: postID }));
 
-  const refreshPostLock = async () => dispatch(postActions.refreshPostLock({ id: postID }));
+  const refreshPostLock = async () => await dispatch(postActions.refreshPostLock({ id: postID }));
 
-  const removePostLock = async (id: number) => dispatch(postActions.removePostLock({ id }));
+  const removePostLock = async (id: number) => await dispatch(postActions.removePostLock({ id }));
 
   const handleOpenTakeOverDialog = () => {
     dispatch(

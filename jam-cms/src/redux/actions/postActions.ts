@@ -31,10 +31,9 @@ export const getPost = createAsyncThunk('post/get', async (args: GetPostArgs, th
     },
   }: any = thunkAPI.getState();
 
-  if (args.id) {
-    const response = await db('getPost', args, source);
-    return response;
-  }
+  const response = await db('getPost', args, source);
+
+  return response;
 });
 
 export interface UpdatePostArgs {

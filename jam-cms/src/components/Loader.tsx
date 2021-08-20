@@ -9,11 +9,7 @@ const Loader = (props: any) => {
     <Container className="jam-cms" height={height} py={py}>
       <Content>
         <Spin size="large" />
-        {text && (
-          <Typography.Text style={{ fontSize: 12, marginTop: 20, textTransform: 'uppercase' }}>
-            {text}
-          </Typography.Text>
-        )}
+        {text && <span>{text}</span>}
       </Content>
     </Container>
   );
@@ -31,7 +27,19 @@ const Container = styled('div' as any)`
 
 const Content = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+  span {
+    display: block;
+    margin-top: 20px;
+  }
 `;
 
 export default Loader;

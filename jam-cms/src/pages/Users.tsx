@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, PageHeader, Spin, Popconfirm, message } from 'antd';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -14,7 +14,7 @@ const Users = (props: any) => {
   const { fields } = props;
 
   const {
-    auth: { user: authUser },
+    auth: { user: authUser, userLoaded },
     cms: {
       users: { items, page },
     },
@@ -22,9 +22,11 @@ const Users = (props: any) => {
 
   const dispatch: any = useAppDispatch();
 
+  const [loading, setLoading] = useState('');
+
   useEffect(() => {
-    loadUsers(page);
-  }, []);
+    userLoaded && loadUsers(page);
+  }, [userLoaded]);
 
   const loadUsers = async (page: any) =>
     page > -1 && dispatch(userActions.getUsers({ page, limit: 10 }));
@@ -56,12 +58,16 @@ const Users = (props: any) => {
     }
   };
 
-  const handleDelete = async ({ id }: any) => {
-    const { payload } = await dispatch(userActions.deleteUser({ id }));
+  const handleDelete = async (user: User) => {
+    setLoading(user.id.toString());
+
+    const { payload } = await dispatch(userActions.deleteUser({ id: user.id }));
 
     if (payload) {
-      message.success(`Deleted successfully.`);
+      message.success(`Deleted successfully`);
     }
+
+    setLoading('');
   };
 
   return (
@@ -70,7 +76,9 @@ const Users = (props: any) => {
         <Button children={`Add`} onClick={() => handleOpenDialog(null)} type="primary" />
       </PageHeader>
 
-      <StyledListItem title={authUser?.email} subtitle={authUser?.roles?.join(', ')} />
+      {userLoaded && (
+        <StyledListItem title={authUser?.email} subtitle={authUser?.roles?.join(', ')} />
+      )}
 
       <InfiniteScroll
         pageStart={0}
@@ -92,7 +100,12 @@ const Users = (props: any) => {
                 okText="Yes"
                 cancelText="No"
               >
-                <Button size="small" children={`Delete`} danger />
+                <Button
+                  size="small"
+                  children={`Delete`}
+                  danger
+                  loading={o.id.toString() === loading}
+                />
               </Popconfirm>,
               <Button key="edit" size="small" onClick={() => handleOpenDialog(o)}>
                 Edit

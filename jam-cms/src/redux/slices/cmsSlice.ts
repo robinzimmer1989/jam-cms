@@ -37,6 +37,7 @@ export interface CmsState {
   config: Config | null;
   site: Site | null;
   siteLoaded: boolean;
+  siteLastFetch: number;
   unpublishedChanges: UnpublishedChange[] | null;
   activeLanguage: string;
   languages: Language[];
@@ -58,6 +59,7 @@ const initialState: CmsState = {
   config: null,
   site: null,
   siteLoaded: false,
+  siteLastFetch: 0,
   unpublishedChanges: null,
   activeLanguage: '',
   languages: [],
@@ -125,10 +127,16 @@ export const cmsSlice = createSlice({
       if (action.payload) {
         state.site = action.payload;
         state.siteLoaded = true;
+        state.siteLastFetch = Date.now();
 
         // Set active language if applicable
         if (!state.activeLanguage && action.payload?.languages?.defaultLanguage) {
           state.activeLanguage = action.payload?.languages?.defaultLanguage || 'all';
+        }
+
+        // Update editor site if nothing has changed
+        if (!state.editor.siteHasChanged) {
+          state.editor.site = action.payload;
         }
       }
     });
@@ -137,6 +145,7 @@ export const cmsSlice = createSlice({
       if (action.payload) {
         state.site = action.payload;
         state.editor.site = action.payload;
+        state.editor.siteHasChanged = false;
       }
     });
 
@@ -172,13 +181,18 @@ export const cmsSlice = createSlice({
      ******************************/
     builder.addCase(postActions.getPost.fulfilled, (state, action: PayloadAction<Post>) => {
       if (action.payload) {
-        set(
-          state,
-          `site.postTypes.${action.payload.postTypeID}.posts.${action.payload.id}`,
-          action.payload
-        );
+        if (action.payload.revisionID) {
+          set(state, `editor.post`, action.payload);
+          set(state, `editor.postHasChanged`, true);
+        } else {
+          set(
+            state,
+            `site.postTypes.${action.payload.postTypeID}.posts.${action.payload.id}`,
+            action.payload
+          );
 
-        set(state, `editor.post`, action.payload);
+          set(state, `editor.post`, action.payload);
+        }
       }
     });
 
@@ -218,9 +232,11 @@ export const cmsSlice = createSlice({
           action.payload
         );
 
-        set(state, `editor.post`, action.payload);
+        state.editor.post = action.payload;
 
-        // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the site.
+        state.editor.postHasChanged = false;
+
+        // In case the user only updates the post, the new deployment status isn't available (only for site updates), so we need to manually update the status.
         set(state, `site.deployment.undeployedChanges`, true);
       }
     });
@@ -447,9 +463,9 @@ export const cmsSlice = createSlice({
       }
     });
 
-    builder.addCase(userActions.deleteUser.fulfilled, (state, action: PayloadAction<number>) => {
+    builder.addCase(userActions.deleteUser.fulfilled, (state, action: PayloadAction<User>) => {
       if (action.payload) {
-        state.users.items = state.users.items.filter((o: User) => o.id !== action.payload);
+        state.users.items = state.users.items.filter((o: User) => o.id !== action.payload.id);
       }
     });
 
@@ -517,6 +533,7 @@ export const cmsSlice = createSlice({
       (state, action: PayloadAction<Site>) => {
         if (action.payload) {
           state.site = action.payload;
+          state.editor.site = action.payload;
           state.siteLoaded = true;
         }
       }
@@ -563,17 +580,28 @@ export const cmsSlice = createSlice({
 
     builder.addCase(
       languageActions.deleteLanguage.fulfilled,
-      (state, action: PayloadAction<Language>) => {
-        if (action.payload) {
-          state.site?.languages?.languages?.filter((o: Language) => o.id !== action.payload.id);
+      (state, action: PayloadAction<number | boolean>) => {
+        if (action.payload && state.site?.languages?.languages) {
+          // Get language from state
+          const language = state.site.languages.languages.find(
+            (o: Language) => o.id !== action.payload
+          );
+
+          // Remove language
+          state.site.languages.languages = state.site.languages.languages.filter(
+            (o: Language) => o.id !== action.payload
+          );
 
           // Reset language if active language gets deleted
-          if (state.activeLanguage === action.payload.slug) {
+          if (state.activeLanguage === language?.slug) {
             state.activeLanguage = 'all';
           }
 
           // Reset default language in case user deletes it
-          if (state?.site?.languages?.defaultLanguage === action.payload.slug) {
+          if (
+            state?.site?.languages?.defaultLanguage &&
+            state.site.languages.defaultLanguage === language?.slug
+          ) {
             state.site.languages.defaultLanguage = '';
           }
         }

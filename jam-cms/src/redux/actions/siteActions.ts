@@ -27,6 +27,7 @@ export interface UpdateSiteArgs {
   googleMapsApi?: string;
   apiKey?: string;
   editorOptions?: EditorOptions;
+  language?: string;
 }
 
 export const updateSite = createAsyncThunk(

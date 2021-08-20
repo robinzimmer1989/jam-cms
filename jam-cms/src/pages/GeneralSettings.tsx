@@ -220,7 +220,7 @@ const GeneralSettings = (props: any) => {
         </Card>
       )}
 
-      {tab === 'languages' && <LanguageSettings />}
+      {tab === 'languages' && <LanguageSettings fields={fields} />}
     </CmsLayout>
   );
 };

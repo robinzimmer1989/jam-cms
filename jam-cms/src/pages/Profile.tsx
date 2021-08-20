@@ -24,7 +24,7 @@ const Profile = (props: any) => {
               <Typography>{authUser?.email}</Typography>
             </Space>
 
-            {authUser?.roles && (
+            {authUser?.roles && authUser.roles.length > 0 && (
               <Space direction="vertical" size={2}>
                 <Caption children="Role" />
                 <Typography>{authUser.roles.join(', ')}</Typography>

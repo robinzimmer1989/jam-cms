@@ -88,20 +88,14 @@ const EditorSidebar = (props: any) => {
       return draft;
     });
 
-    nextPost && dispatch(cmsActions.addEditorPost(nextPost));
+    nextPost && dispatch(cmsActions.updateEditorPost(nextPost));
   };
 
   const handleSelectRevision = async (postID: number) => {
     setLoading(postID.toString());
 
-    const result: any = await dispatch(postActions.getPost({ id: postID }));
+    await dispatch(postActions.getPost({ id: postID }));
 
-    if (result) {
-      // Update existing post with title, content, post date and revisionID.
-      const { content, title, revisionID } = result;
-
-      dispatch(cmsActions.updateEditorPost({ ...post, content, title, revisionID }));
-    }
     setLoading('');
   };
 
@@ -148,7 +142,9 @@ const EditorSidebar = (props: any) => {
 
     if (siteHasChanged) {
       const { themeOptions, frontPage } = editorSite || {};
-      siteResult = await dispatch(siteActions.updateSite({ themeOptions, frontPage }));
+      siteResult = await dispatch(
+        siteActions.updateSite({ themeOptions, frontPage, language: post?.language || '' })
+      );
     }
 
     if (postHasChanged || action === 'publish') {
@@ -203,11 +199,15 @@ const EditorSidebar = (props: any) => {
 
   const handleGeneratePreviewLink = async () => {
     if (post) {
+      setLoading('generatePreviewLink');
+
       const result = await dispatch(previewActions.getPreviewLink({ postID: post.id, expiryDate }));
 
       if (result?.payload) {
         setPreviewLink(result.payload);
       }
+
+      setLoading('');
     }
   };
 
@@ -534,7 +534,7 @@ const EditorSidebar = (props: any) => {
                   type={o.id === post?.revisionID ? 'primary' : 'default'}
                   onClick={() => o.id !== post?.revisionID && handleSelectRevision(o.id)}
                   children={o.title}
-                  loading={loading === o.id}
+                  loading={loading === o.id.toString()}
                   block
                 />
               ))}
@@ -607,6 +607,7 @@ const EditorSidebar = (props: any) => {
               onClick={handleGeneratePreviewLink}
               type="primary"
               block
+              loading={loading === 'generatePreviewLink'}
             />
           )}
         </Space>
