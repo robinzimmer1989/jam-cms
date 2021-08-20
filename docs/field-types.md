@@ -9,7 +9,7 @@
   id: 'foo',
   type: 'checkbox',
   label: 'Bar',
-  defaultValue: 'checkbox-1', // optional
+  defaultValue: ['checkbox-1'], // optional
   instructions: 'Some instructions...', // optional
   options: [
     {
