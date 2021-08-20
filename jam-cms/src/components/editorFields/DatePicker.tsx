@@ -2,7 +2,14 @@ import React, { useEffect } from 'react';
 import { DatePicker as AntDatePicker } from 'antd';
 import moment from 'moment';
 
-const DatePicker = (props: any) => {
+export interface IDatePicker {
+  value: string;
+  format?: string;
+  defaultValue?: string;
+  onChange: Function;
+}
+
+const DatePicker = (props: IDatePicker) => {
   const { value, defaultValue, format = 'DD/MM/YYYY', onChange } = props;
 
   useEffect(() => {

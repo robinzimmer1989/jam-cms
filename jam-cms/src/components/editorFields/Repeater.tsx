@@ -10,7 +10,17 @@ import Caption from '../Caption';
 import { getField } from '../editor/Fields';
 import { colors } from '../../theme';
 
-const Repeater = (props: any) => {
+export interface IRepeater {
+  id: string;
+  label?: string;
+  instructions?: string;
+  items: any[];
+  value: any[];
+  level: number;
+  onChange: Function;
+}
+
+const Repeater = (props: IRepeater) => {
   const { id, label, instructions, items, value, onChange, level } = props;
 
   const values = value || [];

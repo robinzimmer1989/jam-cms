@@ -10,7 +10,17 @@ import Caption from '../Caption';
 import { getField } from '../editor/Fields';
 import { colors } from '../../theme';
 
-const FlexibleContent = (props: any) => {
+export interface IFlexibleContent {
+  id: string;
+  label?: string;
+  instructions?: string;
+  items: any[];
+  value: any[];
+  level: number;
+  onChange: Function;
+}
+
+const FlexibleContent = (props: IFlexibleContent) => {
   const { id, label, instructions, items, value, onChange, level } = props;
 
   const values = value || [];

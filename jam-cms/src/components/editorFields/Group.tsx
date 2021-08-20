@@ -7,7 +7,16 @@ import { Collapse, Typography } from 'antd';
 // import app components
 import { getField } from '../editor/Fields';
 
-const Group = (props: any) => {
+export interface IGroup {
+  id: string;
+  label?: string;
+  instructions?: string;
+  fields: any[];
+  value: any[];
+  onChange: Function;
+}
+
+const Group = (props: IGroup) => {
   const { id, label, instructions, fields, value, onChange } = props;
 
   let values = value || {};

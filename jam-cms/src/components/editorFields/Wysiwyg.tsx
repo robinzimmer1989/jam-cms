@@ -3,7 +3,12 @@ import React from 'react';
 // import app components
 import HTMLEditor from '../Jodit';
 
-const Wysiwyg = (props: any) => {
+export interface IWysiwyg {
+  value: string;
+  onChange: Function;
+}
+
+const Wysiwyg = (props: IWysiwyg) => {
   const { value, onChange } = props;
 
   const handleChange = (c: any) => onChange(c);

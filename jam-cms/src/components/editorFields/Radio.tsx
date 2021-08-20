@@ -1,8 +1,34 @@
 import React from 'react';
 import { Radio as AntRadio } from 'antd';
 
-const Radio = (props: any) => {
-  const { value, options, defaultValue, onChange } = props;
+export interface IRadioOption {
+  name: string;
+  value: string | number;
+}
+
+export interface IRadio {
+  value: string;
+  defaultValue?: string;
+  options: IRadioOption[];
+  onChange: Function;
+}
+
+const Radio = (props: IRadio) => {
+  const { value = '', options, defaultValue, onChange } = props;
+
+  let checkedValue = value;
+
+  if (typeof value !== 'string') {
+    console.warn('Radio value must be a string');
+    checkedValue = '';
+  }
+
+  let checkedDefaultValue = defaultValue;
+
+  if (typeof defaultValue !== 'string') {
+    console.warn('Radio default value must be a string');
+    checkedDefaultValue = '';
+  }
 
   const handleChange = (e: any) => {
     const {
@@ -13,7 +39,7 @@ const Radio = (props: any) => {
   };
 
   return (
-    <AntRadio.Group onChange={handleChange} value={value || defaultValue}>
+    <AntRadio.Group onChange={handleChange} value={checkedValue || checkedDefaultValue}>
       {options &&
         options.map((o: any) => <AntRadio key={o.value} value={o.value} children={o.name} />)}
     </AntRadio.Group>

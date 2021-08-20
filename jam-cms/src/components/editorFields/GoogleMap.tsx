@@ -15,7 +15,18 @@ const Marker = () => (
   </Icon>
 );
 
-const Map = (props: any) => {
+export interface IAddress {
+  lat: number;
+  lng: number;
+  address: string;
+}
+
+export interface IMap {
+  value: IAddress;
+  onChange: Function;
+}
+
+const Map = (props: IMap) => {
   const { value, onChange } = props;
 
   const {

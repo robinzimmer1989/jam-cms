@@ -1,7 +1,20 @@
 import React from 'react';
 import { Button, Typography, Space, Input } from 'antd';
 
-const Link = (props: any) => {
+export interface ILink {
+  title: string;
+  url: string;
+  target?: string;
+}
+
+export interface ILinkField {
+  value: ILink;
+  defaultValue?: string;
+  onClick: any;
+  onRemove: any;
+}
+
+const Link = (props: ILinkField) => {
   const { value, onClick, onRemove } = props;
 
   const exists = value?.title && value?.url;

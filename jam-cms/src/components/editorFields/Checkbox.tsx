@@ -2,17 +2,33 @@ import React from 'react';
 import produce from 'immer';
 import { Checkbox as AntCheckbox } from 'antd';
 
-const Checkbox = (props: any) => {
-  const { value, options, onChange } = props;
+export interface ICheckboxOption {
+  name: string;
+  value: string | number;
+}
 
-  const values = value || [];
+export interface ICheckbox {
+  value: string[];
+  options: ICheckboxOption[];
+  onChange: Function;
+}
+
+const Checkbox = (props: ICheckbox) => {
+  const { value = [], options, onChange } = props;
+
+  let checkedValue = value;
+
+  if (!Array.isArray(value)) {
+    console.warn('Checkbox value must be an array');
+    checkedValue = [];
+  }
 
   const handleChange = (e: any) => {
     const {
       target: { checked, value },
     } = e;
 
-    const newValues = produce(values, (draft: any) => {
+    const newValues = produce(checkedValue, (draft: any) => {
       if (checked) {
         draft.push(value);
       } else {
@@ -30,7 +46,7 @@ const Checkbox = (props: any) => {
       <AntCheckbox
         key={o.value}
         value={o.value}
-        checked={values.includes(o.value)}
+        checked={checkedValue.includes(o.value)}
         children={o.name}
         onChange={handleChange}
       />

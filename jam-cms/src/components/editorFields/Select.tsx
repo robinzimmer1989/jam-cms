@@ -1,7 +1,19 @@
 import React from 'react';
 import { Select as AntSelect } from 'antd';
 
-const Select = (props: any) => {
+export interface ISelectOption {
+  name: string;
+  value: string | number;
+}
+
+export interface ISelect {
+  value: string;
+  defaultValue?: string;
+  options: ISelectOption[];
+  onChange: () => void;
+}
+
+const Select = (props: ISelect) => {
   const { value = '', options, defaultValue, onChange } = props;
 
   return (

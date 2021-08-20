@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import ChromePicker from 'react-color';
 
-const ColorPicker = (props: any) => {
+export interface IColorPicker {
+  value: string;
+  defaultValue?: string;
+  onChange: Function;
+}
+
+const ColorPicker = (props: IColorPicker) => {
   const { value, defaultValue, onChange } = props;
 
   const [open, setOpen] = useState(false);

@@ -4,6 +4,7 @@ import { Button, Tree, Collapse, Space, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Parser from 'html-react-parser';
 import produce from 'immer';
+import { isObject, get } from 'lodash';
 
 // import app components
 import Input from '../Input';
@@ -12,8 +13,27 @@ import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../../utils
 import { colors } from '../../theme';
 import { RootState, useAppSelector } from '../../redux';
 
-const Menu = (props: any) => {
-  const { value = [], maxLevel = 3, onChange } = props;
+export interface IMenuItem {
+  key: number;
+  title: string;
+  url: string;
+  postID: string | null;
+  postTypeID: string | null;
+  children: IMenuItem[];
+}
+
+export interface ITranslatedMenu {
+  [language: string]: IMenuItem[];
+}
+
+export interface IMenu {
+  value: ITranslatedMenu | IMenuItem[];
+  maxLevel?: number;
+  onChange: Function;
+}
+
+const Menu = (props: IMenu) => {
+  const { value, maxLevel = 3, onChange } = props;
 
   const {
     cms: {
@@ -25,14 +45,13 @@ const Menu = (props: any) => {
   const [items, setItems] = useState([]);
   const [modal, setModal] = useState(false);
 
-  const translatedMenu =
-    !!site?.languages && post?.language && Array.isArray(value[post?.language]);
+  const translatedMenu = !!site?.languages && post?.language && isObject(value);
 
   useEffect(() => {
-    let menuItems: any = [];
+    let menuItems: IMenuItem[] = [];
 
-    if (translatedMenu) {
-      menuItems = value[post?.language || ''];
+    if (!!translatedMenu) {
+      menuItems = get(value, `${post?.language}`) || [];
     } else {
       menuItems = Array.isArray(value) ? value : [];
     }

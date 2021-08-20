@@ -4,10 +4,18 @@ import styled from 'styled-components';
 
 // import app components
 import Img from '../GatsbyImage';
+import { MediaItem } from '../../types';
 import { colors } from '../../theme';
 
-const FilePicker = (props: any) => {
-  const { buttonText = 'Edit', onClick, onRemove, value = '' } = props;
+export interface IFilePicker {
+  buttonText?: string;
+  value: MediaItem | null;
+  onClick: any;
+  onRemove: any;
+}
+
+const FilePicker = (props: IFilePicker) => {
+  const { buttonText = 'Edit', onClick, onRemove, value = null } = props;
 
   return (
     <Container>
@@ -17,7 +25,7 @@ const FilePicker = (props: any) => {
             image={value}
             objectFit="cover"
             objectPosition="50% 50%"
-            alt={value.alt}
+            alt={value.altText}
             style={{ width: '100%', height: '100%' }}
           />
         )}

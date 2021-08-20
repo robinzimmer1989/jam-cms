@@ -12,9 +12,15 @@ import {
 import Img from '../GatsbyImage';
 import MediaLibrary from '../MediaLibrary';
 import { colors } from '../../theme';
+import { MediaItem } from '../../types';
 import { useAppDispatch, uiActions } from '../../redux';
 
-const Gallery = (props: any) => {
+export interface IGallery {
+  value: MediaItem[];
+  onChange: Function;
+}
+
+const Gallery = (props: IGallery) => {
   const { onChange, value } = props;
 
   const dispatch: any = useAppDispatch();
