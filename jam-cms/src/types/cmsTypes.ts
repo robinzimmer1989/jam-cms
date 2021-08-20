@@ -146,4 +146,17 @@ export interface Site {
 
 export interface MediaItem {
   id: number;
+  slug: string;
+  altText?: string;
+  filename: string;
+  filesize: number;
+  height?: number;
+  icon?: string;
+  localFile?: any;
+  svg?: any;
+  type: string;
+  subtype: string;
+  title: string;
+  url: string;
+  sourceUrl: string;
 }
