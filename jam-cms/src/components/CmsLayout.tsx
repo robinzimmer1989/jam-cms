@@ -30,7 +30,7 @@ const CmsLayout = (props: any) => {
     cms: { site },
   } = useAppSelector((state: RootState) => state);
 
-  const handleAddPost = async (args: any) => dispatch(postActions.addPost(args));
+  const handleAddPost = async (args: any) => await dispatch(postActions.addPost(args));
 
   return (
     <>

@@ -132,17 +132,13 @@ const PostType = (props: any) => {
     setLoading('');
   };
 
-  const handleDuplicatePost = async ({ postID }: any) => {
+  const handleDuplicatePost = async ({ postID }: any) =>
     await dispatch(postActions.duplicatePost({ id: postID }));
-  };
 
-  const handleDeletePost = async ({ postID }: any) => {
+  const handleDeletePost = async ({ postID }: any) =>
     await dispatch(postActions.deletePost({ postTypeID, id: postID }));
-  };
 
-  const handleAddPost = async (args: any) => {
-    dispatch(postActions.addPost(args));
-  };
+  const handleAddPost = async (args: any) => await dispatch(postActions.addPost(args));
 
   const handleTrashPost = async ({ postID }: any) => {
     const result: any = await dispatch(
