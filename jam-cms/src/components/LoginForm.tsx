@@ -97,7 +97,7 @@ const LoginForm = (props: any) => {
     try {
       const result = await authActions.forgetPassword({ email }, url);
 
-      if (result?.data?.sendPasswordResetEmail) {
+      if (result?.sendPasswordResetEmail) {
         setData({
           ...data,
           success: (
@@ -126,7 +126,7 @@ const LoginForm = (props: any) => {
     try {
       const result = await authActions.resetPassword({ key, login, password }, url);
 
-      if (result?.data?.resetUserPassword) {
+      if (result?.resetUserPassword) {
         setData({
           ...data,
           password: '',
