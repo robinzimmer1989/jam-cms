@@ -7,7 +7,7 @@ import Profile from '../../pages/Profile';
 import Dashboard from '../../pages/Dashboard';
 import Media from '../../pages/Media';
 import PostType from '../../pages/PostType';
-import GeneralSettings from '../../pages/GeneralSettings';
+import Settings from '../../pages/Settings';
 import Taxonomy from '../../pages/Taxonomy';
 import Users from '../../pages/Users';
 import AdminEditor from '../editor/AdminEditor';
@@ -46,7 +46,7 @@ const AdminRouter = (props: any) => {
         <Taxonomy path={`${ROUTE_APP}${ROUTE_TAXONOMY}/:taxonomyID`} fields={fields} />
 
         {authUser?.capabilities?.manage_options && (
-          <GeneralSettings path={`${ROUTE_APP}${ROUTE_SETTINGS_GENERAL}`} fields={fields} />
+          <Settings path={`${ROUTE_APP}${ROUTE_SETTINGS_GENERAL}`} fields={fields} />
         )}
 
         {authUser?.capabilities?.list_users && (
