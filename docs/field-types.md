@@ -215,6 +215,38 @@ The menu id must be unique throughout the entire site.
 
 You can assign a max depth level to the menu so users won't be able to nest menu items infinitely.
 
+The return value will be an array of menu items.
+
+```
+[
+  children: []
+  key: 1
+  postID: 2
+  postTypeID: "page"
+  title: "Homepage"
+]
+```
+
+If you use Polylang for multilingual support, the return value will we an object with language keys instead:
+
+```
+{
+  en: [
+    children: []
+    key: 1
+    postID: 2
+    postTypeID: "page"
+    title: "Homepage"
+  ]
+}
+```
+
+To support both, regular and multilingual menus you can wrap your menu into a simple function so nothing breaks once you add or remove Polylang (the language object gets passed down to the template via pageContext).
+
+```
+const getMenu = (value, language) => Array.isArray(value) ? value : value?.[language?.slug];
+```
+
 ## Number
 
 ```
