@@ -16,8 +16,10 @@ plugins: [
       // Change path to fields object
       fields: path.join(__dirname, 'src/fields'),
       settings: {
-        // Deactivate automatic syncing of post types, templates and fields to WordPress
+        // Deactivate automatic syncing of post types, templates and fields to WordPress (default: true)
         sync: true,
+        // Deactivate the jamCMS editing interface altogether (default: false)
+        decouple: false,
       },
     },
   },

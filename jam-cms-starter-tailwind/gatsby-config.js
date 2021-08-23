@@ -24,6 +24,7 @@ module.exports = {
         fields: path.join(__dirname, 'src/fields'), // default: 'src/fields
         settings: {
           sync: true, // true (default) || false
+          decouple: false, // true || false (default)
         },
       },
     },

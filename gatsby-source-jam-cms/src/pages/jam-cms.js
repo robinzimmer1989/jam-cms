@@ -1,25 +1,31 @@
 import React from 'react';
+import { navigate } from 'gatsby';
 import styled from 'styled-components';
 import Helmet from 'react-helmet';
 import { LoginForm } from 'jam-cms';
 
 const Login = (props) => {
-  const { source } = props;
+  const { source, settings } = props;
 
-  return (
-    <>
-      <Helmet>
-        <title>Login</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
+  if (settings?.decouple) {
+    navigate('/');
+    return null;
+  } else {
+    return (
+      <>
+        <Helmet>
+          <title>Login</title>
+          <meta name="robots" content="noindex" />
+        </Helmet>
 
-      <Container>
-        <CardWrapper>
-          <LoginForm url={source} backLink={true} isAdmin />
-        </CardWrapper>
-      </Container>
-    </>
-  );
+        <Container>
+          <CardWrapper>
+            <LoginForm url={source} backLink={true} isAdmin />
+          </CardWrapper>
+        </Container>
+      </>
+    );
+  }
 };
 
 const Container = styled.div`

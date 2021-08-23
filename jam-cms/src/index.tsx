@@ -11,18 +11,18 @@ import { isLoggedIn, logout } from './utils/auth';
 import { validateAccess } from './utils';
 
 const Index = (props: any) => {
-  const { source, children } = props;
+  const { source, settings, children } = props;
 
   // Check if user has access to jamCMS.
   const allowAccess = validateAccess();
 
-  if (allowAccess) {
+  if (allowAccess && !settings?.decouple) {
     return <JamCMS {...props} />;
   } else {
     return (
       <>
         <Seo {...props} />
-        {React.cloneElement(children, { source })}
+        {React.cloneElement(children, { source, settings })}
       </>
     );
   }
