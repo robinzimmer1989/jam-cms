@@ -7,7 +7,7 @@ import RichText from './components/RichText';
 import GatsbyImage from './components/GatsbyImage';
 import Seo from './components/Seo';
 
-import { isLoggedIn, deleteUser, logout } from './utils/auth';
+import { isLoggedIn, logout } from './utils/auth';
 import { validateAccess } from './utils';
 
 const Index = (props: any) => {
@@ -19,8 +19,6 @@ const Index = (props: any) => {
   if (allowAccess) {
     return <JamCMS {...props} />;
   } else {
-    deleteUser();
-
     return (
       <>
         <Seo {...props} />
