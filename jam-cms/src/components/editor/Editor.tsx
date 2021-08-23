@@ -187,9 +187,20 @@ const Editor = (props: any) => {
   }
 
   const renderComponent = () => {
+    const seo = { ...post?.seo };
+
+    // Add page title if no seo title is provided
+    if (!seo?.title) {
+      set(seo, `title`, post?.title);
+    }
+
+    // Add site title to seo title
+    // TODO: This should be based on the Yoast SEO setting in WordPress
+    set(seo, `title`, `${seo.title} - ${site?.title || siteTitle}`);
+
     const pageContext: any = {
       siteTitle: site?.title || siteTitle,
-      seo: post?.seo,
+      seo,
       pagination,
       jamCMS: {
         sidebar: {
@@ -247,7 +258,6 @@ const Editor = (props: any) => {
         });
       }
     }
-
     return (
       <>
         <Seo {...props} pageContext={pageContext} />
