@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.11.0
+
+- Feat: Switch to Redux
+- Feat: Add 'decouple' option
+- Fix: Render SEO component server-side
+
 ### 1.10.3
 
 - Fix: Antd typography
