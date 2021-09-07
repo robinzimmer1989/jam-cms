@@ -22,14 +22,17 @@ const DatePicker = (props: IDatePicker) => {
   }, [value, defaultValue]);
 
   return (
-    (value || defaultValue) && (
-      <AntDatePicker
-        value={moment(value || defaultValue, format)}
-        onChange={(value) => onChange(value ? (value as any)._d : '')}
-        allowClear={false}
-        style={{ width: '100%' }}
-      />
-    )
+    <div>
+      {value ||
+        (defaultValue && (
+          <AntDatePicker
+            value={moment(value || defaultValue, format)}
+            onChange={(value) => onChange(value ? (value as any)._d : '')}
+            allowClear={false}
+            style={{ width: '100%' }}
+          />
+        ))}
+    </div>
   );
 };
 

@@ -41,16 +41,18 @@ const Checkbox = (props: ICheckbox) => {
   };
 
   return (
-    options &&
-    options.map((o: any) => (
-      <AntCheckbox
-        key={o.value}
-        value={o.value}
-        checked={checkedValue.includes(o.value)}
-        children={o.name}
-        onChange={handleChange}
-      />
-    ))
+    <div>
+      {options &&
+        options.map((o: any) => (
+          <AntCheckbox
+            key={o.value}
+            value={o.value}
+            checked={checkedValue.includes(o.value)}
+            children={o.name}
+            onChange={handleChange}
+          />
+        ))}
+    </div>
   );
 };
 
