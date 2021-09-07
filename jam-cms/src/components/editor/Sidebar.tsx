@@ -227,7 +227,7 @@ const EditorSidebar = (props: any) => {
           } else {
             field = post?.content?.[o.id] || o;
           }
-          const formattedField = formatFieldForEditor({ field, site: editorSite });
+          const formattedField = formatFieldForEditor({ field });
           return {
             global: o.global,
             ...field,
@@ -236,6 +236,7 @@ const EditorSidebar = (props: any) => {
           };
         })
       : [];
+
     return (
       <EditorFieldsContainer>
         <Fields fields={formattedFields} onChangeElement={handleChangeContent} />
@@ -251,10 +252,10 @@ const EditorSidebar = (props: any) => {
         const formattedField = formatFieldForEditor({
           // Pass in fields from editor site state or global option itself
           field: editorSite?.themeOptions?.[o.id] || o,
-          site: editorSite,
         });
         return { global: true, ...o, value: formattedField?.value };
       });
+
     return (
       <EditorFieldsContainer>
         <Fields fields={formattedFields} onChangeElement={handleChangeContent} />

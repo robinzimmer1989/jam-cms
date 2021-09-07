@@ -27,13 +27,13 @@ export default function formatFieldsToProps({
             field = content[o.id] || o;
           }
 
-          const formattedField = formatFieldForEditor({ field, site });
+          const formattedField = formatFieldForEditor({ field });
 
           return (obj[o.id] = formattedField?.value);
         })
     : themeOptions &&
       themeOptions.map((o: any) => {
-        const formattedField = formatFieldForEditor({ field: content?.[o.id] || o, site });
+        const formattedField = formatFieldForEditor({ field: content?.[o.id] || o });
 
         return (obj[o.id] = formattedField?.value);
       });

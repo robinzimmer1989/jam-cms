@@ -3,7 +3,7 @@ import produce from 'immer';
 
 // This function formats the value for the editor.
 
-export default function formatFieldForEditor({ field, site }: any) {
+export default function formatFieldForEditor({ field }: any) {
   if (field?.type === 'group') {
     const nextGroupField = produce(field, (draft: any) => {
       // On initial load the field won't have a value (assigned in database)
@@ -15,7 +15,6 @@ export default function formatFieldForEditor({ field, site }: any) {
 
           const formattedSubField = formatFieldForEditor({
             field: { ...subField, value: draft.value[key] },
-            site,
           });
 
           return set(draft, `value.${key}`, formattedSubField.value);
@@ -40,7 +39,6 @@ export default function formatFieldForEditor({ field, site }: any) {
 
           const formattedSubField = formatFieldForEditor({
             field: { ...subField, value: draft.value[i][key] },
-            site,
           });
 
           return set(draft, `value.${i}.${key}`, formattedSubField.value);
@@ -70,7 +68,6 @@ export default function formatFieldForEditor({ field, site }: any) {
 
             const formattedSubField = formatFieldForEditor({
               field: { ...subField, value: draft.value[i][key] },
-              site,
             });
 
             return set(draft, `value.${i}.${key}`, formattedSubField.value);
