@@ -9,6 +9,7 @@ import sortBy from './sortBy';
 import recursivelyUpdateTree from './recursivelyUpdateTree';
 import removeFromTree from './removeFromTree';
 import deepCopyTree from './deepCopyTree';
+import searchTree from './searchTree';
 import formatFieldForEditor from './formatFieldForEditor';
 import formatTaxonomiesForEditor from './formatTaxonomiesForEditor';
 import generateRandomString from './generateRandomString';
@@ -35,6 +36,7 @@ export {
   recursivelyUpdateTree,
   removeFromTree,
   deepCopyTree,
+  searchTree,
   formatFieldForEditor,
   formatTaxonomiesForEditor,
   auth,
