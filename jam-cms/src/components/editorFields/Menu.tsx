@@ -4,12 +4,13 @@ import { Button, Tree, Collapse, Space, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Parser from 'html-react-parser';
 import produce from 'immer';
-import { isObject, get } from 'lodash';
+import { isObject, get, set } from 'lodash';
 
 // import app components
 import Input from '../Input';
 import MenuPicker from '../MenuPicker';
-import { recursivelyUpdateTree, removeFromTree, deepCopyTree } from '../../utils';
+import Fields from '../editor/Fields';
+import { recursivelyUpdateTree, removeFromTree, deepCopyTree, searchTree } from '../../utils';
 import { colors } from '../../theme';
 import { RootState, useAppSelector } from '../../redux';
 
@@ -29,11 +30,12 @@ export interface ITranslatedMenu {
 export interface IMenu {
   value: ITranslatedMenu | IMenuItem[];
   maxLevel?: number;
+  fields?: any;
   onChange: Function;
 }
 
 const Menu = (props: IMenu) => {
-  const { value, maxLevel = 3, onChange } = props;
+  const { value, maxLevel = 3, fields, onChange } = props;
 
   const {
     cms: {
@@ -165,24 +167,6 @@ const Menu = (props: IMenu) => {
     handleChange(data);
   };
 
-  const handleUpdate = (e: any, name: string, key: string) => {
-    const updateItem = (parentNode: any, child: any, params: any) => {
-      if (child.key === params.key) {
-        return {
-          ...child,
-          [name]: params.value,
-        };
-      }
-      return child;
-    };
-
-    const newItems = recursivelyUpdateTree({ children: items }, updateItem, {
-      key,
-      value: e.target.value,
-    });
-    handleChange(newItems);
-  };
-
   const handleRemove = (key: string) => {
     const newItems = removeFromTree({ children: [...items] }, key);
     handleChange(newItems.children);
@@ -216,6 +200,44 @@ const Menu = (props: IMenu) => {
     });
     setEditing(nextValue);
   };
+
+  const handleUpdate = (value: any, name: string, key: string) => {
+    const updateItem = (parentNode: any, child: any, params: any) => {
+      if (child.key === params.key) {
+        return produce(child, (draft: any) => {
+          set(draft, name, params.value);
+        });
+      } else {
+        return child;
+      }
+    };
+
+    const newItems = recursivelyUpdateTree({ children: items }, updateItem, {
+      key,
+      value,
+    });
+
+    handleChange(newItems);
+  };
+
+  const renderFields = (key: string) => {
+    if (!fields) {
+      return null;
+    }
+
+    const formattedFields = fields.map((field: any) => {
+      return { ...field, value: searchTree(items, key)?.value?.[field.id] };
+    });
+
+    return (
+      <Fields
+        fields={formattedFields}
+        onChangeElement={(field: any) => handleUpdate(field.value, `value.${field.id}`, key)}
+        padding={false}
+      />
+    );
+  };
+
   return (
     <>
       <Container>
@@ -244,15 +266,16 @@ const Menu = (props: IMenu) => {
                         <Input
                           label="title"
                           value={node.title}
-                          onChange={(e: any) => handleUpdate(e, 'title', node.key)}
+                          onChange={(e: any) => handleUpdate(e.target.value, 'title', node.key)}
                         />
-
                         <Input
                           label="Url"
                           value={(node as any).url}
-                          onChange={(e: any) => handleUpdate(e, 'url', node.key)}
+                          onChange={(e: any) => handleUpdate(e.target.value, 'url', node.key)}
                           disabled={(node as any).postTypeID}
                         />
+
+                        {renderFields(node.key)}
 
                         <Button
                           size="small"

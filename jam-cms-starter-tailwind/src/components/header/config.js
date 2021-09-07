@@ -13,6 +13,13 @@ const config = {
       type: 'menu',
       label: 'Menu',
       maxLevel: 2,
+      fields: [
+        {
+          id: 'icon',
+          type: 'image',
+          label: 'Icon',
+        },
+      ],
     },
   ],
 };
