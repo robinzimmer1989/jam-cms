@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import axios from 'axios';
 import Parser from 'html-react-parser';
 import { isObject } from 'lodash';
@@ -58,7 +57,7 @@ const db = async (
     }
   } catch (err) {
     if (err?.response?.data?.message) {
-      message.error(Parser(err.response.data.message));
+      console.log(Parser(err.response.data.message));
     }
   }
 
