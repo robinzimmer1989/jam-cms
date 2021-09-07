@@ -1,5 +1,10 @@
 # Changelog
 
+### 1.12.0
+
+- Feat: ACF fields for menu
+- Fix: Pagination for archive pages
+
 ### 1.11.0
 
 - Feat: Switch to Redux
