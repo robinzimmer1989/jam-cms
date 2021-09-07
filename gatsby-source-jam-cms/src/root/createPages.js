@@ -106,7 +106,7 @@ const createJamPages = async (
             archivePostsPerPage,
           } = node;
 
-          const context = {
+          let context = {
             id,
             databaseId,
             status,
@@ -155,18 +155,19 @@ const createJamPages = async (
                   pathname = `${uri}page/${page}`;
                 }
 
-                context.pagination = {
-                  basePath: uri,
-                  numberOfPosts,
-                  postsPerPage: archivePostsPerPage,
-                  numberOfPages: Math.ceil(numberOfPosts / archivePostsPerPage),
-                  page,
-                };
-
                 actions.createPage({
                   component: path.resolve(`./${component}`),
                   path: pathname,
-                  context,
+                  context: {
+                    ...context,
+                    pagination: {
+                      basePath: uri,
+                      numberOfPosts,
+                      postsPerPage: archivePostsPerPage,
+                      numberOfPages,
+                      page,
+                    },
+                  },
                 });
               }
             } else {
