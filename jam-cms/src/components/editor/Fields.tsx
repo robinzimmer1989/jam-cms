@@ -27,7 +27,7 @@ import ColorPicker from '../editorFields/ColorPicker';
 
 import { useAppDispatch, uiActions } from '../../redux';
 
-export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
+export const getField = ({ index, field, onChangeElement, level = 1, padding = true }: any) => {
   const dispatch: any = useAppDispatch();
 
   let component;
@@ -213,7 +213,7 @@ export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
       {field.type === 'repeater' || field.type === 'flexible_content' || field.type === 'group' ? (
         component
       ) : (
-        <FieldContainer level={level}>
+        <FieldContainer level={level} padding={padding}>
           <Space direction="vertical" size={6}>
             <Caption children={field.label || field.id} />
             {field.instructions && (
@@ -228,14 +228,14 @@ export const getField = ({ index, field, onChangeElement, level = 1 }: any) => {
 };
 
 const Fields = (props: any) => {
-  const { fields, onChangeElement } = props;
+  const { fields, padding = true, onChangeElement } = props;
 
   return (
     <Container>
       {fields &&
         fields
           .filter((field: any) => !!field)
-          .map((field: any) => getField({ field, onChangeElement, level: 0 }))}
+          .map((field: any) => getField({ field, onChangeElement, level: 0, padding }))}
     </Container>
   );
 };
@@ -257,7 +257,7 @@ const Container = styled.div`
 `;
 
 const FieldContainer = styled('div' as any)`
-  padding: 12px ${({ level }: any) => (level === 0 ? '16px' : '10px')};
+  padding: ${({ padding, level }) => (padding ? `12px ${level === 0 ? '16px' : '10px'}` : 0)};
 `;
 
 export default Fields;
