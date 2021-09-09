@@ -1,5 +1,11 @@
 # Changelog
 
+### 1.12.1
+
+- Fix: Casing for post types (for automatically created taxonomies such as product_cat)
+- Fix: Prevent breaking of application when user visits taxonomy backend page directly
+- Fix: Update term function creates new term instead
+
 ### 1.12.0
 
 - Feat: ACF fields for menu
