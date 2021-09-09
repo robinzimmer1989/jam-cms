@@ -1,6 +1,8 @@
 const React = require('react');
 const JamCms = require('jam-cms').default;
 
+const casing = require('./casing').default;
+
 const preferDefault = (m) => (m && m.default) || m;
 
 let fields = null;
@@ -15,7 +17,7 @@ try {
 // Loop through post types and templates and add React component to fields object
 if (fields && fields.postTypes) {
   for (const postTypeIndex in fields.postTypes) {
-    const postType = fields.postTypes[postTypeIndex].id;
+    const postType = casing(fields.postTypes[postTypeIndex].id);
 
     for (const templateIndex in fields.postTypes[postTypeIndex].templates) {
       const template = fields.postTypes[postTypeIndex].templates[templateIndex].id;
@@ -59,7 +61,7 @@ if (fields && fields.postTypes) {
 // Loop through taxonomies and add React component to fields object
 if (fields && fields.taxonomies) {
   for (const taxonomyIndex in fields.taxonomies) {
-    const taxonomy = fields.taxonomies[taxonomyIndex].id;
+    const taxonomy = casing(fields.taxonomies[taxonomyIndex].id);
 
     let component = null;
 
