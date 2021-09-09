@@ -31,7 +31,7 @@ const Taxonomy = (props: any) => {
 
   const taxonomy = site?.taxonomies?.[taxonomyID];
 
-  const terms = Object.values(taxonomy.terms);
+  const terms = taxonomy?.terms && Object.values(taxonomy.terms);
 
   const hasTemplate = !!fields?.taxonomies.find((o: any) => o.id === taxonomyID).component;
 
