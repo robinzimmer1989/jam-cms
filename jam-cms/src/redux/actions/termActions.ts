@@ -62,7 +62,7 @@ export const updateTerm = createAsyncThunk(
       },
     }: any = thunkAPI.getState();
 
-    const response = await db('createTerm', args, source);
+    const response = await db('updateTerm', args, source);
 
     return response;
   }
